@@ -4,13 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jerminal Decline</title>
-<meta name="description" content="My channel is under attack! Long-form vs Shorts, the numbers without the padding. Updated nightly.">
+<meta name="description" content="HE'S SHORTLESS! Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
 <link rel="icon" type="image/png" href="logo.png">
-<meta property="og:title" content="Jerminal Decline — channels stripped of their Shorts">
-<meta property="og:description" content="See how YouTube channels are really performing once Shorts are removed from the numbers.">
+<meta property="og:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta property="og:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://jerminaldecline.com">
 <meta property="og:image" content="https://jerminaldecline.com/logo.png">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta name="twitter:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
 <style>
   :root {
     /* Brand */
@@ -111,16 +114,25 @@
     margin-bottom: 1.25rem;
     font-size: 0.9rem;
   }
-  .channel-strip-label {
+  .channel-link {
     color: var(--brand-deep);
-    font-weight: 500;
-  }
-  .channel-strip a {
-    color: var(--brand);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
   }
-  .channel-strip a:hover { text-decoration: underline; }
+  .channel-link:hover { text-decoration: underline; }
+  .channel-link-arrow {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .channel-link:hover .channel-link-arrow {
+    opacity: 1;
+    transform: translate(2px, -2px);
+  }
   .last-updated {
     color: var(--text-muted);
     font-size: 0.8rem;
@@ -612,9 +624,9 @@
       </div>
     </div>
     <div class="channel-strip">
-      <span class="channel-strip-label">
-        Currently watching: <a id="channelLink" href="#" target="_blank"><span id="watchingName">…</span></a>
-      </span>
+      <a id="channelLink" href="#" target="_blank" class="channel-link">
+        <span id="watchingName">…</span><span class="channel-link-arrow">↗</span>
+      </a>
       <span class="last-updated" id="lastUpdated"></span>
     </div>
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
@@ -783,22 +795,23 @@ function escapeHtml(str) {
 
 // --- Prediction card ("This channel is dying because…") ---
 const PREDICTIONS = [
-  "It's hot outside",
-  "It's summer",
-  "It's winter",
-  "It's spring",
-  "It's fall",
-  "There is a holiday next week",
-  "It's not an election year",
-  "The culture war is over",
-  "It's shadow banned",
-  "The timeslot is wrong",
-  "Crowder read the news first",
+  "It's hot outside.",
+  "It's summer.",
+  "It's winter.",
+  "It's spring.",
+  "It's fall.",
+  "There is a holiday next week.",
+  "It's not an election year.",
+  "The culture war is over.",
+  "It's shadow banned.",
+  "The timeslot is wrong.",
+  "Crowder read the news first.",
   "Actually it's not dying, it's more successful than ever! You just don't understand YouTube analytics!",
   "Uhhhm, it's because, uhhh, because, it's uhhh, uhhh... how's everyone's weekend going?",
   "WHOOOOOOOOOOOOOOOAH BUUUUUUUUUUUDY!!!",
   "HE'S FAT!",
-  "HE CAN'T READ!"
+  "HE CAN'T READ!",
+  "HE'S FATIRED!"
 ];
 
 let lastPredictionIndex = -1;
@@ -845,9 +858,20 @@ const COFFEE_TAGLINES = [
   "Help me pay for my airplane."
 ];
 {
-  const idx = Math.floor(Math.random() * COFFEE_TAGLINES.length);
-  document.getElementById('coffeeTagline').textContent = COFFEE_TAGLINES[idx];
-  // Replace YOUR_USERNAME after you set up Buy Me a Coffee
+  // Shuffle once per page load so visitors see them in a different order each visit
+  const order = [...COFFEE_TAGLINES].sort(() => Math.random() - 0.5);
+  const taglineEl = document.getElementById('coffeeTagline');
+  let i = 0;
+  taglineEl.textContent = order[0];
+  taglineEl.style.transition = 'opacity 0.4s';
+  setInterval(() => {
+    taglineEl.style.opacity = '0';
+    setTimeout(() => {
+      i = (i + 1) % order.length;
+      taglineEl.textContent = order[i];
+      taglineEl.style.opacity = '1';
+    }, 400);
+  }, 4500);
   document.getElementById('coffeeButton').href = 'https://www.buymeacoffee.com/jerminaldecline';
 }
 
