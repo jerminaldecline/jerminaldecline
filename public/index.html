@@ -3,30 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TheQuartering — Channel Analytics</title>
-<meta name="description" content="Long-form vs Shorts performance analytics for TheQuartering YouTube channel, updated daily.">
+<title>Jerminal Decline</title>
+<meta name="description" content="Watching YouTube channels age in real time. Long-form vs Shorts, the numbers without the padding. Updated nightly.">
+<link rel="icon" type="image/png" href="logo.png">
+<meta property="og:title" content="Jerminal Decline — channels stripped of their Shorts">
+<meta property="og:description" content="See how YouTube channels are really performing once Shorts are removed from the numbers.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="logo.png">
+<meta name="twitter:card" content="summary">
 <style>
   :root {
-    --bg: #fafaf8;
+    /* Brand */
+    --brand: #1b4d9f;
+    --brand-deep: #143b7a;
+    --brand-soft: #e8eef9;
+    --shorts: #ef8e29;
+    --shorts-soft: #fdecd5;
+
+    /* Surfaces (warm off-white, editorial feel) */
+    --bg: #f6f3ec;
     --surface: #ffffff;
-    --surface-2: #f4f4f0;
-    --border: #e8e8e3;
-    --border-strong: #d4d4cf;
-    --text: #1a1a1a;
-    --text-muted: #6b6b6b;
-    --text-dim: #999;
-    --accent: #c4302b;
-    --accent-hover: #a02622;
-    --accent-soft: #fdf0ef;
-    --shorts: #f0993b;
+    --surface-2: #efebe1;
+    --border: #e3ddd0;
+    --border-strong: #cfc8b8;
+
+    /* Text */
+    --text: #1c1a14;
+    --text-muted: #6b665a;
+    --text-dim: #998f7c;
+
+    /* Semantic */
+    --accent: var(--brand);
+    --accent-hover: var(--brand-deep);
+    --accent-soft: var(--brand-soft);
     --up: #1d9e75;
     --up-soft: #e1f5ee;
-    --down: #c4302b;
-    --down-soft: #fcebeb;
-    --flat: #999;
+    --down: #b8302b;
+    --down-soft: #fbe9e8;
+    --flat: #998f7c;
+
     --radius: 10px;
     --radius-sm: 6px;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 2px rgba(28, 26, 20, 0.04);
   }
   * { box-sizing: border-box; }
   body {
@@ -38,18 +56,75 @@
     line-height: 1.5;
   }
   .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Brand header */
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .brand-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-text { flex: 1; min-width: 0; }
+  .brand-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: var(--brand-deep);
+    line-height: 1.05;
+  }
+  .brand-tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0.2rem 0 0;
+    font-style: italic;
+  }
+  .channel-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: var(--brand-soft);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+  }
+  .channel-strip-label {
+    color: var(--brand-deep);
+    font-weight: 500;
+  }
+  .channel-strip a {
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .channel-strip a:hover { text-decoration: underline; }
+  .last-updated {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  @media (max-width: 540px) {
+    .brand-name { font-size: 1.65rem; }
+    .brand-logo { width: 54px; height: 54px; }
+  }
+
   header { margin-bottom: 1.5rem; }
   h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
   .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
-  .last-updated {
-    display: inline-block;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    background: var(--surface-2);
-    padding: 0.25rem 0.6rem;
-    border-radius: 4px;
-  }
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -114,7 +189,13 @@
   .channel-name { font-size: 1.4rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   .channel-name a { color: inherit; text-decoration: none; }
   .channel-name a:hover { color: var(--accent); }
-  .period-label { color: var(--text-muted); font-size: 0.9rem; }
+  .period-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
   .mode-toggle {
     display: inline-flex;
@@ -415,9 +496,19 @@
 <body>
 <div class="container">
   <header>
-    <h1 id="pageTitle">Loading…</h1>
-    <p class="subtitle">Long-form vs Shorts performance, month over month, year over year.</p>
-    <span class="last-updated" id="lastUpdated"></span>
+    <div class="brand-header">
+      <div class="brand-logo"><img src="logo.png" alt="Jerminal Decline logo"></div>
+      <div class="brand-text">
+        <h1 class="brand-name">Jerminal Decline</h1>
+        <p class="brand-tagline">Watching YouTube channels age in real time.</p>
+      </div>
+    </div>
+    <div class="channel-strip">
+      <span class="channel-strip-label">
+        Currently watching: <a id="channelLink" href="#" target="_blank"><span id="watchingName">…</span></a>
+      </span>
+      <span class="last-updated" id="lastUpdated"></span>
+    </div>
   </header>
 
   <div class="card">
@@ -440,7 +531,6 @@
     <div class="loading" id="loadingMsg">Loading channel data…</div>
     <div id="resultsBody" style="display: none;">
       <div class="header-row">
-        <h2 class="channel-name" id="channelTitle"></h2>
         <span class="period-label" id="periodLabel"></span>
       </div>
 
@@ -464,7 +554,16 @@
   </div>
 
   <footer>
-    Data updated nightly from the YouTube Data API. Shorts defined as videos ≤3 minutes. <span id="footerMeta"></span>
+    <p style="margin: 0 0 0.4rem;">
+      Data refreshed nightly from the
+      <a href="https://developers.google.com/youtube/v3" target="_blank" rel="noopener">YouTube Data API</a>.
+      Shorts defined as videos ≤3 minutes.
+    </p>
+    <p style="margin: 0; font-size: 0.75rem;">
+      <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a> ·
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> ·
+      <span id="footerMeta"></span>
+    </p>
   </footer>
 </div>
 
@@ -564,12 +663,12 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dataset = await res.json();
 
-    document.getElementById('pageTitle').textContent = `${dataset.channel.title} — channel analytics`;
-    document.title = `${dataset.channel.title} — Channel Analytics`;
+    document.getElementById('watchingName').textContent = dataset.channel.title;
+    document.getElementById('channelLink').href = dataset.channel.url;
 
     const updated = new Date(dataset.meta.lastUpdated);
     document.getElementById('lastUpdated').textContent =
-      `Last updated ${updated.toUTCString().slice(5, 16)} · ${dataset.meta.videoCount} videos tracked`;
+      `Updated ${updated.toUTCString().slice(5, 16)}`;
 
     document.getElementById('footerMeta').textContent =
       `Tracking ${dataset.meta.longFormCount} long-form videos and ${dataset.meta.shortsCount} Shorts.`;
@@ -601,10 +700,8 @@ function rebuild() {
   const currEnd = new Date(endDate + 'T23:59:59Z');
   if (currStart > currEnd) return;
 
-  document.getElementById('channelTitle').innerHTML =
-    `<a href="${dataset.channel.url}" target="_blank">${dataset.channel.title}</a>`;
   document.getElementById('periodLabel').textContent =
-    `${startDate} – ${endDate}`;
+    `Viewing ${startDate} – ${endDate}`;
 
   // Group all videos by month for fast lookup
   const allMonthMap = new Map();
