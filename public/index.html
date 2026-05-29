@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheQuartering — Channel Analytics</title>
+<meta name="description" content="Long-form vs Shorts performance analytics for TheQuartering YouTube channel, updated daily.">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface-2: #f4f4f0;
+    --border: #e8e8e3;
+    --border-strong: #d4d4cf;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --text-dim: #999;
+    --accent: #c4302b;
+    --accent-hover: #a02622;
+    --accent-soft: #fdf0ef;
+    --shorts: #f0993b;
+    --up: #1d9e75;
+    --up-soft: #e1f5ee;
+    --down: #c4302b;
+    --down-soft: #fcebeb;
+    --flat: #999;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    line-height: 1.5;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 1.5rem; }
+  h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+  .last-updated {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .field input {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--surface);
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .options-row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    padding: 0.85rem 1rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+  .options-row label {
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .options-row input[type="checkbox"] { accent-color: var(--accent); }
+
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .channel-name { font-size: 1.4rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .channel-name a { color: inherit; text-decoration: none; }
+  .channel-name a:hover { color: var(--accent); }
+  .period-label { color: var(--text-muted); font-size: 0.9rem; }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    gap: 2px;
+    margin-bottom: 1.25rem;
+  }
+  .mode-toggle button {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+  }
+  .mode-toggle button:hover { color: var(--text); }
+  .mode-toggle button.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-actions { display: flex; gap: 0.4rem; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { background: var(--surface-2); }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
+  .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
+  .hero-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+  .hero-stat-value {
+    font-size: 1.65rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-stat-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.45rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .composition {
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .composition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+  }
+  .composition-title {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .composition-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .composition-bar {
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 0.65rem;
+  }
+  .composition-bar-fill.long { background: var(--accent); height: 100%; }
+  .composition-bar-fill.short { background: var(--shorts); height: 100%; }
+  .composition-legend {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .composition-legend-item { display: flex; align-items: center; gap: 0.45rem; }
+  .composition-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .composition-legend-dot.long { background: var(--accent); }
+  .composition-legend-dot.short { background: var(--shorts); }
+  .composition-legend-text { color: var(--text-muted); }
+  .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  .delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+    padding: 0.12rem 0.45rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .delta.up { color: var(--up); background: var(--up-soft); }
+  .delta.down { color: var(--down); background: var(--down-soft); }
+  .delta.flat { color: var(--flat); background: var(--surface-2); }
+  .delta.large { font-size: 0.92rem; padding: 0.2rem 0.55rem; }
+  .delta-arrow { font-size: 0.72rem; line-height: 1; }
+  .delta-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 0.2rem;
+  }
+
+  .monthly-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .month-row {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    transition: background 0.1s;
+  }
+  .month-row:last-child { border-bottom: none; }
+  .month-header {
+    display: grid;
+    grid-template-columns: 1.1fr 0.55fr 1.4fr 0.9fr 1.3fr;
+    gap: 1rem;
+    padding: 0.95rem 1.1rem;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .month-header:hover { background: var(--surface-2); }
+  .month-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .caret {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(-45deg);
+    transition: transform 0.15s;
+  }
+  .month-row.expanded .caret { transform: rotate(45deg); }
+  .month-cell { font-variant-numeric: tabular-nums; }
+  .month-cell.num { text-align: right; }
+  .month-cell-value { font-weight: 500; font-size: 0.95rem; }
+  .month-cell-sub { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .deltas-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+  }
+  .delta-line { display: flex; align-items: center; gap: 0.35rem; }
+
+  .stack-bar-wrap { margin-top: 0.4rem; }
+  .stack-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+  }
+  .stack-bar-long { background: var(--accent); height: 100%; }
+  .stack-bar-short { background: var(--shorts); height: 100%; }
+  .stack-bar-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .month-detail {
+    display: none;
+    background: var(--surface-2);
+    padding: 1rem 1.1rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .month-row.expanded .month-detail { display: block; }
+
+  .group {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+  }
+  .group:last-child { margin-bottom: 0; }
+  .group-header {
+    padding: 0.7rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .group-title { font-weight: 500; display: flex; align-items: center; gap: 0.45rem; }
+  .group-stats { color: var(--text-muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .group-empty { padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center; }
+  .split-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .split-dot.long { background: var(--accent); }
+  .split-dot.short { background: var(--shorts); }
+  .video-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 80px 110px;
+    gap: 0.75rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.88rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-row:last-child { border-bottom: none; }
+  .video-row:hover { background: var(--surface-2); }
+  .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.82rem; }
+  .video-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .video-title a { color: var(--text); text-decoration: none; }
+  .video-title a:hover { color: var(--accent); text-decoration: underline; }
+  .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.82rem; }
+  .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+  .group-content { max-height: 360px; overflow-y: auto; }
+
+  .loading, .error {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .error { color: #791f1f; background: var(--down-soft); border-radius: var(--radius-sm); }
+
+  footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  footer a { color: var(--text-muted); }
+
+  @media (max-width: 720px) {
+    .month-header { grid-template-columns: 1fr 1.2fr 1fr; }
+    .month-cell.hide-mobile { display: none; }
+    .video-row { grid-template-columns: 70px 1fr 90px; }
+    .video-duration { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1 id="pageTitle">Loading…</h1>
+    <p class="subtitle">Long-form vs Shorts performance, month over month, year over year.</p>
+    <span class="last-updated" id="lastUpdated"></span>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label for="startDate">Start date</label>
+        <input type="date" id="startDate">
+      </div>
+      <div class="field">
+        <label for="endDate">End date</label>
+        <input type="date" id="endDate">
+      </div>
+    </div>
+    <div class="options-row">
+      <label><input type="checkbox" id="compareYoY" checked> Compare to same period 1 year earlier</label>
+    </div>
+  </div>
+
+  <div id="resultsCard" class="card">
+    <div class="loading" id="loadingMsg">Loading channel data…</div>
+    <div id="resultsBody" style="display: none;">
+      <div class="header-row">
+        <h2 class="channel-name" id="channelTitle"></h2>
+        <span class="period-label" id="periodLabel"></span>
+      </div>
+
+      <div class="mode-toggle" role="tablist" aria-label="View mode">
+        <button data-mode="long" class="active" role="tab">Long-form only</button>
+        <button data-mode="total" role="tab">Total channel</button>
+      </div>
+
+      <div class="hero-grid" id="heroStats"></div>
+      <div class="composition" id="composition"></div>
+
+      <div class="section-title">
+        <span>Monthly breakdown</span>
+        <div class="section-actions">
+          <button class="btn-secondary" id="expandAll">Expand all</button>
+          <button class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
+        </div>
+      </div>
+      <div class="monthly-list" id="monthlyList"></div>
+    </div>
+  </div>
+
+  <footer>
+    Data updated nightly from the YouTube Data API. Shorts defined as videos ≤3 minutes. <span id="footerMeta"></span>
+  </footer>
+</div>
+
+<script>
+let dataset = null;
+let viewMode = 'long';
+let monthlyData = [];
+
+// --- Helpers ---
+function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+function fmtCompact(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K';
+  return Math.round(n).toString();
+}
+function formatDuration(secs) {
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+function monthKey(date) {
+  const d = new Date(date);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+function monthLabel(key) {
+  const [y, m] = key.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${y}`;
+}
+function prevMonthKey(key) {
+  let [y, m] = key.split('-').map(Number);
+  m -= 1;
+  if (m < 1) { m = 12; y -= 1; }
+  return `${y}-${String(m).padStart(2, '0')}`;
+}
+function monthsBetween(start, end) {
+  const keys = [];
+  let y = start.getUTCFullYear();
+  let m = start.getUTCMonth();
+  const endY = end.getUTCFullYear();
+  const endM = end.getUTCMonth();
+  while (y < endY || (y === endY && m <= endM)) {
+    keys.push(`${y}-${String(m + 1).padStart(2, '0')}`);
+    m++;
+    if (m > 11) { m = 0; y++; }
+  }
+  return keys;
+}
+function deltaPill(curr, prev, opts = {}) {
+  const { large, label } = opts;
+  const cls = large ? 'delta large' : 'delta';
+  const labelHtml = label ? `<span class="delta-label">${label}</span>` : '';
+  if (prev == null) return '';
+  if (prev === 0) {
+    if (curr > 0) return `${labelHtml}<span class="${cls} up"><span class="delta-arrow">▲</span> new</span>`;
+    return `${labelHtml}<span class="${cls} flat">—</span>`;
+  }
+  const pct = ((curr - prev) / prev) * 100;
+  const arrow = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
+  const tone = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat';
+  const sign = pct >= 0 ? '+' : '';
+  return `${labelHtml}<span class="${cls} ${tone}"><span class="delta-arrow">${arrow}</span> ${sign}${pct.toFixed(1)}%</span>`;
+}
+function summarise(videos) {
+  const longForm = videos.filter(v => !v.isShort && !v.unavailable);
+  const shorts = videos.filter(v => v.isShort && !v.unavailable);
+  const longViews = longForm.reduce((s, v) => s + v.views, 0);
+  const shortViews = shorts.reduce((s, v) => s + v.views, 0);
+  return {
+    longForm, shorts,
+    longViews, shortViews,
+    longAvg: longForm.length ? longViews / longForm.length : 0,
+    shortAvg: shorts.length ? shortViews / shorts.length : 0,
+    totalViews() { return this.longViews + this.shortViews; },
+    totalCount() { return this.longForm.length + this.shorts.length; },
+    totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
+  };
+}
+function metricsFor(summary) {
+  if (!summary) return null;
+  if (viewMode === 'long') {
+    return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
+  }
+  return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+}
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// --- Bootstrap ---
+async function loadData() {
+  try {
+    const res = await fetch('data.json?t=' + Date.now()); // cache-bust
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    dataset = await res.json();
+
+    document.getElementById('pageTitle').textContent = `${dataset.channel.title} — channel analytics`;
+    document.title = `${dataset.channel.title} — Channel Analytics`;
+
+    const updated = new Date(dataset.meta.lastUpdated);
+    document.getElementById('lastUpdated').textContent =
+      `Last updated ${updated.toUTCString().slice(5, 16)} · ${dataset.meta.videoCount} videos tracked`;
+
+    document.getElementById('footerMeta').textContent =
+      `Tracking ${dataset.meta.longFormCount} long-form videos and ${dataset.meta.shortsCount} Shorts.`;
+
+    // Default range: Jan 1 of current year to today
+    const today = new Date();
+    const startOfYear = new Date(today.getFullYear(), 0, 1);
+    document.getElementById('endDate').value = today.toISOString().split('T')[0];
+    document.getElementById('startDate').value = startOfYear.toISOString().split('T')[0];
+
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('resultsBody').style.display = 'block';
+
+    rebuild();
+  } catch (e) {
+    document.getElementById('loadingMsg').className = 'error';
+    document.getElementById('loadingMsg').textContent = `Failed to load data: ${e.message}`;
+  }
+}
+
+function rebuild() {
+  if (!dataset) return;
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  const yoy = document.getElementById('compareYoY').checked;
+
+  if (!startDate || !endDate) return;
+  const currStart = new Date(startDate + 'T00:00:00Z');
+  const currEnd = new Date(endDate + 'T23:59:59Z');
+  if (currStart > currEnd) return;
+
+  document.getElementById('channelTitle').innerHTML =
+    `<a href="${dataset.channel.url}" target="_blank">${dataset.channel.title}</a>`;
+  document.getElementById('periodLabel').textContent =
+    `${startDate} – ${endDate}`;
+
+  // Group all videos by month for fast lookup
+  const allMonthMap = new Map();
+  for (const v of dataset.videos) {
+    const k = monthKey(v.publishedAt);
+    if (!allMonthMap.has(k)) allMonthMap.set(k, []);
+    allMonthMap.get(k).push(v);
+  }
+
+  // Current period videos
+  const currentVids = dataset.videos.filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= currStart && d <= currEnd;
+  });
+
+  // Previous-year period videos
+  let prevStart, prevEnd, previousVids = [];
+  if (yoy) {
+    prevStart = new Date(currStart); prevStart.setUTCFullYear(prevStart.getUTCFullYear() - 1);
+    prevEnd = new Date(currEnd); prevEnd.setUTCFullYear(prevEnd.getUTCFullYear() - 1);
+    previousVids = dataset.videos.filter(v => {
+      const d = new Date(v.publishedAt);
+      return d >= prevStart && d <= prevEnd;
+    });
+  }
+
+  const currSummary = summarise(currentVids);
+  const prevSummary = summarise(previousVids);
+
+  const orderedKeys = monthsBetween(currStart, currEnd);
+  monthlyData = orderedKeys.map(key => {
+    const currVids = allMonthMap.get(key) || [];
+    const [y, m] = key.split('-');
+    const yoyKey = `${parseInt(y) - 1}-${m}`;
+    const momKey = prevMonthKey(key);
+    const yoyVids = allMonthMap.get(yoyKey);
+    const momVids = allMonthMap.get(momKey);
+    return {
+      key, label: monthLabel(key),
+      curr: summarise(currVids),
+      yoy: yoyVids ? summarise(yoyVids) : null,
+      mom: momVids ? summarise(momVids) : null
+    };
+  });
+
+  renderHeroStats(currSummary, yoy ? prevSummary : null);
+  renderComposition(currSummary);
+  renderMonthlyList(yoy);
+}
+
+function renderHeroStats(curr, prev) {
+  const c = metricsFor(curr);
+  const p = prev ? metricsFor(prev) : null;
+  const viewLabel = viewMode === 'long' ? 'Long-form views' : 'Total channel views';
+  const countLabel = viewMode === 'long' ? 'Long-form videos' : 'Total videos';
+  const avgLabel = viewMode === 'long' ? 'Avg views / long-form' : 'Avg views / video';
+
+  const stats = [
+    { label: viewLabel, value: fmt(c.views), sub: p ? `vs ${fmtCompact(p.views)} prev year ${deltaPill(c.views, p.views)}` : `${c.count} videos`, featured: true },
+    { label: countLabel, value: fmt(c.count), sub: p ? `vs ${p.count} prev year ${deltaPill(c.count, p.count)}` : '' },
+    { label: avgLabel, value: fmt(c.avg), sub: p ? `vs ${fmtCompact(p.avg)} prev year ${deltaPill(c.avg, p.avg)}` : '' }
+  ];
+  document.getElementById('heroStats').innerHTML = stats.map(s => `
+    <div class="hero-stat${s.featured ? ' featured' : ''}">
+      <div class="hero-stat-label">${s.label}</div>
+      <div class="hero-stat-value">${s.value}</div>
+      ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderComposition(s) {
+  const total = s.totalViews();
+  const longPct = total ? (s.longViews / total) * 100 : 0;
+  const shortPct = total ? (s.shortViews / total) * 100 : 0;
+  document.getElementById('composition').innerHTML = `
+    <div class="composition-header">
+      <span class="composition-title">Period composition</span>
+      <span class="composition-meta">${fmt(s.totalCount())} videos · ${fmt(total)} total views</span>
+    </div>
+    <div class="composition-bar">
+      <div class="composition-bar-fill long" style="width: ${longPct}%"></div>
+      <div class="composition-bar-fill short" style="width: ${shortPct}%"></div>
+    </div>
+    <div class="composition-legend">
+      <div class="composition-legend-item">
+        <span class="composition-legend-dot long"></span>
+        <span class="composition-legend-text">Long-form (&gt;3 min):</span>
+        <span class="composition-legend-pct">${longPct.toFixed(1)}%</span>
+        <span class="composition-legend-text">· ${s.longForm.length} videos</span>
+      </div>
+      <div class="composition-legend-item">
+        <span class="composition-legend-dot short"></span>
+        <span class="composition-legend-text">Shorts (≤3 min):</span>
+        <span class="composition-legend-pct">${shortPct.toFixed(1)}%</span>
+        <span class="composition-legend-text">· ${s.shorts.length} videos</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderMonthlyList(yoy) {
+  const list = document.getElementById('monthlyList');
+  list.innerHTML = monthlyData.map((m, idx) => {
+    const longViews = m.curr.longViews;
+    const shortViews = m.curr.shortViews;
+    const totalViews = longViews + shortViews;
+    const longShare = totalViews ? (longViews / totalViews) * 100 : 0;
+    const shortShare = totalViews ? (shortViews / totalViews) * 100 : 0;
+
+    const currMetrics = metricsFor(m.curr);
+    const yoyMetrics = m.yoy ? metricsFor(m.yoy) : null;
+    const momMetrics = m.mom ? metricsFor(m.mom) : null;
+
+    const yoyPill = yoy && yoyMetrics ? deltaPill(currMetrics.views, yoyMetrics.views, { large: true, label: 'YoY' }) : '';
+    const momPill = momMetrics ? deltaPill(currMetrics.views, momMetrics.views, { label: 'MoM' }) : '';
+
+    return `
+      <div class="month-row" data-idx="${idx}">
+        <div class="month-header">
+          <div class="month-name"><span class="caret"></span>${m.label}</div>
+          <div class="month-cell num hide-mobile">
+            <div class="month-cell-value">${m.curr.longForm.length} <span style="color: var(--text-dim); font-weight: 400;">/ ${m.curr.shorts.length}</span></div>
+            <div class="month-cell-sub">long / shorts</div>
+          </div>
+          <div class="month-cell num">
+            <div class="month-cell-value">${fmt(currMetrics.views)}</div>
+            <div class="stack-bar-wrap">
+              <div class="stack-bar">
+                <div class="stack-bar-long" style="width: ${longShare}%"></div>
+                <div class="stack-bar-short" style="width: ${shortShare}%"></div>
+              </div>
+              <div class="stack-bar-legend">
+                <span>${fmtCompact(longViews)} long · ${longShare.toFixed(0)}%</span>
+                <span>${fmtCompact(shortViews)} shorts · ${shortShare.toFixed(0)}%</span>
+              </div>
+            </div>
+          </div>
+          <div class="month-cell num hide-mobile">
+            <div class="month-cell-value">${fmt(currMetrics.avg)}</div>
+            <div class="month-cell-sub">avg / ${currMetrics.label}</div>
+          </div>
+          <div class="month-cell num">
+            <div class="deltas-stack">
+              ${yoyPill ? `<div class="delta-line">${yoyPill}</div>` : ''}
+              ${momPill ? `<div class="delta-line">${momPill}</div>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="month-detail">${renderMonthDetail(m)}</div>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.month-header').forEach(header => {
+    header.addEventListener('click', () => header.parentElement.classList.toggle('expanded'));
+  });
+}
+
+function renderMonthDetail(m) {
+  const longList = m.curr.longForm.slice().sort((a, b) => b.views - a.views);
+  const shortList = m.curr.shorts.slice().sort((a, b) => b.views - a.views);
+  return `
+    <div class="group">
+      <div class="group-header">
+        <span class="group-title"><span class="split-dot long"></span> Long-form videos (&gt;3 min)</span>
+        <span class="group-stats">${longList.length} videos · ${fmt(m.curr.longViews)} views · avg ${fmt(m.curr.longAvg)}</span>
+      </div>
+      <div class="group-content">
+        ${longList.length === 0 ? '<div class="group-empty">No long-form videos this month</div>' : longList.map(v => `
+          <div class="video-row">
+            <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+            <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
+            <div class="video-duration">${formatDuration(v.durationSec)}</div>
+            <div class="video-views">${fmt(v.views)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="group">
+      <div class="group-header">
+        <span class="group-title"><span class="split-dot short"></span> Shorts (≤3 min)</span>
+        <span class="group-stats">${shortList.length} videos · ${fmt(m.curr.shortViews)} views · avg ${fmt(m.curr.shortAvg)}</span>
+      </div>
+      <div class="group-content">
+        ${shortList.length === 0 ? '<div class="group-empty">No Shorts this month</div>' : shortList.map(v => `
+          <div class="video-row">
+            <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+            <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
+            <div class="video-duration">${formatDuration(v.durationSec)}</div>
+            <div class="video-views">${fmt(v.views)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// --- Event wiring ---
+document.querySelectorAll('.mode-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.mode === viewMode) return;
+    viewMode = btn.dataset.mode;
+    document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === viewMode));
+    rebuild();
+  });
+});
+document.getElementById('startDate').addEventListener('change', rebuild);
+document.getElementById('endDate').addEventListener('change', rebuild);
+document.getElementById('compareYoY').addEventListener('change', rebuild);
+document.getElementById('expandAll').addEventListener('click', (e) => {
+  const rows = document.querySelectorAll('.month-row');
+  const allExpanded = Array.from(rows).every(r => r.classList.contains('expanded'));
+  rows.forEach(r => r.classList.toggle('expanded', !allExpanded));
+  e.target.textContent = allExpanded ? 'Expand all' : 'Collapse all';
+});
+document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
+  const yoy = document.getElementById('compareYoY').checked;
+  const header = ['Month', 'Long-form videos', 'Long-form views', 'Long-form avg', 'Shorts videos', 'Shorts views', 'Shorts avg', 'Total views'];
+  if (yoy) header.push('Prev year long-form views', 'YoY long-form views %');
+  const rows = [header];
+  for (const m of monthlyData) {
+    const row = [m.label, m.curr.longForm.length, m.curr.longViews, Math.round(m.curr.longAvg), m.curr.shorts.length, m.curr.shortViews, Math.round(m.curr.shortAvg), m.curr.totalViews()];
+    if (yoy) {
+      const yoyPct = m.yoy && m.yoy.longViews ? ((m.curr.longViews - m.yoy.longViews) / m.yoy.longViews * 100).toFixed(1) : '';
+      row.push(m.yoy ? m.yoy.longViews : '', yoyPct);
+    }
+    rows.push(row);
+  }
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${dataset.channel.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-monthly.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+loadData();
+</script>
+</body>
+</html>
