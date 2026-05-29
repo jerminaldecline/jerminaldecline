@@ -726,7 +726,7 @@
   .month-row:last-child { border-bottom: none; }
   .month-header {
     display: grid;
-    grid-template-columns: 1.1fr 0.55fr 1.6fr 1.3fr;
+    grid-template-columns: 1.1fr 0.55fr 1.4fr 0.9fr 1.3fr;
     gap: 1rem;
     padding: 0.95rem 1.1rem;
     align-items: center;
@@ -1134,19 +1134,26 @@ const PREDICTIONS = [
   "HE'S FATIRED!"
 ];
 
-let lastPredictionIndex = -1;
+let predictionBag = [];
+function nextPredictionIndex() {
+  if (predictionBag.length === 0) {
+    // Refill bag with all indices, then shuffle
+    predictionBag = PREDICTIONS.map((_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = predictionBag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [predictionBag[i], predictionBag[j]] = [predictionBag[j], predictionBag[i]];
+    }
+  }
+  return predictionBag.pop();
+}
 function setPrediction() {
   const card = document.getElementById('predictionCard');
   const text = document.getElementById('predictionText');
   const reason = document.getElementById('predictionReason');
   text.classList.add('shaking');
   setTimeout(() => {
-    let idx;
-    do {
-      idx = Math.floor(Math.random() * PREDICTIONS.length);
-    } while (idx === lastPredictionIndex && PREDICTIONS.length > 1);
-    lastPredictionIndex = idx;
-    reason.textContent = PREDICTIONS[idx];
+    reason.textContent = PREDICTIONS[nextPredictionIndex()];
     text.classList.remove('shaking');
   }, 180);
 }
@@ -1155,11 +1162,7 @@ document.getElementById('predictionCard').addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPrediction(); }
 });
 // Set initial prediction (no animation on first render)
-{
-  const idx = Math.floor(Math.random() * PREDICTIONS.length);
-  lastPredictionIndex = idx;
-  document.getElementById('predictionReason').textContent = PREDICTIONS[idx];
-}
+document.getElementById('predictionReason').textContent = PREDICTIONS[nextPredictionIndex()];
 
 // --- Coffee button rotating CTA ---
 const COFFEE_TAGLINES = [
@@ -1388,6 +1391,10 @@ function renderMonthlyList(yoy) {
                 <span>${fmtCompact(shortViews)} shorts · ${shortShare.toFixed(0)}%</span>
               </div>
             </div>
+          </div>
+          <div class="month-cell num hide-mobile">
+            <div class="month-cell-value">${fmt(currMetrics.avg)}</div>
+            <div class="month-cell-sub">avg / ${currMetrics.label}</div>
           </div>
           <div class="month-cell num">
             <div class="deltas-stack">
