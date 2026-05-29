@@ -376,6 +376,15 @@
     font-size: 0.95rem;
     font-family: inherit;
     background: var(--surface);
+    color: var(--text);
+    color-scheme: light dark;
+  }
+  /* Make the native date picker icon flip to white in dark mode */
+  [data-theme="dark"] .field input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.6);
+  }
+  [data-theme="dark"] .field input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(1) opacity(1);
   }
   .field input:focus {
     outline: none;
@@ -951,6 +960,7 @@ const PREDICTIONS = [
   "It's shadow banned.",
   "The timeslot is wrong.",
   "Crowder read the news first.",
+  "The algorithm has changed.",
   "Actually it's not dying, it's more successful than ever! You just don't understand YouTube analytics!",
   "Uhhhm, it's because, uhhh, because, it's uhhh, uhhh... how's everyone's weekend going?",
   "WHOOOOOOOOOOOOOOOAH BUUUUUUUUUUUDY!!!",
