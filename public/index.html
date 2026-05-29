@@ -9,7 +9,7 @@
 <meta property="og:title" content="Jerminal Decline — channels stripped of their Shorts">
 <meta property="og:description" content="See how YouTube channels are really performing once Shorts are removed from the numbers.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="logo.png">
+<meta property="og:image" content="https://jerminaldecline.com/logo.png">
 <meta name="twitter:card" content="summary">
 <style>
   :root {
@@ -167,17 +167,22 @@
   }
   .prediction-shake {
     font-size: 0.7rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.2rem 0.55rem;
+    background: var(--shorts);
+    color: #1c1a14;
+    padding: 0.3rem 0.7rem;
     border-radius: 4px;
-    transition: background 0.15s;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
   }
-  .prediction-card:hover .prediction-shake { background: rgba(255, 255, 255, 0.18); }
+  .prediction-card:hover .prediction-shake { background: #ffaa4d; }
+  .prediction-card:active .prediction-shake { transform: scale(0.96); }
   .prediction-text {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 500;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
     font-style: italic;
     transition: opacity 0.2s;
   }
@@ -615,7 +620,7 @@
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
       <div class="prediction-header">
         <span>The official diagnosis</span>
-        <span class="prediction-shake">🎱 Shake</span>
+        <span class="prediction-shake">🎱 Find a new excuse</span>
       </div>
       <div class="prediction-text" id="predictionText">
         <strong>This channel is dying because…</strong> <span id="predictionReason">…</span>
@@ -788,7 +793,12 @@ const PREDICTIONS = [
   "The culture war is over",
   "It's shadow banned",
   "The timeslot is wrong",
-  "Crowder read the news first"
+  "Crowder read the news first",
+  "Actually it's not dying, it's more successful than ever! You just don't understand YouTube analytics!",
+  "Uhhhm, it's because, uhhh, because, it's uhhh, uhhh... how's everyone's weekend going?",
+  "WHOOOOOOOOOOOOOOOAH BUUUUUUUUUUUDY!!!",
+  "HE'S FAT!",
+  "HE CAN'T READ!"
 ];
 
 let lastPredictionIndex = -1;
