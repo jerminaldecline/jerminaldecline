@@ -310,6 +310,52 @@
   }
   .prediction-text.shaking { opacity: 0; }
 
+  /* Weekend counter — deadpan "days since accident" energy */
+  .weekend-counter {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .weekend-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+  }
+  .weekend-num {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--brand-deep);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  [data-theme="dark"] .weekend-num { color: var(--brand-deep); } /* already light in dark mode */
+  .weekend-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .weekend-divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0.3rem 0;
+  }
+  @media (max-width: 480px) {
+    .weekend-num { font-size: 2rem; }
+    .weekend-label { font-size: 0.68rem; }
+  }
+
   /* Coffee button — footer */
   .coffee-block {
     margin-top: 2.5rem;
@@ -763,6 +809,17 @@
         <strong>This channel is dying because…</strong> <span id="predictionReason">…</span>
       </div>
     </div>
+    <div class="weekend-counter" aria-label="Weekend proximity counter">
+      <div class="weekend-side">
+        <div class="weekend-num" id="daysSinceWeekend">0</div>
+        <div class="weekend-label">days since last weekend</div>
+      </div>
+      <div class="weekend-divider"></div>
+      <div class="weekend-side">
+        <div class="weekend-num" id="daysUntilWeekend">0</div>
+        <div class="weekend-label">days until next weekend</div>
+      </div>
+    </div>
   </header>
 
   <div class="card">
@@ -945,6 +1002,43 @@ function escapeHtml(str) {
       applyTheme('system');
     }
   });
+})();
+
+// --- Weekend counter ---
+(function() {
+  const d = new Date();
+  const day = d.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+
+  // Days since last weekend ended:
+  //   Sun (0) → 0  (still the weekend)
+  //   Mon (1) → 1
+  //   Tue (2) → 2
+  //   Wed (3) → 3
+  //   Thu (4) → 4
+  //   Fri (5) → 5
+  //   Sat (6) → 0  (it's the weekend again)
+  let since;
+  if (day === 0 || day === 6) {
+    since = 0;
+  } else {
+    since = day; // Mon=1 ... Fri=5
+  }
+
+  // Days until next weekend starts (Saturday):
+  //   Sat (6) → 0
+  //   Sun (0) → 6
+  //   Mon (1) → 5
+  //   ...
+  //   Fri (5) → 1
+  let until;
+  if (day === 6) {
+    until = 0;
+  } else {
+    until = 6 - day;
+  }
+
+  document.getElementById('daysSinceWeekend').textContent = since;
+  document.getElementById('daysUntilWeekend').textContent = until;
 })();
 
 // --- Prediction card ("This channel is dying because…") ---
