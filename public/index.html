@@ -14,9 +14,20 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jerminal Decline — HE'S SHORTLESS!">
 <meta name="twitter:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
+<!-- No-flash theme bootstrap: runs before paint -->
+<script>
+  (function() {
+    const stored = localStorage.getItem('theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored || 'system';
+    const resolved = theme === 'system' ? (sysDark ? 'dark' : 'light') : theme;
+    document.documentElement.setAttribute('data-theme', resolved);
+    document.documentElement.setAttribute('data-theme-pref', theme);
+  })();
+</script>
 <style>
-  :root {
-    /* Brand */
+  :root, [data-theme="light"] {
+    /* Brand (constant across themes) */
     --brand: #1b4d9f;
     --brand-deep: #143b7a;
     --brand-soft: #e8eef9;
@@ -45,9 +56,52 @@
     --down-soft: #fbe9e8;
     --flat: #998f7c;
 
+    /* Background gradients */
+    --bg-glow-1: rgba(27, 77, 159, 0.04);
+    --bg-glow-2: rgba(239, 142, 41, 0.04);
+    /* Prediction card text */
+    --pred-text: #f0e9d9;
+
     --radius: 10px;
     --radius-sm: 6px;
     --shadow-sm: 0 1px 2px rgba(28, 26, 20, 0.04);
+  }
+
+  [data-theme="dark"] {
+    /* Brand tweaked slightly for dark legibility */
+    --brand: #6aa3ff;
+    --brand-deep: #b8d0ff;
+    --brand-soft: #1a2540;
+    --shorts: #ffa752;
+    --shorts-soft: #3a2614;
+
+    /* Surfaces — deep navy that echoes the brand */
+    --bg: #0d1220;
+    --surface: #161c2e;
+    --surface-2: #1d2538;
+    --border: #29314a;
+    --border-strong: #3a4564;
+
+    /* Text — warm off-white for editorial continuity */
+    --text: #ede8d8;
+    --text-muted: #9aa0b3;
+    --text-dim: #6c728a;
+
+    /* Semantic */
+    --accent: var(--brand);
+    --accent-hover: var(--brand-deep);
+    --accent-soft: var(--brand-soft);
+    --up: #4dd0a0;
+    --up-soft: #143028;
+    --down: #ff6b66;
+    --down-soft: #3a1c1c;
+    --flat: #6c728a;
+
+    --bg-glow-1: rgba(106, 163, 255, 0.05);
+    --bg-glow-2: rgba(255, 167, 82, 0.04);
+    --pred-text: #ede8d8;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
   * { box-sizing: border-box; }
   html, body {
@@ -56,8 +110,8 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
     background:
-      radial-gradient(ellipse at top left, rgba(27, 77, 159, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse at bottom right, rgba(239, 142, 41, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at top left, var(--bg-glow-1) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, var(--bg-glow-2) 0%, transparent 50%),
       var(--bg);
     background-attachment: fixed;
     color: var(--text);
@@ -65,6 +119,7 @@
     padding: 2.5rem 1.5rem 4rem;
     line-height: 1.5;
     min-height: 100vh;
+    transition: background-color 0.2s, color 0.2s;
   }
   .container { max-width: 1100px; margin: 0 auto; }
 
@@ -74,6 +129,11 @@
     align-items: center;
     gap: 1.25rem;
     margin-bottom: 0.75rem;
+  }
+  .brand-text { flex: 1; min-width: 0; }
+  @media (max-width: 540px) {
+    .brand-header { flex-wrap: wrap; }
+    .brand-text { flex: 1 1 calc(100% - 70px); }
   }
   .brand-logo {
     width: 64px;
@@ -87,7 +147,6 @@
     overflow: hidden;
   }
   .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
-  .brand-text { flex: 1; min-width: 0; }
   .brand-name {
     font-size: 2rem;
     font-weight: 700;
@@ -142,10 +201,49 @@
     .brand-logo { width: 54px; height: 54px; }
   }
 
+  /* Theme toggle */
+  .theme-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .theme-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-toggle button:hover {
+    color: var(--text);
+    background: rgba(127, 127, 127, 0.08);
+  }
+  .theme-toggle button.active {
+    background: var(--surface);
+    color: var(--accent);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] .theme-toggle button.active {
+    background: var(--bg);
+  }
+  @media (max-width: 540px) {
+    .theme-toggle { align-self: flex-start; }
+  }
+
   /* Prediction card (the "8-ball") */
   .prediction-card {
     background: var(--brand-deep);
-    color: #f0e9d9;
+    color: var(--pred-text);
     border-radius: var(--radius);
     padding: 1.25rem 1.4rem;
     margin-bottom: 1rem;
@@ -154,7 +252,12 @@
     cursor: pointer;
     user-select: none;
     box-shadow: 0 4px 12px rgba(27, 77, 159, 0.18);
-    transition: transform 0.15s;
+    transition: transform 0.15s, background-color 0.2s;
+  }
+  [data-theme="dark"] .prediction-card {
+    background: var(--surface-2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border);
   }
   .prediction-card:hover { transform: translateY(-1px); }
   .prediction-card:active { transform: translateY(0); }
@@ -174,9 +277,11 @@
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(240, 233, 217, 0.65);
+    color: rgba(237, 232, 216, 0.65);
     font-weight: 500;
   }
+  [data-theme="dark"] .prediction-header { color: var(--text-muted); }
+  [data-theme="dark"] .prediction-text strong { color: var(--text); }
   .prediction-shake {
     font-size: 0.7rem;
     background: var(--shorts);
@@ -622,6 +727,17 @@
         <h1 class="brand-name">Jerminal Decline</h1>
         <p class="brand-tagline">My channel is under attack!</p>
       </div>
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button data-theme-set="light" aria-label="Light theme" title="Light">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button data-theme-set="system" aria-label="System theme" title="System">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
+        </button>
+        <button data-theme-set="dark" aria-label="Dark theme" title="Dark">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
     </div>
     <div class="channel-strip">
       <a id="channelLink" href="#" target="_blank" class="channel-link">
@@ -792,6 +908,35 @@ function metricsFor(summary) {
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+// --- Theme toggle ---
+(function() {
+  const buttons = document.querySelectorAll('.theme-toggle button');
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(pref) {
+    const resolved = pref === 'system' ? (mq.matches ? 'dark' : 'light') : pref;
+    document.documentElement.setAttribute('data-theme', resolved);
+    document.documentElement.setAttribute('data-theme-pref', pref);
+    localStorage.setItem('theme', pref);
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.themeSet === pref));
+  }
+
+  // Initial active state (theme already applied by pre-paint script)
+  const initialPref = document.documentElement.getAttribute('data-theme-pref') || 'system';
+  buttons.forEach(b => b.classList.toggle('active', b.dataset.themeSet === initialPref));
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => applyTheme(btn.dataset.themeSet));
+  });
+
+  // Update if OS changes theme while we're on "system"
+  mq.addEventListener('change', () => {
+    if (document.documentElement.getAttribute('data-theme-pref') === 'system') {
+      applyTheme('system');
+    }
+  });
+})();
 
 // --- Prediction card ("This channel is dying because…") ---
 const PREDICTIONS = [
