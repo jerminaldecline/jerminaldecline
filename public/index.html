@@ -768,6 +768,12 @@
     height: 0;
     border-top: 2px dashed var(--text-dim);
   }
+  .trend-legend-swatch.gap {
+    background: #ff6b66;
+    opacity: 0.4;
+    height: 10px;
+    border-radius: 2px;
+  }
   .chart-wrap {
     position: relative;
     background: var(--surface-2);
@@ -789,6 +795,22 @@
   .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
   .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
   .chart-area-curr { fill: var(--accent); opacity: 0.08; }
+  .chart-gap { fill: #ff6b66; opacity: 0.12; pointer-events: none; }
+  .chart-annotation-label {
+    fill: #fff;
+    font-size: 10.5px;
+    font-weight: 600;
+    font-family: inherit;
+    text-anchor: middle;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-attribution {
+    fill: var(--text-dim);
+    font-size: 9.5px;
+    font-family: inherit;
+    text-anchor: end;
+    opacity: 0.75;
+  }
   .chart-dot { fill: var(--surface); stroke-width: 2; }
   .chart-dot.curr { stroke: var(--accent); }
   .chart-dot.prev { stroke: var(--text-dim); }
@@ -1363,7 +1385,9 @@ const COFFEE_TAGLINES = [
   "Help me pay for 3 useless co-hosts.",
   "Help me pay for my $1.4 million dollar mortgage.",
   "Help me pay for my $300,000 home equity loan.",
-  "Help me pay for my airplane."
+  "Help me pay for my airplane.",
+  "Help me pay for my floor to ceiling saltwater aquarium.",
+  "Help me pay for my fish tank guy."
 ];
 {
   // Shuffle once per page load so visitors see them in a different order each visit
@@ -1608,11 +1632,12 @@ function renderTrendChart(yoy) {
   legend.innerHTML = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> This period</span>
     ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+    ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap"></span> YoY deficit</span>' : ''}
   `;
 
-  // Layout constants (SVG viewBox is 720×240)
-  const W = 720, H = 240;
-  const P = { top: 14, right: 16, bottom: 30, left: 56 };
+  // Layout — taller to accommodate annotation, more left padding for Y labels
+  const W = 720, H = 260;
+  const P = { top: 18, right: 22, bottom: 42, left: 58 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
@@ -1620,21 +1645,20 @@ function renderTrendChart(yoy) {
   const currValues = monthlyData.map(m => metricsFor(m.curr).views);
   const prevValues = yoy ? monthlyData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
 
-  // Y-axis max: round up to a nice number
+  // Y-axis max: tight to the data with 10% headroom, then round to a nice number
   const allValues = [...currValues, ...prevValues.filter(v => v != null)];
   const rawMax = Math.max(1, ...allValues);
-  const yMax = niceMax(rawMax);
+  const yMax = niceMax(rawMax * 1.1);
 
-  // X positions: evenly distribute points across the inner width
+  // X positions
   const n = monthlyData.length;
   const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
   const yFor = v => P.top + (1 - v / yMax) * innerH;
 
   // Build path strings
   const currPath = currValues.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i)} ${yFor(v)}`).join(' ');
-  const currArea = `${currPath} L ${xFor(n - 1)} ${P.top + innerH} L ${xFor(0)} ${P.top + innerH} Z`;
 
-  // Previous-year path: handle nulls by breaking the line
+  // Previous-year path — handle nulls by breaking the line
   let prevPath = '';
   if (yoy) {
     let started = false;
@@ -1645,21 +1669,36 @@ function renderTrendChart(yoy) {
     });
   }
 
-  // Y axis grid + labels (4 grid lines)
+  // Gap fill — closed polygon between the two lines, only where prev > curr (deficit)
+  let gapPath = '';
+  if (yoy) {
+    // Walk forward along previous, backward along current, only including indices where both exist
+    const validIndices = [];
+    prevValues.forEach((p, i) => {
+      if (p != null && currValues[i] != null) validIndices.push(i);
+    });
+    if (validIndices.length >= 2) {
+      const forward = validIndices.map(i => `${xFor(i)},${yFor(prevValues[i])}`).join(' L ');
+      const backward = [...validIndices].reverse().map(i => `${xFor(i)},${yFor(currValues[i])}`).join(' L ');
+      gapPath = `M ${forward} L ${backward} Z`;
+    }
+  }
+
+  // Y axis grid + labels
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map(t => ({ y: yFor(t * yMax), v: t * yMax }));
   const gridLines = yTicks.map(t => `
     <line class="chart-grid-line" x1="${P.left}" y1="${t.y}" x2="${P.left + innerW}" y2="${t.y}"/>
     <text class="chart-axis-label y" x="${P.left - 8}" y="${t.y + 4}">${fmtCompact(t.v)}</text>
   `).join('');
 
-  // X axis labels — show roughly 6 labels max to avoid overlap
+  // X axis labels
   const labelStride = Math.max(1, Math.ceil(n / 6));
   const xLabels = monthlyData.map((m, i) => {
     if (i % labelStride !== 0 && i !== n - 1) return '';
-    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 10}">${m.label.split(' ')[0]}</text>`;
+    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 22}">${m.label.split(' ')[0]}</text>`;
   }).join('');
 
-  // Dots — drawn on top
+  // Dots
   const currDots = currValues.map((v, i) =>
     `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
   ).join('');
@@ -1667,7 +1706,52 @@ function renderTrendChart(yoy) {
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
 
-  // Hit areas (invisible wide rects, one per month, for hover/touch tooltips)
+  // Annotate worst YoY drop — find the largest negative percentage and label it
+  let annotation = '';
+  if (yoy) {
+    let worstIdx = -1;
+    let worstPct = 0;
+    monthlyData.forEach((m, i) => {
+      if (!m.yoy) return;
+      const c = metricsFor(m.curr).views;
+      const p = metricsFor(m.yoy).views;
+      if (p > 0) {
+        const pct = ((c - p) / p) * 100;
+        if (pct < worstPct) { worstPct = pct; worstIdx = i; }
+      }
+    });
+    if (worstIdx >= 0 && worstPct < -5) {
+      const cx = xFor(worstIdx);
+      const cy = yFor(currValues[worstIdx]);
+      // Position label below the point so it doesn't collide with the gap-fill above
+      const labelY = cy + 22;
+      const labelText = `${worstPct.toFixed(1)}% YoY`;
+      const labelW = labelText.length * 6.6 + 14;
+      // Keep label within chart bounds
+      const labelX = Math.max(P.left + labelW / 2, Math.min(P.left + innerW - labelW / 2, cx));
+      annotation = `
+        <g class="chart-annotation">
+          <circle cx="${cx}" cy="${cy}" r="6" fill="none" stroke="#ff6b66" stroke-width="2" opacity="0.85"/>
+          <line x1="${cx}" y1="${cy + 6}" x2="${labelX}" y2="${labelY - 11}" stroke="#ff6b66" stroke-width="1" opacity="0.5"/>
+          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="18" rx="3" fill="#ff6b66"/>
+          <text x="${labelX}" y="${labelY + 2}" class="chart-annotation-label">${labelText}</text>
+        </g>
+      `;
+    }
+  }
+
+  // Attribution: bottom-right corner of the chart area
+  const channelName = dataset?.channel?.title || 'Channel';
+  const startEl = document.getElementById('startDate');
+  const endEl = document.getElementById('endDate');
+  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const attribution = `
+    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 6}">
+      ${escapeHtml(channelName)} · ${dateRange} · jerminaldecline.com
+    </text>
+  `;
+
+  // Hit areas
   const hitWidth = innerW / Math.max(1, n);
   const hits = monthlyData.map((m, i) => `
     <rect class="chart-hit"
@@ -1676,21 +1760,22 @@ function renderTrendChart(yoy) {
       data-idx="${i}"/>
   `).join('');
 
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
     ${xLabels}
-    <path class="chart-area-curr" d="${currArea}"/>
+    ${gapPath ? `<path class="chart-gap" d="${gapPath}"/>` : ''}
     ${yoy && prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${currPath}"/>
     ${prevDots}
     ${currDots}
+    ${annotation}
+    ${attribution}
     ${hits}
   `;
 
   // Tooltip behaviour
-  const wrap = svg.parentElement;
-  const wrapRect = () => wrap.getBoundingClientRect();
   svg.querySelectorAll('.chart-hit').forEach(rect => {
     rect.addEventListener('mouseenter', e => showTooltip(parseInt(rect.dataset.idx)));
     rect.addEventListener('touchstart', e => { e.preventDefault(); showTooltip(parseInt(rect.dataset.idx)); }, { passive: false });
