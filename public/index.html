@@ -714,6 +714,92 @@
   .composition-legend-text { color: var(--text-muted); }
   .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
 
+  /* Monthly trend chart */
+  .trend-title { margin-bottom: 0.4rem; }
+  .trend-legend {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .trend-legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .trend-legend-swatch {
+    display: inline-block;
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .trend-legend-swatch.prev {
+    background: var(--text-dim);
+    height: 0;
+    border-top: 2px dashed var(--text-dim);
+  }
+  .chart-wrap {
+    position: relative;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 0.85rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  #trendChart {
+    width: 100%;
+    height: 240px;
+    display: block;
+    overflow: visible;
+  }
+  .chart-axis-line { stroke: var(--border-strong); stroke-width: 1; }
+  .chart-grid-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 3; }
+  .chart-axis-label { fill: var(--text-dim); font-size: 11px; font-family: inherit; }
+  .chart-axis-label.x { text-anchor: middle; }
+  .chart-axis-label.y { text-anchor: end; }
+  .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
+  .chart-area-curr { fill: var(--accent); opacity: 0.08; }
+  .chart-dot { fill: var(--surface); stroke-width: 2; }
+  .chart-dot.curr { stroke: var(--accent); }
+  .chart-dot.prev { stroke: var(--text-dim); }
+  .chart-hit { fill: transparent; cursor: pointer; }
+  .chart-tooltip {
+    position: absolute;
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+    margin-top: -8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+  .chart-tooltip-month { font-weight: 600; margin-bottom: 0.2rem; }
+  .chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-tooltip-row .swatch {
+    width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+  }
+  .chart-tooltip-row .swatch.curr { background: var(--accent); }
+  .chart-tooltip-row .swatch.prev { background: var(--text-dim); }
+  .chart-tooltip-delta { font-weight: 500; margin-left: 0.3rem; }
+  .chart-tooltip-delta.up { color: #4dd0a0; }
+  .chart-tooltip-delta.down { color: #ff8a8a; }
+  .chart-empty {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    padding: 4rem 1rem;
+  }
+
   .delta {
     display: inline-flex;
     align-items: center;
@@ -958,6 +1044,15 @@
 
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
+
+      <div class="section-title trend-title">
+        <span>Monthly trend</span>
+        <span class="trend-legend" id="trendLegend"></span>
+      </div>
+      <div class="chart-wrap">
+        <svg id="trendChart" viewBox="0 0 720 240" preserveAspectRatio="none" role="img" aria-label="Monthly long-form views trend chart"></svg>
+        <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
+      </div>
 
       <div class="section-title">
         <span>Monthly breakdown</span>
@@ -1322,6 +1417,7 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
+  renderTrendChart(yoy);
   renderMonthlyList(yoy);
 }
 
@@ -1374,6 +1470,149 @@ function renderComposition(s) {
       </div>
     </div>
   `;
+}
+
+function renderTrendChart(yoy) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (!monthlyData.length) {
+    svg.innerHTML = '';
+    legend.innerHTML = '';
+    return;
+  }
+
+  // Legend
+  legend.innerHTML = `
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> This period</span>
+    ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+  `;
+
+  // Layout constants (SVG viewBox is 720×240)
+  const W = 720, H = 240;
+  const P = { top: 14, right: 16, bottom: 30, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+
+  // Pull metric values (mode-aware via metricsFor)
+  const currValues = monthlyData.map(m => metricsFor(m.curr).views);
+  const prevValues = yoy ? monthlyData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
+
+  // Y-axis max: round up to a nice number
+  const allValues = [...currValues, ...prevValues.filter(v => v != null)];
+  const rawMax = Math.max(1, ...allValues);
+  const yMax = niceMax(rawMax);
+
+  // X positions: evenly distribute points across the inner width
+  const n = monthlyData.length;
+  const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
+  const yFor = v => P.top + (1 - v / yMax) * innerH;
+
+  // Build path strings
+  const currPath = currValues.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i)} ${yFor(v)}`).join(' ');
+  const currArea = `${currPath} L ${xFor(n - 1)} ${P.top + innerH} L ${xFor(0)} ${P.top + innerH} Z`;
+
+  // Previous-year path: handle nulls by breaking the line
+  let prevPath = '';
+  if (yoy) {
+    let started = false;
+    prevValues.forEach((v, i) => {
+      if (v == null) { started = false; return; }
+      prevPath += `${started ? 'L' : 'M'} ${xFor(i)} ${yFor(v)} `;
+      started = true;
+    });
+  }
+
+  // Y axis grid + labels (4 grid lines)
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map(t => ({ y: yFor(t * yMax), v: t * yMax }));
+  const gridLines = yTicks.map(t => `
+    <line class="chart-grid-line" x1="${P.left}" y1="${t.y}" x2="${P.left + innerW}" y2="${t.y}"/>
+    <text class="chart-axis-label y" x="${P.left - 8}" y="${t.y + 4}">${fmtCompact(t.v)}</text>
+  `).join('');
+
+  // X axis labels — show roughly 6 labels max to avoid overlap
+  const labelStride = Math.max(1, Math.ceil(n / 6));
+  const xLabels = monthlyData.map((m, i) => {
+    if (i % labelStride !== 0 && i !== n - 1) return '';
+    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 10}">${m.label.split(' ')[0]}</text>`;
+  }).join('');
+
+  // Dots — drawn on top
+  const currDots = currValues.map((v, i) =>
+    `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+  ).join('');
+  const prevDots = yoy ? prevValues.map((v, i) =>
+    v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
+  ).join('') : '';
+
+  // Hit areas (invisible wide rects, one per month, for hover/touch tooltips)
+  const hitWidth = innerW / Math.max(1, n);
+  const hits = monthlyData.map((m, i) => `
+    <rect class="chart-hit"
+      x="${xFor(i) - hitWidth / 2}" y="${P.top}"
+      width="${hitWidth}" height="${innerH}"
+      data-idx="${i}"/>
+  `).join('');
+
+  svg.innerHTML = `
+    <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
+    ${gridLines}
+    ${xLabels}
+    <path class="chart-area-curr" d="${currArea}"/>
+    ${yoy && prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
+    <path class="chart-line-curr" d="${currPath}"/>
+    ${prevDots}
+    ${currDots}
+    ${hits}
+  `;
+
+  // Tooltip behaviour
+  const wrap = svg.parentElement;
+  const wrapRect = () => wrap.getBoundingClientRect();
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', e => showTooltip(parseInt(rect.dataset.idx)));
+    rect.addEventListener('touchstart', e => { e.preventDefault(); showTooltip(parseInt(rect.dataset.idx)); }, { passive: false });
+    rect.addEventListener('mouseleave', hideTooltip);
+  });
+  svg.addEventListener('mouseleave', hideTooltip);
+
+  function showTooltip(idx) {
+    const m = monthlyData[idx];
+    const curr = metricsFor(m.curr);
+    const yoyM = m.yoy ? metricsFor(m.yoy) : null;
+    const cxPct = ((xFor(idx) / W) * 100);
+    const cyPct = ((yFor(curr.views) / H) * 100);
+    let deltaHtml = '';
+    if (yoy && yoyM && yoyM.views > 0) {
+      const pct = ((curr.views - yoyM.views) / yoyM.views) * 100;
+      const cls = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : '';
+      const sign = pct >= 0 ? '+' : '';
+      deltaHtml = `<span class="chart-tooltip-delta ${cls}">${sign}${pct.toFixed(1)}%</span>`;
+    }
+    tooltip.innerHTML = `
+      <div class="chart-tooltip-month">${m.label}</div>
+      <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
+      ${yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
+    `;
+    tooltip.style.display = 'block';
+    tooltip.style.left = cxPct + '%';
+    tooltip.style.top = cyPct + '%';
+  }
+  function hideTooltip() { tooltip.style.display = 'none'; }
+}
+
+// Pick a "nice" max for Y axis — round up to a clean multiple
+function niceMax(v) {
+  if (v <= 0) return 1;
+  const mag = Math.pow(10, Math.floor(Math.log10(v)));
+  const norm = v / mag;
+  let factor;
+  if (norm <= 1) factor = 1;
+  else if (norm <= 2) factor = 2;
+  else if (norm <= 2.5) factor = 2.5;
+  else if (norm <= 5) factor = 5;
+  else factor = 10;
+  return factor * mag;
 }
 
 function renderMonthlyList(yoy) {
