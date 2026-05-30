@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jerminal Decline</title>
 <meta name="description" content="HE'S SHORTLESS! Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
-<link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:title" content="Jerminal Decline — HE'S SHORTLESS!">
 <meta property="og:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
 <meta property="og:type" content="website">
@@ -195,6 +197,33 @@
   .last-updated {
     color: var(--text-muted);
     font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--up);
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--up);
+    opacity: 0.4;
+    animation: livePulse 2s ease-out infinite;
+  }
+  .live-dot.stale { background: var(--shorts); }
+  .live-dot.stale::after { background: var(--shorts); animation: none; opacity: 0; }
+  @keyframes livePulse {
+    0% { transform: scale(1); opacity: 0.4; }
+    70%, 100% { transform: scale(2.2); opacity: 0; }
   }
   @media (max-width: 540px) {
     .brand-name { font-size: 1.65rem; }
@@ -799,6 +828,16 @@
     font-size: 0.9rem;
     padding: 4rem 1rem;
   }
+  .empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 3rem 1.5rem;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+  .empty-state strong { color: var(--text); }
 
   .delta {
     display: inline-flex;
@@ -948,6 +987,26 @@
   }
   .error { color: #791f1f; background: var(--down-soft); border-radius: var(--radius-sm); }
 
+  /* Loading skeleton */
+  .loading { padding: 0; text-align: left; }
+  .skeleton-bar, .skeleton-card {
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: var(--radius-sm);
+  }
+  .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .skeleton-card { height: 110px; border-radius: var(--radius); }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
   footer {
     margin-top: 2rem;
     text-align: center;
@@ -1014,7 +1073,16 @@
   </header>
 
   <div id="resultsCard" class="card">
-    <div class="loading" id="loadingMsg">Loading channel data…</div>
+    <div class="loading" id="loadingMsg">
+      <div class="skeleton-bar" style="width: 30%; height: 32px; margin-bottom: 1.5rem;"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+      <div class="skeleton-bar" style="width: 100%; height: 90px; margin-bottom: 1.5rem;"></div>
+      <div class="skeleton-bar" style="width: 100%; height: 200px;"></div>
+    </div>
     <div id="resultsBody" style="display: none;">
       <div class="control-bar">
         <div class="control-bar-period">
@@ -1091,6 +1159,7 @@
 let dataset = null;
 let viewMode = 'long';
 let monthlyData = [];
+let heroAnimated = false;
 
 // --- Helpers ---
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
@@ -1325,8 +1394,15 @@ async function loadData() {
     document.getElementById('channelLink').href = dataset.channel.url;
 
     const updated = new Date(dataset.meta.lastUpdated);
-    document.getElementById('lastUpdated').textContent =
-      `Updated ${updated.toUTCString().slice(5, 16)}`;
+    const now = new Date();
+    const hoursAgo = (now - updated) / 36e5;
+    let freshness;
+    if (hoursAgo < 24) freshness = 'Updated today';
+    else if (hoursAgo < 48) freshness = 'Updated yesterday';
+    else freshness = `Updated ${Math.floor(hoursAgo / 24)} days ago`;
+    const fresh = hoursAgo < 48;
+    document.getElementById('lastUpdated').innerHTML =
+      `<span class="live-dot${fresh ? '' : ' stale'}"></span>${freshness}`;
 
     document.getElementById('footerMeta').textContent =
       `Tracking ${dataset.meta.longFormCount} long-form videos and ${dataset.meta.shortsCount} Shorts.`;
@@ -1399,6 +1475,33 @@ function rebuild() {
   const currSummary = summarise(currentVids);
   const prevSummary = summarise(previousVids);
 
+  // Empty state — no uploads in the selected range
+  const resultsBody = document.getElementById('resultsBody');
+  let emptyMsg = document.getElementById('emptyState');
+  if (currentVids.length === 0) {
+    if (!emptyMsg) {
+      emptyMsg = document.createElement('div');
+      emptyMsg.id = 'emptyState';
+      emptyMsg.className = 'empty-state';
+      document.getElementById('monthlyList').before(emptyMsg);
+    }
+    emptyMsg.innerHTML = `No uploads found between <strong>${startDate}</strong> and <strong>${endDate}</strong>. Try widening the date range.`;
+    emptyMsg.style.display = 'block';
+    document.getElementById('heroStats').style.display = 'none';
+    document.getElementById('composition').style.display = 'none';
+    document.querySelector('.chart-wrap').style.display = 'none';
+    document.getElementById('monthlyList').style.display = 'none';
+    document.querySelectorAll('.section-title').forEach(el => el.style.display = 'none');
+    return;
+  }
+  // Restore visibility if previously empty
+  if (emptyMsg) emptyMsg.style.display = 'none';
+  document.getElementById('heroStats').style.display = '';
+  document.getElementById('composition').style.display = '';
+  document.querySelector('.chart-wrap').style.display = '';
+  document.getElementById('monthlyList').style.display = '';
+  document.querySelectorAll('.section-title').forEach(el => el.style.display = '');
+
   const orderedKeys = monthsBetween(currStart, currEnd);
   monthlyData = orderedKeys.map(key => {
     const currVids = allMonthMap.get(key) || [];
@@ -1429,17 +1532,36 @@ function renderHeroStats(curr, prev) {
   const avgLabel = viewMode === 'long' ? 'Avg views / long-form' : 'Avg views / video';
 
   const stats = [
-    { label: viewLabel, value: fmt(c.views), sub: p ? `vs ${fmtCompact(p.views)} prev year ${deltaPill(c.views, p.views)}` : `${c.count} videos`, featured: true },
-    { label: countLabel, value: fmt(c.count), sub: p ? `vs ${p.count} prev year ${deltaPill(c.count, p.count)}` : '' },
-    { label: avgLabel, value: fmt(c.avg), sub: p ? `vs ${fmtCompact(p.avg)} prev year ${deltaPill(c.avg, p.avg)}` : '' }
+    { label: viewLabel, raw: c.views, value: fmt(c.views), sub: p ? `vs ${fmtCompact(p.views)} prev year ${deltaPill(c.views, p.views)}` : `${c.count} videos`, featured: true },
+    { label: countLabel, raw: c.count, value: fmt(c.count), sub: p ? `vs ${p.count} prev year ${deltaPill(c.count, p.count)}` : '' },
+    { label: avgLabel, raw: c.avg, value: fmt(c.avg), sub: p ? `vs ${fmtCompact(p.avg)} prev year ${deltaPill(c.avg, p.avg)}` : '' }
   ];
-  document.getElementById('heroStats').innerHTML = stats.map(s => `
+  document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
     <div class="hero-stat${s.featured ? ' featured' : ''}">
       <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value">${s.value}</div>
+      <div class="hero-stat-value" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : '0'}</div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
   `).join('');
+
+  // Count-up animation, first render only
+  if (!heroAnimated) {
+    heroAnimated = true;
+    document.querySelectorAll('.hero-stat-value').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const duration = 900;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min(1, (now - start) / duration);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = fmt(target * eased);
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = fmt(target);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
 }
 
 function renderComposition(s) {
