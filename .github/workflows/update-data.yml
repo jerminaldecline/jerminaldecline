@@ -2,12 +2,17 @@ name: Update channel data
 
 on:
   schedule:
-    # Runs at 03:00 UTC every day (early morning UK time)
-    - cron: '0 3 * * *'
+    # Multiple staggered runs daily. GitHub's free-tier scheduler is
+    # unreliable and often skips runs scheduled on the hour, so we
+    # use off-hour minutes and three attempts across the day.
+    # Only the first run that finds new data will produce a commit.
+    - cron: '17 3 * * *'   # 03:17 UTC — primary, early morning
+    - cron: '37 11 * * *'  # 11:37 UTC — midday backup
+    - cron: '47 19 * * *'  # 19:47 UTC — evening backup
   workflow_dispatch:  # allows manual runs from the Actions tab
 
 permissions:
-  contents: write  # needed to commit the updated data.json back
+  contents: write
 
 jobs:
   fetch:
@@ -19,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Run fetcher
         env:
