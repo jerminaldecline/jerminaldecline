@@ -23,7 +23,7 @@ const https = require('https');
 const CHANNEL_HANDLE = '@TheQuartering';
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
-const HISTORY_YEARS = 2; // how far back to fetch on first run
+const HISTORY_YEARS = 6; // how far back to fetch on first run (start of 2020)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
