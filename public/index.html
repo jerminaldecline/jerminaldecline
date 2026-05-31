@@ -1044,6 +1044,89 @@
     font-size: 0.9rem;
     padding: 4rem 1rem;
   }
+
+  /* Word cloud section */
+  .wordcloud-section {
+    margin: 0 0 1.5rem;
+  }
+  .wordcloud-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
+  }
+  .wordcloud-toggle:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+  .wordcloud-toggle[aria-expanded="true"] {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .wordcloud-caret {
+    font-size: 0.75rem;
+    transition: transform 0.15s;
+    display: inline-block;
+    color: var(--text-dim);
+  }
+  .wordcloud-toggle[aria-expanded="true"] .wordcloud-caret {
+    transform: rotate(90deg);
+    color: var(--accent);
+  }
+  .wordcloud-hint {
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    font-weight: 400;
+  }
+  .wordcloud-panel {
+    margin-top: 0.7rem;
+    padding: 1.1rem 1.2rem 1.4rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .wordcloud-meta {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+  }
+  .wordcloud-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.65rem;
+    align-items: baseline;
+    line-height: 1.4;
+  }
+  .wordcloud-word {
+    color: var(--text);
+    transition: color 0.12s;
+    font-weight: 500;
+    display: inline-block;
+  }
+  .wordcloud-word:hover {
+    color: var(--accent);
+  }
+  .wordcloud-empty {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 1rem 0;
+  }
+  @media (max-width: 540px) {
+    .wordcloud-panel { padding: 0.9rem 0.95rem 1.1rem; }
+    .wordcloud-body { gap: 0.25rem 0.5rem; }
+  }
   .empty-state {
     text-align: center;
     color: var(--text-muted);
@@ -1420,6 +1503,18 @@
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
       </div>
 
+      <div class="wordcloud-section">
+        <button class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
+          <span class="wordcloud-caret">▸</span>
+          <span>Title word cloud</span>
+          <span class="wordcloud-hint" id="wordcloudHint"></span>
+        </button>
+        <div class="wordcloud-panel" id="wordcloudPanel" hidden>
+          <div class="wordcloud-meta" id="wordcloudMeta"></div>
+          <div class="wordcloud-body" id="wordcloudBody"></div>
+        </div>
+      </div>
+
       <div class="section-title">
         <span>Monthly breakdown</span>
         <div class="section-actions">
@@ -1780,6 +1875,7 @@ async function loadData() {
     document.getElementById('loadingMsg').style.display = 'none';
     document.getElementById('resultsBody').style.display = 'block';
 
+    setupWordCloudToggle();
     highlightActivePreset();
     rebuild();
   } catch (e) {
@@ -1888,6 +1984,31 @@ function rebuild() {
   renderComposition(currSummary);
   renderTrendChart(yoy);
   renderMonthlyList(yoy);
+  updateWordCloudHint();
+}
+
+// Light update on date/channel/mode changes — refreshes hint, and the cloud itself if open
+function updateWordCloudHint() {
+  const toggle = document.getElementById('wordcloudToggle');
+  const hint = document.getElementById('wordcloudHint');
+  if (!toggle || !hint) return;
+  const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+  if (isOpen) {
+    renderWordCloud();
+  } else {
+    // Just refresh the hint preview without doing the full cloud
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (!startDate || !endDate) { hint.textContent = ''; return; }
+    const start = new Date(startDate + 'T00:00:00Z');
+    const end = new Date(endDate + 'T23:59:59Z');
+    let videos = filteredVideos().filter(v => {
+      const d = new Date(v.publishedAt);
+      return d >= start && d <= end;
+    });
+    if (viewMode === 'long') videos = videos.filter(v => !v.isShort);
+    hint.textContent = `(${videos.length} titles)`;
+  }
 }
 
 function renderChannelSelector() {
@@ -2482,6 +2603,132 @@ function sortArrow(state, col) {
   return state.sortDir === 'asc'
     ? '<span class="sort-arrow active">↑</span>'
     : '<span class="sort-arrow active">↓</span>';
+}
+
+// --- Title word cloud ---
+const STOPWORDS = new Set([
+  // Standard English stopwords
+  'the','and','for','are','but','not','you','all','any','can','her','was','one','our','out',
+  'has','his','had','how','its','may','new','now','old','see','two','way','who','boy','did',
+  'get','him','let','put','say','she','too','use','this','that','with','from','they','were',
+  'have','what','when','your','will','would','there','their','some','more','then','about',
+  'just','like','make','than','only','very','also','into','over','well','been','being',
+  // YouTube/title filler
+  'video','videos','watch','full','episode','part','live','stream','today','him','her',
+  // Common contractions stripped of apostrophes
+  'doesnt','dont','wont','isnt','arent','wasnt','werent','hasnt','havent','hadnt','cant',
+  'shouldnt','wouldnt','couldnt','its','im','ive','youre','youve','theyre','weve','well',
+  // Generic verbs that show up a lot but mean nothing alone
+  'gets','got','goes','went','going','make','makes','made','take','takes','took','says',
+  'said','saw','seen','tell','told','call','calls','called'
+]);
+
+function extractWords(videos) {
+  const counts = new Map();
+  for (const v of videos) {
+    if (!v.title || v.unavailable) continue;
+    // Find tokens: words (possibly with apostrophes) and hashtags
+    const tokens = v.title.match(/#[\w]+|[A-Za-z][A-Za-z']*/g) || [];
+    for (let tok of tokens) {
+      // Normalise: lowercase, strip apostrophes from words (but keep hashtags as-is in case)
+      let key;
+      if (tok.startsWith('#')) {
+        key = tok.toLowerCase();
+      } else {
+        key = tok.toLowerCase().replace(/'/g, '');
+      }
+      if (key.length < 3) continue;
+      if (STOPWORDS.has(key)) continue;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+  }
+  return counts;
+}
+
+function renderWordCloud() {
+  const panel = document.getElementById('wordcloudPanel');
+  const body = document.getElementById('wordcloudBody');
+  const meta = document.getElementById('wordcloudMeta');
+  const hint = document.getElementById('wordcloudHint');
+  const toggle = document.getElementById('wordcloudToggle');
+  if (!panel || !body || !meta) return;
+
+  // Operate on the currently visible date range + channel + mode
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (!startDate || !endDate) {
+    body.innerHTML = '<div class="wordcloud-empty">Set a valid date range first.</div>';
+    return;
+  }
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+
+  let videos = filteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+  // Respect long-form vs Including-Shorts toggle
+  if (viewMode === 'long') {
+    videos = videos.filter(v => !v.isShort);
+  }
+
+  if (videos.length < 20) {
+    body.innerHTML = `<div class="wordcloud-empty">Not enough titles in this range to draw a meaningful cloud (${videos.length} found, need at least 20).</div>`;
+    meta.textContent = '';
+    if (hint) hint.textContent = `(${videos.length} titles)`;
+    return;
+  }
+
+  const counts = extractWords(videos);
+  if (counts.size === 0) {
+    body.innerHTML = '<div class="wordcloud-empty">No usable words in this range.</div>';
+    meta.textContent = '';
+    if (hint) hint.textContent = `(0 words from ${videos.length} titles)`;
+    return;
+  }
+
+  // Sort by frequency descending, take top 40
+  const TOP_N = 40;
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP_N);
+  const maxFreq = sorted[0][1];
+  const minFreq = sorted[sorted.length - 1][1];
+
+  // Size mapping: linear from 0.85rem (min) to 2.2rem (max)
+  // Use sqrt to dampen extreme outliers so the highest-frequency word doesn't dwarf everything
+  function fontSizeFor(freq) {
+    if (maxFreq === minFreq) return 1.2;
+    const t = Math.sqrt((freq - minFreq) / (maxFreq - minFreq));
+    return 0.85 + t * (2.2 - 0.85);
+  }
+
+  // Render
+  body.innerHTML = sorted.map(([word, freq]) => {
+    const size = fontSizeFor(freq).toFixed(2);
+    // Slightly higher opacity for more frequent words
+    const opacity = (0.6 + 0.4 * Math.sqrt((freq - minFreq) / Math.max(1, (maxFreq - minFreq)))).toFixed(2);
+    return `<span class="wordcloud-word" style="font-size:${size}rem;opacity:${opacity};" title="${freq} occurrence${freq === 1 ? '' : 's'}">${escapeHtml(word)}</span>`;
+  }).join('');
+
+  const modeLabel = viewMode === 'long' ? 'long-form titles' : 'all titles';
+  meta.textContent = `Top ${sorted.length} words from ${videos.length} ${modeLabel} in the selected range. Stopwords and very short tokens excluded. Hashtags preserved.`;
+  if (hint) hint.textContent = `(${sorted.length} words from ${videos.length} titles)`;
+}
+
+function setupWordCloudToggle() {
+  const toggle = document.getElementById('wordcloudToggle');
+  const panel = document.getElementById('wordcloudPanel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      toggle.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    } else {
+      toggle.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      renderWordCloud(); // lazy build on first open
+    }
+  });
 }
 
 function renderMonthDetail(m, idx) {
