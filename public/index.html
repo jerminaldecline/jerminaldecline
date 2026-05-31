@@ -1758,11 +1758,6 @@ function renderPeakStrip() {
   const latestKey = sortedKeys[sortedKeys.length - 1];
   const latestViews = byMonth.get(latestKey);
 
-  // Same month one year earlier (if data exists)
-  const [latestY, latestM] = latestKey.split('-');
-  const yearAgoKey = `${parseInt(latestY) - 1}-${latestM}`;
-  const yearAgoViews = byMonth.get(yearAgoKey);
-
   function labelFromKey(k) {
     const [y, m] = k.split('-');
     const d = new Date(Date.UTC(parseInt(y), parseInt(m) - 1, 1));
@@ -1777,9 +1772,9 @@ function renderPeakStrip() {
     </div>
   `;
 
-  // All-time low (only if different from latest to avoid duplication, and channel has run a while)
+  // All-time low (skip if it duplicates peak; show even when it equals latest — takes precedence)
   let lowLine = '';
-  if (lowKey && lowKey !== latestKey && lowKey !== peakKey && byMonth.size >= 3) {
+  if (lowKey && lowKey !== peakKey && byMonth.size >= 3) {
     const fromPeak = peakViews > 0 ? ((lowViews - peakViews) / peakViews) * 100 : 0;
     lowLine = `
       <div class="peak-line">
@@ -1789,9 +1784,9 @@ function renderPeakStrip() {
     `;
   }
 
-  // Latest complete month vs peak
+  // Latest complete month — suppress if it duplicates either bookend
   let downLine = '';
-  if (latestKey !== peakKey && peakViews > 0) {
+  if (latestKey !== peakKey && latestKey !== lowKey && peakViews > 0) {
     const drop = ((latestViews - peakViews) / peakViews) * 100;
     downLine = `
       <div class="peak-line">
@@ -1801,26 +1796,12 @@ function renderPeakStrip() {
     `;
   }
 
-  // Latest complete month vs same month last year
-  let yoyLine = '';
-  if (yearAgoViews && yearAgoViews > 0) {
-    const pct = ((latestViews - yearAgoViews) / yearAgoViews) * 100;
-    const pctClass = pct < 0 ? 'peak-drop' : 'peak-gain';
-    const sign = pct >= 0 ? '+' : '';
-    yoyLine = `
-      <div class="peak-line">
-        <span class="peak-strip-label">vs same month last year</span>
-        <span>${labelFromKey(yearAgoKey)} had <strong>${fmt(yearAgoViews)}</strong> <span class="${pctClass}">(${sign}${pct.toFixed(1)}%)</span></span>
-      </div>
-    `;
-  }
-
   // Footnote explaining why the in-progress month is excluded
   const footnote = `
     <div class="peak-footnote">Current month (${labelFromKey(currentMonthKey).split(' ')[0]}) is in progress and excluded from comparisons.</div>
   `;
 
-  el.innerHTML = peakLine + lowLine + downLine + yoyLine + footnote;
+  el.innerHTML = peakLine + lowLine + downLine + footnote;
 }
 
 function renderHeroStats(curr, prev) {
