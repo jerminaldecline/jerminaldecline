@@ -1266,7 +1266,7 @@
 
       <div class="mode-toggle" role="tablist" aria-label="View mode">
         <button data-mode="long" class="active" role="tab">Long-form only</button>
-        <button data-mode="total" role="tab">Total channel</button>
+        <button data-mode="total" role="tab">Including Shorts</button>
       </div>
 
       <div class="hero-grid" id="heroStats"></div>
@@ -1751,7 +1751,7 @@ function renderPeakStrip() {
 function renderHeroStats(curr, prev) {
   const c = metricsFor(curr);
   const p = prev ? metricsFor(prev) : null;
-  const viewLabel = viewMode === 'long' ? 'Long-form views' : 'Total channel views';
+  const viewLabel = viewMode === 'long' ? 'Long-form views' : 'Total views (incl. Shorts)';
   const countLabel = viewMode === 'long' ? 'Long-form videos' : 'Total videos';
   const avgLabel = viewMode === 'long' ? 'Avg views / long-form' : 'Avg views / video';
 
