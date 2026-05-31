@@ -642,6 +642,12 @@
   }
   .control-bar-yoy input { accent-color: var(--accent); margin: 0; }
   .control-bar-yoy:hover { color: var(--text); }
+  .control-bar-yoy.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .control-bar-yoy.disabled:hover { color: var(--text-muted); }
+  .control-bar-yoy.disabled input { cursor: not-allowed; }
 
   @media (max-width: 540px) {
     .control-bar { padding: 0.55rem 0.7rem; gap: 0.55rem; }
@@ -1600,12 +1606,23 @@ function rebuild() {
   if (!dataset) return;
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
-  const yoy = document.getElementById('compareYoY').checked;
-
   if (!startDate || !endDate) return;
   const currStart = new Date(startDate + 'T00:00:00Z');
   const currEnd = new Date(endDate + 'T23:59:59Z');
   if (currStart > currEnd) return;
+
+  // YoY only makes sense for ranges of ~12 months or less — beyond that, the
+  // shifted comparison window overlaps the current window and produces nonsense.
+  const rangeDays = (currEnd - currStart) / 86400000;
+  const yoyMeaningful = rangeDays <= 400;  // ~13 months allowance
+  const yoyCheckbox = document.getElementById('compareYoY');
+  const yoyLabel = document.querySelector('.control-bar-yoy');
+  yoyCheckbox.disabled = !yoyMeaningful;
+  yoyLabel.classList.toggle('disabled', !yoyMeaningful);
+  yoyLabel.title = yoyMeaningful
+    ? ''
+    : 'YoY comparison is disabled for ranges over 12 months — the comparison window would overlap the current period.';
+  const yoy = yoyMeaningful && yoyCheckbox.checked;
 
   // Group all videos by month for fast lookup
   const allMonthMap = new Map();
