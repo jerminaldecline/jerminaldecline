@@ -1845,10 +1845,10 @@ function renderTrendChart(yoy) {
   const currValues = monthlyData.map(m => metricsFor(m.curr).views);
   const prevValues = yoy ? monthlyData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
 
-  // Y-axis max: tight to the data with 10% headroom, then round to a nice number
+  // Y-axis max: tight to the data with 5% headroom, then round to a nice number
   const allValues = [...currValues, ...prevValues.filter(v => v != null)];
   const rawMax = Math.max(1, ...allValues);
-  const yMax = niceMax(rawMax * 1.1);
+  const yMax = niceMax(rawMax * 1.05);
 
   // X positions
   const n = monthlyData.length;
@@ -2135,9 +2135,13 @@ function niceMax(v) {
   const norm = v / mag;
   let factor;
   if (norm <= 1) factor = 1;
+  else if (norm <= 1.5) factor = 1.5;
   else if (norm <= 2) factor = 2;
   else if (norm <= 2.5) factor = 2.5;
+  else if (norm <= 3) factor = 3;
+  else if (norm <= 4) factor = 4;
   else if (norm <= 5) factor = 5;
+  else if (norm <= 7.5) factor = 7.5;
   else factor = 10;
   return factor * mag;
 }
