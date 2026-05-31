@@ -1469,6 +1469,7 @@ const PREDICTIONS = [
   "It's shadow banned.",
   "The timeslot is wrong.",
   "Crowder read the news first.",
+  "We're in the middle of a dead news cycle.",
   "The algorithm has changed.",
   "Actually it's not dying, it's more successful than ever! You just don't understand YouTube analytics!",
   "Uhhhm, it's because, uhhh, because, it's uhhh, uhhh... how's everyone's weekend going?",
@@ -1522,7 +1523,7 @@ const COFFEE_TAGLINES = [
   "Help me pay for my Rolex watch collection.",
   "Help me pay for my fully loaded Cybertruck.",
   "Help me pay for 3 useless co-hosts.",
-  "Help me pay for my $1.4 million dollar mortgage.",
+  "Help me pay for my $1.4 million mortgage.",
   "Help me pay for my $300,000 home equity loan.",
   "Help me pay for my airplane.",
   "Help me pay for my floor to ceiling saltwater aquarium.",
@@ -1937,12 +1938,44 @@ function renderTrendChart(yoy) {
     <text class="chart-axis-label y" x="${P.left - 8}" y="${t.y + 4}">${fmtCompact(t.v)}</text>
   `).join('');
 
-  // X axis labels
-  const labelStride = Math.max(1, Math.ceil(n / 6));
-  const xLabels = monthlyData.map((m, i) => {
-    if (i % labelStride !== 0 && i !== n - 1) return '';
-    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
-  }).join('');
+  // X axis labels — strategy depends on range
+  // monthlyData[i].label is like "Jan 2025"; we parse month + year out of it
+  const years = new Set(monthlyData.map(m => m.label.split(' ')[1]));
+  const spansMultipleYears = years.size > 1;
+  let xLabels;
+  if (spansMultipleYears && n > 24) {
+    // Long range: one label per year, positioned at the first month of that year
+    // (or at i=0 if the range starts mid-year)
+    const yearFirstIdx = new Map();
+    monthlyData.forEach((m, i) => {
+      const year = m.label.split(' ')[1];
+      if (!yearFirstIdx.has(year)) yearFirstIdx.set(year, i);
+    });
+    xLabels = [...yearFirstIdx.entries()].map(([year, i]) =>
+      `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`
+    ).join('');
+  } else if (spansMultipleYears) {
+    // Medium range (~12-24 months): show month + abbreviated year on first label of each year,
+    // month-only elsewhere
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    xLabels = monthlyData.map((m, i) => {
+      if (i % labelStride !== 0 && i !== n - 1) return '';
+      const [mon, year] = m.label.split(' ');
+      const yearShort = "'" + year.slice(2);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} ${yearShort}` : mon;
+      return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${text}</text>`;
+    }).join('');
+  } else {
+    // Single year: just month abbreviations as before
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    xLabels = monthlyData.map((m, i) => {
+      if (i % labelStride !== 0 && i !== n - 1) return '';
+      return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
+    }).join('');
+  }
 
   // Dots
   const currDots = currValues.map((v, i) =>
