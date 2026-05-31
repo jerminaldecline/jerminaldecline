@@ -170,31 +170,76 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    padding: 0.7rem 1rem;
+    gap: 0.6rem 1rem;
+    padding: 0.65rem 0.85rem;
     background: var(--brand-soft);
     border-radius: var(--radius-sm);
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.6rem;
     font-size: 0.9rem;
   }
-  .channel-link {
+  /* Channel selector — pill row of channel buttons */
+  .channel-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .channel-chip {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.32rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+  }
+  .channel-chip:hover {
     color: var(--brand-deep);
-    text-decoration: none;
+    background: rgba(127,127,127,0.06);
+  }
+  .channel-chip.active {
+    background: var(--surface);
+    color: var(--brand-deep);
+    border-color: var(--brand);
     font-weight: 600;
-    font-size: 1rem;
+  }
+  [data-theme="dark"] .channel-chip.active {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .channel-chip.all { font-style: italic; }
+
+  /* Row below the strip with the View-on-YouTube link */
+  .channel-link-row {
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+    min-height: 1.2rem;
+  }
+  .channel-link-row:empty { margin-bottom: 0.5rem; min-height: 0; }
+  .channel-link {
+    color: var(--text-muted);
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
+    transition: color 0.12s;
   }
-  .channel-link:hover { text-decoration: underline; }
+  .channel-link:hover { color: var(--brand); }
   .channel-link-arrow {
-    font-size: 0.85rem;
-    opacity: 0.6;
+    font-size: 0.78rem;
+    opacity: 0.7;
     transition: transform 0.15s, opacity 0.15s;
   }
   .channel-link:hover .channel-link-arrow {
     opacity: 1;
-    transform: translate(2px, -2px);
+    transform: translate(1px, -1px);
+  }
+  @media (max-width: 540px) {
+    .channel-chip { font-size: 0.82rem; padding: 0.3rem 0.7rem; }
   }
   .last-updated {
     color: var(--text-muted);
@@ -1303,11 +1348,10 @@
       </div>
     </div>
     <div class="channel-strip">
-      <a id="channelLink" href="#" target="_blank" class="channel-link">
-        <span id="watchingName">…</span><span class="channel-link-arrow">↗</span>
-      </a>
+      <div class="channel-selector" id="channelSelector" role="tablist" aria-label="Channel"></div>
       <span class="last-updated" id="lastUpdated"></span>
     </div>
+    <div class="channel-link-row" id="channelLinkRow"></div>
     <div class="peak-strip" id="peakStrip"></div>
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
       <div class="prediction-header">
@@ -1424,6 +1468,7 @@
 <script>
 let dataset = null;
 let viewMode = 'long';
+let selectedChannel = 'ALL'; // either a channel ID string, or 'ALL'
 let monthlyData = [];
 let heroAnimated = false;
 
@@ -1509,6 +1554,28 @@ function metricsFor(summary) {
 }
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// --- Channel selection helpers ---
+function getActiveChannels() {
+  // Returns array of channel IDs included in the current selection
+  if (!dataset?.channels) return [];
+  if (selectedChannel === 'ALL') return Object.keys(dataset.channels);
+  return [selectedChannel];
+}
+function filteredVideos() {
+  // Returns videos belonging to the active channel selection.
+  if (!dataset?.videos) return [];
+  if (selectedChannel === 'ALL') return dataset.videos;
+  return dataset.videos.filter(v => v.channelId === selectedChannel);
+}
+function activeDisplayName() {
+  if (selectedChannel === 'ALL') return 'Quartering universe';
+  return dataset?.channels?.[selectedChannel]?.title || 'Channel';
+}
+function activeChannelUrl() {
+  if (selectedChannel === 'ALL') return null;
+  return dataset?.channels?.[selectedChannel]?.url || null;
 }
 
 // --- Theme toggle ---
@@ -1661,8 +1728,15 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dataset = await res.json();
 
-    document.getElementById('watchingName').textContent = dataset.channel.title;
-    document.getElementById('channelLink').href = dataset.channel.url;
+    // Restore selected channel from URL if present and valid
+    const initialParams = new URLSearchParams(window.location.search);
+    const chParam = initialParams.get('channel');
+    if (chParam && (chParam === 'ALL' || dataset.channels?.[chParam])) {
+      selectedChannel = chParam;
+    }
+
+    renderChannelSelector();
+    renderChannelLinkRow();
 
     const updated = new Date(dataset.meta.lastUpdated);
     const now = new Date();
@@ -1675,9 +1749,7 @@ async function loadData() {
     document.getElementById('lastUpdated').innerHTML =
       `<span class="live-dot${fresh ? '' : ' stale'}"></span>${freshness}`;
 
-    document.getElementById('footerMeta').textContent =
-      `Tracking ${dataset.meta.longFormCount} long-form videos and ${dataset.meta.shortsCount} Shorts.`;
-
+    renderFooterMeta();
     renderPeakStrip();
 
     // Default range: Jan 1 of current year to today, overridable via URL params
@@ -1732,16 +1804,19 @@ function rebuild() {
     : 'YoY comparison is disabled for ranges over 12 months — the comparison window would overlap the current period.';
   const yoy = yoyMeaningful && yoyCheckbox.checked;
 
+  // Channel-filtered videos for this render pass
+  const videos = filteredVideos();
+
   // Group all videos by month for fast lookup
   const allMonthMap = new Map();
-  for (const v of dataset.videos) {
+  for (const v of videos) {
     const k = monthKey(v.publishedAt);
     if (!allMonthMap.has(k)) allMonthMap.set(k, []);
     allMonthMap.get(k).push(v);
   }
 
   // Current period videos
-  const currentVids = dataset.videos.filter(v => {
+  const currentVids = videos.filter(v => {
     const d = new Date(v.publishedAt);
     return d >= currStart && d <= currEnd;
   });
@@ -1751,7 +1826,7 @@ function rebuild() {
   if (yoy) {
     prevStart = new Date(currStart); prevStart.setUTCFullYear(prevStart.getUTCFullYear() - 1);
     prevEnd = new Date(currEnd); prevEnd.setUTCFullYear(prevEnd.getUTCFullYear() - 1);
-    previousVids = dataset.videos.filter(v => {
+    previousVids = videos.filter(v => {
       const d = new Date(v.publishedAt);
       return d >= prevStart && d <= prevEnd;
     });
@@ -1809,13 +1884,55 @@ function rebuild() {
   renderMonthlyList(yoy);
 }
 
+function renderChannelSelector() {
+  const el = document.getElementById('channelSelector');
+  if (!el || !dataset?.channels) return;
+  const ids = Object.keys(dataset.channels);
+  const chips = [];
+  // "All combined" chip first
+  chips.push(`<button class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
+  for (const id of ids) {
+    const ch = dataset.channels[id];
+    const active = selectedChannel === id;
+    chips.push(`<button class="channel-chip${active ? ' active' : ''}" data-channel-id="${id}" role="tab" aria-selected="${active}">${escapeHtml(ch.title)}</button>`);
+  }
+  el.innerHTML = chips.join('');
+}
+
+function renderChannelLinkRow() {
+  const el = document.getElementById('channelLinkRow');
+  if (!el) return;
+  if (selectedChannel === 'ALL') {
+    el.innerHTML = '';
+    return;
+  }
+  const url = activeChannelUrl();
+  if (!url) { el.innerHTML = ''; return; }
+  el.innerHTML = `<a class="channel-link" href="${url}" target="_blank" rel="noopener">View ${escapeHtml(activeDisplayName())} on YouTube <span class="channel-link-arrow">↗</span></a>`;
+}
+
+function renderFooterMeta() {
+  const el = document.getElementById('footerMeta');
+  if (!el || !dataset) return;
+  if (selectedChannel === 'ALL') {
+    const chCount = Object.keys(dataset.channels || {}).length;
+    el.textContent = `Tracking ${dataset.meta.longFormCount} long-form videos and ${dataset.meta.shortsCount} Shorts across ${chCount} channels.`;
+  } else {
+    const m = dataset.channels[selectedChannel]?.meta;
+    if (m) {
+      el.textContent = `Tracking ${m.longFormCount} long-form videos and ${m.shortsCount} Shorts.`;
+    }
+  }
+}
+
 function renderPeakStrip() {
   const el = document.getElementById('peakStrip');
   if (!el || !dataset?.videos?.length) return;
 
+  const videos = filteredVideos();
   // Group long-form videos by month — total views per month
   const byMonth = new Map();
-  for (const v of dataset.videos) {
+  for (const v of videos) {
     if (v.isShort || v.unavailable) continue;
     const key = monthKey(v.publishedAt);
     byMonth.set(key, (byMonth.get(key) || 0) + (v.views || 0));
@@ -2137,7 +2254,7 @@ function renderTrendChart(yoy) {
 
   // Attribution: bottom-right corner of the chart area
   // On narrow viewports, use a more compact form so the text doesn't overflow
-  const channelName = dataset?.channel?.title || 'Channel';
+  const channelName = activeDisplayName();
   const startEl = document.getElementById('startDate');
   const endEl = document.getElementById('endDate');
   const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
@@ -2471,6 +2588,7 @@ function buildShareUrl() {
   params.set('end', document.getElementById('endDate').value);
   if (!document.getElementById('compareYoY').checked) params.set('yoy', '0');
   if (viewMode === 'total') params.set('mode', 'total');
+  if (selectedChannel !== 'ALL') params.set('channel', selectedChannel);
   return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
 }
 function syncUrlBar() {
@@ -2483,6 +2601,23 @@ function syncUrlBar() {
 });
 document.querySelectorAll('.mode-toggle button').forEach(btn => {
   btn.addEventListener('click', () => setTimeout(syncUrlBar, 0));
+});
+
+// --- Channel selector wiring ---
+document.getElementById('channelSelector').addEventListener('click', (e) => {
+  const chip = e.target.closest('.channel-chip');
+  if (!chip) return;
+  const newChannel = chip.dataset.channelId;
+  if (newChannel === selectedChannel) return;
+  selectedChannel = newChannel;
+  renderChannelSelector();
+  renderChannelLinkRow();
+  renderFooterMeta();
+  renderPeakStrip();
+  // Reset hero animation flag so the count-up plays on channel switch (feels alive)
+  heroAnimated = false;
+  rebuild();
+  syncUrlBar();
 });
 
 // --- Date range presets ---
@@ -2576,7 +2711,7 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${dataset.channel.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-monthly.csv`;
+  a.download = `${activeDisplayName().replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-monthly.csv`;
   a.click();
   URL.revokeObjectURL(url);
 });

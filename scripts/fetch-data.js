@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Nightly fetcher for TheQuartering channel data.
+ * Nightly fetcher for the Quartering universe channels.
  *
  * Strategy:
- * - On first run (no existing data file), fetches everything from 2 years ago
- *   to today so YoY comparison works from day one.
+ * - On first run (no existing data file), fetches everything from HISTORY_YEARS
+ *   ago to today for every channel in the CHANNELS list.
  * - On subsequent runs, only fetches the last 60 days of uploads to catch
  *   new videos and update view counts on recent content.
  * - Merges new data into the existing dataset and writes public/data.json.
@@ -20,10 +20,15 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-const CHANNEL_HANDLE = '@TheQuartering';
+const CHANNELS = [
+  '@TheQuartering',
+  '@JeremyHambly',
+  '@UnSleevedMedia',
+  '@rcnightmare'
+];
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
-const HISTORY_YEARS = 6; // how far back to fetch on first run (start of 2020)
+const HISTORY_YEARS = 6; // how far back to fetch on first run (start of ~6 years ago)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
@@ -61,19 +66,21 @@ function parseDuration(iso) {
   return (parseInt(m[1] || 0)) * 3600 + (parseInt(m[2] || 0)) * 60 + (parseInt(m[3] || 0));
 }
 
-async function resolveChannel() {
-  console.log(`Resolving channel ${CHANNEL_HANDLE}...`);
-  const url = `https://www.googleapis.com/youtube/v3/channels?part=id,snippet,contentDetails&forHandle=${encodeURIComponent(CHANNEL_HANDLE)}&key=${API_KEY}`;
+async function resolveChannel(handle) {
+  console.log(`Resolving channel ${handle}...`);
+  const url = `https://www.googleapis.com/youtube/v3/channels?part=id,snippet,contentDetails&forHandle=${encodeURIComponent(handle)}&key=${API_KEY}`;
   const data = await get(url);
-  if (!data.items || !data.items.length) throw new Error(`Channel ${CHANNEL_HANDLE} not found`);
+  if (!data.items || !data.items.length) throw new Error(`Channel ${handle} not found`);
   return {
     id: data.items[0].id,
     title: data.items[0].snippet.title,
+    handle,
+    url: `https://www.youtube.com/${handle}`,
     uploadsPlaylistId: data.items[0].contentDetails.relatedPlaylists.uploads
   };
 }
 
-async function listVideosFromPlaylist(playlistId, sinceDate) {
+async function listVideosFromPlaylist(playlistId, sinceDate, channelId) {
   const videos = [];
   let pageToken = '';
   let pages = 0;
@@ -90,13 +97,14 @@ async function listVideosFromPlaylist(playlistId, sinceDate) {
       if (publishedAt >= sinceDate) {
         videos.push({
           id: item.contentDetails.videoId,
+          channelId,
           title: item.snippet.title,
           publishedAt: publishedAt.toISOString()
         });
       }
     }
 
-    console.log(`  Page ${pages}: ${data.items.length} items, ${videos.length} in range so far`);
+    console.log(`    Page ${pages}: ${data.items.length} items, ${videos.length} in range so far`);
 
     if (allOlder && data.items.length > 0) break;
     if (!data.nextPageToken) break;
@@ -107,7 +115,7 @@ async function listVideosFromPlaylist(playlistId, sinceDate) {
 }
 
 async function enrichVideos(videos) {
-  console.log(`Fetching duration + view stats for ${videos.length} videos...`);
+  console.log(`  Fetching duration + view stats for ${videos.length} videos...`);
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
     const ids = batch.map(v => v.id).join(',');
@@ -128,7 +136,7 @@ async function enrichVideos(videos) {
         v.unavailable = true;
       }
     }
-    console.log(`  Enriched ${Math.min(i + 50, videos.length)} / ${videos.length}`);
+    console.log(`    Enriched ${Math.min(i + 50, videos.length)} / ${videos.length}`);
   }
   return videos;
 }
@@ -137,9 +145,15 @@ function loadExistingData() {
   if (!fs.existsSync(DATA_FILE)) return null;
   try {
     const parsed = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    // Treat empty/placeholder datasets as no data so we trigger first-run mode
     if (!parsed.videos || parsed.videos.length === 0) {
       console.log('Existing data file is empty (placeholder), treating as first run.');
+      return null;
+    }
+    // If the file is in the old single-channel format, migrate by ignoring
+    // the old data and treating as a first run. The deep backfill will
+    // restore the full history under the new schema.
+    if (!parsed.channels && parsed.channel) {
+      console.log('Existing data is in old single-channel format, treating as first run for migration.');
       return null;
     }
     return parsed;
@@ -178,28 +192,67 @@ async function main() {
     console.log(`Incremental run: refreshing last ${RECENT_WINDOW_DAYS} days (since ${sinceDate.toISOString().slice(0, 10)})`);
   }
 
-  const channel = await resolveChannel();
-  console.log(`Channel: ${channel.title} (${channel.id})`);
-
-  const freshVideos = await listVideosFromPlaylist(channel.uploadsPlaylistId, sinceDate);
-  if (freshVideos.length === 0) {
-    console.log('No videos in window, nothing to update.');
-    return;
+  // Resolve all channels
+  const channelMeta = {};
+  for (const handle of CHANNELS) {
+    const ch = await resolveChannel(handle);
+    channelMeta[ch.id] = {
+      id: ch.id,
+      title: ch.title,
+      handle: ch.handle,
+      url: ch.url,
+      uploadsPlaylistId: ch.uploadsPlaylistId
+    };
+    console.log(`  → ${ch.title} (${ch.id})`);
   }
 
-  await enrichVideos(freshVideos);
+  // Fetch fresh videos for each channel
+  let freshVideos = [];
+  for (const channelId of Object.keys(channelMeta)) {
+    const ch = channelMeta[channelId];
+    console.log(`\n[${ch.title}] Listing videos...`);
+    const v = await listVideosFromPlaylist(ch.uploadsPlaylistId, sinceDate, channelId);
+    if (v.length === 0) {
+      console.log(`  No videos in window for ${ch.title}.`);
+      continue;
+    }
+    await enrichVideos(v);
+    freshVideos = freshVideos.concat(v);
+  }
+
+  if (freshVideos.length === 0 && isFirstRun) {
+    console.log('No videos fetched on first run — aborting to avoid writing empty data.');
+    return;
+  }
 
   const allVideos = isFirstRun
     ? freshVideos
     : mergeVideos(existing.videos, freshVideos);
 
+  // Sort by date descending
+  allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  // Strip uploadsPlaylistId from output channel data (internal only)
+  const channelsOut = {};
+  for (const id of Object.keys(channelMeta)) {
+    const { uploadsPlaylistId, ...publicFields } = channelMeta[id];
+    channelsOut[id] = publicFields;
+  }
+
+  // Per-channel meta counts
+  for (const id of Object.keys(channelsOut)) {
+    const chVids = allVideos.filter(v => v.channelId === id);
+    channelsOut[id].meta = {
+      videoCount: chVids.length,
+      longFormCount: chVids.filter(v => !v.isShort && !v.unavailable).length,
+      shortsCount: chVids.filter(v => v.isShort && !v.unavailable).length,
+      oldestVideoDate: chVids.length ? chVids[chVids.length - 1].publishedAt : null,
+      newestVideoDate: chVids.length ? chVids[0].publishedAt : null
+    };
+  }
+
   const output = {
-    channel: {
-      id: channel.id,
-      title: channel.title,
-      handle: CHANNEL_HANDLE,
-      url: `https://www.youtube.com/${CHANNEL_HANDLE}`
-    },
+    channels: channelsOut,
     meta: {
       lastUpdated: new Date().toISOString(),
       videoCount: allVideos.length,
@@ -217,8 +270,12 @@ async function main() {
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ Done in ${elapsed}s`);
-  console.log(`  ${output.meta.videoCount} videos total`);
+  console.log(`  ${output.meta.videoCount} videos total across ${Object.keys(channelsOut).length} channels`);
   console.log(`  ${output.meta.longFormCount} long-form · ${output.meta.shortsCount} shorts`);
+  for (const id of Object.keys(channelsOut)) {
+    const m = channelsOut[id].meta;
+    console.log(`    ${channelsOut[id].title}: ${m.videoCount} (${m.longFormCount} long / ${m.shortsCount} shorts)`);
+  }
   console.log(`  Written to ${DATA_FILE}`);
 }
 
