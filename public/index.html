@@ -1166,6 +1166,66 @@
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
   .group-content { max-height: 360px; overflow-y: auto; }
 
+  /* Column header row inside groups */
+  .video-row-header {
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-row-header:hover { background: var(--surface-2); }
+  .video-row-header .sortable {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.12s;
+  }
+  .video-row-header .sortable:hover { color: var(--text); }
+  .video-row-header .video-date { font-size: 0.72rem; }
+  .video-row-header .video-duration { font-size: 0.72rem; }
+  .sort-arrow {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: var(--text-dim);
+  }
+  .sort-arrow.active { color: var(--accent); }
+
+  /* Search input above the groups */
+  .detail-controls {
+    padding: 0 0 0.7rem;
+  }
+  .detail-search {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.88rem;
+  }
+  .detail-search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  .detail-search::placeholder { color: var(--text-dim); }
+  @media (max-width: 540px) {
+    .detail-search { font-size: 16px; padding: 0.5rem 0.7rem; }
+  }
+
   .loading, .error {
     padding: 2rem;
     text-align: center;
@@ -2226,7 +2286,7 @@ function renderMonthlyList(yoy) {
             </div>
           </div>
         </div>
-        <div class="month-detail">${renderMonthDetail(m)}</div>
+        <div class="month-detail">${renderMonthDetail(m, idx)}</div>
       </div>
     `;
   }).join('');
@@ -2236,44 +2296,146 @@ function renderMonthlyList(yoy) {
   });
 }
 
-function renderMonthDetail(m) {
-  const longList = m.curr.longForm.slice().sort((a, b) => b.views - a.views);
-  const shortList = m.curr.shorts.slice().sort((a, b) => b.views - a.views);
+// Per-month sort/search state (keyed by month idx)
+const monthDetailState = new Map();
+function getMonthState(idx) {
+  if (!monthDetailState.has(idx)) {
+    monthDetailState.set(idx, { sortBy: 'views', sortDir: 'desc', query: '' });
+  }
+  return monthDetailState.get(idx);
+}
+
+function sortVideos(list, sortBy, sortDir) {
+  const sorted = list.slice().sort((a, b) => {
+    let cmp = 0;
+    if (sortBy === 'date') {
+      cmp = a.publishedAt.localeCompare(b.publishedAt);
+    } else if (sortBy === 'duration') {
+      cmp = (a.durationSec || 0) - (b.durationSec || 0);
+    } else { // views
+      cmp = (a.views || 0) - (b.views || 0);
+    }
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+  return sorted;
+}
+
+function filterVideos(list, query) {
+  if (!query) return list;
+  const q = query.toLowerCase();
+  return list.filter(v => v.title.toLowerCase().includes(q));
+}
+
+function renderVideoRows(videos, emptyText) {
+  if (videos.length === 0) {
+    return `<div class="group-empty">${emptyText}</div>`;
+  }
+  return videos.map(v => `
+    <div class="video-row">
+      <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+      <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
+      <div class="video-duration">${formatDuration(v.durationSec)}</div>
+      <div class="video-views">${fmt(v.views)}</div>
+    </div>
+  `).join('');
+}
+
+function sortArrow(state, col) {
+  if (state.sortBy !== col) return '<span class="sort-arrow"></span>';
+  return state.sortDir === 'asc'
+    ? '<span class="sort-arrow active">↑</span>'
+    : '<span class="sort-arrow active">↓</span>';
+}
+
+function renderMonthDetail(m, idx) {
+  const state = getMonthState(idx);
+  // Filter then sort each group
+  const longFiltered = filterVideos(m.curr.longForm, state.query);
+  const shortFiltered = filterVideos(m.curr.shorts, state.query);
+  const longList = sortVideos(longFiltered, state.sortBy, state.sortDir);
+  const shortList = sortVideos(shortFiltered, state.sortBy, state.sortDir);
+
+  // Column header row — date, title (not sortable), duration, views; matches video-row grid
+  const colHeader = `
+    <div class="video-row video-row-header">
+      <div class="video-date sortable" data-sort="date">Date${sortArrow(state, 'date')}</div>
+      <div class="video-title">Title</div>
+      <div class="video-duration sortable" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
+      <div class="video-views sortable" data-sort="views">Views${sortArrow(state, 'views')}</div>
+    </div>
+  `;
+
   return `
-    <div class="group">
+    <div class="detail-controls">
+      <input type="text" class="detail-search" placeholder="Search titles…" value="${escapeHtml(state.query)}" data-month-idx="${idx}">
+    </div>
+    <div class="group" data-month-idx="${idx}">
       <div class="group-header">
         <span class="group-title"><span class="split-dot long"></span> Long-form videos (&gt;3 min)</span>
-        <span class="group-stats">${longList.length} videos · ${fmt(m.curr.longViews)} views · avg ${fmt(m.curr.longAvg)}</span>
+        <span class="group-stats">${longList.length} of ${m.curr.longForm.length} videos · ${fmt(m.curr.longViews)} views · avg ${fmt(m.curr.longAvg)}</span>
       </div>
-      <div class="group-content">
-        ${longList.length === 0 ? '<div class="group-empty">No long-form videos this month</div>' : longList.map(v => `
-          <div class="video-row">
-            <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
-            <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
-            <div class="video-duration">${formatDuration(v.durationSec)}</div>
-            <div class="video-views">${fmt(v.views)}</div>
-          </div>
-        `).join('')}
+      <div class="group-content" data-group="long">
+        ${colHeader}
+        ${renderVideoRows(longList, state.query ? 'No long-form videos match your search' : 'No long-form videos this month')}
       </div>
     </div>
-    <div class="group">
+    <div class="group" data-month-idx="${idx}">
       <div class="group-header">
         <span class="group-title"><span class="split-dot short"></span> Shorts (≤3 min)</span>
-        <span class="group-stats">${shortList.length} videos · ${fmt(m.curr.shortViews)} views · avg ${fmt(m.curr.shortAvg)}</span>
+        <span class="group-stats">${shortList.length} of ${m.curr.shorts.length} videos · ${fmt(m.curr.shortViews)} views · avg ${fmt(m.curr.shortAvg)}</span>
       </div>
-      <div class="group-content">
-        ${shortList.length === 0 ? '<div class="group-empty">No Shorts this month</div>' : shortList.map(v => `
-          <div class="video-row">
-            <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
-            <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
-            <div class="video-duration">${formatDuration(v.durationSec)}</div>
-            <div class="video-views">${fmt(v.views)}</div>
-          </div>
-        `).join('')}
+      <div class="group-content" data-group="short">
+        ${colHeader}
+        ${renderVideoRows(shortList, state.query ? 'No Shorts match your search' : 'No Shorts this month')}
       </div>
     </div>
   `;
 }
+
+function refreshMonthDetail(idx) {
+  const row = document.querySelector(`.month-row[data-idx="${idx}"]`);
+  if (!row) return;
+  const detail = row.querySelector('.month-detail');
+  if (!detail) return;
+  const m = monthlyData[idx];
+  if (!m) return;
+  detail.innerHTML = renderMonthDetail(m, idx);
+}
+
+// Event delegation: handle sort header clicks and search input across all expanded months
+document.addEventListener('click', (e) => {
+  const sortHeader = e.target.closest('.video-row-header .sortable');
+  if (!sortHeader) return;
+  const group = sortHeader.closest('.group');
+  if (!group) return;
+  const idx = parseInt(group.dataset.monthIdx);
+  if (isNaN(idx)) return;
+  const state = getMonthState(idx);
+  const col = sortHeader.dataset.sort;
+  if (state.sortBy === col) {
+    state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    state.sortBy = col;
+    state.sortDir = 'desc';
+  }
+  refreshMonthDetail(idx);
+});
+
+document.addEventListener('input', (e) => {
+  if (!e.target.classList.contains('detail-search')) return;
+  const idx = parseInt(e.target.dataset.monthIdx);
+  if (isNaN(idx)) return;
+  const state = getMonthState(idx);
+  state.query = e.target.value;
+  // Preserve focus and caret position across re-render
+  const caretPos = e.target.selectionStart;
+  refreshMonthDetail(idx);
+  const newInput = document.querySelector(`.detail-search[data-month-idx="${idx}"]`);
+  if (newInput) {
+    newInput.focus();
+    newInput.setSelectionRange(caretPos, caretPos);
+  }
+});
 
 // --- Event wiring ---
 document.querySelectorAll('.mode-toggle button').forEach(btn => {
