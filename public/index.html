@@ -123,6 +123,9 @@
     min-height: 100vh;
     transition: background-color 0.2s, color 0.2s;
   }
+  @media (max-width: 540px) {
+    body { padding: 1.25rem 0.85rem 3rem; }
+  }
   .container { max-width: 1100px; margin: 0 auto; }
 
   /* Brand header */
@@ -134,8 +137,7 @@
   }
   .brand-text { flex: 1; min-width: 0; }
   @media (max-width: 540px) {
-    .brand-header { flex-wrap: wrap; }
-    .brand-text { flex: 1 1 calc(100% - 70px); }
+    .brand-header { gap: 0.6rem; }
   }
   .brand-logo {
     width: 64px;
@@ -266,7 +268,8 @@
     background: var(--bg);
   }
   @media (max-width: 540px) {
-    .theme-toggle { align-self: flex-start; }
+    .theme-toggle { padding: 2px; }
+    .theme-toggle button { width: 32px; height: 32px; }
   }
 
   /* Prediction card (the "8-ball") */
@@ -290,6 +293,10 @@
   }
   .prediction-card:hover { transform: translateY(-1px); }
   .prediction-card:active { transform: translateY(0); }
+  @media (max-width: 540px) {
+    .prediction-card { padding: 1rem 1.05rem; }
+    .prediction-text { font-size: 0.95rem; }
+  }
   .prediction-card::before {
     content: "";
     position: absolute;
@@ -434,6 +441,11 @@
   }
   .coffee-button:active { transform: translateY(0); }
   .coffee-icon { font-size: 1.05rem; }
+  @media (max-width: 540px) {
+    .coffee-block { padding: 1.1rem 0.9rem; margin-top: 1.75rem; }
+    .coffee-tagline { font-size: 0.85rem; }
+    .coffee-button { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+  }
 
   header { margin-bottom: 1.5rem; }
   h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
@@ -445,6 +457,9 @@
     padding: 1.5rem;
     margin-bottom: 1rem;
     box-shadow: var(--shadow-sm);
+  }
+  @media (max-width: 540px) {
+    .card { padding: 1rem 0.85rem; border-radius: 8px; }
   }
   .field { margin-bottom: 1rem; }
   .field label {
@@ -524,6 +539,11 @@
     font-variant-numeric: tabular-nums;
     color-scheme: light dark;
   }
+  /* Mobile: bump font to 16px to prevent iOS auto-zoom on tap */
+  @media (max-width: 540px) {
+    .inline-date { font-size: 16px; padding: 0.4rem 0.55rem; }
+    .field input { font-size: 16px; }
+  }
   .inline-date:focus {
     outline: none;
     border-color: var(--accent);
@@ -556,6 +576,13 @@
   }
   .control-bar-yoy input { accent-color: var(--accent); margin: 0; }
   .control-bar-yoy:hover { color: var(--text); }
+
+  @media (max-width: 540px) {
+    .control-bar { padding: 0.55rem 0.7rem; gap: 0.55rem; }
+    .control-bar-prefix { display: none; }
+    .control-bar-period { gap: 0.4rem; }
+    .control-bar-right { gap: 0.5rem; }
+  }
 
   .control-bar-right {
     display: flex;
@@ -669,6 +696,17 @@
   }
   .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
   .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
+  @media (max-width: 540px) {
+    .hero-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+    }
+    .hero-stat.featured { grid-column: 1 / -1; }
+    .hero-stat { padding: 0.85rem 0.9rem; }
+    .hero-stat-value { font-size: 1.4rem; }
+    .hero-stat-label { font-size: 0.7rem; }
+    .hero-stat-sub { font-size: 0.72rem; }
+  }
   .hero-stat-label {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -742,6 +780,11 @@
   .composition-legend-dot.short { background: var(--shorts); }
   .composition-legend-text { color: var(--text-muted); }
   .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+  @media (max-width: 540px) {
+    .composition { padding: 0.85rem 0.9rem; margin-bottom: 1.1rem; }
+    .composition-legend { gap: 1rem; font-size: 0.8rem; }
+    .composition-meta { font-size: 0.78rem; }
+  }
 
   /* Monthly trend chart */
   .trend-title { margin-bottom: 0.4rem; }
@@ -784,13 +827,16 @@
   }
   #trendChart {
     width: 100%;
-    height: 240px;
+    height: auto;
     display: block;
     overflow: visible;
   }
+  @media (max-width: 540px) {
+    .chart-wrap { padding: 0.65rem 0.35rem 0.5rem; }
+  }
   .chart-axis-line { stroke: var(--border-strong); stroke-width: 1; }
   .chart-grid-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 3; }
-  .chart-axis-label { fill: var(--text-dim); font-size: 11px; font-family: inherit; }
+  .chart-axis-label { fill: var(--text-dim); font-size: 13px; font-family: inherit; }
   .chart-axis-label.x { text-anchor: middle; }
   .chart-axis-label.y { text-anchor: end; }
   .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
@@ -801,7 +847,7 @@
   .chart-gap.surplus { fill: #1d9e75; opacity: 0.13; }
   .chart-annotation-label {
     fill: #fff;
-    font-size: 10.5px;
+    font-size: 12.5px;
     font-weight: 600;
     font-family: inherit;
     text-anchor: middle;
@@ -809,10 +855,16 @@
   }
   .chart-attribution {
     fill: var(--text-dim);
-    font-size: 9.5px;
+    font-size: 11px;
     font-family: inherit;
     text-anchor: end;
     opacity: 0.75;
+  }
+  /* On mobile, the SVG renders smaller; bump text size in the viewBox to compensate */
+  @media (max-width: 540px) {
+    .chart-axis-label { font-size: 18px; }
+    .chart-annotation-label { font-size: 17px; }
+    .chart-attribution { font-size: 15px; }
   }
   .chart-dot { fill: var(--surface); stroke-width: 2; }
   .chart-dot.curr { stroke: var(--accent); }
@@ -1041,10 +1093,13 @@
   footer a { color: var(--text-muted); }
 
   @media (max-width: 720px) {
-    .month-header { grid-template-columns: 1fr 1.2fr 1fr; }
+    .month-header { grid-template-columns: 1fr 1.2fr 1fr; padding: 0.8rem 0.85rem; }
     .month-cell.hide-mobile { display: none; }
-    .video-row { grid-template-columns: 70px 1fr 90px; }
+    .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
     .video-duration { display: none; }
+    .month-detail { padding: 0.7rem 0.7rem 0.85rem; }
+    .group-header { padding: 0.55rem 0.7rem; }
+    .group-stats { font-size: 0.78rem; }
   }
 </style>
 </head>
@@ -1143,7 +1198,7 @@
         <span class="trend-legend" id="trendLegend"></span>
       </div>
       <div class="chart-wrap">
-        <svg id="trendChart" viewBox="0 0 720 240" preserveAspectRatio="none" role="img" aria-label="Monthly long-form views trend chart"></svg>
+        <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Monthly long-form views trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
       </div>
 
@@ -1640,8 +1695,8 @@ function renderTrendChart(yoy) {
   `;
 
   // Layout — taller to accommodate annotation, more left padding for Y labels
-  const W = 720, H = 260;
-  const P = { top: 18, right: 22, bottom: 42, left: 58 };
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 66 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
@@ -1746,7 +1801,7 @@ function renderTrendChart(yoy) {
   const labelStride = Math.max(1, Math.ceil(n / 6));
   const xLabels = monthlyData.map((m, i) => {
     if (i % labelStride !== 0 && i !== n - 1) return '';
-    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 22}">${m.label.split(' ')[0]}</text>`;
+    return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
   }).join('');
 
   // Dots
@@ -1797,7 +1852,7 @@ function renderTrendChart(yoy) {
       const labelY = isPositive ? cy - 18 : cy + 22;
       const sign = isPositive ? '+' : '';
       const labelText = `${sign}${targetPct.toFixed(1)}% YoY`;
-      const labelW = labelText.length * 6.6 + 14;
+      const labelW = labelText.length * 7.5 + 16;
       const labelX = Math.max(P.left + labelW / 2, Math.min(P.left + innerW - labelW / 2, cx));
       const connectorStartY = isPositive ? cy - 6 : cy + 6;
       const connectorEndY = isPositive ? labelY + 11 : labelY - 11;
@@ -1805,21 +1860,26 @@ function renderTrendChart(yoy) {
         <g class="chart-annotation">
           <circle cx="${cx}" cy="${cy}" r="6" fill="none" stroke="${color}" stroke-width="2" opacity="0.85"/>
           <line x1="${cx}" y1="${connectorStartY}" x2="${labelX}" y2="${connectorEndY}" stroke="${color}" stroke-width="1" opacity="0.5"/>
-          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="18" rx="3" fill="${color}"/>
-          <text x="${labelX}" y="${labelY + 2}" class="chart-annotation-label">${labelText}</text>
+          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="20" rx="3" fill="${color}"/>
+          <text x="${labelX}" y="${labelY + 3}" class="chart-annotation-label">${labelText}</text>
         </g>
       `;
     }
   }
 
   // Attribution: bottom-right corner of the chart area
+  // On narrow viewports, use a more compact form so the text doesn't overflow
   const channelName = dataset?.channel?.title || 'Channel';
   const startEl = document.getElementById('startDate');
   const endEl = document.getElementById('endDate');
   const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const isNarrow = window.matchMedia('(max-width: 540px)').matches;
+  const attributionText = isNarrow
+    ? `${channelName} · jerminaldecline.com`
+    : `${channelName} · ${dateRange} · jerminaldecline.com`;
   const attribution = `
-    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 6}">
-      ${escapeHtml(channelName)} · ${dateRange} · jerminaldecline.com
+    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 8}">
+      ${escapeHtml(attributionText)}
     </text>
   `;
 
@@ -1877,6 +1937,20 @@ function renderTrendChart(yoy) {
     tooltip.style.display = 'block';
     tooltip.style.left = cxPct + '%';
     tooltip.style.top = cyPct + '%';
+    // After render, nudge horizontally if tooltip would overflow the wrap
+    requestAnimationFrame(() => {
+      const wrap = svg.parentElement;
+      const wrapRect = wrap.getBoundingClientRect();
+      const tipRect = tooltip.getBoundingClientRect();
+      let offset = 0;
+      if (tipRect.left < wrapRect.left + 4) offset = (wrapRect.left + 4) - tipRect.left;
+      else if (tipRect.right > wrapRect.right - 4) offset = (wrapRect.right - 4) - tipRect.right;
+      if (offset !== 0) {
+        tooltip.style.transform = `translate(calc(-50% + ${offset}px), -100%)`;
+      } else {
+        tooltip.style.transform = '';
+      }
+    });
   }
   function hideTooltip() { tooltip.style.display = 'none'; }
 }
