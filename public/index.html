@@ -2067,61 +2067,6 @@ function renderTrendChart(yoy) {
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
 
-  // Polarity-aware annotation over complete months: highlight worst monthly drop
-  // if the period is net negative, best monthly gain if net positive.
-  let annotation = '';
-  if (yoy) {
-    // Period-level YoY direction
-    let totalCurr = 0, totalPrev = 0;
-    chartData.forEach((m) => {
-      if (!m.yoy) return;
-      totalCurr += metricsFor(m.curr).views;
-      totalPrev += metricsFor(m.yoy).views;
-    });
-    const periodPct = totalPrev > 0 ? ((totalCurr - totalPrev) / totalPrev) * 100 : 0;
-
-    // Pick direction: < 0 → find worst drop; > 0 → find best gain
-    let targetIdx = -1;
-    let targetPct = 0;
-    const findWorst = periodPct < 0;
-    chartData.forEach((m, i) => {
-      if (!m.yoy) return;
-      const c = metricsFor(m.curr).views;
-      const p = metricsFor(m.yoy).views;
-      if (p > 0) {
-        const pct = ((c - p) / p) * 100;
-        if (findWorst ? pct < targetPct : pct > targetPct) {
-          targetPct = pct; targetIdx = i;
-        }
-      }
-    });
-
-    // Only annotate if the highlight passes a meaningful threshold (5%)
-    if (targetIdx >= 0 && Math.abs(targetPct) >= 5) {
-      const isPositive = targetPct > 0;
-      const color = isPositive ? '#1d9e75' : '#ff6b66';
-      const cx = xFor(targetIdx);
-      const cy = yFor(currValues[targetIdx]);
-      // Position label below for negative drops (current line is low → space below)
-      // and above for positive gains (current line is high → space above)
-      const labelY = isPositive ? cy - 18 : cy + 22;
-      const sign = isPositive ? '+' : '';
-      const labelText = `${sign}${targetPct.toFixed(1)}% YoY`;
-      const labelW = labelText.length * 7.5 + 16;
-      const labelX = Math.max(P.left + labelW / 2, Math.min(P.left + innerW - labelW / 2, cx));
-      const connectorStartY = isPositive ? cy - 6 : cy + 6;
-      const connectorEndY = isPositive ? labelY + 11 : labelY - 11;
-      annotation = `
-        <g class="chart-annotation">
-          <circle cx="${cx}" cy="${cy}" r="6" fill="none" stroke="${color}" stroke-width="2" opacity="0.85"/>
-          <line x1="${cx}" y1="${connectorStartY}" x2="${labelX}" y2="${connectorEndY}" stroke="${color}" stroke-width="1" opacity="0.5"/>
-          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="20" rx="3" fill="${color}"/>
-          <text x="${labelX}" y="${labelY + 3}" class="chart-annotation-label">${labelText}</text>
-        </g>
-      `;
-    }
-  }
-
   // Attribution: bottom-right corner of the chart area
   // On narrow viewports, use a more compact form so the text doesn't overflow
   const channelName = dataset?.channel?.title || 'Channel';
@@ -2158,7 +2103,6 @@ function renderTrendChart(yoy) {
     <path class="chart-line-curr" d="${currPath}"/>
     ${prevDots}
     ${currDots}
-    ${annotation}
     ${attribution}
     ${hits}
   `;
