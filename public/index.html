@@ -1266,10 +1266,18 @@
     .month-header { grid-template-columns: 1fr 1.2fr 1fr; padding: 0.8rem 0.85rem; }
     .month-cell.hide-mobile { display: none; }
     .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
-    .video-duration { display: none; }
+    .video-row .video-duration,
+    .video-row .hide-mobile { display: none !important; }
     .month-detail { padding: 0.7rem 0.7rem 0.85rem; }
     .group-header { padding: 0.55rem 0.7rem; }
     .group-stats { font-size: 0.78rem; }
+  }
+  /* Larger phones (e.g. modern Samsungs) can run >720px CSS px in portrait —
+     catch them with a coarse-pointer media query to hide duration on touch devices regardless of width */
+  @media (pointer: coarse) and (max-width: 1000px) {
+    .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
+    .video-row .video-duration,
+    .video-row .hide-mobile { display: none !important; }
   }
 </style>
 </head>
@@ -2360,7 +2368,7 @@ function renderMonthDetail(m, idx) {
     <div class="video-row video-row-header">
       <div class="video-date sortable" data-sort="date">Date${sortArrow(state, 'date')}</div>
       <div class="video-title">Title</div>
-      <div class="video-duration sortable" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
+      <div class="video-duration sortable hide-mobile" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
       <div class="video-views sortable" data-sort="views">Views${sortArrow(state, 'views')}</div>
     </div>
   `;
