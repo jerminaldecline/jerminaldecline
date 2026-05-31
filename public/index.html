@@ -769,11 +769,12 @@
     border-top: 2px dashed var(--text-dim);
   }
   .trend-legend-swatch.gap {
-    background: #ff6b66;
-    opacity: 0.4;
+    opacity: 0.45;
     height: 10px;
     border-radius: 2px;
   }
+  .trend-legend-swatch.gap.deficit { background: #ff6b66; }
+  .trend-legend-swatch.gap.surplus { background: #1d9e75; }
   .chart-wrap {
     position: relative;
     background: var(--surface-2);
@@ -795,7 +796,9 @@
   .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
   .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
   .chart-area-curr { fill: var(--accent); opacity: 0.08; }
-  .chart-gap { fill: #ff6b66; opacity: 0.12; pointer-events: none; }
+  .chart-gap { pointer-events: none; }
+  .chart-gap.deficit { fill: #ff6b66; opacity: 0.13; }
+  .chart-gap.surplus { fill: #1d9e75; opacity: 0.13; }
   .chart-annotation-label {
     fill: #fff;
     font-size: 10.5px;
@@ -1628,11 +1631,10 @@ function renderTrendChart(yoy) {
     return;
   }
 
-  // Legend
-  legend.innerHTML = `
+  // Legend (gap-fill swatches added later, once we know which colours appear)
+  let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> This period</span>
     ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
-    ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap"></span> YoY deficit</span>' : ''}
   `;
 
   // Layout — taller to accommodate annotation, more left padding for Y labels
@@ -1669,20 +1671,67 @@ function renderTrendChart(yoy) {
     });
   }
 
-  // Gap fill — closed polygon between the two lines, only where prev > curr (deficit)
-  let gapPath = '';
+  // Directional gap fill — red segments where curr < prev (deficit), green where curr > prev (surplus).
+  // Lines crossing between two consecutive months get split at the intersection so colours don't overlap.
+  let gapSegmentsRed = '';
+  let gapSegmentsGreen = '';
   if (yoy) {
-    // Walk forward along previous, backward along current, only including indices where both exist
-    const validIndices = [];
-    prevValues.forEach((p, i) => {
-      if (p != null && currValues[i] != null) validIndices.push(i);
-    });
-    if (validIndices.length >= 2) {
-      const forward = validIndices.map(i => `${xFor(i)},${yFor(prevValues[i])}`).join(' L ');
-      const backward = [...validIndices].reverse().map(i => `${xFor(i)},${yFor(currValues[i])}`).join(' L ');
-      gapPath = `M ${forward} L ${backward} Z`;
+    // Collect valid (both-defined) consecutive pairs into segment polygons
+    function pushSegment(points, isDeficit) {
+      if (points.length < 3) return;
+      const path = `M ${points.map(p => `${p.x},${p.y}`).join(' L ')} Z`;
+      if (isDeficit) gapSegmentsRed += path + ' ';
+      else gapSegmentsGreen += path + ' ';
+    }
+    // Walk paired points, building per-interval quadrilaterals (or triangles at crossovers)
+    for (let i = 0; i < n - 1; i++) {
+      const p1 = prevValues[i], p2 = prevValues[i + 1];
+      const c1 = currValues[i], c2 = currValues[i + 1];
+      if (p1 == null || p2 == null || c1 == null || c2 == null) continue;
+      const x1 = xFor(i), x2 = xFor(i + 1);
+      const yp1 = yFor(p1), yp2 = yFor(p2);
+      const yc1 = yFor(c1), yc2 = yFor(c2);
+      // Difference between lines at each endpoint (positive = curr below prev = deficit)
+      const d1 = yc1 - yp1;
+      const d2 = yc2 - yp2;
+      const sameSign = (d1 >= 0 && d2 >= 0) || (d1 <= 0 && d2 <= 0);
+      if (sameSign) {
+        // Whole interval is one colour
+        const isDeficit = (d1 + d2) >= 0; // y grows downward → curr below = deficit
+        pushSegment([
+          { x: x1, y: yp1 }, { x: x2, y: yp2 },
+          { x: x2, y: yc2 }, { x: x1, y: yc1 }
+        ], isDeficit);
+      } else {
+        // Lines cross between i and i+1: find the intersection x and split
+        // Parametric: at fraction t (0..1), prev = yp1 + t*(yp2-yp1), curr = yc1 + t*(yc2-yc1)
+        // Intersection where prev == curr: yp1 + t*(yp2-yp1) = yc1 + t*(yc2-yc1)
+        // → t = (yc1 - yp1) / ((yp2 - yp1) - (yc2 - yc1))
+        const denom = (yp2 - yp1) - (yc2 - yc1);
+        const t = denom !== 0 ? (yc1 - yp1) / denom : 0.5;
+        const tt = Math.max(0, Math.min(1, t));
+        const xCross = x1 + tt * (x2 - x1);
+        const yCross = yp1 + tt * (yp2 - yp1); // = yc at crossover
+        // Left half: from i to crossover
+        const leftIsDeficit = d1 > 0;
+        pushSegment([
+          { x: x1, y: yp1 }, { x: xCross, y: yCross },
+          { x: x1, y: yc1 }
+        ], leftIsDeficit);
+        // Right half: from crossover to i+1
+        const rightIsDeficit = d2 > 0;
+        pushSegment([
+          { x: xCross, y: yCross }, { x: x2, y: yp2 },
+          { x: x2, y: yc2 }
+        ], rightIsDeficit);
+      }
     }
   }
+
+  // Append deficit/surplus swatches to legend based on what's actually rendered
+  if (gapSegmentsRed) legendHtml += '<span class="trend-legend-item"><span class="trend-legend-swatch gap deficit"></span> YoY deficit</span>';
+  if (gapSegmentsGreen) legendHtml += '<span class="trend-legend-item"><span class="trend-legend-swatch gap surplus"></span> YoY surplus</span>';
+  legend.innerHTML = legendHtml;
 
   // Y axis grid + labels
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map(t => ({ y: yFor(t * yMax), v: t * yMax }));
@@ -1706,34 +1755,55 @@ function renderTrendChart(yoy) {
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
 
-  // Annotate worst YoY drop — find the largest negative percentage and label it
+  // Polarity-aware annotation: highlight worst monthly drop if period is net negative,
+  // best monthly gain if period is net positive. Suppress on near-flat periods.
   let annotation = '';
   if (yoy) {
-    let worstIdx = -1;
-    let worstPct = 0;
+    // Period-level YoY direction
+    let totalCurr = 0, totalPrev = 0;
+    monthlyData.forEach((m) => {
+      if (!m.yoy) return;
+      totalCurr += metricsFor(m.curr).views;
+      totalPrev += metricsFor(m.yoy).views;
+    });
+    const periodPct = totalPrev > 0 ? ((totalCurr - totalPrev) / totalPrev) * 100 : 0;
+
+    // Pick direction: < 0 → find worst drop; > 0 → find best gain
+    let targetIdx = -1;
+    let targetPct = 0;
+    const findWorst = periodPct < 0;
     monthlyData.forEach((m, i) => {
       if (!m.yoy) return;
       const c = metricsFor(m.curr).views;
       const p = metricsFor(m.yoy).views;
       if (p > 0) {
         const pct = ((c - p) / p) * 100;
-        if (pct < worstPct) { worstPct = pct; worstIdx = i; }
+        if (findWorst ? pct < targetPct : pct > targetPct) {
+          targetPct = pct; targetIdx = i;
+        }
       }
     });
-    if (worstIdx >= 0 && worstPct < -5) {
-      const cx = xFor(worstIdx);
-      const cy = yFor(currValues[worstIdx]);
-      // Position label below the point so it doesn't collide with the gap-fill above
-      const labelY = cy + 22;
-      const labelText = `${worstPct.toFixed(1)}% YoY`;
+
+    // Only annotate if the highlight passes a meaningful threshold (5%)
+    if (targetIdx >= 0 && Math.abs(targetPct) >= 5) {
+      const isPositive = targetPct > 0;
+      const color = isPositive ? '#1d9e75' : '#ff6b66';
+      const cx = xFor(targetIdx);
+      const cy = yFor(currValues[targetIdx]);
+      // Position label below for negative drops (current line is low → space below)
+      // and above for positive gains (current line is high → space above)
+      const labelY = isPositive ? cy - 18 : cy + 22;
+      const sign = isPositive ? '+' : '';
+      const labelText = `${sign}${targetPct.toFixed(1)}% YoY`;
       const labelW = labelText.length * 6.6 + 14;
-      // Keep label within chart bounds
       const labelX = Math.max(P.left + labelW / 2, Math.min(P.left + innerW - labelW / 2, cx));
+      const connectorStartY = isPositive ? cy - 6 : cy + 6;
+      const connectorEndY = isPositive ? labelY + 11 : labelY - 11;
       annotation = `
         <g class="chart-annotation">
-          <circle cx="${cx}" cy="${cy}" r="6" fill="none" stroke="#ff6b66" stroke-width="2" opacity="0.85"/>
-          <line x1="${cx}" y1="${cy + 6}" x2="${labelX}" y2="${labelY - 11}" stroke="#ff6b66" stroke-width="1" opacity="0.5"/>
-          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="18" rx="3" fill="#ff6b66"/>
+          <circle cx="${cx}" cy="${cy}" r="6" fill="none" stroke="${color}" stroke-width="2" opacity="0.85"/>
+          <line x1="${cx}" y1="${connectorStartY}" x2="${labelX}" y2="${connectorEndY}" stroke="${color}" stroke-width="1" opacity="0.5"/>
+          <rect x="${labelX - labelW / 2}" y="${labelY - 11}" width="${labelW}" height="18" rx="3" fill="${color}"/>
           <text x="${labelX}" y="${labelY + 2}" class="chart-annotation-label">${labelText}</text>
         </g>
       `;
@@ -1765,7 +1835,8 @@ function renderTrendChart(yoy) {
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
     ${xLabels}
-    ${gapPath ? `<path class="chart-gap" d="${gapPath}"/>` : ''}
+    ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
+    ${gapSegmentsGreen ? `<path class="chart-gap surplus" d="${gapSegmentsGreen}"/>` : ''}
     ${yoy && prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${currPath}"/>
     ${prevDots}
