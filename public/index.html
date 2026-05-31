@@ -1728,6 +1728,12 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dataset = await res.json();
 
+    // Default to TheQuartering, override from URL if specified
+    const quarteringId = Object.keys(dataset.channels || {}).find(
+      id => dataset.channels[id].handle === '@TheQuartering'
+    );
+    if (quarteringId) selectedChannel = quarteringId;
+
     // Restore selected channel from URL if present and valid
     const initialParams = new URLSearchParams(window.location.search);
     const chParam = initialParams.get('channel');
@@ -1888,14 +1894,20 @@ function renderChannelSelector() {
   const el = document.getElementById('channelSelector');
   if (!el || !dataset?.channels) return;
   const ids = Object.keys(dataset.channels);
+  // Order: TheQuartering first, then the rest in declared order, then "All combined" last
+  const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
+  const orderedIds = [];
+  if (quarteringId) orderedIds.push(quarteringId);
+  for (const id of ids) if (id !== quarteringId) orderedIds.push(id);
+
   const chips = [];
-  // "All combined" chip first
-  chips.push(`<button class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
-  for (const id of ids) {
+  for (const id of orderedIds) {
     const ch = dataset.channels[id];
     const active = selectedChannel === id;
     chips.push(`<button class="channel-chip${active ? ' active' : ''}" data-channel-id="${id}" role="tab" aria-selected="${active}">${escapeHtml(ch.title)}</button>`);
   }
+  // "All combined" goes last
+  chips.push(`<button class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
   el.innerHTML = chips.join('');
 }
 
@@ -2588,7 +2600,11 @@ function buildShareUrl() {
   params.set('end', document.getElementById('endDate').value);
   if (!document.getElementById('compareYoY').checked) params.set('yoy', '0');
   if (viewMode === 'total') params.set('mode', 'total');
-  if (selectedChannel !== 'ALL') params.set('channel', selectedChannel);
+  // Only include channel in URL if it isn't the default (TheQuartering)
+  const defaultChannel = Object.keys(dataset?.channels || {}).find(
+    id => dataset.channels[id].handle === '@TheQuartering'
+  );
+  if (selectedChannel !== defaultChannel) params.set('channel', selectedChannel);
   return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
 }
 function syncUrlBar() {
