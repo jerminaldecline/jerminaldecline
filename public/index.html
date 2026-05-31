@@ -230,23 +230,30 @@
 
   /* Peak strip — surfaces all-time peak as a reference point */
   .peak-strip {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
-    padding: 0.4rem 0.2rem 0.85rem;
-    margin-bottom: 0.4rem;
+    padding: 0.6rem 0.2rem 0.95rem;
+    margin-bottom: 0.5rem;
     border-bottom: 1px dashed var(--border);
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.3rem;
   }
   .peak-strip:empty { display: none; }
+  .peak-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
   .peak-strip-label {
     text-transform: uppercase;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.08em;
     color: var(--text-dim);
     font-weight: 500;
+    flex-shrink: 0;
+    min-width: 145px;
   }
   .peak-strip strong {
     color: var(--text);
@@ -258,8 +265,15 @@
     font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
+  .peak-strip .peak-gain {
+    color: var(--up);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
   @media (max-width: 540px) {
-    .peak-strip { font-size: 0.78rem; padding: 0.35rem 0.15rem 0.7rem; gap: 0.4rem; }
+    .peak-strip { font-size: 0.78rem; padding: 0.5rem 0.15rem 0.75rem; gap: 0.25rem; }
+    .peak-strip-label { min-width: 0; font-size: 0.66rem; }
+    .peak-line { gap: 0.45rem; }
   }
   @media (max-width: 540px) {
     .brand-name { font-size: 1.65rem; }
@@ -940,6 +954,7 @@
   }
   .chart-dot { fill: var(--surface); stroke-width: 2; }
   .chart-dot.curr { stroke: var(--accent); }
+  .chart-dot.curr.in-progress { stroke-dasharray: 2 1.5; opacity: 0.7; }
   .chart-dot.prev { stroke: var(--text-dim); }
   .chart-hit { fill: transparent; cursor: pointer; }
   .chart-tooltip {
@@ -1206,21 +1221,10 @@
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
       <div class="prediction-header">
         <span>The official diagnosis</span>
-        <span class="prediction-shake">🎱 Find a new excuse</span>
+        <span class="prediction-shake">Find a new excuse</span>
       </div>
       <div class="prediction-text" id="predictionText">
         <strong>This channel is dying because…</strong> <span id="predictionReason">…</span>
-      </div>
-    </div>
-    <div class="weekend-counter" aria-label="Weekend proximity counter">
-      <div class="weekend-side">
-        <div class="weekend-num" id="daysSinceWeekend">0</div>
-        <div class="weekend-label">days since last weekend</div>
-      </div>
-      <div class="weekend-divider"></div>
-      <div class="weekend-side">
-        <div class="weekend-num" id="daysUntilWeekend">0</div>
-        <div class="weekend-label">days until next weekend</div>
       </div>
     </div>
   </header>
@@ -1289,6 +1293,18 @@
         </div>
       </div>
       <div class="monthly-list" id="monthlyList"></div>
+    </div>
+  </div>
+
+  <div class="weekend-counter" aria-label="Weekend proximity counter">
+    <div class="weekend-side">
+      <div class="weekend-num" id="daysSinceWeekend">0</div>
+      <div class="weekend-label">days since last weekend</div>
+    </div>
+    <div class="weekend-divider"></div>
+    <div class="weekend-side">
+      <div class="weekend-num" id="daysUntilWeekend">0</div>
+      <div class="weekend-label">days until next weekend</div>
     </div>
   </div>
 
@@ -1716,37 +1732,70 @@ function renderPeakStrip() {
 
   if (!byMonth.size) { el.innerHTML = ''; return; }
 
-  // Find the peak month
+  // Identify the current (in-progress) month so we can exclude it from peak/latest logic
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+
+  // Find the peak month, ignoring the current in-progress month
   let peakKey = null, peakViews = 0;
   for (const [k, v] of byMonth.entries()) {
+    if (k === currentMonthKey) continue;
     if (v > peakViews) { peakViews = v; peakKey = k; }
   }
 
-  // Find the most recent complete month (last entry by key sort)
-  const sortedKeys = [...byMonth.keys()].sort();
+  // Find the most recent complete month (latest key by sort, excluding current)
+  const sortedKeys = [...byMonth.keys()].filter(k => k !== currentMonthKey).sort();
+  if (!sortedKeys.length) { el.innerHTML = ''; return; }
   const latestKey = sortedKeys[sortedKeys.length - 1];
   const latestViews = byMonth.get(latestKey);
 
-  // Format month label from "YYYY-MM" key
+  // Find the same month one year earlier, if data exists for it
+  const [latestY, latestM] = latestKey.split('-');
+  const yearAgoKey = `${parseInt(latestY) - 1}-${latestM}`;
+  const yearAgoViews = byMonth.get(yearAgoKey);
+
   function labelFromKey(k) {
     const [y, m] = k.split('-');
     const d = new Date(Date.UTC(parseInt(y), parseInt(m) - 1, 1));
     return d.toLocaleString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
   }
 
-  // Only show "% off peak" if peak isn't the latest month (otherwise it'd say 0%)
-  let dropHtml = '';
-  if (peakKey !== latestKey && peakViews > 0) {
+  // Build the peak line (always shown)
+  const peakLine = `
+    <div class="peak-line">
+      <span class="peak-strip-label">All-time peak</span>
+      <span><strong>${labelFromKey(peakKey)}</strong> · <strong>${fmt(peakViews)}</strong> long-form views</span>
+    </div>
+  `;
+
+  // Build the "down from peak" line (only if latest != peak)
+  let downLine = '';
+  if (latestKey !== peakKey && peakViews > 0) {
     const drop = ((latestViews - peakViews) / peakViews) * 100;
-    if (drop < -1) {
-      dropHtml = ` · <span class="peak-drop">${labelFromKey(latestKey)} is ${drop.toFixed(1)}% off peak</span>`;
-    }
+    const dropFmt = `${drop.toFixed(1)}%`;
+    downLine = `
+      <div class="peak-line">
+        <span class="peak-strip-label">Down from peak</span>
+        <span><strong>${labelFromKey(latestKey)}</strong> · <strong>${fmt(latestViews)}</strong> <span class="peak-drop">(${dropFmt})</span></span>
+      </div>
+    `;
   }
 
-  el.innerHTML = `
-    <span class="peak-strip-label">All-time peak</span>
-    <span><strong>${labelFromKey(peakKey)}</strong> · <strong>${fmt(peakViews)}</strong> long-form views</span>${dropHtml}
-  `;
+  // Build the "vs same month last year" line (only if data exists)
+  let yoyLine = '';
+  if (yearAgoViews && yearAgoViews > 0) {
+    const pct = ((latestViews - yearAgoViews) / yearAgoViews) * 100;
+    const pctClass = pct < 0 ? 'peak-drop' : 'peak-gain';
+    const sign = pct >= 0 ? '+' : '';
+    yoyLine = `
+      <div class="peak-line">
+        <span class="peak-strip-label">vs same month last year</span>
+        <span>${labelFromKey(yearAgoKey)} had <strong>${fmt(yearAgoViews)}</strong> <span class="${pctClass}">(${sign}${pct.toFixed(1)}%)</span></span>
+      </div>
+    `;
+  }
+
+  el.innerHTML = peakLine + downLine + yoyLine;
 }
 
 function renderHeroStats(curr, prev) {
@@ -1977,22 +2026,27 @@ function renderTrendChart(yoy) {
     }).join('');
   }
 
-  // Dots
-  const currDots = currValues.map((v, i) =>
-    `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
-  ).join('');
+  // Dots — current in-progress month rendered hollow to flag it
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const currDots = currValues.map((v, i) => {
+    const isInProgress = monthlyData[i].key === currentMonthKey;
+    return `<circle class="chart-dot curr${isInProgress ? ' in-progress' : ''}" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`;
+  }).join('');
   const prevDots = yoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
 
   // Polarity-aware annotation: highlight worst monthly drop if period is net negative,
   // best monthly gain if period is net positive. Suppress on near-flat periods.
+  // Skip the current in-progress month — it hasn't fully accumulated views yet.
   let annotation = '';
   if (yoy) {
-    // Period-level YoY direction
+
+    // Period-level YoY direction (excluding current month)
     let totalCurr = 0, totalPrev = 0;
     monthlyData.forEach((m) => {
-      if (!m.yoy) return;
+      if (!m.yoy || m.key === currentMonthKey) return;
       totalCurr += metricsFor(m.curr).views;
       totalPrev += metricsFor(m.yoy).views;
     });
@@ -2003,7 +2057,7 @@ function renderTrendChart(yoy) {
     let targetPct = 0;
     const findWorst = periodPct < 0;
     monthlyData.forEach((m, i) => {
-      if (!m.yoy) return;
+      if (!m.yoy || m.key === currentMonthKey) return;
       const c = metricsFor(m.curr).views;
       const p = metricsFor(m.yoy).views;
       if (p > 0) {
@@ -2102,8 +2156,12 @@ function renderTrendChart(yoy) {
       const sign = pct >= 0 ? '+' : '';
       deltaHtml = `<span class="chart-tooltip-delta ${cls}">${sign}${pct.toFixed(1)}%</span>`;
     }
+    const isInProgress = m.key === currentMonthKey;
+    const inProgressBadge = isInProgress
+      ? ' <span style="color:var(--shorts);font-size:0.7rem;font-weight:500;">· in progress</span>'
+      : '';
     tooltip.innerHTML = `
-      <div class="chart-tooltip-month">${m.label}</div>
+      <div class="chart-tooltip-month">${m.label}${inProgressBadge}</div>
       <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
       ${yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
     `;
