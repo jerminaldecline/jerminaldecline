@@ -1058,6 +1058,22 @@
     gap: 0.5rem;
     font-size: 0.95rem;
   }
+  .in-progress-badge {
+    background: var(--shorts-soft);
+    color: var(--shorts);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.12rem 0.42rem;
+    border-radius: 999px;
+    border: 1px solid var(--shorts);
+    line-height: 1.4;
+  }
+  [data-theme="dark"] .in-progress-badge {
+    background: transparent;
+    color: var(--shorts);
+  }
   .caret {
     width: 10px;
     height: 10px;
@@ -1884,6 +1900,17 @@ function renderTrendChart(yoy) {
     return;
   }
 
+  // Exclude the current in-progress month from the chart entirely so the trend
+  // line, annotations and tooltips all reflect complete months only.
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
+  if (!chartData.length) {
+    svg.innerHTML = '';
+    legend.innerHTML = '';
+    return;
+  }
+
   // Legend (gap-fill swatches added later, once we know which colours appear)
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> This period</span>
@@ -1897,8 +1924,8 @@ function renderTrendChart(yoy) {
   const innerH = H - P.top - P.bottom;
 
   // Pull metric values (mode-aware via metricsFor)
-  const currValues = monthlyData.map(m => metricsFor(m.curr).views);
-  const prevValues = yoy ? monthlyData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
+  const currValues = chartData.map(m => metricsFor(m.curr).views);
+  const prevValues = yoy ? chartData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
 
   // Y-axis max: tight to the data with 5% headroom, then round to a nice number
   const allValues = [...currValues, ...prevValues.filter(v => v != null)];
@@ -1906,7 +1933,7 @@ function renderTrendChart(yoy) {
   const yMax = niceMax(rawMax * 1.05);
 
   // X positions
-  const n = monthlyData.length;
+  const n = chartData.length;
   const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
   const yFor = v => P.top + (1 - v / yMax) * innerH;
 
@@ -1994,15 +2021,15 @@ function renderTrendChart(yoy) {
   `).join('');
 
   // X axis labels — strategy depends on range
-  // monthlyData[i].label is like "Jan 2025"; we parse month + year out of it
-  const years = new Set(monthlyData.map(m => m.label.split(' ')[1]));
+  // chartData[i].label is like "Jan 2025"; we parse month + year out of it
+  const years = new Set(chartData.map(m => m.label.split(' ')[1]));
   const spansMultipleYears = years.size > 1;
   let xLabels;
   if (spansMultipleYears && n > 24) {
     // Long range: one label per year, positioned at the first month of that year
     // (or at i=0 if the range starts mid-year)
     const yearFirstIdx = new Map();
-    monthlyData.forEach((m, i) => {
+    chartData.forEach((m, i) => {
       const year = m.label.split(' ')[1];
       if (!yearFirstIdx.has(year)) yearFirstIdx.set(year, i);
     });
@@ -2014,7 +2041,7 @@ function renderTrendChart(yoy) {
     // month-only elsewhere
     const labelStride = Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
-    xLabels = monthlyData.map((m, i) => {
+    xLabels = chartData.map((m, i) => {
       if (i % labelStride !== 0 && i !== n - 1) return '';
       const [mon, year] = m.label.split(' ');
       const yearShort = "'" + year.slice(2);
@@ -2026,33 +2053,28 @@ function renderTrendChart(yoy) {
   } else {
     // Single year: just month abbreviations as before
     const labelStride = Math.max(1, Math.ceil(n / 6));
-    xLabels = monthlyData.map((m, i) => {
+    xLabels = chartData.map((m, i) => {
       if (i % labelStride !== 0 && i !== n - 1) return '';
       return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
     }).join('');
   }
 
-  // Dots — current in-progress month rendered hollow to flag it
-  const now = new Date();
-  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
-  const currDots = currValues.map((v, i) => {
-    const isInProgress = monthlyData[i].key === currentMonthKey;
-    return `<circle class="chart-dot curr${isInProgress ? ' in-progress' : ''}" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`;
-  }).join('');
+  // Dots — every point is now a complete month, render uniformly
+  const currDots = currValues.map((v, i) =>
+    `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+  ).join('');
   const prevDots = yoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
 
-  // Polarity-aware annotation: highlight worst monthly drop if period is net negative,
-  // best monthly gain if period is net positive. Suppress on near-flat periods.
-  // Skip the current in-progress month — it hasn't fully accumulated views yet.
+  // Polarity-aware annotation over complete months: highlight worst monthly drop
+  // if the period is net negative, best monthly gain if net positive.
   let annotation = '';
   if (yoy) {
-
-    // Period-level YoY direction (excluding current month)
+    // Period-level YoY direction
     let totalCurr = 0, totalPrev = 0;
-    monthlyData.forEach((m) => {
-      if (!m.yoy || m.key === currentMonthKey) return;
+    chartData.forEach((m) => {
+      if (!m.yoy) return;
       totalCurr += metricsFor(m.curr).views;
       totalPrev += metricsFor(m.yoy).views;
     });
@@ -2062,8 +2084,8 @@ function renderTrendChart(yoy) {
     let targetIdx = -1;
     let targetPct = 0;
     const findWorst = periodPct < 0;
-    monthlyData.forEach((m, i) => {
-      if (!m.yoy || m.key === currentMonthKey) return;
+    chartData.forEach((m, i) => {
+      if (!m.yoy) return;
       const c = metricsFor(m.curr).views;
       const p = metricsFor(m.yoy).views;
       if (p > 0) {
@@ -2118,7 +2140,7 @@ function renderTrendChart(yoy) {
 
   // Hit areas
   const hitWidth = innerW / Math.max(1, n);
-  const hits = monthlyData.map((m, i) => `
+  const hits = chartData.map((m, i) => `
     <rect class="chart-hit"
       x="${xFor(i) - hitWidth / 2}" y="${P.top}"
       width="${hitWidth}" height="${innerH}"
@@ -2150,7 +2172,7 @@ function renderTrendChart(yoy) {
   svg.addEventListener('mouseleave', hideTooltip);
 
   function showTooltip(idx) {
-    const m = monthlyData[idx];
+    const m = chartData[idx];
     const curr = metricsFor(m.curr);
     const yoyM = m.yoy ? metricsFor(m.yoy) : null;
     const cxPct = ((xFor(idx) / W) * 100);
@@ -2162,12 +2184,8 @@ function renderTrendChart(yoy) {
       const sign = pct >= 0 ? '+' : '';
       deltaHtml = `<span class="chart-tooltip-delta ${cls}">${sign}${pct.toFixed(1)}%</span>`;
     }
-    const isInProgress = m.key === currentMonthKey;
-    const inProgressBadge = isInProgress
-      ? ' <span style="color:var(--shorts);font-size:0.7rem;font-weight:500;">· in progress</span>'
-      : '';
     tooltip.innerHTML = `
-      <div class="chart-tooltip-month">${m.label}${inProgressBadge}</div>
+      <div class="chart-tooltip-month">${m.label}</div>
       <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
       ${yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
     `;
@@ -2212,6 +2230,8 @@ function niceMax(v) {
 
 function renderMonthlyList(yoy) {
   const list = document.getElementById('monthlyList');
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
   list.innerHTML = monthlyData.map((m, idx) => {
     const longViews = m.curr.longViews;
     const shortViews = m.curr.shortViews;
@@ -2223,13 +2243,17 @@ function renderMonthlyList(yoy) {
     const yoyMetrics = m.yoy ? metricsFor(m.yoy) : null;
     const momMetrics = m.mom ? metricsFor(m.mom) : null;
 
-    const yoyPill = yoy && yoyMetrics ? deltaPill(currMetrics.views, yoyMetrics.views, { large: true, label: 'YoY' }) : '';
-    const momPill = momMetrics ? deltaPill(currMetrics.views, momMetrics.views, { label: 'MoM' }) : '';
+    const isInProgress = m.key === currentMonthKey;
+    const inProgressBadge = isInProgress ? ' <span class="in-progress-badge">in progress</span>' : '';
+
+    // Suppress YoY/MoM pills on in-progress month (partial-vs-complete is misleading)
+    const yoyPill = yoy && yoyMetrics && !isInProgress ? deltaPill(currMetrics.views, yoyMetrics.views, { large: true, label: 'YoY' }) : '';
+    const momPill = momMetrics && !isInProgress ? deltaPill(currMetrics.views, momMetrics.views, { label: 'MoM' }) : '';
 
     return `
-      <div class="month-row" data-idx="${idx}">
+      <div class="month-row${isInProgress ? ' in-progress' : ''}" data-idx="${idx}">
         <div class="month-header">
-          <div class="month-name"><span class="caret"></span>${m.label}</div>
+          <div class="month-name"><span class="caret"></span>${m.label}${inProgressBadge}</div>
           <div class="month-cell num hide-mobile">
             <div class="month-cell-value">${m.curr.longForm.length} <span style="color: var(--text-dim); font-weight: 400;">/ ${m.curr.shorts.length}</span></div>
             <div class="month-cell-sub">long / shorts</div>
