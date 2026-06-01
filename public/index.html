@@ -1045,6 +1045,60 @@
     padding: 4rem 1rem;
   }
 
+  /* Window mode — flat video list for sub-monthly ranges */
+  .window-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .window-list .window-list-search {
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .window-list .window-list-search input {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.88rem;
+  }
+  .window-list .window-list-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  .window-list .window-list-stats {
+    padding: 0.55rem 0.9rem;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .window-list .window-list-rows {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .window-list .video-row-header {
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .window-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+  @media (max-width: 540px) {
+    .window-list .window-list-search input { font-size: 16px; padding: 0.5rem 0.7rem; }
+  }
+
   /* Word cloud section */
   .wordcloud-section {
     margin: 0 0 1.5rem;
@@ -1522,11 +1576,11 @@
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
 
-      <div class="section-title trend-title">
+      <div class="section-title trend-title" id="trendSection">
         <span>Monthly trend</span>
         <span class="trend-legend" id="trendLegend"></span>
       </div>
-      <div class="chart-wrap">
+      <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Monthly long-form views trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
       </div>
@@ -1543,14 +1597,23 @@
         </div>
       </div>
 
-      <div class="section-title">
-        <span>Monthly breakdown</span>
-        <div class="section-actions">
-          <button class="btn-secondary" id="expandAll">Expand all</button>
-          <button class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
+      <div id="monthlySection">
+        <div class="section-title">
+          <span>Monthly breakdown</span>
+          <div class="section-actions">
+            <button class="btn-secondary" id="expandAll">Expand all</button>
+            <button class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
+          </div>
         </div>
+        <div class="monthly-list" id="monthlyList"></div>
       </div>
-      <div class="monthly-list" id="monthlyList"></div>
+
+      <div id="windowSection" hidden>
+        <div class="section-title">
+          <span id="windowTitle">Videos in range</span>
+        </div>
+        <div class="window-list" id="windowList"></div>
+      </div>
     </div>
   </div>
 
@@ -1700,6 +1763,29 @@ function activeChannelUrl() {
   if (selectedChannel === 'ALL') return null;
   return dataset?.channels?.[selectedChannel]?.url || null;
 }
+
+// --- Window mode detection ---
+// Sub-monthly date ranges (under 32 days) get a flat video list instead of monthly aggregation.
+function isWindowMode(startDate, endDate) {
+  if (!startDate || !endDate) return false;
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T00:00:00Z');
+  const days = (end - start) / 86400000;
+  return days >= 0 && days < 32;
+}
+function formatWindowTitle(startDate, endDate) {
+  // Single day vs multi-day window
+  const sameDay = startDate === endDate;
+  function pretty(d) {
+    const dt = new Date(d + 'T00:00:00Z');
+    return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  }
+  if (sameDay) return `Videos uploaded on ${pretty(startDate)}`;
+  return `Videos from ${pretty(startDate)} to ${pretty(endDate)}`;
+}
+
+// Window-list state: sort + search, shared single state (one window at a time)
+const windowListState = { sortBy: 'date', sortDir: 'desc', query: '' };
 
 // --- Theme toggle ---
 (function() {
@@ -1921,15 +2007,20 @@ function rebuild() {
   const currEnd = new Date(endDate + 'T23:59:59Z');
   if (currStart > currEnd) return;
 
+  // Window mode: sub-monthly ranges get a flat video list instead of monthly aggregation
+  const windowMode = isWindowMode(startDate, endDate);
+
   // YoY only makes sense for ranges of ~12 months or less — beyond that, the
   // shifted comparison window overlaps the current window and produces nonsense.
+  // YoY is also meaningless in window mode (sub-monthly).
   const rangeDays = (currEnd - currStart) / 86400000;
-  const yoyMeaningful = rangeDays <= 400;  // ~13 months allowance
+  const yoyMeaningful = !windowMode && rangeDays <= 400;  // ~13 months allowance
   const yoyCheckbox = document.getElementById('compareYoY');
   const yoyLabel = document.querySelector('.control-bar-yoy');
   yoyCheckbox.disabled = !yoyMeaningful;
   yoyLabel.classList.toggle('disabled', !yoyMeaningful);
-  yoyLabel.title = yoyMeaningful
+  yoyLabel.style.display = windowMode ? 'none' : '';
+  yoyLabel.title = (yoyMeaningful || windowMode)
     ? ''
     : 'YoY comparison is disabled for ranges over 12 months — the comparison window would overlap the current period.';
   const yoy = yoyMeaningful && yoyCheckbox.checked;
@@ -1992,6 +2083,12 @@ function rebuild() {
   document.getElementById('monthlyList').style.display = '';
   document.querySelectorAll('.section-title').forEach(el => el.style.display = '');
 
+  // Apply window-mode visibility (chart hidden, monthly hidden, window list shown)
+  document.getElementById('trendSection').style.display = windowMode ? 'none' : '';
+  document.getElementById('chartWrap').style.display = windowMode ? 'none' : '';
+  document.getElementById('monthlySection').hidden = windowMode;
+  document.getElementById('windowSection').hidden = !windowMode;
+
   const orderedKeys = monthsBetween(currStart, currEnd);
   monthlyData = orderedKeys.map(key => {
     const currVids = allMonthMap.get(key) || [];
@@ -2010,10 +2107,94 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
-  renderTrendChart(yoy);
-  renderMonthlyList(yoy);
+  if (windowMode) {
+    renderWindowList(startDate, endDate);
+  } else {
+    renderTrendChart(yoy);
+    renderMonthlyList(yoy);
+  }
   updateWordCloudHint();
 }
+
+function renderWindowList(startDate, endDate) {
+  document.getElementById('windowTitle').textContent = formatWindowTitle(startDate, endDate);
+
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+  const videos = filteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+
+  // Split by long-form / shorts for summary stats only; the visible list mixes them
+  const longCount = videos.filter(v => !v.isShort && !v.unavailable).length;
+  const shortCount = videos.filter(v => v.isShort && !v.unavailable).length;
+  const totalViews = videos.reduce((s, v) => s + (v.views || 0), 0);
+
+  // Sort + filter the combined list
+  const filtered = filterVideos(videos, windowListState.query);
+  const sorted = sortVideos(filtered, windowListState.sortBy, windowListState.sortDir);
+
+  const list = document.getElementById('windowList');
+  if (videos.length === 0) {
+    list.innerHTML = `<div class="window-empty">No videos uploaded in this range.</div>`;
+    return;
+  }
+
+  const showChannel = selectedChannel === 'ALL';
+  const colHeader = `
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
+      <div class="video-date sortable" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
+      ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
+      <div class="video-title">Title</div>
+      <div class="video-duration sortable hide-mobile" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
+      <div class="video-views sortable" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
+    </div>
+  `;
+
+  const statsLine = `${sorted.length} of ${videos.length} video${videos.length === 1 ? '' : 's'} · ${longCount} long-form · ${shortCount} Shorts · ${fmt(totalViews)} total views`;
+
+  list.innerHTML = `
+    <div class="window-list-search">
+      <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
+    </div>
+    <div class="window-list-stats">${statsLine}</div>
+    <div class="window-list-rows">
+      ${colHeader}
+      ${renderVideoRows(sorted, windowListState.query ? 'No videos match your search' : 'No videos in this range')}
+    </div>
+  `;
+}
+
+// Window-list interactions (delegated)
+document.addEventListener('click', (e) => {
+  const header = e.target.closest('#windowList .video-row-header .sortable');
+  if (!header) return;
+  const col = header.dataset.sort;
+  if (windowListState.sortBy === col) {
+    windowListState.sortDir = windowListState.sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    windowListState.sortBy = col;
+    windowListState.sortDir = 'desc';
+  }
+  // Re-render the window list using the current rebuild — this gets us a fresh render
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (startDate && endDate) renderWindowList(startDate, endDate);
+});
+document.addEventListener('input', (e) => {
+  if (e.target.id !== 'windowListSearch') return;
+  windowListState.query = e.target.value;
+  const caretPos = e.target.selectionStart;
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (startDate && endDate) renderWindowList(startDate, endDate);
+  const newInput = document.getElementById('windowListSearch');
+  if (newInput) {
+    newInput.focus();
+    newInput.setSelectionRange(caretPos, caretPos);
+  }
+});
 
 // Light update on date/channel/mode changes — refreshes hint, and the cloud itself if open
 function updateWordCloudHint() {
