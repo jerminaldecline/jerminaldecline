@@ -1079,6 +1079,102 @@
     font-size: 0.82rem;
     border-bottom: 1px solid var(--border);
   }
+
+  /* Channel breakdown chips above the window list */
+  .channel-breakdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .channel-breakdown-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.32rem 0.85rem 0.32rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s, color 0.12s;
+  }
+  .channel-breakdown-chip:hover {
+    border-color: var(--brand);
+    color: var(--brand-deep);
+  }
+  [data-theme="dark"] .channel-breakdown-chip:hover { color: var(--text); }
+  .channel-breakdown-chip.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .channel-breakdown-chip.empty {
+    opacity: 0.45;
+  }
+  .channel-breakdown-chip .cbc-name {
+    font-weight: 600;
+  }
+  .channel-breakdown-chip .cbc-counts {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .channel-breakdown-chip.active .cbc-counts {
+    color: var(--accent);
+    opacity: 0.85;
+  }
+  .channel-breakdown-chip .cbc-views {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.72rem;
+  }
+  .channel-breakdown-chip.active .cbc-views {
+    color: var(--accent);
+    opacity: 0.75;
+  }
+  .channel-breakdown-clear {
+    background: transparent;
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.74rem;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .channel-breakdown-clear:hover {
+    color: var(--text);
+    border-color: var(--text-muted);
+  }
+
+  /* Clickable channel cells in data rows */
+  .video-channel.clickable {
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+  .video-channel.clickable:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .video-title-channel-tag.clickable-inline {
+    cursor: pointer;
+  }
+  .video-title-channel-tag.clickable-inline:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 540px) {
+    .channel-breakdown { padding: 0.55rem 0.7rem; gap: 0.3rem; }
+    .channel-breakdown-chip { font-size: 0.74rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem; }
+    .channel-breakdown-chip .cbc-views { display: none; }
+  }
   .window-list .window-list-rows {
     max-height: 600px;
     overflow-y: auto;
@@ -1785,7 +1881,7 @@ function formatWindowTitle(startDate, endDate) {
 }
 
 // Window-list state: sort + search, shared single state (one window at a time)
-const windowListState = { sortBy: 'date', sortDir: 'desc', query: '' };
+const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null };
 
 // --- Theme toggle ---
 (function() {
@@ -2121,27 +2217,79 @@ function renderWindowList(startDate, endDate) {
 
   const start = new Date(startDate + 'T00:00:00Z');
   const end = new Date(endDate + 'T23:59:59Z');
-  const videos = filteredVideos().filter(v => {
+  const allWindowVideos = filteredVideos().filter(v => {
     const d = new Date(v.publishedAt);
     return d >= start && d <= end;
   });
 
-  // Split by long-form / shorts for summary stats only; the visible list mixes them
-  const longCount = videos.filter(v => !v.isShort && !v.unavailable).length;
-  const shortCount = videos.filter(v => v.isShort && !v.unavailable).length;
-  const totalViews = videos.reduce((s, v) => s + (v.views || 0), 0);
+  // Compute per-channel breakdown (only meaningful in All-combined mode)
+  const showChannel = selectedChannel === 'ALL';
+  const perChannel = new Map();
+  if (showChannel) {
+    for (const id of Object.keys(dataset.channels || {})) {
+      perChannel.set(id, { longCount: 0, shortCount: 0, views: 0 });
+    }
+    for (const v of allWindowVideos) {
+      const stats = perChannel.get(v.channelId);
+      if (!stats) continue;
+      if (v.unavailable) continue;
+      if (v.isShort) stats.shortCount++;
+      else stats.longCount++;
+      stats.views += v.views || 0;
+    }
+  }
 
-  // Sort + filter the combined list
-  const filtered = filterVideos(videos, windowListState.query);
+  // Apply channel filter if active
+  let scopedVideos = allWindowVideos;
+  if (showChannel && windowListState.channelFilter) {
+    scopedVideos = allWindowVideos.filter(v => v.channelId === windowListState.channelFilter);
+  }
+
+  // Summary over the (channel-filtered) scope
+  const longCount = scopedVideos.filter(v => !v.isShort && !v.unavailable).length;
+  const shortCount = scopedVideos.filter(v => v.isShort && !v.unavailable).length;
+  const totalViews = scopedVideos.reduce((s, v) => s + (v.views || 0), 0);
+
+  // Filter + sort
+  const filtered = filterVideos(scopedVideos, windowListState.query);
   const sorted = sortVideos(filtered, windowListState.sortBy, windowListState.sortDir);
 
   const list = document.getElementById('windowList');
-  if (videos.length === 0) {
+  if (allWindowVideos.length === 0) {
     list.innerHTML = `<div class="window-empty">No videos uploaded in this range.</div>`;
     return;
   }
 
-  const showChannel = selectedChannel === 'ALL';
+  // Build per-channel chip row (All-combined only)
+  let breakdownHtml = '';
+  if (showChannel) {
+    // Order chips to match the top-level selector ordering: TheQuartering first
+    const ids = Object.keys(dataset.channels);
+    const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
+    const orderedIds = quarteringId
+      ? [quarteringId, ...ids.filter(id => id !== quarteringId)]
+      : ids;
+    const chips = orderedIds.map(id => {
+      const ch = dataset.channels[id];
+      const stats = perChannel.get(id) || { longCount: 0, shortCount: 0, views: 0 };
+      const isActive = windowListState.channelFilter === id;
+      const isEmpty = stats.longCount + stats.shortCount === 0;
+      return `
+        <button class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}"
+                data-channel-filter="${id}"
+                title="Click to filter to ${escapeHtml(ch.title)}">
+          <span class="cbc-name">${escapeHtml(ch.title)}</span>
+          <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
+          <span class="cbc-views">${fmtCompact(stats.views)}</span>
+        </button>
+      `;
+    }).join('');
+    const clearChip = windowListState.channelFilter
+      ? `<button class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
+      : '';
+    breakdownHtml = `<div class="channel-breakdown">${chips}${clearChip}</div>`;
+  }
+
   const colHeader = `
     <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
       <div class="video-date sortable" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
@@ -2152,12 +2300,16 @@ function renderWindowList(startDate, endDate) {
     </div>
   `;
 
-  const statsLine = `${sorted.length} of ${videos.length} video${videos.length === 1 ? '' : 's'} · ${longCount} long-form · ${shortCount} Shorts · ${fmt(totalViews)} total views`;
+  const filterLabel = windowListState.channelFilter
+    ? ` · filtered to ${escapeHtml(dataset.channels[windowListState.channelFilter]?.title || '?')}`
+    : '';
+  const statsLine = `${sorted.length} of ${scopedVideos.length} video${scopedVideos.length === 1 ? '' : 's'} · ${longCount} long-form · ${shortCount} Shorts · ${fmt(totalViews)} total views${filterLabel}`;
 
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
     </div>
+    ${breakdownHtml}
     <div class="window-list-stats">${statsLine}</div>
     <div class="window-list-rows">
       ${colHeader}
@@ -2168,6 +2320,26 @@ function renderWindowList(startDate, endDate) {
 
 // Window-list interactions (delegated)
 document.addEventListener('click', (e) => {
+  // Clear filter
+  if (e.target.id === 'clearChannelFilter') {
+    windowListState.channelFilter = null;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (startDate && endDate) renderWindowList(startDate, endDate);
+    return;
+  }
+  // Channel filter toggles from chips or row cells
+  const chip = e.target.closest('[data-channel-filter]');
+  if (chip && document.getElementById('windowList')?.contains(chip)) {
+    const id = chip.dataset.channelFilter;
+    // Toggle: clicking the active filter again clears it
+    windowListState.channelFilter = (windowListState.channelFilter === id) ? null : id;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (startDate && endDate) renderWindowList(startDate, endDate);
+    return;
+  }
+  // Sort header
   const header = e.target.closest('#windowList .video-row-header .sortable');
   if (!header) return;
   const col = header.dataset.sort;
@@ -2177,7 +2349,6 @@ document.addEventListener('click', (e) => {
     windowListState.sortBy = col;
     windowListState.sortDir = 'desc';
   }
-  // Re-render the window list using the current rebuild — this gets us a fresh render
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
   if (startDate && endDate) renderWindowList(startDate, endDate);
@@ -2803,10 +2974,10 @@ function renderVideoRows(videos, emptyText) {
       ? (dataset?.channels?.[v.channelId]?.title || '?')
       : '';
     const channelCell = showChannel
-      ? `<div class="video-channel" title="${escapeHtml(channelName)}">${escapeHtml(channelName)}</div>`
+      ? `<div class="video-channel clickable" data-channel-filter="${v.channelId}" title="Click to filter to ${escapeHtml(channelName)}">${escapeHtml(channelName)}</div>`
       : '';
     const titleSubtitle = showChannel
-      ? `<div class="video-title-channel-tag">${escapeHtml(channelName)}</div>`
+      ? `<div class="video-title-channel-tag clickable-inline" data-channel-filter="${v.channelId}">${escapeHtml(channelName)}</div>`
       : '';
     return `
       <div class="video-row${showChannel ? ' with-channel' : ''}">
@@ -3097,6 +3268,7 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   const newChannel = chip.dataset.channelId;
   if (newChannel === selectedChannel) return;
   selectedChannel = newChannel;
+  windowListState.channelFilter = null;  // filter only meaningful in "All combined"
   renderChannelSelector();
   renderChannelLinkRow();
   renderFooterMeta();
