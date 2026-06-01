@@ -1169,8 +1169,40 @@
   #monthlyBreakdownChips .channel-breakdown {
     padding: 0.6rem 0;
     margin-bottom: 0.7rem;
+    gap: 0.5rem;
   }
   #monthlyBreakdownChips .channel-breakdown:empty { display: none; }
+  /* Static chips render as small two-line cards (used in monthly mode) */
+  .channel-breakdown-chip.static {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 8px;
+    min-width: 160px;
+  }
+  .channel-breakdown-chip.static .cbc-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .channel-breakdown-chip.static .cbc-detail {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .channel-breakdown-chip.static .cbc-long-num,
+  .channel-breakdown-chip.static .cbc-short-num,
+  .channel-breakdown-chip.static .cbc-views-num {
+    color: var(--text);
+    font-weight: 500;
+  }
+  @media (max-width: 540px) {
+    .channel-breakdown-chip.static { min-width: 140px; padding: 0.5rem 0.8rem; }
+    .channel-breakdown-chip.static .cbc-name { font-size: 0.88rem; }
+    .channel-breakdown-chip.static .cbc-detail { font-size: 0.74rem; }
+  }
   .channel-breakdown-chip {
     display: inline-flex;
     align-items: center;
@@ -2382,11 +2414,27 @@ function buildChannelBreakdownHtml(videos, opts) {
     const dataAttr = interactive ? ` data-channel-filter="${id}"` : '';
     const titleAttr = interactive ? ` title="Click to filter to ${escapeHtml(ch.title)}"` : '';
     const tag = interactive ? 'button' : 'div';
+
+    // Interactive (window) mode: compact pill — name + L/S counts + views, single line
+    // Static (monthly) mode: small card — name on top, "X long · Y Shorts · ZM views" below
+    const body = interactive
+      ? `
+          <span class="cbc-name">${escapeHtml(ch.title)}</span>
+          <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
+          <span class="cbc-views">${fmtCompact(stats.views)}</span>
+        `
+      : `
+          <div class="cbc-name">${escapeHtml(ch.title)}</div>
+          <div class="cbc-detail">
+            <span class="cbc-long-num">${fmt(stats.longCount)}</span> long ·
+            <span class="cbc-short-num">${fmt(stats.shortCount)}</span> Shorts ·
+            <span class="cbc-views-num">${fmtCompact(stats.views)}</span> views
+          </div>
+        `;
+
     return `
       <${tag} class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}${interactive ? '' : ' static'}"${dataAttr}${titleAttr}>
-        <span class="cbc-name">${escapeHtml(ch.title)}</span>
-        <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
-        <span class="cbc-views">${fmtCompact(stats.views)}</span>
+        ${body}
       </${tag}>
     `;
   }).join('');
