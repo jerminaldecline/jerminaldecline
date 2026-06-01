@@ -1,0 +1,50 @@
+name: Monthly audit (deletion check)
+
+on:
+  schedule:
+    # Runs on the 1st of every month at 04:23 UTC. Off-hour minute to dodge
+    # GitHub's scheduler stampede on the hour. Covers deletion detection
+    # for videos older than the 60-day window the daily run handles.
+    - cron: '23 4 1 * *'
+  workflow_dispatch:  # allows manual runs from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run audit
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/fetch-data.js --audit
+
+      - name: Commit audited data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data.json
+          if git diff --staged --quiet; then
+            echo "Audit found no changes."
+            exit 0
+          fi
+          git commit -m "chore: monthly audit ($(date -u '+%Y-%m-%d'))"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed on attempt $attempt. Rebasing on latest main and retrying..."
+            git pull --rebase origin main
+          done
+          echo "Push failed after 3 attempts."
+          exit 1

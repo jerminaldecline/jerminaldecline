@@ -2,18 +2,28 @@
 /**
  * Nightly fetcher for the Quartering universe channels.
  *
- * Strategy:
- * - On first run (no existing data file), fetches everything from HISTORY_YEARS
- *   ago to today for every channel in the CHANNELS list.
- * - On subsequent runs, only fetches the last 60 days of uploads to catch
- *   new videos and update view counts on recent content.
- * - Merges new data into the existing dataset and writes public/data.json.
+ * Modes:
+ *
+ *   (default) — incremental refresh:
+ *     - On first run (no existing data file), fetches everything from HISTORY_YEARS
+ *       ago to today for every channel in the CHANNELS list.
+ *     - On subsequent runs, only fetches the last 60 days of uploads to catch
+ *       new videos and update view counts on recent content.
+ *
+ *   --audit — deletion-detection sweep:
+ *     - Reads the existing dataset, re-enriches every video older than RECENT_WINDOW_DAYS
+ *       (recent ones are already covered by daily runs), updates view counts and
+ *       the `unavailable` flag.
+ *     - Does NOT fetch new videos via the uploads playlist.
+ *     - Intended to run monthly via a separate workflow to catch deletions of
+ *       older videos that fall outside the 60-day refresh window.
  *
  * Required env vars:
  *   YOUTUBE_API_KEY — YouTube Data API v3 key
  *
  * Run:
  *   node scripts/fetch-data.js
+ *   node scripts/fetch-data.js --audit
  */
 
 const fs = require('fs');
@@ -30,6 +40,8 @@ const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
 const HISTORY_YEARS = 6; // how far back to fetch on first run (start of ~6 years ago)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
+
+const IS_AUDIT = process.argv.includes('--audit');
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 if (!API_KEY) {
@@ -128,6 +140,11 @@ async function enrichVideos(videos) {
         v.durationSec = parseDuration(det.contentDetails.duration);
         v.views = parseInt(det.statistics.viewCount || '0', 10);
         v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
+        // If a video was previously flagged as unavailable but is now live, clear the flag.
+        if (v.unavailable) {
+          delete v.unavailable;
+          delete v.unavailableSince;
+        }
       } else {
         // Video may have been deleted or made private — keep stub
         v.durationSec = 0;
@@ -139,6 +156,53 @@ async function enrichVideos(videos) {
     console.log(`    Enriched ${Math.min(i + 50, videos.length)} / ${videos.length}`);
   }
   return videos;
+}
+
+/**
+ * Audit-mode enrichment: re-checks the availability of videos older than the
+ * RECENT_WINDOW_DAYS window. Updates view counts (since they may have moved
+ * meaningfully over months) and the `unavailable` flag. Logs what changed.
+ *
+ * Differs from enrichVideos:
+ * - Doesn't touch publishedAt, title, channelId, id
+ * - Tracks transitions and prints a deletion summary at the end
+ */
+async function auditEnrich(videos) {
+  console.log(`  AUDIT: Re-checking ${videos.length} videos for availability...`);
+  const newlyUnavailable = [];
+  const restoredToLive = [];
+  for (let i = 0; i < videos.length; i += 50) {
+    const batch = videos.slice(i, i + 50);
+    const ids = batch.map(v => v.id).join(',');
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${API_KEY}`;
+    const data = await get(url);
+    const byId = new Map(data.items.map(it => [it.id, it]));
+    for (const v of batch) {
+      const det = byId.get(v.id);
+      const wasUnavailable = !!v.unavailable;
+      if (det) {
+        v.durationSec = parseDuration(det.contentDetails.duration);
+        v.views = parseInt(det.statistics.viewCount || '0', 10);
+        v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
+        if (wasUnavailable) {
+          delete v.unavailable;
+          delete v.unavailableSince;
+          restoredToLive.push({ id: v.id, title: v.title });
+        }
+      } else {
+        v.durationSec = v.durationSec || 0;
+        v.views = 0;
+        v.isShort = false;
+        v.unavailable = true;
+        if (!wasUnavailable) {
+          v.unavailableSince = new Date().toISOString();
+          newlyUnavailable.push({ id: v.id, title: v.title, channelId: v.channelId, publishedAt: v.publishedAt });
+        }
+      }
+    }
+    console.log(`    Audited ${Math.min(i + 50, videos.length)} / ${videos.length}`);
+  }
+  return { newlyUnavailable, restoredToLive };
 }
 
 function loadExistingData() {
@@ -172,10 +236,56 @@ function mergeVideos(existing, fresh) {
   );
 }
 
+// Build output JSON from a videos array + channel meta
+function buildOutput(allVideos, channelMeta) {
+  // Strip uploadsPlaylistId from output channel data (internal only)
+  const channelsOut = {};
+  for (const id of Object.keys(channelMeta)) {
+    const { uploadsPlaylistId, ...publicFields } = channelMeta[id];
+    channelsOut[id] = publicFields;
+  }
+
+  // Per-channel meta counts
+  for (const id of Object.keys(channelsOut)) {
+    const chVids = allVideos.filter(v => v.channelId === id);
+    channelsOut[id].meta = {
+      videoCount: chVids.length,
+      longFormCount: chVids.filter(v => !v.isShort && !v.unavailable).length,
+      shortsCount: chVids.filter(v => v.isShort && !v.unavailable).length,
+      unavailableCount: chVids.filter(v => v.unavailable).length,
+      oldestVideoDate: chVids.length ? chVids[chVids.length - 1].publishedAt : null,
+      newestVideoDate: chVids.length ? chVids[0].publishedAt : null
+    };
+  }
+
+  return {
+    channels: channelsOut,
+    meta: {
+      lastUpdated: new Date().toISOString(),
+      videoCount: allVideos.length,
+      longFormCount: allVideos.filter(v => !v.isShort && !v.unavailable).length,
+      shortsCount: allVideos.filter(v => v.isShort && !v.unavailable).length,
+      unavailableCount: allVideos.filter(v => v.unavailable).length,
+      oldestVideoDate: allVideos.length ? allVideos[allVideos.length - 1].publishedAt : null,
+      newestVideoDate: allVideos.length ? allVideos[0].publishedAt : null,
+      shortsCutoffSec: SHORTS_CUTOFF_SEC
+    },
+    videos: allVideos
+  };
+}
+
 // --- Main ---
 
 async function main() {
   const startTime = Date.now();
+
+  if (IS_AUDIT) {
+    return runAudit(startTime);
+  }
+  return runIncremental(startTime);
+}
+
+async function runIncremental(startTime) {
   const existing = loadExistingData();
   const isFirstRun = !existing;
 
@@ -232,50 +342,88 @@ async function main() {
   // Sort by date descending
   allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-  // Strip uploadsPlaylistId from output channel data (internal only)
-  const channelsOut = {};
-  for (const id of Object.keys(channelMeta)) {
-    const { uploadsPlaylistId, ...publicFields } = channelMeta[id];
-    channelsOut[id] = publicFields;
-  }
-
-  // Per-channel meta counts
-  for (const id of Object.keys(channelsOut)) {
-    const chVids = allVideos.filter(v => v.channelId === id);
-    channelsOut[id].meta = {
-      videoCount: chVids.length,
-      longFormCount: chVids.filter(v => !v.isShort && !v.unavailable).length,
-      shortsCount: chVids.filter(v => v.isShort && !v.unavailable).length,
-      oldestVideoDate: chVids.length ? chVids[chVids.length - 1].publishedAt : null,
-      newestVideoDate: chVids.length ? chVids[0].publishedAt : null
-    };
-  }
-
-  const output = {
-    channels: channelsOut,
-    meta: {
-      lastUpdated: new Date().toISOString(),
-      videoCount: allVideos.length,
-      longFormCount: allVideos.filter(v => !v.isShort && !v.unavailable).length,
-      shortsCount: allVideos.filter(v => v.isShort && !v.unavailable).length,
-      oldestVideoDate: allVideos.length ? allVideos[allVideos.length - 1].publishedAt : null,
-      newestVideoDate: allVideos.length ? allVideos[0].publishedAt : null,
-      shortsCutoffSec: SHORTS_CUTOFF_SEC
-    },
-    videos: allVideos
-  };
+  const output = buildOutput(allVideos, channelMeta);
 
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ Done in ${elapsed}s`);
-  console.log(`  ${output.meta.videoCount} videos total across ${Object.keys(channelsOut).length} channels`);
-  console.log(`  ${output.meta.longFormCount} long-form · ${output.meta.shortsCount} shorts`);
-  for (const id of Object.keys(channelsOut)) {
-    const m = channelsOut[id].meta;
-    console.log(`    ${channelsOut[id].title}: ${m.videoCount} (${m.longFormCount} long / ${m.shortsCount} shorts)`);
+  console.log(`  ${output.meta.videoCount} videos total across ${Object.keys(output.channels).length} channels`);
+  console.log(`  ${output.meta.longFormCount} long-form · ${output.meta.shortsCount} shorts · ${output.meta.unavailableCount} unavailable`);
+  for (const id of Object.keys(output.channels)) {
+    const m = output.channels[id].meta;
+    console.log(`    ${output.channels[id].title}: ${m.videoCount} (${m.longFormCount} long / ${m.shortsCount} shorts / ${m.unavailableCount} unavailable)`);
   }
+  console.log(`  Written to ${DATA_FILE}`);
+}
+
+async function runAudit(startTime) {
+  const existing = loadExistingData();
+  if (!existing) {
+    console.log('AUDIT: no existing data to audit. Run a normal fetch first.');
+    return;
+  }
+
+  // We need channel meta with uploadsPlaylistId to write back; re-resolve channels
+  console.log('AUDIT: Resolving channels for output metadata...');
+  const channelMeta = {};
+  for (const handle of CHANNELS) {
+    const ch = await resolveChannel(handle);
+    channelMeta[ch.id] = {
+      id: ch.id,
+      title: ch.title,
+      handle: ch.handle,
+      url: ch.url,
+      uploadsPlaylistId: ch.uploadsPlaylistId
+    };
+  }
+
+  // Audit scope: all videos older than RECENT_WINDOW_DAYS (recent ones already covered by daily run)
+  const cutoff = new Date();
+  cutoff.setUTCDate(cutoff.getUTCDate() - RECENT_WINDOW_DAYS);
+  const auditTargets = existing.videos.filter(v => new Date(v.publishedAt) < cutoff);
+
+  console.log(`AUDIT: Checking ${auditTargets.length} videos older than ${cutoff.toISOString().slice(0, 10)}`);
+  console.log(`AUDIT: (${existing.videos.length - auditTargets.length} recent videos skipped — covered by daily runs)`);
+
+  if (auditTargets.length === 0) {
+    console.log('AUDIT: no videos to audit. Done.');
+    return;
+  }
+
+  // Run audit enrichment, capturing deletions and restorations
+  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets);
+
+  // Merge audited records back into the full dataset (audit changed objects in-place
+  // since they're the same references, but be defensive)
+  const auditById = new Map(auditTargets.map(v => [v.id, v]));
+  const allVideos = existing.videos.map(v => auditById.get(v.id) || v);
+  allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  const output = buildOutput(allVideos, channelMeta);
+  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+  fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
+
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  console.log(`\n✓ AUDIT done in ${elapsed}s`);
+  console.log(`  Newly unavailable: ${newlyUnavailable.length}`);
+  if (newlyUnavailable.length > 0) {
+    for (const v of newlyUnavailable.slice(0, 25)) {
+      const chTitle = channelMeta[v.channelId]?.title || v.channelId;
+      console.log(`    [${chTitle}] ${v.publishedAt.slice(0, 10)} · ${v.title}`);
+    }
+    if (newlyUnavailable.length > 25) {
+      console.log(`    …and ${newlyUnavailable.length - 25} more`);
+    }
+  }
+  console.log(`  Restored to live: ${restoredToLive.length}`);
+  if (restoredToLive.length > 0) {
+    for (const v of restoredToLive.slice(0, 10)) {
+      console.log(`    ${v.title}`);
+    }
+  }
+  console.log(`  Total unavailable across dataset: ${output.meta.unavailableCount}`);
   console.log(`  Written to ${DATA_FILE}`);
 }
 
