@@ -1284,12 +1284,31 @@
     align-items: center;
     border-bottom: 1px solid var(--border);
   }
+  .video-row.with-channel {
+    grid-template-columns: 90px 120px 1fr 80px 110px;
+  }
   .video-row:last-child { border-bottom: none; }
   .video-row:hover { background: var(--surface-2); }
   .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.82rem; }
+  .video-channel {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .video-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .video-title a { color: var(--text); text-decoration: none; }
   .video-title a:hover { color: var(--accent); text-decoration: underline; }
+  /* Mobile: channel becomes a subtitle under the title */
+  .video-title-channel-tag {
+    display: none;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    font-weight: 400;
+    margin-top: 0.15rem;
+    white-space: nowrap;
+  }
   .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.82rem; }
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
   .group-content { max-height: 360px; overflow-y: auto; }
@@ -1319,6 +1338,7 @@
   }
   .video-row-header .sortable:hover { color: var(--text); }
   .video-row-header .video-date { font-size: 0.72rem; }
+  .video-row-header .video-channel { font-size: 0.72rem; }
   .video-row-header .video-duration { font-size: 0.72rem; }
   .sort-arrow {
     display: inline-block;
@@ -1394,8 +1414,12 @@
     .month-header { grid-template-columns: 1fr 1.2fr 1fr; padding: 0.8rem 0.85rem; }
     .month-cell.hide-mobile { display: none; }
     .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
+    .video-row.with-channel { grid-template-columns: 70px 1fr 90px; }
     .video-row .video-duration,
+    .video-row .video-channel,
     .video-row .hide-mobile { display: none !important; }
+    .video-title { white-space: normal; }
+    .video-title-channel-tag { display: block; }
     .month-detail { padding: 0.7rem 0.7rem 0.85rem; }
     .group-header { padding: 0.55rem 0.7rem; }
     .group-stats { font-size: 0.78rem; }
@@ -1404,8 +1428,12 @@
      catch them with a coarse-pointer media query to hide duration on touch devices regardless of width */
   @media (pointer: coarse) and (max-width: 1000px) {
     .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
+    .video-row.with-channel { grid-template-columns: 70px 1fr 90px; }
     .video-row .video-duration,
+    .video-row .video-channel,
     .video-row .hide-mobile { display: none !important; }
+    .video-title { white-space: normal; }
+    .video-title-channel-tag { display: block; }
   }
 </style>
 </head>
@@ -2588,14 +2616,27 @@ function renderVideoRows(videos, emptyText) {
   if (videos.length === 0) {
     return `<div class="group-empty">${emptyText}</div>`;
   }
-  return videos.map(v => `
-    <div class="video-row">
-      <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
-      <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a></div>
-      <div class="video-duration">${formatDuration(v.durationSec)}</div>
-      <div class="video-views">${fmt(v.views)}</div>
-    </div>
-  `).join('');
+  const showChannel = selectedChannel === 'ALL';
+  return videos.map(v => {
+    const channelName = showChannel
+      ? (dataset?.channels?.[v.channelId]?.title || '?')
+      : '';
+    const channelCell = showChannel
+      ? `<div class="video-channel" title="${escapeHtml(channelName)}">${escapeHtml(channelName)}</div>`
+      : '';
+    const titleSubtitle = showChannel
+      ? `<div class="video-title-channel-tag">${escapeHtml(channelName)}</div>`
+      : '';
+    return `
+      <div class="video-row${showChannel ? ' with-channel' : ''}">
+        <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+        ${channelCell}
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a>${titleSubtitle}</div>
+        <div class="video-duration">${formatDuration(v.durationSec)}</div>
+        <div class="video-views">${fmt(v.views)}</div>
+      </div>
+    `;
+  }).join('');
 }
 
 function sortArrow(state, col) {
@@ -2739,10 +2780,12 @@ function renderMonthDetail(m, idx) {
   const longList = sortVideos(longFiltered, state.sortBy, state.sortDir);
   const shortList = sortVideos(shortFiltered, state.sortBy, state.sortDir);
 
-  // Column header row — date, title (not sortable), duration, views; matches video-row grid
+  // Column header row — date, [channel], title (not sortable), duration, views; matches video-row grid
+  const showChannel = selectedChannel === 'ALL';
   const colHeader = `
-    <div class="video-row video-row-header">
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
       <div class="video-date sortable" data-sort="date">Date${sortArrow(state, 'date')}</div>
+      ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
       <div class="video-duration sortable hide-mobile" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
       <div class="video-views sortable" data-sort="views">Views${sortArrow(state, 'views')}</div>
