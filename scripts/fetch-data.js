@@ -80,15 +80,21 @@ function parseDuration(iso) {
 
 async function resolveChannel(handle) {
   console.log(`Resolving channel ${handle}...`);
-  const url = `https://www.googleapis.com/youtube/v3/channels?part=id,snippet,contentDetails&forHandle=${encodeURIComponent(handle)}&key=${API_KEY}`;
+  const url = `https://www.googleapis.com/youtube/v3/channels?part=id,snippet,contentDetails,statistics&forHandle=${encodeURIComponent(handle)}&key=${API_KEY}`;
   const data = await get(url);
   if (!data.items || !data.items.length) throw new Error(`Channel ${handle} not found`);
+  const item = data.items[0];
+  const stats = item.statistics || {};
   return {
-    id: data.items[0].id,
-    title: data.items[0].snippet.title,
+    id: item.id,
+    title: item.snippet.title,
     handle,
     url: `https://www.youtube.com/${handle}`,
-    uploadsPlaylistId: data.items[0].contentDetails.relatedPlaylists.uploads
+    uploadsPlaylistId: item.contentDetails.relatedPlaylists.uploads,
+    // Channel-level statistics — captured on every run so we can build
+    // a month-over-month delta of total channel views and subscriber count.
+    channelViews: parseInt(stats.viewCount || '0', 10),
+    subscriberCount: parseInt(stats.subscriberCount || '0', 10)
   };
 }
 
@@ -237,12 +243,26 @@ function mergeVideos(existing, fresh) {
 }
 
 // Build output JSON from a videos array + channel meta
-function buildOutput(allVideos, channelMeta) {
-  // Strip uploadsPlaylistId from output channel data (internal only)
+function buildOutput(allVideos, channelMeta, existing) {
+  // Strip internal-only fields from output channel data
   const channelsOut = {};
   for (const id of Object.keys(channelMeta)) {
-    const { uploadsPlaylistId, ...publicFields } = channelMeta[id];
+    const { uploadsPlaylistId, channelViews, subscriberCount, ...publicFields } = channelMeta[id];
     channelsOut[id] = publicFields;
+
+    // Append today's snapshot if we don't already have one for today.
+    // (Multiple daily runs would otherwise duplicate snapshots.)
+    const today = new Date().toISOString().slice(0, 10);
+    const existingSnapshots = existing?.channels?.[id]?.snapshots || [];
+    const todayAlreadyCaptured = existingSnapshots.some(s => s.date === today);
+    const updatedSnapshots = todayAlreadyCaptured
+      ? existingSnapshots.map(s => s.date === today
+          ? { date: today, channelViews, subscriberCount }
+          : s)
+      : [...existingSnapshots, { date: today, channelViews, subscriberCount }];
+    // Keep snapshots sorted ascending by date
+    updatedSnapshots.sort((a, b) => a.date.localeCompare(b.date));
+    channelsOut[id].snapshots = updatedSnapshots;
   }
 
   // Per-channel meta counts
@@ -311,9 +331,11 @@ async function runIncremental(startTime) {
       title: ch.title,
       handle: ch.handle,
       url: ch.url,
-      uploadsPlaylistId: ch.uploadsPlaylistId
+      uploadsPlaylistId: ch.uploadsPlaylistId,
+      channelViews: ch.channelViews,
+      subscriberCount: ch.subscriberCount
     };
-    console.log(`  → ${ch.title} (${ch.id})`);
+    console.log(`  → ${ch.title} (${ch.id}) · ${ch.channelViews.toLocaleString()} views · ${ch.subscriberCount.toLocaleString()} subs`);
   }
 
   // Fetch fresh videos for each channel
@@ -342,7 +364,7 @@ async function runIncremental(startTime) {
   // Sort by date descending
   allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-  const output = buildOutput(allVideos, channelMeta);
+  const output = buildOutput(allVideos, channelMeta, existing);
 
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
@@ -352,9 +374,13 @@ async function runIncremental(startTime) {
   console.log(`  ${output.meta.videoCount} videos total across ${Object.keys(output.channels).length} channels`);
   console.log(`  ${output.meta.longFormCount} long-form · ${output.meta.shortsCount} shorts · ${output.meta.unavailableCount} unavailable`);
   for (const id of Object.keys(output.channels)) {
-    const m = output.channels[id].meta;
-    console.log(`    ${output.channels[id].title}: ${m.videoCount} (${m.longFormCount} long / ${m.shortsCount} shorts / ${m.unavailableCount} unavailable)`);
+    const ch = output.channels[id];
+    const m = ch.meta;
+    const snap = ch.snapshots?.[ch.snapshots.length - 1];
+    const snapStr = snap ? ` · ${snap.channelViews.toLocaleString()} channel views · ${snap.subscriberCount.toLocaleString()} subs` : '';
+    console.log(`    ${ch.title}: ${m.videoCount} (${m.longFormCount} long / ${m.shortsCount} shorts / ${m.unavailableCount} unavailable)${snapStr}`);
   }
+  console.log(`  Snapshot history: ${output.channels[Object.keys(output.channels)[0]]?.snapshots?.length || 0} day(s) recorded`);
   console.log(`  Written to ${DATA_FILE}`);
 }
 
@@ -375,7 +401,9 @@ async function runAudit(startTime) {
       title: ch.title,
       handle: ch.handle,
       url: ch.url,
-      uploadsPlaylistId: ch.uploadsPlaylistId
+      uploadsPlaylistId: ch.uploadsPlaylistId,
+      channelViews: ch.channelViews,
+      subscriberCount: ch.subscriberCount
     };
   }
 
@@ -401,7 +429,7 @@ async function runAudit(startTime) {
   const allVideos = existing.videos.map(v => auditById.get(v.id) || v);
   allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-  const output = buildOutput(allVideos, channelMeta);
+  const output = buildOutput(allVideos, channelMeta, existing);
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
 
