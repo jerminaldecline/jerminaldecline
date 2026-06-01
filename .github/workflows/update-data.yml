@@ -4,8 +4,9 @@ on:
   schedule:
     # Multiple staggered runs daily. GitHub's free-tier scheduler is
     # unreliable and often skips runs scheduled on the hour, so we
-    # use off-hour minutes and three attempts across the day.
-    # Only the first run that finds new data will produce a commit.
+    # use off-hour minutes and four attempts across the day.
+    # Only runs that find new data will produce a commit.
+    - cron: '7 0 * * *'    # 00:07 UTC — overnight catch (plugs late-day upload gap)
     - cron: '17 3 * * *'   # 03:17 UTC — primary, early morning
     - cron: '37 11 * * *'  # 11:37 UTC — midday backup
     - cron: '47 19 * * *'  # 19:47 UTC — evening backup
