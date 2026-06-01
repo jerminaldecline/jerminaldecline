@@ -185,31 +185,41 @@
     align-items: center;
   }
   .channel-chip {
-    background: transparent;
+    background: var(--surface);
     color: var(--text-muted);
-    border: 1px solid transparent;
+    border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 0.32rem 0.85rem;
+    padding: 0.42rem 1rem;
     font-family: inherit;
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     font-weight: 500;
     cursor: pointer;
-    transition: color 0.12s, background 0.12s, border-color 0.12s;
+    transition: color 0.12s, background 0.12s, border-color 0.12s, box-shadow 0.12s;
     white-space: nowrap;
   }
+  [data-theme="dark"] .channel-chip {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.10);
+  }
   .channel-chip:hover {
-    color: var(--brand-deep);
-    background: rgba(127,127,127,0.06);
+    color: var(--text);
+    border-color: var(--brand);
+    background: var(--surface);
+  }
+  [data-theme="dark"] .channel-chip:hover {
+    background: rgba(255,255,255,0.08);
   }
   .channel-chip.active {
-    background: var(--surface);
-    color: var(--brand-deep);
+    background: var(--brand);
+    color: #ffffff;
     border-color: var(--brand);
     font-weight: 600;
+    box-shadow: 0 2px 6px rgba(27, 77, 159, 0.25);
   }
-  [data-theme="dark"] .channel-chip.active {
-    background: var(--bg);
-    color: var(--text);
+  .channel-chip.active:hover {
+    background: var(--brand-deep);
+    color: #ffffff;
+    border-color: var(--brand-deep);
   }
   .channel-chip.all { font-style: italic; }
 
@@ -239,7 +249,7 @@
     transform: translate(1px, -1px);
   }
   @media (max-width: 540px) {
-    .channel-chip { font-size: 0.82rem; padding: 0.3rem 0.7rem; }
+    .channel-chip { font-size: 0.83rem; padding: 0.38rem 0.85rem; }
   }
   .last-updated {
     color: var(--text-muted);
@@ -605,36 +615,48 @@
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
 
-  /* Date range preset chips */
+  /* Date range preset chips — secondary controls, lighter than channel chips */
   .preset-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-bottom: 0.6rem;
+    gap: 0.15rem;
+    margin-bottom: 0.7rem;
+    align-items: center;
   }
   .preset-chip {
-    background: var(--surface-2);
+    background: transparent;
     color: var(--text-muted);
-    border: 1px solid transparent;
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.65rem;
     font-family: inherit;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: color 0.12s, border-color 0.12s, background 0.12s;
+    transition: color 0.12s, background 0.12s;
+    position: relative;
   }
   .preset-chip:hover {
     color: var(--text);
-    border-color: var(--border-strong);
+    background: var(--surface-2);
   }
   .preset-chip.active {
-    background: var(--accent-soft);
     color: var(--accent);
-    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .preset-chip.active::after {
+    content: '';
+    position: absolute;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: 0.1rem;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
   }
   @media (max-width: 540px) {
-    .preset-chip { font-size: 0.75rem; padding: 0.28rem 0.65rem; }
+    .preset-chip { font-size: 0.78rem; padding: 0.3rem 0.55rem; }
+    .preset-chip.active::after { left: 0.55rem; right: 0.55rem; }
   }
 
   /* Compact control bar — date pickers inline */
@@ -1487,6 +1509,12 @@
     transition: color 0.12s;
   }
   .video-row-header .sortable:hover { color: var(--text); }
+  .video-row-header .sortable.active-sort {
+    color: var(--accent);
+  }
+  .video-row-header .sortable.active-sort:hover {
+    color: var(--accent);
+  }
   .video-row-header .video-date { font-size: 0.72rem; }
   .video-row-header .video-channel { font-size: 0.72rem; }
   .video-row-header .video-duration { font-size: 0.72rem; }
@@ -2292,11 +2320,11 @@ function renderWindowList(startDate, endDate) {
 
   const colHeader = `
     <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
-      <div class="video-date sortable" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
+      <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
       ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
-      <div class="video-duration sortable hide-mobile" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
-      <div class="video-views sortable" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
+      <div class="video-duration sortable hide-mobile${sortableClass(windowListState, 'duration')}" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
+      <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
     </div>
   `;
 
@@ -2997,6 +3025,9 @@ function sortArrow(state, col) {
     ? '<span class="sort-arrow active">↑</span>'
     : '<span class="sort-arrow active">↓</span>';
 }
+function sortableClass(state, col) {
+  return state.sortBy === col ? ' active-sort' : '';
+}
 
 // --- Title word cloud ---
 const STOPWORDS = new Set([
@@ -3136,11 +3167,11 @@ function renderMonthDetail(m, idx) {
   const showChannel = selectedChannel === 'ALL';
   const colHeader = `
     <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
-      <div class="video-date sortable" data-sort="date">Date${sortArrow(state, 'date')}</div>
+      <div class="video-date sortable${sortableClass(state, 'date')}" data-sort="date">Date${sortArrow(state, 'date')}</div>
       ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
-      <div class="video-duration sortable hide-mobile" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
-      <div class="video-views sortable" data-sort="views">Views${sortArrow(state, 'views')}</div>
+      <div class="video-duration sortable hide-mobile${sortableClass(state, 'duration')}" data-sort="duration">Duration${sortArrow(state, 'duration')}</div>
+      <div class="video-views sortable${sortableClass(state, 'views')}" data-sort="views">Views${sortArrow(state, 'views')}</div>
     </div>
   `;
 
