@@ -325,6 +325,28 @@
     font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
+  .peak-month-jump {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text);
+    font-weight: 600;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .peak-month-jump:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .peak-month-jump:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
   .peak-footnote {
     font-size: 0.7rem;
     color: var(--text-dim);
@@ -383,50 +405,55 @@
   }
 
   /* Prediction card (the "8-ball") */
+  /* Diagnosis card — single horizontal line */
   .prediction-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
     background: var(--brand-deep);
     color: var(--pred-text);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.4rem;
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 1rem;
     margin-bottom: 1rem;
     position: relative;
     overflow: hidden;
     cursor: pointer;
     user-select: none;
-    box-shadow: 0 4px 12px rgba(27, 77, 159, 0.18);
-    transition: transform 0.15s, background-color 0.2s;
+    transition: background-color 0.2s;
   }
   [data-theme="dark"] .prediction-card {
     background: var(--surface-2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     border: 1px solid var(--border);
   }
-  .prediction-card:hover { transform: translateY(-1px); }
-  .prediction-card:active { transform: translateY(0); }
-  @media (max-width: 540px) {
-    .prediction-card { padding: 1rem 1.05rem; }
-    .prediction-text { font-size: 0.95rem; }
+  .prediction-card:hover { background: #163d80; }
+  [data-theme="dark"] .prediction-card:hover {
+    background: var(--surface);
   }
-  .prediction-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 60%);
-    pointer-events: none;
-  }
-  .prediction-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.72rem;
+  .prediction-label {
+    font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: rgba(237, 232, 216, 0.65);
-    font-weight: 500;
+    font-weight: 600;
+    flex-shrink: 0;
   }
-  [data-theme="dark"] .prediction-header { color: var(--text-muted); }
+  [data-theme="dark"] .prediction-label { color: var(--text-muted); }
+  .prediction-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.3;
+    font-style: italic;
+    flex: 1;
+    min-width: 0;
+    transition: opacity 0.2s;
+  }
+  .prediction-text.shaking { opacity: 0; }
+  .prediction-text strong {
+    color: #ffffff;
+    font-style: normal;
+    font-weight: 600;
+  }
   [data-theme="dark"] .prediction-text strong { color: var(--text); }
   .prediction-shake {
     font-size: 0.7rem;
@@ -436,25 +463,17 @@
     border-radius: 4px;
     font-weight: 600;
     letter-spacing: 0.06em;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s, transform 0.12s;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .prediction-card:hover .prediction-shake { background: #ffaa4d; }
-  .prediction-card:active .prediction-shake { transform: scale(0.96); }
-  .prediction-text {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: -0.005em;
-    font-style: italic;
-    transition: opacity 0.2s;
+  .prediction-card:active .prediction-shake { transform: scale(0.92); }
+  .prediction-card:active { transform: scale(0.998); }
+  @media (max-width: 540px) {
+    .prediction-card { padding: 0.65rem 0.85rem; gap: 0.5rem; }
+    .prediction-text { font-size: 0.88rem; }
   }
-  .prediction-text strong {
-    color: #fff;
-    font-style: normal;
-    font-weight: 600;
-  }
-  .prediction-text.shaking { opacity: 0; }
 
   /* Weekend counter — deadpan "days since accident" energy */
   .weekend-counter {
@@ -773,6 +792,32 @@
     border-color: var(--up);
     background: var(--up-soft);
   }
+  .share-btn .share-icon-done { display: none; }
+  .share-btn.copied .share-icon-default { display: none; }
+  .share-btn.copied .share-icon-done { display: inline; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    top: 1.25rem;
+    left: 50%;
+    transform: translate(-50%, -120%);
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.65rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s;
+  }
+  .toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
   @media (max-width: 480px) {
     .share-btn-label { display: none; }
     .control-bar-right { gap: 0.5rem; }
@@ -863,7 +908,8 @@
     }
     .hero-stat.featured { grid-column: 1 / -1; }
     .hero-stat { padding: 0.85rem 0.9rem; }
-    .hero-stat-value { font-size: 1.4rem; }
+    .hero-stat-value { font-size: 1.55rem; }
+    .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
     .hero-stat-label { font-size: 0.7rem; }
     .hero-stat-sub { font-size: 0.72rem; }
   }
@@ -876,12 +922,16 @@
     font-weight: 500;
   }
   .hero-stat-value {
-    font-size: 1.65rem;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
   }
+  .hero-stat-value[data-compact="1"] {
+    cursor: help;
+  }
+  .hero-stat.featured .hero-stat-value { font-size: 2.4rem; }
   .hero-stat-sub {
     font-size: 0.8rem;
     color: var(--text-muted);
@@ -1309,6 +1359,29 @@
     margin: 1rem 0;
   }
   .empty-state strong { color: var(--text); }
+  .empty-state-msg { margin-bottom: 1.1rem; }
+  .empty-state-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+  .empty-state-btn {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s, border-color 0.12s;
+  }
+  .empty-state-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 
   .delta {
     display: inline-flex;
@@ -1616,6 +1689,7 @@
 </style>
 </head>
 <body>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="container">
   <header>
     <div class="brand-header">
@@ -1643,13 +1717,11 @@
     <div class="channel-link-row" id="channelLinkRow"></div>
     <div class="peak-strip" id="peakStrip"></div>
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
-      <div class="prediction-header">
-        <span>The official diagnosis</span>
-        <span class="prediction-shake">Find a new excuse</span>
-      </div>
-      <div class="prediction-text" id="predictionText">
-        <strong>This channel is dying because…</strong> <span id="predictionReason">…</span>
-      </div>
+      <span class="prediction-label">Diagnosis:</span>
+      <span class="prediction-text" id="predictionText">
+        This channel is dying because… <strong id="predictionReason">…</strong>
+      </span>
+      <span class="prediction-shake">New excuse</span>
     </div>
   </header>
 
@@ -1686,7 +1758,8 @@
             <span>Compare YoY</span>
           </label>
           <button class="share-btn" id="shareBtn" title="Copy link to this view" aria-label="Copy link to this view">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <svg class="share-icon-default" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <svg class="share-icon-done" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span class="share-btn-label">Share</span>
           </button>
         </div>
@@ -2190,7 +2263,15 @@ function rebuild() {
       emptyMsg.className = 'empty-state';
       document.getElementById('monthlyList').before(emptyMsg);
     }
-    emptyMsg.innerHTML = `No uploads found between <strong>${startDate}</strong> and <strong>${endDate}</strong>. Try widening the date range.`;
+    emptyMsg.innerHTML = `
+      <div class="empty-state-msg">No uploads found between <strong>${startDate}</strong> and <strong>${endDate}</strong>.</div>
+      <div class="empty-state-actions">
+        <button class="empty-state-btn" data-empty-action="7d">Use last 7 days</button>
+        <button class="empty-state-btn" data-empty-action="30d">Use last 30 days</button>
+        <button class="empty-state-btn" data-empty-action="ytd">Year to date</button>
+        <button class="empty-state-btn" data-empty-action="all">All time</button>
+      </div>
+    `;
     emptyMsg.style.display = 'block';
     document.getElementById('heroStats').style.display = 'none';
     document.getElementById('composition').style.display = 'none';
@@ -2510,7 +2591,7 @@ function renderPeakStrip() {
   const peakLine = `
     <div class="peak-line">
       <span class="peak-strip-label">All-time peak</span>
-      <span><strong>${labelFromKey(peakKey)}</strong> · <strong>${fmt(peakViews)}</strong> long-form views</span>
+      <span><button class="peak-month-jump" data-jump-month-key="${peakKey}" title="Jump to this month">${labelFromKey(peakKey)}</button> · <strong>${fmt(peakViews)}</strong> long-form views</span>
     </div>
   `;
 
@@ -2521,7 +2602,7 @@ function renderPeakStrip() {
     lowLine = `
       <div class="peak-line">
         <span class="peak-strip-label">All-time low</span>
-        <span><strong>${labelFromKey(lowKey)}</strong> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(${fromPeak.toFixed(1)}% from peak)</span></span>
+        <span><button class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(${fromPeak.toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -2533,7 +2614,7 @@ function renderPeakStrip() {
     downLine = `
       <div class="peak-line">
         <span class="peak-strip-label">Latest complete month</span>
-        <span><strong>${labelFromKey(latestKey)}</strong> · <strong>${fmt(latestViews)}</strong> <span class="peak-drop">(${drop.toFixed(1)}% from peak)</span></span>
+        <span><button class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="peak-drop">(${drop.toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -2553,33 +2634,56 @@ function renderHeroStats(curr, prev) {
   const countLabel = viewMode === 'long' ? 'Long-form videos' : 'Total videos';
   const avgLabel = viewMode === 'long' ? 'Avg views / long-form' : 'Avg views / video';
 
+  // Big headline numbers go compact for readability (e.g. "105M" not "105,475,680").
+  // Full number is preserved in the title attribute for tooltip on hover.
+  // Video counts stay non-compact — they're small enough to be readable.
   const stats = [
-    { label: viewLabel, raw: c.views, value: fmt(c.views), sub: p ? `vs ${fmtCompact(p.views)} prev year ${deltaPill(c.views, p.views)}` : `${c.count} videos`, featured: true },
-    { label: countLabel, raw: c.count, value: fmt(c.count), sub: p ? `vs ${p.count} prev year ${deltaPill(c.count, p.count)}` : '' },
-    { label: avgLabel, raw: c.avg, value: fmt(c.avg), sub: p ? `vs ${fmtCompact(p.avg)} prev year ${deltaPill(c.avg, p.avg)}` : '' }
+    {
+      label: viewLabel,
+      raw: c.views,
+      value: fmtCompact(c.views),
+      fullValue: fmt(c.views),
+      sub: p ? `vs ${fmtCompact(p.views)} last year ${deltaPill(c.views, p.views)}` : `${fmt(c.count)} videos`,
+      featured: true
+    },
+    {
+      label: countLabel,
+      raw: c.count,
+      value: fmt(c.count),
+      fullValue: fmt(c.count),
+      sub: p ? `vs ${fmt(p.count)} last year ${deltaPill(c.count, p.count)}` : ''
+    },
+    {
+      label: avgLabel,
+      raw: c.avg,
+      value: fmtCompact(c.avg),
+      fullValue: fmt(c.avg),
+      sub: p ? `vs ${fmtCompact(p.avg)} last year ${deltaPill(c.avg, p.avg)}` : ''
+    }
   ];
   document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
     <div class="hero-stat${s.featured ? ' featured' : ''}">
       <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : '0'}</div>
+      <div class="hero-stat-value" data-target="${s.raw}" data-idx="${i}" data-compact="${s.value !== s.fullValue ? '1' : '0'}" title="${s.fullValue}">${heroAnimated ? s.value : '0'}</div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
   `).join('');
 
-  // Count-up animation, first render only
+  // Count-up animation, first render only — uses compact format mid-animation when applicable
   if (!heroAnimated) {
     heroAnimated = true;
     document.querySelectorAll('.hero-stat-value').forEach(el => {
       const target = parseFloat(el.dataset.target);
+      const useCompact = el.dataset.compact === '1';
       const duration = 900;
       const start = performance.now();
+      const formatter = useCompact ? fmtCompact : fmt;
       function tick(now) {
         const t = Math.min(1, (now - start) / duration);
-        // easeOutCubic
-        const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = fmt(target * eased);
+        const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+        el.textContent = formatter(target * eased);
         if (t < 1) requestAnimationFrame(tick);
-        else el.textContent = fmt(target);
+        else el.textContent = formatter(target);
       }
       requestAnimationFrame(tick);
     });
@@ -3317,6 +3421,12 @@ function presetToRange(preset) {
   let start;
   if (preset === 'ytd') {
     start = `${today.getFullYear()}-01-01`;
+  } else if (preset === '7d') {
+    const d = new Date(today); d.setUTCDate(d.getUTCDate() - 7);
+    start = d.toISOString().split('T')[0];
+  } else if (preset === '30d') {
+    const d = new Date(today); d.setUTCDate(d.getUTCDate() - 30);
+    start = d.toISOString().split('T')[0];
   } else if (preset === '12m') {
     const d = new Date(today); d.setUTCMonth(d.getUTCMonth() - 12);
     start = d.toISOString().split('T')[0];
@@ -3357,6 +3467,30 @@ function highlightActivePreset() {
 document.querySelectorAll('.preset-chip').forEach(chip => {
   chip.addEventListener('click', () => applyPreset(chip.dataset.preset));
 });
+// Empty-state buttons reuse applyPreset
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-empty-action]');
+  if (!btn) return;
+  applyPreset(btn.dataset.emptyAction);
+});
+
+// Jump to specific month from the peak strip
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-jump-month-key]');
+  if (!btn) return;
+  const key = btn.dataset.jumpMonthKey; // "YYYY-MM"
+  const [y, m] = key.split('-').map(Number);
+  // First day of the month
+  const start = `${y}-${String(m).padStart(2, '0')}-01`;
+  // Last day of the month (day 0 of next month)
+  const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const end = `${y}-${String(m).padStart(2, '0')}-${String(last).padStart(2, '0')}`;
+  document.getElementById('startDate').value = start;
+  document.getElementById('endDate').value = end;
+  highlightActivePreset();
+  syncUrlBar();
+  rebuild();
+});
 // Re-highlight whenever dates change manually
 ['startDate', 'endDate'].forEach(id => {
   document.getElementById(id).addEventListener('change', highlightActivePreset);
@@ -3371,6 +3505,7 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
     await navigator.clipboard.writeText(url);
     btn.classList.add('copied');
     label.textContent = 'Copied';
+    showToast('Link copied to clipboard');
     setTimeout(() => {
       btn.classList.remove('copied');
       label.textContent = 'Share';
@@ -3382,6 +3517,15 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
     setTimeout(() => { label.textContent = 'Share'; }, 1800);
   }
 });
+
+function showToast(message) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = message;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2000);
+}
 
 document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
   const yoy = document.getElementById('compareYoY').checked;
