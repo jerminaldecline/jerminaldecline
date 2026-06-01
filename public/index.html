@@ -1157,11 +1157,20 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+    align-items: center;
+  }
+  /* Window-mode variant: sits inside the window-list card */
+  .window-list .channel-breakdown {
     padding: 0.7rem 0.9rem;
     background: var(--surface-2);
     border-bottom: 1px solid var(--border);
-    align-items: center;
   }
+  /* Monthly-mode variant: standalone informational strip above the monthly list */
+  #monthlyBreakdownChips .channel-breakdown {
+    padding: 0.6rem 0;
+    margin-bottom: 0.7rem;
+  }
+  #monthlyBreakdownChips .channel-breakdown:empty { display: none; }
   .channel-breakdown-chip {
     display: inline-flex;
     align-items: center;
@@ -1181,6 +1190,14 @@
     color: var(--brand-deep);
   }
   [data-theme="dark"] .channel-breakdown-chip:hover { color: var(--text); }
+  .channel-breakdown-chip.static {
+    cursor: default;
+  }
+  .channel-breakdown-chip.static:hover {
+    border-color: var(--border);
+    color: var(--text);
+  }
+  [data-theme="dark"] .channel-breakdown-chip.static:hover { color: var(--text); }
   .channel-breakdown-chip.active {
     background: var(--accent-soft);
     border-color: var(--accent);
@@ -1802,6 +1819,7 @@
             <button class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
           </div>
         </div>
+        <div id="monthlyBreakdownChips"></div>
         <div class="monthly-list" id="monthlyList"></div>
       </div>
 
@@ -2314,11 +2332,69 @@ function rebuild() {
   renderComposition(currSummary);
   if (windowMode) {
     renderWindowList(startDate, endDate);
+    document.getElementById('monthlyBreakdownChips').innerHTML = '';
   } else {
     renderTrendChart(yoy);
     renderMonthlyList(yoy);
+    // Informational per-channel chips above the monthly breakdown (All combined only)
+    const chipsEl = document.getElementById('monthlyBreakdownChips');
+    chipsEl.innerHTML = (selectedChannel === 'ALL')
+      ? buildChannelBreakdownHtml(currentVids, { interactive: false })
+      : '';
   }
   updateWordCloudHint();
+}
+
+// Build the per-channel breakdown chips HTML. Used in window mode (interactive
+// filter chips) and in monthly mode for "All combined" (informational only).
+function buildChannelBreakdownHtml(videos, opts) {
+  const interactive = !!(opts && opts.interactive);
+  const activeFilter = (opts && opts.activeFilter) || null;
+  const showClear = !!(opts && opts.showClear);
+  if (!dataset?.channels) return '';
+
+  // Aggregate counts per channel from the supplied video set
+  const perChannel = new Map();
+  for (const id of Object.keys(dataset.channels)) {
+    perChannel.set(id, { longCount: 0, shortCount: 0, views: 0 });
+  }
+  for (const v of videos) {
+    const stats = perChannel.get(v.channelId);
+    if (!stats) continue;
+    if (v.unavailable) continue;
+    if (v.isShort) stats.shortCount++;
+    else stats.longCount++;
+    stats.views += v.views || 0;
+  }
+
+  // Order chips: TheQuartering first, then the rest
+  const ids = Object.keys(dataset.channels);
+  const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
+  const orderedIds = quarteringId
+    ? [quarteringId, ...ids.filter(id => id !== quarteringId)]
+    : ids;
+
+  const chips = orderedIds.map(id => {
+    const ch = dataset.channels[id];
+    const stats = perChannel.get(id) || { longCount: 0, shortCount: 0, views: 0 };
+    const isActive = activeFilter === id;
+    const isEmpty = stats.longCount + stats.shortCount === 0;
+    const dataAttr = interactive ? ` data-channel-filter="${id}"` : '';
+    const titleAttr = interactive ? ` title="Click to filter to ${escapeHtml(ch.title)}"` : '';
+    const tag = interactive ? 'button' : 'div';
+    return `
+      <${tag} class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}${interactive ? '' : ' static'}"${dataAttr}${titleAttr}>
+        <span class="cbc-name">${escapeHtml(ch.title)}</span>
+        <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
+        <span class="cbc-views">${fmtCompact(stats.views)}</span>
+      </${tag}>
+    `;
+  }).join('');
+
+  const clearChip = (interactive && showClear)
+    ? `<button class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
+    : '';
+  return `<div class="channel-breakdown">${chips}${clearChip}</div>`;
 }
 
 function renderWindowList(startDate, endDate) {
@@ -2333,20 +2409,6 @@ function renderWindowList(startDate, endDate) {
 
   // Compute per-channel breakdown (only meaningful in All-combined mode)
   const showChannel = selectedChannel === 'ALL';
-  const perChannel = new Map();
-  if (showChannel) {
-    for (const id of Object.keys(dataset.channels || {})) {
-      perChannel.set(id, { longCount: 0, shortCount: 0, views: 0 });
-    }
-    for (const v of allWindowVideos) {
-      const stats = perChannel.get(v.channelId);
-      if (!stats) continue;
-      if (v.unavailable) continue;
-      if (v.isShort) stats.shortCount++;
-      else stats.longCount++;
-      stats.views += v.views || 0;
-    }
-  }
 
   // Apply channel filter if active
   let scopedVideos = allWindowVideos;
@@ -2369,35 +2431,14 @@ function renderWindowList(startDate, endDate) {
     return;
   }
 
-  // Build per-channel chip row (All-combined only)
-  let breakdownHtml = '';
-  if (showChannel) {
-    // Order chips to match the top-level selector ordering: TheQuartering first
-    const ids = Object.keys(dataset.channels);
-    const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
-    const orderedIds = quarteringId
-      ? [quarteringId, ...ids.filter(id => id !== quarteringId)]
-      : ids;
-    const chips = orderedIds.map(id => {
-      const ch = dataset.channels[id];
-      const stats = perChannel.get(id) || { longCount: 0, shortCount: 0, views: 0 };
-      const isActive = windowListState.channelFilter === id;
-      const isEmpty = stats.longCount + stats.shortCount === 0;
-      return `
-        <button class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}"
-                data-channel-filter="${id}"
-                title="Click to filter to ${escapeHtml(ch.title)}">
-          <span class="cbc-name">${escapeHtml(ch.title)}</span>
-          <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
-          <span class="cbc-views">${fmtCompact(stats.views)}</span>
-        </button>
-      `;
-    }).join('');
-    const clearChip = windowListState.channelFilter
-      ? `<button class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
-      : '';
-    breakdownHtml = `<div class="channel-breakdown">${chips}${clearChip}</div>`;
-  }
+  // Build per-channel chip row (All-combined only) — interactive filter mode
+  const breakdownHtml = showChannel
+    ? buildChannelBreakdownHtml(allWindowVideos, {
+        interactive: true,
+        activeFilter: windowListState.channelFilter,
+        showClear: !!windowListState.channelFilter
+      })
+    : '';
 
   const colHeader = `
     <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
