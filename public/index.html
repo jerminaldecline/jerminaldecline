@@ -2641,12 +2641,21 @@ function renderPeakStrip() {
   if (!el || !dataset?.videos?.length) return;
 
   const videos = filteredVideos();
-  // Group long-form videos by month — total views per month
-  const byMonth = new Map();
+  // Group long-form videos by month — total views AND count per month.
+  // Tracking the count lets us distinguish "had uploads but few views" (a real low)
+  // from "had no uploads at all" (a gap, not a low).
+  //
+  // We also exclude duration-0 entries: these are usually scheduled livestreams
+  // that never broadcast or premieres that errored. YouTube returns them with
+  // zero duration and zero views, but they aren't actual content.
+  const byMonth = new Map();        // key -> total views
+  const countByMonth = new Map();   // key -> count of *real* long-form uploads
   for (const v of videos) {
     if (v.isShort || v.unavailable) continue;
+    if (!v.durationSec) continue;  // skip zombie entries (failed streams, etc.)
     const key = monthKey(v.publishedAt);
     byMonth.set(key, (byMonth.get(key) || 0) + (v.views || 0));
+    countByMonth.set(key, (countByMonth.get(key) || 0) + 1);
   }
 
   if (!byMonth.size) { el.innerHTML = ''; return; }
@@ -2655,17 +2664,22 @@ function renderPeakStrip() {
   const now = new Date();
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
 
-  // Find peak and trough months, ignoring the current in-progress month
+  // Find peak and trough months, ignoring the current in-progress month.
+  // For "low": only consider months that actually had uploads (zero-upload months
+  // would mechanically be the lowest but aren't a meaningful "low").
   let peakKey = null, peakViews = 0;
   let lowKey = null, lowViews = Infinity;
   for (const [k, v] of byMonth.entries()) {
     if (k === currentMonthKey) continue;
     if (v > peakViews) { peakViews = v; peakKey = k; }
-    if (v < lowViews) { lowViews = v; lowKey = k; }
+    if ((countByMonth.get(k) || 0) > 0 && v < lowViews) { lowViews = v; lowKey = k; }
   }
 
-  // Find the most recent complete month
-  const sortedKeys = [...byMonth.keys()].filter(k => k !== currentMonthKey).sort();
+  // Find the most recent complete month that had uploads.
+  // (A trailing month with zero long-form uploads would falsely show -100% from peak.)
+  const sortedKeys = [...byMonth.keys()]
+    .filter(k => k !== currentMonthKey && (countByMonth.get(k) || 0) > 0)
+    .sort();
   if (!sortedKeys.length) { el.innerHTML = ''; return; }
   const latestKey = sortedKeys[sortedKeys.length - 1];
   const latestViews = byMonth.get(latestKey);
