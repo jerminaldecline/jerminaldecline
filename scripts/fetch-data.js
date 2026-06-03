@@ -132,6 +132,17 @@ async function listVideosFromPlaylist(playlistId, sinceDate, channelId) {
   return videos;
 }
 
+// Parse an engagement count field from the API response.
+// Distinguishes "creator has hidden this stat" (returns null) from "zero" (returns 0).
+// YouTube omits the field entirely when hidden; we surface that as null rather than 0
+// so the site can show "—" instead of misleading "0".
+function parseEngagement(statsObj, key) {
+  const raw = statsObj && statsObj[key];
+  if (raw === undefined || raw === null) return null;
+  const n = parseInt(raw, 10);
+  return Number.isFinite(n) ? n : null;
+}
+
 async function enrichVideos(videos) {
   console.log(`  Fetching duration + view stats for ${videos.length} videos...`);
   for (let i = 0; i < videos.length; i += 50) {
@@ -145,6 +156,8 @@ async function enrichVideos(videos) {
       if (det) {
         v.durationSec = parseDuration(det.contentDetails.duration);
         v.views = parseInt(det.statistics.viewCount || '0', 10);
+        v.likes = parseEngagement(det.statistics, 'likeCount');
+        v.comments = parseEngagement(det.statistics, 'commentCount');
         v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
         // If a video was previously flagged as unavailable but is now live, clear the flag.
         if (v.unavailable) {
@@ -155,6 +168,8 @@ async function enrichVideos(videos) {
         // Video may have been deleted or made private — keep stub
         v.durationSec = 0;
         v.views = 0;
+        v.likes = null;
+        v.comments = null;
         v.isShort = false;
         v.unavailable = true;
       }
@@ -189,6 +204,8 @@ async function auditEnrich(videos) {
       if (det) {
         v.durationSec = parseDuration(det.contentDetails.duration);
         v.views = parseInt(det.statistics.viewCount || '0', 10);
+        v.likes = parseEngagement(det.statistics, 'likeCount');
+        v.comments = parseEngagement(det.statistics, 'commentCount');
         v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
         if (wasUnavailable) {
           delete v.unavailable;
@@ -198,6 +215,8 @@ async function auditEnrich(videos) {
       } else {
         v.durationSec = v.durationSec || 0;
         v.views = 0;
+        v.likes = null;
+        v.comments = null;
         v.isShort = false;
         v.unavailable = true;
         if (!wasUnavailable) {
