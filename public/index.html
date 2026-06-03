@@ -176,6 +176,9 @@
     border-radius: var(--radius-sm);
     margin-bottom: 0.6rem;
     font-size: 0.9rem;
+    /* Reserve height so chips appearing post-load don't shift the layout below.
+       Matches the rendered height of a single row of channel-chip buttons. */
+    min-height: 2.85rem;
   }
   /* Channel selector — pill row of channel buttons */
   .channel-selector {
@@ -927,6 +930,22 @@
     line-height: 1.1;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
+    /* The value container is a relative positioning context.
+       Spacer (visible final value) reserves layout space.
+       Anim (animated counter) overlays via absolute positioning. */
+    position: relative;
+    display: inline-block;
+  }
+  .hero-stat-value-spacer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .hero-stat-value-anim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: left;
   }
   .hero-stat-value[data-compact="1"] {
     cursor: help;
@@ -3057,7 +3076,10 @@ function renderHeroStats(curr, prev) {
   document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
     <div class="hero-stat${s.featured ? ' featured' : ''}">
       <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value" data-target="${s.raw}" data-idx="${i}" data-compact="${s.value !== s.fullValue ? '1' : '0'}" title="${s.fullValue}">${heroAnimated ? s.value : '0'}</div>
+      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" title="${s.fullValue}">
+        <span class="hero-stat-value-spacer">${s.value}</span>
+        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : '0'}</span>
+      </div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
   `).join('');
@@ -3065,9 +3087,9 @@ function renderHeroStats(curr, prev) {
   // Count-up animation, first render only — uses compact format mid-animation when applicable
   if (!heroAnimated) {
     heroAnimated = true;
-    document.querySelectorAll('.hero-stat-value').forEach(el => {
+    document.querySelectorAll('.hero-stat-value-anim').forEach(el => {
       const target = parseFloat(el.dataset.target);
-      const useCompact = el.dataset.compact === '1';
+      const useCompact = el.parentElement.dataset.compact === '1';
       const duration = 900;
       const start = performance.now();
       const formatter = useCompact ? fmtCompact : fmt;
