@@ -1735,10 +1735,277 @@
     .video-title { white-space: normal; }
     .video-title-channel-tag { display: block; }
   }
+  /* ===== MOOD MODES ===== */
+
+  /* Hidden audio player — iframe needs to exist in DOM for audio, just visually hidden */
+  .audio-player {
+    position: fixed;
+    bottom: -200px;
+    left: -200px;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* Mood control buttons — floating bottom-right */
+  .mood-controls {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 90;
+  }
+  .mood-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  }
+  .mood-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  .mood-btn[aria-pressed="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+  .mood-party[aria-pressed="true"] {
+    animation: moodPartyPulse 0.9s ease-in-out infinite;
+  }
+  .mood-funeral[aria-pressed="true"] {
+    animation: moodFuneralPulse 2s ease-in-out infinite;
+  }
+  @keyframes moodPartyPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(239, 142, 41, 0.5), 0 6px 18px rgba(239, 142, 41, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(239, 142, 41, 0.3), 0 6px 22px rgba(239, 142, 41, 0.5); }
+  }
+  @keyframes moodFuneralPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(120, 120, 130, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(120, 120, 130, 0.25), 0 6px 22px rgba(0, 0, 0, 0.4); }
+  }
+  .mood-icon { font-size: 1rem; line-height: 1; }
+  @media (max-width: 540px) {
+    .mood-controls { bottom: 0.6rem; right: 0.6rem; gap: 0.35rem; }
+    .mood-btn { font-size: 0.78rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; }
+  }
+
+  /* Party mode — disco lights overlay */
+  .disco-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s;
+    overflow: hidden;
+    mix-blend-mode: screen;
+  }
+  body.party-mode .disco-overlay { opacity: 1; }
+  .disco-light {
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+  .disco-light-1 {
+    background: radial-gradient(circle, rgba(255, 50, 100, 0.9), transparent 70%);
+    animation: discoMove1 7s ease-in-out infinite;
+  }
+  .disco-light-2 {
+    background: radial-gradient(circle, rgba(50, 150, 255, 0.9), transparent 70%);
+    animation: discoMove2 9s ease-in-out infinite;
+  }
+  .disco-light-3 {
+    background: radial-gradient(circle, rgba(120, 255, 100, 0.9), transparent 70%);
+    animation: discoMove3 8s ease-in-out infinite;
+  }
+  .disco-light-4 {
+    background: radial-gradient(circle, rgba(255, 200, 50, 0.9), transparent 70%);
+    animation: discoMove4 11s ease-in-out infinite;
+  }
+  .disco-light-5 {
+    background: radial-gradient(circle, rgba(200, 100, 255, 0.9), transparent 70%);
+    animation: discoMove5 10s ease-in-out infinite;
+  }
+  @keyframes discoMove1 {
+    0%, 100% { top: -10%; left: -10%; }
+    25% { top: 30%; left: 70%; }
+    50% { top: 70%; left: 20%; }
+    75% { top: 10%; left: 50%; }
+  }
+  @keyframes discoMove2 {
+    0%, 100% { top: 60%; left: 70%; }
+    33% { top: 10%; left: 30%; }
+    66% { top: 70%; left: -10%; }
+  }
+  @keyframes discoMove3 {
+    0%, 100% { top: 30%; left: 40%; }
+    50% { top: 70%; left: 60%; }
+  }
+  @keyframes discoMove4 {
+    0%, 100% { top: 80%; left: 20%; }
+    40% { top: 0%; left: 60%; }
+    80% { top: 50%; left: 80%; }
+  }
+  @keyframes discoMove5 {
+    0%, 100% { top: 20%; left: 75%; }
+    50% { top: 60%; left: 15%; }
+  }
+  /* Subtle hue cycling in party mode — applied to .container so the mood
+     buttons keep their natural brand colours and stay clearly clickable. */
+  body.party-mode .container { animation: partyHue 6s linear infinite; }
+  @keyframes partyHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(15deg); }
+  }
+
+  /* Party mode mascots — slide up from below the viewport */
+  .party-mascots {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* above disco lights (1), below mood-controls (90) and toast (100) */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.25));
+  }
+  body.party-mode .party-mascots {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+    animation: mascotBob 2.4s ease-in-out infinite 0.7s;
+  }
+  @keyframes mascotBob {
+    0%, 100% { transform: translate(-50%, 0%); }
+    50%      { transform: translate(-50%, -6px); }
+  }
+  @media (max-width: 540px) {
+    .party-mascots { width: 70vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.party-mode .party-mascots { animation: none; }
+  }
+
+  /* Funeral mode mascot — slow, mournful slide up from below. No bob. */
+  .funeral-mascot {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* same layer as party-mascots */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 2s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.35));
+  }
+  body.funeral-mode .funeral-mascot {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+  }
+  @media (max-width: 540px) {
+    .funeral-mascot { width: 70vw; }
+  }
+
+  /* Funeral mode — greyscale + rain.
+     We apply the filter to .container rather than body so the mood-controls,
+     toast, and overlays (which are body-level siblings) stay vibrant and
+     remain obviously interactive. */
+  body.funeral-mode .container {
+    filter: grayscale(1) brightness(0.92);
+    transition: filter 0.5s;
+  }
+  body:not(.funeral-mode) .container { transition: filter 0.5s; }
+
+  .rain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.6s;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(40, 50, 60, 0.18), rgba(20, 25, 30, 0.32));
+    /* Subtle backdrop blur — the "glass" the drops sit on. Kept light so
+       the data on the page stays readable through it. */
+    backdrop-filter: blur(0.6px);
+    -webkit-backdrop-filter: blur(0.6px);
+  }
+  body.funeral-mode .rain-overlay { opacity: 1; }
+  .rain-overlay canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Respect reduced-motion preferences for both modes */
+  @media (prefers-reduced-motion: reduce) {
+    .disco-light, body.party-mode .container { animation: none !important; }
+    /* Canvas rain animation is gated by JS — see setupMoodModes */
+  }
 </style>
 </head>
 <body>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Funeral mode rain overlay (CSS-only) -->
+<div class="rain-overlay" id="rainOverlay" aria-hidden="true"></div>
+
+<!-- Party mode disco lights overlay (CSS-only) -->
+<div class="disco-overlay" id="discoOverlay" aria-hidden="true">
+  <div class="disco-light disco-light-1"></div>
+  <div class="disco-light disco-light-2"></div>
+  <div class="disco-light disco-light-3"></div>
+  <div class="disco-light disco-light-4"></div>
+  <div class="disco-light disco-light-5"></div>
+</div>
+
+<!-- Party mode mascots — slide up from below when party mode is active -->
+<img class="party-mascots" id="partyMascots" src="" alt="" aria-hidden="true" />
+
+<!-- Funeral mode mascot — slides up slowly when funeral mode is active -->
+<img class="funeral-mascot" id="funeralMascot" src="" alt="" aria-hidden="true" />
+
+<!-- Hidden YouTube audio player -->
+<div class="audio-player" id="audioPlayer" aria-hidden="true">
+  <div id="ytPlayer"></div>
+</div>
+
+<!-- Mood controls (floating bottom-right) -->
+<div class="mood-controls" role="group" aria-label="Mood">
+  <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false">
+    <span class="mood-icon">🎉</span>
+    <span class="mood-label">Party mode</span>
+  </button>
+  <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false">
+    <span class="mood-icon">⚰️</span>
+    <span class="mood-label">Funeral mode</span>
+  </button>
+</div>
+
 <div class="container">
   <header>
     <div class="brand-header">
@@ -3652,6 +3919,360 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+// --- Mood modes (party / funeral) with hidden YouTube audio ---
+(function setupMoodModes() {
+  // YouTube video IDs for the two modes
+  const VIDEOS = {
+    party: 'Vz60le50JL8',     // Crab Rave
+    funeral: 'xTyLzSUea0U'    // RDR2 - That's The Way It Is
+  };
+  const DEFAULT_VOLUME = 30;
+
+  let ytPlayer = null;
+  let ytReady = false;
+  let currentMode = null;     // 'party' | 'funeral' | null
+  let mascotsLoaded = false;
+  let funeralMascotLoaded = false;
+
+  // Lazy-load the mascots GIF on first party activation — saves bandwidth
+  // for visitors who never trigger party mode.
+  function ensureMascotsLoaded() {
+    if (mascotsLoaded) return;
+    const img = document.getElementById('partyMascots');
+    if (!img) return;
+    img.src = 'party-mascots.gif';
+    mascotsLoaded = true;
+  }
+
+  // Lazy-load the funeral mascot on first funeral activation
+  function ensureFuneralMascotLoaded() {
+    if (funeralMascotLoaded) return;
+    const img = document.getElementById('funeralMascot');
+    if (!img) return;
+    img.src = 'unconscious_jer.png';
+    funeralMascotLoaded = true;
+  }
+
+  // --- Canvas-based rain-on-glass simulation ---
+  // Drops are persistent objects with position, radius, and velocity. Static drops
+  // sit on the "glass" surface; when a drop grows past the slide threshold,
+  // gravity overcomes surface tension and it slides down, shedding smaller drops
+  // as a trail. Drops that touch each other merge.
+  const rainState = {
+    canvas: null,
+    ctx: null,
+    drops: [],
+    rafId: null,
+    lastSpawn: 0,
+    running: false,
+    dpr: 1,
+    width: 0,
+    height: 0
+  };
+
+  function rainSizeCanvas() {
+    if (!rainState.canvas) return;
+    const c = rainState.canvas;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    c.style.width = w + 'px';
+    c.style.height = h + 'px';
+    rainState.dpr = dpr;
+    rainState.width = w;
+    rainState.height = h;
+    rainState.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function rainSpawnDrop(x, y, r) {
+    rainState.drops.push({
+      x: x !== undefined ? x : Math.random() * rainState.width,
+      y: y !== undefined ? y : Math.random() * rainState.height,
+      r: r !== undefined ? r : 1.5 + Math.random() * 3,
+      vy: 0,
+      sliding: false,
+      shedTimer: 0
+    });
+  }
+
+  function rainInit() {
+    // Initial scatter of drops across the glass
+    rainState.drops = [];
+    const baseCount = Math.min(140, Math.floor(rainState.width * rainState.height / 9000));
+    for (let i = 0; i < baseCount; i++) {
+      rainSpawnDrop(undefined, undefined, 2 + Math.random() * 6);
+    }
+    // A few larger drops that may slide
+    for (let i = 0; i < 8; i++) {
+      rainSpawnDrop(undefined, Math.random() * rainState.height * 0.6, 7 + Math.random() * 4);
+    }
+  }
+
+  function rainStep(now) {
+    if (!rainState.running) return;
+    const { ctx, drops, width, height } = rainState;
+    ctx.clearRect(0, 0, width, height);
+
+    // Occasionally spawn new small drops on the surface
+    if (now - rainState.lastSpawn > 180) {
+      rainState.lastSpawn = now;
+      const newCount = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < newCount; i++) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height, 1.5 + Math.random() * 2.5);
+      }
+      // Very occasionally, spawn a heavy drop that's likely to start sliding immediately
+      if (Math.random() < 0.15) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height * 0.4, 8 + Math.random() * 5);
+      }
+    }
+
+    const SLIDE_THRESHOLD = 7.5;
+    // Update drops
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+
+      // Drops large enough to slide gain gravity; small static drops stay put
+      if (d.r >= SLIDE_THRESHOLD || d.sliding) {
+        d.sliding = true;
+        // Acceleration scales with size — bigger drops fall faster
+        d.vy += 0.012 * d.r;
+        d.vy = Math.min(d.vy, 8);   // terminal velocity
+        d.y += d.vy;
+        // Tiny horizontal wobble — gives a more natural meandering descent
+        d.x += (Math.random() - 0.5) * 0.3;
+
+        // Shed smaller drops as it slides (the "trail" behind it)
+        d.shedTimer++;
+        if (d.shedTimer > 4 && d.r > 4) {
+          d.shedTimer = 0;
+          // The trail drop is smaller and stays static
+          rainState.drops.push({
+            x: d.x + (Math.random() - 0.5) * d.r * 0.6,
+            y: d.y - d.r - Math.random() * 8,
+            r: 1.2 + Math.random() * (d.r * 0.18),
+            vy: 0,
+            sliding: false,
+            shedTimer: 0
+          });
+          // Sliding drop loses a little mass as it sheds
+          d.r -= 0.05;
+          if (d.r < 4) d.sliding = false;  // small enough that surface tension catches it again
+        }
+
+        // Off-screen — remove
+        if (d.y - d.r > height) {
+          drops.splice(i, 1);
+          continue;
+        }
+      }
+
+      // Merge with nearby drops (only nearest neighbour to keep it cheap)
+      for (let j = i - 1; j >= 0; j--) {
+        const e = drops[j];
+        const dx = d.x - e.x;
+        const dy = d.y - e.y;
+        const distSq = dx * dx + dy * dy;
+        const touchDist = d.r + e.r;
+        if (distSq < touchDist * touchDist * 0.6) {
+          // Merge — conserve area roughly: r_new = sqrt(r1^2 + r2^2)
+          const newR = Math.sqrt(d.r * d.r + e.r * e.r);
+          // Larger drop absorbs smaller; new position weighted by size
+          const total = d.r + e.r;
+          d.x = (d.x * d.r + e.x * e.r) / total;
+          d.y = (d.y * d.r + e.y * e.r) / total;
+          d.r = newR;
+          // Inherit velocity from whichever was already moving more
+          d.vy = Math.max(d.vy, e.vy);
+          if (newR >= SLIDE_THRESHOLD) d.sliding = true;
+          drops.splice(j, 1);
+          i--;  // we removed an earlier index, adjust outer counter
+        }
+      }
+    }
+
+    // Draw — two-pass for the glass effect.
+    // 1) Subtle dark shadow under each drop (gives depth on the glass)
+    // 2) The drop itself: light fill, brighter highlight on upper-left
+    for (const d of drops) {
+      // Shadow pass — very subtle, slightly offset down-right
+      ctx.beginPath();
+      ctx.arc(d.x + 0.6, d.y + 0.8, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      ctx.fill();
+    }
+    for (const d of drops) {
+      // Main drop body — slightly translucent so it looks like water, not paint
+      const grad = ctx.createRadialGradient(
+        d.x - d.r * 0.3, d.y - d.r * 0.3, d.r * 0.1,
+        d.x, d.y, d.r
+      );
+      grad.addColorStop(0, 'rgba(230, 240, 250, 0.65)');
+      grad.addColorStop(0.4, 'rgba(180, 200, 220, 0.40)');
+      grad.addColorStop(1, 'rgba(120, 145, 170, 0.30)');
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Bright pinpoint highlight on upper-left — sells the "wet bead" look
+      if (d.r > 2) {
+        ctx.beginPath();
+        ctx.arc(d.x - d.r * 0.4, d.y - d.r * 0.45, Math.max(0.5, d.r * 0.18), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.fill();
+      }
+    }
+
+    rainState.rafId = requestAnimationFrame(rainStep);
+  }
+
+  function rainStart() {
+    if (rainState.running) return;
+    const overlay = document.getElementById('rainOverlay');
+    if (!overlay) return;
+
+    if (!rainState.canvas) {
+      rainState.canvas = document.createElement('canvas');
+      rainState.ctx = rainState.canvas.getContext('2d');
+      overlay.appendChild(rainState.canvas);
+      window.addEventListener('resize', rainSizeCanvas);
+    }
+    rainSizeCanvas();
+    rainInit();
+    rainState.running = true;
+    rainState.lastSpawn = performance.now();
+    rainState.rafId = requestAnimationFrame(rainStep);
+  }
+
+  function rainStop() {
+    rainState.running = false;
+    if (rainState.rafId) {
+      cancelAnimationFrame(rainState.rafId);
+      rainState.rafId = null;
+    }
+    if (rainState.ctx) {
+      rainState.ctx.clearRect(0, 0, rainState.width, rainState.height);
+    }
+    rainState.drops = [];
+  }
+
+  // Load YouTube IFrame API on demand (lazy — don't load unless user clicks)
+  function loadYouTubeAPI(then) {
+    if (window.YT && window.YT.Player) { then(); return; }
+    if (document.getElementById('ytApiScript')) {
+      // Script already loading — wait for ready callback
+      window.__moodOnYTReady = then;
+      return;
+    }
+    window.onYouTubeIframeAPIReady = function() {
+      if (window.__moodOnYTReady) { window.__moodOnYTReady(); window.__moodOnYTReady = null; }
+      else then();
+    };
+    const script = document.createElement('script');
+    script.id = 'ytApiScript';
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
+  }
+
+  function ensurePlayer(callback) {
+    if (ytPlayer && ytReady) { callback(); return; }
+    loadYouTubeAPI(() => {
+      if (ytPlayer) { callback(); return; }
+      ytPlayer = new YT.Player('ytPlayer', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            ytReady = true;
+            try { ytPlayer.setVolume(DEFAULT_VOLUME); } catch (e) {}
+            callback();
+          },
+          onStateChange: (e) => {
+            // Loop manually when video ends (YT.PlayerState.ENDED = 0)
+            if (e.data === 0 && currentMode) {
+              const id = VIDEOS[currentMode];
+              if (id) ytPlayer.loadVideoById({ videoId: id });
+            }
+          },
+          onError: () => {
+            // If a video errored (removed/blocked), bail out of the mode cleanly
+            setMode(null);
+            showToast('Audio unavailable right now.');
+          }
+        }
+      });
+    });
+  }
+
+  function setMode(newMode) {
+    // newMode: 'party' | 'funeral' | null (off)
+    currentMode = newMode;
+
+    // Update button states
+    const partyBtn = document.getElementById('moodParty');
+    const funeralBtn = document.getElementById('moodFuneral');
+    partyBtn.setAttribute('aria-pressed', newMode === 'party' ? 'true' : 'false');
+    funeralBtn.setAttribute('aria-pressed', newMode === 'funeral' ? 'true' : 'false');
+    partyBtn.querySelector('.mood-label').textContent =
+      newMode === 'party' ? 'Stop party' : 'Party mode';
+    funeralBtn.querySelector('.mood-label').textContent =
+      newMode === 'funeral' ? 'Stop funeral' : 'Funeral mode';
+
+    // Update body classes for visual overlays
+    document.body.classList.toggle('party-mode', newMode === 'party');
+    document.body.classList.toggle('funeral-mode', newMode === 'funeral');
+
+    // Lazy-load the party mascots GIF on first party activation
+    if (newMode === 'party') ensureMascotsLoaded();
+    // Lazy-load the funeral mascot on first funeral activation
+    if (newMode === 'funeral') ensureFuneralMascotLoaded();
+
+    // Start or stop the canvas rain to match funeral state
+    if (newMode === 'funeral') rainStart();
+    else rainStop();
+
+    // Update audio
+    if (!newMode) {
+      if (ytPlayer && ytReady) {
+        try { ytPlayer.stopVideo(); } catch (e) {}
+      }
+      return;
+    }
+    const videoId = VIDEOS[newMode];
+    if (!videoId) return;
+    ensurePlayer(() => {
+      try {
+        ytPlayer.loadVideoById({ videoId });
+        ytPlayer.setVolume(DEFAULT_VOLUME);
+        ytPlayer.playVideo();
+      } catch (e) {
+        // Will get retried via ready callback
+      }
+    });
+  }
+
+  document.getElementById('moodParty').addEventListener('click', () => {
+    setMode(currentMode === 'party' ? null : 'party');
+  });
+  document.getElementById('moodFuneral').addEventListener('click', () => {
+    setMode(currentMode === 'funeral' ? null : 'funeral');
+  });
+
+  // ESC key stops whatever mode is active
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentMode) setMode(null);
+  });
+})();
 
 loadData();
 </script>
