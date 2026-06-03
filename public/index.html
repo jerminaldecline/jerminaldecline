@@ -1797,9 +1797,19 @@
     50% { box-shadow: 0 0 0 4px rgba(120, 120, 130, 0.25), 0 6px 22px rgba(0, 0, 0, 0.4); }
   }
   .mood-icon { font-size: 1rem; line-height: 1; }
+  /* When mood-controls move, animate the transition */
+  .mood-controls { transition: bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
   @media (max-width: 540px) {
     .mood-controls { bottom: 0.6rem; right: 0.6rem; gap: 0.35rem; }
     .mood-btn { font-size: 0.78rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; }
+    /* On mobile, lift the buttons clear of the mascot area when a mode is active.
+       Both the party mascots and unconscious_jer occupy the bottom-center of the
+       viewport; the buttons normally sit bottom-right where the mascots' wider
+       silhouettes can overlap them. Lift to ~30vh from the bottom while active. */
+    body.party-mode .mood-controls,
+    body.funeral-mode .mood-controls {
+      bottom: 32vh;
+    }
   }
 
   /* Party mode — disco lights overlay */
@@ -1867,6 +1877,19 @@
   @keyframes discoMove5 {
     0%, 100% { top: 20%; left: 75%; }
     50% { top: 60%; left: 15%; }
+  }
+  /* On mobile, the disco lights need bigger size, less blur, and higher opacity
+     to read properly. 80px blur on a 200px-wide light at 50vw dissolves them
+     to near-invisibility on phone screens. */
+  @media (max-width: 540px) {
+    .disco-light {
+      width: 85vw;
+      height: 85vw;
+      max-width: none;
+      max-height: none;
+      filter: blur(45px);
+      opacity: 0.75;
+    }
   }
   /* Subtle hue cycling in party mode — applied to .container so the mood
      buttons keep their natural brand colours and stay clearly clickable. */
