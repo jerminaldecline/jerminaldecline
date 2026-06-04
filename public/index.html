@@ -1970,6 +1970,66 @@
     .funeral-mascot { width: 70vw; }
   }
 
+  /* ===== FLOATING LOW-FIGURE TEXT ===== */
+
+  /* Funeral mode: dust effect — a single canvas covers the viewport.
+     One-shot text appearance: fades in, holds, crumbles to dust over ~17s. */
+  .floaters-funeral {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s;
+  }
+  body.funeral-mode .floaters-funeral { opacity: 1; }
+  .floaters-funeral canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* Party mode: multiple instances bouncing across the screen,
+     flashing colours via filter hue rotation. */
+  .floaters-party {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  body.party-mode .floaters-party { opacity: 1; }
+  .floater-party {
+    position: absolute;
+    font-weight: 800;
+    white-space: nowrap;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.4);
+    animation:
+      floaterPartyMove var(--move-dur, 8s) cubic-bezier(0.4, 0, 0.6, 1) infinite alternate,
+      floaterPartyHue var(--hue-dur, 2s) linear infinite;
+  }
+  @keyframes floaterPartyMove {
+    0%   { transform: translate(0, 0) rotate(var(--rot-start, -8deg)); }
+    100% { transform: translate(var(--move-x, 60vw), var(--move-y, 40vh)) rotate(var(--rot-end, 12deg)); }
+  }
+  @keyframes floaterPartyHue {
+    0%, 100% { filter: hue-rotate(0deg); color: hsl(340, 90%, 60%); }
+    16%      { color: hsl(30, 95%, 60%); }
+    33%      { color: hsl(55, 95%, 60%); }
+    50%      { color: hsl(140, 80%, 55%); filter: hue-rotate(0deg); }
+    66%      { color: hsl(200, 90%, 60%); }
+    83%      { color: hsl(280, 85%, 65%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .floater-funeral, .floater-party { animation: none !important; }
+  }
+
   /* Funeral mode — greyscale + rain.
      We apply the filter to .container rather than body so the mood-controls,
      toast, and overlays (which are body-level siblings) stay vibrant and
@@ -2031,6 +2091,10 @@
 <!-- Funeral mode mascot — slides up slowly when funeral mode is active -->
 <img class="funeral-mascot" id="funeralMascot" src="" alt="" aria-hidden="true" />
 
+<!-- Floating low-figure text — populated and shown by JS when mood modes activate -->
+<div class="floaters-funeral" id="floatersFuneral" aria-hidden="true"></div>
+<div class="floaters-party" id="floatersParty" aria-hidden="true"></div>
+
 <!-- Hidden YouTube audio player -->
 <div class="audio-player" id="audioPlayer" aria-hidden="true">
   <div id="ytPlayer"></div>
@@ -2075,7 +2139,6 @@
     <div class="channel-link-row" id="channelLinkRow"></div>
     <div class="peak-strip" id="peakStrip"></div>
     <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
-      <span class="prediction-label">Diagnosis:</span>
       <span class="prediction-text" id="predictionText">
         This channel is dying because… <strong id="predictionReason">…</strong>
       </span>
@@ -2269,8 +2332,9 @@ function deltaPill(curr, prev, opts = {}) {
   const pct = ((curr - prev) / prev) * 100;
   const arrow = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
   const tone = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat';
-  const sign = pct >= 0 ? '+' : '';
-  return `${labelHtml}<span class="${cls} ${tone}"><span class="delta-arrow">${arrow}</span> ${sign}${pct.toFixed(1)}%</span>`;
+  // Direction is already conveyed by the arrow and the tone colour;
+  // no need to also include a +/- sign on the number.
+  return `${labelHtml}<span class="${cls} ${tone}"><span class="delta-arrow">${arrow}</span> ${Math.abs(pct).toFixed(1)}%</span>`;
 }
 function summarise(videos) {
   const longForm = videos.filter(v => !v.isShort && !v.unavailable);
@@ -2417,7 +2481,8 @@ const PREDICTIONS = [
   "HE CAN'T READ!",
   "HE'S FATIRED!",
   "HE POOPED HIS PANTS!",
-  "He has panic diarrhoea!"
+  "He has panic diarrhoea!",
+  "Grok, write me a 30 minute deep dive video script that explains why my channel is dying."
 ];
 
 let predictionBag = [];
@@ -3014,7 +3079,7 @@ function renderPeakStrip() {
     lowLine = `
       <div class="peak-line">
         <span class="peak-strip-label">All-time low</span>
-        <span><button class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(${fromPeak.toFixed(1)}% from peak)</span></span>
+        <span><button class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(▼${Math.abs(fromPeak).toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -3023,10 +3088,13 @@ function renderPeakStrip() {
   let downLine = '';
   if (latestKey !== peakKey && latestKey !== lowKey && peakViews > 0) {
     const drop = ((latestViews - peakViews) / peakViews) * 100;
+    // Use the appropriate arrow + class: most often a drop, but a recovery is possible
+    const arrowSym = drop >= 0 ? '▲' : '▼';
+    const cls = drop >= 0 ? 'peak-gain' : 'peak-drop';
     downLine = `
       <div class="peak-line">
         <span class="peak-strip-label">Latest complete month</span>
-        <span><button class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="peak-drop">(${drop.toFixed(1)}% from peak)</span></span>
+        <span><button class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="${cls}">(${arrowSym}${Math.abs(drop).toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -3370,8 +3438,8 @@ function renderTrendChart(yoy) {
     if (yoy && yoyM && yoyM.views > 0) {
       const pct = ((curr.views - yoyM.views) / yoyM.views) * 100;
       const cls = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : '';
-      const sign = pct >= 0 ? '+' : '';
-      deltaHtml = `<span class="chart-tooltip-delta ${cls}">${sign}${pct.toFixed(1)}%</span>`;
+      const arrowSym = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
+      deltaHtml = `<span class="chart-tooltip-delta ${cls}">${arrowSym} ${Math.abs(pct).toFixed(1)}%</span>`;
     }
     tooltip.innerHTML = `
       <div class="chart-tooltip-month">${m.label}</div>
@@ -3823,6 +3891,9 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   renderChannelLinkRow();
   renderFooterMeta();
   renderPeakStrip();
+  // If a mood mode is active, refresh the floating low-figure text so it
+  // reflects the newly-selected channel's data
+  if (window.__refreshActiveFloaters) window.__refreshActiveFloaters();
   // Reset hero animation flag so the count-up plays on channel switch (feels alive)
   heroAnimated = false;
   rebuild();
@@ -3998,6 +4069,344 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     img.src = 'unconscious_jer.png';
     funeralMascotLoaded = true;
   }
+
+  // Read the "All-time low" line from the rendered peak strip and produce a
+  // compact display string like "▼89.3%" — just the figure.
+  // The mood mode itself is the joke; the over-explained version was redundant.
+  function readAllTimeLowText() {
+    const peakStrip = document.getElementById('peakStrip');
+    if (!peakStrip) return '▼ —';
+
+    const lines = peakStrip.querySelectorAll('.peak-line');
+    for (const line of lines) {
+      const label = line.querySelector('.peak-strip-label');
+      if (!label || !/all[- ]?time low/i.test(label.textContent)) continue;
+      const drop = line.querySelector('.peak-drop');
+      if (drop) {
+        const m = drop.textContent.match(/-?(\d+(?:\.\d+)?)/);
+        if (m) return `▼${parseFloat(m[1]).toFixed(1)}%`;
+      }
+    }
+    return '▼ —';
+  }
+
+  // Funeral floater: a one-shot dust effect. The all-time low figure fades in,
+  // holds briefly, then progressively crumbles to dust over ~15 seconds.
+  // After the dust disperses, no text remains — the rain and mascot carry the mood.
+  //
+  // Implementation: render the text to an offscreen canvas, sample it as a grid
+  // of "particles" (one per text pixel cluster), then animate each particle
+  // independently — drifting downward with gravity, slight horizontal wind,
+  // fading out. The crumble starts from the bottom of the text and progresses
+  // upward, so the top is the last to disappear.
+  const funeralDust = {
+    canvas: null,
+    ctx: null,
+    particles: null,
+    rafId: null,
+    startedAt: 0,
+    dpr: 1
+  };
+
+  // Timing (ms)
+  const DUST_FADE_IN = 3000;     // slower, more deliberate appearance
+  const DUST_HOLD = 4500;        // longer hold so the figure can be read and absorbed
+  const DUST_CRUMBLE = 15000;
+  const DUST_TAIL = 2500;        // a small grace period after crumble for last particles to settle
+  const DUST_TOTAL = DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE + DUST_TAIL;
+
+  function startFuneralFloater() {
+    const container = document.getElementById('floatersFuneral');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    funeralDust.canvas = canvas;
+    funeralDust.ctx = ctx;
+    funeralDust.dpr = dpr;
+    funeralDust.startedAt = performance.now();
+
+    // For users who prefer reduced motion: skip the particle simulation
+    // and render the figure as a simple fade-in / hold / fade-out instead.
+    funeralDust.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    funeralDust.particles = buildDustParticles(readAllTimeLowText(), w, h);
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function buildDustParticles(text, viewW, viewH) {
+    // Render text to a hidden canvas, then sample pixels into particle objects
+    const fontSize = Math.min(viewW * 0.18, 200);
+    const offscreen = document.createElement('canvas');
+    const octx = offscreen.getContext('2d');
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    const metrics = octx.measureText(text);
+    const textW = Math.ceil(metrics.width);
+    const textH = Math.ceil(fontSize * 1.2);
+    offscreen.width = textW;
+    offscreen.height = textH;
+    // Re-set font after canvas resize (resize clears state)
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    octx.fillStyle = '#dc3232';
+    octx.textBaseline = 'middle';
+    octx.fillText(text, 0, textH / 2);
+
+    const imgData = octx.getImageData(0, 0, textW, textH);
+    const data = imgData.data;
+
+    // Position text centered on viewport
+    const startX = (viewW - textW) / 2;
+    const startY = (viewH - textH) / 2;
+
+    // Sample at intervals to keep particle count manageable
+    const step = 3;
+    // Pick a global wind direction with light variation. Mostly horizontal,
+    // slight downward bias. Each individual particle adds its own jitter.
+    const windAngle = (Math.random() - 0.5) * 0.3 + (Math.random() < 0.5 ? -1 : 1) * 0.15;
+    const windDir = windAngle < 0 ? -1 : 1;  // overall left/right tendency
+    const particles = [];
+    for (let py = 0; py < textH; py += step) {
+      for (let px = 0; px < textW; px += step) {
+        const idx = (py * textW + px) * 4;
+        const alpha = data[idx + 3];
+        if (alpha < 80) continue;
+        // Release time is a position-based bias PLUS heavy randomness, so
+        // particles don't release in clean rows. The bottom of the text is
+        // slightly more likely to release early, but there's significant
+        // overlap — some top particles release first, some bottom particles
+        // hang on. Creates the "wind erosion" look rather than "row crumble".
+        const positionBias = 1 - (py / textH);        // 0 (top) to 1 (bottom)
+        // Each particle gets a release fraction in [0, 1].
+        // Heavy randomisation; position bias is gentle (only 30% weight).
+        const releaseFraction = Math.min(0.95,
+          (positionBias * 0.3) + (Math.random() * 0.7));
+        // Each particle has its own wind speed scaled around the global wind
+        const personalWind = windDir * (0.6 + Math.random() * 1.4);
+        particles.push({
+          x: startX + px,
+          y: startY + py,
+          releaseFraction,
+          // Pre-determined wind for this particle — applied gradually after release
+          wind: personalWind,
+          vx: 0,
+          vy: 0,
+          released: false,
+          life: 0,
+          // Random fade-out length per particle for natural variation
+          maxLife: 100 + Math.random() * 80,
+          // Tiny phase offset for the sinusoidal swirl — gives each particle
+          // its own subtly different drift pattern
+          swirlPhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+    return particles;
+  }
+
+  function funeralDustStep(now) {
+    if (!funeralDust.canvas) return;
+    const elapsed = now - funeralDust.startedAt;
+    const ctx = funeralDust.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    // Compute global opacity envelope: fade-in, hold, then fade with the crumble
+    let globalOpacity = 1;
+    if (elapsed < DUST_FADE_IN) {
+      // Ease-in curve (cubic) so the fade-in feels gentle rather than linear
+      const t = elapsed / DUST_FADE_IN;
+      globalOpacity = t * t * (3 - 2 * t);  // smoothstep
+    } else if (elapsed > DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE) {
+      const tailElapsed = elapsed - (DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE);
+      globalOpacity = Math.max(0, 1 - tailElapsed / DUST_TAIL);
+    }
+
+    const crumbleStart = DUST_FADE_IN + DUST_HOLD;
+    const crumbleProgress = elapsed < crumbleStart
+      ? 0
+      : Math.min(1, (elapsed - crumbleStart) / DUST_CRUMBLE);
+
+    // Reduced-motion path: static text with the same opacity envelope, no particle physics.
+    // We still respect the crumble phase by fading the text out during it.
+    if (funeralDust.reducedMotion) {
+      let opacity = globalOpacity;
+      if (crumbleProgress > 0) {
+        opacity *= Math.max(0, 1 - crumbleProgress);
+      }
+      if (opacity > 0.01) {
+        for (const p of funeralDust.particles) {
+          ctx.fillStyle = `rgba(220, 50, 50, ${opacity * 0.85})`;
+          ctx.fillRect(p.x, p.y, 2.3, 2.3);
+        }
+      }
+      if (elapsed >= DUST_TOTAL) {
+        funeralDust.rafId = null;
+        ctx.clearRect(0, 0, w, h);
+        return;
+      }
+      funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+      return;
+    }
+
+    // Render in opacity buckets to minimise fillStyle changes (2000 setState calls/frame
+    // is wasteful; bucketing brings that down to ~16). Each bucket collects particles
+    // of similar final opacity, drawn in a single fillStyle pass.
+    const BUCKETS = 16;
+    const bucketed = Array.from({ length: BUCKETS }, () => []);
+
+    for (const p of funeralDust.particles) {
+      // Has this particle been released yet?
+      if (!p.released) {
+        if (crumbleProgress >= p.releaseFraction) {
+          p.released = true;
+          p.vx = (Math.random() - 0.5) * 0.6;
+          p.vy = (Math.random() - 0.5) * 0.3;
+        }
+      }
+
+      if (p.released) {
+        const windRamp = Math.min(1, p.life / 60);
+        p.vx += p.wind * 0.03 * windRamp;
+        p.vy += 0.008;
+        p.vx += Math.sin((p.life + p.swirlPhase * 20) * 0.04) * 0.015;
+        p.vx *= 0.992;
+        p.vy *= 0.996;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+      }
+
+      let particleOpacity = 1;
+      if (p.released) {
+        particleOpacity = Math.max(0, 1 - p.life / p.maxLife);
+      }
+      const finalOpacity = globalOpacity * particleOpacity;
+      if (finalOpacity <= 0.01) continue;
+
+      // Quantise to bucket
+      const bucketIdx = Math.min(BUCKETS - 1, Math.floor(finalOpacity * BUCKETS));
+      bucketed[bucketIdx].push(p);
+    }
+
+    // Draw each bucket
+    for (let b = 0; b < BUCKETS; b++) {
+      const bucket = bucketed[b];
+      if (bucket.length === 0) continue;
+      const opacity = ((b + 0.5) / BUCKETS) * 0.85;
+      ctx.fillStyle = `rgba(220, 50, 50, ${opacity})`;
+      for (const p of bucket) {
+        ctx.fillRect(p.x, p.y, 2.3, 2.3);
+      }
+    }
+
+    if (elapsed >= DUST_TOTAL) {
+      funeralDust.rafId = null;
+      ctx.clearRect(0, 0, w, h);
+      return;
+    }
+
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function stopFuneralFloater() {
+    if (funeralDust.rafId) {
+      cancelAnimationFrame(funeralDust.rafId);
+      funeralDust.rafId = null;
+    }
+    funeralDust.canvas = null;
+    funeralDust.ctx = null;
+    funeralDust.particles = null;
+    const container = document.getElementById('floatersFuneral');
+    if (container) container.innerHTML = '';
+  }
+
+  // If the viewport resizes during the dust sequence, restart from scratch
+  // (re-sampling text at the new viewport width gives the correct font size).
+  // Debounce so a window drag doesn't trigger dozens of restarts.
+  let funeralResizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (currentMode !== 'funeral') return;
+    if (funeralResizeTimer) clearTimeout(funeralResizeTimer);
+    funeralResizeTimer = setTimeout(() => {
+      if (currentMode === 'funeral') {
+        stopFuneralFloater();
+        startFuneralFloater();
+      }
+    }, 250);
+  });
+
+  // Populate the party floaters (multiple instances bouncing with rainbow flashing)
+  function startPartyFloaters() {
+    const container = document.getElementById('floatersParty');
+    if (!container) return;
+    container.innerHTML = '';
+    const text = readAllTimeLowText();
+    const count = 16;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'floater-party';
+      el.textContent = text;
+      // Random starting position
+      const startX = Math.random() * 70;  // 0-70vw
+      const startY = Math.random() * 70 + 5;  // 5-75vh
+      // Random destination offset, can go in any direction
+      const moveX = (Math.random() * 60 - 30) + 'vw';   // -30 to +30vw
+      const moveY = (Math.random() * 50 - 25) + 'vh';   // -25 to +25vh
+      // Random rotation start/end
+      const rotStart = (Math.random() * 30 - 15) + 'deg';
+      const rotEnd = (Math.random() * 30 - 15) + 'deg';
+      // Random size
+      const fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+      // Random animation durations
+      const moveDur = (5 + Math.random() * 6) + 's';
+      const hueDur = (1.5 + Math.random() * 1.5) + 's';
+      // Random negative delay so they don't all sync
+      const moveDelay = (-Math.random() * 8) + 's';
+      const hueDelay = (-Math.random() * 3) + 's';
+
+      el.style.left = startX + 'vw';
+      el.style.top = startY + 'vh';
+      el.style.fontSize = fontSize;
+      el.style.setProperty('--move-x', moveX);
+      el.style.setProperty('--move-y', moveY);
+      el.style.setProperty('--rot-start', rotStart);
+      el.style.setProperty('--rot-end', rotEnd);
+      el.style.setProperty('--move-dur', moveDur);
+      el.style.setProperty('--hue-dur', hueDur);
+      el.style.animationDelay = `${moveDelay}, ${hueDelay}`;
+      container.appendChild(el);
+    }
+  }
+  function stopPartyFloaters() {
+    const container = document.getElementById('floatersParty');
+    if (container) container.innerHTML = '';
+  }
+
+  // Re-fetch the all-time low text and update any active floaters.
+  // Funeral: restart the dust sequence so the new channel's figure gets its own moment.
+  // Party: full rebuild — the chaos hides the reshuffle.
+  function refreshActiveFloaters() {
+    if (currentMode === 'funeral') {
+      stopFuneralFloater();
+      startFuneralFloater();
+    } else if (currentMode === 'party') {
+      startPartyFloaters();
+    }
+  }
+  // Expose so the rebuild flow can call it
+  window.__refreshActiveFloaters = refreshActiveFloaters;
 
   // --- Canvas-based rain-on-glass simulation ---
   // Drops are persistent objects with position, radius, and velocity. Static drops
@@ -4281,6 +4690,11 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     if (newMode === 'party') ensureMascotsLoaded();
     // Lazy-load the funeral mascot on first funeral activation
     if (newMode === 'funeral') ensureFuneralMascotLoaded();
+
+    // Floating low-figure text — populated fresh on each activation
+    // (the current channel selection may have changed since last time)
+    if (newMode === 'party') startPartyFloaters(); else stopPartyFloaters();
+    if (newMode === 'funeral') startFuneralFloater(); else stopFuneralFloater();
 
     // Start or stop the canvas rain to match funeral state
     if (newMode === 'funeral') rainStart();
