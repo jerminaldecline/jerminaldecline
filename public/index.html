@@ -4136,6 +4136,10 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     funeralDust.ctx = ctx;
     funeralDust.dpr = dpr;
     funeralDust.startedAt = performance.now();
+    // Track the dimensions we initialised at so the resize handler can
+    // distinguish "real" resize from mobile address-bar scrolling.
+    funeralLastW = w;
+    funeralLastH = h;
 
     // For users who prefer reduced motion: skip the particle simulation
     // and render the figure as a simple fade-in / hold / fade-out instead.
@@ -4246,9 +4250,9 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
         opacity *= Math.max(0, 1 - crumbleProgress);
       }
       if (opacity > 0.01) {
+        ctx.fillStyle = `rgba(220, 50, 50, ${opacity * 0.75})`;
         for (const p of funeralDust.particles) {
-          ctx.fillStyle = `rgba(220, 50, 50, ${opacity * 0.85})`;
-          ctx.fillRect(p.x, p.y, 2.3, 2.3);
+          ctx.fillRect(p.x, p.y, 3.5, 3.5);
         }
       }
       if (elapsed >= DUST_TOTAL) {
@@ -4304,10 +4308,15 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     for (let b = 0; b < BUCKETS; b++) {
       const bucket = bucketed[b];
       if (bucket.length === 0) continue;
-      const opacity = ((b + 0.5) / BUCKETS) * 0.85;
+      // Slightly lower opacity coefficient because larger particles overlap;
+      // higher value would oversaturate the colour into a flat block.
+      const opacity = ((b + 0.5) / BUCKETS) * 0.75;
       ctx.fillStyle = `rgba(220, 50, 50, ${opacity})`;
       for (const p of bucket) {
-        ctx.fillRect(p.x, p.y, 2.3, 2.3);
+        // Larger size so adjacent particles overlap into a solid mass,
+        // rather than reading as a dot-grid. As particles release and drift,
+        // the solid mass naturally fragments.
+        ctx.fillRect(p.x, p.y, 3.5, 3.5);
       }
     }
 
@@ -4334,13 +4343,33 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
 
   // If the viewport resizes during the dust sequence, restart from scratch
   // (re-sampling text at the new viewport width gives the correct font size).
-  // Debounce so a window drag doesn't trigger dozens of restarts.
+  // Two concerns:
+  //   1. Debounce so a window drag doesn't trigger dozens of restarts.
+  //   2. On mobile, the address bar shows/hides during scroll, changing the
+  //      window height by ~60-100px and firing resize events. We don't want
+  //      those scroll-induced height changes to restart the animation.
   let funeralResizeTimer = null;
+  let funeralLastW = 0;
+  let funeralLastH = 0;
+  // Threshold above which a height-only change is considered "real" (rotation,
+  // resize) rather than browser-chrome flicker. ~120px clears typical mobile
+  // address bar movements (which are usually 60-90px).
+  const FUNERAL_RESIZE_HEIGHT_THRESHOLD = 120;
+
   window.addEventListener('resize', () => {
     if (currentMode !== 'funeral') return;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // If width is unchanged and height delta is small (address bar showing/hiding),
+    // ignore the event — the dust sequence stays running.
+    if (w === funeralLastW && Math.abs(h - funeralLastH) < FUNERAL_RESIZE_HEIGHT_THRESHOLD) {
+      return;
+    }
     if (funeralResizeTimer) clearTimeout(funeralResizeTimer);
     funeralResizeTimer = setTimeout(() => {
       if (currentMode === 'funeral') {
+        funeralLastW = window.innerWidth;
+        funeralLastH = window.innerHeight;
         stopFuneralFloater();
         startFuneralFloater();
       }
