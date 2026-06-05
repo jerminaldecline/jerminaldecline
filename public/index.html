@@ -4376,32 +4376,72 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     }, 250);
   });
 
-  // Populate the party floaters (multiple instances bouncing with rainbow flashing)
+  // Party floaters: numbers bounce around the screen with rainbow flashing.
+  // Each one has a random lifespan; when its time is up, it explodes into a
+  // rainbow particle burst and is removed. The screen gradually empties as
+  // numbers expire, leaving just music + lights + mascot. Not a continuous
+  // loop — toggle the mode to replay.
+  const partyState = {
+    canvas: null,        // separate canvas for burst particles
+    ctx: null,
+    bursts: [],          // active particle bursts
+    rafId: null,
+    timers: []           // per-floater burst timers
+  };
+
   function startPartyFloaters() {
+    stopPartyFloaters();
     const container = document.getElementById('floatersParty');
     if (!container) return;
-    container.innerHTML = '';
+
+    // Create the burst-particle canvas alongside the DOM floaters
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.style.position = 'absolute';
+    canvas.style.inset = '0';
+    canvas.style.pointerEvents = 'none';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    partyState.canvas = canvas;
+    partyState.ctx = ctx;
+    partyState.bursts = [];
+
     const text = readAllTimeLowText();
     const count = 16;
+    // Schedule bursts across ~16 seconds so the screen gradually clears.
+    // Random spacing keeps it from feeling mechanical.
+    const burstSchedule = [];
+    let cumulativeTime = 1500;  // start after a brief enjoy-the-chaos period
+    for (let i = 0; i < count; i++) {
+      burstSchedule.push(cumulativeTime);
+      cumulativeTime += 800 + Math.random() * 700;  // 0.8-1.5s between bursts
+    }
+    // Shuffle the schedule so the visual order of bursts is random, not in spawn order
+    for (let i = burstSchedule.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [burstSchedule[i], burstSchedule[j]] = [burstSchedule[j], burstSchedule[i]];
+    }
+
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div');
       el.className = 'floater-party';
       el.textContent = text;
-      // Random starting position
-      const startX = Math.random() * 70;  // 0-70vw
-      const startY = Math.random() * 70 + 5;  // 5-75vh
-      // Random destination offset, can go in any direction
-      const moveX = (Math.random() * 60 - 30) + 'vw';   // -30 to +30vw
-      const moveY = (Math.random() * 50 - 25) + 'vh';   // -25 to +25vh
-      // Random rotation start/end
+      const startX = Math.random() * 70;
+      const startY = Math.random() * 70 + 5;
+      const moveX = (Math.random() * 60 - 30) + 'vw';
+      const moveY = (Math.random() * 50 - 25) + 'vh';
       const rotStart = (Math.random() * 30 - 15) + 'deg';
       const rotEnd = (Math.random() * 30 - 15) + 'deg';
-      // Random size
       const fontSize = (0.9 + Math.random() * 1.4) + 'rem';
-      // Random animation durations
       const moveDur = (5 + Math.random() * 6) + 's';
       const hueDur = (1.5 + Math.random() * 1.5) + 's';
-      // Random negative delay so they don't all sync
       const moveDelay = (-Math.random() * 8) + 's';
       const hueDelay = (-Math.random() * 3) + 's';
 
@@ -4416,9 +4456,102 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
       el.style.setProperty('--hue-dur', hueDur);
       el.style.animationDelay = `${moveDelay}, ${hueDelay}`;
       container.appendChild(el);
+
+      // Schedule this floater's burst at its assigned time
+      const timer = setTimeout(() => burstPartyFloater(el), burstSchedule[i]);
+      partyState.timers.push(timer);
     }
+
+    // Start the burst-particle animation loop
+    partyState.rafId = requestAnimationFrame(partyStep);
   }
+
+  function burstPartyFloater(el) {
+    if (!el || !el.isConnected) return;
+    // Capture the element's current screen position (mid-animation) so the
+    // burst happens wherever the number actually is, not where it started.
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    // Spawn particles radiating outward from this point.
+    // Bigger explosions: more particles, faster initial speed, larger size, longer life.
+    const particleCount = 180 + Math.floor(Math.random() * 60);
+    const burst = {
+      particles: [],
+      startedAt: performance.now()
+    };
+    for (let i = 0; i < particleCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 4 + Math.random() * 8;
+      const hue = Math.floor(Math.random() * 360);
+      burst.particles.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        hue,
+        life: 0,
+        maxLife: 80 + Math.random() * 70,
+        size: 3 + Math.random() * 3
+      });
+    }
+    partyState.bursts.push(burst);
+
+    // Remove the DOM element immediately — the burst replaces it visually
+    el.remove();
+  }
+
+  function partyStep() {
+    if (!partyState.ctx) return;
+    const ctx = partyState.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = partyState.bursts.length - 1; i >= 0; i--) {
+      const burst = partyState.bursts[i];
+      let aliveCount = 0;
+      for (const p of burst.particles) {
+        if (p.life > p.maxLife) continue;
+        // Update physics: gravity pulls particles down, drag slows them
+        p.vy += 0.08;
+        p.vx *= 0.985;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+
+        const lifeT = p.life / p.maxLife;
+        const opacity = (1 - lifeT) * 0.9;
+        if (opacity < 0.02) continue;
+        aliveCount++;
+
+        // Particle body: bright HSL with the assigned hue
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * (1 - lifeT * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Remove dead bursts to keep the array small
+      if (aliveCount === 0) {
+        partyState.bursts.splice(i, 1);
+      }
+    }
+
+    partyState.rafId = requestAnimationFrame(partyStep);
+  }
+
   function stopPartyFloaters() {
+    if (partyState.rafId) {
+      cancelAnimationFrame(partyState.rafId);
+      partyState.rafId = null;
+    }
+    for (const t of partyState.timers) clearTimeout(t);
+    partyState.timers = [];
+    partyState.bursts = [];
+    partyState.canvas = null;
+    partyState.ctx = null;
     const container = document.getElementById('floatersParty');
     if (container) container.innerHTML = '';
   }
