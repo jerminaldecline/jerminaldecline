@@ -873,6 +873,36 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   }
 
+  /* Chart metric toggle — sits between the trend section title and the chart.
+     Matches the .mode-toggle visual style but is more compact and slightly muted
+     so it doesn't compete with the main view-mode toggle higher on the page. */
+  .chart-metric-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 2px;
+    margin: 0 0 0.6rem;
+  }
+  .chart-metric-toggle button {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0.32rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+  }
+  .chart-metric-toggle button:hover { color: var(--text); }
+  .chart-metric-toggle button.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
   .section-title {
     font-size: 1.05rem;
     font-weight: 600;
@@ -910,6 +940,9 @@
       gap: 0.55rem;
     }
     .hero-stat.featured { grid-column: 1 / -1; }
+    /* When the duration stat is present, it sits at the bottom and goes full-width
+       for balance — the alternative is a stranded single card in a row of two. */
+    .hero-stat.duration-stat { grid-column: 1 / -1; }
     .hero-stat { padding: 0.85rem 0.9rem; }
     .hero-stat-value { font-size: 1.55rem; }
     .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
@@ -1047,6 +1080,12 @@
   }
   .trend-legend-swatch.gap.deficit { background: #ff6b66; }
   .trend-legend-swatch.gap.surplus { background: #1d9e75; }
+  /* Duration line swatch — matches the dashed pattern of the actual chart line */
+  .trend-legend-swatch.duration {
+    background: transparent;
+    height: 0;
+    border-top: 2px dashed #7c3aed;
+  }
   .chart-wrap {
     position: relative;
     background: var(--surface-2);
@@ -1070,6 +1109,52 @@
   .chart-axis-label.y { text-anchor: end; }
   .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
   .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
+  /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
+     with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
+  .chart-line-duration { fill: none; stroke: #7c3aed; stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-dot.duration { fill: #7c3aed; }
+  /* Right-axis labels for the duration scale */
+  .chart-axis-label.y.dur { text-anchor: start; fill: #7c3aed; }
+
+  /* In-progress month indicator — a pulsing red dot connected by a dashed line
+     to the last complete month. The dashed connector visually separates the
+     partial data from the trend without hiding it. */
+  .chart-line-inprogress {
+    fill: none;
+    stroke: #dc3232;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.7;
+  }
+  .chart-line-inprogress.dur {
+    stroke: #dc3232;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    opacity: 0.6;
+  }
+  .chart-dot-inprogress {
+    fill: #dc3232;
+    stroke: var(--surface-2);
+    stroke-width: 1.5;
+  }
+  /* The pulse circle starts at the dot's size and expands outward while fading.
+     Looping animation creates the "alive, in progress" cue. */
+  .chart-dot-inprogress-pulse {
+    fill: #dc3232;
+    opacity: 0.6;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: chart-pulse 1.8s ease-out infinite;
+  }
+  @keyframes chart-pulse {
+    0%   { transform: scale(1);   opacity: 0.55; }
+    70%  { transform: scale(3);   opacity: 0;    }
+    100% { transform: scale(3);   opacity: 0;    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chart-dot-inprogress-pulse { animation: none; opacity: 0; }
+  }
   .chart-area-curr { fill: var(--accent); opacity: 0.08; }
   .chart-gap { pointer-events: none; }
   .chart-gap.deficit { fill: #ff6b66; opacity: 0.13; }
@@ -1126,9 +1211,41 @@
   }
   .chart-tooltip-row .swatch.curr { background: var(--accent); }
   .chart-tooltip-row .swatch.prev { background: var(--text-dim); }
+  .chart-tooltip-row .swatch.duration { background: #7c3aed; }
+  /* In-progress caveat — small italic footer in the tooltip */
+  .chart-tooltip-inprogress {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 0.35rem;
+    padding-top: 0.3rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.3;
+  }
+  .chart-tooltip-inprogress-tag {
+    display: inline-block;
+    background: #dc3232;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
   .chart-tooltip-delta { font-weight: 500; margin-left: 0.3rem; }
   .chart-tooltip-delta.up { color: #4dd0a0; }
   .chart-tooltip-delta.down { color: #ff8a8a; }
+  /* Inline reference label inside a delta — e.g. "vs Jun 2025" — quieter than
+     the main delta value, so the percentage stays the dominant element. */
+  .chart-tooltip-delta-ref {
+    font-weight: 400;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    margin-left: 0.15rem;
+  }
   .chart-empty {
     text-align: center;
     color: var(--text-dim);
@@ -1484,7 +1601,7 @@
   .month-row:last-child { border-bottom: none; }
   .month-header {
     display: grid;
-    grid-template-columns: 1.1fr 0.55fr 1.4fr 0.9fr 1.3fr;
+    grid-template-columns: 1.1fr 0.55fr 1.4fr 0.9fr 0.7fr 1.3fr;
     gap: 1rem;
     padding: 0.95rem 1.1rem;
     align-items: center;
@@ -2198,6 +2315,10 @@
         <span>Monthly trend</span>
         <span class="trend-legend" id="trendLegend"></span>
       </div>
+      <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
+        <button data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
+        <button data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+      </div>
       <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Monthly long-form views trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
@@ -2274,6 +2395,7 @@
 let dataset = null;
 let viewMode = 'long';
 let selectedChannel = 'ALL'; // either a channel ID string, or 'ALL'
+let chartMetric = 'views';   // 'views' | 'views_length'
 let monthlyData = [];
 let heroAnimated = false;
 
@@ -2291,6 +2413,10 @@ function formatDuration(secs) {
   const s = secs % 60;
   if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   return `${m}:${String(s).padStart(2,'0')}`;
+}
+function fmtDurStat(secs) {
+  // Round to whole seconds for stat display (medians can be fractional)
+  return formatDuration(Math.round(secs));
 }
 function monthKey(date) {
   const d = new Date(date);
@@ -2321,19 +2447,31 @@ function monthsBetween(start, end) {
   return keys;
 }
 function deltaPill(curr, prev, opts = {}) {
-  const { large, label } = opts;
+  const { large, label, invertDelta, neutral } = opts;
   const cls = large ? 'delta large' : 'delta';
   const labelHtml = label ? `<span class="delta-label">${label}</span>` : '';
   if (prev == null) return '';
   if (prev === 0) {
-    if (curr > 0) return `${labelHtml}<span class="${cls} up"><span class="delta-arrow">▲</span> new</span>`;
+    if (curr > 0) return `${labelHtml}<span class="${cls} ${neutral ? 'flat' : 'up'}"><span class="delta-arrow">▲</span> new</span>`;
     return `${labelHtml}<span class="${cls} flat">—</span>`;
   }
   const pct = ((curr - prev) / prev) * 100;
   const arrow = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
-  const tone = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : 'flat';
-  // Direction is already conveyed by the arrow and the tone colour;
-  // no need to also include a +/- sign on the number.
+  // Tone determines the colour styling:
+  // - neutral: always 'flat' (grey), regardless of direction — for metrics where
+  //   change is not value-laden (e.g. video length, where longer isn't strictly worse)
+  // - invertDelta: flips up/down semantics (e.g. for stats where rising is concerning)
+  // - default: up = good (green), down = bad (red)
+  let tone;
+  if (neutral) {
+    tone = 'flat';
+  } else if (pct > 0.5) {
+    tone = invertDelta ? 'down' : 'up';
+  } else if (pct < -0.5) {
+    tone = invertDelta ? 'up' : 'down';
+  } else {
+    tone = 'flat';
+  }
   return `${labelHtml}<span class="${cls} ${tone}"><span class="delta-arrow">${arrow}</span> ${Math.abs(pct).toFixed(1)}%</span>`;
 }
 function summarise(videos) {
@@ -2341,11 +2479,23 @@ function summarise(videos) {
   const shorts = videos.filter(v => v.isShort && !v.unavailable);
   const longViews = longForm.reduce((s, v) => s + v.views, 0);
   const shortViews = shorts.reduce((s, v) => s + v.views, 0);
+  // Median long-form duration (excluding duration-0 zombie streams)
+  const durations = longForm.filter(v => v.durationSec > 0).map(v => v.durationSec);
+  let medianDuration = 0;
+  if (durations.length) {
+    durations.sort((a, b) => a - b);
+    const mid = Math.floor(durations.length / 2);
+    medianDuration = durations.length % 2
+      ? durations[mid]
+      : (durations[mid - 1] + durations[mid]) / 2;
+  }
   return {
     longForm, shorts,
     longViews, shortViews,
     longAvg: longForm.length ? longViews / longForm.length : 0,
     shortAvg: shorts.length ? shortViews / shorts.length : 0,
+    medianDuration,
+    longFormDurations: durations.length,  // count of videos with real durations
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
     totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
@@ -2382,6 +2532,17 @@ function activeDisplayName() {
 function activeChannelUrl() {
   if (selectedChannel === 'ALL') return null;
   return dataset?.channels?.[selectedChannel]?.url || null;
+}
+
+// Channels eligible for the Views + video length chart. Restricted to those with
+// consistent enough upload patterns that monthly median duration is a meaningful
+// trend rather than noise from tiny samples. Adjust this list as channels grow
+// into having enough data.
+const LENGTH_CHART_HANDLES = ['@TheQuartering', '@JeremyHambly'];
+function channelQualifiesForLengthChart(channelId) {
+  if (channelId === 'ALL') return false;
+  const handle = dataset?.channels?.[channelId]?.handle;
+  return LENGTH_CHART_HANDLES.includes(handle);
 }
 
 // --- Window mode detection ---
@@ -2736,6 +2897,29 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
+
+  // Chart metric toggle visibility:
+  // Views + video length only makes sense when:
+  // - We're in long-form mode (median duration is a long-form metric)
+  // - We're in monthly trend mode (not window mode)
+  // - The selected channel has enough consistent upload history for the
+  //   comparison to be meaningful. UnSleevedMedia and rcnightmare have very
+  //   patchy, low-volume uploads — their duration trends would mostly be noise
+  //   from tiny sample sizes per month. Restricted to TheQuartering and
+  //   Jeremy Hambly, who upload regularly enough for the comparison to be useful.
+  //   "All combined" is excluded too since mixing channels with very different
+  //   upload patterns distorts the median.
+  const metricToggle = document.querySelector('.chart-metric-toggle');
+  const lengthEligible = channelQualifiesForLengthChart(selectedChannel);
+  if (metricToggle) {
+    metricToggle.style.display = (!windowMode && viewMode === 'long' && lengthEligible) ? '' : 'none';
+  }
+  // If the user had views+length selected and switched to a channel that doesn't
+  // qualify, coerce the chart metric back to 'views' (without resetting their
+  // stated preference — when they return to a qualifying channel it comes back).
+  // We do this by passing a local "effective" flag into renderTrendChart, not
+  // by mutating the persistent chartMetric state.
+
   if (windowMode) {
     renderWindowList(startDate, endDate);
     document.getElementById('monthlyBreakdownChips').innerHTML = '';
@@ -3141,12 +3325,33 @@ function renderHeroStats(curr, prev) {
       sub: p ? `vs ${fmtCompact(p.avg)} last year ${deltaPill(c.avg, p.avg)}` : ''
     }
   ];
+
+  // Median long-form duration — long-form mode only, requires meaningful sample size.
+  // The stat is most interesting alongside the view-collapse story (creators padding
+  // videos to compensate for lost ad revenue), so it earns its slot in the hero grid.
+  if (viewMode === 'long' && curr.longFormDurations >= 5) {
+    const med = curr.medianDuration;
+    const prevMed = prev && prev.longFormDurations >= 5 ? prev.medianDuration : null;
+    stats.push({
+      label: 'Median long-form length',
+      raw: med,
+      value: fmtDurStat(med),
+      fullValue: fmtDurStat(med),
+      // Neutral delta — duration changes aren't inherently good or bad.
+      // The arrow conveys direction; we deliberately don't colour it as a verdict.
+      sub: prevMed != null
+        ? `vs ${fmtDurStat(prevMed)} last year ${deltaPill(med, prevMed, { neutral: true })}`
+        : '',
+      durationStat: true  // signals the animator to format seconds as duration
+    });
+  }
+
   document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
-    <div class="hero-stat${s.featured ? ' featured' : ''}">
+    <div class="hero-stat${s.featured ? ' featured' : ''}${s.durationStat ? ' duration-stat' : ''}">
       <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" title="${s.fullValue}">
+      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" data-duration="${s.durationStat ? '1' : '0'}" title="${s.fullValue}">
         <span class="hero-stat-value-spacer">${s.value}</span>
-        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : '0'}</span>
+        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : '0')}</span>
       </div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
@@ -3157,10 +3362,12 @@ function renderHeroStats(curr, prev) {
     heroAnimated = true;
     document.querySelectorAll('.hero-stat-value-anim').forEach(el => {
       const target = parseFloat(el.dataset.target);
-      const useCompact = el.parentElement.dataset.compact === '1';
+      const parent = el.parentElement;
+      const useCompact = parent.dataset.compact === '1';
+      const isDuration = parent.dataset.duration === '1';
       const duration = 900;
       const start = performance.now();
-      const formatter = useCompact ? fmtCompact : fmt;
+      const formatter = isDuration ? fmtDurStat : (useCompact ? fmtCompact : fmt);
       function tick(now) {
         const t = Math.min(1, (now - start) / duration);
         const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
@@ -3213,62 +3420,157 @@ function renderTrendChart(yoy) {
     return;
   }
 
-  // Exclude the current in-progress month from the chart entirely so the trend
-  // line, annotations and tooltips all reflect complete months only.
+  // Exclude the current in-progress month from the *trend* (axis scale, YoY
+  // comparison fills, prev-year line) — but include it as a separate visual
+  // element so users can see "where we are right now" without it distorting
+  // the comparison logic.
   const now = new Date();
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
   const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
+  const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
   if (!chartData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
     return;
   }
 
+  // Are we in views+length mode? Only effective when:
+  // - chartMetric is set to 'views_length'
+  // - We're in long-form view (median duration is a long-form metric)
+  // - The selected channel qualifies (sufficient consistent upload history)
+  // - We have enough complete-month duration data points to plot
+  const durations = chartData.map(m => m.curr.medianDuration || 0);
+  const hasDurationData = durations.filter(d => d > 0).length >= 3;
+  const showDuration = chartMetric === 'views_length'
+    && viewMode === 'long'
+    && channelQualifiesForLengthChart(selectedChannel)
+    && hasDurationData;
+
+  // In views+length mode, we suppress the YoY visual (deficit/surplus fills, prev-year line)
+  // because two superimposed lines on dual axes plus the gap fill becomes noisy.
+  // The view-history alone is the story; duration overlay is the story.
+  const effectiveYoy = yoy && !showDuration;
+
   // Legend (gap-fill swatches added later, once we know which colours appear)
   let legendHtml = `
-    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> This period</span>
-    ${yoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
+    ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+    ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Median length</span>' : ''}
   `;
 
-  // Layout — taller to accommodate annotation, more left padding for Y labels
+  // Layout — taller to accommodate annotation, more left padding for Y labels.
+  // When the duration line is shown, also add right padding for the secondary Y axis labels.
   const W = 720, H = 280;
-  const P = { top: 20, right: 24, bottom: 48, left: 66 };
+  const P = { top: 20, right: showDuration ? 66 : 24, bottom: 48, left: 66 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
   // Pull metric values (mode-aware via metricsFor)
   const currValues = chartData.map(m => metricsFor(m.curr).views);
-  const prevValues = yoy ? chartData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
+  const prevValues = effectiveYoy ? chartData.map(m => m.yoy ? metricsFor(m.yoy).views : null) : [];
 
-  // Y-axis max: tight to the data with 5% headroom, then round to a nice number
-  const allValues = [...currValues, ...prevValues.filter(v => v != null)];
+  // Y-axis max: tight to the data with 5% headroom, then round to a nice number.
+  // Include the in-progress month's value if present so its dot stays inside the chart.
+  // (Note: in-progress prev-year value is also factored in — it's a complete prior month.)
+  const ipViewValue = inProgressMonth ? metricsFor(inProgressMonth.curr).views : null;
+  const ipPrevViewValue = (inProgressMonth && effectiveYoy && inProgressMonth.yoy)
+    ? metricsFor(inProgressMonth.yoy).views
+    : null;
+  const allValues = [
+    ...currValues,
+    ...prevValues.filter(v => v != null),
+    ...(ipViewValue != null ? [ipViewValue] : []),
+    ...(ipPrevViewValue != null ? [ipPrevViewValue] : [])
+  ];
   const rawMax = Math.max(1, ...allValues);
   const yMax = niceMax(rawMax * 1.05);
 
-  // X positions
+  // X positions — we extend the X scale by one slot when there's an in-progress
+  // month, so its data point sits naturally to the right of the last complete
+  // month. The compression of the complete-month positions is negligible
+  // (~1% for a typical 60-month range).
   const n = chartData.length;
-  const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
+  const nTotal = n + (inProgressMonth ? 1 : 0);
+  const xFor = i => nTotal === 1 ? P.left + innerW / 2 : P.left + (i / (nTotal - 1)) * innerW;
   const yFor = v => P.top + (1 - v / yMax) * innerH;
 
   // Build path strings
   const currPath = currValues.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i)} ${yFor(v)}`).join(' ');
 
-  // Previous-year path — handle nulls by breaking the line
+  // Duration line (only when in views+length mode). Uses a separate Y scale
+  // mapped to the same vertical extent so both lines share the plot area but
+  // each carries its own axis interpretation.
+  let durPath = '';
+  let durDots = '';
+  let durTicks = [];
+  let yForDur = null;
+  if (showDuration) {
+    const durValid = durations.filter(d => d > 0);
+    // Also factor in the in-progress month's duration (if present) and its YoY counterpart
+    // so the scale extends to accommodate them, not just the complete-month line.
+    const ipDuration = inProgressMonth && inProgressMonth.curr.medianDuration > 0
+      ? inProgressMonth.curr.medianDuration : null;
+    const ipPrevDuration = inProgressMonth && inProgressMonth.yoy && inProgressMonth.yoy.medianDuration > 0
+      ? inProgressMonth.yoy.medianDuration : null;
+    const allDurations = [
+      ...durValid,
+      ...(ipDuration != null ? [ipDuration] : []),
+      ...(ipPrevDuration != null ? [ipPrevDuration] : [])
+    ];
+    const durMaxRaw = Math.max(...allDurations);
+    const durMinRaw = Math.min(...allDurations);
+    // Round outward to human-readable multiples (e.g. whole minutes) so axis labels
+    // like 11:00, 12:00, 13:00 land where they should — rather than mathematical
+    // fifths like 11:28, 12:57 from a simple linear split.
+    const axis = niceDurationAxis(durMinRaw, durMaxRaw);
+    const durMin = axis.min;
+    const durMax = axis.max;
+    yForDur = v => P.top + (1 - (v - durMin) / (durMax - durMin)) * innerH;
+
+    // Build path — break the line on zero/missing values
+    let started = false;
+    durations.forEach((d, i) => {
+      if (d <= 0) { started = false; return; }
+      durPath += `${started ? 'L' : 'M'} ${xFor(i)} ${yForDur(d)} `;
+      started = true;
+    });
+    durDots = durations.map((d, i) =>
+      d <= 0 ? '' : `<circle class="chart-dot duration" cx="${xFor(i)}" cy="${yForDur(d)}" r="2.8"/>`
+    ).join('');
+
+    // Right-axis tick labels — one per step from min to max inclusive.
+    // This produces clean values like 11:00, 12:00, 13:00 rather than 11:28, 12:57.
+    durTicks = [];
+    for (let v = durMin; v <= durMax; v += axis.step) {
+      durTicks.push({ y: yForDur(v), v });
+    }
+  }
+
+  // Previous-year path — handle nulls by breaking the line.
+  // Extends one slot beyond chartData to include the prev-year of the in-progress month
+  // (which is a complete past month). The gap-fill polygons stay confined to complete-month
+  // segments because the deficit/surplus comparison is misleading when one side is partial.
   let prevPath = '';
-  if (yoy) {
+  if (effectiveYoy) {
     let started = false;
     prevValues.forEach((v, i) => {
       if (v == null) { started = false; return; }
       prevPath += `${started ? 'L' : 'M'} ${xFor(i)} ${yFor(v)} `;
       started = true;
     });
+    // Append the in-progress prev-year point if present
+    if (ipPrevViewValue != null) {
+      const ipX = xFor(n);
+      const ipY = yFor(ipPrevViewValue);
+      prevPath += `${started ? 'L' : 'M'} ${ipX} ${ipY} `;
+    }
   }
 
   // Directional gap fill — red segments where curr < prev (deficit), green where curr > prev (surplus).
   // Lines crossing between two consecutive months get split at the intersection so colours don't overlap.
   let gapSegmentsRed = '';
   let gapSegmentsGreen = '';
-  if (yoy) {
+  if (effectiveYoy) {
     // Collect valid (both-defined) consecutive pairs into segment polygons
     function pushSegment(points, isDeficit) {
       if (points.length < 3) return;
@@ -3376,9 +3678,14 @@ function renderTrendChart(yoy) {
   const currDots = currValues.map((v, i) =>
     `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
   ).join('');
-  const prevDots = yoy ? prevValues.map((v, i) =>
+  const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
+  // Prev-year dot at the in-progress slot too (so the prev-year line ends with a dot
+  // at the same X as the in-progress dot for visual consistency)
+  const ipPrevDot = effectiveYoy && ipPrevViewValue != null
+    ? `<circle class="chart-dot prev" cx="${xFor(n)}" cy="${yFor(ipPrevViewValue)}" r="3"/>`
+    : '';
 
   // Attribution: bottom-right corner of the chart area
   // On narrow viewports, use a more compact form so the text doesn't overflow
@@ -3397,7 +3704,7 @@ function renderTrendChart(yoy) {
   `;
 
   // Hit areas
-  const hitWidth = innerW / Math.max(1, n);
+  const hitWidth = innerW / Math.max(1, nTotal);
   const hits = chartData.map((m, i) => `
     <rect class="chart-hit"
       x="${xFor(i) - hitWidth / 2}" y="${P.top}"
@@ -3405,19 +3712,87 @@ function renderTrendChart(yoy) {
       data-idx="${i}"/>
   `).join('');
 
+  // Right-axis labels for duration scale (only when showDuration is true)
+  const durLabelsSvg = showDuration ? durTicks.map(t =>
+    `<text class="chart-axis-label y dur" x="${P.left + innerW + 8}" y="${t.y + 4}">${fmtDurStat(t.v)}</text>`
+  ).join('') : '';
+
+  // In-progress month rendering:
+  // - Dashed connector from the last complete month to the in-progress dot
+  // - Pulsing red dot at the in-progress data point
+  // - Dedicated hit area for the tooltip
+  // The dot uses two stacked circles: a static red ring and an expanding/fading
+  // pulse ring that loops via CSS animation.
+  let inProgressSvg = '';
+  let inProgressHits = '';
+  if (inProgressMonth) {
+    const ipIdx = n;  // sits at index = n in the extended X scale
+    const ipX = xFor(ipIdx);
+    const ipMetrics = metricsFor(inProgressMonth.curr);
+    const ipViews = ipMetrics.views;
+    const ipY = yFor(ipViews);
+    // Connector for views line — dashed
+    const lastCompleteY = yFor(currValues[n - 1]);
+    const lastCompleteX = xFor(n - 1);
+    const viewsConnector = `<path class="chart-line-inprogress" d="M ${lastCompleteX} ${lastCompleteY} L ${ipX} ${ipY}"/>`;
+
+    // Connector + dot for duration line if in views+length mode
+    let durInProgressSvg = '';
+    if (showDuration && yForDur) {
+      const ipDur = inProgressMonth.curr.medianDuration || 0;
+      if (ipDur > 0) {
+        // Find the last complete month that had duration data, for the dashed connector
+        let lastDurIdx = -1;
+        for (let i = n - 1; i >= 0; i--) {
+          if (durations[i] > 0) { lastDurIdx = i; break; }
+        }
+        if (lastDurIdx >= 0) {
+          const lastDurX = xFor(lastDurIdx);
+          const lastDurY = yForDur(durations[lastDurIdx]);
+          const ipDurY = yForDur(ipDur);
+          durInProgressSvg = `
+            <path class="chart-line-inprogress dur" d="M ${lastDurX} ${lastDurY} L ${ipX} ${ipDurY}"/>
+            <circle class="chart-dot-inprogress dur" cx="${ipX}" cy="${ipDurY}" r="4"/>
+            <circle class="chart-dot-inprogress-pulse dur" cx="${ipX}" cy="${ipDurY}" r="4"/>
+          `;
+        }
+      }
+    }
+
+    inProgressSvg = `
+      ${viewsConnector}
+      ${durInProgressSvg}
+      <circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
+      <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>
+    `;
+    inProgressHits = `
+      <rect class="chart-hit"
+        x="${ipX - hitWidth / 2}" y="${P.top}"
+        width="${hitWidth}" height="${innerH}"
+        data-idx="-1"
+        data-inprogress="1"/>
+    `;
+  }
+
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
     ${xLabels}
+    ${durLabelsSvg}
     ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
     ${gapSegmentsGreen ? `<path class="chart-gap surplus" d="${gapSegmentsGreen}"/>` : ''}
-    ${yoy && prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
+    ${effectiveYoy && prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${currPath}"/>
+    ${showDuration && durPath ? `<path class="chart-line-duration" d="${durPath}"/>` : ''}
     ${prevDots}
+    ${ipPrevDot}
     ${currDots}
+    ${showDuration ? durDots : ''}
+    ${inProgressSvg}
     ${attribution}
     ${hits}
+    ${inProgressHits}
   `;
 
   // Tooltip behaviour
@@ -3429,22 +3804,56 @@ function renderTrendChart(yoy) {
   svg.addEventListener('mouseleave', hideTooltip);
 
   function showTooltip(idx) {
-    const m = chartData[idx];
+    // idx === -1 means the in-progress month hit
+    const isInProgress = idx === -1;
+    const m = isInProgress ? inProgressMonth : chartData[idx];
+    if (!m) return;
     const curr = metricsFor(m.curr);
     const yoyM = m.yoy ? metricsFor(m.yoy) : null;
-    const cxPct = ((xFor(idx) / W) * 100);
+    const xIdx = isInProgress ? n : idx;
+    const cxPct = ((xFor(xIdx) / W) * 100);
     const cyPct = ((yFor(curr.views) / H) * 100);
     let deltaHtml = '';
-    if (yoy && yoyM && yoyM.views > 0) {
+    // Suppress YoY delta for the in-progress month — comparing partial-current
+    // to full-previous-year is misleading without proportional adjustment.
+    if (!isInProgress && effectiveYoy && yoyM && yoyM.views > 0) {
       const pct = ((curr.views - yoyM.views) / yoyM.views) * 100;
       const cls = pct > 0.5 ? 'up' : pct < -0.5 ? 'down' : '';
       const arrowSym = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
       deltaHtml = `<span class="chart-tooltip-delta ${cls}">${arrowSym} ${Math.abs(pct).toFixed(1)}%</span>`;
     }
+    // Duration row appears only in views+length mode
+    const durSec = m.curr.medianDuration;
+    let durationHtml = '';
+    if (showDuration && durSec > 0) {
+      let durDeltaHtml = '';
+      // Show duration change vs the previous MONTH (not previous year).
+      // The whole story we're telling is the recent step-change: median length
+      // hovered around 12 minutes for years, then spiked in the last few months.
+      // Year-over-year would mask that — flat baselines vs flat baselines hide
+      // the spike. Month-on-month reveals it: hover May to see how it jumped
+      // from April; hover June to see how it jumped from May.
+      if (m.mom && m.mom.medianDuration > 0) {
+        const pct = ((durSec - m.mom.medianDuration) / m.mom.medianDuration) * 100;
+        const arrowSym = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '·';
+        // Label the comparison explicitly so the arrow can't be misread as
+        // referring to the chart line's local slope (it's a specific value, not direction).
+        const prevMonthLabel = monthLabel(prevMonthKey(m.key));
+        durDeltaHtml = `<span class="chart-tooltip-delta">${arrowSym} ${Math.abs(pct).toFixed(1)}% <span class="chart-tooltip-delta-ref">vs ${prevMonthLabel}</span></span>`;
+      }
+      durationHtml = `<div class="chart-tooltip-row"><span class="swatch duration"></span> ${fmtDurStat(durSec)} median length ${durDeltaHtml}</div>`;
+    }
+    // In-progress caveat — clarifies which numbers are partial and which aren't.
+    // Views are cumulative and incomplete; duration medians are real numbers.
+    const inProgressCaveat = isInProgress
+      ? `<div class="chart-tooltip-inprogress">In progress — views are partial; length is a running median.</div>`
+      : '';
     tooltip.innerHTML = `
-      <div class="chart-tooltip-month">${m.label}</div>
+      <div class="chart-tooltip-month">${m.label}${isInProgress ? ' <span class="chart-tooltip-inprogress-tag">live</span>' : ''}</div>
       <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
-      ${yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
+      ${!isInProgress && effectiveYoy && yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
+      ${durationHtml}
+      ${inProgressCaveat}
     `;
     tooltip.style.display = 'block';
     tooltip.style.left = cxPct + '%';
@@ -3485,6 +3894,28 @@ function niceMax(v) {
   return factor * mag;
 }
 
+// Pick a "nice" tick range for a duration axis: returns { min, max, step } in seconds,
+// where min/max are multiples of step, and step is chosen so the axis has 4-8 ticks
+// at human-readable intervals (30s, 1m, 2m, 5m, 10m, etc).
+// Inputs minSec and maxSec define the observed data range; the returned bounds
+// extend outward to clean multiples of the chosen step.
+function niceDurationAxis(minSec, maxSec) {
+  const span = Math.max(1, maxSec - minSec);
+  // Candidate step sizes in seconds, in order of preference
+  // (60, 120, 180, 300, 600... and finer at the small end for very tight ranges)
+  const candidateSteps = [30, 60, 90, 120, 180, 300, 600, 900, 1800, 3600];
+  // Find a step that yields a comfortable 4-8 tick spread
+  let step = candidateSteps[0];
+  for (const s of candidateSteps) {
+    const ticks = Math.ceil(maxSec / s) - Math.floor(minSec / s) + 1;
+    if (ticks <= 8) { step = s; break; }
+  }
+  // Round outward to clean multiples
+  const niceMin = Math.max(0, Math.floor(minSec / step) * step);
+  const niceMax = Math.ceil(maxSec / step) * step;
+  return { min: niceMin, max: niceMax, step };
+}
+
 function renderMonthlyList(yoy) {
   const list = document.getElementById('monthlyList');
   const now = new Date();
@@ -3501,7 +3932,7 @@ function renderMonthlyList(yoy) {
     const momMetrics = m.mom ? metricsFor(m.mom) : null;
 
     const isInProgress = m.key === currentMonthKey;
-    const inProgressBadge = isInProgress ? ' <span class="in-progress-badge">in progress</span>' : '';
+    const inProgressBadge = isInProgress ? '<span class="in-progress-badge">in progress</span>' : '';
 
     // Suppress YoY/MoM pills on in-progress month (partial-vs-complete is misleading)
     const yoyPill = yoy && yoyMetrics && !isInProgress ? deltaPill(currMetrics.views, yoyMetrics.views, { large: true, label: 'YoY' }) : '';
@@ -3510,7 +3941,7 @@ function renderMonthlyList(yoy) {
     return `
       <div class="month-row${isInProgress ? ' in-progress' : ''}" data-idx="${idx}">
         <div class="month-header">
-          <div class="month-name"><span class="caret"></span>${m.label}${inProgressBadge}</div>
+          <div class="month-name"><span class="caret"></span>${m.label}</div>
           <div class="month-cell num hide-mobile">
             <div class="month-cell-value">${m.curr.longForm.length} <span style="color: var(--text-dim); font-weight: 400;">/ ${m.curr.shorts.length}</span></div>
             <div class="month-cell-sub">long / shorts</div>
@@ -3532,8 +3963,13 @@ function renderMonthlyList(yoy) {
             <div class="month-cell-value">${fmt(currMetrics.avg)}</div>
             <div class="month-cell-sub">avg / ${currMetrics.label}</div>
           </div>
+          <div class="month-cell num hide-mobile">
+            <div class="month-cell-value">${m.curr.longFormDurations >= 3 ? fmtDurStat(m.curr.medianDuration) : '—'}</div>
+            <div class="month-cell-sub">median length</div>
+          </div>
           <div class="month-cell num">
             <div class="deltas-stack">
+              ${isInProgress ? `<div class="delta-line">${inProgressBadge}</div>` : ''}
               ${yoyPill ? `<div class="delta-line">${yoyPill}</div>` : ''}
               ${momPill ? `<div class="delta-line">${momPill}</div>` : ''}
             </div>
@@ -3841,6 +4277,22 @@ document.querySelectorAll('.mode-toggle button').forEach(btn => {
     viewMode = btn.dataset.mode;
     document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === viewMode));
     rebuild();
+  });
+});
+
+// Chart metric toggle — switches what's plotted on the trend chart.
+// Doesn't trigger a full rebuild; just re-renders the chart with the new metric.
+document.querySelectorAll('.chart-metric-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.chartMetric === chartMetric) return;
+    chartMetric = btn.dataset.chartMetric;
+    document.querySelectorAll('.chart-metric-toggle button').forEach(b => {
+      const active = b.dataset.chartMetric === chartMetric;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    const yoy = document.getElementById('compareYoY').checked;
+    renderTrendChart(yoy);
   });
 });
 document.getElementById('startDate').addEventListener('change', rebuild);
