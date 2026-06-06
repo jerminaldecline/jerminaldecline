@@ -972,24 +972,6 @@
   }
   .btn-secondary:hover { background: var(--surface-2); }
 
-  /* Editorial lede — appears above hero stats, sets the framing for first-time
-     visitors. Larger than body text, lower density than the headlines below,
-     uses muted colour so it reads as context rather than competing with the data. */
-  .lede {
-    font-size: 1.05rem;
-    line-height: 1.55;
-    color: var(--text);
-    margin: 0 0 1.5rem;
-    max-width: 65ch;
-    /* Empty paragraphs (between renders) should not occupy vertical space */
-  }
-  .lede:empty { display: none; }
-  .lede strong { font-weight: 600; }
-  .lede .lede-num { font-variant-numeric: tabular-nums; }
-  @media (max-width: 540px) {
-    .lede { font-size: 0.97rem; margin-bottom: 1.15rem; }
-  }
-
   .hero-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -2655,10 +2637,6 @@
         <button type="button" data-mode="total" role="tab">Including Shorts</button>
       </div>
 
-      <!-- Channel-aware lede — sets editorial frame before the data. Populated
-           by renderLede() based on the selected channel's headline findings. -->
-      <p class="lede" id="lede"></p>
-
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
 
@@ -3167,7 +3145,6 @@ async function loadData() {
     renderFooterMeta();
     renderPeakStrip();
     renderAdPanel();
-    renderLede();
 
     // Default range: Jan 1 of current year to today, overridable via URL params
     const today = new Date();
@@ -3292,9 +3269,6 @@ function rebuild() {
     document.getElementById('windowSection').hidden = true;
     const adPanel = document.getElementById('adPanel');
     if (adPanel) adPanel.hidden = true;
-    // Clear the lede too — its computed text refers to the channel that has data
-    const ledeEl = document.getElementById('lede');
-    if (ledeEl) ledeEl.innerHTML = '';
     return;
   }
   // Restore visibility if previously empty
@@ -3999,93 +3973,6 @@ function renderAdPanel() {
       }
     });
   });
-}
-
-// Channel-aware lede — the opening sentence(s) that frame what the data shows.
-// First-time visitors land on the site without knowing the story; the lede
-// gives them an instant "this is what you're looking at" before they parse stats.
-//
-// Sourced entirely from the dataset (no editorialising beyond what the numbers
-// support). For TheQuartering (the main subject) it combines peak-vs-current,
-// duration trend, and ad campaign count. For secondary channels it gives a
-// shorter framing because they're not the central story.
-function renderLede() {
-  const el = document.getElementById('lede');
-  if (!el) return;
-
-  // Hide for ALL view — too many stories to compress
-  if (selectedChannel === 'ALL') {
-    el.innerHTML = '';
-    return;
-  }
-
-  const chData = dataset?.channels?.[selectedChannel];
-  if (!chData || !monthlyData.length) { el.innerHTML = ''; return; }
-  const channelTitle = chData.title || 'Channel';
-
-  // Find the peak long-form-views month (excluding current in-progress)
-  const now = new Date();
-  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
-  const completeMonths = monthlyData.filter(m => m.key !== currentMonthKey);
-  if (!completeMonths.length) { el.innerHTML = ''; return; }
-  const peakMonth = completeMonths.reduce((best, m) =>
-    (m.curr.longViews > best.curr.longViews) ? m : best, completeMonths[0]);
-  const latestComplete = completeMonths[completeMonths.length - 1];
-  if (!peakMonth || !latestComplete || peakMonth === latestComplete) {
-    // Channel is at its peak — no decline story to tell
-    el.innerHTML = '';
-    return;
-  }
-
-  const peakViews = peakMonth.curr.longViews;
-  const latestViews = latestComplete.curr.longViews;
-  const dropPct = (1 - latestViews / peakViews) * 100;
-  if (dropPct < 20) {
-    // Not enough decline to be the headline — skip the lede
-    el.innerHTML = '';
-    return;
-  }
-
-  // Optional second beat: duration trend (if we have enough data points)
-  let durationBeat = '';
-  const recentDurations = completeMonths.slice(-12)
-    .map(m => m.curr.medianDuration)
-    .filter(d => d > 0);
-  if (recentDurations.length >= 6) {
-    const baseline = recentDurations.slice(0, Math.max(1, Math.floor(recentDurations.length / 2)));
-    const recent = recentDurations.slice(-2);
-    if (baseline.length && recent.length) {
-      const baselineMed = baseline.reduce((s,v)=>s+v,0) / baseline.length;
-      const recentMed = recent.reduce((s,v)=>s+v,0) / recent.length;
-      const durChange = (recentMed - baselineMed) / baselineMed * 100;
-      if (Math.abs(durChange) >= 15) {
-        function fmtDur(s) {
-          const m = Math.floor(s/60), r = Math.round(s%60);
-          return `${m}:${String(r).padStart(2,'0')}`;
-        }
-        const direction = durChange > 0 ? 'risen' : 'fallen';
-        durationBeat = ` Median video length has <strong>${direction}</strong> from <span class="lede-num">${fmtDur(baselineMed)}</span> to <span class="lede-num">${fmtDur(recentMed)}</span>.`;
-      }
-    }
-  }
-
-  // Optional third beat: ad campaign count if we have ad data for this channel
-  let adBeat = '';
-  const channelHandle = chData.handle;
-  const adEntry = adVideoData?.channels?.[channelHandle];
-  if (adEntry && adEntry.videoIds?.length) {
-    const adCount = adEntry.videoIds.length;
-    adBeat = ` <strong><span class="lede-num">${adCount}</span></strong> of their videos have been promoted through paid Google Ad campaigns.`;
-  }
-
-  // Peak month formatted nicely
-  function ymLabel(key) {
-    const [y, m] = key.split('-');
-    return new Date(parseInt(y), parseInt(m)-1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-  }
-
-  const lede = `<strong>${escapeHtml(channelTitle)}</strong>'s long-form views are down <strong><span class="lede-num">${dropPct.toFixed(0)}%</span></strong> from their peak in ${ymLabel(peakMonth.key)}.${durationBeat}${adBeat}`;
-  el.innerHTML = lede;
 }
 
 function renderHeroStats(curr, prev) {
@@ -5450,7 +5337,6 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   renderFooterMeta();
   renderPeakStrip();
   renderAdPanel();
-  renderLede();
   // If a mood mode is active, refresh the floating low-figure text so it
   // reflects the newly-selected channel's data
   if (window.__refreshActiveFloaters) window.__refreshActiveFloaters();
@@ -5533,7 +5419,6 @@ document.addEventListener('click', (e) => {
     renderFooterMeta();
     renderPeakStrip();
     renderAdPanel();
-    renderLede();
     heroAnimated = false;
     // Default range = year-to-date
     applyPreset('ytd');
