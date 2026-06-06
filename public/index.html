@@ -1383,6 +1383,33 @@
     font-size: 0.82rem;
     border-bottom: 1px solid var(--border);
   }
+  /* Group header inside the window list — sits between the sortable column
+     header and the actual video rows, labels each group (Long-form / Shorts)
+     and shows its count + total views for fast scanning. Visually quieter
+     than the main stats line so it reads as a section divider. */
+  .window-list-group + .window-list-group {
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .window-list-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0.9rem;
+    background: var(--surface);
+    font-size: 0.78rem;
+  }
+  .window-list-group-label {
+    font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.72rem;
+  }
+  .window-list-group-meta {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
 
   /* Channel breakdown chips above the window list */
   .channel-breakdown {
@@ -1662,6 +1689,12 @@
   .empty-state-btn:hover {
     color: var(--accent);
     border-color: var(--accent);
+  }
+  /* "Reset to default" button — bigger commitment than date-only resets
+     (also changes channel), so it gets a slightly heavier visual treatment. */
+  .empty-state-btn-reset {
+    background: var(--surface-2);
+    font-weight: 600;
   }
 
   .delta {
@@ -3242,6 +3275,7 @@ function rebuild() {
         <button type="button" class="empty-state-btn" data-empty-action="30d">Use last 30 days</button>
         <button type="button" class="empty-state-btn" data-empty-action="ytd">Year to date</button>
         <button type="button" class="empty-state-btn" data-empty-action="all">All time</button>
+        <button type="button" class="empty-state-btn empty-state-btn-reset" data-empty-action="reset">Reset to default</button>
       </div>
     `;
     emptyMsg.style.display = 'block';
@@ -3250,6 +3284,17 @@ function rebuild() {
     document.querySelector('.chart-wrap').style.display = 'none';
     document.getElementById('monthlyList').style.display = 'none';
     document.querySelectorAll('.section-title').forEach(el => el.style.display = 'none');
+    // Also hide the window list and ad panel — these aren't section-titles so the
+    // querySelectorAll above doesn't catch them. Without this, switching to a
+    // channel with no uploads in the current range still showed the previous
+    // channel's data in the window list (since we early-return before reaching
+    // the windowMode visibility toggles below).
+    document.getElementById('windowSection').hidden = true;
+    const adPanel = document.getElementById('adPanel');
+    if (adPanel) adPanel.hidden = true;
+    // Clear the lede too — its computed text refers to the channel that has data
+    const ledeEl = document.getElementById('lede');
+    if (ledeEl) ledeEl.innerHTML = '';
     return;
   }
   // Restore visibility if previously empty
@@ -3448,6 +3493,35 @@ function renderWindowList(startDate, endDate) {
     : '';
   const statsLine = `${sorted.length} of ${scopedVideos.length} video${scopedVideos.length === 1 ? '' : 's'} · ${longCount} long-form · ${shortCount} Shorts · ${fmt(totalViews)} total views${filterLabel}`;
 
+  // Split the sorted video list into long-form and shorts. The monthly view
+  // already separates these into expandable groups; the window view follows the
+  // same pattern so the long-form story stays uncluttered by Shorts noise (which
+  // typically dominates by count but contributes a small share of views). Each
+  // group has its own count + total-views header. Sort order is shared so toggling
+  // a column header applies consistently across both groups.
+  const longSorted = sorted.filter(v => !v.isShort && !v.unavailable);
+  const shortSorted = sorted.filter(v => v.isShort && !v.unavailable);
+  const longViewsTotal = longSorted.reduce((s, v) => s + (v.views || 0), 0);
+  const shortViewsTotal = shortSorted.reduce((s, v) => s + (v.views || 0), 0);
+
+  function group(label, videos, totalViews) {
+    if (videos.length === 0 && !windowListState.query) {
+      // Skip empty groups entirely when no search is active.
+      // (When a search IS active, we still show "no matches" so the user
+      // doesn't think their search broke the page.)
+      return '';
+    }
+    return `
+      <div class="window-list-group">
+        <div class="window-list-group-header">
+          <span class="window-list-group-label">${label}</span>
+          <span class="window-list-group-meta">${videos.length} video${videos.length === 1 ? '' : 's'} · ${fmt(totalViews)} views</span>
+        </div>
+        ${renderVideoRows(videos, windowListState.query ? `No ${label.toLowerCase()} match your search` : `No ${label.toLowerCase()} in this range`)}
+      </div>
+    `;
+  }
+
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
@@ -3456,7 +3530,8 @@ function renderWindowList(startDate, endDate) {
     <div class="window-list-stats">${statsLine}</div>
     <div class="window-list-rows">
       ${colHeader}
-      ${renderVideoRows(sorted, windowListState.query ? 'No videos match your search' : 'No videos in this range')}
+      ${group('Long-form', longSorted, longViewsTotal)}
+      ${group('Shorts', shortSorted, shortViewsTotal)}
     </div>
   `;
 }
@@ -5438,11 +5513,33 @@ function highlightActivePreset() {
 document.querySelectorAll('.preset-chip').forEach(chip => {
   chip.addEventListener('click', () => applyPreset(chip.dataset.preset));
 });
-// Empty-state buttons reuse applyPreset
+// Empty-state buttons reuse applyPreset, with a 'reset' option that also
+// restores the default channel selection (TheQuartering) — useful when the
+// user arrives here via a stale shareable URL pointing at a channel with no
+// uploads in the saved range.
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-empty-action]');
   if (!btn) return;
-  applyPreset(btn.dataset.emptyAction);
+  const action = btn.dataset.emptyAction;
+  if (action === 'reset') {
+    // Restore default channel to TheQuartering
+    const quarteringId = Object.keys(dataset?.channels || {}).find(
+      id => dataset.channels[id].handle === '@TheQuartering'
+    );
+    if (quarteringId) selectedChannel = quarteringId;
+    windowListState.channelFilter = null;
+    renderChannelSelector();
+    renderChannelLinkRow();
+    renderFooterMeta();
+    renderPeakStrip();
+    renderAdPanel();
+    renderLede();
+    heroAnimated = false;
+    // Default range = year-to-date
+    applyPreset('ytd');
+  } else {
+    applyPreset(action);
+  }
 });
 
 // Jump to specific month from the peak strip
