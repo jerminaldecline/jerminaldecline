@@ -4536,89 +4536,102 @@ function renderAllVideosChart(chartData, inProgressMonth) {
   // too many turns to a smear. The 1.5-year / 3.5-year breakpoints below were
   // calibrated for this density target on a ~720px-wide chart.
   const monthCount = allBuckets.length;
-  const xLabels = [];
   const quarterTicks = [];
   const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+  // Decide cadence: which months get labels based on how many are visible.
+  // The principle is calendar-aligned: same months labelled regardless of where
+  // the data starts. Year-on-Jan keeps year transitions visible at every density.
+  //
+  //   ≤12 months → every month
+  //   13-30      → every quarter (Jan, Apr, Jul, Oct)
+  //   31-60      → Jan and Jul of each year (2 per year)
+  //   60+        → Jan only
+  let isLabelMonth, getTickHeight;
   if (monthCount <= 12) {
-    // 1-12 months in view: label EVERY month. The first month of each year
-    // (or the very first month of the range) gets a year appended for context.
-    let lastYear = null;
-    allBuckets.forEach((m, i) => {
-      const month = parseInt(m.key.slice(5, 7));
-      const year = m.key.slice(0, 4);
-      const monthName = MONTH_NAMES[month - 1];
-      // Show "Jan 2026" for January and for the very first month; just "Feb" etc. otherwise.
-      // This keeps the year visible without repeating it on every label.
-      const label = (month === 1 || i === 0) ? `${monthName} ${year}` : monthName;
-      xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
-      // Tick on the axis for every month
-      const tickH = (month === 1) ? 5 : 3;
-      quarterTicks.push(
-        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
-      );
-      lastYear = year;
-    });
-  } else if (monthCount <= 24) {
-    // 13-24 months in view: label every other month so the axis stays readable.
-    // First month of each year shows the year; alternate intervening labels show just the month name.
-    allBuckets.forEach((m, i) => {
-      const month = parseInt(m.key.slice(5, 7));
-      const year = m.key.slice(0, 4);
-      // Label every odd-indexed month (about 12 labels for 24-month range)
-      const everyOther = (i % 2 === 0);
-      if (everyOther) {
-        const monthName = MONTH_NAMES[month - 1];
-        const label = (month === 1 || i === 0) ? `${monthName} ${year}` : monthName;
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
-      }
-      // Tick on every month regardless
-      const tickH = (month === 1) ? 5 : 3;
-      quarterTicks.push(
-        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
-      );
-    });
-  } else if (monthCount <= 42) {
-    // 25-42 months (2-3.5 years): label Jan and Jul of each year, ticks at all quarters.
-    allBuckets.forEach((m, i) => {
-      const month = parseInt(m.key.slice(5, 7));
-      const year = m.key.slice(0, 4);
-      if (month === 1 || i === 0) {
-        const monthName = MONTH_NAMES[month - 1];
-        const label = (month === 1) ? year : `${monthName} ${year}`;
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
-        quarterTicks.push(
-          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 6}"/>`
-        );
-      } else if (month === 7) {
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">Jul</text>`);
-        quarterTicks.push(
-          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 3}"/>`
-        );
-      } else if (month === 4 || month === 10) {
-        quarterTicks.push(
-          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 3}"/>`
-        );
-      }
-    });
+    isLabelMonth = () => true;
+    getTickHeight = (month) => (month === 1) ? 5 : 3;
+  } else if (monthCount <= 30) {
+    isLabelMonth = (month) => (month === 1 || month === 4 || month === 7 || month === 10);
+    getTickHeight = (month) => (month === 1) ? 5 : (month === 4 || month === 7 || month === 10) ? 3 : 0;
+  } else if (monthCount <= 60) {
+    isLabelMonth = (month) => (month === 1 || month === 7);
+    getTickHeight = (month) => (month === 1) ? 6 : (month === 4 || month === 7 || month === 10) ? 3 : 0;
   } else {
-    // 43+ months (3.5+ years): year labels at January only, ticks at quarters.
-    const seenYears = new Set();
-    allBuckets.forEach((m, i) => {
-      const year = m.key.slice(0, 4);
-      const month = parseInt(m.key.slice(5, 7));
-      if (!seenYears.has(year) && (month === 1 || i === 0)) {
-        seenYears.add(year);
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`);
-      }
-      if (month === 1 || month === 4 || month === 7 || month === 10) {
-        const tickH = month === 1 ? 6 : 3;
-        quarterTicks.push(
-          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
-        );
-      }
-    });
+    isLabelMonth = (month) => (month === 1);
+    getTickHeight = (month) => (month === 1) ? 6 : (month === 4 || month === 7 || month === 10) ? 3 : 0;
   }
+
+  // First pass: build all candidate labels with x positions.
+  // We always label the first data point so the chart has an unambiguous start —
+  // but mark it so we can suppress/shorten it later if it would collide with
+  // the next regular cadence label.
+  const candidates = [];  // {x, text, isFirst, month, year}
+  allBuckets.forEach((m, i) => {
+    const month = parseInt(m.key.slice(5, 7));
+    const year = m.key.slice(0, 4);
+
+    // Always emit a tick at the right cadence
+    const tickH = getTickHeight(month);
+    if (tickH > 0) {
+      quarterTicks.push(
+        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
+      );
+    }
+
+    // Emit a candidate label if either (a) this is the first index (so the
+    // chart's left edge is anchored to a known date), or (b) this month is
+    // part of the chosen cadence.
+    const monthName = MONTH_NAMES[month - 1];
+    if (i === 0) {
+      candidates.push({
+        x: xFor(i),
+        text: `${monthName} ${year}`,
+        isFirst: true,
+        month, year, index: i
+      });
+    } else if (isLabelMonth(month)) {
+      // Cadence label. Show "Jan 2026" on January (year marker), or just the
+      // month name otherwise.
+      const text = (month === 1) ? `${monthName} ${year}` : monthName;
+      candidates.push({
+        x: xFor(i),
+        text,
+        isFirst: false,
+        month, year, index: i
+      });
+    }
+  });
+
+  // Second pass: de-conflict labels that are too close together.
+  // The most common collision is between the always-labelled first index and
+  // the first regular cadence label that follows shortly after.
+  // We use the approximate label width (chars × 7px) to detect overlap, and
+  // drop the LATER label if both are near each other, since the first-index
+  // label is more important (anchors the chart's left edge to a date).
+  const MIN_LABEL_GAP = 50;  // pixels between label centres
+  const xLabels = [];
+  let lastCentre = -Infinity;
+  candidates.forEach((c, idx) => {
+    if (c.x - lastCentre < MIN_LABEL_GAP) {
+      // Collision: prefer keeping the FIRST candidate when one is the chart's
+      // anchor (isFirst), since that's the user's "where am I" reference.
+      // Otherwise prefer the candidate that carries a year (more information).
+      const prev = xLabels[xLabels.length - 1];
+      if (prev && !prev._isFirst && c.text.includes(' ')) {
+        // Current carries year, previous doesn't → replace previous
+        xLabels.pop();
+        xLabels.push({ html: `<text class="chart-axis-label x" x="${c.x}" y="${H - 26}">${c.text}</text>`, _isFirst: c.isFirst });
+        lastCentre = c.x;
+      }
+      // Otherwise skip this label entirely (keep what we already have)
+    } else {
+      xLabels.push({ html: `<text class="chart-axis-label x" x="${c.x}" y="${H - 26}">${c.text}</text>`, _isFirst: c.isFirst });
+      lastCentre = c.x;
+    }
+  });
+  // Convert label objects back to string array for the SVG joiner downstream
+  const xLabelsHtml = xLabels.map(l => l.html);
 
   // Build scatter dots — one per video, day-of-month interpolated for X.
   // Outliers clipped to the visible Y range, dropped if outside.
@@ -4690,7 +4703,7 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     ${quarterTicks.join('')}
     ${gridLines}
     ${yLabels}
-    ${xLabels.join('')}
+    ${xLabelsHtml.join('')}
     ${yAxisTitle}
     ${scatterDots}
     ${outlierCaption}
