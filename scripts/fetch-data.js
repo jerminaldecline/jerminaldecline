@@ -34,7 +34,8 @@ const CHANNELS = [
   '@TheQuartering',
   '@JeremyHambly',
   '@UnSleevedMedia',
-  '@rcnightmare'
+  '@rcnightmare',
+  '@QuarteringLive'
 ];
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
