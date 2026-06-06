@@ -8,15 +8,19 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Theme colour for mobile browser chrome (Chrome Android, Safari iOS).
+     The two media-conditional tags let the browser pick the right shade per theme. -->
+<meta name="theme-color" content="#f4efe2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="Jerminal Decline — HE'S SHORTLESS!">
 <meta property="og:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jerminaldecline.com">
 <meta property="og:image" content="https://jerminaldecline.com/logo.png">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Jerminal Decline — HE'S SHORTLESS!">
 <meta name="twitter:description" content="Watching TheQuartering's long-form numbers once Shorts are stripped out. Updated nightly.">
-<!-- No-flash theme bootstrap: runs before paint -->
+<meta name="twitter:image" content="https://jerminaldecline.com/logo.png"><!-- No-flash theme bootstrap: runs before paint -->
 <script>
   (function() {
     const stored = localStorage.getItem('theme');
@@ -942,6 +946,8 @@
   .chart-sub-toggle input { cursor: pointer; accent-color: #7c3aed; }
   .chart-sub-toggle:hover { color: var(--text); }
 
+  /* Section heading style — used on h2 elements throughout the page.
+     Overrides browser h2 defaults so semantic markup doesn't bring its own size. */
   .section-title {
     font-size: 1.05rem;
     font-weight: 600;
@@ -949,6 +955,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    line-height: 1.3;
   }
   .section-title:first-child { margin-top: 0; }
   .section-actions { display: flex; gap: 0.4rem; }
@@ -965,6 +972,24 @@
   }
   .btn-secondary:hover { background: var(--surface-2); }
 
+  /* Editorial lede — appears above hero stats, sets the framing for first-time
+     visitors. Larger than body text, lower density than the headlines below,
+     uses muted colour so it reads as context rather than competing with the data. */
+  .lede {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--text);
+    margin: 0 0 1.5rem;
+    max-width: 65ch;
+    /* Empty paragraphs (between renders) should not occupy vertical space */
+  }
+  .lede:empty { display: none; }
+  .lede strong { font-weight: 600; }
+  .lede .lede-num { font-variant-numeric: tabular-nums; }
+  @media (max-width: 540px) {
+    .lede { font-size: 0.97rem; margin-bottom: 1.15rem; }
+  }
+
   .hero-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -979,9 +1004,12 @@
       gap: 0.55rem;
     }
     .hero-stat.featured { grid-column: 1 / -1; }
-    /* When the duration stat is present, it sits at the bottom and goes full-width
-       for balance — the alternative is a stranded single card in a row of two. */
+    /* Production-side stats (duration, total hours uploaded) sit below the
+       audience stats and go full-width on mobile. This avoids a stranded card
+       in a row of two and visually separates the "creator output" group from
+       the "audience response" group above. */
     .hero-stat.duration-stat { grid-column: 1 / -1; }
+    .hero-stat.hours-stat { grid-column: 1 / -1; }
     .hero-stat { padding: 0.85rem 0.9rem; }
     .hero-stat-value { font-size: 1.55rem; }
     .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
@@ -2524,13 +2552,13 @@
         <p class="brand-tagline">My channel is under attack!</p>
       </div>
       <div class="theme-toggle" role="group" aria-label="Theme">
-        <button data-theme-set="light" aria-label="Light theme" title="Light">
+        <button type="button" data-theme-set="light" aria-label="Light theme" title="Light">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </button>
-        <button data-theme-set="system" aria-label="System theme" title="System">
+        <button type="button" data-theme-set="system" aria-label="System theme" title="System">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
         </button>
-        <button data-theme-set="dark" aria-label="Dark theme" title="Dark">
+        <button type="button" data-theme-set="dark" aria-label="Dark theme" title="Dark">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
@@ -2562,10 +2590,10 @@
     </div>
     <div id="resultsBody" style="display: none;">
       <div class="preset-row" id="presetRow">
-        <button class="preset-chip" data-preset="ytd">YTD</button>
-        <button class="preset-chip" data-preset="12m">Last 12 months</button>
-        <button class="preset-chip" data-preset="24m">Last 24 months</button>
-        <button class="preset-chip" data-preset="all">All time</button>
+        <button type="button" class="preset-chip" data-preset="ytd">YTD</button>
+        <button type="button" class="preset-chip" data-preset="12m">Last 12 months</button>
+        <button type="button" class="preset-chip" data-preset="24m">Last 24 months</button>
+        <button type="button" class="preset-chip" data-preset="all">All time</button>
       </div>
       <div class="control-bar">
         <div class="control-bar-period">
@@ -2581,7 +2609,7 @@
             <input type="checkbox" id="compareYoY" checked>
             <span>Compare YoY</span>
           </label>
-          <button class="share-btn" id="shareBtn" title="Copy link to this view" aria-label="Copy link to this view">
+          <button type="button" class="share-btn" id="shareBtn" title="Copy link to this view" aria-label="Copy link to this view">
             <svg class="share-icon-default" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             <svg class="share-icon-done" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span class="share-btn-label">Share</span>
@@ -2590,9 +2618,13 @@
       </div>
 
       <div class="mode-toggle" role="tablist" aria-label="View mode">
-        <button data-mode="long" class="active" role="tab">Long-form only</button>
-        <button data-mode="total" role="tab">Including Shorts</button>
+        <button type="button" data-mode="long" class="active" role="tab">Long-form only</button>
+        <button type="button" data-mode="total" role="tab">Including Shorts</button>
       </div>
+
+      <!-- Channel-aware lede — sets editorial frame before the data. Populated
+           by renderLede() based on the selected channel's headline findings. -->
+      <p class="lede" id="lede"></p>
 
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
@@ -2601,15 +2633,15 @@
            confirmed ad-promoted videos in ad-videos.json -->
       <div class="ad-panel" id="adPanel" hidden></div>
 
-      <div class="section-title trend-title" id="trendSection">
+      <h2 class="section-title trend-title" id="trendSection">
         <span>Monthly trend</span>
         <span class="trend-legend" id="trendLegend"></span>
-      </div>
+      </h2>
       <div class="chart-controls-row">
         <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
-          <button data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
-          <button data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
-          <button data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
+          <button type="button" data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
+          <button type="button" data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+          <button type="button" data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
         </div>
       </div>
       <div class="chart-wrap" id="chartWrap">
@@ -2618,7 +2650,7 @@
       </div>
 
       <div class="wordcloud-section">
-        <button class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
+        <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
           <span class="wordcloud-caret">▸</span>
           <span>Title word cloud</span>
           <span class="wordcloud-hint" id="wordcloudHint"></span>
@@ -2630,21 +2662,21 @@
       </div>
 
       <div id="monthlySection">
-        <div class="section-title">
+        <h2 class="section-title">
           <span>Monthly breakdown</span>
           <div class="section-actions">
-            <button class="btn-secondary" id="expandAll">Expand all</button>
-            <button class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
+            <button type="button" class="btn-secondary" id="expandAll">Expand all</button>
+            <button type="button" class="btn-secondary" id="downloadMonthlyCsv">CSV</button>
           </div>
-        </div>
+        </h2>
         <div id="monthlyBreakdownChips"></div>
         <div class="monthly-list" id="monthlyList"></div>
       </div>
 
       <div id="windowSection" hidden>
-        <div class="section-title">
+        <h2 class="section-title">
           <span id="windowTitle">Videos in range</span>
-        </div>
+        </h2>
         <div class="window-list" id="windowList"></div>
       </div>
     </div>
@@ -2724,6 +2756,26 @@ function fmtDurStat(secs) {
   // Round to whole seconds for stat display (medians can be fractional)
   return formatDuration(Math.round(secs));
 }
+// Format a (potentially large) duration in seconds as a human-readable
+// "amount of content" stat — used for "hours uploaded" totals.
+// Rounds to the nearest minute. Maxes out at hours (no days unit) so the
+// magnitudes are directly comparable across windows of different sizes:
+//   45      → "1m"
+//   2700    → "45m"
+//   3700    → "1h 2m"
+//   75600   → "21h"
+//   100000  → "27h 47m"
+// Zero-valued minutes are dropped when the value is a whole number of hours.
+function fmtHours(secs) {
+  const totalMinutes = Math.round(secs / 60);
+  if (totalMinutes <= 0) return '0m';
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const parts = [];
+  if (hours) parts.push(`${hours}h`);
+  if (minutes) parts.push(`${minutes}m`);
+  return parts.join(' ');
+}
 function monthKey(date) {
   const d = new Date(date);
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
@@ -2795,13 +2847,19 @@ function summarise(videos) {
       ? durations[mid]
       : (durations[mid - 1] + durations[mid]) / 2;
   }
+  // Total seconds of long-form content uploaded in this window — answers
+  // "how much content was published" as opposed to "how many videos" or
+  // "how long was the typical video". Useful for spotting cases where video
+  // count stays flat but per-video duration rises, inflating total upload time.
+  const longFormTotalSeconds = durations.reduce((s, d) => s + d, 0);
   return {
     longForm, shorts,
     longViews, shortViews,
     longAvg: longForm.length ? longViews / longForm.length : 0,
     shortAvg: shorts.length ? shortViews / shorts.length : 0,
     medianDuration,
-    longFormDurations: durations.length,  // count of videos with real durations
+    longFormDurations: durations.length,
+    longFormTotalSeconds,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
     totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
@@ -3076,6 +3134,7 @@ async function loadData() {
     renderFooterMeta();
     renderPeakStrip();
     renderAdPanel();
+    renderLede();
 
     // Default range: Jan 1 of current year to today, overridable via URL params
     const today = new Date();
@@ -3179,10 +3238,10 @@ function rebuild() {
     emptyMsg.innerHTML = `
       <div class="empty-state-msg">No uploads found between <strong>${startDate}</strong> and <strong>${endDate}</strong>.</div>
       <div class="empty-state-actions">
-        <button class="empty-state-btn" data-empty-action="7d">Use last 7 days</button>
-        <button class="empty-state-btn" data-empty-action="30d">Use last 30 days</button>
-        <button class="empty-state-btn" data-empty-action="ytd">Year to date</button>
-        <button class="empty-state-btn" data-empty-action="all">All time</button>
+        <button type="button" class="empty-state-btn" data-empty-action="7d">Use last 7 days</button>
+        <button type="button" class="empty-state-btn" data-empty-action="30d">Use last 30 days</button>
+        <button type="button" class="empty-state-btn" data-empty-action="ytd">Year to date</button>
+        <button type="button" class="empty-state-btn" data-empty-action="all">All time</button>
       </div>
     `;
     emptyMsg.style.display = 'block';
@@ -3326,7 +3385,7 @@ function buildChannelBreakdownHtml(videos, opts) {
   }).join('');
 
   const clearChip = (interactive && showClear)
-    ? `<button class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
+    ? `<button type="button" class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
     : '';
   return `<div class="channel-breakdown">${chips}${clearChip}</div>`;
 }
@@ -3489,10 +3548,10 @@ function renderChannelSelector() {
   for (const id of orderedIds) {
     const ch = dataset.channels[id];
     const active = selectedChannel === id;
-    chips.push(`<button class="channel-chip${active ? ' active' : ''}" data-channel-id="${id}" role="tab" aria-selected="${active}">${escapeHtml(ch.title)}</button>`);
+    chips.push(`<button type="button" class="channel-chip${active ? ' active' : ''}" data-channel-id="${id}" role="tab" aria-selected="${active}">${escapeHtml(ch.title)}</button>`);
   }
   // "All combined" goes last
-  chips.push(`<button class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
+  chips.push(`<button type="button" class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
   el.innerHTML = chips.join('');
 }
 
@@ -3580,7 +3639,7 @@ function renderPeakStrip() {
   const peakLine = `
     <div class="peak-line">
       <span class="peak-strip-label">All-time peak</span>
-      <span><button class="peak-month-jump" data-jump-month-key="${peakKey}" title="Jump to this month">${labelFromKey(peakKey)}</button> · <strong>${fmt(peakViews)}</strong> long-form views</span>
+      <span><button type="button" class="peak-month-jump" data-jump-month-key="${peakKey}" title="Jump to this month">${labelFromKey(peakKey)}</button> · <strong>${fmt(peakViews)}</strong> long-form views</span>
     </div>
   `;
 
@@ -3591,7 +3650,7 @@ function renderPeakStrip() {
     lowLine = `
       <div class="peak-line">
         <span class="peak-strip-label">All-time low</span>
-        <span><button class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(▼${Math.abs(fromPeak).toFixed(1)}% from peak)</span></span>
+        <span><button type="button" class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(▼${Math.abs(fromPeak).toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -3606,7 +3665,7 @@ function renderPeakStrip() {
     downLine = `
       <div class="peak-line">
         <span class="peak-strip-label">Latest complete month</span>
-        <span><button class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="${cls}">(${arrowSym}${Math.abs(drop).toFixed(1)}% from peak)</span></span>
+        <span><button type="button" class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="${cls}">(${arrowSym}${Math.abs(drop).toFixed(1)}% from peak)</span></span>
       </div>
     `;
   }
@@ -3769,16 +3828,21 @@ function renderAdPanel() {
     const arrow = isActive
       ? (adPanelSort.dir === 'asc' ? '<span class="sort-arrow active">↑</span>' : '<span class="sort-arrow active">↓</span>')
       : '<span class="sort-arrow"></span>';
-    return `<th class="${extraClass} sortable${isActive ? ' active-sort' : ''}" data-ad-sort="${colKey}" role="button" tabindex="0">${label}${arrow}</th>`;
+    // Use proper table semantics: aria-sort communicates state to screen readers
+    // ("Views, column header, sorted descending"). Native <th> already implies
+    // columnheader role, so we don't override with role="button" — that would
+    // confuse assistive tech into announcing "button" instead of "column header".
+    const ariaSort = isActive ? (adPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
+    return `<th class="${extraClass} sortable${isActive ? ' active-sort' : ''}" data-ad-sort="${colKey}" aria-sort="${ariaSort}" tabindex="0">${label}${arrow}</th>`;
   }
 
   panel.hidden = false;
   panel.innerHTML = `
-    <button class="ad-panel-toggle" aria-expanded="false" id="adPanelToggle">
+    <button type="button" class="ad-panel-toggle" aria-expanded="false" id="adPanelToggle">
       <div class="ad-panel-header">
         <div class="ad-panel-header-left">
           <span class="ad-panel-eyebrow">Confirmed paid promotion</span>
-          <span class="ad-panel-summary">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span>
+          <span class="ad-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span></span>
         </div>
         <span class="ad-panel-caret" aria-hidden="true"></span>
       </div>
@@ -3843,6 +3907,8 @@ function renderAdPanel() {
       panel.querySelectorAll('[data-ad-sort]').forEach(hdr => {
         const isActive = hdr.getAttribute('data-ad-sort') === adPanelSort.col;
         hdr.classList.toggle('active-sort', isActive);
+        // Update aria-sort so screen readers announce the current sort state
+        hdr.setAttribute('aria-sort', isActive ? (adPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
         const arrow = hdr.querySelector('.sort-arrow');
         if (arrow) {
           arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
@@ -3858,6 +3924,93 @@ function renderAdPanel() {
       }
     });
   });
+}
+
+// Channel-aware lede — the opening sentence(s) that frame what the data shows.
+// First-time visitors land on the site without knowing the story; the lede
+// gives them an instant "this is what you're looking at" before they parse stats.
+//
+// Sourced entirely from the dataset (no editorialising beyond what the numbers
+// support). For TheQuartering (the main subject) it combines peak-vs-current,
+// duration trend, and ad campaign count. For secondary channels it gives a
+// shorter framing because they're not the central story.
+function renderLede() {
+  const el = document.getElementById('lede');
+  if (!el) return;
+
+  // Hide for ALL view — too many stories to compress
+  if (selectedChannel === 'ALL') {
+    el.innerHTML = '';
+    return;
+  }
+
+  const chData = dataset?.channels?.[selectedChannel];
+  if (!chData || !monthlyData.length) { el.innerHTML = ''; return; }
+  const channelTitle = chData.title || 'Channel';
+
+  // Find the peak long-form-views month (excluding current in-progress)
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const completeMonths = monthlyData.filter(m => m.key !== currentMonthKey);
+  if (!completeMonths.length) { el.innerHTML = ''; return; }
+  const peakMonth = completeMonths.reduce((best, m) =>
+    (m.curr.longViews > best.curr.longViews) ? m : best, completeMonths[0]);
+  const latestComplete = completeMonths[completeMonths.length - 1];
+  if (!peakMonth || !latestComplete || peakMonth === latestComplete) {
+    // Channel is at its peak — no decline story to tell
+    el.innerHTML = '';
+    return;
+  }
+
+  const peakViews = peakMonth.curr.longViews;
+  const latestViews = latestComplete.curr.longViews;
+  const dropPct = (1 - latestViews / peakViews) * 100;
+  if (dropPct < 20) {
+    // Not enough decline to be the headline — skip the lede
+    el.innerHTML = '';
+    return;
+  }
+
+  // Optional second beat: duration trend (if we have enough data points)
+  let durationBeat = '';
+  const recentDurations = completeMonths.slice(-12)
+    .map(m => m.curr.medianDuration)
+    .filter(d => d > 0);
+  if (recentDurations.length >= 6) {
+    const baseline = recentDurations.slice(0, Math.max(1, Math.floor(recentDurations.length / 2)));
+    const recent = recentDurations.slice(-2);
+    if (baseline.length && recent.length) {
+      const baselineMed = baseline.reduce((s,v)=>s+v,0) / baseline.length;
+      const recentMed = recent.reduce((s,v)=>s+v,0) / recent.length;
+      const durChange = (recentMed - baselineMed) / baselineMed * 100;
+      if (Math.abs(durChange) >= 15) {
+        function fmtDur(s) {
+          const m = Math.floor(s/60), r = Math.round(s%60);
+          return `${m}:${String(r).padStart(2,'0')}`;
+        }
+        const direction = durChange > 0 ? 'risen' : 'fallen';
+        durationBeat = ` Median video length has <strong>${direction}</strong> from <span class="lede-num">${fmtDur(baselineMed)}</span> to <span class="lede-num">${fmtDur(recentMed)}</span>.`;
+      }
+    }
+  }
+
+  // Optional third beat: ad campaign count if we have ad data for this channel
+  let adBeat = '';
+  const channelHandle = chData.handle;
+  const adEntry = adVideoData?.channels?.[channelHandle];
+  if (adEntry && adEntry.videoIds?.length) {
+    const adCount = adEntry.videoIds.length;
+    adBeat = ` <strong><span class="lede-num">${adCount}</span></strong> of their videos have been promoted through paid Google Ad campaigns.`;
+  }
+
+  // Peak month formatted nicely
+  function ymLabel(key) {
+    const [y, m] = key.split('-');
+    return new Date(parseInt(y), parseInt(m)-1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
+  const lede = `<strong>${escapeHtml(channelTitle)}</strong>'s long-form views are down <strong><span class="lede-num">${dropPct.toFixed(0)}%</span></strong> from their peak in ${ymLabel(peakMonth.key)}.${durationBeat}${adBeat}`;
+  el.innerHTML = lede;
 }
 
 function renderHeroStats(curr, prev) {
@@ -3915,12 +4068,40 @@ function renderHeroStats(curr, prev) {
     });
   }
 
+  // Total long-form runtime — "how many hours of content was produced".
+  // Complements the median duration stat: median tells you per-video, this
+  // tells you the cumulative output. Useful when video count is flat but
+  // per-video duration is rising (the case here for TheQuartering since May).
+  // Long-form mode only since the metric is about long-form content specifically.
+  //
+  // Threshold of 1: unlike the median (which needs ≥5 for statistical meaning),
+  // a sum is accurate at any count — 1 video × 12 minutes = 12 minutes, no
+  // statistical caveat. So this card surfaces on single-day windows too,
+  // not just on multi-week ranges where the median qualifies.
+  if (viewMode === 'long' && curr.longFormDurations >= 1) {
+    const totalSecs = curr.longFormTotalSeconds;
+    const prevTotalSecs = prev && prev.longFormDurations >= 1 ? prev.longFormTotalSeconds : null;
+    stats.push({
+      label: 'Hours of long-form uploaded',
+      raw: totalSecs,
+      value: fmtHours(totalSecs),
+      fullValue: fmtHours(totalSecs),
+      // Use the views/quantity sign convention here (more is "up", less is "down").
+      // Unlike median length, total output IS directional — uploading more is
+      // typically a creator-positive signal; uploading less suggests slowdown.
+      sub: prevTotalSecs != null
+        ? `vs ${fmtHours(prevTotalSecs)} last year ${deltaPill(totalSecs, prevTotalSecs)}`
+        : '',
+      hoursStat: true
+    });
+  }
+
   document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
-    <div class="hero-stat${s.featured ? ' featured' : ''}${s.durationStat ? ' duration-stat' : ''}">
+    <div class="hero-stat${s.featured ? ' featured' : ''}${s.durationStat ? ' duration-stat' : ''}${s.hoursStat ? ' hours-stat' : ''}">
       <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" data-duration="${s.durationStat ? '1' : '0'}" title="${s.fullValue}">
+      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" data-duration="${s.durationStat ? '1' : '0'}" data-hours="${s.hoursStat ? '1' : '0'}" title="${s.fullValue}">
         <span class="hero-stat-value-spacer">${s.value}</span>
-        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : '0')}</span>
+        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : s.hoursStat ? '0m' : '0')}</span>
       </div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
@@ -3934,9 +4115,12 @@ function renderHeroStats(curr, prev) {
       const parent = el.parentElement;
       const useCompact = parent.dataset.compact === '1';
       const isDuration = parent.dataset.duration === '1';
+      const isHours = parent.dataset.hours === '1';
       const duration = 900;
       const start = performance.now();
-      const formatter = isDuration ? fmtDurStat : (useCompact ? fmtCompact : fmt);
+      const formatter = isHours ? fmtHours
+                      : isDuration ? fmtDurStat
+                      : (useCompact ? fmtCompact : fmt);
       function tick(now) {
         const t = Math.min(1, (now - start) / duration);
         const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
@@ -4875,7 +5059,7 @@ function renderVideoRows(videos, emptyText) {
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a>${adBadge}${titleSubtitle}</div>
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
       </div>
@@ -5163,6 +5347,12 @@ function buildShareUrl() {
 function syncUrlBar() {
   const url = buildShareUrl();
   window.history.replaceState({}, '', url);
+  // Keep the browser tab title in sync with the selected channel — helps users
+  // tracking multiple tabs identify which channel they're viewing at a glance.
+  const channelName = activeDisplayName();
+  document.title = channelName && channelName !== 'Channel'
+    ? `${channelName} — Jerminal Decline`
+    : 'Jerminal Decline';
 }
 // Update URL when any view-state input changes
 ['startDate', 'endDate', 'compareYoY'].forEach(id => {
@@ -5185,6 +5375,7 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   renderFooterMeta();
   renderPeakStrip();
   renderAdPanel();
+  renderLede();
   // If a mood mode is active, refresh the floating low-figure text so it
   // reflects the newly-selected channel's data
   if (window.__refreshActiveFloaters) window.__refreshActiveFloaters();
