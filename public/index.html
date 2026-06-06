@@ -64,6 +64,11 @@
     /* Prediction card text */
     --pred-text: #f0e9d9;
 
+    /* Scatter dot colour — strong contrast against the light cream background.
+       Teal because it sits well apart from blue (views), purple (duration line),
+       and red (in-progress) on the colour wheel. */
+    --scatter: #0d9488;
+
     --radius: 10px;
     --radius-sm: 6px;
     --shadow-sm: 0 1px 2px rgba(28, 26, 20, 0.04);
@@ -102,6 +107,9 @@
     --bg-glow-1: rgba(106, 163, 255, 0.05);
     --bg-glow-2: rgba(255, 167, 82, 0.04);
     --pred-text: #ede8d8;
+
+    /* Scatter dot colour — brighter teal for visibility on the dark navy surface */
+    --scatter: #5eead4;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
@@ -579,6 +587,14 @@
     .coffee-button { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
   }
 
+  /* Footer X link — inline alongside the other small footer links, with a
+     subtle icon. Quiet by design; the coffee button is the primary CTA. */
+  .footer-x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
   header { margin-bottom: 1.5rem; }
   h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
   .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
@@ -902,6 +918,29 @@
     color: var(--text);
     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   }
+  /* Row containing the metric toggle plus its optional companion controls.
+     Subtle alignment so they read as related but not nested. */
+  .chart-controls-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.85rem;
+    margin: 0 0 0.6rem;
+  }
+  .chart-controls-row .chart-metric-toggle { margin: 0; }
+  /* Sub-toggle (e.g. "Show all videos") — appears alongside the metric toggle
+     when it's contextually relevant. Smaller and quieter than the main toggle. */
+  .chart-sub-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .chart-sub-toggle input { cursor: pointer; accent-color: #7c3aed; }
+  .chart-sub-toggle:hover { color: var(--text); }
 
   .section-title {
     font-size: 1.05rem;
@@ -1103,6 +1142,9 @@
     .chart-wrap { padding: 0.65rem 0.35rem 0.5rem; }
   }
   .chart-axis-line { stroke: var(--border-strong); stroke-width: 1; }
+  /* Small tick marks at quarter boundaries on the X axis (scatter chart).
+     Gives a measurable scale reference between year labels. */
+  .chart-axis-tick { stroke: var(--border-strong); stroke-width: 1; opacity: 0.6; }
   .chart-grid-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 3; }
   .chart-axis-label { fill: var(--text-dim); font-size: 13px; font-family: inherit; }
   .chart-axis-label.x { text-anchor: middle; }
@@ -1113,6 +1155,23 @@
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
   .chart-line-duration { fill: none; stroke: #7c3aed; stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round; }
   .chart-dot.duration { fill: #7c3aed; }
+  /* Scatter dots — one per long-form video in "All videos" mode.
+     Theme-aware colour so they contrast well in both light and dark. Opacity
+     tuned for ~7000 dots: low enough that overlapping dots build into a
+     readable density field, high enough that the band of typical durations
+     reads distinctly from the chart background. */
+  .chart-scatter-dot {
+    fill: var(--scatter);
+    opacity: 0.32;
+    pointer-events: none;
+  }
+  /* Legend swatch for scatter — solid filled circle equivalent */
+  .trend-legend-swatch.scatter {
+    background: var(--scatter);
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+  }
   /* Right-axis labels for the duration scale */
   .chart-axis-label.y.dur { text-anchor: start; fill: #7c3aed; }
 
@@ -1739,6 +1798,201 @@
     margin-top: 0.15rem;
     white-space: nowrap;
   }
+  /* Inline "ad" badge — appears next to video titles for videos that have been
+     identified as paid Google Ad campaigns via the Google Ads Transparency Centre.
+     Subtle but visible: factual annotation, not editorial commentary. */
+  .ad-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--shorts-soft);
+    color: var(--shorts);
+    border: 1px solid var(--shorts);
+    border-radius: 4px;
+    padding: 0 5px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: help;
+  }
+  [data-theme="dark"] .ad-badge {
+    background: transparent;
+  }
+  /* Info hint inside the ad badge — quieter than the "ad" text but still
+     part of the same hover target. Signals there's more info on hover. */
+  .ad-badge-info {
+    font-size: 0.78em;
+    opacity: 0.7;
+    margin-left: 1px;
+    font-weight: 500;
+  }
+
+  /* Ad campaigns panel — shows the channel's confirmed paid promotion data.
+     Collapsible: header is always visible (summary stats in one line);
+     body with full per-campaign performance table appears on click. */
+  .ad-panel {
+    background: var(--surface);
+    border: 1px solid var(--shorts);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 1rem 0 1.5rem;
+    overflow: hidden;
+  }
+  /* The whole header is a button so the entire bar is the click target.
+     Reset native button styling so it looks like a panel header. */
+  .ad-panel-toggle {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;
+  }
+  .ad-panel-toggle:hover { background: var(--surface-2); }
+  .ad-panel-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .ad-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+  }
+  .ad-panel-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .ad-panel-eyebrow {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--shorts);
+  }
+  .ad-panel-summary {
+    font-size: 0.92rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  /* Caret rotates to indicate expanded state */
+  .ad-panel-caret {
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;
+  }
+  .ad-panel-toggle[aria-expanded="true"] .ad-panel-caret {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+  }
+
+  /* Expanded body */
+  .ad-panel-body {
+    padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  .ad-panel-meta {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 0.85rem 0;
+    line-height: 1.5;
+  }
+  .ad-panel-meta a {
+    color: var(--text-muted);
+    text-decoration: underline;
+  }
+  .ad-panel-meta a:hover { color: var(--accent); }
+
+  /* Performance table — scrollable on overflow */
+  .ad-perf-table-wrap {
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .ad-perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .ad-perf-table thead th {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .ad-perf-table th.col-num,
+  .ad-perf-table td.col-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ad-perf-table td {
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ad-perf-table tbody tr:last-child td { border-bottom: none; }
+  .ad-perf-table tbody tr:hover { background: var(--surface-2); }
+  .ad-perf-table .col-vid a {
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    line-height: 1.3;
+  }
+  .ad-perf-table .col-vid a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .ad-perf-date {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+  }
+
+  /* Performance multiplier colouring — visual hierarchy at a glance.
+     Strong = significantly above median (likely meaningful boost).
+     Up = modestly above. Flat = around median. Down = below median. */
+  .perf-strong { color: var(--down); font-weight: 600; }
+  .perf-up { color: var(--text); }
+  .perf-flat { color: var(--text-muted); }
+  .perf-down { color: var(--text-dim); }
+
+  .ad-panel-footnote {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.85rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 540px) {
+    .ad-panel-toggle { padding: 0.7rem 0.85rem; }
+    .ad-panel-body { padding: 0 0.85rem 0.85rem; }
+    .ad-perf-table { font-size: 0.8rem; }
+    .ad-perf-table thead th,
+    .ad-perf-table td { padding: 0.45rem 0.55rem; }
+  }
   .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.82rem; }
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
   .group-content { max-height: 360px; overflow-y: auto; }
@@ -2311,13 +2565,20 @@
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
 
+      <!-- Ad campaigns panel — populated only when the selected channel has
+           confirmed ad-promoted videos in ad-videos.json -->
+      <div class="ad-panel" id="adPanel" hidden></div>
+
       <div class="section-title trend-title" id="trendSection">
         <span>Monthly trend</span>
         <span class="trend-legend" id="trendLegend"></span>
       </div>
-      <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
-        <button data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
-        <button data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+      <div class="chart-controls-row">
+        <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
+          <button data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
+          <button data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+          <button data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
+        </div>
       </div>
       <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Monthly long-form views trend chart"></svg>
@@ -2384,6 +2645,12 @@
       Shorts defined as videos ≤3 minutes.
     </p>
     <p style="margin: 0; font-size: 0.75rem;">
+      <a href="https://x.com/JerminalDecline" target="_blank" rel="noopener" class="footer-x-link" aria-label="Follow @JerminalDecline on X">
+        <svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true" focusable="false" style="vertical-align: -1px;">
+          <path fill="currentColor" d="M18.244 2H21.5l-7.5 8.567L23 22h-6.844l-5.36-6.99L4.5 22H1.244l8.02-9.16L1 2h7.014l4.86 6.43L18.244 2zm-1.2 18h1.9L7.044 4H5.06l11.984 16z"/>
+        </svg>
+        @JerminalDecline
+      </a> ·
       <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a> ·
       <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> ·
       <span id="footerMeta"></span>
@@ -2395,9 +2662,13 @@
 let dataset = null;
 let viewMode = 'long';
 let selectedChannel = 'ALL'; // either a channel ID string, or 'ALL'
-let chartMetric = 'views';   // 'views' | 'views_length'
+let chartMetric = 'views';   // 'views' | 'views_length' | 'all_videos'
 let monthlyData = [];
 let heroAnimated = false;
+// Set of YouTube video IDs identified as paid Google Ad campaigns
+// (loaded from ad-videos.json, curated from Google Ads Transparency Centre)
+let adVideoIds = new Set();
+let adVideoData = null;  // Full ad data including channel metadata
 
 // --- Helpers ---
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
@@ -2719,6 +2990,27 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dataset = await res.json();
 
+    // Load the curated list of videos identified as paid Google Ad campaigns.
+    // This is human-maintained (extracted from Google Ads Transparency Centre)
+    // rather than YouTube API data, so it lives in its own file. Failure to load
+    // is non-fatal — the site works without it, just without the ad annotations.
+    try {
+      const adRes = await fetch('ad-videos.json?t=' + Date.now());
+      if (adRes.ok) {
+        const adData = await adRes.json();
+        adVideoData = adData;
+        // Build a fast O(1) lookup of "is this video ID a known ad-promoted video"
+        adVideoIds = new Set();
+        for (const channelKey of Object.keys(adData.channels || {})) {
+          for (const vid of adData.channels[channelKey].videoIds || []) {
+            adVideoIds.add(vid);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Could not load ad-videos.json:', err);
+    }
+
     // Default to TheQuartering, override from URL if specified
     const quarteringId = Object.keys(dataset.channels || {}).find(
       id => dataset.channels[id].handle === '@TheQuartering'
@@ -2748,6 +3040,7 @@ async function loadData() {
 
     renderFooterMeta();
     renderPeakStrip();
+    renderAdPanel();
 
     // Default range: Jan 1 of current year to today, overridable via URL params
     const today = new Date();
@@ -3291,6 +3584,165 @@ function renderPeakStrip() {
   el.innerHTML = peakLine + lowLine + downLine + footnote;
 }
 
+// Renders the "confirmed paid promotion" panel — visible only when the selected
+// channel has matching ad data in ad-videos.json. The data is curated from the
+// Google Ads Transparency Centre; the panel surfaces the count, reach, recency,
+// and methodology so the finding is verifiable rather than speculative.
+//
+// The panel starts collapsed showing just headline stats. Clicking expands a
+// per-campaign performance table comparing each ad video's views against the
+// median views of long-form videos uploaded in the same month — controlling for
+// the temporal trend (channel-wide views have been declining, so a video's
+// absolute views matter less than how it performs vs its monthly peers).
+function renderAdPanel() {
+  const panel = document.getElementById('adPanel');
+  if (!panel) return;
+
+  // Only show if we have ad data for the selected channel
+  if (!adVideoData || selectedChannel === 'ALL' || !adVideoIds.size) {
+    panel.hidden = true;
+    return;
+  }
+  const channelHandle = dataset?.channels?.[selectedChannel]?.handle;
+  if (!channelHandle) { panel.hidden = true; return; }
+  const channelEntry = adVideoData.channels?.[channelHandle];
+  if (!channelEntry || !channelEntry.videoIds?.length) {
+    panel.hidden = true;
+    return;
+  }
+
+  // Pull metadata about the matching videos from the main dataset
+  const idSet = new Set(channelEntry.videoIds);
+  const matched = (dataset.videos || []).filter(v => idSet.has(v.id) && v.channelId === selectedChannel);
+  if (!matched.length) { panel.hidden = true; return; }
+
+  // Headline stats
+  const totalViews = matched.reduce((s, v) => s + (v.views || 0), 0);
+  const dates = matched.map(v => v.publishedAt).sort();
+  const earliest = dates[0].slice(0, 10);
+  const latest = dates[dates.length - 1].slice(0, 10);
+
+  // Pre-compute monthly medians of LONG-FORM videos for this channel.
+  // Used to contextualise each ad video's performance against its peers
+  // (controls for the temporal view-decline trend).
+  const monthlyLongFormViews = {};  // 'YYYY-MM' -> [views, views, ...]
+  for (const v of dataset.videos) {
+    if (v.channelId !== selectedChannel) continue;
+    if (v.unavailable || v.isShort) continue;
+    if (!(v.views > 0)) continue;
+    const key = v.publishedAt.slice(0, 7);
+    (monthlyLongFormViews[key] ||= []).push(v.views);
+  }
+  function median(arr) {
+    if (!arr.length) return 0;
+    const s = arr.slice().sort((a, b) => a - b);
+    return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2;
+  }
+  const monthlyMedians = {};
+  for (const [k, arr] of Object.entries(monthlyLongFormViews)) {
+    monthlyMedians[k] = median(arr);
+  }
+
+  // Build per-ad performance rows. For each ad video:
+  //   - views (actual)
+  //   - median of long-form videos uploaded in the same month
+  //   - delta: views − median (the "excess" over typical)
+  //   - multiplier: views / median (X.Xx the typical video)
+  // Sorted by views descending so top performers surface first.
+  const rows = matched.map(v => {
+    const monthKey = v.publishedAt.slice(0, 7);
+    const monthMedian = monthlyMedians[monthKey] || 0;
+    const views = v.views || 0;
+    const excess = monthMedian > 0 ? views - monthMedian : null;
+    const multiplier = monthMedian > 0 ? views / monthMedian : null;
+    return { v, views, monthMedian, excess, multiplier, monthKey };
+  }).sort((a, b) => b.views - a.views);
+
+  // Aggregate: how many ads outperformed their month's median? Total excess views?
+  const outperformed = rows.filter(r => r.excess !== null && r.excess > 0).length;
+  const totalExcess = rows.reduce((s, r) => s + (r.excess && r.excess > 0 ? r.excess : 0), 0);
+
+  function ymLabel(isoDate) {
+    const d = new Date(isoDate);
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+  function fmtMult(m) {
+    if (m == null) return '—';
+    if (m >= 1) return `${m.toFixed(1)}× median`;
+    return `${(m * 100).toFixed(0)}% of median`;
+  }
+  function perfClass(m) {
+    if (m == null) return '';
+    if (m >= 2) return 'perf-strong';
+    if (m >= 1.2) return 'perf-up';
+    if (m <= 0.8) return 'perf-down';
+    return 'perf-flat';
+  }
+
+  panel.hidden = false;
+  panel.innerHTML = `
+    <button class="ad-panel-toggle" aria-expanded="false" id="adPanelToggle">
+      <div class="ad-panel-header">
+        <div class="ad-panel-header-left">
+          <span class="ad-panel-eyebrow">Confirmed paid promotion</span>
+          <span class="ad-panel-summary">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span>
+        </div>
+        <span class="ad-panel-caret" aria-hidden="true"></span>
+      </div>
+    </button>
+    <div class="ad-panel-body" id="adPanelBody" hidden>
+      <div class="ad-panel-meta">
+        Identified via the
+        <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
+        Advertiser: <strong>${escapeHtml(adVideoData.meta?.advertiser || 'unknown')}</strong>.
+        ${outperformed > 0 ? `${outperformed} of ${rows.length} ad-promoted videos exceeded the median views for their upload month, accounting for ${fmtCompact(totalExcess)} excess views above typical.` : ''}
+      </div>
+      <div class="ad-perf-table-wrap">
+        <table class="ad-perf-table">
+          <thead>
+            <tr>
+              <th class="col-vid">Video</th>
+              <th class="col-num">Views</th>
+              <th class="col-num hide-mobile">Month median</th>
+              <th class="col-num">Performance</th>
+              <th class="col-num hide-mobile">Excess over median</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td class="col-vid">
+                  <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
+                  <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}</span>
+                </td>
+                <td class="col-num">${fmt(r.views)}</td>
+                <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
+                <td class="col-num ${perfClass(r.multiplier)}">${fmtMult(r.multiplier)}</td>
+                <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="ad-panel-footnote">
+        <strong>Reading this table:</strong> each video's views compared to the median views of long-form videos uploaded the same month.
+        A video at 2× median earned twice as many views as the typical upload that month. "Excess over median" is the views above the typical baseline —
+        a rough proxy for the impact of paid promotion, though some excess may reflect organic virality.
+        Individual videos are also flagged with an <span class="ad-badge">ad</span> badge in the lists below.
+      </div>
+    </div>
+  `;
+
+  // Toggle handler
+  const toggle = document.getElementById('adPanelToggle');
+  const body = document.getElementById('adPanelBody');
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    body.hidden = expanded;
+  });
+}
+
 function renderHeroStats(curr, prev) {
   const c = metricsFor(curr);
   const p = prev ? metricsFor(prev) : null;
@@ -3434,6 +3886,15 @@ function renderTrendChart(yoy) {
     return;
   }
 
+  // "All videos" mode: dedicated scatter chart, no lines. Branch here and
+  // return early so the rest of the function (line/dual-axis rendering) doesn't run.
+  const isAllVideosMode = chartMetric === 'all_videos'
+    && viewMode === 'long'
+    && channelQualifiesForLengthChart(selectedChannel);
+  if (isAllVideosMode) {
+    return renderAllVideosChart(chartData, inProgressMonth);
+  }
+
   // Are we in views+length mode? Only effective when:
   // - chartMetric is set to 'views_length'
   // - We're in long-form view (median duration is a long-form metric)
@@ -3504,6 +3965,8 @@ function renderTrendChart(yoy) {
   let durDots = '';
   let durTicks = [];
   let yForDur = null;
+  let durMin = 0;
+  let durMax = 0;
   if (showDuration) {
     const durValid = durations.filter(d => d > 0);
     // Also factor in the in-progress month's duration (if present) and its YoY counterpart
@@ -3523,8 +3986,8 @@ function renderTrendChart(yoy) {
     // like 11:00, 12:00, 13:00 land where they should — rather than mathematical
     // fifths like 11:28, 12:57 from a simple linear split.
     const axis = niceDurationAxis(durMinRaw, durMaxRaw);
-    const durMin = axis.min;
-    const durMax = axis.max;
+    durMin = axis.min;
+    durMax = axis.max;
     yForDur = v => P.top + (1 - (v - durMin) / (durMax - durMin)) * innerH;
 
     // Build path — break the line on zero/missing values
@@ -3876,6 +4339,213 @@ function renderTrendChart(yoy) {
   function hideTooltip() { tooltip.style.display = 'none'; }
 }
 
+// Dedicated scatter chart — every long-form video as a dot at (publishDate, duration).
+// No lines, no YoY comparison, no median overlay. This is the raw-data view: the
+// median trend chart describes what's happening; this view shows you every video
+// the median is summarising. The eye reads the cloud as a "band of typical durations"
+// that shifts over time, with the recent spike visible as the band stepping upward.
+function renderAllVideosChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  tooltip.style.display = 'none';
+
+  // Legend
+  legend.innerHTML = '<span class="trend-legend-item"><span class="trend-legend-swatch scatter"></span> Each dot is one long-form video</span>';
+
+  // Combine complete months + in-progress month to plot the whole timeline
+  const allBuckets = [...chartData];
+  if (inProgressMonth) allBuckets.push(inProgressMonth);
+
+  // Collect all video durations to compute Y axis bounds.
+  // Outliers are common (90+ minute livestreams), so we clip the Y range to
+  // a percentile rather than using true min/max — keeps the chart focused on
+  // the bulk of the distribution where the story lives. Without clipping a single
+  // 2-hour stream would compress the typical band into a thin line at the bottom.
+  const allDurations = [];
+  for (const m of allBuckets) {
+    for (const v of (m.curr.longForm || [])) {
+      if (v.durationSec > 0) allDurations.push(v.durationSec);
+    }
+  }
+  if (!allDurations.length) {
+    svg.innerHTML = '';
+    return;
+  }
+  allDurations.sort((a, b) => a - b);
+  // Use 1st and 99th percentiles to define the visible range. Most channels'
+  // typical content falls well within this, while extreme outliers (livestreams)
+  // are excluded from rendering.
+  const pct = (arr, p) => arr[Math.floor(arr.length * p)];
+  const rawMin = pct(allDurations, 0.01);
+  const rawMax = pct(allDurations, 0.99);
+  const axis = niceDurationAxis(rawMin, rawMax);
+  const durMin = axis.min;
+  const durMax = axis.max;
+
+  // Layout
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 66 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+
+  const n = allBuckets.length;
+  const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
+  const yForDur = v => P.top + (1 - (v - durMin) / (durMax - durMin)) * innerH;
+
+  // Grid lines & Y axis ticks (left axis — duration is the only axis now)
+  const yTicks = [];
+  for (let v = durMin; v <= durMax; v += axis.step) {
+    yTicks.push({ y: yForDur(v), v });
+  }
+  const gridLines = yTicks.map(t =>
+    `<line class="chart-grid" x1="${P.left}" y1="${t.y}" x2="${P.left + innerW}" y2="${t.y}"/>`
+  ).join('');
+  const yLabels = yTicks.map(t =>
+    `<text class="chart-axis-label y" x="${P.left - 8}" y="${t.y + 4}">${fmtDurStat(t.v)}</text>`
+  ).join('');
+
+  // X-axis labels — adapt density to the date range.
+  // For 1-year ranges we want quarter labels ("Q1 2026"); for 2-3 years, half-years;
+  // for 4+ years, year labels only. This avoids a single lonely year label when
+  // the range is short, and a crowded smear when it's long.
+  const spanYears = (() => {
+    if (allBuckets.length < 2) return 0;
+    const first = allBuckets[0].key;
+    const last = allBuckets[allBuckets.length - 1].key;
+    return (parseInt(last.slice(0,4)) - parseInt(first.slice(0,4))) +
+           (parseInt(last.slice(5,7)) - parseInt(first.slice(5,7))) / 12;
+  })();
+
+  const xLabels = [];
+  const quarterTicks = [];
+  if (spanYears < 1.5) {
+    // Short range: label every quarter with month + year ("Jan 2026", "Apr 2026"...)
+    allBuckets.forEach((m, i) => {
+      const month = parseInt(m.key.slice(5, 7));
+      if (month === 1 || month === 4 || month === 7 || month === 10) {
+        const monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][month-1];
+        const year = m.key.slice(0, 4);
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${monthName} ${year}</text>`);
+        // Tick mark at every quarter
+        quarterTicks.push(
+          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 5}"/>`
+        );
+      }
+    });
+  } else if (spanYears < 3.5) {
+    // Medium range: label Jan and Jul of each year ("Jan 2024", "Jul 2024"...)
+    allBuckets.forEach((m, i) => {
+      const month = parseInt(m.key.slice(5, 7));
+      const year = m.key.slice(0, 4);
+      if (month === 1) {
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`);
+        quarterTicks.push(
+          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 6}"/>`
+        );
+      } else if (month === 7) {
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">Jul</text>`);
+        quarterTicks.push(
+          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 3}"/>`
+        );
+      } else if (month === 4 || month === 10) {
+        quarterTicks.push(
+          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 3}"/>`
+        );
+      }
+    });
+  } else {
+    // Long range: year labels at January only, quarter ticks unlabelled
+    const seenYears = new Set();
+    allBuckets.forEach((m, i) => {
+      const year = m.key.slice(0, 4);
+      const month = parseInt(m.key.slice(5, 7));
+      if (!seenYears.has(year) && month === 1) {
+        seenYears.add(year);
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`);
+      }
+      if (month === 1 || month === 4 || month === 7 || month === 10) {
+        const tickH = month === 1 ? 6 : 3;
+        quarterTicks.push(
+          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
+        );
+      }
+    });
+    // Also catch the first year if it didn't appear at January
+    if (allBuckets.length && !seenYears.has(allBuckets[0].key.slice(0, 4))) {
+      xLabels.unshift(`<text class="chart-axis-label x" x="${xFor(0)}" y="${H - 26}">${allBuckets[0].key.slice(0, 4)}</text>`);
+    }
+  }
+
+  // Build scatter dots — one per video, day-of-month interpolated for X.
+  // Outliers clipped to the visible Y range, dropped if outside.
+  let outliersAbove = 0;
+  let outliersBelow = 0;
+  const dotsHtml = [];
+  for (let i = 0; i < allBuckets.length; i++) {
+    const monthEntry = allBuckets[i];
+    const monthVids = monthEntry.curr.longForm || [];
+    if (!monthVids.length) continue;
+    const [yStr, mStr] = monthEntry.key.split('-');
+    const year = parseInt(yStr);
+    const monthNum = parseInt(mStr);
+    const daysInMonth = new Date(year, monthNum, 0).getDate();
+    const xStart = xFor(i);
+    const xEnd = i + 1 < allBuckets.length ? xFor(i + 1) : xStart + (xFor(1) - xFor(0));
+    for (const v of monthVids) {
+      if (!v.durationSec || v.durationSec <= 0) continue;
+      if (v.durationSec > durMax) { outliersAbove++; continue; }
+      if (v.durationSec < durMin) { outliersBelow++; continue; }
+      const dayOfMonth = parseInt(v.publishedAt.slice(8, 10));
+      const dayFrac = Math.max(0, Math.min(1, (dayOfMonth - 1) / daysInMonth));
+      const x = xStart + dayFrac * (xEnd - xStart);
+      const y = yForDur(v.durationSec);
+      dotsHtml.push(`<circle class="chart-scatter-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.8"/>`);
+    }
+  }
+  const scatterDots = dotsHtml.join('');
+
+  // Outlier caption — small note inside the top-left of the plot area
+  // (not below the chart, where overflow:visible on the SVG could let it
+  // escape the chart panel's visible bounds).
+  let outlierCaption = '';
+  if (outliersAbove + outliersBelow > 0) {
+    const parts = [];
+    if (outliersAbove > 0) parts.push(`${outliersAbove} above ${fmtDurStat(durMax)}`);
+    if (outliersBelow > 0) parts.push(`${outliersBelow} below ${fmtDurStat(durMin)}`);
+    outlierCaption = `<text class="chart-attribution" x="${P.left + 6}" y="${P.top + 12}" style="text-anchor: start;">${parts.join(', ')} outside view</text>`;
+  }
+
+  // Brand attribution — bottom-right corner. Matches the main trend chart so
+  // anyone screenshotting either visualisation gets the channel name + site URL
+  // baked in. Date range is included to ground the data in time.
+  const channelName = activeDisplayName();
+  const startEl = document.getElementById('startDate');
+  const endEl = document.getElementById('endDate');
+  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const isNarrow = window.matchMedia('(max-width: 540px)').matches;
+  const attributionText = isNarrow
+    ? `${channelName} · jerminaldecline.com`
+    : `${channelName} · ${dateRange} · jerminaldecline.com`;
+  const attribution = `
+    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 8}" text-anchor="end">
+      ${escapeHtml(attributionText)}
+    </text>
+  `;
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
+    ${quarterTicks.join('')}
+    ${gridLines}
+    ${yLabels}
+    ${xLabels.join('')}
+    ${scatterDots}
+    ${outlierCaption}
+    ${attribution}
+  `;
+}
+
 // Pick a "nice" max for Y axis — round up to a clean multiple
 function niceMax(v) {
   if (v <= 0) return 1;
@@ -4030,11 +4700,17 @@ function renderVideoRows(videos, emptyText) {
     const titleSubtitle = showChannel
       ? `<div class="video-title-channel-tag clickable-inline" data-channel-filter="${v.channelId}">${escapeHtml(channelName)}</div>`
       : '';
+    // Inline "ad" badge if this video appears in the Google Ads Transparency Centre
+    // as one of the channel's paid promotional campaigns. The ⓘ icon signals
+    // hoverable detail; the tooltip explains provenance.
+    const adBadge = adVideoIds.has(v.id)
+      ? `<span class="ad-badge" title="Video promoted through paid advertisement (Google Ads Transparency Centre)">ad <span class="ad-badge-info" aria-hidden="true">ⓘ</span></span>`
+      : '';
     return `
-      <div class="video-row${showChannel ? ' with-channel' : ''}">
+      <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a>${titleSubtitle}</div>
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank">${escapeHtml(v.title)}</a>${adBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
       </div>
@@ -4343,6 +5019,7 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   renderChannelLinkRow();
   renderFooterMeta();
   renderPeakStrip();
+  renderAdPanel();
   // If a mood mode is active, refresh the floating low-figure text so it
   // reflects the newly-selected channel's data
   if (window.__refreshActiveFloaters) window.__refreshActiveFloaters();
