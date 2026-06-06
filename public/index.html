@@ -2046,14 +2046,6 @@
     margin-top: 0.1rem;
   }
 
-  /* Performance multiplier colouring — visual hierarchy at a glance.
-     Strong = significantly above median (likely meaningful boost).
-     Up = modestly above. Flat = around median. Down = below median. */
-  .perf-strong { color: var(--down); font-weight: 600; }
-  .perf-up { color: var(--text); }
-  .perf-flat { color: var(--text-muted); }
-  .perf-down { color: var(--text-dim); }
-
   .ad-panel-footnote {
     font-size: 0.78rem;
     color: var(--text-muted);
@@ -3813,13 +3805,6 @@ function renderAdPanel() {
     if (m >= 1) return `${m.toFixed(1)}× median`;
     return `${(m * 100).toFixed(0)}% of median`;
   }
-  function perfClass(m) {
-    if (m == null) return '';
-    if (m >= 2) return 'perf-strong';
-    if (m >= 1.2) return 'perf-up';
-    if (m <= 0.8) return 'perf-down';
-    return 'perf-flat';
-  }
 
   // Sort the rows in place according to the current adPanelSort state.
   // Each column has its own sort key extractor and a sensible null/missing
@@ -3864,7 +3849,7 @@ function renderAdPanel() {
         </td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
-        <td class="col-num ${perfClass(r.multiplier)}">${fmtMult(r.multiplier)}</td>
+        <td class="col-num">${fmtMult(r.multiplier)}</td>
         <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
       </tr>
     `).join('');
