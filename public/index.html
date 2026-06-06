@@ -1941,6 +1941,29 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+  /* Sortable header cells — click affordance, hover state, active indicator.
+     Uses the same .sort-arrow component as the window-list sortable rows. */
+  .ad-perf-table thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.12s, background 0.12s;
+  }
+  .ad-perf-table thead th.sortable:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+  .ad-perf-table thead th.sortable.active-sort {
+    color: var(--text);
+  }
+  .ad-perf-table thead th.sortable:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .ad-perf-table thead th .sort-arrow {
+    margin-left: 0.35rem;
+  }
+  /* For numeric-aligned (right-aligned) columns, the arrow sits to the right
+     of the label which is already at the right edge — same pattern as text columns. */
   .ad-perf-table th.col-num,
   .ad-perf-table td.col-num {
     text-align: right;
@@ -2669,6 +2692,9 @@ let heroAnimated = false;
 // (loaded from ad-videos.json, curated from Google Ads Transparency Centre)
 let adVideoIds = new Set();
 let adVideoData = null;  // Full ad data including channel metadata
+// Sort state for the ad panel performance table.
+// 'views' (desc) is the default because top performers carry the most editorial weight.
+let adPanelSort = { col: 'views', dir: 'desc' };
 
 // --- Helpers ---
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
@@ -3648,7 +3674,6 @@ function renderAdPanel() {
   //   - median of long-form videos uploaded in the same month
   //   - delta: views − median (the "excess" over typical)
   //   - multiplier: views / median (X.Xx the typical video)
-  // Sorted by views descending so top performers surface first.
   const rows = matched.map(v => {
     const monthKey = v.publishedAt.slice(0, 7);
     const monthMedian = monthlyMedians[monthKey] || 0;
@@ -3656,7 +3681,7 @@ function renderAdPanel() {
     const excess = monthMedian > 0 ? views - monthMedian : null;
     const multiplier = monthMedian > 0 ? views / monthMedian : null;
     return { v, views, monthMedian, excess, multiplier, monthKey };
-  }).sort((a, b) => b.views - a.views);
+  });
 
   // Aggregate: how many ads outperformed their month's median? Total excess views?
   const outperformed = rows.filter(r => r.excess !== null && r.excess > 0).length;
@@ -3677,6 +3702,65 @@ function renderAdPanel() {
     if (m >= 1.2) return 'perf-up';
     if (m <= 0.8) return 'perf-down';
     return 'perf-flat';
+  }
+
+  // Sort the rows in place according to the current adPanelSort state.
+  // Each column has its own sort key extractor and a sensible null/missing
+  // handling (missing values always sort to the bottom regardless of direction
+  // so they don't pollute either end of the visible list).
+  function sortRows(rs) {
+    const { col, dir } = adPanelSort;
+    const factor = dir === 'asc' ? 1 : -1;
+    const keyFns = {
+      title: r => r.v.title.toLowerCase(),
+      date:  r => r.v.publishedAt,
+      views: r => r.views,
+      median: r => r.monthMedian,
+      perf: r => r.multiplier,
+      excess: r => r.excess,
+    };
+    const keyFn = keyFns[col] || keyFns.views;
+    return rs.slice().sort((a, b) => {
+      const av = keyFn(a), bv = keyFn(b);
+      // Push null/undefined/0-median rows to the bottom regardless of direction
+      const aMissing = av == null || (col === 'median' && av === 0);
+      const bMissing = bv == null || (col === 'median' && bv === 0);
+      if (aMissing && bMissing) return 0;
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      if (av < bv) return -1 * factor;
+      if (av > bv) return 1 * factor;
+      return 0;
+    });
+  }
+
+  // Render just the tbody — called on initial render AND on sort changes.
+  // Pulled out so sort clicks don't re-render the whole panel (which would
+  // collapse it back to closed, lose scroll position, etc).
+  function renderAdTableBody() {
+    const sorted = sortRows(rows);
+    return sorted.map(r => `
+      <tr>
+        <td class="col-vid">
+          <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
+          <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}</span>
+        </td>
+        <td class="col-num">${fmt(r.views)}</td>
+        <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
+        <td class="col-num ${perfClass(r.multiplier)}">${fmtMult(r.multiplier)}</td>
+        <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Header cell with sort indicator. Active column gets an arrow; inactive
+  // columns get a faint placeholder so the layout doesn't shift on sort change.
+  function sortHeader(label, colKey, extraClass = '') {
+    const isActive = adPanelSort.col === colKey;
+    const arrow = isActive
+      ? (adPanelSort.dir === 'asc' ? '<span class="sort-arrow active">↑</span>' : '<span class="sort-arrow active">↓</span>')
+      : '<span class="sort-arrow"></span>';
+    return `<th class="${extraClass} sortable${isActive ? ' active-sort' : ''}" data-ad-sort="${colKey}" role="button" tabindex="0">${label}${arrow}</th>`;
   }
 
   panel.hidden = false;
@@ -3701,26 +3785,15 @@ function renderAdPanel() {
         <table class="ad-perf-table">
           <thead>
             <tr>
-              <th class="col-vid">Video</th>
-              <th class="col-num">Views</th>
-              <th class="col-num hide-mobile">Month median</th>
-              <th class="col-num">Performance</th>
-              <th class="col-num hide-mobile">Excess over median</th>
+              ${sortHeader('Video', 'title', 'col-vid')}
+              ${sortHeader('Views', 'views', 'col-num')}
+              ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Performance', 'perf', 'col-num')}
+              ${sortHeader('Excess over median', 'excess', 'col-num hide-mobile')}
             </tr>
           </thead>
-          <tbody>
-            ${rows.map(r => `
-              <tr>
-                <td class="col-vid">
-                  <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-                  <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}</span>
-                </td>
-                <td class="col-num">${fmt(r.views)}</td>
-                <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
-                <td class="col-num ${perfClass(r.multiplier)}">${fmtMult(r.multiplier)}</td>
-                <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
-              </tr>
-            `).join('')}
+          <tbody id="adPerfTableBody">
+            ${renderAdTableBody()}
           </tbody>
         </table>
       </div>
@@ -3740,6 +3813,41 @@ function renderAdPanel() {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     body.hidden = expanded;
+  });
+
+  // Sort handlers — attach to each sortable header.
+  // Clicking the active column flips direction; clicking a new column starts at
+  // descending (intuitive default for numeric columns where users typically want
+  // "biggest first"). Exception: title column starts at ascending (A–Z is the
+  // natural first read).
+  panel.querySelectorAll('[data-ad-sort]').forEach(th => {
+    function doSort() {
+      const col = th.getAttribute('data-ad-sort');
+      if (adPanelSort.col === col) {
+        adPanelSort.dir = adPanelSort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        adPanelSort.col = col;
+        adPanelSort.dir = col === 'title' ? 'asc' : 'desc';
+      }
+      // Re-render tbody + refresh header arrows (without rebuilding the whole panel)
+      document.getElementById('adPerfTableBody').innerHTML = renderAdTableBody();
+      panel.querySelectorAll('[data-ad-sort]').forEach(hdr => {
+        const isActive = hdr.getAttribute('data-ad-sort') === adPanelSort.col;
+        hdr.classList.toggle('active-sort', isActive);
+        const arrow = hdr.querySelector('.sort-arrow');
+        if (arrow) {
+          arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
+          arrow.textContent = isActive ? (adPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+        }
+      });
+    }
+    th.addEventListener('click', doSort);
+    th.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        doSort();
+      }
+    });
   });
 }
 
