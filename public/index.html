@@ -1149,6 +1149,15 @@
   .chart-axis-label { fill: var(--text-dim); font-size: 13px; font-family: inherit; }
   .chart-axis-label.x { text-anchor: middle; }
   .chart-axis-label.y { text-anchor: end; }
+  /* Axis title (rotated for Y axis). Slightly more emphasis than tick labels
+     since this is naming the axis variable, not enumerating its values. */
+  .chart-axis-title {
+    fill: var(--text-muted);
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
   .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
   .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
   /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
@@ -4483,17 +4492,26 @@ function renderAllVideosChart(chartData, inProgressMonth) {
   allDurations.sort((a, b) => a - b);
   // Use 1st and 99th percentiles to define the visible range. Most channels'
   // typical content falls well within this, while extreme outliers (livestreams)
-  // are excluded from rendering.
+  // are excluded from rendering. We then ensure the upper bound reaches at
+  // least 23:30 (1410s) — long enough to capture the recent ramp-up in video
+  // duration where some uploads now exceed 20 minutes. Without this floor, the
+  // axis would compress around the median band and crop the interesting tail.
   const pct = (arr, p) => arr[Math.floor(arr.length * p)];
   const rawMin = pct(allDurations, 0.01);
-  const rawMax = pct(allDurations, 0.99);
+  const rawMaxPct = pct(allDurations, 0.99);
+  // Floor the visible upper bound at 23:30 = 1410 seconds. This is a deliberate
+  // editorial choice: the duration spike is the story, longer videos must be visible.
+  const MIN_VISIBLE_MAX = 1410;
+  const rawMax = Math.max(rawMaxPct, MIN_VISIBLE_MAX);
   const axis = niceDurationAxis(rawMin, rawMax);
   const durMin = axis.min;
   const durMax = axis.max;
 
   // Layout
+  // Note: P.left increased to accommodate the rotated "Video duration" axis label
+  // sitting outside the tick numbers without overlapping them.
   const W = 720, H = 280;
-  const P = { top: 20, right: 24, bottom: 48, left: 66 };
+  const P = { top: 20, right: 24, bottom: 48, left: 80 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
@@ -4513,41 +4531,62 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     `<text class="chart-axis-label y" x="${P.left - 8}" y="${t.y + 4}">${fmtDurStat(t.v)}</text>`
   ).join('');
 
-  // X-axis labels — adapt density to the date range.
-  // For 1-year ranges we want quarter labels ("Q1 2026"); for 2-3 years, half-years;
-  // for 4+ years, year labels only. This avoids a single lonely year label when
-  // the range is short, and a crowded smear when it's long.
-  const spanYears = (() => {
-    if (allBuckets.length < 2) return 0;
-    const first = allBuckets[0].key;
-    const last = allBuckets[allBuckets.length - 1].key;
-    return (parseInt(last.slice(0,4)) - parseInt(first.slice(0,4))) +
-           (parseInt(last.slice(5,7)) - parseInt(first.slice(5,7))) / 12;
-  })();
-
+  // X-axis labels — density adapts to how many months are in view.
+  // The rule: aim for 6-12 labels visible at any zoom level. Too few looks bare;
+  // too many turns to a smear. The 1.5-year / 3.5-year breakpoints below were
+  // calibrated for this density target on a ~720px-wide chart.
+  const monthCount = allBuckets.length;
   const xLabels = [];
   const quarterTicks = [];
-  if (spanYears < 1.5) {
-    // Short range: label every quarter with month + year ("Jan 2026", "Apr 2026"...)
-    allBuckets.forEach((m, i) => {
-      const month = parseInt(m.key.slice(5, 7));
-      if (month === 1 || month === 4 || month === 7 || month === 10) {
-        const monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][month-1];
-        const year = m.key.slice(0, 4);
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${monthName} ${year}</text>`);
-        // Tick mark at every quarter
-        quarterTicks.push(
-          `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 5}"/>`
-        );
-      }
-    });
-  } else if (spanYears < 3.5) {
-    // Medium range: label Jan and Jul of each year ("Jan 2024", "Jul 2024"...)
+  const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  if (monthCount <= 12) {
+    // 1-12 months in view: label EVERY month. The first month of each year
+    // (or the very first month of the range) gets a year appended for context.
+    let lastYear = null;
     allBuckets.forEach((m, i) => {
       const month = parseInt(m.key.slice(5, 7));
       const year = m.key.slice(0, 4);
-      if (month === 1) {
-        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`);
+      const monthName = MONTH_NAMES[month - 1];
+      // Show "Jan 2026" for January and for the very first month; just "Feb" etc. otherwise.
+      // This keeps the year visible without repeating it on every label.
+      const label = (month === 1 || i === 0) ? `${monthName} ${year}` : monthName;
+      xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
+      // Tick on the axis for every month
+      const tickH = (month === 1) ? 5 : 3;
+      quarterTicks.push(
+        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
+      );
+      lastYear = year;
+    });
+  } else if (monthCount <= 24) {
+    // 13-24 months in view: label every other month so the axis stays readable.
+    // First month of each year shows the year; alternate intervening labels show just the month name.
+    allBuckets.forEach((m, i) => {
+      const month = parseInt(m.key.slice(5, 7));
+      const year = m.key.slice(0, 4);
+      // Label every odd-indexed month (about 12 labels for 24-month range)
+      const everyOther = (i % 2 === 0);
+      if (everyOther) {
+        const monthName = MONTH_NAMES[month - 1];
+        const label = (month === 1 || i === 0) ? `${monthName} ${year}` : monthName;
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
+      }
+      // Tick on every month regardless
+      const tickH = (month === 1) ? 5 : 3;
+      quarterTicks.push(
+        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
+      );
+    });
+  } else if (monthCount <= 42) {
+    // 25-42 months (2-3.5 years): label Jan and Jul of each year, ticks at all quarters.
+    allBuckets.forEach((m, i) => {
+      const month = parseInt(m.key.slice(5, 7));
+      const year = m.key.slice(0, 4);
+      if (month === 1 || i === 0) {
+        const monthName = MONTH_NAMES[month - 1];
+        const label = (month === 1) ? year : `${monthName} ${year}`;
+        xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${label}</text>`);
         quarterTicks.push(
           `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + 6}"/>`
         );
@@ -4563,12 +4602,12 @@ function renderAllVideosChart(chartData, inProgressMonth) {
       }
     });
   } else {
-    // Long range: year labels at January only, quarter ticks unlabelled
+    // 43+ months (3.5+ years): year labels at January only, ticks at quarters.
     const seenYears = new Set();
     allBuckets.forEach((m, i) => {
       const year = m.key.slice(0, 4);
       const month = parseInt(m.key.slice(5, 7));
-      if (!seenYears.has(year) && month === 1) {
+      if (!seenYears.has(year) && (month === 1 || i === 0)) {
         seenYears.add(year);
         xLabels.push(`<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${year}</text>`);
       }
@@ -4579,10 +4618,6 @@ function renderAllVideosChart(chartData, inProgressMonth) {
         );
       }
     });
-    // Also catch the first year if it didn't appear at January
-    if (allBuckets.length && !seenYears.has(allBuckets[0].key.slice(0, 4))) {
-      xLabels.unshift(`<text class="chart-axis-label x" x="${xFor(0)}" y="${H - 26}">${allBuckets[0].key.slice(0, 4)}</text>`);
-    }
   }
 
   // Build scatter dots — one per video, day-of-month interpolated for X.
@@ -4641,6 +4676,14 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     </text>
   `;
 
+  // Y-axis title — "Video duration" rotated 90° along the left edge of the plot.
+  // Sits to the left of the tick value labels (e.g. "10:00", "12:00"). The
+  // rotation point and translation are chosen so the text reads bottom-to-top
+  // and is centred vertically with the plot area.
+  const yAxisTitleX = 16;  // px from left edge of viewBox
+  const yAxisTitleY = P.top + innerH / 2;
+  const yAxisTitle = `<text class="chart-axis-title" x="${yAxisTitleX}" y="${yAxisTitleY}" transform="rotate(-90 ${yAxisTitleX} ${yAxisTitleY})" style="text-anchor: middle;">Video duration</text>`;
+
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
@@ -4648,6 +4691,7 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     ${gridLines}
     ${yLabels}
     ${xLabels.join('')}
+    ${yAxisTitle}
     ${scatterDots}
     ${outlierCaption}
     ${attribution}
