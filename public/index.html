@@ -3293,6 +3293,20 @@ function rebuild() {
     };
   });
 
+  // Trim leading empty months — i.e. months at the start of the range with
+  // zero uploads (typically when the user picks a date range that predates a
+  // channel's first upload, like viewing UnSleevedMedia from 2010 onwards
+  // when their first video was 2022). These would otherwise render as a long
+  // flat-zero tail at the chart's left edge, making it hard to see the
+  // meaningful data. We do NOT trim trailing empty months — those reflect
+  // "no recent uploads" which is editorially meaningful.
+  // Special case: if EVERY month is empty (channel has no uploads in the
+  // window at all), leave monthlyData empty so the empty-state path renders.
+  const firstNonEmpty = monthlyData.findIndex(m => m.curr.totalCount() > 0);
+  if (firstNonEmpty > 0) {
+    monthlyData = monthlyData.slice(firstNonEmpty);
+  }
+
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
 
@@ -5351,9 +5365,16 @@ function presetToRange(preset) {
     const d = new Date(today); d.setUTCMonth(d.getUTCMonth() - 24);
     start = d.toISOString().split('T')[0];
   } else if (preset === 'all') {
-    start = dataset?.meta?.oldestVideoDate
-      ? dataset.meta.oldestVideoDate.split('T')[0]
-      : '2020-01-01';
+    // Use the selected channel's first upload date when a single channel is
+    // focused — saves rendering empty leading months for channels that started
+    // later than the dataset's oldest video. Falls back to global oldest for
+    // the ALL view (which by definition spans every channel).
+    let oldest = null;
+    if (selectedChannel !== 'ALL') {
+      oldest = dataset?.channels?.[selectedChannel]?.oldestVideoDate;
+    }
+    if (!oldest) oldest = dataset?.meta?.oldestVideoDate;
+    start = oldest ? oldest.split('T')[0] : '2020-01-01';
   }
   return { start, end };
 }

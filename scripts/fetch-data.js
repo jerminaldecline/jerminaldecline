@@ -51,7 +51,7 @@ const HISTORY_YEARS = 20; // how far back to fetch on first run / backfill (cove
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 
 const IS_AUDIT = process.argv.includes('--audit');
-const IS_BACKFILL = true;  // TEMP: force backfill on next run, REVERT after by changing back to: process.argv.includes('--backfill')
+const IS_BACKFILL = process.argv.includes('--backfill');
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 if (!API_KEY) {
