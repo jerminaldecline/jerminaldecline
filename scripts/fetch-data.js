@@ -10,6 +10,13 @@
  *     - On subsequent runs, only fetches the last 60 days of uploads to catch
  *       new videos and update view counts on recent content.
  *
+ *   --backfill — historical backfill:
+ *     - Treats the run as a "first run" for fetching purposes (pulls all history
+ *       from HISTORY_YEARS ago to today) but merges with existing data so we
+ *       don't lose previously-tracked deletion flags / unavailableSince stamps.
+ *     - Use when bumping HISTORY_YEARS or adding a channel and you want
+ *       deeper history for ALL channels in one shot.
+ *
  *   --audit — deletion-detection sweep:
  *     - Reads the existing dataset, re-enriches every video older than RECENT_WINDOW_DAYS
  *       (recent ones are already covered by daily runs), updates view counts and
@@ -23,6 +30,7 @@
  *
  * Run:
  *   node scripts/fetch-data.js
+ *   node scripts/fetch-data.js --backfill
  *   node scripts/fetch-data.js --audit
  */
 
@@ -39,10 +47,11 @@ const CHANNELS = [
 ];
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
-const HISTORY_YEARS = 6; // how far back to fetch on first run (start of ~6 years ago)
+const HISTORY_YEARS = 20; // how far back to fetch on first run / backfill (covers all channels' full histories)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 
 const IS_AUDIT = process.argv.includes('--audit');
+const IS_BACKFILL = true;  // TEMP: force backfill on next run, REVERT after by changing back to: process.argv.includes('--backfill')
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 if (!API_KEY) {
@@ -329,13 +338,24 @@ async function runIncremental(startTime) {
   const existing = loadExistingData();
   const isFirstRun = !existing;
 
+  // Backfill mode: pretend we have no recent-window optimisation and fetch
+  // the full HISTORY_YEARS span — but still merge with existing data so we
+  // don't lose unavailable flags or deletion-tracking history. Useful when:
+  //   - Adding a new channel (so it gets the full backfill, not just the
+  //     "since HISTORY_YEARS ago" default applied to all channels)
+  //   - Increasing HISTORY_YEARS and wanting older content backfilled for
+  //     channels that already have data
   let sinceDate;
-  if (isFirstRun) {
+  if (isFirstRun || IS_BACKFILL) {
     sinceDate = new Date();
     sinceDate.setUTCFullYear(sinceDate.getUTCFullYear() - HISTORY_YEARS);
     sinceDate.setUTCMonth(0, 1);
     sinceDate.setUTCHours(0, 0, 0, 0);
-    console.log(`First run: fetching since ${sinceDate.toISOString().slice(0, 10)}`);
+    if (IS_BACKFILL && !isFirstRun) {
+      console.log(`Backfill run: fetching all uploads since ${sinceDate.toISOString().slice(0, 10)} (full historical refresh, merging with existing data)`);
+    } else {
+      console.log(`First run: fetching since ${sinceDate.toISOString().slice(0, 10)}`);
+    }
   } else {
     sinceDate = new Date();
     sinceDate.setUTCDate(sinceDate.getUTCDate() - RECENT_WINDOW_DAYS);
