@@ -3664,14 +3664,25 @@ function renderPeakStrip() {
   const now = new Date();
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
 
-  // Find peak and trough months, ignoring the current in-progress month.
-  // For "low": only consider months that actually had uploads (zero-upload months
-  // would mechanically be the lowest but aren't a meaningful "low").
+  // Find peak month first, ignoring the current in-progress month.
   let peakKey = null, peakViews = 0;
-  let lowKey = null, lowViews = Infinity;
   for (const [k, v] of byMonth.entries()) {
     if (k === currentMonthKey) continue;
     if (v > peakViews) { peakViews = v; peakKey = k; }
+  }
+
+  // Find the "low" month, scoped to months AFTER the peak. The editorially
+  // meaningful "low" is the depth of the trough since things turned south,
+  // not the lowest month of all time (which for many channels would be their
+  // very first month back when nobody knew them — interesting trivia, not a
+  // story). When the peak is recent / current, there may be no post-peak month
+  // yet, in which case lowKey stays null and the "All-time low" line is skipped.
+  // Only counts months that actually had uploads (zero-upload months would
+  // mechanically be the lowest but aren't a meaningful "low").
+  let lowKey = null, lowViews = Infinity;
+  for (const [k, v] of byMonth.entries()) {
+    if (k === currentMonthKey) continue;
+    if (!peakKey || k <= peakKey) continue;  // only post-peak months count
     if ((countByMonth.get(k) || 0) > 0 && v < lowViews) { lowViews = v; lowKey = k; }
   }
 
