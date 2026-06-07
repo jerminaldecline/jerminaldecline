@@ -2597,9 +2597,11 @@
     </div>
     <div id="resultsBody" style="display: none;">
       <div class="preset-row" id="presetRow">
+        <button type="button" class="preset-chip" data-preset="30d">Last 30 days</button>
         <button type="button" class="preset-chip" data-preset="ytd">YTD</button>
         <button type="button" class="preset-chip" data-preset="12m">Last 12 months</button>
         <button type="button" class="preset-chip" data-preset="24m">Last 24 months</button>
+        <button type="button" class="preset-chip" data-preset="since-peak">Since peak</button>
         <button type="button" class="preset-chip" data-preset="all">All time</button>
       </div>
       <div class="control-bar">
@@ -2891,6 +2893,30 @@ function filteredVideos() {
   if (!dataset?.videos) return [];
   if (selectedChannel === 'ALL') return dataset.videos;
   return dataset.videos.filter(v => v.channelId === selectedChannel);
+}
+
+// Find the all-time peak month (by long-form views) for the currently selected
+// channel scope. Returns the key in YYYY-MM form, or null if no eligible months
+// exist. Excludes the in-progress current month. Used both by renderPeakStrip
+// (to display the peak) and by the "Since peak" date preset (to set the start).
+function computePeakMonthKey() {
+  if (!dataset?.videos?.length) return null;
+  const videos = filteredVideos();
+  const byMonth = new Map();
+  for (const v of videos) {
+    if (v.isShort || v.unavailable) continue;
+    if (!v.durationSec) continue;
+    const k = monthKey(v.publishedAt);
+    byMonth.set(k, (byMonth.get(k) || 0) + (v.views || 0));
+  }
+  const now = new Date();
+  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  let peakKey = null, peakViews = 0;
+  for (const [k, v] of byMonth.entries()) {
+    if (k === currentMonthKey) continue;
+    if (v > peakViews) { peakViews = v; peakKey = k; }
+  }
+  return peakKey;
 }
 function activeDisplayName() {
   if (selectedChannel === 'ALL') return 'Quartering universe';
@@ -3664,12 +3690,9 @@ function renderPeakStrip() {
   const now = new Date();
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
 
-  // Find peak month first, ignoring the current in-progress month.
-  let peakKey = null, peakViews = 0;
-  for (const [k, v] of byMonth.entries()) {
-    if (k === currentMonthKey) continue;
-    if (v > peakViews) { peakViews = v; peakKey = k; }
-  }
+  // Find peak month (shared with the "Since peak" date preset, hence helper).
+  const peakKey = computePeakMonthKey();
+  const peakViews = peakKey ? byMonth.get(peakKey) || 0 : 0;
 
   // Find the "low" month, scoped to months AFTER the peak. The editorially
   // meaningful "low" is the depth of the trough since things turned south,
@@ -5375,6 +5398,30 @@ function presetToRange(preset) {
   } else if (preset === '24m') {
     const d = new Date(today); d.setUTCMonth(d.getUTCMonth() - 24);
     start = d.toISOString().split('T')[0];
+  } else if (preset === 'since-peak') {
+    // Start date = first day of the month AFTER the all-time peak. This frames
+    // the chart on "what's happened since things turned" without including the
+    // peak month itself (which would visually anchor the decline as just a
+    // descent from the highest point).
+    const peakKey = computePeakMonthKey();
+    if (peakKey) {
+      const [y, m] = peakKey.split('-').map(Number);
+      // Add one month — handles December rollover via the Date constructor
+      const d = new Date(Date.UTC(y, m, 1));  // m (0-indexed +1) = month after peak
+      const candidateStart = d.toISOString().split('T')[0];
+      // If the peak is so recent that "month after" would be today or future,
+      // there's no meaningful post-peak window. Fall back to last 30 days
+      // which is a reasonable "recent context" view.
+      if (candidateStart >= end) {
+        const fallback = new Date(today); fallback.setUTCDate(fallback.getUTCDate() - 30);
+        start = fallback.toISOString().split('T')[0];
+      } else {
+        start = candidateStart;
+      }
+    } else {
+      // No peak (no eligible data) — fall back to YTD so the click does something sensible
+      start = `${today.getFullYear()}-01-01`;
+    }
   } else if (preset === 'all') {
     // Use the selected channel's first upload date when a single channel is
     // focused — saves rendering empty leading months for channels that started
@@ -5404,7 +5451,11 @@ function highlightActivePreset() {
   const today = new Date().toISOString().split('T')[0];
   let activePreset = null;
   if (end === today) {
-    for (const preset of ['ytd', '12m', '24m', 'all']) {
+    // Order matters here: check more-specific presets first so they win when
+    // dates happen to match multiple. 'since-peak' is checked before 'all' because
+    // a channel with a peak on its very first upload month would give both the
+    // same start date, and "since peak" is the more meaningful highlight.
+    for (const preset of ['30d', 'ytd', '12m', '24m', 'since-peak', 'all']) {
       const r = presetToRange(preset);
       if (r.start === start) { activePreset = preset; break; }
     }
