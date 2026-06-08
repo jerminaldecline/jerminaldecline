@@ -138,6 +138,14 @@
   @media (max-width: 540px) {
     body { padding: 1.25rem 0.85rem 3rem; }
   }
+  /* Tablet / small-laptop range — the previous design had a single 540px mobile
+     breakpoint, leaving a 540-1100px window where the layout was full desktop
+     density on a partial-screen viewport. iPad portrait (768px) lands in this
+     range. Tighten container padding and grid minimums so cards don't end up
+     awkwardly narrow against an oversized container. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    body { padding: 2rem 1.15rem 3.5rem; }
+  }
   .container { max-width: 1100px; margin: 0 auto; }
 
   /* Brand header */
@@ -164,7 +172,7 @@
   }
   .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
   .brand-name {
-    font-size: 2rem;
+    font-size: 1.85rem;
     font-weight: 700;
     margin: 0;
     letter-spacing: -0.02em;
@@ -187,7 +195,7 @@
     background: var(--brand-soft);
     border-radius: var(--radius-sm);
     margin-bottom: 0.6rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     /* Reserve height so chips appearing post-load don't shift the layout below.
        Matches the rendered height of a single row of channel-chip buttons. */
     min-height: 2.85rem;
@@ -206,7 +214,7 @@
     border-radius: 999px;
     padding: 0.42rem 1rem;
     font-family: inherit;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.12s, background 0.12s, border-color 0.12s, box-shadow 0.12s;
@@ -241,7 +249,7 @@
   /* Row below the strip with the View-on-YouTube link */
   .channel-link-row {
     margin-bottom: 1rem;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     min-height: 1.2rem;
   }
   .channel-link-row:empty { margin-bottom: 0.5rem; min-height: 0; }
@@ -264,11 +272,11 @@
     transform: translate(1px, -1px);
   }
   @media (max-width: 540px) {
-    .channel-chip { font-size: 0.83rem; padding: 0.38rem 0.85rem; }
+    .channel-chip { font-size: 0.85rem; padding: 0.38rem 0.85rem; }
   }
   .last-updated {
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -300,7 +308,7 @@
 
   /* Peak strip — surfaces all-time peak as a reference point */
   .peak-strip {
-    font-size: 0.84rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     padding: 0.6rem 0.2rem 0.95rem;
     margin-bottom: 0.5rem;
@@ -318,7 +326,7 @@
   }
   .peak-strip-label {
     text-transform: uppercase;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     letter-spacing: 0.08em;
     color: var(--text-dim);
     font-weight: 500;
@@ -390,11 +398,11 @@
   }
   @media (max-width: 540px) {
     .peak-strip { font-size: 0.78rem; padding: 0.5rem 0.15rem 0.75rem; gap: 0.25rem; }
-    .peak-strip-label { min-width: 0; font-size: 0.66rem; }
+    .peak-strip-label { min-width: 0; font-size: 0.7rem; }
     .peak-line { gap: 0.45rem; }
   }
   @media (max-width: 540px) {
-    .brand-name { font-size: 1.65rem; }
+    .brand-name { font-size: 1.5rem; }
     .brand-logo { width: 54px; height: 54px; }
   }
 
@@ -438,8 +446,11 @@
     .theme-toggle button { width: 32px; height: 32px; }
   }
 
-  /* Prediction card (the "8-ball") */
-  /* Diagnosis card — single horizontal line */
+  /* Prediction card — editorial flourish, the satirical voice of the site.
+     Styled deliberately distinct from data cards so first-time visitors
+     immediately read it as commentary, not metrics. Accented left border
+     functions as a "pull quote" tell; subtle quote-mark glyph in the corner
+     reinforces the voice register without being precious about it. */
   .prediction-card {
     display: flex;
     align-items: center;
@@ -448,24 +459,45 @@
     background: var(--brand-deep);
     color: var(--pred-text);
     border-radius: var(--radius-sm);
-    padding: 0.7rem 1rem;
-    margin-bottom: 1rem;
+    border-left: 3px solid var(--shorts);
+    padding: 0.85rem 1.1rem 0.85rem 1.25rem;
+    margin: 0.6rem 0 1.25rem;
     position: relative;
     overflow: hidden;
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.15s;
+  }
+  /* Decorative open-quote glyph in the corner — large, very low opacity,
+     positioned to bleed off the top-left without intercepting clicks. Reads
+     as "this is a quote / opinion" without consuming layout space. */
+  .prediction-card::before {
+    content: '"';
+    position: absolute;
+    top: -0.4rem;
+    right: 0.7rem;
+    font-size: 2.4rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--shorts);
+    opacity: 0.18;
+    pointer-events: none;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .prediction-card:hover {
+    background: #163d80;
+    transform: translateY(-1px);
   }
   [data-theme="dark"] .prediction-card {
     background: var(--surface-2);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--shorts);
   }
-  .prediction-card:hover { background: #163d80; }
   [data-theme="dark"] .prediction-card:hover {
     background: var(--surface);
   }
   .prediction-label {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: rgba(237, 232, 216, 0.65);
@@ -506,7 +538,7 @@
   .prediction-card:active { transform: scale(0.998); }
   @media (max-width: 540px) {
     .prediction-card { padding: 0.65rem 0.85rem; gap: 0.5rem; }
-    .prediction-text { font-size: 0.88rem; }
+    .prediction-text { font-size: 0.85rem; }
   }
 
   /* Weekend counter — deadpan "days since accident" energy */
@@ -539,7 +571,7 @@
   }
   [data-theme="dark"] .weekend-num { color: var(--brand-deep); } /* already light in dark mode */
   .weekend-label {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -551,8 +583,8 @@
     margin: 0.3rem 0;
   }
   @media (max-width: 480px) {
-    .weekend-num { font-size: 2rem; }
-    .weekend-label { font-size: 0.68rem; }
+    .weekend-num { font-size: 1.85rem; }
+    .weekend-label { font-size: 0.7rem; }
   }
   /* Weekend-day fallback: card collapses to single italic line */
   .weekend-counter.weekend-now {
@@ -561,7 +593,7 @@
     padding: 1.25rem 1rem;
   }
   .weekend-message {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-style: italic;
     font-weight: 500;
     color: var(--brand-deep);
@@ -579,7 +611,7 @@
     box-shadow: var(--shadow-sm);
   }
   .coffee-tagline {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
     margin: 0 0 0.75rem;
     font-style: italic;
@@ -607,7 +639,7 @@
   @media (max-width: 540px) {
     .coffee-block { padding: 1.1rem 0.9rem; margin-top: 1.75rem; }
     .coffee-tagline { font-size: 0.85rem; }
-    .coffee-button { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+    .coffee-button { padding: 0.7rem 1.2rem; font-size: 0.95rem; }
   }
 
   /* Footer X link — inline alongside the other small footer links, with a
@@ -619,7 +651,7 @@
   }
 
   header { margin-bottom: 1.5rem; }
-  h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  h1 { font-size: 1.85rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
   .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
   .card {
     background: var(--surface);
@@ -635,7 +667,7 @@
   .field { margin-bottom: 1rem; }
   .field label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 0.35rem;
     color: var(--text-muted);
@@ -691,7 +723,7 @@
     border-radius: 4px;
     padding: 0.3rem 0.65rem;
     font-family: inherit;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.12s, background 0.12s;
@@ -730,7 +762,7 @@
     background: var(--surface-2);
     border-radius: var(--radius-sm);
     margin-bottom: 1.25rem;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     flex-wrap: wrap;
   }
   .control-bar-period { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
@@ -738,7 +770,7 @@
     color: var(--text-muted);
     font-weight: 500;
     text-transform: uppercase;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     letter-spacing: 0.07em;
   }
   .control-bar-dates { display: flex; align-items: center; gap: 0.4rem; }
@@ -750,7 +782,7 @@
     border-radius: 5px;
     padding: 0.3rem 0.55rem;
     font-family: inherit;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-variant-numeric: tabular-nums;
     color-scheme: light dark;
   }
@@ -809,6 +841,13 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  /* Tablet (541-960px): right-cluster gets tighter spacing so the date range
+     and right-side controls usually fit on one line. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    .control-bar-right { gap: 0.5rem; }
   }
   .share-btn {
     display: inline-flex;
@@ -820,7 +859,7 @@
     border: 1px solid var(--border);
     border-radius: 5px;
     font-family: inherit;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.15s, border-color 0.15s, background 0.15s;
@@ -848,7 +887,7 @@
     color: var(--surface);
     padding: 0.65rem 1.1rem;
     border-radius: 6px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 500;
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
     z-index: 100;
@@ -876,7 +915,7 @@
     border-radius: var(--radius-sm);
   }
   .options-row label {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -885,19 +924,22 @@
   }
   .options-row input[type="checkbox"] { accent-color: var(--accent); }
 
+  /* View-mode toggle — now lives inside .control-bar (no own bottom margin).
+     Visually it's a tab strip embedded in the toolbar. Compact slightly so it
+     doesn't dominate the control bar's height. */
   .mode-toggle {
     display: inline-flex;
-    background: var(--surface-2);
+    background: var(--surface);
     border-radius: var(--radius-sm);
-    padding: 3px;
+    padding: 2px;
     gap: 2px;
-    margin-bottom: 1.25rem;
+    border: 1px solid var(--border);
   }
   .mode-toggle button {
     background: transparent;
     color: var(--text-muted);
     border: none;
-    padding: 0.5rem 0.95rem;
+    padding: 0.35rem 0.75rem;
     font-size: 0.85rem;
     font-weight: 500;
     border-radius: 4px;
@@ -907,7 +949,7 @@
   }
   .mode-toggle button:hover { color: var(--text); }
   .mode-toggle button.active {
-    background: var(--surface);
+    background: var(--surface-2);
     color: var(--text);
     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   }
@@ -999,6 +1041,16 @@
   }
   .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
   .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
+  /* Tablet: raise the minmax so 4-5 cards don't compress to awkward narrow
+     widths against the medium-width container. At 768px (iPad portrait), the
+     200px floor produces 3-column rows with cards that look too tall-and-narrow.
+     A 240px floor here makes the grid wrap to 2 columns on tablet — bigger
+     cards, calmer rhythm. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
   @media (max-width: 540px) {
     .hero-grid {
       grid-template-columns: 1fr 1fr;
@@ -1012,13 +1064,13 @@
     .hero-stat.duration-stat { grid-column: 1 / -1; }
     .hero-stat.hours-stat { grid-column: 1 / -1; }
     .hero-stat { padding: 0.85rem 0.9rem; }
-    .hero-stat-value { font-size: 1.55rem; }
+    .hero-stat-value { font-size: 1.5rem; }
     .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
     .hero-stat-label { font-size: 0.7rem; }
-    .hero-stat-sub { font-size: 0.72rem; }
+    .hero-stat-sub { font-size: 0.78rem; }
   }
   .hero-stat-label {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     margin-bottom: 0.4rem;
     text-transform: uppercase;
@@ -1026,7 +1078,7 @@
     font-weight: 500;
   }
   .hero-stat-value {
-    font-size: 2rem;
+    font-size: 1.85rem;
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.01em;
@@ -1053,7 +1105,7 @@
   }
   .hero-stat.featured .hero-stat-value { font-size: 2.4rem; }
   .hero-stat-sub {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     margin-top: 0.45rem;
     display: flex;
@@ -1077,7 +1129,7 @@
     margin-bottom: 0.65rem;
   }
   .composition-title {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     font-weight: 500;
     text-transform: uppercase;
@@ -1112,7 +1164,7 @@
   .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
   @media (max-width: 540px) {
     .composition { padding: 0.85rem 0.9rem; margin-bottom: 1.1rem; }
-    .composition-legend { gap: 1rem; font-size: 0.8rem; }
+    .composition-legend { gap: 1rem; font-size: 0.85rem; }
     .composition-meta { font-size: 0.78rem; }
   }
 
@@ -1288,7 +1340,7 @@
     color: var(--surface);
     padding: 0.55rem 0.75rem;
     border-radius: 6px;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     pointer-events: none;
     transform: translate(-50%, -100%);
     margin-top: -8px;
@@ -1323,7 +1375,7 @@
     display: inline-block;
     background: #dc3232;
     color: #fff;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     font-weight: 600;
     padding: 1px 6px;
     border-radius: 8px;
@@ -1346,7 +1398,7 @@
   .chart-empty {
     text-align: center;
     color: var(--text-dim);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     padding: 4rem 1rem;
   }
 
@@ -1370,7 +1422,7 @@
     border-radius: 6px;
     padding: 0.45rem 0.7rem;
     font-family: inherit;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
   .window-list .window-list-search input:focus {
     outline: none;
@@ -1381,7 +1433,7 @@
     padding: 0.55rem 0.9rem;
     background: var(--surface-2);
     color: var(--text-muted);
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     border-bottom: 1px solid var(--border);
   }
   /* Group header inside the window list — sits between the sortable column
@@ -1405,7 +1457,7 @@
     color: var(--text);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
   }
   .window-list-group-meta {
     color: var(--text-muted);
@@ -1443,7 +1495,7 @@
     min-width: 160px;
   }
   .channel-breakdown-chip.static .cbc-name {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
   }
@@ -1460,8 +1512,8 @@
   }
   @media (max-width: 540px) {
     .channel-breakdown-chip.static { min-width: 140px; padding: 0.5rem 0.8rem; }
-    .channel-breakdown-chip.static .cbc-name { font-size: 0.88rem; }
-    .channel-breakdown-chip.static .cbc-detail { font-size: 0.74rem; }
+    .channel-breakdown-chip.static .cbc-name { font-size: 0.85rem; }
+    .channel-breakdown-chip.static .cbc-detail { font-size: 0.78rem; }
   }
   .channel-breakdown-chip {
     display: inline-flex;
@@ -1512,7 +1564,7 @@
   .channel-breakdown-chip .cbc-views {
     color: var(--text-dim);
     font-variant-numeric: tabular-nums;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
   }
   .channel-breakdown-chip.active .cbc-views {
     color: var(--accent);
@@ -1525,7 +1577,7 @@
     border-radius: 999px;
     padding: 0.3rem 0.75rem;
     font-family: inherit;
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     cursor: pointer;
     transition: color 0.12s, border-color 0.12s;
   }
@@ -1553,7 +1605,7 @@
 
   @media (max-width: 540px) {
     .channel-breakdown { padding: 0.55rem 0.7rem; gap: 0.3rem; }
-    .channel-breakdown-chip { font-size: 0.74rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem; }
+    .channel-breakdown-chip { font-size: 0.78rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem; }
     .channel-breakdown-chip .cbc-views { display: none; }
   }
   .window-list .window-list-rows {
@@ -1570,7 +1622,7 @@
     padding: 2rem 1rem;
     text-align: center;
     color: var(--text-dim);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   @media (max-width: 540px) {
     .window-list .window-list-search input { font-size: 16px; padding: 0.5rem 0.7rem; }
@@ -1605,7 +1657,7 @@
     border-color: var(--accent);
   }
   .wordcloud-caret {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     transition: transform 0.15s;
     display: inline-block;
     color: var(--text-dim);
@@ -1704,7 +1756,7 @@
     gap: 0.2rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     padding: 0.12rem 0.45rem;
     border-radius: 4px;
     white-space: nowrap;
@@ -1712,8 +1764,8 @@
   .delta.up { color: var(--up); background: var(--up-soft); }
   .delta.down { color: var(--down); background: var(--down-soft); }
   .delta.flat { color: var(--flat); background: var(--surface-2); }
-  .delta.large { font-size: 0.92rem; padding: 0.2rem 0.55rem; }
-  .delta-arrow { font-size: 0.72rem; line-height: 1; }
+  .delta.large { font-size: 0.95rem; padding: 0.2rem 0.55rem; }
+  .delta-arrow { font-size: 0.78rem; line-height: 1; }
   .delta-label {
     font-size: 0.7rem;
     color: var(--text-dim);
@@ -1749,7 +1801,7 @@
   .in-progress-badge {
     background: var(--shorts-soft);
     color: var(--shorts);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -1775,7 +1827,7 @@
   .month-cell { font-variant-numeric: tabular-nums; }
   .month-cell.num { text-align: right; }
   .month-cell-value { font-weight: 500; font-size: 0.95rem; }
-  .month-cell-sub { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .month-cell-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; }
   .deltas-stack {
     display: flex;
     flex-direction: column;
@@ -1840,7 +1892,7 @@
     grid-template-columns: 90px 1fr 80px 110px;
     gap: 0.75rem;
     padding: 0.55rem 0.9rem;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     align-items: center;
     border-bottom: 1px solid var(--border);
   }
@@ -1849,7 +1901,7 @@
   }
   .video-row:last-child { border-bottom: none; }
   .video-row:hover { background: var(--surface-2); }
-  .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.82rem; }
+  .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
   .video-channel {
     color: var(--text-muted);
     font-size: 0.78rem;
@@ -1864,7 +1916,7 @@
   .video-title-channel-tag {
     display: none;
     color: var(--text-dim);
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 400;
     margin-top: 0.15rem;
     white-space: nowrap;
@@ -1874,7 +1926,7 @@
      Subtle but visible: factual annotation, not editorial commentary. */
   .ad-badge {
     display: inline-block;
-    font-size: 0.62rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -1942,14 +1994,14 @@
     min-width: 0;
   }
   .ad-panel-eyebrow {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
     color: var(--shorts);
   }
   .ad-panel-summary {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--text);
     font-weight: 500;
   }
@@ -1975,7 +2027,7 @@
     border-top: 1px solid var(--border);
   }
   .ad-panel-meta {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     padding: 0.85rem 0;
     line-height: 1.5;
@@ -2008,7 +2060,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -2060,7 +2112,7 @@
   }
   .ad-perf-date {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     color: var(--text-dim);
     margin-top: 0.1rem;
   }
@@ -2075,11 +2127,11 @@
   @media (max-width: 540px) {
     .ad-panel-toggle { padding: 0.7rem 0.85rem; }
     .ad-panel-body { padding: 0 0.85rem 0.85rem; }
-    .ad-perf-table { font-size: 0.8rem; }
+    .ad-perf-table { font-size: 0.85rem; }
     .ad-perf-table thead th,
     .ad-perf-table td { padding: 0.45rem 0.55rem; }
   }
-  .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.82rem; }
+  .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
   .group-content { max-height: 360px; overflow-y: auto; }
 
@@ -2089,7 +2141,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-dim);
@@ -2113,9 +2165,9 @@
   .video-row-header .sortable.active-sort:hover {
     color: var(--accent);
   }
-  .video-row-header .video-date { font-size: 0.72rem; }
-  .video-row-header .video-channel { font-size: 0.72rem; }
-  .video-row-header .video-duration { font-size: 0.72rem; }
+  .video-row-header .video-date { font-size: 0.78rem; }
+  .video-row-header .video-channel { font-size: 0.78rem; }
+  .video-row-header .video-duration { font-size: 0.78rem; }
   .sort-arrow {
     display: inline-block;
     width: 10px;
@@ -2138,7 +2190,7 @@
     border-radius: 6px;
     padding: 0.45rem 0.7rem;
     font-family: inherit;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
   .detail-search:focus {
     outline: none;
@@ -2182,7 +2234,7 @@
     margin-top: 2rem;
     text-align: center;
     color: var(--text-dim);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
   footer a { color: var(--text-muted); }
 
@@ -2244,7 +2296,7 @@
     border-radius: 999px;
     padding: 0.45rem 0.95rem 0.45rem 0.75rem;
     font-family: inherit;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
@@ -2633,6 +2685,10 @@
           </div>
         </div>
         <div class="control-bar-right">
+          <div class="mode-toggle" role="tablist" aria-label="View mode">
+            <button type="button" data-mode="long" class="active" role="tab">Long-form only</button>
+            <button type="button" data-mode="total" role="tab">Including Shorts</button>
+          </div>
           <label class="control-bar-yoy">
             <input type="checkbox" id="compareYoY" checked>
             <span>Compare YoY</span>
@@ -2643,11 +2699,6 @@
             <span class="share-btn-label">Share</span>
           </button>
         </div>
-      </div>
-
-      <div class="mode-toggle" role="tablist" aria-label="View mode">
-        <button type="button" data-mode="long" class="active" role="tab">Long-form only</button>
-        <button type="button" data-mode="total" role="tab">Including Shorts</button>
       </div>
 
       <div class="hero-grid" id="heroStats"></div>
@@ -2732,7 +2783,7 @@
       <a href="https://developers.google.com/youtube/v3" target="_blank" rel="noopener">YouTube Data API</a>.
       Shorts defined as videos ≤3 minutes.
     </p>
-    <p style="margin: 0; font-size: 0.75rem;">
+    <p style="margin: 0; font-size: 0.78rem;">
       <a href="https://x.com/JerminalDecline" target="_blank" rel="noopener" class="footer-x-link" aria-label="Follow @JerminalDecline on X">
         <svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true" focusable="false" style="vertical-align: -1px;">
           <path fill="currentColor" d="M18.244 2H21.5l-7.5 8.567L23 22h-6.844l-5.36-6.99L4.5 22H1.244l8.02-9.16L1 2h7.014l4.86 6.43L18.244 2zm-1.2 18h1.9L7.044 4H5.06l11.984 16z"/>
