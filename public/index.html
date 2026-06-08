@@ -369,6 +369,25 @@
     font-style: italic;
     opacity: 0.85;
   }
+  /* Throwback annotation under the "Lowest since peak" line — visually subordinate
+     to the line above so users read it as context, not a separate stat. */
+  .peak-throwback {
+    margin-top: -0.15rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .peak-throwback strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .peak-throwback-gap {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.92em;
+  }
+  @media (max-width: 540px) {
+    .peak-throwback { font-size: 0.78rem; }
+  }
   @media (max-width: 540px) {
     .peak-strip { font-size: 0.78rem; padding: 0.5rem 0.15rem 0.75rem; gap: 0.25rem; }
     .peak-strip-label { min-width: 0; font-size: 0.66rem; }
@@ -2938,6 +2957,32 @@ function channelQualifiesForLengthChart(channelId) {
   return LENGTH_CHART_HANDLES.includes(handle);
 }
 
+// Canonical channel display order used everywhere channels are listed (selector
+// chips at the top of the page, breakdown cards above the monthly section,
+// window-mode breakdown pills). Roughly tracks total channel views (highest
+// first) and groups TheQuartering with its sister channel QuarteringLive.
+// Channels not in this list fall through to the end in their natural data
+// order, so a newly-fetched channel still appears in the UI — it just sits at
+// the end until the order is updated.
+const CHANNEL_DISPLAY_ORDER = [
+  '@TheQuartering',
+  '@JeremyHambly',
+  '@QuarteringLive',
+  '@UnSleevedMedia',
+  '@rcnightmare'
+];
+function orderChannelIds(ids) {
+  const ordered = [];
+  for (const handle of CHANNEL_DISPLAY_ORDER) {
+    const id = ids.find(i => dataset?.channels?.[i]?.handle === handle);
+    if (id) ordered.push(id);
+  }
+  for (const id of ids) {
+    if (!ordered.includes(id)) ordered.push(id);
+  }
+  return ordered;
+}
+
 // --- Window mode detection ---
 // Sub-monthly date ranges (under 32 days) get a flat video list instead of monthly aggregation.
 function isWindowMode(startDate, endDate) {
@@ -3395,12 +3440,10 @@ function buildChannelBreakdownHtml(videos, opts) {
     stats.views += v.views || 0;
   }
 
-  // Order chips: TheQuartering first, then the rest
-  const ids = Object.keys(dataset.channels);
-  const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
-  const orderedIds = quarteringId
-    ? [quarteringId, ...ids.filter(id => id !== quarteringId)]
-    : ids;
+  // Order chips using the canonical channel display order — same one used by
+  // the selector chips at the top of the page, so the visual rhythm stays
+  // consistent across the site.
+  const orderedIds = orderChannelIds(Object.keys(dataset.channels));
 
   const chips = orderedIds.map(id => {
     const ch = dataset.channels[id];
@@ -3618,31 +3661,7 @@ function updateWordCloudHint() {
 function renderChannelSelector() {
   const el = document.getElementById('channelSelector');
   if (!el || !dataset?.channels) return;
-  const ids = Object.keys(dataset.channels);
-
-  // Explicit display order for the chip row. Editorial choice: TheQuartering
-  // first (main subject), then Jeremy Hambly (highest-engagement secondary),
-  // then the other Quartering account (QuarteringLive), then UnSleeved + RC
-  // (lowest-traffic of the bunch). Channels not in this list fall through to
-  // the end in their natural data order. "All combined" is always last.
-  const DISPLAY_ORDER = [
-    '@TheQuartering',
-    '@JeremyHambly',
-    '@QuarteringLive',
-    '@UnSleevedMedia',
-    '@rcnightmare'
-  ];
-  const orderedIds = [];
-  for (const handle of DISPLAY_ORDER) {
-    const id = ids.find(i => dataset.channels[i].handle === handle);
-    if (id) orderedIds.push(id);
-  }
-  // Append any channels that exist in the data but aren't in the explicit order
-  // (defensive — keeps the chip row complete if a new channel is added before
-  // someone updates DISPLAY_ORDER)
-  for (const id of ids) {
-    if (!orderedIds.includes(id)) orderedIds.push(id);
-  }
+  const orderedIds = orderChannelIds(Object.keys(dataset.channels));
 
   const chips = [];
   for (const id of orderedIds) {
@@ -3718,7 +3737,7 @@ function renderPeakStrip() {
   // not the lowest month of all time (which for many channels would be their
   // very first month back when nobody knew them — interesting trivia, not a
   // story). When the peak is recent / current, there may be no post-peak month
-  // yet, in which case lowKey stays null and the "All-time low" line is skipped.
+  // yet, in which case lowKey stays null and the "Lowest since peak" line is skipped.
   // Only counts months that actually had uploads (zero-upload months would
   // mechanically be the lowest but aren't a meaningful "low").
   let lowKey = null, lowViews = Infinity;
@@ -3751,15 +3770,90 @@ function renderPeakStrip() {
     </div>
   `;
 
-  // All-time low (skip if it duplicates peak; show even when it equals latest — takes precedence)
+  // Lowest since peak (skip if it duplicates peak; show even when it equals latest — takes precedence)
   let lowLine = '';
   if (lowKey && lowKey !== peakKey && byMonth.size >= 3) {
     const fromPeak = peakViews > 0 ? ((lowViews - peakViews) / peakViews) * 100 : 0;
+
+    // "Throwback" — find the most recent pre-peak month where the channel had
+    // similar (or lower) view performance. Frames the decline concretely:
+    // "views are back to 2018 levels" hits harder than "down 67% from peak"
+    // because it gives a named, intuitive anchor.
+    //
+    // We use a 3-month centred rolling average for both sides of the comparison.
+    // Single-month dips during the growth era would otherwise dominate the
+    // throwback search (e.g. a holiday month in 2020 with 2M views isn't
+    // representative of 2020-era baseline performance). Smoothing demands the
+    // earlier period was *sustainedly* at the current low's level.
+    function rollingAvg(key) {
+      const [y, m] = key.split('-').map(Number);
+      const before = new Date(Date.UTC(y, m - 2, 1));  // previous month
+      const after = new Date(Date.UTC(y, m, 1));        // next month
+      const beforeKey = `${before.getUTCFullYear()}-${String(before.getUTCMonth() + 1).padStart(2, '0')}`;
+      const afterKey = `${after.getUTCFullYear()}-${String(after.getUTCMonth() + 1).padStart(2, '0')}`;
+      // Drop months with no real uploads (zombie months would deflate the avg)
+      const vals = [beforeKey, key, afterKey]
+        .filter(k => (countByMonth.get(k) || 0) > 0)
+        .map(k => byMonth.get(k) || 0);
+      if (!vals.length) return null;
+      return vals.reduce((s, v) => s + v, 0) / vals.length;
+    }
+
+    const lowAvg = rollingAvg(lowKey);
+    let throwbackKey = null;
+    if (lowAvg != null) {
+      // Walk every pre-peak month, find the LATEST one where rolling avg ≤ low's avg.
+      // "Latest" because we want the most recent comparable period — the most
+      // intuitive anchor — not the historically furthest one.
+      const candidates = [...byMonth.keys()]
+        .filter(k => k < peakKey && k !== currentMonthKey && (countByMonth.get(k) || 0) > 0)
+        .sort();
+      for (let i = candidates.length - 1; i >= 0; i--) {
+        const k = candidates[i];
+        const avg = rollingAvg(k);
+        if (avg != null && avg <= lowAvg) {
+          throwbackKey = k;
+          break;
+        }
+      }
+    }
+
+    // Compose the throwback annotation. Suppress when the gap is too small
+    // to be editorially meaningful (< 3 months between throwback and low) —
+    // anything closer than that and we're just describing volatility in the
+    // current decline, not a regression to an earlier era.
+    let throwbackHtml = '';
+    if (throwbackKey) {
+      const [ly, lm] = lowKey.split('-').map(Number);
+      const [ty, tm] = throwbackKey.split('-').map(Number);
+      const monthGap = (ly - ty) * 12 + (lm - tm);
+      if (monthGap >= 3) {
+        // Format the gap by magnitude:
+        //   3-12 months → "5 months ago"   (months feel concrete at this scale)
+        //   12-23 months → "≈ 1 year ago"
+        //   24+ months → "≈ 3 years ago"   (years feel right; "30 months" is awkward)
+        let gapText;
+        if (monthGap < 12) {
+          gapText = `${monthGap} months ago`;
+        } else {
+          const yearGap = Math.round(monthGap / 12);
+          gapText = yearGap === 1 ? '≈ 1 year ago' : `≈ ${yearGap} years ago`;
+        }
+        throwbackHtml = `
+          <div class="peak-line peak-throwback">
+            <span class="peak-strip-label"></span>
+            <span>Last seen at this level: <button type="button" class="peak-month-jump" data-jump-month-key="${throwbackKey}" title="Jump to this month">${labelFromKey(throwbackKey)}</button> · <span class="peak-throwback-gap">${gapText}</span></span>
+          </div>
+        `;
+      }
+    }
+
     lowLine = `
       <div class="peak-line">
-        <span class="peak-strip-label">All-time low</span>
+        <span class="peak-strip-label">Lowest since peak</span>
         <span><button type="button" class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(▼${Math.abs(fromPeak).toFixed(1)}% from peak)</span></span>
       </div>
+      ${throwbackHtml}
     `;
   }
 
@@ -5624,7 +5718,7 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     funeralMascotLoaded = true;
   }
 
-  // Read the "All-time low" line from the rendered peak strip and produce a
+  // Read the "Lowest since peak" line from the rendered peak strip and produce a
   // compact display string like "▼89.3%" — just the figure.
   // The mood mode itself is the joke; the over-explained version was redundant.
   function readAllTimeLowText() {
@@ -5634,7 +5728,7 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     const lines = peakStrip.querySelectorAll('.peak-line');
     for (const line of lines) {
       const label = line.querySelector('.peak-strip-label');
-      if (!label || !/all[- ]?time low/i.test(label.textContent)) continue;
+      if (!label || !/lowest since peak/i.test(label.textContent)) continue;
       const drop = line.querySelector('.peak-drop');
       if (drop) {
         const m = drop.textContent.match(/-?(\d+(?:\.\d+)?)/);
@@ -5644,7 +5738,7 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     return '▼ —';
   }
 
-  // Funeral floater: a one-shot dust effect. The all-time low figure fades in,
+  // Funeral floater: a one-shot dust effect. The lowest-since-peak figure fades in,
   // holds briefly, then progressively crumbles to dust over ~15 seconds.
   // After the dust disperses, no text remains — the rain and mascot carry the mood.
   //
@@ -6110,7 +6204,7 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     if (container) container.innerHTML = '';
   }
 
-  // Re-fetch the all-time low text and update any active floaters.
+  // Re-fetch the lowest-since-peak text and update any active floaters.
   // Funeral: restart the dust sequence so the new channel's figure gets its own moment.
   // Party: full rebuild — the chaos hides the reshuffle.
   function refreshActiveFloaters() {
