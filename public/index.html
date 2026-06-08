@@ -191,14 +191,64 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.6rem 1rem;
-    padding: 0.65rem 0.85rem;
-    background: var(--brand-soft);
-    border-radius: var(--radius-sm);
-    margin-bottom: 0.6rem;
+    padding: 0.5rem 0 0.65rem;
     font-size: 0.95rem;
     /* Reserve height so chips appearing post-load don't shift the layout below.
        Matches the rendered height of a single row of channel-chip buttons. */
     min-height: 2.85rem;
+  }
+  /* Filter cluster — groups channel chips + date presets + control bar into
+     a single visual block at the top of the results card. Bottom separator
+     divides "filter controls" from the channel-derived context block and
+     data below.
+     Sticky positioning keeps the filters at the top of the viewport when the
+     user scrolls down past them — important for the long charts and tables
+     below, where users may want to change channel/range without scrolling
+     all the way back up. The opaque background + bottom shadow lets the
+     filters sit cleanly over the content beneath. */
+  .filter-cluster {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--surface);
+    /* Subtle bottom shadow appears when the cluster is "stuck" — the actual
+       always-visible separator is the 1px border-bottom above. The shadow
+       gives a sense of depth when content scrolls behind. */
+    box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
+    /* Negative-margin trick: extend the sticky element to bleed into the
+       card's horizontal padding, so the background fully covers the card's
+       width at the top. Without this, scrolled content shows through the
+       card padding on the sides. */
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+    /* Sit flush with the card's top edge so the card border isn't visible
+       through the sticky header */
+    margin-top: -1.5rem;
+    padding-top: 1.5rem;
+  }
+  /* Mobile: card has less horizontal padding (0.85rem), so the negative
+     margins need to match. Padding-top stays smaller too.
+     Also: REMOVE sticky from the whole cluster on mobile. The cluster is
+     tall on small screens (chips wrap, presets wrap, control bar wraps) and
+     gluing all of it to the top eats too much viewport. Instead the
+     channel-strip alone gets sticky treatment (see its own rule below). */
+  @media (max-width: 540px) {
+    .filter-cluster {
+      margin-left: -0.85rem;
+      margin-right: -0.85rem;
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+      margin-top: -1rem;
+      padding-top: 1rem;
+      position: static;
+      box-shadow: none;
+    }
   }
   /* Channel selector — pill row of channel buttons */
   .channel-selector {
@@ -246,31 +296,6 @@
   }
   .channel-chip.all { font-style: italic; }
 
-  /* Row below the strip with the View-on-YouTube link */
-  .channel-link-row {
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    min-height: 1.2rem;
-  }
-  .channel-link-row:empty { margin-bottom: 0.5rem; min-height: 0; }
-  .channel-link {
-    color: var(--text-muted);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: color 0.12s;
-  }
-  .channel-link:hover { color: var(--brand); }
-  .channel-link-arrow {
-    font-size: 0.78rem;
-    opacity: 0.7;
-    transition: transform 0.15s, opacity 0.15s;
-  }
-  .channel-link:hover .channel-link-arrow {
-    opacity: 1;
-    transform: translate(1px, -1px);
-  }
   @media (max-width: 540px) {
     .channel-chip { font-size: 0.85rem; padding: 0.38rem 0.85rem; }
     /* Centre the chip cluster on mobile — when wrapped across 2-3 rows on a
@@ -281,10 +306,37 @@
       justify-content: center;
       width: 100%;
     }
+    /* Sticky channel chips only on mobile — recovers screen space lost when
+       the full filter cluster was sticky (presets + control bar took too
+       many rows). Date controls scroll away normally; users scroll back to
+       the top of the card to change them (rarer action than channel switch).
+       Background + shadow match the cluster's stuck-state visual so it reads
+       as "the filter bar". Bleeds into the card's horizontal padding so it
+       covers the full card width when stuck. */
     .channel-strip {
       justify-content: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--surface);
+      box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
+      margin-left: -0.85rem;
+      margin-right: -0.85rem;
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+      /* Tighter padding when sticky so the bar is as short as we can get it
+         without cramping the chips. */
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      /* min-height was 2.85rem (room for chips + last-updated stacked).
+         With last-updated hidden, drop to fit chips only. */
+      min-height: 0;
     }
-    .last-updated { width: 100%; justify-content: center; }
+    /* Last-updated hidden on mobile — it's secondary metadata (which the
+       chips don't need) and consumes a full row on small screens. Available
+       in the footer/source area for anyone who needs it. */
+    .last-updated { display: none; }
   }
   .last-updated {
     color: var(--text-muted);
@@ -320,46 +372,105 @@
 
   /* Peak strip — surfaces all-time peak as a reference point */
   .peak-strip {
-    font-size: 0.85rem;
     color: var(--text-muted);
-    padding: 0.6rem 0.2rem 0.95rem;
+    padding: 0.85rem 0.2rem 1.1rem;
     margin-bottom: 0.5rem;
     border-bottom: 1px dashed var(--border);
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 1rem;
   }
   .peak-strip:empty { display: none; }
+  /* Two-column grid: peak on the left, lowest-since-peak on the right.
+     Subtle vertical separator visually reinforces "from A to B" reading.
+     Equal columns; gap is generous so the two stats don't feel cramped.
+     Collapses to single column at ≤540px (mobile rule below). */
+  .peak-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2.25rem;
+    align-items: start;
+  }
+  .peak-grid .peak-line:last-child {
+    /* Right column gets a left border as the divider. The padding-left
+       pulls its content off the divider line so it doesn't crowd. */
+    border-left: 1px solid var(--border);
+    padding-left: 2.25rem;
+    margin-left: -2.25rem;  /* compensates so the grid gap accommodates */
+  }
+  /* Each "line" in the grid is now column-shaped: label on top, value below,
+     month below that. The eyebrow label functions as a column header. */
   .peak-line {
     display: flex;
-    align-items: baseline;
-    gap: 0.65rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
   }
   .peak-strip-label {
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     color: var(--text-dim);
-    font-weight: 500;
-    flex-shrink: 0;
-    min-width: 145px;
+    font-weight: 600;
   }
-  .peak-strip strong {
+  .peak-line-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  /* Value row — big number is the headline, unit is secondary, percentage
+     is a small badge hanging off to the right (or wrapping below on narrow). */
+  .peak-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+  .peak-value {
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--text);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .peak-value-unit {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .peak-pct {
+    font-size: 0.85rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    margin-left: 0.25rem;
   }
-  .peak-strip .peak-drop {
-    color: var(--down);
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
+  .peak-meta-row {
+    font-size: 0.85rem;
+    color: var(--text-muted);
   }
-  .peak-strip .peak-gain {
-    color: var(--up);
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
+  /* Latest-month row drops below the grid as full-width. It gets the original
+     horizontal layout (label left, content right) since it's a standalone
+     row, not part of a 2-col layout. */
+  .peak-strip > .peak-line {
+    /* This rule targets the latest-row's .peak-line that's a direct child of
+       .peak-strip (not nested in .peak-grid). Restore horizontal layout. */
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
   }
+  .peak-strip > .peak-line > .peak-strip-label {
+    width: 145px;
+    flex-shrink: 0;
+    padding-top: 0.45rem;
+  }
+  .peak-strip > .peak-line > .peak-line-content {
+    flex: 1 1 auto;
+  }
+  .peak-strip strong { color: var(--text); font-weight: 600; }
+  .peak-strip .peak-drop { color: var(--down); }
+  .peak-strip .peak-gain { color: var(--up); }
   .peak-month-jump {
     background: none;
     border: none;
@@ -385,33 +496,49 @@
   .peak-footnote {
     font-size: 0.7rem;
     color: var(--text-dim);
-    margin-top: 0.35rem;
+    margin-top: 0.1rem;
     font-style: italic;
     opacity: 0.85;
   }
-  /* Throwback annotation under the "Lowest since peak" line — visually subordinate
-     to the line above so users read it as context, not a separate stat. */
   .peak-throwback {
-    margin-top: -0.15rem;
     font-size: 0.85rem;
     color: var(--text-muted);
-  }
-  .peak-throwback strong {
-    color: var(--text);
-    font-weight: 600;
+    margin-top: 0.1rem;
   }
   .peak-throwback-gap {
     color: var(--text-dim);
     font-variant-numeric: tabular-nums;
     font-size: 0.92em;
   }
-  @media (max-width: 540px) {
-    .peak-throwback { font-size: 0.78rem; }
+  /* Tablet: tighten the gap between columns when there's less horizontal
+     room, so peak and lowest don't crowd against the divider. */
+  @media (max-width: 800px) {
+    .peak-grid { gap: 0 1.5rem; }
+    .peak-grid .peak-line:last-child {
+      padding-left: 1.5rem;
+      margin-left: -1.5rem;
+    }
   }
+  /* Mobile: collapse grid to single column, drop the divider, restore the
+     old label-on-left / content-on-right inside each line. */
   @media (max-width: 540px) {
-    .peak-strip { font-size: 0.78rem; padding: 0.5rem 0.15rem 0.75rem; gap: 0.25rem; }
-    .peak-strip-label { min-width: 0; font-size: 0.7rem; }
-    .peak-line { gap: 0.45rem; }
+    .peak-grid {
+      grid-template-columns: 1fr;
+      gap: 0.85rem 0;
+    }
+    .peak-grid .peak-line:last-child {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+    .peak-value { font-size: 1.35rem; }
+    .peak-value-row { gap: 0.45rem; }
+    .peak-pct { margin-left: 0; }
+    .peak-throwback { font-size: 0.78rem; }
+    .peak-strip { gap: 0.85rem; padding: 0.5rem 0.15rem 0.75rem; }
+    /* Latest-row also goes column-stacked on mobile */
+    .peak-strip > .peak-line { flex-direction: column; gap: 0.15rem; }
+    .peak-strip > .peak-line > .peak-strip-label { width: auto; padding-top: 0; }
   }
   @media (max-width: 540px) {
     .brand-name { font-size: 1.5rem; }
@@ -1218,6 +1345,41 @@
     height: 0;
     border-top: 2px dashed #7c3aed;
   }
+  /* Revenue band swatch — translucent fill matching the chart's revenue band. */
+  .trend-legend-swatch.revenue-band {
+    background: var(--up);
+    opacity: 0.22;
+    height: 10px;
+    border-radius: 2px;
+  }
+  /* Revenue band path on the chart itself — soft green fill, no stroke. */
+  .chart-revenue-band {
+    fill: var(--up);
+    fill-opacity: 0.18;
+    stroke: none;
+  }
+  /* Revenue mid-line — solid line through the middle of the band. Must be
+     explicit about fill:none, otherwise the browser fills the path's closed
+     region with black (SVG default) and the entire chart becomes a black
+     polygon. */
+  .chart-line-revenue {
+    fill: none;
+    stroke: var(--up);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  /* In-progress connector specifically for the revenue chart — dashed line
+     in the same green family as the main line, lower opacity so it reads
+     as "tentative / not yet complete" alongside the solid pre-complete line. */
+  .chart-line-revenue-inprogress {
+    fill: none;
+    stroke: var(--up);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
   .chart-wrap {
     position: relative;
     background: var(--surface-2);
@@ -1298,6 +1460,14 @@
     fill: #dc3232;
     stroke: var(--surface-2);
     stroke-width: 1.5;
+  }
+  /* Revenue-specific in-progress dot — green to match the revenue chart palette.
+     Scoped by the wrapping #revenueChart so it only applies inside the panel. */
+  #revenueChart .chart-dot-inprogress {
+    fill: var(--up);
+  }
+  #revenueChart .chart-dot-inprogress-pulse {
+    fill: var(--up);
   }
   /* The pulse circle starts at the dot's size and expands outward while fading.
      Looping animation creates the "alive, in progress" cue. */
@@ -2143,6 +2313,169 @@
     .ad-perf-table thead th,
     .ad-perf-table td { padding: 0.45rem 0.55rem; }
   }
+
+  /* Estimated revenue panel — same architectural pattern as the ad panel
+     (collapsible toggle with one-line summary, expandable detail) but
+     visually distinguished with a different accent colour so users can tell
+     them apart at a glance. Green accent reads as "money" without being too
+     on-the-nose about it. */
+  .revenue-panel {
+    background: var(--surface);
+    border: 1px solid var(--up);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 0 0 1.5rem;
+    /* Note: no `overflow: hidden` here — the chart tooltip inside the panel
+       body needs to be free to extend beyond the panel edges. The toggle
+       button below clips its own hover background to the rounded corners
+       individually via the toggle's own border-radius. */
+  }
+  .revenue-panel-toggle {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;
+    /* Match panel's top corners so hover background doesn't bleed past them
+       (the panel no longer uses overflow:hidden — see note there). */
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+  }
+  .revenue-panel-toggle:hover { background: var(--surface-2); }
+  .revenue-panel-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .revenue-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+  }
+  .revenue-panel-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .revenue-panel-eyebrow {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--up);
+  }
+  .revenue-panel-summary {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-panel-caret {
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;
+  }
+  .revenue-panel-toggle[aria-expanded="true"] .revenue-panel-caret {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+  }
+  /* Expanded body — chart, breakdown table, methodology */
+  .revenue-panel-body {
+    padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  /* Chart wrap inside the panel — relative-positioned so the absolute
+     tooltip can anchor to it. Slightly inset from the panel body padding
+     so the chart doesn't bleed visually into the table below. */
+  .revenue-chart-wrap {
+    position: relative;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 0.85rem 0.5rem;
+    margin: 1rem 0 0.5rem;
+  }
+  #revenueChart {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .revenue-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.4rem;
+  }
+  .trend-legend-swatch.revenue-mid {
+    background: var(--up);
+    height: 2px;
+  }
+  .revenue-breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-breakdown th {
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .revenue-breakdown th.num { text-align: right; }
+  .revenue-breakdown td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .revenue-breakdown td.num { text-align: right; }
+  .revenue-breakdown tr.total td {
+    border-bottom: none;
+    border-top: 2px solid var(--border-strong);
+    font-weight: 700;
+    padding-top: 0.7rem;
+  }
+  .revenue-breakdown .rev-category {
+    color: var(--text);
+  }
+  .revenue-breakdown .rev-subdetail {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-breakdown .rev-range {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-panel-footnote {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 1rem;
+    line-height: 1.55;
+  }
+  .revenue-panel-footnote strong { color: var(--text); }
+  @media (max-width: 540px) {
+    .revenue-panel-toggle { padding: 0.7rem 0.85rem; }
+    .revenue-panel-body { padding: 0 0.85rem 0.85rem; }
+    .revenue-breakdown { font-size: 0.85rem; }
+    .revenue-breakdown th,
+    .revenue-breakdown td { padding: 0.45rem 0.4rem; }
+  }
   .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
   .group-content { max-height: 360px; overflow-y: auto; }
@@ -2653,18 +2986,6 @@
         </button>
       </div>
     </div>
-    <div class="channel-strip">
-      <div class="channel-selector" id="channelSelector" role="tablist" aria-label="Channel"></div>
-      <span class="last-updated" id="lastUpdated"></span>
-    </div>
-    <div class="channel-link-row" id="channelLinkRow"></div>
-    <div class="peak-strip" id="peakStrip"></div>
-    <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
-      <span class="prediction-text" id="predictionText">
-        This channel is dying because… <strong id="predictionReason">…</strong>
-      </span>
-      <span class="prediction-shake">New excuse</span>
-    </div>
   </header>
 
   <div id="resultsCard" class="card">
@@ -2679,38 +3000,59 @@
       <div class="skeleton-bar" style="width: 100%; height: 200px;"></div>
     </div>
     <div id="resultsBody" style="display: none;">
-      <div class="preset-row" id="presetRow">
-        <button type="button" class="preset-chip" data-preset="30d">Last 30 days</button>
-        <button type="button" class="preset-chip" data-preset="ytd">YTD</button>
-        <button type="button" class="preset-chip" data-preset="12m">Last 12 months</button>
-        <button type="button" class="preset-chip" data-preset="24m">Last 24 months</button>
-        <button type="button" class="preset-chip" data-preset="since-peak">Since peak</button>
-        <button type="button" class="preset-chip" data-preset="all">All time</button>
+      <!-- Filter cluster — channel chips, then time/mode controls.
+           All filters sit together at the top of the card so the user can
+           change any combination without travelling far on the page.
+           Reading order: channel → time range → mode/share → context → stats. -->
+      <div class="filter-cluster" id="filterCluster">
+        <div class="channel-strip">
+          <div class="channel-selector" id="channelSelector" role="tablist" aria-label="Channel"></div>
+          <span class="last-updated" id="lastUpdated"></span>
+        </div>
+        <div class="preset-row" id="presetRow">
+          <button type="button" class="preset-chip" data-preset="30d">Last 30 days</button>
+          <button type="button" class="preset-chip" data-preset="ytd">YTD</button>
+          <button type="button" class="preset-chip" data-preset="12m">Last 12 months</button>
+          <button type="button" class="preset-chip" data-preset="24m">Last 24 months</button>
+          <button type="button" class="preset-chip" data-preset="since-peak">Since peak</button>
+          <button type="button" class="preset-chip" data-preset="all">All time</button>
+        </div>
+        <div class="control-bar">
+          <div class="control-bar-period">
+            <span class="control-bar-prefix">Viewing</span>
+            <div class="control-bar-dates">
+              <input type="date" id="startDate" class="inline-date">
+              <span class="control-bar-dash">–</span>
+              <input type="date" id="endDate" class="inline-date">
+            </div>
+          </div>
+          <div class="control-bar-right">
+            <div class="mode-toggle" role="tablist" aria-label="View mode">
+              <button type="button" data-mode="long" class="active" role="tab">Long-form only</button>
+              <button type="button" data-mode="total" role="tab">Including Shorts</button>
+            </div>
+            <label class="control-bar-yoy">
+              <input type="checkbox" id="compareYoY" checked>
+              <span>Compare YoY</span>
+            </label>
+            <button type="button" class="share-btn" id="shareBtn" title="Copy link to this view" aria-label="Copy link to this view">
+              <svg class="share-icon-default" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              <svg class="share-icon-done" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="share-btn-label">Share</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="control-bar">
-        <div class="control-bar-period">
-          <span class="control-bar-prefix">Viewing</span>
-          <div class="control-bar-dates">
-            <input type="date" id="startDate" class="inline-date">
-            <span class="control-bar-dash">–</span>
-            <input type="date" id="endDate" class="inline-date">
-          </div>
-        </div>
-        <div class="control-bar-right">
-          <div class="mode-toggle" role="tablist" aria-label="View mode">
-            <button type="button" data-mode="long" class="active" role="tab">Long-form only</button>
-            <button type="button" data-mode="total" role="tab">Including Shorts</button>
-          </div>
-          <label class="control-bar-yoy">
-            <input type="checkbox" id="compareYoY" checked>
-            <span>Compare YoY</span>
-          </label>
-          <button type="button" class="share-btn" id="shareBtn" title="Copy link to this view" aria-label="Copy link to this view">
-            <svg class="share-icon-default" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            <svg class="share-icon-done" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span class="share-btn-label">Share</span>
-          </button>
-        </div>
+
+      <!-- Channel-derived summary block: peak/low strip and the satirical
+           prediction card. Sits just above the hero stats so it reads as
+           "what to watch for" framing immediately before the numbers themselves. -->
+      <div class="peak-strip" id="peakStrip"></div>
+      <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
+        <span class="prediction-text" id="predictionText">
+          This channel is dying because… <strong id="predictionReason">…</strong>
+        </span>
+        <span class="prediction-shake">New excuse</span>
       </div>
 
       <div class="hero-grid" id="heroStats"></div>
@@ -2719,6 +3061,10 @@
       <!-- Ad campaigns panel — populated only when the selected channel has
            confirmed ad-promoted videos in ad-videos.json -->
       <div class="ad-panel" id="adPanel" hidden></div>
+
+      <!-- Estimated ad revenue panel — collapsible, shows category-by-category
+           ranges (long-form vs Shorts) with methodology disclosure. -->
+      <div class="revenue-panel" id="revenuePanel" hidden></div>
 
       <h2 class="section-title trend-title" id="trendSection">
         <span>Monthly trend</span>
@@ -2814,6 +3160,15 @@ let dataset = null;
 let viewMode = 'long';
 let selectedChannel = 'ALL'; // either a channel ID string, or 'ALL'
 let chartMetric = 'views';   // 'views' | 'views_length' | 'all_videos'
+// Persist the revenue panel's expanded/collapsed state across re-renders.
+// The panel re-renders whenever the channel or date filter changes (since its
+// data depends on those), and re-render rebuilds the toggle DOM from scratch.
+// Without this, the panel snaps closed every time the user touches a filter
+// — disorienting if they're trying to compare e.g. "TheQuartering revenue
+// last 30d" with "TheQuartering revenue YTD" and watching the chart.
+let revenuePanelExpanded = false;
+// Same treatment for the ad campaigns panel for consistency.
+let adPanelExpanded = false;
 let monthlyData = [];
 let heroAnimated = false;
 // Set of YouTube video IDs identified as paid Google Ad campaigns
@@ -2939,6 +3294,24 @@ function summarise(videos) {
   // "how long was the typical video". Useful for spotting cases where video
   // count stays flat but per-video duration rises, inflating total upload time.
   const longFormTotalSeconds = durations.reduce((s, d) => s + d, 0);
+
+  // Revenue bucketing — splits long-form by mid-roll eligibility (≥8 min)
+  // since the two tiers have different published RPM ranges. Defined as
+  // top-level constants (see RPM and MID_ROLL_THRESHOLD_SEC). We pre-compute
+  // low and high revenue here so the chart can render a band without
+  // re-walking the video list per render.
+  const midRollViews = longForm
+    .filter(v => (v.durationSec || 0) >= MID_ROLL_THRESHOLD_SEC)
+    .reduce((s, v) => s + v.views, 0);
+  const shortLongViews = longViews - midRollViews;
+  const revLow = (midRollViews / 1000) * RPM.longFormMidRoll.low
+              + (shortLongViews / 1000) * RPM.longFormShort.low
+              + (shortViews / 1000) * RPM.shorts.low;
+  const revHigh = (midRollViews / 1000) * RPM.longFormMidRoll.high
+               + (shortLongViews / 1000) * RPM.longFormShort.high
+               + (shortViews / 1000) * RPM.shorts.high;
+  const revMid = (revLow + revHigh) / 2;
+
   return {
     longForm, shorts,
     longViews, shortViews,
@@ -2947,6 +3320,7 @@ function summarise(videos) {
     medianDuration,
     longFormDurations: durations.length,
     longFormTotalSeconds,
+    revLow, revHigh, revMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
     totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
@@ -3003,10 +3377,6 @@ function computePeakMonthKey() {
 function activeDisplayName() {
   if (selectedChannel === 'ALL') return 'Quartering universe';
   return dataset?.channels?.[selectedChannel]?.title || 'Channel';
-}
-function activeChannelUrl() {
-  if (selectedChannel === 'ALL') return null;
-  return dataset?.channels?.[selectedChannel]?.url || null;
 }
 
 // Channels eligible for the Views + video length chart. Restricted to those with
@@ -3275,7 +3645,6 @@ async function loadData() {
     }
 
     renderChannelSelector();
-    renderChannelLinkRow();
 
     const updated = new Date(dataset.meta.lastUpdated);
     const now = new Date();
@@ -3291,6 +3660,7 @@ async function loadData() {
     renderFooterMeta();
     renderPeakStrip();
     renderAdPanel();
+    renderRevenuePanel();
 
     // Default range: Jan 1 of current year to today, overridable via URL params
     const today = new Date();
@@ -3415,6 +3785,8 @@ function rebuild() {
     document.getElementById('windowSection').hidden = true;
     const adPanel = document.getElementById('adPanel');
     if (adPanel) adPanel.hidden = true;
+    const revPanel = document.getElementById('revenuePanel');
+    if (revPanel) revPanel.hidden = true;
     return;
   }
   // Restore visibility if previously empty
@@ -3463,28 +3835,33 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
+  // Revenue panel needs to refresh when the date range changes (its estimate
+  // is scoped to the active filter window). The ad panel is channel-scoped
+  // and doesn't change with date — handled separately.
+  renderRevenuePanel();
 
   // Chart metric toggle visibility:
-  // Views + video length only makes sense when:
-  // - We're in long-form mode (median duration is a long-form metric)
-  // - We're in monthly trend mode (not window mode)
-  // - The selected channel has enough consistent upload history for the
-  //   comparison to be meaningful. UnSleevedMedia and rcnightmare have very
-  //   patchy, low-volume uploads — their duration trends would mostly be noise
-  //   from tiny sample sizes per month. Restricted to TheQuartering and
-  //   Jeremy Hambly, who upload regularly enough for the comparison to be useful.
-  //   "All combined" is excluded too since mixing channels with very different
-  //   upload patterns distorts the median.
+  // - Always visible in monthly trend mode (hidden in window mode)
+  // - Per-button visibility: "Views + video length" and "All videos" require
+  //   long-form mode, monthly mode, and a channel with consistent uploads
+  //   (TheQuartering, JeremyHambly). Median/scatter on patchy data is mostly
+  //   noise, so we hide those modes for other channels.
+  //   (Revenue is its own chart inside the revenue panel, not a toggle here.)
   const metricToggle = document.querySelector('.chart-metric-toggle');
   const lengthEligible = channelQualifiesForLengthChart(selectedChannel);
   if (metricToggle) {
-    metricToggle.style.display = (!windowMode && viewMode === 'long' && lengthEligible) ? '' : 'none';
+    metricToggle.style.display = windowMode ? 'none' : '';
+    const btnLength = metricToggle.querySelector('[data-chart-metric="views_length"]');
+    const btnScatter = metricToggle.querySelector('[data-chart-metric="all_videos"]');
+    const lengthShown = viewMode === 'long' && lengthEligible;
+    if (btnLength) btnLength.style.display = lengthShown ? '' : 'none';
+    if (btnScatter) btnScatter.style.display = lengthShown ? '' : 'none';
   }
-  // If the user had views+length selected and switched to a channel that doesn't
-  // qualify, coerce the chart metric back to 'views' (without resetting their
-  // stated preference — when they return to a qualifying channel it comes back).
-  // We do this by passing a local "effective" flag into renderTrendChart, not
-  // by mutating the persistent chartMetric state.
+  // If the user had a now-unavailable metric selected and switched to a channel
+  // that doesn't support it, coerce the chart metric back to 'views' (without
+  // resetting their stated preference — when they return to a qualifying view
+  // it comes back). We do this by passing a local "effective" flag into
+  // renderTrendChart, not by mutating the persistent chartMetric state.
 
   if (windowMode) {
     renderWindowList(startDate, endDate);
@@ -3757,18 +4134,6 @@ function renderChannelSelector() {
   el.innerHTML = chips.join('');
 }
 
-function renderChannelLinkRow() {
-  const el = document.getElementById('channelLinkRow');
-  if (!el) return;
-  if (selectedChannel === 'ALL') {
-    el.innerHTML = '';
-    return;
-  }
-  const url = activeChannelUrl();
-  if (!url) { el.innerHTML = ''; return; }
-  el.innerHTML = `<a class="channel-link" href="${url}" target="_blank" rel="noopener">View ${escapeHtml(activeDisplayName())} on YouTube <span class="channel-link-arrow">↗</span></a>`;
-}
-
 function renderFooterMeta() {
   const el = document.getElementById('footerMeta');
   if (!el || !dataset) return;
@@ -3845,11 +4210,22 @@ function renderPeakStrip() {
     return d.toLocaleString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
   }
 
-  // Peak (always shown)
+  // Peak (always shown).
+  // Structure: eyebrow label → big value → context (month, label).
+  // The big value is the visual focus — what someone scanning the strip
+  // should see first, without having to read the label.
   const peakLine = `
     <div class="peak-line">
       <span class="peak-strip-label">All-time peak</span>
-      <span><button type="button" class="peak-month-jump" data-jump-month-key="${peakKey}" title="Jump to this month">${labelFromKey(peakKey)}</button> · <strong>${fmt(peakViews)}</strong> long-form views</span>
+      <div class="peak-line-content">
+        <div class="peak-value-row">
+          <strong class="peak-value">${fmtCompact(peakViews)}</strong>
+          <span class="peak-value-unit">long-form views</span>
+        </div>
+        <div class="peak-meta-row">
+          <button type="button" class="peak-month-jump" data-jump-month-key="${peakKey}" title="Jump to this month">${labelFromKey(peakKey)}</button>
+        </div>
+      </div>
     </div>
   `;
 
@@ -3923,9 +4299,8 @@ function renderPeakStrip() {
           gapText = yearGap === 1 ? '≈ 1 year ago' : `≈ ${yearGap} years ago`;
         }
         throwbackHtml = `
-          <div class="peak-line peak-throwback">
-            <span class="peak-strip-label"></span>
-            <span>Last seen at this level: <button type="button" class="peak-month-jump" data-jump-month-key="${throwbackKey}" title="Jump to this month">${labelFromKey(throwbackKey)}</button> · <span class="peak-throwback-gap">${gapText}</span></span>
+          <div class="peak-throwback">
+            Last seen at this level: <button type="button" class="peak-month-jump" data-jump-month-key="${throwbackKey}" title="Jump to this month">${labelFromKey(throwbackKey)}</button> · <span class="peak-throwback-gap">${gapText}</span>
           </div>
         `;
       }
@@ -3934,9 +4309,18 @@ function renderPeakStrip() {
     lowLine = `
       <div class="peak-line">
         <span class="peak-strip-label">Lowest since peak</span>
-        <span><button type="button" class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button> · <strong>${fmt(lowViews)}</strong> <span class="peak-drop">(▼${Math.abs(fromPeak).toFixed(1)}% from peak)</span></span>
+        <div class="peak-line-content">
+          <div class="peak-value-row">
+            <strong class="peak-value">${fmtCompact(lowViews)}</strong>
+            <span class="peak-value-unit">long-form views</span>
+            <span class="peak-drop peak-pct">▼${Math.abs(fromPeak).toFixed(1)}% from peak</span>
+          </div>
+          <div class="peak-meta-row">
+            <button type="button" class="peak-month-jump" data-jump-month-key="${lowKey}" title="Jump to this month">${labelFromKey(lowKey)}</button>
+          </div>
+          ${throwbackHtml}
+        </div>
       </div>
-      ${throwbackHtml}
     `;
   }
 
@@ -3950,7 +4334,16 @@ function renderPeakStrip() {
     downLine = `
       <div class="peak-line">
         <span class="peak-strip-label">Latest complete month</span>
-        <span><button type="button" class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button> · <strong>${fmt(latestViews)}</strong> <span class="${cls}">(${arrowSym}${Math.abs(drop).toFixed(1)}% from peak)</span></span>
+        <div class="peak-line-content">
+          <div class="peak-value-row">
+            <strong class="peak-value">${fmtCompact(latestViews)}</strong>
+            <span class="peak-value-unit">long-form views</span>
+            <span class="${cls} peak-pct">${arrowSym}${Math.abs(drop).toFixed(1)}% from peak</span>
+          </div>
+          <div class="peak-meta-row">
+            <button type="button" class="peak-month-jump" data-jump-month-key="${latestKey}" title="Jump to this month">${labelFromKey(latestKey)}</button>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -3960,7 +4353,19 @@ function renderPeakStrip() {
     <div class="peak-footnote">Current month (${labelFromKey(currentMonthKey).split(' ')[0]}) is in progress and excluded from comparisons.</div>
   `;
 
-  el.innerHTML = peakLine + lowLine + downLine + footnote;
+  // Two-column layout on desktop: peak on the left, lowest-since-peak on the
+  // right, reading left-to-right as a decline narrative. Latest-month (when
+  // distinct from lowest) drops below as a full-width row. On mobile the
+  // grid collapses to a single column — the CSS handles that responsively.
+  //
+  // If we don't have a lowest line (single-month channel, or peak is also
+  // latest), there's nothing to put in the right column — fall back to a
+  // single-column layout so peak doesn't sit alone in a 50% slot.
+  const hasLow = !!lowLine;
+  const topRow = hasLow
+    ? `<div class="peak-grid">${peakLine}${lowLine}</div>`
+    : peakLine;
+  el.innerHTML = topRow + downLine + footnote;
 }
 
 // Renders the "confirmed paid promotion" panel — visible only when the selected
@@ -4115,8 +4520,11 @@ function renderAdPanel() {
   }
 
   panel.hidden = false;
+  // Apply persisted state — ad panel only re-renders on channel changes (it
+  // doesn't depend on the date filter), so the issue is milder than the
+  // revenue panel, but consistent UX wins by preserving state here too.
   panel.innerHTML = `
-    <button type="button" class="ad-panel-toggle" aria-expanded="false" id="adPanelToggle">
+    <button type="button" class="ad-panel-toggle" aria-expanded="${adPanelExpanded}" id="adPanelToggle">
       <div class="ad-panel-header">
         <div class="ad-panel-header-left">
           <span class="ad-panel-eyebrow">Confirmed paid promotion</span>
@@ -4125,7 +4533,7 @@ function renderAdPanel() {
         <span class="ad-panel-caret" aria-hidden="true"></span>
       </div>
     </button>
-    <div class="ad-panel-body" id="adPanelBody" hidden>
+    <div class="ad-panel-body" id="adPanelBody"${adPanelExpanded ? '' : ' hidden'}>
       <div class="ad-panel-meta">
         Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
@@ -4162,8 +4570,10 @@ function renderAdPanel() {
   const body = document.getElementById('adPanelBody');
   toggle.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-    body.hidden = expanded;
+    const next = !expanded;
+    toggle.setAttribute('aria-expanded', String(next));
+    body.hidden = !next;
+    adPanelExpanded = next;  // persist across re-renders
   });
 
   // Sort handlers — attach to each sortable header.
@@ -4202,6 +4612,284 @@ function renderAdPanel() {
       }
     });
   });
+}
+
+// === Estimated YouTube ad revenue ============================================
+//
+// Methodology: split views into categories with different monetisation profiles,
+// apply published RPM (revenue-per-1000-views) ranges for each, present a range.
+//
+// RPM = what the creator actually receives AFTER YouTube's 45% cut (NOT the
+// gross CPM advertisers pay). This is the "estimated revenue" figure YouTube
+// shows creators in Studio.
+//
+// Sources used to set the RPM ranges below (all 2026 data, all consistent
+// within their stated margins):
+//
+//   1. OutlierKit, "YouTube Drama Channel RPM & CPM: What Creators Actually
+//      Earn in 2026" (April 2026):
+//      - Commentary/reaction RPM range: $3-$8
+//      - YouTube creator drama RPM: $2-$5 (brand-safety penalty)
+//      - Celebrity/news drama RPM: $3-$6
+//      Source: https://outlierkit.com/resources/youtube-drama-channel-rpm-cpm/
+//
+//   2. Revid.ai, "How Much Do YouTubers Make? Real Earnings Breakdown" (Dec 2025):
+//      - Average long-form RPM ~$3 globally; "realistic working range" $2-$5
+//      - Shorts: $0.01-$0.07 typical, $0.05 most common
+//      Source: https://www.revid.ai/blog/how-much-do-youtubers-make
+//
+//   3. Statly RPM estimator (2026):
+//      - News & Politics: $3-$10, with caveat "many advertisers avoid news —
+//        brand safety exclusions lower RPM"
+//      Source: https://statly.in/youtube-rpm-estimator
+//
+//   4. Lenos 2026 CPM guide (referenced by OutlierKit):
+//      - US/UK/CA/AU viewers pay 2-3× the global average
+//
+// For TheQuartering and Jeremy Hambly (commentary + creator drama + political
+// reactions) we use a CONSERVATIVE blended range that overlaps these sources:
+// $2-$6 long-form, $0.02-$0.07 Shorts. This sits at the lower end of pure
+// commentary ($3-$8) to reflect the demonetisation/brand-safety drag that
+// political-commentary channels are documented to experience.
+//
+// Geography assumption: US-heavy audience (consistent with creator base).
+// Global average would be 30-50% lower.
+//
+// IMPORTANT — what this DOES NOT include (also surfaced in the panel footnote):
+//   - Sponsorships (often 2-5× ad revenue at this channel size — per OutlierKit
+//     and Revid.ai data, mid-large drama channels make MORE from sponsors than
+//     ads)
+//   - Channel memberships, Super Chats, merch
+//   - Off-platform income (Patreon, courses, etc.)
+//   - YouTube Premium subscriber payouts (small but non-zero)
+//
+// Mid-roll capacity: long-form 8+ min videos can carry mid-roll ads; under
+// 8 min are pre-roll only. Higher RPM tier reflects more ad inventory.
+
+const RPM = {
+  // Long-form ≥8 min: most ad capacity (mid-roll eligible). Top of the
+  // commentary range minus a brand-safety adjustment for political content.
+  longFormMidRoll: { low: 3.0, high: 6.0 },
+  // Long-form 3-8 min: pre-roll only, lower effective per-view yield.
+  longFormShort: { low: 2.0, high: 4.0 },
+  // Shorts: consensus range across all sources cited above.
+  shorts: { low: 0.02, high: 0.07 }
+};
+const MID_ROLL_THRESHOLD_SEC = 480; // 8 minutes — YouTube's mid-roll eligibility line
+
+// Compute revenue estimates from a video list. Returns a structured object
+// with per-category breakdowns and totals. The caller renders it.
+function summariseRevenue(videos) {
+  const buckets = {
+    longFormMidRoll: { views: 0, count: 0 },
+    longFormShort: { views: 0, count: 0 },
+    shorts: { views: 0, count: 0 }
+  };
+  for (const v of videos) {
+    if (v.unavailable) continue;
+    const views = v.views || 0;
+    if (!views) continue;
+    if (v.isShort) {
+      buckets.shorts.views += views;
+      buckets.shorts.count++;
+    } else if ((v.durationSec || 0) >= MID_ROLL_THRESHOLD_SEC) {
+      buckets.longFormMidRoll.views += views;
+      buckets.longFormMidRoll.count++;
+    } else {
+      buckets.longFormShort.views += views;
+      buckets.longFormShort.count++;
+    }
+  }
+  function bucketRevenue(b, rpm) {
+    return {
+      ...b,
+      low: (b.views / 1000) * rpm.low,
+      high: (b.views / 1000) * rpm.high,
+      rpmLow: rpm.low,
+      rpmHigh: rpm.high
+    };
+  }
+  return {
+    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, RPM.longFormMidRoll),
+    longFormShort: bucketRevenue(buckets.longFormShort, RPM.longFormShort),
+    shorts: bucketRevenue(buckets.shorts, RPM.shorts),
+    totalLow: 0,
+    totalHigh: 0,
+    totalViews: 0
+  };
+}
+
+// Currency formatter — USD, no decimals (estimates are imprecise enough that
+// pennies are noise). Uses compact form for amounts ≥10k so "$23,400" doesn't
+// crowd the summary row.
+function fmtUSD(amount, compact = false) {
+  amount = Math.max(0, amount);
+  if (compact && amount >= 1000) {
+    if (amount >= 1e6) return '$' + (amount / 1e6).toFixed(amount >= 1e7 ? 0 : 1) + 'M';
+    return '$' + (amount / 1000).toFixed(amount >= 10000 ? 0 : 1) + 'k';
+  }
+  return '$' + Math.round(amount).toLocaleString('en-US');
+}
+
+// Render the collapsible revenue panel. Shows nothing for ALL view (mixing
+// channels doesn't add useful detail) or when there's no view data to model.
+function renderRevenuePanel() {
+  const panel = document.getElementById('revenuePanel');
+  if (!panel) return;
+
+  // Show for any view including ALL — all the channels we track are in the
+  // same broad niche (political/commentary/creator drama), so the blended
+  // estimate is meaningful as "network total". Only suppress if there's no
+  // dataset at all.
+  if (!dataset?.videos) {
+    panel.hidden = true;
+    return;
+  }
+  // Use the currently-filtered video set so the estimate matches the user's
+  // active date range. Reuses existing video filter logic from rebuild().
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (!startDate || !endDate) { panel.hidden = true; return; }
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+  const videos = filteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+  if (!videos.length) { panel.hidden = true; return; }
+
+  const rev = summariseRevenue(videos);
+  rev.totalLow = rev.longFormMidRoll.low + rev.longFormShort.low + rev.shorts.low;
+  rev.totalHigh = rev.longFormMidRoll.high + rev.longFormShort.high + rev.shorts.high;
+  rev.totalViews = rev.longFormMidRoll.views + rev.longFormShort.views + rev.shorts.views;
+
+  if (rev.totalViews === 0) { panel.hidden = true; return; }
+
+  function rangeLabel() {
+    const dayMs = 86400000;
+    const days = Math.round((end - start) / dayMs);
+    if (days <= 32) return `${days} days`;
+    const months = Math.round(days / 30.4);
+    if (months <= 14) return `${months} months`;
+    const years = (days / 365.25);
+    return years < 2 ? `${years.toFixed(1)} years` : `${Math.round(years)} years`;
+  }
+
+  function row(label, bucket, sublabel) {
+    if (bucket.count === 0) return '';
+    return `
+      <tr>
+        <td>
+          <div class="rev-category">${label}</div>
+          <div class="rev-subdetail">${fmt(bucket.count)} videos · ${fmt(bucket.views)} views${sublabel ? ' · ' + sublabel : ''}</div>
+        </td>
+        <td class="num"><span class="rev-range">${fmtUSD(bucket.low)} – ${fmtUSD(bucket.high)}</span></td>
+      </tr>
+    `;
+  }
+
+  const summary = `${fmtUSD(rev.totalLow, true)} – ${fmtUSD(rev.totalHigh, true)} over ${rangeLabel()}`;
+
+  panel.hidden = false;
+  // Apply the persisted expanded state so the panel doesn't snap closed
+  // every time a filter change triggers a re-render.
+  panel.innerHTML = `
+    <button type="button" class="revenue-panel-toggle" aria-expanded="${revenuePanelExpanded}" id="revenuePanelToggle">
+      <div class="revenue-panel-header">
+        <div class="revenue-panel-header-left">
+          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
+          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Range reflects published RPM data for commentary/news channels with US-heavy audiences.">${summary}</span>
+        </div>
+        <span class="revenue-panel-caret" aria-hidden="true"></span>
+      </div>
+    </button>
+    <div class="revenue-panel-body" id="revenuePanelBody"${revenuePanelExpanded ? '' : ' hidden'}>
+      <!-- Revenue chart — sized to the panel width, sits above the breakdown
+           table as the dramatic visual that sells the story. -->
+      <div class="revenue-chart-wrap" id="revenueChartWrap">
+        <svg id="revenueChart" viewBox="0 0 720 280" role="img" aria-label="Estimated revenue trend over time"></svg>
+        <div class="chart-tooltip" id="revenueChartTooltip" style="display: none;"></div>
+        <div class="revenue-chart-legend" id="revenueChartLegend"></div>
+      </div>
+      <table class="revenue-breakdown">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th class="num">Estimated range (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${row('Long-form (8 min+, mid-roll eligible)', rev.longFormMidRoll, `RPM $${RPM.longFormMidRoll.low.toFixed(2)}-$${RPM.longFormMidRoll.high.toFixed(2)}`)}
+          ${row('Long-form (under 8 min)', rev.longFormShort, `RPM $${RPM.longFormShort.low.toFixed(2)}-$${RPM.longFormShort.high.toFixed(2)}`)}
+          ${row('Shorts', rev.shorts, `RPM $${RPM.shorts.low.toFixed(2)}-$${RPM.shorts.high.toFixed(2)}`)}
+          <tr class="total">
+            <td><strong>Total estimated ad revenue</strong></td>
+            <td class="num"><strong>${fmtUSD(rev.totalLow)} – ${fmtUSD(rev.totalHigh)}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="revenue-panel-footnote">
+        <strong>Methodology.</strong> Views are split by category and multiplied by published RPM ranges (creator
+        revenue per 1,000 views, after YouTube's 45% cut).
+        Long-form 8+ min videos can carry mid-roll ads and earn more per view than shorter videos. Shorts are paid
+        from a separate creator pool at roughly 60-100× lower per view than long-form.
+        RPM ranges are blended from
+        <a href="https://outlierkit.com/resources/youtube-drama-channel-rpm-cpm/" target="_blank" rel="noopener noreferrer">OutlierKit's 2026 drama-channel report</a>
+        ($3-$8 for commentary, $2-$5 for creator drama),
+        <a href="https://www.revid.ai/blog/how-much-do-youtubers-make" target="_blank" rel="noopener noreferrer">Revid.ai's 2025 earnings breakdown</a>
+        ($2-$5 long-form realistic working range, $0.01-$0.07 Shorts),
+        and
+        <a href="https://statly.in/youtube-rpm-estimator" target="_blank" rel="noopener noreferrer">Statly's RPM data</a>
+        (News &amp; Politics $3-$10, with documented brand-safety penalty).
+        We use the conservative end of each range to reflect that political-commentary content has documented
+        demonetisation drag. Assumes US-heavy audience (consistent with the creator base);
+        global mix would lower these by 30-50%.
+        <br><br>
+        <strong>Why we use RPM (not CPM).</strong> A common follow-up question: doesn't watch time matter?
+        (Mid-roll ads only fire if viewers stay long enough; not all views see ads at all.)
+        Yes — but those effects are already baked into the published RPM data. RPM is observed
+        revenue per 1,000 views from real creator dashboards. It already reflects retention,
+        ad-fill rates, and skipped ads. Modelling them again on top would double-count.
+        <br><br>
+        <strong>What this excludes:</strong> sponsorship deals (industry data indicates sponsors often
+        out-earn ad revenue for drama/commentary channels at this size), channel memberships, Super Chats,
+        merch, courses, Patreon, and off-platform income. Headline numbers also don't account for individual
+        video demonetisations, which the channel has publicly discussed experiencing.
+      </div>
+    </div>
+  `;
+
+  const toggle = document.getElementById('revenuePanelToggle');
+  const body = document.getElementById('revenuePanelBody');
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    const next = !expanded;
+    toggle.setAttribute('aria-expanded', String(next));
+    body.hidden = !next;
+    // Persist so subsequent re-renders (from filter changes) don't reset.
+    revenuePanelExpanded = next;
+  });
+
+  // Render the trend chart inside the panel body. Uses the same monthlyData
+  // that the main views chart uses, so the chart's window matches the
+  // user's active date filter (and the headline summary above it).
+  // The chart is hidden along with the rest of the body when the panel is
+  // collapsed; expanding the panel reveals the chart with its data already
+  // there — no lazy load needed since the SVG is cheap.
+  if (monthlyData && monthlyData.length) {
+    const now = new Date();
+    const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+    const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
+    const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
+    if (chartData.length) {
+      renderRevenueChart(chartData, inProgressMonth, {
+        svgId: 'revenueChart',
+        legendId: 'revenueChartLegend',
+        wrapEl: document.getElementById('revenueChartWrap'),
+        tooltipEl: 'revenueChartTooltip'
+      });
+    }
+  }
 }
 
 function renderHeroStats(curr, prev) {
@@ -5086,6 +5774,266 @@ function renderAllVideosChart(chartData, inProgressMonth) {
   `;
 }
 
+// Estimated revenue trend chart — same line-chart pattern as the views chart,
+// but with a shaded band between the low and high revenue estimates and a
+// mid-line through the middle. The band makes the uncertainty in the estimate
+// visually honest: you see the range, not a deceptively precise single line.
+//
+// No YoY comparison here. RPM ranges shift year-to-year (the published
+// industry data only covers 2025-2026), so comparing a 2018 monthly estimate
+// against a 2019 monthly estimate using today's RPM ranges would mostly be
+// showing how views differ, not how revenue actually differed at the time.
+// Cleaner to just show one line.
+// Estimated revenue trend chart. Two render targets exist:
+//   1. The main #trendChart SVG (when called from renderTrendChart's
+//      revenue-mode branch — legacy path, no longer reachable from the UI
+//      since we removed the chart-toggle button, but kept for safety).
+//   2. The dedicated #revenueChart SVG inside the revenue panel body.
+//
+// Options bag lets the caller pick which SVG to draw into and whether to
+// suppress the shared chart tooltip (the panel chart uses a smaller inline
+// tooltip styled to match the panel's tighter layout).
+function renderRevenueChart(chartData, inProgressMonth, options = {}) {
+  const svgId = options.svgId || 'trendChart';
+  const legendId = options.legendId || 'trendLegend';
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  const legend = legendId ? document.getElementById(legendId) : null;
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  // Hide the chart entirely for a single completed month (with or without an
+  // in-progress month) — a line/band with only one data point is meaningless
+  // and looks broken. The headline summary above and the breakdown table
+  // below already cover this case adequately.
+  // The caller (panel render) is responsible for hiding the chart wrap; we
+  // just clear the SVG so nothing stale lingers if the data shrinks.
+  if (chartData.length < 2) {
+    svg.innerHTML = '';
+    if (legend) legend.innerHTML = '';
+    const wrap = options.wrapEl || document.getElementById('chartWrap');
+    if (wrap && options.wrapEl) {
+      // Only hide the panel chart wrap, not the main chart wrap (which has
+      // other render modes that don't need to hide on single-month).
+      wrap.style.display = 'none';
+    }
+    return;
+  }
+  // Otherwise make sure the wrap is visible (in case a previous render hid it)
+  if (options.wrapEl) options.wrapEl.style.display = '';
+
+  if (legend) {
+    legend.innerHTML = `
+      <span class="trend-legend-item"><span class="trend-legend-swatch revenue-mid"></span> Mid-range estimate</span>
+      <span class="trend-legend-item"><span class="trend-legend-swatch revenue-band"></span> Low–high range</span>
+    `;
+  }
+
+  // Layout — same dimensions as the views chart for visual consistency.
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 66 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+
+  // Combine completed + in-progress months
+  const allBuckets = [...chartData];
+  if (inProgressMonth) allBuckets.push(inProgressMonth);
+
+  // Y axis: based on the HIGH estimate (top of the band), so the band
+  // always fits inside the chart. We want minimal headroom above the band
+  // — the visual impact of the decline depends on the peak band filling
+  // most of the chart height. Use a tighter "nice" rounding (more factor
+  // granularity than niceMax) and skip the 5% padding the views chart adds.
+  const highValues = allBuckets.map(m => m.curr.revHigh || 0);
+  const rawMax = Math.max(1, ...highValues);
+  const axis = tightNiceAxis(rawMax);
+  const yMax = axis.max;
+  const yStep = axis.step;
+
+  // X positions — match the trend chart's logic of extending the scale by
+  // one slot for the in-progress month so it sits visually outside the trend
+  // proper but inside the chart bounds.
+  const n = chartData.length;
+  const nTotal = n + (inProgressMonth ? 1 : 0);
+  function xFor(i) {
+    if (nTotal === 1) return P.left + innerW / 2;
+    return P.left + (i / (nTotal - 1)) * innerW;
+  }
+  function yFor(value) {
+    return P.top + innerH - (value / yMax) * innerH;
+  }
+
+  // Format USD for axis labels — uses compact form so $25,000 renders as $25k
+  function fmtAxisUSD(amount) {
+    if (amount >= 1e6) return '$' + (amount / 1e6).toFixed(amount >= 1e7 ? 0 : 1) + 'M';
+    if (amount >= 1000) return '$' + (amount / 1000).toFixed(amount >= 10000 ? 0 : 1) + 'k';
+    return '$' + Math.round(amount);
+  }
+
+  // Y axis grid + labels — driven by the step returned from tightNiceAxis
+  // so labels land on clean values. Defensive cap at 10 ticks in case step
+  // is small relative to max (shouldn't happen, but guards against bad data).
+  let gridLines = '', yLabels = '';
+  const tickCount = Math.min(10, Math.round(yMax / yStep));
+  for (let i = 0; i <= tickCount; i++) {
+    const v = yStep * i;
+    if (v > yMax + 0.001) break;
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${fmtAxisUSD(v)}</text>`;
+  }
+
+  // X axis labels — three strategies by range size, mirroring the views chart
+  // (where this approach has been battle-tested):
+  //   1. Long range (25+ months, spans years) → one label per year, anchored to
+  //      January of that year (or chart start if first year is mid-range).
+  //   2. Medium range (13-24 months spanning years) → strided labels with
+  //      year suffix shown on the first appearance of each new year.
+  //   3. Short range (≤12 months OR single year) → strided month abbreviations.
+  // labelStride is computed so we never produce more than ~6 labels for the
+  // strided cases, regardless of n. Empty labels are skipped — saves SVG nodes.
+  const years = new Set(chartData.map(m => m.key.slice(0, 4)));
+  const spansMultipleYears = years.size > 1;
+  let xLabels = '';
+  function monthShort(key) {
+    const [y, mo] = key.split('-').map(Number);
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
+  }
+  if (spansMultipleYears && n > 24) {
+    // Long range: just years, at the first month of each year (or chart start)
+    const yearFirstIdx = new Map();
+    chartData.forEach((m, i) => {
+      const y = m.key.slice(0, 4);
+      if (!yearFirstIdx.has(y)) yearFirstIdx.set(y, i);
+    });
+    for (const [year, i] of yearFirstIdx.entries()) {
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
+    }
+  } else if (spansMultipleYears) {
+    // Medium range: stride month labels, append abbreviated year on first hit
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      const year = chartData[i].key.slice(0, 4);
+      const mon = monthShort(chartData[i].key);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} '${year.slice(2)}` : mon;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
+    }
+  } else {
+    // Single year: month abbreviations on a stride
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
+    }
+  }
+
+  // Band path — fill between low and high lines
+  let bandTop = '', bandBottom = '';
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    const yHigh = yFor(chartData[i].curr.revHigh || 0);
+    const yLow = yFor(chartData[i].curr.revLow || 0);
+    bandTop += `${i === 0 ? 'M' : 'L'}${x},${yHigh}`;
+    bandBottom = `L${x},${yLow}` + bandBottom;
+  }
+  const bandPath = bandTop + bandBottom + 'Z';
+
+  // Mid line
+  let midPath = '';
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    const y = yFor(chartData[i].curr.revMid || 0);
+    midPath += `${i === 0 ? 'M' : 'L'}${x},${y}`;
+  }
+
+  // Hover targets — invisible wide rects that capture mouse and trigger tooltips
+  let hovers = '';
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    const wHover = innerW / Math.max(1, nTotal - 1);
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="${i}" />`;
+  }
+
+  // In-progress month dot (if applicable) — plus a dashed connector from
+  // the last complete month's mid-value so the dot doesn't float disconnected
+  // from the line. Mirrors the views chart's in-progress treatment.
+  let ipDot = '';
+  let ipConnector = '';
+  if (inProgressMonth) {
+    const x = xFor(n);
+    const y = yFor(inProgressMonth.curr.revMid || 0);
+    // Connect from the last completed month's mid-point
+    const lastIdx = n - 1;
+    const lastX = xFor(lastIdx);
+    const lastY = yFor(chartData[lastIdx].curr.revMid || 0);
+    ipConnector = `<path class="chart-line-revenue-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
+    ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    const wHover = innerW / Math.max(1, nTotal - 1);
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    <path class="chart-revenue-band" d="${bandPath}" />
+    <path class="chart-line-revenue" d="${midPath}" />
+    ${ipConnector}
+    ${ipDot}
+    ${xLabels}
+    ${yLabels}
+    ${hovers}
+  `;
+
+  // Tooltip wiring — positioned relative to the SVG's containing wrap.
+  // For the main chart that's #chartWrap; for the panel chart it's the
+  // panel-supplied wrap element. We use a tooltip element specific to the
+  // chart's container to avoid the main chart's tooltip floating in unrelated
+  // places when the panel chart is hovered.
+  const wrapEl = options.wrapEl || document.getElementById('chartWrap');
+  const tooltipEl = options.tooltipEl
+    ? document.getElementById(options.tooltipEl)
+    : tooltip;
+  if (!tooltipEl || !wrapEl) {
+    // Without a tooltip target there's no interactive layer to wire up.
+    return;
+  }
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const idx = rect.getAttribute('data-idx');
+      const m = idx === 'ip' ? inProgressMonth : chartData[Number(idx)];
+      if (!m) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltipEl.style.display = 'block';
+      // Set the content first so the tooltip has its real width when we measure
+      tooltipEl.innerHTML = `
+        <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="tooltip-row"><strong>${fmtAxisUSD(m.curr.revLow)} – ${fmtAxisUSD(m.curr.revHigh)}</strong></div>
+        <div class="tooltip-row tooltip-detail">${fmt(m.curr.longViews)} long-form + ${fmt(m.curr.shortViews)} Shorts views</div>
+      `;
+      // Tooltip uses transform: translate(-50%, -100%) — the `left` value is
+      // the CENTRE of the tooltip. Clamp it so the tooltip stays inside the
+      // wrap horizontally rather than extending beyond an edge and getting
+      // clipped (the panel and other ancestors might clip overflow). Vertical
+      // clamping doesn't matter as much because tooltips above the chart top
+      // remain visible — the wrap doesn't clip vertically.
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltipEl.offsetWidth || 200;  // fallback if not yet measured
+      const margin = 8;
+      const half = tipWidth / 2;
+      const minLeft = half + margin;
+      const maxLeft = wrap.width - half - margin;
+      const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltipEl.style.left = clamped + 'px';
+      tooltipEl.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltipEl.style.display = 'none'; });
+  });
+}
+
 // Pick a "nice" max for Y axis — round up to a clean multiple
 function niceMax(v) {
   if (v <= 0) return 1;
@@ -5102,6 +6050,40 @@ function niceMax(v) {
   else if (norm <= 7.5) factor = 7.5;
   else factor = 10;
   return factor * mag;
+}
+
+// Tighter version of niceMax with more factor granularity. Use this when
+// you want the peak data to fill more of the chart height — fewer cases
+// where the value sits awkwardly far below the rounded axis maximum.
+// Worst-case overshoot is ~10% (peak at 0.9× yMax) vs ~33% for niceMax.
+// Returns { max, step } so the caller can pick clean tick values.
+function tightNiceAxis(v) {
+  if (v <= 0) return { max: 1, step: 0.2 };
+  const mag = Math.pow(10, Math.floor(Math.log10(v)));
+  const norm = v / mag;
+  // Each factor gets a tick step chosen so axis labels land on clean values
+  const choices = [
+    { factor: 1,   step: 0.2 },
+    { factor: 1.2, step: 0.2 },
+    { factor: 1.5, step: 0.25 },
+    { factor: 1.8, step: 0.3 },
+    { factor: 2,   step: 0.5 },
+    { factor: 2.5, step: 0.5 },
+    { factor: 3,   step: 0.5 },
+    { factor: 3.5, step: 0.5 },
+    { factor: 4,   step: 1 },
+    { factor: 5,   step: 1 },
+    { factor: 6,   step: 1 },
+    { factor: 7.5, step: 1.5 },
+    { factor: 9,   step: 1.5 },
+    { factor: 10,  step: 2 }
+  ];
+  for (const c of choices) {
+    if (norm <= c.factor) {
+      return { max: c.factor * mag, step: c.step * mag };
+    }
+  }
+  return { max: 10 * mag, step: 2 * mag };
 }
 
 // Pick a "nice" tick range for a duration axis: returns { min, max, step } in seconds,
@@ -5562,10 +6544,10 @@ document.getElementById('channelSelector').addEventListener('click', (e) => {
   selectedChannel = newChannel;
   windowListState.channelFilter = null;  // filter only meaningful in "All combined"
   renderChannelSelector();
-  renderChannelLinkRow();
   renderFooterMeta();
   renderPeakStrip();
   renderAdPanel();
+  renderRevenuePanel();
   // If a mood mode is active, refresh the floating low-figure text so it
   // reflects the newly-selected channel's data
   if (window.__refreshActiveFloaters) window.__refreshActiveFloaters();
@@ -5595,19 +6577,19 @@ function presetToRange(preset) {
     const d = new Date(today); d.setUTCMonth(d.getUTCMonth() - 24);
     start = d.toISOString().split('T')[0];
   } else if (preset === 'since-peak') {
-    // Start date = first day of the month AFTER the all-time peak. This frames
-    // the chart on "what's happened since things turned" without including the
-    // peak month itself (which would visually anchor the decline as just a
-    // descent from the highest point).
+    // Start date = first day of the PEAK month itself. Including the peak in
+    // the visible window anchors the decline narrative — the line starts at
+    // the high water mark and visibly falls away. Excluding the peak (a
+    // previous version) made the chart open on the descent already underway,
+    // losing the "from here, to here" framing.
     const peakKey = computePeakMonthKey();
     if (peakKey) {
       const [y, m] = peakKey.split('-').map(Number);
-      // Add one month — handles December rollover via the Date constructor
-      const d = new Date(Date.UTC(y, m, 1));  // m (0-indexed +1) = month after peak
+      // m is 1-indexed; pass m-1 to Date.UTC for 0-indexed month
+      const d = new Date(Date.UTC(y, m - 1, 1));
       const candidateStart = d.toISOString().split('T')[0];
-      // If the peak is so recent that "month after" would be today or future,
-      // there's no meaningful post-peak window. Fall back to last 30 days
-      // which is a reasonable "recent context" view.
+      // If the peak month is the current/future month, there's no post-peak
+      // story to tell — fall back to last 30 days.
       if (candidateStart >= end) {
         const fallback = new Date(today); fallback.setUTCDate(fallback.getUTCDate() - 30);
         start = fallback.toISOString().split('T')[0];
@@ -5679,10 +6661,10 @@ document.addEventListener('click', (e) => {
     if (quarteringId) selectedChannel = quarteringId;
     windowListState.channelFilter = null;
     renderChannelSelector();
-    renderChannelLinkRow();
     renderFooterMeta();
     renderPeakStrip();
     renderAdPanel();
+    renderRevenuePanel();
     heroAnimated = false;
     // Default range = year-to-date
     applyPreset('ytd');
