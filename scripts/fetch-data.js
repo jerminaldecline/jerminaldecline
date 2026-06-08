@@ -46,6 +46,27 @@ const CHANNELS = [
   '@QuarteringLive'
 ];
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
+// Earliest date on which we believe a sub-3-minute upload could meaningfully
+// have been a "Short" in the format sense. YouTube Shorts launched in the US
+// (with #Shorts hashtag support) in mid-March 2021, with global rollout in
+// July 2021. We use the earlier US date because most of the channels we track
+// are US-based and adopted Shorts during the beta period. Videos before this
+// were just short videos, not Shorts.
+//
+// Without this date floor we misclassify a creator's early-career 2-minute
+// clips as Shorts, which makes long-form-views aggregates wrong for any
+// channel with pre-2021 history.
+//
+// (We have no direct signal for Shorts in the API — no explicit shorts flag,
+// no aspect ratio. Duration-only is a heuristic; date floor improves it for
+// old content but doesn't make it perfect.)
+const SHORTS_FORMAT_EARLIEST = '2021-03-18';
+function isLikelyShort(durationSec, publishedAt) {
+  if (!durationSec || durationSec <= 0) return false;
+  if (durationSec > SHORTS_CUTOFF_SEC) return false;
+  // Compare ISO date strings directly — lexicographic order works for these.
+  return (publishedAt || '') >= SHORTS_FORMAT_EARLIEST;
+}
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
 const HISTORY_YEARS = 20; // how far back to fetch on first run / backfill (covers all channels' full histories)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
@@ -168,7 +189,7 @@ async function enrichVideos(videos) {
         v.views = parseInt(det.statistics.viewCount || '0', 10);
         v.likes = parseEngagement(det.statistics, 'likeCount');
         v.comments = parseEngagement(det.statistics, 'commentCount');
-        v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
+        v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
         // If a video was previously flagged as unavailable but is now live, clear the flag.
         if (v.unavailable) {
           delete v.unavailable;
@@ -216,7 +237,7 @@ async function auditEnrich(videos) {
         v.views = parseInt(det.statistics.viewCount || '0', 10);
         v.likes = parseEngagement(det.statistics, 'likeCount');
         v.comments = parseEngagement(det.statistics, 'commentCount');
-        v.isShort = v.durationSec > 0 && v.durationSec <= SHORTS_CUTOFF_SEC;
+        v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
         if (wasUnavailable) {
           delete v.unavailable;
           delete v.unavailableSince;

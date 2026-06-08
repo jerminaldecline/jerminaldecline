@@ -3157,6 +3157,26 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dataset = await res.json();
 
+    // Fix up isShort for legacy data: any video classified as a Short by the
+    // fetcher purely on duration grounds, but uploaded before YouTube Shorts
+    // existed as a format (US beta launch March 18 2021), is reclassified as
+    // a regular short video. Without this correction, a creator's early-career
+    // 2-minute clips count as "Shorts" in our aggregates, inflating Shorts
+    // counts and deflating long-form views for any channel with pre-2021
+    // history.
+    //
+    // The fetcher has the same logic baked in for new fetches, but applying
+    // it here too means we don't need to wait for a full re-fetch to correct
+    // historical data — existing data.json gets patched on every page load.
+    const SHORTS_FORMAT_EARLIEST = '2021-03-18';
+    if (dataset?.videos) {
+      for (const v of dataset.videos) {
+        if (v.isShort && (v.publishedAt || '') < SHORTS_FORMAT_EARLIEST) {
+          v.isShort = false;
+        }
+      }
+    }
+
     // Load the curated list of videos identified as paid Google Ad campaigns.
     // This is human-maintained (extracted from Google Ads Transparency Centre)
     // rather than YouTube API data, so it lives in its own file. Failure to load
