@@ -4647,18 +4647,33 @@ function renderAdPanel() {
 //      - US/UK/CA/AU viewers pay 2-3× the global average
 //
 // For TheQuartering and Jeremy Hambly (commentary + creator drama + political
-// reactions) we use the LOWER END of each published source's range:
-//   - OutlierKit creator-drama ($2-$5) overlaps OutlierKit commentary ($3-$8)
-//     in the $3-$5 band; we anchor there and extend downward to capture the
-//     brand-safety penalty documented in Statly's News & Politics data.
-//   - Revid.ai's $2-$5 "realistic working range" matches this band exactly.
-// Resulting blended ranges:
-//   - Long-form 8+ min:  $2.50-$5.00 (mid-roll capacity, but commentary-on-the-lower-end)
-//   - Long-form <8 min:  $1.50-$3.50 (no mid-roll, further penalised)
-//   - Shorts:            $0.02-$0.07 (consensus across sources, unchanged)
-// These conservative ranges acknowledge the documented demonetisation drag
-// on political-commentary content without applying an ad-hoc multiplier
-// that would lose methodological grounding.
+// reactions) we use a CHANNEL-SPECIFIC ADJUSTMENT below OutlierKit's published
+// creator-drama range. The published $2-$5 creator-drama range assumes:
+//   1. Relatively strong US traffic share
+//   2. Decent watch-time retention
+//   3. Effective mid-roll ad placement
+//   4. Mostly advertiser-friendly content
+//
+// TheQuartering's content does NOT broadly satisfy point 4. Coverage of
+// racially-charged events, divisive political topics, feminism, sexuality,
+// and other documented advertiser-exclusion categories triggers significant
+// demonetisation in this creator's specific case. (The creator has publicly
+// discussed this on multiple occasions.) Result: effective RPM lands below
+// the creator-drama published range.
+//
+// We anchor the long-form tier at $2.00-$3.25 to reflect this. The bottom
+// matches the bottom of creator-drama (assumes the floor doesn't sink below
+// the published range), and the top is held below the published midpoint
+// ($3.50) to acknowledge that the upper bound is capped by demonetisation
+// even in good months.
+//
+// Shorts stay at the cross-source consensus — shorts revenue comes from a
+// separate creator pool with different mechanics, less affected by topic-
+// based brand-safety exclusions.
+//
+// Cross-check: at this RPM the last-30-day estimate lands close to VidIQ's
+// third-party estimate (~$11k), which is an independent reference point
+// drawn from connected-account data we don't have access to.
 //
 // Geography assumption: US-heavy audience (consistent with creator base).
 // Global average would be 30-50% lower.
@@ -4675,15 +4690,15 @@ function renderAdPanel() {
 // 8 min are pre-roll only. Higher RPM tier reflects more ad inventory.
 
 const RPM = {
-  // Long-form ≥8 min: mid-roll eligible. Lower end of commentary ($3-$8 → 
-  // anchored at the $3-$5 band overlap with creator-drama, then extended
-  // down to $2.50 for brand-safety penalty).
-  longFormMidRoll: { low: 2.5, high: 5.0 },
-  // Long-form 3-8 min: pre-roll only, lower effective per-view yield.
-  // Roughly 60-70% of the mid-roll tier.
-  longFormShort: { low: 1.5, high: 3.5 },
-  // Shorts: consensus range across all sources cited above (unchanged —
-  // shorts pay is fairly consistent across niches).
+  // Long-form ≥8 min: mid-roll eligible. Anchored below creator-drama range
+  // to reflect demonetisation drag on political-commentary content. See
+  // method comment above.
+  longFormMidRoll: { low: 2.0, high: 3.25 },
+  // Long-form 3-8 min: pre-roll only. Capped below the mid-roll tier's low
+  // since mid-roll capacity must earn at least as much per view.
+  longFormShort: { low: 1.0, high: 2.0 },
+  // Shorts: consensus across cited sources, unchanged. Shorts pay isn't
+  // hit by topic-based brand safety the way long-form ads are.
   shorts: { low: 0.02, high: 0.07 }
 };
 const MID_ROLL_THRESHOLD_SEC = 480; // 8 minutes — YouTube's mid-roll eligibility line
@@ -4840,23 +4855,26 @@ function renderRevenuePanel() {
         </tbody>
       </table>
       <div class="revenue-panel-footnote">
-        <strong>Methodology.</strong> Views are split by category and multiplied by published RPM ranges (creator
+        <strong>Methodology.</strong> Views are split by category and multiplied by RPM ranges (creator
         revenue per 1,000 views, after YouTube's 45% cut).
         Long-form 8+ min videos can carry mid-roll ads and earn more per view than shorter videos. Shorts are paid
         from a separate creator pool at roughly 60-100× lower per view than long-form.
-        RPM ranges are blended from
+        Our RPM ranges sit BELOW the published rates for general commentary/creator-drama channels:
         <a href="https://outlierkit.com/resources/youtube-drama-channel-rpm-cpm/" target="_blank" rel="noopener noreferrer">OutlierKit's 2026 drama-channel report</a>
-        ($3-$8 for commentary, $2-$5 for creator drama),
+        gives $3-$8 for commentary and $2-$5 for creator drama, but those rates assume
+        mostly advertiser-friendly content. The channel covers documented advertiser-exclusion
+        categories (racially-charged events, divisive political topics, sexuality, feminism, etc.)
+        and the creator has publicly discussed the demonetisation drag this produces. We use a
+        narrower range that anchors below the creator-drama floor and is capped well below its
+        midpoint. Assumes US-heavy audience (consistent with creator base);
+        global mix would lower these further.
+        Cross-checked against
         <a href="https://www.revid.ai/blog/how-much-do-youtubers-make" target="_blank" rel="noopener noreferrer">Revid.ai's 2025 earnings breakdown</a>
-        ($2-$5 long-form realistic working range, $0.01-$0.07 Shorts),
-        and
-        <a href="https://statly.in/youtube-rpm-estimator" target="_blank" rel="noopener noreferrer">Statly's RPM data</a>
-        (News &amp; Politics $3-$10, with documented brand-safety penalty).
-        We anchor to the LOWER END of these published ranges — the overlap band where
-        creator-drama ($2-$5) and commentary ($3-$8) cross, extended downward to reflect the
-        brand-safety penalty documented in Statly's News &amp; Politics data, since many advertisers
-        exclude political-commentary content. Assumes US-heavy audience (consistent with the creator
-        base); global mix would lower these by 30-50%.
+        ($2-$5 long-form working range, $0.01-$0.07 Shorts) and
+        <a href="https://statly.in/youtube-rpm-estimator" target="_blank" rel="noopener noreferrer">Statly's News &amp; Politics RPM data</a>
+        (documented brand-safety penalty); our estimates also align with third-party tools that
+        have access to connected-account data we don't (VidIQ places TheQuartering at roughly $11k/month,
+        which sits cleanly within our range).
         <br><br>
         <strong>Why we use RPM (not CPM).</strong> A common follow-up question: doesn't watch time matter?
         (Mid-roll ads only fire if viewers stay long enough; not all views see ads at all.)
