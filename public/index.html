@@ -196,58 +196,57 @@
     /* Reserve height so chips appearing post-load don't shift the layout below.
        Matches the rendered height of a single row of channel-chip buttons. */
     min-height: 2.85rem;
+    /* Sticky on desktop too. Outside .filter-cluster in DOM so its sticky
+       context is bound to #resultsBody (long), not to its small container.
+       Without this, scrolling past the cluster releases the sticky entirely,
+       leaving the user with no quick channel access while reading data. */
+    position: sticky;
+    top: 0;
+    z-index: 21;  /* above filter-cluster (20) since strip stacks on top */
+    background: var(--surface);
+    /* Bleed into card padding so background covers full card width when stuck */
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    /* Pull up to sit flush with the card's top edge — channel strip is the
+       first child of resultsBody so it covers the card's top area when stuck. */
+    margin-top: -1.5rem;
+    padding-top: 1.5rem;
   }
-  /* Filter cluster — groups channel chips + date presets + control bar into
-     a single visual block at the top of the results card. Bottom separator
-     divides "filter controls" from the channel-derived context block and
-     data below.
-     Sticky positioning keeps the filters at the top of the viewport when the
-     user scrolls down past them — important for the long charts and tables
-     below, where users may want to change channel/range without scrolling
-     all the way back up. The opaque background + bottom shadow lets the
-     filters sit cleanly over the content beneath. */
+  /* Filter cluster — groups date presets + control bar into a single visual
+     block below the channel strip. Bottom separator divides filter controls
+     from the channel-derived context block and data below.
+     Sticky on desktop with top offset = approximate channel-strip rendered
+     height, so it parks just under the strip when the user scrolls down.
+     Together the strip + cluster form a unified sticky filter bar. */
   .filter-cluster {
     border-bottom: 1px solid var(--border);
     margin-bottom: 1.25rem;
     padding-bottom: 0.5rem;
     position: sticky;
-    top: 0;
+    top: 3.85rem;  /* matches channel-strip rendered height (~62px) */
     z-index: 20;
     background: var(--surface);
-    /* Subtle bottom shadow appears when the cluster is "stuck" — the actual
-       always-visible separator is the 1px border-bottom above. The shadow
-       gives a sense of depth when content scrolls behind. */
     box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
-    /* Negative-margin trick: extend the sticky element to bleed into the
-       card's horizontal padding, so the background fully covers the card's
-       width at the top. Without this, scrolled content shows through the
-       card padding on the sides. */
     margin-left: -1.5rem;
     margin-right: -1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     padding-top: 0.5rem;
-    /* Sit flush with the card's top edge so the card border isn't visible
-       through the sticky header */
-    margin-top: -1.5rem;
-    padding-top: 1.5rem;
   }
-  /* Mobile: card has less horizontal padding (0.85rem), so the negative
-     margins need to match. Padding-top stays smaller too.
-     Also: REMOVE sticky from the whole cluster on mobile. The cluster is
-     tall on small screens (chips wrap, presets wrap, control bar wraps) and
-     gluing all of it to the top eats too much viewport. Instead the
-     channel-strip alone gets sticky treatment (see its own rule below). */
+  /* Mobile: filter-cluster scrolls away normally. Only channel-strip stays
+     sticky (its top: 0 below). The cluster is too tall on mobile (presets
+     wrap, control bar wraps) — keeping it sticky would eat too much viewport. */
   @media (max-width: 540px) {
     .filter-cluster {
       margin-left: -0.85rem;
       margin-right: -0.85rem;
       padding-left: 0.85rem;
       padding-right: 0.85rem;
-      margin-top: -1rem;
-      padding-top: 1rem;
       position: static;
       box-shadow: none;
+      top: auto;
     }
   }
   /* Channel selector — pill row of channel buttons */
@@ -315,10 +314,8 @@
        covers the full card width when stuck. */
     .channel-strip {
       justify-content: center;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: var(--surface);
+      /* Mobile-specific overrides — base rule already sets sticky/z-index.
+         Override the desktop padding/margin values for the smaller card padding. */
       box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
       margin-left: -0.85rem;
       margin-right: -0.85rem;
@@ -329,6 +326,7 @@
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
       margin-bottom: 0.75rem;
+      margin-top: -1rem;  /* card has 1rem top padding on mobile */
       /* min-height was 2.85rem (room for chips + last-updated stacked).
          With last-updated hidden, drop to fit chips only. */
       min-height: 0;
@@ -3000,15 +2998,20 @@
       <div class="skeleton-bar" style="width: 100%; height: 200px;"></div>
     </div>
     <div id="resultsBody" style="display: none;">
-      <!-- Filter cluster — channel chips, then time/mode controls.
-           All filters sit together at the top of the card so the user can
-           change any combination without travelling far on the page.
+      <!-- Channel selector sits outside .filter-cluster so its sticky context
+           on mobile is bound to #resultsBody (a tall container) rather than
+           .filter-cluster (small, fits-content). Without this, the sticky
+           channel chips would only stay stuck while scrolling within the
+           ~150px height of the filter cluster, then get left behind. -->
+      <div class="channel-strip">
+        <div class="channel-selector" id="channelSelector" role="tablist" aria-label="Channel"></div>
+        <span class="last-updated" id="lastUpdated"></span>
+      </div>
+
+      <!-- Filter cluster — date presets + control bar.
+           Sits below the channel strip and groups the time/mode controls.
            Reading order: channel → time range → mode/share → context → stats. -->
       <div class="filter-cluster" id="filterCluster">
-        <div class="channel-strip">
-          <div class="channel-selector" id="channelSelector" role="tablist" aria-label="Channel"></div>
-          <span class="last-updated" id="lastUpdated"></span>
-        </div>
         <div class="preset-row" id="presetRow">
           <button type="button" class="preset-chip" data-preset="30d">Last 30 days</button>
           <button type="button" class="preset-chip" data-preset="ytd">YTD</button>
