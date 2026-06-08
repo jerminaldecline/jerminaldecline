@@ -3619,11 +3619,30 @@ function renderChannelSelector() {
   const el = document.getElementById('channelSelector');
   if (!el || !dataset?.channels) return;
   const ids = Object.keys(dataset.channels);
-  // Order: TheQuartering first, then the rest in declared order, then "All combined" last
-  const quarteringId = ids.find(id => dataset.channels[id].handle === '@TheQuartering');
+
+  // Explicit display order for the chip row. Editorial choice: TheQuartering
+  // first (main subject), then Jeremy Hambly (highest-engagement secondary),
+  // then the other Quartering account (QuarteringLive), then UnSleeved + RC
+  // (lowest-traffic of the bunch). Channels not in this list fall through to
+  // the end in their natural data order. "All combined" is always last.
+  const DISPLAY_ORDER = [
+    '@TheQuartering',
+    '@JeremyHambly',
+    '@QuarteringLive',
+    '@UnSleevedMedia',
+    '@rcnightmare'
+  ];
   const orderedIds = [];
-  if (quarteringId) orderedIds.push(quarteringId);
-  for (const id of ids) if (id !== quarteringId) orderedIds.push(id);
+  for (const handle of DISPLAY_ORDER) {
+    const id = ids.find(i => dataset.channels[i].handle === handle);
+    if (id) orderedIds.push(id);
+  }
+  // Append any channels that exist in the data but aren't in the explicit order
+  // (defensive — keeps the chip row complete if a new channel is added before
+  // someone updates DISPLAY_ORDER)
+  for (const id of ids) {
+    if (!orderedIds.includes(id)) orderedIds.push(id);
+  }
 
   const chips = [];
   for (const id of orderedIds) {
