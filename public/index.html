@@ -273,6 +273,18 @@
   }
   @media (max-width: 540px) {
     .channel-chip { font-size: 0.85rem; padding: 0.38rem 0.85rem; }
+    /* Centre the chip cluster on mobile — when wrapped across 2-3 rows on a
+       narrow viewport, left-alignment looked like the chips were bunched
+       to one side. Centring evens the visual weight regardless of how many
+       chips land on the last row. */
+    .channel-selector {
+      justify-content: center;
+      width: 100%;
+    }
+    .channel-strip {
+      justify-content: center;
+    }
+    .last-updated { width: 100%; justify-content: center; }
   }
   .last-updated {
     color: var(--text-muted);
