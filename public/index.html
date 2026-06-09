@@ -4796,7 +4796,10 @@ function renderRevenuePanel() {
 
   function rangeLabel() {
     const dayMs = 86400000;
-    const days = Math.round((end - start) / dayMs);
+    // Floor, not round — the end date is set to 23:59:59 to include videos
+    // published anytime on that day, so the raw delta is always (N days + ~24h).
+    // Rounding would consistently produce N+1; flooring gives the intuitive N.
+    const days = Math.floor((end - start) / dayMs);
     if (days <= 32) return `${days} days`;
     const months = Math.round(days / 30.4);
     if (months <= 14) return `${months} months`;
