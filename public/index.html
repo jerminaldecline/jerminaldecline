@@ -6113,7 +6113,7 @@ function renderTrendChart(yoy) {
   } else if (spansMultipleYears) {
     // Medium range (~12-24 months): show month + abbreviated year on first label of each year,
     // month-only elsewhere
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
     xLabels = chartData.map((m, i) => {
       if (i % labelStride !== 0 && i !== n - 1) return '';
@@ -6126,7 +6126,7 @@ function renderTrendChart(yoy) {
     }).join('');
   } else {
     // Single year: just month abbreviations as before
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     xLabels = chartData.map((m, i) => {
       if (i % labelStride !== 0 && i !== n - 1) return '';
       return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
@@ -6435,7 +6435,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
     }
   } else if (spansMultipleYears) {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
@@ -6447,7 +6447,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
     }
   } else {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
@@ -6638,7 +6638,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
     }
   } else if (spansMultipleYears) {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
@@ -6650,7 +6650,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
     }
   } else {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
@@ -6918,7 +6918,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
     }
   } else if (spansMultipleYears) {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
@@ -6930,7 +6930,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
     }
   } else {
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
@@ -7128,12 +7128,12 @@ function renderAllVideosChart(chartData, inProgressMonth) {
   // The principle is calendar-aligned: same months labelled regardless of where
   // the data starts. Year-on-Jan keeps year transitions visible at every density.
   //
-  //   ≤12 months → every month
-  //   13-30      → every quarter (Jan, Apr, Jul, Oct)
+  //   ≤13 months → every month
+  //   14-30      → every quarter (Jan, Apr, Jul, Oct)
   //   31-60      → Jan and Jul of each year (2 per year)
   //   60+        → Jan only
   let isLabelMonth, getTickHeight;
-  if (monthCount <= 12) {
+  if (monthCount <= 13) {
     isLabelMonth = () => true;
     getTickHeight = (month) => (month === 1) ? 5 : 3;
   } else if (monthCount <= 30) {
@@ -7433,7 +7433,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     }
   } else if (spansMultipleYears) {
     // Medium range: stride month labels, append abbreviated year on first hit
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     const yearsSeen = new Set();
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
@@ -7446,7 +7446,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     }
   } else {
     // Single year: month abbreviations on a stride
-    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
     for (let i = 0; i < n; i++) {
       if (i % labelStride !== 0 && i !== n - 1) continue;
       xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
