@@ -1170,22 +1170,27 @@
   }
   .btn-secondary:hover { background: var(--surface-2); }
 
+  /* Hero stat grid — explicit 3-column layout on desktop.
+     With 6 stat cards, auto-fit was producing 5+1 (orphan card on the second
+     row at common container widths). Explicit 3 columns guarantees a clean
+     2×3 layout regardless of how many cards are present (3 cards = 1 row,
+     6 cards = 2 rows of 3, 4 or 5 cards = first row of 3 + remainder filling
+     left-aligned which still reads well). */
   .hero-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
     margin-bottom: 1.5rem;
   }
   .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
   .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
-  /* Tablet: raise the minmax so 4-5 cards don't compress to awkward narrow
-     widths against the medium-width container. At 768px (iPad portrait), the
-     200px floor produces 3-column rows with cards that look too tall-and-narrow.
-     A 240px floor here makes the grid wrap to 2 columns on tablet — bigger
-     cards, calmer rhythm. */
+  /* Tablet: 2-column layout — at this width 3 cards squeeze too narrow
+     against the medium-sized container. Wrapping to 2 columns keeps cards
+     readable; orphan cards in a 6-stat config land bottom-left which still
+     reads cleanly. */
   @media (min-width: 541px) and (max-width: 960px) {
     .hero-grid {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   @media (max-width: 540px) {
@@ -1200,6 +1205,10 @@
        the "audience response" group above. */
     .hero-stat.duration-stat { grid-column: 1 / -1; }
     .hero-stat.hours-stat { grid-column: 1 / -1; }
+    /* Like rate also goes full-width on mobile — it's the last card in the
+       set (variable position depending on what else is shown), so without
+       this rule it would frequently appear as an orphan half-card. */
+    .hero-stat.likerate-stat { grid-column: 1 / -1; }
     .hero-stat { padding: 0.85rem 0.9rem; }
     .hero-stat-value { font-size: 1.5rem; }
     .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
@@ -1213,6 +1222,35 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-weight: 500;
+  }
+  /* Info pill in a hero stat label — small (ⓘ). Hover (desktop) or tap
+     (mobile) shows a styled popover with the explanation text. Uses the
+     `data-popover` attribute consumed by the popover delegation handler. */
+  .hero-stat-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    margin-left: 0.15rem;
+    font-size: 0.85em;
+    vertical-align: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: color 0.15s;
+    /* Pad out the tap target while keeping the visible icon small. The
+       padding extends the click hit area to roughly 24px on each side without
+       adding layout space (negative margins absorb it). On mobile this means
+       the tap reliably lands even with imprecise fingers. */
+    padding: 6px;
+    margin: -6px -6px -6px calc(0.15rem - 6px);
+    border-radius: 3px;
+  }
+  .hero-stat-info:hover,
+  .hero-stat-info:focus-visible {
+    color: var(--accent);
+    outline: none;
+    background: var(--surface-2);
   }
   .hero-stat-value {
     font-size: 1.85rem;
@@ -1305,8 +1343,10 @@
     .composition-meta { font-size: 0.78rem; }
   }
 
-  /* Monthly trend chart */
-  .trend-title { margin-bottom: 0.4rem; }
+  /* Chart legend — sits above the chart toggle row as a standalone element
+     (no longer wrapped by a section heading). Wraps to multiple lines when
+     legend items run long, with sensible bottom margin so the toggle row
+     doesn't crowd against it. */
   .trend-legend {
     display: flex;
     align-items: center;
@@ -1316,6 +1356,11 @@
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
+    flex-wrap: wrap;
+  }
+  .trend-legend-standalone {
+    margin-bottom: 0.7rem;
+    min-height: 1.2rem;  /* reserve space so layout doesn't jump on chart switches */
   }
   .trend-legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
   .trend-legend-swatch {
@@ -1378,6 +1423,40 @@
     stroke-linecap: round;
     opacity: 0.55;
   }
+  /* Like rate chart — distinct accent colour (purple) so it doesn't visually
+     conflict with the views (accent) or revenue (green) lines. Like rate is
+     a derived engagement signal, separate aesthetically from both. */
+  .chart-line-likerate {
+    fill: none;
+    stroke: #7c3aed;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .chart-line-likerate-inprogress {
+    fill: none;
+    stroke: #7c3aed;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .chart-dot-likerate-inprogress {
+    fill: #7c3aed;
+    stroke: var(--surface-2);
+    stroke-width: 1.5;
+  }
+  .chart-dot-likerate-inprogress-pulse {
+    fill: #7c3aed;
+    opacity: 0.6;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: chart-pulse 1.8s ease-out infinite;
+  }
+  .trend-legend-swatch.likerate {
+    background: #7c3aed;
+    height: 2px;
+  }
   .chart-wrap {
     position: relative;
     background: var(--surface-2);
@@ -1417,6 +1496,57 @@
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
   .chart-line-duration { fill: none; stroke: #7c3aed; stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round; }
   .chart-dot.duration { fill: #7c3aed; }
+  /* Like-rate dots — match the chart-line-likerate colour (purple) so the
+     rate line and its data points read as a single visual unit. */
+  .chart-dot.likerate { fill: #7c3aed; }
+  /* Engagement variance bars — colour-coded by whether they clear the
+     "expected" 10% reference line (p90 means 10% of all-time videos beat
+     the threshold by definition). Bars above reference pop in vivid purple;
+     bars at-or-below are muted, so months with engagement upswings visually
+     dominate the chart. */
+  .chart-bar-variance {
+    transition: opacity 0.12s;
+  }
+  .chart-bar-variance.high {
+    fill: #7c3aed;
+  }
+  .chart-bar-variance.low {
+    fill: var(--text-dim);
+    opacity: 0.4;
+  }
+  .chart-bar-variance.in-progress {
+    opacity: 0.55;
+    stroke: #7c3aed;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+  }
+  .chart-bar-variance:hover {
+    opacity: 0.85;
+  }
+  /* Reference line on the variance chart — drawn over the bars to keep it
+     visible regardless of how tall the bars are. Higher contrast than a
+     normal gridline. */
+  .chart-bar-ref-line {
+    stroke: var(--text);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+    opacity: 0.6;
+  }
+  .chart-bar-ref-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    fill: var(--text);
+    opacity: 0.85;
+  }
+  /* No-data tick — small vertical mark at the X-axis baseline indicating
+     a month was checked but had no measurable like data (e.g. early channel
+     years before YouTube's API reliably exposed like counts). Renders as a
+     dim hint that the gap is intentional, not a chart bug. */
+  .chart-bar-nodata {
+    stroke: var(--text-dim);
+    stroke-width: 1;
+    opacity: 0.4;
+  }
   /* Scatter dots — one per long-form video in "All videos" mode.
      Theme-aware colour so they contrast well in both light and dark. Opacity
      tuned for ~7000 dots: low enough that overlapping dots build into a
@@ -1484,7 +1614,6 @@
   @media (prefers-reduced-motion: reduce) {
     .chart-dot-inprogress-pulse { animation: none; opacity: 0; }
   }
-  .chart-area-curr { fill: var(--accent); opacity: 0.08; }
   .chart-gap { pointer-events: none; }
   .chart-gap.deficit { fill: #ff6b66; opacity: 0.13; }
   .chart-gap.surplus { fill: #1d9e75; opacity: 0.13; }
@@ -1514,6 +1643,59 @@
   .chart-dot.curr.in-progress { stroke-dasharray: 2 1.5; opacity: 0.7; }
   .chart-dot.prev { stroke: var(--text-dim); }
   .chart-hit { fill: transparent; cursor: pointer; }
+
+  /* Custom info popover — replaces native `title` tooltips for the (i) icons
+     and any other element with data-popover. Positioned in document space
+     (absolute relative to body), max-width clamped so long text wraps cleanly,
+     pointer triangle indicates which element the popover belongs to. */
+  .info-popover {
+    position: absolute;
+    display: none;
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.6rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    font-weight: 400;
+    max-width: min(320px, calc(100vw - 32px));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    /* Force the text out of any inherited uppercase/letter-spacing — labels
+       on hero stats use those properties, but the popover content should
+       read as plain prose. */
+    text-transform: none;
+    letter-spacing: 0;
+    /* Pointer triangle below the popover by default — sits at the position
+       defined by --popover-pointer-x which is set from JS to align with the
+       trigger element's centre. */
+  }
+  .info-popover::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: var(--popover-pointer-x, 50%);
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 5px solid var(--text);
+  }
+  /* When popover flips above the trigger, point the arrow downward instead */
+  .info-popover.flipped::before {
+    top: auto;
+    bottom: -5px;
+    border-bottom: none;
+    border-top: 5px solid var(--text);
+  }
+
+  /* Trigger element styling — clickable cursor + ensure mobile gets a usable
+     hit target. The visual ⓘ is small (~12px); but the click area extends a
+     few pixels around it via padding so finger taps land reliably. */
+  [data-popover] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   .chart-tooltip {
     position: absolute;
     background: var(--text);
@@ -1541,6 +1723,7 @@
   .chart-tooltip-row .swatch.curr { background: var(--accent); }
   .chart-tooltip-row .swatch.prev { background: var(--text-dim); }
   .chart-tooltip-row .swatch.duration { background: #7c3aed; }
+  .chart-tooltip-row .swatch.likes { background: #7c3aed; }
   /* In-progress caveat — small italic footer in the tooltip */
   .chart-tooltip-inprogress {
     font-size: 0.7rem;
@@ -1575,13 +1758,6 @@
     font-size: 0.78rem;
     margin-left: 0.15rem;
   }
-  .chart-empty {
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    padding: 4rem 1rem;
-  }
-
   /* Window mode — flat video list for sub-monthly ranges */
   .window-list {
     background: var(--surface);
@@ -1808,55 +1984,103 @@
     .window-list .window-list-search input { font-size: 16px; padding: 0.5rem 0.7rem; }
   }
 
-  /* Word cloud section */
+  /* Word cloud section — header is a full-width card-style toggle that
+     matches the visual weight of the ad/revenue panels, so users know
+     there's something worth opening here. */
   .wordcloud-section {
     margin: 0 0 1.5rem;
   }
   .wordcloud-toggle {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    border-radius: var(--radius-sm);
-    padding: 0.55rem 0.85rem;
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    transition: color 0.12s, border-color 0.12s, background 0.12s;
+    gap: 0.95rem;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid #7c3aed;  /* purple accent — matches the like-rate visualisations */
+    border-radius: var(--radius);
+    padding: 0.85rem 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
   }
   .wordcloud-toggle:hover {
-    color: var(--text);
-    border-color: var(--border-strong);
     background: var(--surface-2);
+    transform: translateY(-1px);
   }
   .wordcloud-toggle[aria-expanded="true"] {
+    background: var(--surface-2);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  /* Icon block — uses an SVG that visually suggests "scattered words" so the
+     user gets an at-a-glance hint of what the panel contains. */
+  .wordcloud-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(124, 58, 237, 0.10);
+    color: #7c3aed;
+  }
+  [data-theme="dark"] .wordcloud-icon {
+    background: rgba(124, 58, 237, 0.18);
+  }
+  .wordcloud-toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .wordcloud-eyebrow {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .wordcloud-title {
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--text);
-    border-color: var(--accent);
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: wrap;
   }
   .wordcloud-caret {
-    font-size: 0.78rem;
-    transition: transform 0.15s;
-    display: inline-block;
-    color: var(--text-dim);
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.18s, border-color 0.18s;
+    margin-right: 0.4rem;
   }
   .wordcloud-toggle[aria-expanded="true"] .wordcloud-caret {
-    transform: rotate(90deg);
-    color: var(--accent);
+    transform: rotate(-135deg);
+    border-color: #7c3aed;
   }
   .wordcloud-hint {
     color: var(--text-dim);
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 400;
   }
   .wordcloud-panel {
-    margin-top: 0.7rem;
+    margin-top: 0;
     padding: 1.1rem 1.2rem 1.4rem;
     background: var(--surface-2);
-    border-radius: var(--radius-sm);
     border: 1px solid var(--border);
+    border-top: none;
+    border-left: 4px solid #7c3aed;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
   }
   .wordcloud-meta {
     font-size: 0.78rem;
@@ -2132,6 +2356,47 @@
     font-weight: 500;
   }
 
+  /* Like-rate outlier badge — appears on individual videos whose like rate
+     falls outside the channel's normal p10-p90 band. Two variants:
+     'high' (green, ▲) flags above-typical engagement; 'low' (red, ▼) flags
+     below-typical. Tooltip shows the actual rate vs channel median. */
+  .like-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Thumbs-up icon inside the badge — inherits the badge's text colour via
+     fill="currentColor" so it tints green or red to match the variant.
+     Small vertical nudge to optically align with the text baseline. */
+  .like-badge-icon {
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+  .like-badge-high {
+    background: rgba(29, 158, 117, 0.12);
+    color: var(--up);
+    border: 1px solid var(--up);
+  }
+  .like-badge-low {
+    background: rgba(220, 50, 50, 0.10);
+    color: var(--down);
+    border: 1px solid var(--down);
+  }
+  [data-theme="dark"] .like-badge-high,
+  [data-theme="dark"] .like-badge-low {
+    background: transparent;
+  }
+
   /* Ad campaigns panel — shows the channel's confirmed paid promotion data.
      Collapsible: header is always visible (summary stats in one line);
      body with full per-campaign performance table appears on click. */
@@ -2206,17 +2471,81 @@
     padding: 0 1.1rem 1.1rem;
     border-top: 1px solid var(--border);
   }
-  .ad-panel-meta {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    padding: 0.85rem 0;
-    line-height: 1.5;
+  /* Performance callout — three stat blocks side-by-side at the top of the
+     panel body. Each stat: big number on top, descriptor underneath. Reads
+     like a proper KPI dashboard: parallel, scannable, no awkward "label —
+     value — label" rhythm. Collapses to single column on narrow viewports.
+     Background tint + left border accent in the panel's --shorts theme tie
+     this visually to "paid promotion". */
+  .ad-panel-callout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    padding: 1rem 1.1rem;
+    margin: 0.85rem 0 1.1rem;
+    background: var(--shorts-soft);
+    border-left: 3px solid var(--shorts);
+    border-radius: var(--radius-sm);
   }
-  .ad-panel-meta a {
-    color: var(--text-muted);
-    text-decoration: underline;
+  [data-theme="dark"] .ad-panel-callout {
+    background: rgba(225, 117, 23, 0.08);
   }
-  .ad-panel-meta a:hover { color: var(--accent); }
+  .ad-panel-callout-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+  .ad-panel-callout-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .ad-panel-callout-of {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  .ad-panel-callout-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  /* (ⓘ) icon inside a callout label — small info hint, matches the
+     hero-stat-info pattern but lighter weight for the smaller text. */
+  .ad-panel-callout-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    margin-left: 0.1rem;
+    font-size: 0.95em;
+    transition: color 0.15s;
+    padding: 6px;
+    margin: -6px -6px -6px calc(0.1rem - 6px);
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  .ad-panel-callout-info:hover,
+  .ad-panel-callout-info:focus-visible {
+    color: var(--shorts);
+    outline: none;
+    background: rgba(225, 117, 23, 0.12);
+  }
+  /* Mobile: stack the stats vertically so they don't squeeze to unreadable
+     widths. Each stat still has the big-number-on-top layout. */
+  @media (max-width: 720px) {
+    .ad-panel-callout {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .ad-panel-callout-value { font-size: 1.25rem; }
+  }
 
   /* Performance table — scrollable on overflow */
   .ad-perf-table-wrap {
@@ -2303,6 +2632,11 @@
     padding-top: 0.85rem;
     line-height: 1.5;
   }
+  .ad-panel-footnote a {
+    color: var(--text-muted);
+    text-decoration: underline;
+  }
+  .ad-panel-footnote a:hover { color: var(--accent); }
 
   @media (max-width: 540px) {
     .ad-panel-toggle { padding: 0.7rem 0.85rem; }
@@ -2879,7 +3213,7 @@
     83%      { color: hsl(280, 85%, 65%); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .floater-funeral, .floater-party { animation: none !important; }
+    .floater-party { animation: none !important; }
   }
 
   /* Funeral mode — greyscale + rain.
@@ -3069,27 +3403,41 @@
            ranges (long-form vs Shorts) with methodology disclosure. -->
       <div class="revenue-panel" id="revenuePanel" hidden></div>
 
-      <h2 class="section-title trend-title" id="trendSection">
-        <span>Monthly trend</span>
-        <span class="trend-legend" id="trendLegend"></span>
-      </h2>
+      <!-- Chart legend lives as a sibling above the chart toggle row. The
+           heading "Monthly trend" used to wrap it but became misleading once
+           the section grew to include the variance bar chart and "All videos"
+           scatter, neither of which are trend-shaped. Section is now
+           self-evident from the chart toggle + chart content. -->
+      <div class="trend-legend trend-legend-standalone" id="trendLegend"></div>
       <div class="chart-controls-row">
         <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
           <button type="button" data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
           <button type="button" data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+          <button type="button" data-chart-metric="views_likes" role="tab" aria-selected="false">Views + like rate</button>
+          <button type="button" data-chart-metric="engagement_variance" role="tab" aria-selected="false">Engagement variance</button>
           <button type="button" data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
         </div>
       </div>
       <div class="chart-wrap" id="chartWrap">
-        <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Monthly long-form views trend chart"></svg>
+        <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Channel chart — content varies by selected chart type"></svg>
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
       </div>
 
       <div class="wordcloud-section">
         <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
-          <span class="wordcloud-caret">▸</span>
-          <span>Title word cloud</span>
-          <span class="wordcloud-hint" id="wordcloudHint"></span>
+          <span class="wordcloud-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <text x="2" y="11" font-size="9" font-weight="700" font-family="system-ui">YT</text>
+              <text x="13" y="9" font-size="6" font-weight="600" font-family="system-ui" opacity="0.7">titles</text>
+              <text x="2" y="20" font-size="7" font-weight="500" font-family="system-ui" opacity="0.85">cloud</text>
+              <text x="13" y="20" font-size="5" font-weight="400" font-family="system-ui" opacity="0.6">words</text>
+            </svg>
+          </span>
+          <span class="wordcloud-toggle-text">
+            <span class="wordcloud-eyebrow">Most-used words</span>
+            <span class="wordcloud-title">Title word cloud<span class="wordcloud-hint" id="wordcloudHint"></span></span>
+          </span>
+          <span class="wordcloud-caret" aria-hidden="true"></span>
         </button>
         <div class="wordcloud-panel" id="wordcloudPanel" hidden>
           <div class="wordcloud-meta" id="wordcloudMeta"></div>
@@ -3162,7 +3510,11 @@
 let dataset = null;
 let viewMode = 'long';
 let selectedChannel = 'ALL'; // either a channel ID string, or 'ALL'
-let chartMetric = 'views';   // 'views' | 'views_length' | 'all_videos'
+let chartMetric = 'views';   // 'views' | 'views_length' | 'views_likes' | 'engagement_variance' | 'all_videos'
+// Note: 'like_rate' is also handled in renderTrendChart and renderLikeRateChart
+// remains in place, but the toggle button was removed in favour of the
+// 'views_likes' chart (which shows views + like rate on a dual-axis chart and
+// is strictly more informative than the standalone rate chart).
 // Persist the revenue panel's expanded/collapsed state across re-renders.
 // The panel re-renders whenever the channel or date filter changes (since its
 // data depends on those), and re-render rebuilds the toggle DOM from scratch.
@@ -3181,6 +3533,76 @@ let adVideoData = null;  // Full ad data including channel metadata
 // Sort state for the ad panel performance table.
 // 'views' (desc) is the default because top performers carry the most editorial weight.
 let adPanelSort = { col: 'views', dir: 'desc' };
+
+// Per-channel like-rate baselines, computed once on data load.
+// Stores p10, p90, median, and sample count of long-form like rates for each
+// channel — used to flag individual videos with outlier-level engagement
+// (above/below the band) and to compute the per-channel reference number
+// used by the hero "typical like rate" card. Recomputed when the dataset
+// changes; keyed by channelId.
+//
+// Why per-channel rather than a global threshold? Like behaviour varies a lot
+// between channels: TheQuartering's all-time median is ~7.1% while
+// JeremyHambly's is ~10.6%. A flat "above 10% is high" rule would mark normal
+// JeremyHambly videos as outliers and miss TheQuartering's actual high-
+// engagement spikes.
+let likeRateBaselines = new Map();
+
+function computeLikeRateBaselines() {
+  likeRateBaselines.clear();
+  if (!dataset?.videos) return;
+  // Bucket long-form videos by channel, collect like rates
+  // Filters:
+  //  - Long-form only (Shorts have different engagement dynamics)
+  //  - Views ≥ 1000 (small-N ratios are too noisy)
+  //  - Likes > 0 (skip videos with hidden/null likes)
+  //  - Older than 3 days (newer videos can show artificially high ratios
+  //    because likes from the dedicated audience accumulate faster than views
+  //    in the very first hours — by ~3 days the ratio is mostly settled for
+  //    channels at this audience velocity)
+  const now = Date.now();
+  const minAgeMs = 3 * 86400 * 1000;
+  const byChannel = new Map();
+  for (const v of dataset.videos) {
+    if (v.isShort || v.unavailable) continue;
+    const views = v.views || 0;
+    const likes = v.likes || 0;
+    if (views < 1000 || likes <= 0) continue;
+    const ageMs = now - new Date(v.publishedAt).getTime();
+    if (ageMs < minAgeMs) continue;
+    const rate = likes / views;
+    if (!byChannel.has(v.channelId)) byChannel.set(v.channelId, []);
+    byChannel.get(v.channelId).push(rate);
+  }
+  // Compute p10 / p90 for each channel with enough samples
+  for (const [channelId, rates] of byChannel.entries()) {
+    if (rates.length < 30) continue;  // need a reasonable sample for percentile stability
+    rates.sort((a, b) => a - b);
+    const p10 = rates[Math.floor(rates.length * 0.1)];
+    const p90 = rates[Math.floor(rates.length * 0.9)];
+    const median = rates[Math.floor(rates.length * 0.5)];
+    likeRateBaselines.set(channelId, { p10, p90, median, n: rates.length });
+  }
+}
+
+// Classify a single video's like rate relative to its channel's baseline.
+// Returns 'high', 'low', or null (within normal range / not classifiable).
+// Same filters as the baseline computation apply: hidden likes, low views,
+// and recent uploads all return null since they can't be meaningfully judged.
+function classifyLikeRate(v) {
+  if (v.isShort || v.unavailable) return null;
+  const views = v.views || 0;
+  const likes = v.likes || 0;
+  if (views < 1000 || likes <= 0) return null;
+  const ageMs = Date.now() - new Date(v.publishedAt).getTime();
+  if (ageMs < 3 * 86400 * 1000) return null;
+  const baseline = likeRateBaselines.get(v.channelId);
+  if (!baseline) return null;
+  const rate = likes / views;
+  if (rate >= baseline.p90) return 'high';
+  if (rate <= baseline.p10) return 'low';
+  return null;
+}
 
 // --- Helpers ---
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
@@ -3282,6 +3704,16 @@ function summarise(videos) {
   const shorts = videos.filter(v => v.isShort && !v.unavailable);
   const longViews = longForm.reduce((s, v) => s + v.views, 0);
   const shortViews = shorts.reduce((s, v) => s + v.views, 0);
+  // Likes — captured per-video by the fetcher. We aggregate here so the like
+  // rate (likes / views) can be computed on any aggregation window. Sum-based
+  // ratio is what Studio reports — equivalent to a view-weighted mean of
+  // per-video ratios. We filter out videos missing a likes value (null/undef)
+  // rather than treating them as zero, since "no data" and "zero likes" are
+  // editorially different. Long-form and Shorts get separate totals because
+  // like behaviour differs significantly between formats (Shorts get many
+  // fewer thumbs-up taps per view than long-form due to phone-scroll UX).
+  const longLikes = longForm.reduce((s, v) => s + (v.likes || 0), 0);
+  const shortLikes = shorts.reduce((s, v) => s + (v.likes || 0), 0);
   // Median long-form duration (excluding duration-0 zombie streams)
   const durations = longForm.filter(v => v.durationSec > 0).map(v => v.durationSec);
   let medianDuration = 0;
@@ -3315,11 +3747,54 @@ function summarise(videos) {
                + (shortViews / 1000) * RPM.shorts.high;
   const revMid = (revLow + revHigh) / 2;
 
+  // Per-video median like rate (long-form only). Each qualifying video
+  // contributes one rate value; we take the median across them. This is the
+  // "typical video for this set" number — used by the hero card. Crucially
+  // it matches the channel baseline computation (same filters), so a video
+  // showing "▲ 45% vs typical" points to the same "typical" number the card
+  // displays for that channel's all-time view.
+  //
+  // Filters mirror computeLikeRateBaselines() — videos under 1k views, with
+  // no likes, or under 3 days old are excluded since their rate is unstable.
+  //
+  // View-weighted aggregate (longLikeRate above) and per-video median can
+  // differ noticeably: a channel where most videos have ~10% like rate but
+  // a single viral hit at 5% dragged the view-weighted aggregate down. The
+  // median is the better answer for "typical engagement on this channel".
+  const minLikeRateAgeMs = 3 * 86400 * 1000;
+  const nowTs = Date.now();
+  const eligibleRates = [];
+  for (const v of longForm) {
+    if ((v.views || 0) < 1000) continue;
+    if ((v.likes || 0) <= 0) continue;
+    const ageMs = nowTs - new Date(v.publishedAt).getTime();
+    if (ageMs < minLikeRateAgeMs) continue;
+    eligibleRates.push((v.likes || 0) / v.views);
+  }
+  let longLikeRateMedian = 0;
+  if (eligibleRates.length) {
+    eligibleRates.sort((a, b) => a - b);
+    const mid = Math.floor(eligibleRates.length / 2);
+    longLikeRateMedian = eligibleRates.length % 2
+      ? eligibleRates[mid]
+      : (eligibleRates[mid - 1] + eligibleRates[mid]) / 2;
+  }
+
   return {
     longForm, shorts,
     longViews, shortViews,
+    longLikes, shortLikes,
     longAvg: longForm.length ? longViews / longForm.length : 0,
     shortAvg: shorts.length ? shortViews / shorts.length : 0,
+    // View-weighted like rate (kept for the chart, which plots it monthly).
+    // Note this differs from longLikeRateMedian — see comment above the
+    // eligibleRates loop.
+    longLikeRate: longViews ? longLikes / longViews : 0,
+    shortLikeRate: shortViews ? shortLikes / shortViews : 0,
+    // Per-video median like rate (used by the hero card so it matches the
+    // baseline number that per-video badges reference).
+    longLikeRateMedian,
+    longLikeRateSampleSize: eligibleRates.length,
     medianDuration,
     longFormDurations: durations.length,
     longFormTotalSeconds,
@@ -3338,6 +3813,189 @@ function metricsFor(summary) {
 }
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// --- Custom info popover ---
+// Lightweight tooltip/popover system. Replaces the native `title` attribute
+// for any element that should show explanatory text on click or hover.
+//
+// Why we need this rather than `title`:
+//   1. `title` doesn't work on mobile — there's no hover, and long-press
+//      support is inconsistent (iOS Safari basically ignores it entirely).
+//      We need an interaction model that works for touch users.
+//   2. `title` provides zero control over wrapping, max-width, position, or
+//      styling — long strings overflow horizontally with no recourse.
+//   3. `title` requires a hover delay no user can configure.
+//
+// Usage: any element with `data-popover="text content here"` will show the
+// popover on click (mobile + desktop) and on hover (desktop only). Click
+// again or outside the element to dismiss. Escape key also closes.
+//
+// Positioning: defaults to BELOW the trigger element, centred horizontally.
+// Flips to above if there's not enough room below. Clamps left/right edges
+// to stay within the viewport with 8px margin.
+
+let _popoverEl = null;
+let _popoverTrigger = null;
+let _popoverHoverTimer = null;
+
+function getPopoverEl() {
+  if (_popoverEl) return _popoverEl;
+  _popoverEl = document.createElement('div');
+  _popoverEl.className = 'info-popover';
+  _popoverEl.setAttribute('role', 'tooltip');
+  _popoverEl.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(_popoverEl);
+  return _popoverEl;
+}
+
+function showPopover(trigger, text) {
+  const el = getPopoverEl();
+  el.textContent = text;
+  el.style.display = 'block';
+  el.setAttribute('aria-hidden', 'false');
+  _popoverTrigger = trigger;
+
+  // Position: get trigger bounds + viewport, decide above/below + clamp
+  const tRect = trigger.getBoundingClientRect();
+  // Force a layout pass by reading offsetWidth/Height so subsequent reads are accurate
+  const pW = el.offsetWidth;
+  const pH = el.offsetHeight;
+  const vW = window.innerWidth;
+  const vH = window.innerHeight;
+  const margin = 8;
+  const gap = 6;
+
+  // Vertical: prefer below; flip if not enough room
+  let top = tRect.bottom + gap;
+  if (top + pH > vH - margin && tRect.top - gap - pH > margin) {
+    top = tRect.top - gap - pH;
+    el.classList.add('flipped');
+  } else {
+    el.classList.remove('flipped');
+  }
+
+  // Horizontal: centre on the trigger, clamp to viewport
+  const triggerCenter = tRect.left + tRect.width / 2;
+  let left = triggerCenter - pW / 2;
+  left = Math.max(margin, Math.min(left, vW - pW - margin));
+  // Pointer offset: where the trigger's centre sits relative to the popover's left edge
+  const pointerX = triggerCenter - left;
+  el.style.setProperty('--popover-pointer-x', pointerX + 'px');
+
+  // Account for page scroll (getBoundingClientRect is viewport-relative, but
+  // the popover is positioned absolutely against the document)
+  el.style.top = (top + window.scrollY) + 'px';
+  el.style.left = (left + window.scrollX) + 'px';
+}
+
+function hidePopover() {
+  if (!_popoverEl) return;
+  _popoverEl.style.display = 'none';
+  _popoverEl.setAttribute('aria-hidden', 'true');
+  _popoverTrigger = null;
+}
+
+// Set up event delegation so dynamically-added popover triggers Just Work
+// without per-element wiring. Triggered when ANY element with data-popover
+// is interacted with anywhere on the page.
+function wirePopoverDelegation() {
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-popover]');
+    if (trigger) {
+      e.stopPropagation();
+      if (_popoverTrigger === trigger) {
+        hidePopover();
+      } else {
+        showPopover(trigger, trigger.getAttribute('data-popover'));
+      }
+      return;
+    }
+    // Click outside any trigger AND outside the popover itself dismisses
+    if (_popoverTrigger && !e.target.closest('.info-popover')) {
+      hidePopover();
+    }
+  });
+
+  // Keyboard activation — triggers carry role="button" + tabindex="0" so
+  // they're focusable, but Enter/Space don't synthesize clicks on non-button
+  // elements. Handle them explicitly so keyboard users can open popovers.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const trigger = e.target.closest?.('[data-popover]');
+    if (!trigger) return;
+    e.preventDefault();  // stop Space from scrolling the page
+    if (_popoverTrigger === trigger) {
+      hidePopover();
+    } else {
+      showPopover(trigger, trigger.getAttribute('data-popover'));
+    }
+  });
+
+  // Desktop hover behaviour — only on devices that actually have hover.
+  // matchMedia('(hover: hover)') is the standard way to detect a real
+  // pointer; touch-only devices won't trigger the hover handlers.
+  if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mouseover', (e) => {
+      const trigger = e.target.closest('[data-popover]');
+      if (!trigger) return;
+      clearTimeout(_popoverHoverTimer);
+      _popoverHoverTimer = setTimeout(() => {
+        showPopover(trigger, trigger.getAttribute('data-popover'));
+      }, 150);
+    });
+    document.addEventListener('mouseout', (e) => {
+      const trigger = e.target.closest('[data-popover]');
+      if (!trigger) return;
+      // Don't hide if we're moving INTO the popover (e.g. user wants to copy text)
+      const moveTarget = e.relatedTarget;
+      if (moveTarget && moveTarget.closest && moveTarget.closest('.info-popover')) return;
+      clearTimeout(_popoverHoverTimer);
+      _popoverHoverTimer = setTimeout(() => {
+        // Only hide if we're not currently hovering ANOTHER trigger
+        const current = document.querySelector('[data-popover]:hover');
+        if (!current) hidePopover();
+      }, 200);
+    });
+  }
+
+  // Escape closes. Capture the trigger BEFORE hidePopover() nulls it —
+  // calling .focus() after the null assignment would throw.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && _popoverTrigger) {
+      const trigger = _popoverTrigger;
+      hidePopover();
+      trigger.focus?.();
+    }
+  });
+
+  // Reposition on scroll/resize while visible — keeps the popover anchored
+  // to its trigger as the user scrolls. Throttled via rAF to avoid jank.
+  // If the trigger has been detached from the DOM (page re-rendered while
+  // the popover was open — e.g. the user changed a filter), close the
+  // popover instead of positioning against a zero-sized rect.
+  let _scrollRafPending = false;
+  function repositionOnScroll() {
+    if (!_popoverTrigger || _scrollRafPending) return;
+    _scrollRafPending = true;
+    requestAnimationFrame(() => {
+      _scrollRafPending = false;
+      if (!_popoverTrigger) return;
+      if (!_popoverTrigger.isConnected) {
+        hidePopover();
+        return;
+      }
+      showPopover(_popoverTrigger, _popoverTrigger.getAttribute('data-popover'));
+    });
+  }
+  window.addEventListener('scroll', repositionOnScroll, { passive: true });
+  window.addEventListener('resize', repositionOnScroll, { passive: true });
+}
+// Wire on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', wirePopoverDelegation);
+} else {
+  wirePopoverDelegation();
 }
 
 // --- Channel selection helpers ---
@@ -3613,6 +4271,11 @@ async function loadData() {
       }
     }
 
+    // Compute per-channel like-rate baselines once data is loaded. Used by
+    // classifyLikeRate() to flag individual videos as high/low engagement
+    // outliers in the breakdown lists.
+    computeLikeRateBaselines();
+
     // Load the curated list of videos identified as paid Google Ad campaigns.
     // This is human-maintained (extracted from Google Ads Transparency Centre)
     // rather than YouTube API data, so it lives in its own file. Failure to load
@@ -3800,8 +4463,11 @@ function rebuild() {
   document.getElementById('monthlyList').style.display = '';
   document.querySelectorAll('.section-title').forEach(el => el.style.display = '');
 
-  // Apply window-mode visibility (chart hidden, monthly hidden, window list shown)
-  document.getElementById('trendSection').style.display = windowMode ? 'none' : '';
+  // Apply window-mode visibility (chart hidden, monthly hidden, window list shown).
+  // We hide the chart, its legend, and the metric toggle in window mode since
+  // the chart's monthly aggregation doesn't apply to a per-day view.
+  document.getElementById('trendLegend').style.display = windowMode ? 'none' : '';
+  document.querySelector('.chart-controls-row').style.display = windowMode ? 'none' : '';
   document.getElementById('chartWrap').style.display = windowMode ? 'none' : '';
   document.getElementById('monthlySection').hidden = windowMode;
   document.getElementById('windowSection').hidden = !windowMode;
@@ -3845,26 +4511,47 @@ function rebuild() {
 
   // Chart metric toggle visibility:
   // - Always visible in monthly trend mode (hidden in window mode)
-  // - Per-button visibility: "Views + video length" and "All videos" require
-  //   long-form mode, monthly mode, and a channel with consistent uploads
-  //   (TheQuartering, JeremyHambly). Median/scatter on patchy data is mostly
-  //   noise, so we hide those modes for other channels.
+  // - Per-button visibility:
+  //   * "Views + video length" / "All videos": require long-form mode AND a
+  //     channel with consistent uploads (TheQuartering, JeremyHambly).
+  //     Median/scatter on patchy data is mostly noise.
+  //   * "Views + like rate" / "Engagement variance": both need a per-channel
+  //     like-rate baseline, so they're hidden for ALL view (mixing channels
+  //     would blend incompatible baselines) and for Shorts mode (Shorts have
+  //     entirely different thumbs-up dynamics that would muddy the signal).
   //   (Revenue is its own chart inside the revenue panel, not a toggle here.)
   const metricToggle = document.querySelector('.chart-metric-toggle');
   const lengthEligible = channelQualifiesForLengthChart(selectedChannel);
+  const likeRateEligible = viewMode === 'long' && selectedChannel !== 'ALL';
   if (metricToggle) {
     metricToggle.style.display = windowMode ? 'none' : '';
     const btnLength = metricToggle.querySelector('[data-chart-metric="views_length"]');
     const btnScatter = metricToggle.querySelector('[data-chart-metric="all_videos"]');
+    const btnViewsLikes = metricToggle.querySelector('[data-chart-metric="views_likes"]');
+    const btnVariance = metricToggle.querySelector('[data-chart-metric="engagement_variance"]');
     const lengthShown = viewMode === 'long' && lengthEligible;
     if (btnLength) btnLength.style.display = lengthShown ? '' : 'none';
     if (btnScatter) btnScatter.style.display = lengthShown ? '' : 'none';
+    if (btnViewsLikes) btnViewsLikes.style.display = likeRateEligible ? '' : 'none';
+    if (btnVariance) btnVariance.style.display = likeRateEligible ? '' : 'none';
   }
-  // If the user had a now-unavailable metric selected and switched to a channel
-  // that doesn't support it, coerce the chart metric back to 'views' (without
-  // resetting their stated preference — when they return to a qualifying view
-  // it comes back). We do this by passing a local "effective" flag into
-  // renderTrendChart, not by mutating the persistent chartMetric state.
+  // If the user's selected metric just became unavailable (e.g. they had
+  // "Views + like rate" active and switched to ALL channels), the chart
+  // dispatch silently falls back to the views chart — so the toggle's
+  // visual active state must follow what's actually rendered, not the
+  // stored preference. chartMetric itself is NOT mutated: when the user
+  // returns to a qualifying view, their selection comes back.
+  if (metricToggle) {
+    const activeBtn = metricToggle.querySelector(`[data-chart-metric="${chartMetric}"]`);
+    const activeHidden = !activeBtn || activeBtn.style.display === 'none';
+    metricToggle.querySelectorAll('[data-chart-metric]').forEach(b => {
+      const isEffectiveActive = activeHidden
+        ? b.dataset.chartMetric === 'views'
+        : b.dataset.chartMetric === chartMetric;
+      b.classList.toggle('active', isEffectiveActive);
+      b.setAttribute('aria-selected', isEffectiveActive ? 'true' : 'false');
+    });
+  }
 
   if (windowMode) {
     renderWindowList(startDate, endDate);
@@ -4537,12 +5224,26 @@ function renderAdPanel() {
       </div>
     </button>
     <div class="ad-panel-body" id="adPanelBody"${adPanelExpanded ? '' : ' hidden'}>
-      <div class="ad-panel-meta">
-        Identified via the
-        <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
-        Advertiser: <strong>${escapeHtml(adVideoData.meta?.advertiser || 'unknown')}</strong>.
-        ${outperformed > 0 ? `${outperformed} of ${rows.length} ad-promoted videos exceeded the median views for their upload month, accounting for ${fmtCompact(totalExcess)} excess views above typical.` : ''}
-      </div>
+      ${outperformed > 0 ? `
+        <div class="ad-panel-callout">
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">${outperformed} <span class="ad-panel-callout-of">/ ${rows.length}</span></div>
+            <div class="ad-panel-callout-label">ad-promoted videos beat their month's median</div>
+          </div>
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">+${fmtCompact(totalExcess)}</div>
+            <div class="ad-panel-callout-label">excess views above the monthly median</div>
+          </div>
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</div>
+            <div class="ad-panel-callout-label">estimated paid-promotion spend
+              <span class="ad-panel-callout-info" tabindex="0" role="button"
+                    aria-label="About the spend estimate"
+                    data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
+            </div>
+          </div>
+        </div>
+      ` : ''}
       <div class="ad-perf-table-wrap">
         <table class="ad-perf-table">
           <thead>
@@ -4564,6 +5265,12 @@ function renderAdPanel() {
         A video at 2× median earned twice as many views as the typical upload that month. "Excess over median" is the views above the typical baseline —
         a rough proxy for the impact of paid promotion, though some excess may reflect organic virality.
         Individual videos are also flagged with an <span class="ad-badge">ad</span> badge in the lists below.
+        <br><br>
+        <strong>Estimated spend</strong> multiplies excess views by industry CPV (cost-per-view) benchmarks of $0.03–$0.10
+        (good–expensive bands for YouTube ad campaigns). This is an UPPER-BOUND estimate: excess views are a proxy for the paid uplift,
+        but some excess may be organic (a hit video doing well on its own merits), and Google bills per qualified view rather than total view, so total view counts
+        don't directly map to ad spend. Actual spend is likely lower than the upper bound.
+        Identified via the <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
       </div>
     </div>
   `;
@@ -5010,12 +5717,41 @@ function renderHeroStats(curr, prev) {
     });
   }
 
+  // Like rate (engagement signal) — per-video MEDIAN, not view-weighted aggregate.
+  // The median gives "the typical video's engagement rate" which is what the
+  // per-video badges in the breakdown list reference. Using the same number
+  // here means a video flagged "▲ 45% vs typical" can be traced back to this
+  // exact card. The view-weighted aggregate (curr.longLikeRate) is still used
+  // for the views+like-rate chart, since the chart plots monthly rates and
+  // monthly aggregates are what's editorially meaningful at that grain.
+  //
+  // Long-form only — Shorts have different engagement dynamics.
+  //
+  // Requires ≥3 qualifying videos (≥1k views, ≥3 days old, likes > 0) so a
+  // single-video window doesn't show a one-data-point "median".
+  if (viewMode === 'long' && curr.longLikeRateSampleSize >= 3) {
+    const rate = curr.longLikeRateMedian * 100;
+    const prevRate = prev && prev.longLikeRateSampleSize >= 3
+      ? prev.longLikeRateMedian * 100 : null;
+    stats.push({
+      label: 'Typical like rate',
+      labelInfo: 'How many people clicked like, out of those who watched, for a typical video in this window. Shorts and brand-new videos are excluded so the number stays stable.',
+      raw: rate,
+      value: rate.toFixed(2) + '%',
+      fullValue: rate.toFixed(2) + '%',
+      sub: prevRate != null
+        ? `vs ${prevRate.toFixed(2)}% last year ${deltaPill(rate, prevRate)}`
+        : `across ${curr.longLikeRateSampleSize} videos`,
+      likeRateStat: true
+    });
+  }
+
   document.getElementById('heroStats').innerHTML = stats.map((s, i) => `
-    <div class="hero-stat${s.featured ? ' featured' : ''}${s.durationStat ? ' duration-stat' : ''}${s.hoursStat ? ' hours-stat' : ''}">
-      <div class="hero-stat-label">${s.label}</div>
-      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" data-duration="${s.durationStat ? '1' : '0'}" data-hours="${s.hoursStat ? '1' : '0'}" title="${s.fullValue}">
+    <div class="hero-stat${s.featured ? ' featured' : ''}${s.durationStat ? ' duration-stat' : ''}${s.hoursStat ? ' hours-stat' : ''}${s.likeRateStat ? ' likerate-stat' : ''}">
+      <div class="hero-stat-label">${s.label}${s.labelInfo ? ` <span class="hero-stat-info" tabindex="0" role="button" aria-label="${escapeHtml(s.labelInfo)}" data-popover="${escapeHtml(s.labelInfo)}">ⓘ</span>` : ''}</div>
+      <div class="hero-stat-value" data-compact="${s.value !== s.fullValue ? '1' : '0'}" data-duration="${s.durationStat ? '1' : '0'}" data-hours="${s.hoursStat ? '1' : '0'}" data-percent="${s.likeRateStat ? '1' : '0'}" title="${s.fullValue}">
         <span class="hero-stat-value-spacer">${s.value}</span>
-        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : s.hoursStat ? '0m' : '0')}</span>
+        <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : s.hoursStat ? '0m' : s.likeRateStat ? '0%' : '0')}</span>
       </div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
     </div>
@@ -5030,10 +5766,13 @@ function renderHeroStats(curr, prev) {
       const useCompact = parent.dataset.compact === '1';
       const isDuration = parent.dataset.duration === '1';
       const isHours = parent.dataset.hours === '1';
+      const isPercent = parent.dataset.percent === '1';
       const duration = 900;
       const start = performance.now();
+      const fmtPercent = (v) => v.toFixed(2) + '%';
       const formatter = isHours ? fmtHours
                       : isDuration ? fmtDurStat
+                      : isPercent ? fmtPercent
                       : (useCompact ? fmtCompact : fmt);
       function tick(now) {
         const t = Math.min(1, (now - start) / duration);
@@ -5108,6 +5847,48 @@ function renderTrendChart(yoy) {
     && channelQualifiesForLengthChart(selectedChannel);
   if (isAllVideosMode) {
     return renderAllVideosChart(chartData, inProgressMonth);
+  }
+
+  // "Like rate" mode: standalone single-line chart showing monthly long-form
+  // like rate over time. The UI toggle for this was removed when "Views +
+  // like rate" was added (the dual-axis chart shows the same rate with views
+  // as visual context, strictly more informative). The dispatch and the
+  // renderLikeRateChart function are kept in place so the mode can be
+  // restored from a URL param or programmatic state without code changes
+  // if we ever want it back. Currently unreachable from the chart toggle.
+  const isLikeRateMode = chartMetric === 'like_rate'
+    && viewMode === 'long'
+    && selectedChannel !== 'ALL';
+  if (isLikeRateMode) {
+    return renderLikeRateChart(chartData, inProgressMonth);
+  }
+
+  // "Views + like rate" mode: dual-axis chart with views (left axis, count)
+  // and like RATE (right axis, percentage). Same eligibility as the engagement
+  // charts (single channel, long-form). Two lines together answer the
+  // engagement-vs-magnitude question: did the loyal audience stay engaged as
+  // total views collapsed, or did engagement fall in lockstep? Where rate
+  // holds steady or rises while views fall = audience shrank but loyalty
+  // remained; both falling together = audience cooled.
+  const isViewsLikesMode = chartMetric === 'views_likes'
+    && viewMode === 'long'
+    && selectedChannel !== 'ALL';
+  if (isViewsLikesMode) {
+    return renderViewsLikesChart(chartData, inProgressMonth);
+  }
+
+  // "Engagement variance" mode: bar chart showing what FRACTION of each
+  // month's videos qualified as high-engagement outliers (above the channel's
+  // all-time p90 like rate). The narrative: in steady months, ~10% of videos
+  // should naturally fall above p90 by definition. A sudden upswing — say
+  // 40-50% of a month's videos beating that threshold — is a clear signal
+  // that the audience's engagement profile has shifted. Same gating as the
+  // other engagement charts (single channel, long-form).
+  const isVarianceMode = chartMetric === 'engagement_variance'
+    && viewMode === 'long'
+    && selectedChannel !== 'ALL';
+  if (isVarianceMode) {
+    return renderEngagementVarianceChart(chartData, inProgressMonth);
   }
 
   // Are we in views+length mode? Only effective when:
@@ -5557,6 +6338,712 @@ function renderTrendChart(yoy) {
 // Dedicated scatter chart — every long-form video as a dot at (publishDate, duration).
 // No lines, no YoY comparison, no median overlay. This is the raw-data view: the
 // median trend chart describes what's happening; this view shows you every video
+// Monthly long-form like rate over time. Single-line chart with a percentage
+// Y-axis. Mirrors the views chart's structure (in-progress connector, three
+// X-axis strategies by range size, tightNiceAxis Y) so the two charts feel
+// visually consistent — useful when comparing views and like-rate side-by-side.
+//
+// Single channel only — channels have different baseline like rates (median
+// 7.6% for TheQuartering vs 11.2% for JeremyHambly), so blending them into
+// a single "All" line would be statistically meaningless. The toggle button
+// is hidden for ALL view; this function is only reached for a specific channel.
+//
+// The point of the chart: the user wants to see whether engagement RATE has
+// changed alongside the audience size. A flat like rate while views collapse
+// means the remaining audience is still as engaged (loyalty held); a falling
+// rate means the audience cooled too (engagement collapsed with attention).
+function renderLikeRateChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  legend.innerHTML = `
+    <span class="trend-legend-item"><span class="trend-legend-swatch likerate"></span> Long-form like rate (likes ÷ views)</span>
+  `;
+
+  // Layout — same dimensions as the views chart for visual consistency.
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+  const n = chartData.length;
+  const nTotal = n + (inProgressMonth ? 1 : 0);
+
+  // Hide chart for too-few data points — a single point is meaningless and a
+  // single-segment line tells no story.
+  if (n < 2) {
+    svg.innerHTML = '';
+    return;
+  }
+
+  // Build [{key, rate}] with rates as percentages (0-100).
+  const rates = chartData.map(m => ({
+    key: m.key,
+    rate: (m.curr.longLikeRate || 0) * 100
+  }));
+  const ipRate = inProgressMonth ? (inProgressMonth.curr.longLikeRate || 0) * 100 : null;
+
+  // Y axis — anchor to data range. Unlike revenue/views which start at 0,
+  // like rate is bounded between ~3-15% for these channels. Forcing y=0 would
+  // compress the meaningful variation into the top 10% of the chart and hide
+  // the story. Instead, pad the rate range with a small margin and use
+  // tightNiceAxis for both ends.
+  const allRates = [...rates.map(r => r.rate), ipRate].filter(v => v != null && v > 0);
+  if (allRates.length < 2) {
+    svg.innerHTML = '';
+    return;
+  }
+  const minRate = Math.min(...allRates);
+  const maxRate = Math.max(...allRates);
+  // Pad ~10% above and below the data range so the line doesn't kiss the axes.
+  const pad = Math.max(0.5, (maxRate - minRate) * 0.15);
+  const yBottom = Math.max(0, minRate - pad);
+  const yTopRaw = maxRate + pad;
+  const axis = tightNiceAxis(yTopRaw);
+  const yMax = axis.max;
+  const yStep = axis.step;
+  // Floor on the bottom to a multiple of step so labels still align nicely
+  const yMin = Math.max(0, Math.floor(yBottom / yStep) * yStep);
+
+  const xFor = (i) => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
+  const yFor = (v) => P.top + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
+
+  // Y grid + labels — driven by step so ticks land on clean values.
+  let gridLines = '', yLabels = '';
+  for (let v = yMin; v <= yMax + 0.001; v += yStep) {
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${v.toFixed(yStep < 1 ? 1 : 0)}%</text>`;
+  }
+
+  // X axis labels — three strategies, identical logic to renderRevenueChart.
+  const years = new Set(chartData.map(m => m.key.slice(0, 4)));
+  const spansMultipleYears = years.size > 1;
+  let xLabels = '';
+  function monthShort(key) {
+    const [, mo] = key.split('-').map(Number);
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
+  }
+  if (spansMultipleYears && n > 24) {
+    const yearFirstIdx = new Map();
+    chartData.forEach((m, i) => {
+      const y = m.key.slice(0, 4);
+      if (!yearFirstIdx.has(y)) yearFirstIdx.set(y, i);
+    });
+    for (const [year, i] of yearFirstIdx.entries()) {
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
+    }
+  } else if (spansMultipleYears) {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      const year = chartData[i].key.slice(0, 4);
+      const mon = monthShort(chartData[i].key);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} '${year.slice(2)}` : mon;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
+    }
+  } else {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
+    }
+  }
+
+  // Build line path. Skip months where the rate is 0 (no data or zero likes
+  // hidden by YouTube) — the line "lifts" over those gaps rather than
+  // collapsing visibly to 0%.
+  let linePath = '';
+  let lastValid = -1;
+  for (let i = 0; i < n; i++) {
+    const r = rates[i].rate;
+    if (r <= 0) continue;
+    const x = xFor(i);
+    const y = yFor(r);
+    linePath += `${lastValid < 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    lastValid = i;
+  }
+
+  // Hover targets for tooltip
+  let hovers = '';
+  const wHover = innerW / Math.max(1, nTotal - 1);
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="${i}" />`;
+  }
+
+  // In-progress month — dot + dashed connector from last complete month
+  let ipDot = '';
+  let ipConnector = '';
+  if (inProgressMonth && ipRate != null && ipRate > 0 && lastValid >= 0) {
+    const x = xFor(n);
+    const y = yFor(ipRate);
+    const lastX = xFor(lastValid);
+    const lastY = yFor(rates[lastValid].rate);
+    ipConnector = `<path class="chart-line-likerate-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
+    ipDot = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    <path class="chart-line-likerate" d="${linePath}" />
+    ${ipConnector}
+    ${ipDot}
+    ${xLabels}
+    ${yLabels}
+    ${hovers}
+  `;
+
+  // Tooltip — shows month, like rate, raw likes/views breakdown
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const idx = rect.getAttribute('data-idx');
+      const m = idx === 'ip' ? inProgressMonth : chartData[Number(idx)];
+      if (!m) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      const rate = (m.curr.longLikeRate || 0) * 100;
+      tooltip.innerHTML = `
+        <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="tooltip-row"><strong>${rate.toFixed(2)}%</strong> like rate</div>
+        <div class="tooltip-row tooltip-detail">${fmt(m.curr.longLikes || 0)} likes / ${fmtCompact(m.curr.longViews || 0)} views</div>
+      `;
+      // Clamp horizontal position to keep tooltip inside the wrap
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltip.offsetWidth || 200;
+      const margin = 8;
+      const half = tipWidth / 2;
+      const minLeft = half + margin;
+      const maxLeft = wrap.width - half - margin;
+      const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltip.style.left = clamped + 'px';
+      tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+// Dual-axis chart: views (left axis, accent) and like rate (right axis, purple).
+// Two independent Y axes — left scaled 0 → niceMax for views (counts have a
+// natural zero), right scaled to the like rate's actual data range (rate is
+// bounded ~3-15% so zeroing the axis would compress all the meaningful
+// variation into the top of the chart). The pairing answers a specific
+// question: did engagement quality hold up while audience size collapsed?
+// If the lines diverge — views dropping while rate holds steady or rises —
+// the loyal-audience-staying story is in play.
+//
+// Same eligibility as the standalone like rate chart (single channel,
+// long-form). Hidden from the toggle for ALL view or Shorts mode.
+function renderViewsLikesChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  legend.innerHTML = `
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Long-form views (left axis)</span>
+    <span class="trend-legend-item"><span class="trend-legend-swatch likerate"></span> Like rate (right axis, %)</span>
+  `;
+
+  // Layout — both axes need label space, so increase the right padding to
+  // accommodate the right-side Y labels.
+  const W = 720, H = 280;
+  const P = { top: 20, right: 56, bottom: 48, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+  const n = chartData.length;
+  const nTotal = n + (inProgressMonth ? 1 : 0);
+
+  if (n < 2) {
+    svg.innerHTML = '';
+    return;
+  }
+
+  // Extract series
+  const views = chartData.map(m => m.curr.longViews || 0);
+  // Like rates as percentages (0-100). Skip months with zero views (rate
+  // would be 0/0; the line lifts over those gaps rather than dropping to 0%).
+  const rates = chartData.map(m => (m.curr.longLikeRate || 0) * 100);
+  const ipViews = inProgressMonth ? (inProgressMonth.curr.longViews || 0) : null;
+  const ipRate = inProgressMonth ? (inProgressMonth.curr.longLikeRate || 0) * 100 : null;
+
+  // Left axis (views): anchored at 0. Use niceMax with 5% headroom — matches
+  // the existing views chart's behaviour.
+  const allViews = [...views, ipViews].filter(v => v != null && v >= 0);
+  const vMax = niceMax(Math.max(1, ...allViews) * 1.05);
+
+  // Right axis (like rate): NOT anchored at 0. Rate hangs in a narrow band
+  // (~3-15% for these channels) so zero-anchoring would crush variation into
+  // the top of the chart. Pad above/below data range and use tightNiceAxis.
+  const allRates = [...rates, ipRate].filter(v => v != null && v > 0);
+  if (allRates.length < 2) {
+    svg.innerHTML = '';
+    return;
+  }
+  const minRate = Math.min(...allRates);
+  const maxRate = Math.max(...allRates);
+  const ratePad = Math.max(0.5, (maxRate - minRate) * 0.15);
+  const rateAxis = tightNiceAxis(maxRate + ratePad);
+  const rMax = rateAxis.max;
+  const rStep = rateAxis.step;
+  const rMin = Math.max(0, Math.floor(Math.max(0, minRate - ratePad) / rStep) * rStep);
+
+  const xFor = (i) => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
+  const yForViews = (v) => P.top + innerH - (v / vMax) * innerH;
+  const yForRate = (v) => P.top + innerH - ((v - rMin) / (rMax - rMin)) * innerH;
+
+  // Grid lines + axis labels.
+  //
+  // Left axis (views) uses fixed 5-tick spacing for clean compact labels.
+  // Right axis (rate) uses tightNiceAxis's step so its ticks land on clean
+  // percentage values — and we DON'T draw gridlines from the right axis,
+  // because two sets of gridlines would clash visually. Right axis ticks
+  // just append labels at their natural positions.
+  let gridLines = '', yLabelsLeft = '', yLabelsRight = '';
+  const TICK_COUNT = 5;
+  for (let i = 0; i <= TICK_COUNT; i++) {
+    const y = P.top + innerH * (1 - i / TICK_COUNT);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    const vVal = (vMax / TICK_COUNT) * i;
+    yLabelsLeft += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${fmtCompact(vVal)}</text>`;
+  }
+  // Right axis labels at clean percentage steps
+  for (let v = rMin; v <= rMax + 0.001; v += rStep) {
+    const y = yForRate(v);
+    yLabelsRight += `<text class="chart-axis-label y" x="${W - P.right + 8}" y="${y + 4}" text-anchor="start">${v.toFixed(rStep < 1 ? 1 : 0)}%</text>`;
+  }
+
+  // X axis labels — three strategies, same as the other charts
+  const years = new Set(chartData.map(m => m.key.slice(0, 4)));
+  const spansMultipleYears = years.size > 1;
+  let xLabels = '';
+  function monthShort(key) {
+    const [, mo] = key.split('-').map(Number);
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
+  }
+  if (spansMultipleYears && n > 24) {
+    const yearFirstIdx = new Map();
+    chartData.forEach((m, i) => {
+      const y = m.key.slice(0, 4);
+      if (!yearFirstIdx.has(y)) yearFirstIdx.set(y, i);
+    });
+    for (const [year, i] of yearFirstIdx.entries()) {
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
+    }
+  } else if (spansMultipleYears) {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      const year = chartData[i].key.slice(0, 4);
+      const mon = monthShort(chartData[i].key);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} '${year.slice(2)}` : mon;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
+    }
+  } else {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
+    }
+  }
+
+  // Build the two line paths. Views line is continuous; rate line skips
+  // months with zero data (line "lifts" over those gaps rather than dipping
+  // to 0%).
+  let viewsPath = '', ratePath = '';
+  let lastValidRate = -1;
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    viewsPath += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${yForViews(views[i]).toFixed(1)}`;
+    if (rates[i] > 0) {
+      ratePath += `${lastValidRate < 0 ? 'M' : 'L'}${x.toFixed(1)},${yForRate(rates[i]).toFixed(1)}`;
+      lastValidRate = i;
+    }
+  }
+
+  // Hover targets
+  let hovers = '';
+  const wHover = innerW / Math.max(1, nTotal - 1);
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="${i}" />`;
+  }
+
+  // Data points — one dot per month on each line, for visual consistency with
+  // the views chart and so users can see exactly where the data lives.
+  let viewsDots = '', rateDots = '';
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    viewsDots += `<circle class="chart-dot curr" cx="${x}" cy="${yForViews(views[i]).toFixed(1)}" r="3.5" />`;
+    if (rates[i] > 0) {
+      rateDots += `<circle class="chart-dot likerate" cx="${x}" cy="${yForRate(rates[i]).toFixed(1)}" r="3.5" />`;
+    }
+  }
+
+  // Site attribution — same format as the other charts. Channel name + date
+  // range + domain, with a narrow-viewport fallback.
+  const channelName = activeDisplayName();
+  const startEl = document.getElementById('startDate');
+  const endEl = document.getElementById('endDate');
+  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const isNarrow = window.matchMedia('(max-width: 540px)').matches;
+  const attributionText = isNarrow
+    ? `${channelName} · jerminaldecline.com`
+    : `${channelName} · ${dateRange} · jerminaldecline.com`;
+  const attribution = `
+    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 8}" text-anchor="end">
+      ${escapeHtml(attributionText)}
+    </text>
+  `;
+
+  // In-progress month — two dots, two connectors (one per line)
+  let ipDotViews = '', ipDotRate = '', ipConnectorViews = '', ipConnectorRate = '';
+  if (inProgressMonth) {
+    const x = xFor(n);
+    const lastIdx = n - 1;
+    const lastX = xFor(lastIdx);
+    const yV = yForViews(ipViews);
+    const lastYV = yForViews(views[lastIdx]);
+    ipConnectorViews = `<path class="chart-line-inprogress" d="M ${lastX} ${lastYV} L ${x} ${yV}" />`;
+    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" />`;
+    // Rate dot only renders if there's an in-progress rate AND a prior valid
+    // rate point to draw the dashed connector from.
+    if (ipRate != null && ipRate > 0 && lastValidRate >= 0) {
+      const yR = yForRate(ipRate);
+      const lastYR = yForRate(rates[lastValidRate]);
+      ipConnectorRate = `<path class="chart-line-likerate-inprogress" d="M ${xFor(lastValidRate)} ${lastYR} L ${x} ${yR}" />`;
+      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" />`;
+    }
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    <path class="chart-line-curr" d="${viewsPath}" />
+    <path class="chart-line-likerate" d="${ratePath}" />
+    ${viewsDots}
+    ${rateDots}
+    ${ipConnectorViews}
+    ${ipConnectorRate}
+    ${ipDotViews}
+    ${ipDotRate}
+    ${xLabels}
+    ${yLabelsLeft}
+    ${yLabelsRight}
+    ${attribution}
+    ${hovers}
+  `;
+
+  // Tooltip — shows month, views, like rate, raw counts
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const idx = rect.getAttribute('data-idx');
+      const m = idx === 'ip' ? inProgressMonth : chartData[Number(idx)];
+      if (!m) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      const rate = (m.curr.longLikeRate || 0) * 100;
+      tooltip.innerHTML = `
+        <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="chart-tooltip-row"><span class="swatch curr"></span> <strong>${fmtCompact(m.curr.longViews || 0)}</strong> views</div>
+        <div class="chart-tooltip-row"><span class="swatch likes"></span> <strong>${rate.toFixed(2)}%</strong> like rate</div>
+      `;
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltip.offsetWidth || 200;
+      const margin = 8;
+      const half = tipWidth / 2;
+      const minLeft = half + margin;
+      const maxLeft = wrap.width - half - margin;
+      const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltip.style.left = clamped + 'px';
+      tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+// Engagement variance chart — bar chart of "% of each month's videos that
+// beat the channel's p90 like-rate baseline". The story we want to surface:
+// a sudden, out-of-trend upswing in high-engagement videos. In steady-state,
+// roughly 10% of videos should sit above p90 by definition. A month where
+// 40-50% of videos cross that threshold is a striking signal the audience
+// profile has shifted (or the channel is uploading content that resonates
+// disproportionately with a smaller, more passionate base).
+//
+// Why p90 specifically: it's the threshold the per-video badges already use,
+// so this chart and the badges in the video lists tell the same story at
+// different grains. Consistency matters editorially.
+//
+// Filters mirror the baseline computation — videos under 1k views, under 3
+// days old, or with no likes are excluded. Edge cases:
+// - Months with qualifying videos but none above p90 (genuinely measured
+//   "uneventful" months) render with a minimum-height visible bar at the
+//   baseline, NOT skipped — they're legitimate zero-pct data points.
+// - Months with no qualifying videos at all render as a small dim tick at
+//   the baseline so the user can distinguish "no measurable data" from
+//   "measured but quiet".
+function renderEngagementVarianceChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+  // n/nTotal derived after monthData is built (we need monthData first so
+  // computeMonth can read p90/now/minAgeMs which depend on the baseline check).
+
+  // Get the channel's p90 baseline. If no baseline (channel has too few
+  // historical samples), the chart can't function — render empty state.
+  const baseline = selectedChannel !== 'ALL'
+    ? likeRateBaselines.get(selectedChannel)
+    : null;
+  if (!baseline) {
+    svg.innerHTML = '';
+    legend.innerHTML = '<span class="trend-legend-item" style="color: var(--text-dim);">Not enough historical data on this channel to compute baselines.</span>';
+    return;
+  }
+  const p90 = baseline.p90;
+  const now = Date.now();
+  const minAgeMs = 3 * 86400 * 1000;
+
+  // Build the legend with explicit, plain-English framing. We're counting
+  // top-tier-engagement videos (above the channel's all-time p90 — the top
+  // 10% threshold of historical like rates). The popover explains what
+  // p90 means and why 10% is the natural reference. The chart's editorial
+  // job: surface months where many MORE than usual videos are top-tier.
+  const p90Pct = (p90 * 100).toFixed(1);
+  const popoverText = `What "top-tier engagement" means: a like rate above ${p90Pct}% (the channel's all-time top-10% threshold). Normally about 10% of a month's videos clear this bar, since it's defined that way across the channel's full history. Months where 30-60% of videos clear it are a clear engagement upswing.`;
+  legend.innerHTML = `
+    <span class="trend-legend-item">
+      <span class="trend-legend-swatch likerate" style="height: 10px;"></span>
+      % of month's videos with top-tier engagement
+      <span class="hero-stat-info" style="margin-left: 0.2rem;" tabindex="0" role="button"
+            aria-label="About top-tier engagement"
+            data-popover="${escapeHtml(popoverText)}">ⓘ</span>
+    </span>
+  `;
+
+  // Compute per-month {qualifying count, above-p90 count, pct}
+  function computeMonth(m) {
+    let qualifying = 0, above = 0;
+    for (const v of m.curr.longForm) {
+      if ((v.views || 0) < 1000) continue;
+      if ((v.likes || 0) <= 0) continue;
+      const ageMs = now - new Date(v.publishedAt).getTime();
+      if (ageMs < minAgeMs) continue;
+      qualifying++;
+      const rate = v.likes / v.views;
+      if (rate >= p90) above++;
+    }
+    return { qualifying, above, pct: qualifying > 0 ? (above / qualifying) * 100 : null };
+  }
+  const monthData = chartData.map(m => ({ key: m.key, ...computeMonth(m) }));
+  const ipMonthData = inProgressMonth ? { key: inProgressMonth.key, ...computeMonth(inProgressMonth) } : null;
+  const n = monthData.length;
+  const nTotal = n + (ipMonthData ? 1 : 0);
+
+  // Find Y max. Round up to next 10%. Cap at 100%.
+  const allPcts = [...monthData.map(d => d.pct), ipMonthData?.pct].filter(v => v != null);
+  if (allPcts.length === 0) {
+    svg.innerHTML = '';
+    legend.innerHTML = '<span class="trend-legend-item" style="color: var(--text-dim);">No qualifying videos in the selected window.</span>';
+    return;
+  }
+  const rawMax = Math.max(20, ...allPcts);
+  const yMax = Math.min(100, Math.ceil(rawMax / 10) * 10);
+
+  const barSlot = innerW / Math.max(1, nTotal);
+  const barWidth = Math.max(3, Math.min(28, barSlot * 0.7));
+  const xFor = (i) => P.left + barSlot * i + barSlot / 2;
+  const yFor = (v) => P.top + innerH - (v / yMax) * innerH;
+
+  // Y grid + labels — 10% increments up to yMax
+  let gridLines = '', yLabels = '';
+  for (let v = 0; v <= yMax; v += 10) {
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${v}%</text>`;
+  }
+
+  // Reference line at 10% — the "expected" rate by definition (p90 means 10%
+  // of all-time videos cross the threshold). Visual reminder of the baseline
+  // — bars rising clearly above this line are the editorial story.
+  //
+  // Styling: stronger than a gridline (chart-bar-ref-line) and the label sits
+  // on a small backdrop so it's readable when bars are behind it.
+  const refY = yFor(10);
+  // Label positioned on the left to avoid the right-side year/X-axis labels
+  // and any bars that grow tall enough to overlap the right edge. The white
+  // backdrop rect keeps the text legible regardless of what's behind.
+  const refLabelX = P.left + 6;
+  const refLabelY = refY - 5;
+  // Approximate text width for the backdrop — rendered via a paint-order
+  // technique so we don't need to measure DOM. ~85px covers "expected: 10%".
+  const refLine = `
+    <line class="chart-bar-ref-line" x1="${P.left}" y1="${refY}" x2="${W - P.right}" y2="${refY}" />
+    <text class="chart-bar-ref-label" x="${refLabelX}" y="${refLabelY}" text-anchor="start"
+          style="paint-order: stroke; stroke: var(--surface-2); stroke-width: 4px; stroke-linejoin: round;">expected: 10%</text>
+  `;
+
+  // X axis labels — same three-strategy logic as the other charts
+  const years = new Set(chartData.map(m => m.key.slice(0, 4)));
+  const spansMultipleYears = years.size > 1;
+  let xLabels = '';
+  function monthShort(key) {
+    const [, mo] = key.split('-').map(Number);
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
+  }
+  if (spansMultipleYears && n > 24) {
+    const yearFirstIdx = new Map();
+    chartData.forEach((m, i) => {
+      const y = m.key.slice(0, 4);
+      if (!yearFirstIdx.has(y)) yearFirstIdx.set(y, i);
+    });
+    for (const [year, i] of yearFirstIdx.entries()) {
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
+    }
+  } else if (spansMultipleYears) {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      const year = chartData[i].key.slice(0, 4);
+      const mon = monthShort(chartData[i].key);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} '${year.slice(2)}` : mon;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
+    }
+  } else {
+    const labelStride = Math.max(1, Math.ceil(n / 6));
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
+    }
+  }
+
+  // Bars + hit areas. Bars are coloured by whether they clear the expected
+  // line — above 10% = vivid purple, at-or-below = muted, so the upswing
+  // months pop visually.
+  //
+  // Two edge cases:
+  // - pct == null: the month had ZERO qualifying videos (no like data at all,
+  //   or all videos filtered out by recency/views thresholds). Renders as a
+  //   small dim tick at the baseline so users can see "checked but nothing
+  //   to measure".
+  // - pct == 0: the month had qualifying videos, but none cleared the p90
+  //   threshold. This is legitimately measured data and shouldn't be invisible
+  //   — we give it a minimum bar height so the user can see "yes, this month
+  //   was uneventful for top-tier engagement" rather than reading it as no data.
+  //   — we give it a minimum bar height so the user can see "yes, this month
+  //   was uneventful for top-tier engagement" rather than reading it as no data.
+  let bars = '', hovers = '', noDataMarks = '';
+  const baseY = P.top + innerH;
+  const MIN_VISIBLE_HEIGHT = 2;  // pixels — enough to be visible without dominating
+  for (let i = 0; i < n; i++) {
+    const d = monthData[i];
+    const x = xFor(i);
+    if (d.pct == null) {
+      // Small grey tick — "no data measured this month"
+      noDataMarks += `<line class="chart-bar-nodata" x1="${x}" y1="${baseY - 2}" x2="${x}" y2="${baseY + 2}" />`;
+      continue;
+    }
+    // Compute height; ensure zero-pct months still produce a visible mark
+    const yTop = yFor(d.pct);
+    const rawHeight = baseY - yTop;
+    const height = Math.max(rawHeight, MIN_VISIBLE_HEIGHT);
+    const yFinal = baseY - height;
+    const cls = d.pct >= 10 ? 'chart-bar-variance high' : 'chart-bar-variance low';
+    bars += `<rect class="${cls}" x="${x - barWidth / 2}" y="${yFinal}" width="${barWidth}" height="${height}" />`;
+    hovers += `<rect class="chart-hit" x="${x - barSlot / 2}" y="${P.top}" width="${barSlot}" height="${innerH}" data-idx="${i}" />`;
+  }
+  // In-progress month bar — dashed outline / lower opacity to signal not-complete
+  let ipBar = '';
+  if (ipMonthData && ipMonthData.pct != null) {
+    const x = xFor(n);
+    const yTop = yFor(ipMonthData.pct);
+    const height = (P.top + innerH) - yTop;
+    const cls = ipMonthData.pct >= 10 ? 'chart-bar-variance high in-progress' : 'chart-bar-variance low in-progress';
+    ipBar = `<rect class="${cls}" x="${x - barWidth / 2}" y="${yTop}" width="${barWidth}" height="${height}" />`;
+    hovers += `<rect class="chart-hit" x="${x - barSlot / 2}" y="${P.top}" width="${barSlot}" height="${innerH}" data-idx="ip" />`;
+  }
+
+  // Site attribution
+  const channelName = activeDisplayName();
+  const startEl = document.getElementById('startDate');
+  const endEl = document.getElementById('endDate');
+  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const isNarrow = window.matchMedia('(max-width: 540px)').matches;
+  const attributionText = isNarrow
+    ? `${channelName} · jerminaldecline.com`
+    : `${channelName} · ${dateRange} · jerminaldecline.com`;
+  const attribution = `
+    <text class="chart-attribution" x="${P.left + innerW}" y="${H - 8}" text-anchor="end">
+      ${escapeHtml(attributionText)}
+    </text>
+  `;
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${noDataMarks}
+    ${bars}
+    ${ipBar}
+    ${refLine}
+    ${xLabels}
+    ${yLabels}
+    ${attribution}
+    ${hovers}
+  `;
+
+  // Tooltip
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const idx = rect.getAttribute('data-idx');
+      const d = idx === 'ip' ? ipMonthData : monthData[Number(idx)];
+      if (!d || d.pct == null) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `
+        <div class="tooltip-month">${monthLabel(d.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="chart-tooltip-row"><strong>${d.above} of ${d.qualifying}</strong> videos above typical</div>
+        <div class="chart-tooltip-row"><strong>${d.pct.toFixed(0)}%</strong> of the month's videos</div>
+      `;
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltip.offsetWidth || 200;
+      const margin = 8;
+      const half = tipWidth / 2;
+      const minLeft = half + margin;
+      const maxLeft = wrap.width - half - margin;
+      const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltip.style.left = clamped + 'px';
+      tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+// Scatter chart of individual video durations over time. Used in the "All
+// videos" chart mode — each dot is one video, plotted by (publish date, duration).
+// Together with the duration overlay on the views chart, this gives the user
+// two views of the same underlying data: the median line shows the central
+// tendency over time, while the scatter shows the spread of individual videos
 // the median is summarising. The eye reads the cloud as a "band of typical durations"
 // that shifts over time, with the recent spike visible as the band stepping upward.
 function renderAllVideosChart(chartData, inProgressMonth) {
@@ -6261,13 +7748,53 @@ function renderVideoRows(videos, emptyText) {
     // as one of the channel's paid promotional campaigns. The ⓘ icon signals
     // hoverable detail; the tooltip explains provenance.
     const adBadge = adVideoIds.has(v.id)
-      ? `<span class="ad-badge" title="Video promoted through paid advertisement (Google Ads Transparency Centre)">ad <span class="ad-badge-info" aria-hidden="true">ⓘ</span></span>`
+      ? `<span class="ad-badge" tabindex="0" role="button" aria-label="Video promoted through paid advertisement" data-popover="Video promoted through paid advertisement (Google Ads Transparency Centre)">ad <span class="ad-badge-info" aria-hidden="true">ⓘ</span></span>`
       : '';
+    // Like-rate outlier badge — only renders when the video's like-to-view
+    // ratio falls outside the channel's p10-p90 band. The number shown is the
+    // % deviation from the channel's median (e.g. ▲ 44% means the rate was
+    // 44% higher than typical for this channel). The arrow carries the sign;
+    // numbers are absolute magnitude. Tooltip shows the raw rate for anyone
+    // who wants the underlying value.
+    const likeClass = classifyLikeRate(v);
+    let likeBadge = '';
+    if (likeClass) {
+      const rate = ((v.likes || 0) / (v.views || 1)) * 100;
+      const baseline = likeRateBaselines.get(v.channelId);
+      const medianRate = baseline ? baseline.median * 100 : 0;
+      // Multiplier vs the channel's median rate. Reads unambiguously: "2×"
+      // means "twice as much", which is much harder to misread than "+100%"
+      // (which a casual reader might parse as "100% of viewers liked it"
+      // or "100 percentage points up" — both wrong).
+      //
+      // Format:
+      //  - For high outliers (rate > median): show as Nx (1.4×, 2×, 3.5×).
+      //    Round to 1 decimal below 10×, to nearest int above (rare).
+      //  - For low outliers (rate < median): same Nx format but the value is
+      //    < 1 (e.g. 0.6×). Combined with the ▼ arrow this reads as "less
+      //    than typical". Fractional multipliers feel slightly clunky but are
+      //    statistically honest — alternatives like "60% of typical" introduce
+      //    the same % confusion we're trying to avoid here.
+      const multiplier = medianRate > 0 ? rate / medianRate : 0;
+      const multiplierStr = multiplier >= 10
+        ? Math.round(multiplier) + '×'
+        : multiplier.toFixed(1) + '×';
+      const tooltip = likeClass === 'high'
+        ? `Like rate ${rate.toFixed(1)}% — well above the channel's all-time typical ${medianRate.toFixed(1)}%`
+        : `Like rate ${rate.toFixed(1)}% — well below the channel's all-time typical ${medianRate.toFixed(1)}%`;
+      const symbol = likeClass === 'high' ? '▲' : '▼';
+      // Small thumbs-up SVG — signals "this is about likes" at a glance,
+      // so users don't have to read the badge to know what it relates to.
+      // Inline rather than CSS background so the icon inherits the badge's
+      // text colour (green for high, red for low) automatically.
+      const thumbsIcon = `<svg class="like-badge-icon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 7.59 6.59C7.22 6.95 7 7.45 7 8v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/></svg>`;
+      likeBadge = `<span class="like-badge like-badge-${likeClass}" tabindex="0" role="button" aria-label="${escapeHtml(tooltip)}" data-popover="${escapeHtml(tooltip)}">${thumbsIcon} ${symbol} ${multiplierStr} typical</span>`;
+    }
     return `
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${titleSubtitle}</div>
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
       </div>
