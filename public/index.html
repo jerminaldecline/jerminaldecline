@@ -4050,6 +4050,39 @@ function channelQualifiesForLengthChart(channelId) {
   return LENGTH_CHART_HANDLES.includes(handle);
 }
 
+// Engagement variance chart is only meaningful when the channel publishes
+// consistently enough that monthly samples are statistically defensible.
+// For dormant/sporadic channels, most months in the 12-month window have
+// no videos and recent months may have n=1-3, making "% above p90" noise.
+// Requires: at least 6 months in the last 13 have n >= 10 qualifying videos
+// (same filters as the variance chart itself).
+function channelQualifiesForEngagementVariance(channelId) {
+  if (channelId === 'ALL') return false;
+  if (!likeRateBaselines.has(channelId)) return false;
+  if (!dataset?.videos) return false;
+  const now = Date.now();
+  const minAgeMs = 3 * 86400 * 1000;
+  const windowStart = now - 13 * 31 * 86400 * 1000; // ~13 months back
+  const monthCounts = new Map();
+  for (const v of dataset.videos) {
+    if (v.channelId !== channelId) continue;
+    if (v.isShort || v.unavailable) continue;
+    if ((v.views || 0) < 1000) continue;
+    if (!(v.likes > 0)) continue;
+    const t = new Date(v.publishedAt).getTime();
+    if (t < windowStart) continue;
+    if (now - t < minAgeMs) continue;
+    const d = new Date(v.publishedAt);
+    const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}`;
+    monthCounts.set(key, (monthCounts.get(key) || 0) + 1);
+  }
+  let monthsWithMeaningfulSample = 0;
+  for (const n of monthCounts.values()) {
+    if (n >= 10) monthsWithMeaningfulSample++;
+  }
+  return monthsWithMeaningfulSample >= 6;
+}
+
 // Canonical channel display order used everywhere channels are listed (selector
 // chips at the top of the page, breakdown cards above the monthly section,
 // window-mode breakdown pills). Roughly tracks total channel views (highest
@@ -4522,6 +4555,7 @@ function rebuild() {
   const metricToggle = document.querySelector('.chart-metric-toggle');
   const lengthEligible = channelQualifiesForLengthChart(selectedChannel);
   const likeRateEligible = viewMode === 'long' && selectedChannel !== 'ALL';
+  const varianceEligible = likeRateEligible && channelQualifiesForEngagementVariance(selectedChannel);
   if (metricToggle) {
     metricToggle.style.display = windowMode ? 'none' : '';
     const btnLength = metricToggle.querySelector('[data-chart-metric="views_length"]');
@@ -4532,7 +4566,7 @@ function rebuild() {
     if (btnLength) btnLength.style.display = lengthShown ? '' : 'none';
     if (btnScatter) btnScatter.style.display = lengthShown ? '' : 'none';
     if (btnViewsLikes) btnViewsLikes.style.display = likeRateEligible ? '' : 'none';
-    if (btnVariance) btnVariance.style.display = likeRateEligible ? '' : 'none';
+    if (btnVariance) btnVariance.style.display = varianceEligible ? '' : 'none';
   }
   // If the user's selected metric just became unavailable (e.g. they had
   // "Views + like rate" active and switched to ALL channels), the chart
@@ -5885,7 +5919,8 @@ function renderTrendChart(yoy) {
   // other engagement charts (single channel, long-form).
   const isVarianceMode = chartMetric === 'engagement_variance'
     && viewMode === 'long'
-    && selectedChannel !== 'ALL';
+    && selectedChannel !== 'ALL'
+    && channelQualifiesForEngagementVariance(selectedChannel);
   if (isVarianceMode) {
     return renderEngagementVarianceChart(chartData, inProgressMonth);
   }
