@@ -2781,6 +2781,25 @@
     font-weight: 700;
     padding-top: 0.7rem;
   }
+  /* Scenario toggle sits at the top of the panel body, above the chart. */
+  .revenue-scenario-toggle {
+    margin: 0 0 0.8rem;
+  }
+  /* Per-scenario explanation — directly under the breakdown table, visually
+     distinct from the footnote (slightly larger, brighter) so it reads as
+     the explanation OF the numbers, not boilerplate. */
+  .revenue-scenario-explanation {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    padding: 0.8rem 0.9rem;
+    margin-top: 0.8rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+  .revenue-scenario-explanation strong {
+    color: var(--text);
+  }
   .revenue-breakdown .rev-category {
     color: var(--text);
   }
@@ -3521,6 +3540,10 @@ let chartMetric = 'views';   // 'views' | 'views_length' | 'views_likes' | 'enga
 // — disorienting if they're trying to compare e.g. "TheQuartering revenue
 // last 30d" with "TheQuartering revenue YTD" and watching the chart.
 let revenuePanelExpanded = false;
+// Active revenue scenario: 'pessimistic' (channel-specific drag factors) or
+// 'optimistic' (published niche RPMs with our demonetisation discount).
+// Defaults to pessimistic — the more defensible claim for THIS channel.
+let revenueScenario = 'pessimistic';
 // Same treatment for the ad campaigns panel for consistency.
 let adPanelExpanded = false;
 let monthlyData = [];
@@ -3745,6 +3768,14 @@ function summarise(videos) {
                + (shortLongViews / 1000) * RPM.longFormShort.high
                + (shortViews / 1000) * RPM.shorts.high;
   const revMid = (revLow + revHigh) / 2;
+  // Pessimistic scenario band — same bucketing, RPM_PESSIMISTIC rates.
+  const revPessLow = (midRollViews / 1000) * RPM_PESSIMISTIC.longFormMidRoll.low
+                  + (shortLongViews / 1000) * RPM_PESSIMISTIC.longFormShort.low
+                  + (shortViews / 1000) * RPM_PESSIMISTIC.shorts.low;
+  const revPessHigh = (midRollViews / 1000) * RPM_PESSIMISTIC.longFormMidRoll.high
+                   + (shortLongViews / 1000) * RPM_PESSIMISTIC.longFormShort.high
+                   + (shortViews / 1000) * RPM_PESSIMISTIC.shorts.high;
+  const revPessMid = (revPessLow + revPessHigh) / 2;
 
   // Per-video median like rate (long-form only). Each qualifying video
   // contributes one rate value; we take the median across them. This is the
@@ -3798,6 +3829,7 @@ function summarise(videos) {
     longFormDurations: durations.length,
     longFormTotalSeconds,
     revLow, revHigh, revMid,
+    revPessLow, revPessHigh, revPessMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
     totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
@@ -4552,7 +4584,10 @@ function rebuild() {
   //     would blend incompatible baselines) and for Shorts mode (Shorts have
   //     entirely different thumbs-up dynamics that would muddy the signal).
   //   (Revenue is its own chart inside the revenue panel, not a toggle here.)
-  const metricToggle = document.querySelector('.chart-metric-toggle');
+  // Scope to the chart's metric toggle specifically — the revenue panel
+  // also uses .chart-metric-toggle for its scenario toggle, and appears
+  // earlier in the DOM, so a bare selector would grab the wrong element.
+  const metricToggle = document.querySelector('.chart-metric-toggle:not(.revenue-scenario-toggle)');
   const lengthEligible = channelQualifiesForLengthChart(selectedChannel);
   const likeRateEligible = viewMode === 'long' && selectedChannel !== 'ALL';
   const varianceEligible = likeRateEligible && channelQualifiesForEngagementVariance(selectedChannel);
@@ -5444,6 +5479,26 @@ const RPM = {
   // hit by topic-based brand safety the way long-form ads are.
   shorts: { low: 0.02, high: 0.07 }
 };
+
+// Pessimistic scenario RPMs. Stacks three channel-specific drags the central
+// range only partially prices in:
+//   1. Demographic ad-block rate — young male gaming/tech audiences have the
+//      highest ad-block usage of any demo (40%+ on desktop); blocked views
+//      count in our view data but earn $0.
+//   2. Limited-ads exposure — culture-war/political uploads routinely get the
+//      yellow icon, cutting CPM 50-80% on affected videos. The central range
+//      discounts for this but assumes a mostly-monetisable catalogue.
+//   3. Audience recycling + frequency caps — 80+ uploads/month watched by the
+//      same core viewers; YouTube frequency-caps ads per viewer per session,
+//      so the 3rd video someone watches that day serves fewer, cheaper ads.
+//      Published niche RPMs are built on broader-reach channels.
+// Shorts are left at the central floor: the Shorts pool isn't materially
+// affected by these long-form-specific mechanics.
+const RPM_PESSIMISTIC = {
+  longFormMidRoll: { low: 1.0, high: 1.5 },
+  longFormShort: { low: 0.5, high: 1.0 },
+  shorts: { low: 0.02, high: 0.02 }
+};
 const MID_ROLL_THRESHOLD_SEC = 480; // 8 minutes — YouTube's mid-roll eligibility line
 
 // Compute revenue estimates from a video list. Returns a structured object
@@ -5469,19 +5524,21 @@ function summariseRevenue(videos) {
       buckets.longFormShort.count++;
     }
   }
-  function bucketRevenue(b, rpm) {
+  function bucketRevenue(b, rpm, rpmPess) {
     return {
       ...b,
       low: (b.views / 1000) * rpm.low,
       high: (b.views / 1000) * rpm.high,
+      pessLow: (b.views / 1000) * rpmPess.low,
+      pessHigh: (b.views / 1000) * rpmPess.high,
       rpmLow: rpm.low,
       rpmHigh: rpm.high
     };
   }
   return {
-    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, RPM.longFormMidRoll),
-    longFormShort: bucketRevenue(buckets.longFormShort, RPM.longFormShort),
-    shorts: bucketRevenue(buckets.shorts, RPM.shorts),
+    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, RPM.longFormMidRoll, RPM_PESSIMISTIC.longFormMidRoll),
+    longFormShort: bucketRevenue(buckets.longFormShort, RPM.longFormShort, RPM_PESSIMISTIC.longFormShort),
+    shorts: bucketRevenue(buckets.shorts, RPM.shorts, RPM_PESSIMISTIC.shorts),
     totalLow: 0,
     totalHigh: 0,
     totalViews: 0
@@ -5530,6 +5587,8 @@ function renderRevenuePanel() {
   const rev = summariseRevenue(videos);
   rev.totalLow = rev.longFormMidRoll.low + rev.longFormShort.low + rev.shorts.low;
   rev.totalHigh = rev.longFormMidRoll.high + rev.longFormShort.high + rev.shorts.high;
+  rev.totalPessLow = rev.longFormMidRoll.pessLow + rev.longFormShort.pessLow + rev.shorts.pessLow;
+  rev.totalPessHigh = rev.longFormMidRoll.pessHigh + rev.longFormShort.pessHigh + rev.shorts.pessHigh;
   rev.totalViews = rev.longFormMidRoll.views + rev.longFormShort.views + rev.shorts.views;
 
   if (rev.totalViews === 0) { panel.hidden = true; return; }
@@ -5547,20 +5606,44 @@ function renderRevenuePanel() {
     return years < 2 ? `${years.toFixed(1)} years` : `${Math.round(years)} years`;
   }
 
-  function row(label, bucket, sublabel) {
+  // Scenario-aware accessors. 'pessimistic' uses the pess* figures and
+  // RPM_PESSIMISTIC labels; 'optimistic' uses the published-rate figures.
+  const isPess = revenueScenario === 'pessimistic';
+  const activeRPM = isPess ? RPM_PESSIMISTIC : RPM;
+  const bucketLow = b => isPess ? b.pessLow : b.low;
+  const bucketHigh = b => isPess ? b.pessHigh : b.high;
+  const activeTotalLow = isPess ? rev.totalPessLow : rev.totalLow;
+  const activeTotalHigh = isPess ? rev.totalPessHigh : rev.totalHigh;
+
+  function row(label, bucket, tier) {
     if (bucket.count === 0) return '';
+    const rpm = activeRPM[tier];
+    const sublabel = `RPM $${rpm.low.toFixed(2)}-$${rpm.high.toFixed(2)}`;
     return `
       <tr>
         <td>
           <div class="rev-category">${label}</div>
-          <div class="rev-subdetail">${fmt(bucket.count)} videos · ${fmt(bucket.views)} views${sublabel ? ' · ' + sublabel : ''}</div>
+          <div class="rev-subdetail">${fmt(bucket.count)} videos · ${fmt(bucket.views)} views · ${sublabel}</div>
         </td>
-        <td class="num"><span class="rev-range">${fmtUSD(bucket.low)} – ${fmtUSD(bucket.high)}</span></td>
+        <td class="num"><span class="rev-range">${fmtUSD(bucketLow(bucket))} – ${fmtUSD(bucketHigh(bucket))}</span></td>
       </tr>
     `;
   }
 
-  const summary = `${fmtUSD(rev.totalLow, true)} – ${fmtUSD(rev.totalHigh, true)} over ${rangeLabel()}`;
+  const summary = `${fmtUSD(activeTotalLow, true)} – ${fmtUSD(activeTotalHigh, true)} over ${rangeLabel()} (${isPess ? 'Pessimistic' : 'Optimistic'})`;
+
+  // Per-scenario explanation shown directly under the breakdown table.
+  // Kept punchy — the shared methodology details live in the footnote below.
+  const scenarioExplanation = isPess
+    ? `<strong>Pessimistic scenario.</strong> Stacks three drags specific to this channel:
+       an audience demographic with the web's highest ad-block rates (blocked views count
+       as views but earn $0); routine limited-ads ("yellow icon") treatment on culture-war
+       topics; and 80+ uploads a month watched by the same core viewers, which trips
+       YouTube's per-viewer ad frequency caps. Long-form RPM floor: $1.00-$1.50.`
+    : `<strong>Optimistic scenario.</strong> Uses published RPM ranges for commentary/creator-drama
+       channels, already discounted for this channel's documented demonetisation drag. Assumes a
+       mostly-monetisable catalogue, US-heavy audience, and typical ad-block mix. Long-form RPM:
+       $2.00-$3.25.`;
 
   panel.hidden = false;
   // Apply the persisted expanded state so the panel doesn't snap closed
@@ -5570,12 +5653,18 @@ function renderRevenuePanel() {
       <div class="revenue-panel-header">
         <div class="revenue-panel-header-left">
           <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
-          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Range reflects published RPM data for commentary/news channels with US-heavy audiences.">${summary}</span>
+          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Two scenarios available — expand to switch and see the assumptions behind each.">${summary}</span>
         </div>
         <span class="revenue-panel-caret" aria-hidden="true"></span>
       </div>
     </button>
     <div class="revenue-panel-body" id="revenuePanelBody"${revenuePanelExpanded ? '' : ' hidden'}>
+      <!-- Scenario toggle — reuses the chart-metric-toggle tab styling for
+           visual consistency with the main chart's tabs. -->
+      <div class="chart-metric-toggle revenue-scenario-toggle" role="tablist" aria-label="Revenue scenario">
+        <button type="button" data-revenue-scenario="pessimistic" role="tab" aria-selected="${isPess}" class="${isPess ? 'active' : ''}">Pessimistic</button>
+        <button type="button" data-revenue-scenario="optimistic" role="tab" aria-selected="${!isPess}" class="${isPess ? '' : 'active'}">Optimistic</button>
+      </div>
       <!-- Revenue chart — sized to the panel width, sits above the breakdown
            table as the dramatic visual that sells the story. -->
       <div class="revenue-chart-wrap" id="revenueChartWrap">
@@ -5591,46 +5680,16 @@ function renderRevenuePanel() {
           </tr>
         </thead>
         <tbody>
-          ${row('Long-form (8 min+, mid-roll eligible)', rev.longFormMidRoll, `RPM $${RPM.longFormMidRoll.low.toFixed(2)}-$${RPM.longFormMidRoll.high.toFixed(2)}`)}
-          ${row('Long-form (under 8 min)', rev.longFormShort, `RPM $${RPM.longFormShort.low.toFixed(2)}-$${RPM.longFormShort.high.toFixed(2)}`)}
-          ${row('Shorts', rev.shorts, `RPM $${RPM.shorts.low.toFixed(2)}-$${RPM.shorts.high.toFixed(2)}`)}
+          ${row('Long-form (8 min+, mid-roll eligible)', rev.longFormMidRoll, 'longFormMidRoll')}
+          ${row('Long-form (under 8 min)', rev.longFormShort, 'longFormShort')}
+          ${row('Shorts', rev.shorts, 'shorts')}
           <tr class="total">
             <td><strong>Total estimated ad revenue</strong></td>
-            <td class="num"><strong>${fmtUSD(rev.totalLow)} – ${fmtUSD(rev.totalHigh)}</strong></td>
+            <td class="num"><strong>${fmtUSD(activeTotalLow)} – ${fmtUSD(activeTotalHigh)}</strong></td>
           </tr>
         </tbody>
       </table>
-      <div class="revenue-panel-footnote">
-        <strong>Methodology.</strong> Views are split by category and multiplied by RPM ranges (creator
-        revenue per 1,000 views, after YouTube's 45% cut).
-        Long-form 8+ min videos can carry mid-roll ads and earn more per view than shorter videos. Shorts are paid
-        from a separate creator pool at roughly 60-100× lower per view than long-form.
-        Our RPM ranges sit BELOW the published rates for general commentary/creator-drama channels:
-        <a href="https://outlierkit.com/resources/youtube-drama-channel-rpm-cpm/" target="_blank" rel="noopener noreferrer">OutlierKit's 2026 drama-channel report</a>
-        gives $3-$8 for commentary and $2-$5 for creator drama, but those rates assume
-        mostly advertiser-friendly content. The channel covers documented advertiser-exclusion
-        categories (racially-charged events, divisive political topics, sexuality, feminism, etc.)
-        and the creator has publicly discussed the demonetisation drag this produces. We use a
-        narrower range that anchors below the creator-drama floor and is capped well below its
-        midpoint. Assumes US-heavy audience (consistent with creator base);
-        global mix would lower these further.
-        Cross-checked against
-        <a href="https://www.revid.ai/blog/how-much-do-youtubers-make" target="_blank" rel="noopener noreferrer">Revid.ai's 2025 earnings breakdown</a>
-        ($2-$5 long-form working range, $0.01-$0.07 Shorts) and
-        <a href="https://statly.in/youtube-rpm-estimator" target="_blank" rel="noopener noreferrer">Statly's News &amp; Politics RPM data</a>
-        (documented brand-safety penalty).
-        <br><br>
-        <strong>Why we use RPM (not CPM).</strong> A common follow-up question: doesn't watch time matter?
-        (Mid-roll ads only fire if viewers stay long enough; not all views see ads at all.)
-        Yes — but those effects are already baked into the published RPM data. RPM is observed
-        revenue per 1,000 views from real creator dashboards. It already reflects retention,
-        ad-fill rates, and skipped ads. Modelling them again on top would double-count.
-        <br><br>
-        <strong>What this excludes:</strong> sponsorship deals (industry data indicates sponsors often
-        out-earn ad revenue for drama/commentary channels at this size), channel memberships, Super Chats,
-        merch, courses, Patreon, and off-platform income. Headline numbers also don't account for individual
-        video demonetisations, which the channel has publicly discussed experiencing.
-      </div>
+      <div class="revenue-scenario-explanation">${scenarioExplanation}</div>
     </div>
   `;
 
@@ -5645,26 +5704,44 @@ function renderRevenuePanel() {
     revenuePanelExpanded = next;
   });
 
+  // Scenario toggle — switching re-renders the whole panel (summary, chart,
+  // table, and explanation all depend on the active scenario).
+  panel.querySelectorAll('[data-revenue-scenario]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.revenueScenario;
+      if (next === revenueScenario) return;
+      revenueScenario = next;
+      renderRevenuePanel();
+    });
+  });
+
   // Render the trend chart inside the panel body. Uses the same monthlyData
   // that the main views chart uses, so the chart's window matches the
   // user's active date filter (and the headline summary above it).
   // The chart is hidden along with the rest of the body when the panel is
   // collapsed; expanding the panel reveals the chart with its data already
   // there — no lazy load needed since the SVG is cheap.
+  // In short windows (≤32 days) the chart is month-to-month so there's
+  // nothing meaningful to plot — toggle, table, and explanation still work,
+  // but the chart wrap must be explicitly hidden so it doesn't take space.
+  const chartWrap = document.getElementById('revenueChartWrap');
+  let chartRendered = false;
   if (monthlyData && monthlyData.length) {
     const now = new Date();
     const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
     const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
     const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
-    if (chartData.length) {
+    if (chartData.length >= 2) {
       renderRevenueChart(chartData, inProgressMonth, {
         svgId: 'revenueChart',
         legendId: 'revenueChartLegend',
-        wrapEl: document.getElementById('revenueChartWrap'),
+        wrapEl: chartWrap,
         tooltipEl: 'revenueChartTooltip'
       });
+      chartRendered = true;
     }
   }
+  if (chartWrap && !chartRendered) chartWrap.style.display = 'none';
 }
 
 function renderHeroStats(curr, prev) {
@@ -7358,6 +7435,13 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   const tooltip = document.getElementById('chartTooltip');
   if (tooltip) tooltip.style.display = 'none';
 
+  // Scenario accessors — the chart plots whichever scenario is active in
+  // the panel. Pessimistic uses revPess* fields, optimistic uses rev*.
+  const usePess = revenueScenario === 'pessimistic';
+  const rLow = m => (usePess ? m.curr.revPessLow : m.curr.revLow) || 0;
+  const rHigh = m => (usePess ? m.curr.revPessHigh : m.curr.revHigh) || 0;
+  const rMid = m => (usePess ? m.curr.revPessMid : m.curr.revMid) || 0;
+
   // Hide the chart entirely for a single completed month (with or without an
   // in-progress month) — a line/band with only one data point is meaningless
   // and looks broken. The headline summary above and the breakdown table
@@ -7400,7 +7484,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   // — the visual impact of the decline depends on the peak band filling
   // most of the chart height. Use a tighter "nice" rounding (more factor
   // granularity than niceMax) and skip the 5% padding the views chart adds.
-  const highValues = allBuckets.map(m => m.curr.revHigh || 0);
+  const highValues = allBuckets.map(m => rHigh(m));
   const rawMax = Math.max(1, ...highValues);
   const axis = tightNiceAxis(rawMax);
   const yMax = axis.max;
@@ -7491,8 +7575,8 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   let bandTop = '', bandBottom = '';
   for (let i = 0; i < n; i++) {
     const x = xFor(i);
-    const yHigh = yFor(chartData[i].curr.revHigh || 0);
-    const yLow = yFor(chartData[i].curr.revLow || 0);
+    const yHigh = yFor(rHigh(chartData[i]));
+    const yLow = yFor(rLow(chartData[i]));
     bandTop += `${i === 0 ? 'M' : 'L'}${x},${yHigh}`;
     bandBottom = `L${x},${yLow}` + bandBottom;
   }
@@ -7502,7 +7586,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   let midPath = '';
   for (let i = 0; i < n; i++) {
     const x = xFor(i);
-    const y = yFor(chartData[i].curr.revMid || 0);
+    const y = yFor(rMid(chartData[i]));
     midPath += `${i === 0 ? 'M' : 'L'}${x},${y}`;
   }
 
@@ -7521,11 +7605,11 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   let ipConnector = '';
   if (inProgressMonth) {
     const x = xFor(n);
-    const y = yFor(inProgressMonth.curr.revMid || 0);
+    const y = yFor(rMid(inProgressMonth));
     // Connect from the last completed month's mid-point
     const lastIdx = n - 1;
     const lastX = xFor(lastIdx);
-    const lastY = yFor(chartData[lastIdx].curr.revMid || 0);
+    const lastY = yFor(rMid(chartData[lastIdx]));
     ipConnector = `<path class="chart-line-revenue-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
     ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" />`;
     const wHover = innerW / Math.max(1, nTotal - 1);
@@ -7567,7 +7651,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
       // Set the content first so the tooltip has its real width when we measure
       tooltipEl.innerHTML = `
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
-        <div class="tooltip-row"><strong>${fmtAxisUSD(m.curr.revLow)} – ${fmtAxisUSD(m.curr.revHigh)}</strong></div>
+        <div class="tooltip-row"><strong>${fmtAxisUSD(rLow(m))} – ${fmtAxisUSD(rHigh(m))}</strong></div>
         <div class="tooltip-row tooltip-detail">${fmt(m.curr.longViews)} long-form + ${fmt(m.curr.shortViews)} Shorts views</div>
       `;
       // Tooltip uses transform: translate(-50%, -100%) — the `left` value is
