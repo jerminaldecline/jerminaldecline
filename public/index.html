@@ -7022,7 +7022,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
       tooltip.style.display = 'block';
       tooltip.innerHTML = `
         <div class="tooltip-month">${monthLabel(d.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
-        <div class="chart-tooltip-row"><strong>${d.above} of ${d.qualifying}</strong> videos above typical</div>
+        <div class="chart-tooltip-row"><strong>${d.above} of ${d.qualifying}</strong> videos with top-tier engagement</div>
         <div class="chart-tooltip-row"><strong>${d.pct.toFixed(0)}%</strong> of the month's videos</div>
       `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
