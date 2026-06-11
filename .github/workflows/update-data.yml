@@ -53,3 +53,50 @@ jobs:
           done
           echo "Push failed after 3 attempts."
           exit 1
+
+      - name: Snapshot daily data
+        # Best-effort: if this fails (auth glitch, sister repo down),
+        # the main data update has already succeeded — don't fail the workflow.
+        continue-on-error: true
+        env:
+          SNAPSHOTS_TOKEN: ${{ secrets.SNAPSHOTS_REPO_TOKEN }}
+          SNAPSHOTS_REPO: jerminaldecline/jerminaldecline-snapshots
+        run: |
+          set -e
+          DATE=$(date -u '+%Y-%m-%d')
+          SNAPSHOT_FILE="${DATE}.json.gz"
+
+          # Shallow clone the sister repo. The PAT is embedded in the URL
+          # as a bearer credential (x-access-token: prefix is the standard
+          # pattern for cross-repo pushes from Actions).
+          git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/snapshots
+
+          # Idempotency: multiple cron runs per day are expected; only the
+          # first creates the snapshot. Later runs in the same UTC day see
+          # the file already exists and bail.
+          if [ -f "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}" ]; then
+            echo "Snapshot ${SNAPSHOT_FILE} already exists — skipping."
+            exit 0
+          fi
+
+          mkdir -p /tmp/snapshots/snapshots
+          gzip -c public/data.json > "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}"
+
+          cd /tmp/snapshots
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "snapshots/${SNAPSHOT_FILE}"
+          git commit -m "snapshot: ${DATE}"
+          # Conflicts on the sister repo are vanishingly unlikely (only one
+          # writer), but the retry discipline matches the main commit step
+          # and costs nothing.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Snapshot push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed on attempt $attempt. Pulling and retrying..."
+            git pull --rebase
+          done
+          echo "Snapshot push failed after 3 attempts."
+          exit 1
