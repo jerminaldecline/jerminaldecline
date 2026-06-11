@@ -2,14 +2,15 @@ name: Update channel data
 
 on:
   schedule:
-    # Multiple staggered runs daily. GitHub's free-tier scheduler is
-    # unreliable and often skips runs scheduled on the hour, so we
-    # use off-hour minutes and four attempts across the day.
-    # Only runs that find new data will produce a commit.
-    - cron: '7 0 * * *'    # 00:07 UTC — overnight catch (plugs late-day upload gap)
-    - cron: '17 3 * * *'   # 03:17 UTC — primary, early morning
-    - cron: '37 11 * * *'  # 11:37 UTC — midday backup
-    - cron: '47 19 * * *'  # 19:47 UTC — evening backup
+    # Four cron runs across the day: two in the AM half (00:00-11:59 UTC)
+    # and two in the PM half (12:00-23:59 UTC). The snapshot step is
+    # idempotent on AM/PM, so the first successful run in each half
+    # creates that half's snapshot; later runs in the same half no-op.
+    # Two attempts per half guards against GitHub's flaky scheduler.
+    - cron: '7 0 * * *'    # 00:07 UTC — AM primary
+    - cron: '17 3 * * *'   # 03:17 UTC — AM backup
+    - cron: '37 13 * * *'  # 13:37 UTC — PM primary
+    - cron: '47 19 * * *'  # 19:47 UTC — PM backup
   workflow_dispatch:  # allows manual runs from the Actions tab
 
 permissions:
@@ -41,7 +42,7 @@ jobs:
             echo "No data changes to commit."
             exit 0
           fi
-          git commit -m "chore: update channel data ($(date -u '+%Y-%m-%d'))"
+          git commit -m "chore: update channel data ($(date -u '+%Y-%m-%d %H:%M UTC'))"
           # Retry push with a rebase if someone else pushed in the meantime
           for attempt in 1 2 3; do
             if git push; then
@@ -54,7 +55,7 @@ jobs:
           echo "Push failed after 3 attempts."
           exit 1
 
-      - name: Snapshot daily data
+      - name: Snapshot data (twice-daily AM/PM)
         # Best-effort: if this fails (auth glitch, sister repo down),
         # the main data update has already succeeded — don't fail the workflow.
         continue-on-error: true
@@ -64,16 +65,18 @@ jobs:
         run: |
           set -e
           DATE=$(date -u '+%Y-%m-%d')
-          SNAPSHOT_FILE="${DATE}.json.gz"
+          # AM = first half of UTC day (00:00-11:59), PM = second half (12:00-23:59).
+          # Each half-day produces one snapshot; the first run in that half
+          # creates the file, later runs in the same half see it exists and bail.
+          HOUR=$(date -u '+%H')
+          if [ "$HOUR" -lt 12 ]; then HALF="AM"; else HALF="PM"; fi
+          SNAPSHOT_FILE="${DATE}-${HALF}.json.gz"
 
           # Shallow clone the sister repo. The PAT is embedded in the URL
           # as a bearer credential (x-access-token: prefix is the standard
           # pattern for cross-repo pushes from Actions).
           git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/snapshots
 
-          # Idempotency: multiple cron runs per day are expected; only the
-          # first creates the snapshot. Later runs in the same UTC day see
-          # the file already exists and bail.
           if [ -f "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}" ]; then
             echo "Snapshot ${SNAPSHOT_FILE} already exists — skipping."
             exit 0
@@ -86,10 +89,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add "snapshots/${SNAPSHOT_FILE}"
-          git commit -m "snapshot: ${DATE}"
-          # Conflicts on the sister repo are vanishingly unlikely (only one
-          # writer), but the retry discipline matches the main commit step
-          # and costs nothing.
+          git commit -m "snapshot: ${DATE} ${HALF}"
           for attempt in 1 2 3; do
             if git push; then
               echo "Snapshot push succeeded on attempt $attempt."
