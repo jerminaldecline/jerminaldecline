@@ -1,11 +1,11 @@
-name: Monthly audit (deletion check)
+name: Daily audit (deletion check)
 
 on:
   schedule:
-    # Runs on the 1st of every month at 04:23 UTC. Off-hour minute to dodge
-    # GitHub's scheduler stampede on the hour. Covers deletion detection
-    # for videos older than the 60-day window the daily run handles.
-    - cron: '23 4 1 * *'
+    # Once daily at 02:00 UTC. Sits in the gap between the 00:07 and 03:17
+    # data-update runs so the audit doesn't compete with the daily fetch
+    # for the same git push slot.
+    - cron: '0 2 * * *'
   workflow_dispatch:  # allows manual runs from the Actions tab
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
             echo "Audit found no changes."
             exit 0
           fi
-          git commit -m "chore: monthly audit ($(date -u '+%Y-%m-%d'))"
+          git commit -m "chore: daily audit ($(date -u '+%Y-%m-%d'))"
           for attempt in 1 2 3; do
             if git push; then
               echo "Push succeeded on attempt $attempt."
