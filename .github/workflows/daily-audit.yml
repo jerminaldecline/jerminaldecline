@@ -2,11 +2,8 @@ name: Daily audit (deletion check)
 
 on:
   schedule:
-    # Once daily at 02:00 UTC. Sits in the gap between the 00:07 and 03:17
-    # data-update runs so the audit doesn't compete with the daily fetch
-    # for the same git push slot.
     - cron: '0 2 * * *'
-  workflow_dispatch:  # allows manual runs from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -32,7 +29,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data.json
+          # Audit also refreshes descriptions (older videos get description
+          # edits checked), so stage both files.
+          git add public/data.json public/descriptions.json
           if git diff --staged --quiet; then
             echo "Audit found no changes."
             exit 0

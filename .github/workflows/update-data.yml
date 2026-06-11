@@ -37,7 +37,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data.json
+          # Stage both the channel data and the descriptions side-file.
+          # The fetcher writes descriptions.json alongside data.json; without
+          # staging it explicitly it would be silently dropped when the
+          # workflow runner is torn down.
+          git add public/data.json public/descriptions.json
           if git diff --staged --quiet; then
             echo "No data changes to commit."
             exit 0
@@ -65,16 +69,10 @@ jobs:
         run: |
           set -e
           DATE=$(date -u '+%Y-%m-%d')
-          # AM = first half of UTC day (00:00-11:59), PM = second half (12:00-23:59).
-          # Each half-day produces one snapshot; the first run in that half
-          # creates the file, later runs in the same half see it exists and bail.
           HOUR=$(date -u '+%H')
           if [ "$HOUR" -lt 12 ]; then HALF="AM"; else HALF="PM"; fi
           SNAPSHOT_FILE="${DATE}-${HALF}.json.gz"
 
-          # Shallow clone the sister repo. The PAT is embedded in the URL
-          # as a bearer credential (x-access-token: prefix is the standard
-          # pattern for cross-repo pushes from Actions).
           git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/snapshots
 
           if [ -f "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}" ]; then
