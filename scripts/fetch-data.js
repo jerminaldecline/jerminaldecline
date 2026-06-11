@@ -70,6 +70,10 @@ function isLikelyShort(durationSec, publishedAt) {
 const RECENT_WINDOW_DAYS = 60; // how far back to refresh on incremental runs
 const HISTORY_YEARS = 20; // how far back to fetch on first run / backfill (covers all channels' full histories)
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
+// Descriptions live in a separate file so data.json stays lean (descriptions
+// would 4x the raw size, parsed by every page load even though only the
+// topic-analysis features actually need them). Loaded on demand by the site.
+const DESCRIPTIONS_FILE = path.join(__dirname, '..', 'public', 'descriptions.json');
 
 const IS_AUDIT = process.argv.includes('--audit');
 const IS_BACKFILL = process.argv.includes('--backfill');
@@ -174,12 +178,14 @@ function parseEngagement(statsObj, key) {
   return Number.isFinite(n) ? n : null;
 }
 
-async function enrichVideos(videos) {
+async function enrichVideos(videos, descriptions) {
   console.log(`  Fetching duration + view stats for ${videos.length} videos...`);
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
     const ids = batch.map(v => v.id).join(',');
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${API_KEY}`;
+    // snippet added for description capture. Cost: 2 quota units/call instead
+    // of 1 — still well within daily quota (we run at ~13% utilisation).
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet&id=${ids}&key=${API_KEY}`;
     const data = await get(url);
     const byId = new Map(data.items.map(it => [it.id, it]));
     for (const v of batch) {
@@ -190,6 +196,11 @@ async function enrichVideos(videos) {
         v.likes = parseEngagement(det.statistics, 'likeCount');
         v.comments = parseEngagement(det.statistics, 'commentCount');
         v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
+        // Capture description to the side-channel map. Stored separately
+        // from the video record so it doesn't end up in data.json.
+        if (descriptions && det.snippet && det.snippet.description !== undefined) {
+          descriptions[v.id] = det.snippet.description;
+        }
         // If a video was previously flagged as unavailable but is now live, clear the flag.
         if (v.unavailable) {
           delete v.unavailable;
@@ -219,14 +230,18 @@ async function enrichVideos(videos) {
  * - Doesn't touch publishedAt, title, channelId, id
  * - Tracks transitions and prints a deletion summary at the end
  */
-async function auditEnrich(videos) {
+async function auditEnrich(videos, descriptions) {
   console.log(`  AUDIT: Re-checking ${videos.length} videos for availability...`);
   const newlyUnavailable = [];
   const restoredToLive = [];
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
     const ids = batch.map(v => v.id).join(',');
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${API_KEY}`;
+    // snippet added so the audit also refreshes descriptions — useful for
+    // detecting retroactive edits on older videos (e.g. removing sponsor
+    // mentions after a deal sours). Audit runs once daily so this is a
+    // small quota cost (~280 units vs ~140 previously).
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet&id=${ids}&key=${API_KEY}`;
     const data = await get(url);
     const byId = new Map(data.items.map(it => [it.id, it]));
     for (const v of batch) {
@@ -238,6 +253,9 @@ async function auditEnrich(videos) {
         v.likes = parseEngagement(det.statistics, 'likeCount');
         v.comments = parseEngagement(det.statistics, 'commentCount');
         v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
+        if (descriptions && det.snippet && det.snippet.description !== undefined) {
+          descriptions[v.id] = det.snippet.description;
+        }
         if (wasUnavailable) {
           delete v.unavailable;
           delete v.unavailableSince;
@@ -259,6 +277,41 @@ async function auditEnrich(videos) {
     console.log(`    Audited ${Math.min(i + 50, videos.length)} / ${videos.length}`);
   }
   return { newlyUnavailable, restoredToLive };
+}
+
+// Descriptions live in their own file (see DESCRIPTIONS_FILE) and persist
+// across runs. The fetcher loads the existing map, refreshes entries for
+// the videos it just enriched, prunes entries for videos that no longer
+// exist in the dataset, and writes back. Older video descriptions that
+// weren't part of this run's refresh window are preserved as-is.
+function loadExistingDescriptions() {
+  if (!fs.existsSync(DESCRIPTIONS_FILE)) return {};
+  try {
+    const parsed = JSON.parse(fs.readFileSync(DESCRIPTIONS_FILE, 'utf8'));
+    return parsed.descriptions || {};
+  } catch (e) {
+    console.log(`Could not parse existing descriptions file (${e.message}); starting fresh.`);
+    return {};
+  }
+}
+
+function writeDescriptions(descriptions, validVideoIds) {
+  // Prune descriptions for videos that are no longer in the dataset at all
+  // (deleted entirely, never seen). Unavailable-flagged videos are still in
+  // the dataset — their last-known descriptions stay until they fall out
+  // of the videos array entirely.
+  const valid = new Set(validVideoIds);
+  const pruned = {};
+  for (const [id, desc] of Object.entries(descriptions)) {
+    if (valid.has(id)) pruned[id] = desc;
+  }
+  const output = {
+    lastUpdated: new Date().toISOString(),
+    descriptions: pruned
+  };
+  fs.mkdirSync(path.dirname(DESCRIPTIONS_FILE), { recursive: true });
+  fs.writeFileSync(DESCRIPTIONS_FILE, JSON.stringify(output));
+  console.log(`  Descriptions: ${Object.keys(pruned).length} entries written to ${DESCRIPTIONS_FILE}`);
 }
 
 function loadExistingData() {
@@ -357,6 +410,7 @@ async function main() {
 
 async function runIncremental(startTime) {
   const existing = loadExistingData();
+  const descriptions = loadExistingDescriptions();
   const isFirstRun = !existing;
 
   // Backfill mode: pretend we have no recent-window optimisation and fetch
@@ -409,7 +463,7 @@ async function runIncremental(startTime) {
       console.log(`  No videos in window for ${ch.title}.`);
       continue;
     }
-    await enrichVideos(v);
+    await enrichVideos(v, descriptions);
     freshVideos = freshVideos.concat(v);
   }
 
@@ -429,6 +483,7 @@ async function runIncremental(startTime) {
 
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
+  writeDescriptions(descriptions, allVideos.map(v => v.id));
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ Done in ${elapsed}s`);
@@ -447,6 +502,7 @@ async function runIncremental(startTime) {
 
 async function runAudit(startTime) {
   const existing = loadExistingData();
+  const descriptions = loadExistingDescriptions();
   if (!existing) {
     console.log('AUDIT: no existing data to audit. Run a normal fetch first.');
     return;
@@ -482,7 +538,7 @@ async function runAudit(startTime) {
   }
 
   // Run audit enrichment, capturing deletions and restorations
-  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets);
+  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets, descriptions);
 
   // Merge audited records back into the full dataset (audit changed objects in-place
   // since they're the same references, but be defensive)
@@ -493,6 +549,7 @@ async function runAudit(startTime) {
   const output = buildOutput(allVideos, channelMeta, existing);
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
+  writeDescriptions(descriptions, allVideos.map(v => v.id));
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ AUDIT done in ${elapsed}s`);
