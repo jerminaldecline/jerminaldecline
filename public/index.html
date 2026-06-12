@@ -2650,6 +2650,506 @@
      visually distinguished with a different accent colour so users can tell
      them apart at a glance. Green accent reads as "money" without being too
      on-the-nose about it. */
+  /* Story tracker — surfaces a dominant single-topic saturation event
+     while it's ongoing. Collapsible like the revenue and ad panels: header
+     button always shows the headline; body (stats, saturation chart,
+     video list) reveals on expand. */
+  .story-tracker {
+    background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border);
+    border-left: 3px solid #e85d4d;
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;
+  }
+  .story-tracker-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;
+  }
+  .story-tracker-toggle:hover { background: rgba(255,255,255,0.02); }
+  .story-tracker-eyebrow {
+    grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #e85d4d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .story-tracker-headline {
+    grid-column: 1;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .story-tracker-headline strong {
+    color: #e85d4d;
+  }
+  .story-tracker-chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .story-tracker-toggle[aria-expanded="true"] .story-tracker-chevron {
+    transform: rotate(180deg);
+  }
+  .story-tracker-body {
+    padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .story-tracker-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .story-tracker-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .story-tracker-stat-value {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .story-tracker-stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  /* "Unclassifiable" note — appears when some videos have descriptions
+     too thin for keyword matching. Visually subordinate to the main stats:
+     muted, italic-ish. Honest about a known limitation without distracting
+     from the verified count above. */
+  .story-tracker-unclassified {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding: 0.5rem 0.7rem;
+    margin: 0 0 0.9rem;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--border);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .story-tracker-unclassified em {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Saturation chart — horizontal bars per time window. The bar visually
+     encodes the percentage; the numeric label shows the fraction. */
+  .story-saturation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 1rem;
+  }
+  .story-saturation-row {
+    display: grid;
+    grid-template-columns: 56px 1fr 56px;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+  }
+  .story-saturation-window {
+    color: var(--text-muted);
+  }
+  .story-saturation-bar {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .story-saturation-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e85d4d, #ff7a6b);
+    border-radius: 4px;
+  }
+  .story-saturation-value {
+    color: var(--text);
+    font-weight: 500;
+    text-align: right;
+  }
+  /* Video list — sortable header row, scrollable list below. Both the
+     header and the list items have explicit right padding to push the
+     rightmost column (like rate) away from where the scrollbar appears.
+     scrollbar-gutter: stable alone wasn't enough — Chrome's overlay
+     scrollbar can still visually crowd the content. Explicit padding
+     reserves the space whether the scrollbar shows or not. */
+  .story-tracker-video-list-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    padding: 0.4rem 14px 0.4rem 0;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .story-tracker-sort-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .story-tracker-sort-btn:hover { color: var(--text); }
+  .story-tracker-sort-btn[data-sort-active="true"] {
+    color: var(--text);
+  }
+  /* Numeric columns right-aligned (header + body) */
+  .story-tracker-sort-btn[data-sort-col="views"],
+  .story-tracker-sort-btn[data-sort-col="like_rate"],
+  .story-tracker-video-list-header > :nth-child(3),
+  .story-tracker-video-list-header > :nth-child(4) {
+    text-align: right;
+  }
+  .story-tracker-video-list {
+    font-size: 0.82rem;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  .story-tracker-video-item {
+    padding: 0.4rem 14px 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .story-tracker-video-item:last-child { border-bottom: none; }
+  .story-tracker-video-date {
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .story-tracker-video-title a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .story-tracker-video-title a:hover { text-decoration: underline; }
+  .story-tracker-video-desc {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  .story-tracker-video-views,
+  .story-tracker-video-likerate {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Description Patterns panel — same collapsible structure as the story
+     tracker but distinct visual identity (muted accent, analytical
+     register, no urgency cue) so the two read as different kinds of
+     finding. Used for channel-behavior patterns that are interesting in
+     aggregate rather than tied to a single hot story. */
+  .desc-pattern-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;
+  }
+  .desc-pattern-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;
+  }
+  .desc-pattern-toggle:hover { background: rgba(255,255,255,0.02); }
+  .desc-pattern-eyebrow {
+    grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .desc-pattern-headline {
+    grid-column: 1;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .desc-pattern-headline strong {
+    color: var(--brand);
+    font-weight: 700;
+  }
+  .desc-pattern-quote {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .desc-pattern-chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .desc-pattern-toggle[aria-expanded="true"] .desc-pattern-chevron {
+    transform: rotate(180deg);
+  }
+  .desc-pattern-body {
+    padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .desc-pattern-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .desc-pattern-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .desc-pattern-stat-value {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .desc-pattern-stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .desc-pattern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .desc-pattern-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .desc-pattern-table th.num { text-align: right; }
+  .desc-pattern-table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .desc-pattern-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .desc-pattern-table tr:last-child td { border-bottom: none; }
+  .desc-pattern-table .desc-text {
+    font-style: italic;
+    color: var(--text);
+    word-break: break-word;
+  }
+  /* Long descriptions collapse to a single-line preview with a chevron.
+     Native <details>/<summary> for accessibility; default marker hidden
+     so the row layout stays clean. */
+  .desc-pattern-long {
+    overflow: hidden;
+  }
+  .desc-pattern-long summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    color: var(--text);
+    font-style: italic;
+  }
+  .desc-pattern-long summary::-webkit-details-marker { display: none; }
+  .desc-pattern-long summary::after {
+    content: '▼';
+    font-size: 0.65em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+  .desc-pattern-long[open] summary::after {
+    transform: rotate(180deg);
+  }
+  .desc-pattern-long .desc-preview {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+  }
+  .desc-pattern-long .desc-full {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-style: italic;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Info point callout — curated editorial annotations specific to the
+     selected channel (e.g. "this typo appears on 100 videos"). Sits at
+     the top of the expanded body, brand-tinted background to read as
+     informational rather than warning. */
+  .desc-pattern-info {
+    background: rgba(106, 163, 255, 0.06);
+    border-left: 2px solid var(--brand);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.9rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .desc-pattern-info-label {
+    color: var(--brand);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+  .desc-pattern-info p { margin: 0; }
+  .desc-pattern-info + .desc-pattern-info { margin-top: -0.4rem; }
+
+  /* Small ⓘ icon next to stat labels — uses a CSS-driven tooltip rather
+     than the native title attribute, which has a ~1 second hover delay
+     and inconsistent rendering. Tooltip appears immediately on hover. */
+  .info-icon {
+    color: var(--text-dim);
+    cursor: help;
+    font-size: 0.85em;
+    margin-left: 0.15rem;
+    user-select: none;
+    position: relative;
+  }
+  .info-icon:hover { color: var(--text-muted); }
+  .info-icon[data-tooltip]:hover::after,
+  .info-icon[data-tooltip]:focus::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.65rem;
+    width: max-content;
+    max-width: 280px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.45;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 100;
+    white-space: normal;
+    pointer-events: none;
+  }
+  .desc-pattern-typos {
+    margin-top: 1rem;
+    padding: 0.8rem 0.95rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+  }
+  .desc-pattern-typos-header {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.55rem;
+    font-weight: 600;
+  }
+  .desc-pattern-typos-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+  .desc-pattern-typos-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .desc-pattern-typos-list .typo-wrong {
+    color: #e85d4d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 600;
+  }
+  .desc-pattern-typos-list .typo-arrow {
+    color: var(--text-dim);
+  }
+  .desc-pattern-typos-list .typo-right {
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .desc-pattern-typos-list .typo-context {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.8rem;
+  }
+
   .revenue-panel {
     background: var(--surface);
     border: 1px solid var(--up);
@@ -3412,6 +3912,22 @@
 
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
+
+      <!-- Story Tracker — surfaces a single dominant topic when the channel
+           is saturating with coverage of it. Pulls match data from
+           descriptions.json (fetched on demand) and only renders when the
+           threshold conditions are met (currently hardcoded to Karmelo
+           Anthony coverage on TheQuartering). When the story cools and
+           saturation drops below the threshold, the panel auto-hides. -->
+      <div class="story-tracker" id="storyTracker" hidden></div>
+
+      <!-- Description Patterns — surfaces channel content patterns that
+           emerge from analysing descriptions in aggregate. Currently
+           highlights the most-repeated description and the share of
+           uploads with thin (uninformative) descriptions. Different
+           editorial register from the story tracker: this is a permanent
+           channel-behavior finding, not a transient topic spike. -->
+      <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
 
       <!-- Ad campaigns panel — populated only when the selected channel has
            confirmed ad-promoted videos in ad-videos.json -->
@@ -4568,6 +5084,14 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
+  // Story tracker — appears above heroStats DOM-wise but renders after
+  // because it depends on the same filtered video set and the descriptions
+  // side-channel (loaded lazily on first call).
+  renderStoryTracker();
+  // Description patterns — analytical companion to the story tracker.
+  // Same data source (descriptions.json) so once one is loaded the other
+  // is free. Different editorial register: permanent finding, not transient.
+  renderDescPatterns();
   // Revenue panel needs to refresh when the date range changes (its estimate
   // is scoped to the active filter window). The ad panel is channel-scoped
   // and doesn't change with date — handled separately.
@@ -5495,8 +6019,8 @@ const RPM = {
 // Shorts are left at the central floor: the Shorts pool isn't materially
 // affected by these long-form-specific mechanics.
 const RPM_PESSIMISTIC = {
-  longFormMidRoll: { low: 1.0, high: 1.5 },
-  longFormShort: { low: 0.5, high: 1.0 },
+  longFormMidRoll: { low: 0.85, high: 1.28 },
+  longFormShort: { low: 0.43, high: 0.85 },
   shorts: { low: 0.02, high: 0.02 }
 };
 const MID_ROLL_THRESHOLD_SEC = 480; // 8 minutes — YouTube's mid-roll eligibility line
@@ -5639,7 +6163,7 @@ function renderRevenuePanel() {
        an audience demographic with the web's highest ad-block rates (blocked views count
        as views but earn $0); routine limited-ads ("yellow icon") treatment on culture-war
        topics; and 80+ uploads a month watched by the same core viewers, which trips
-       YouTube's per-viewer ad frequency caps. Long-form RPM floor: $1.00-$1.50.`
+       YouTube's per-viewer ad frequency caps. Long-form RPM floor: $0.85-$1.28.`
     : `<strong>Optimistic scenario.</strong> Uses published RPM ranges for commentary/creator-drama
        channels, already discounted for this channel's documented demonetisation drag. Assumes a
        mostly-monetisable catalogue, US-heavy audience, and typical ad-block mix. Long-form RPM:
@@ -5894,6 +6418,623 @@ function renderHeroStats(curr, prev) {
       requestAnimationFrame(tick);
     });
   }
+}
+
+// ===== Story Tracker =====
+// Surfaces a dominant single-topic saturation event on the headline area.
+// Currently hardcoded to Karmelo Anthony coverage on TheQuartering; when
+// the next big story breaks, edit the STORY_CONFIG to swap topic. When
+// saturation falls below MIN_SATURATION_TO_DISPLAY for the configured
+// window, the panel auto-hides — no manual cleanup needed when the story
+// cools.
+
+const STORY_CONFIG = {
+  id: 'karmelo-anthony',
+  topic: 'Karmelo Anthony',
+  // Story scope — case-insensitive substring match on the description.
+  // Karmelo's name is uncommon enough to be a clean keyword; Metcalf
+  // catches related family-statement videos that don't name Karmelo
+  // directly but are part of the same trial coverage.
+  keywords: ['karmelo', 'metcalf'],
+  // The story trackers only show when the topic is dominant enough to
+  // earn the headline slot. 30% saturation in the configured window.
+  primaryWindowDays: 7,
+  minSaturationToDisplay: 0.30,
+  // Restrict to channels where the story is actually playing out.
+  channelHandles: ['@TheQuartering'],
+  // Windows shown in the saturation chart, smallest-first feels punchier
+  // visually but largest-first reads more naturally for the story arc.
+  windows: [60, 30, 14, 7, 3],
+  // Only long-form videos counted toward saturation: shorts have minimal
+  // descriptions (often just hashtags), so they can't be reliably
+  // topic-matched and would dilute the percentage.
+  longFormOnly: true
+};
+
+let descriptionsCache = null;
+let descriptionsLoadPromise = null;
+
+function loadDescriptions() {
+  if (descriptionsCache) return Promise.resolve(descriptionsCache);
+  if (descriptionsLoadPromise) return descriptionsLoadPromise;
+  descriptionsLoadPromise = fetch('descriptions.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(json => {
+      descriptionsCache = json && json.descriptions ? json.descriptions : {};
+      return descriptionsCache;
+    })
+    .catch(err => {
+      console.warn('descriptions.json failed to load', err);
+      descriptionsCache = {};
+      return descriptionsCache;
+    });
+  return descriptionsLoadPromise;
+}
+
+function storyMatchesVideo(v, descriptions) {
+  const desc = descriptions[v.id];
+  if (!desc) return false;
+  const lower = desc.toLowerCase();
+  return STORY_CONFIG.keywords.some(k => lower.includes(k));
+}
+
+// Persistent UI state across re-renders within the session. The panel
+// re-renders on channel/date changes; without these, expansion state and
+// sort preference would reset every time.
+let storyTrackerExpanded = false;
+let storyTrackerSort = { col: 'date', dir: 'desc' };
+
+function renderStoryTracker() {
+  const panel = document.getElementById('storyTracker');
+  if (!panel) return;
+
+  // Channel filter — tracker only renders for relevant channels. If user
+  // is on "ALL" or any non-matching channel, hide and bail.
+  if (!dataset) { panel.hidden = true; return; }
+  const channelMap = dataset.channels || {};
+  const allowedIds = new Set();
+  for (const [chId, ch] of Object.entries(channelMap)) {
+    if (STORY_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
+  }
+  if (!allowedIds.has(selectedChannel)) { panel.hidden = true; return; }
+
+  // Descriptions are loaded lazily; the first call kicks off the fetch
+  // and renders a minimal loading state, then re-renders when ready.
+  // After that the cache is hot for the rest of the session.
+  if (!descriptionsCache) {
+    loadDescriptions().then(() => renderStoryTracker());
+    return;
+  }
+
+  const now = Date.now();
+  const candidates = dataset.videos.filter(v => {
+    if (!allowedIds.has(v.channelId)) return false;
+    if (STORY_CONFIG.longFormOnly && v.isShort) return false;
+    if (v.unavailable) return false;
+    return true;
+  });
+
+  // Compute saturation for each window in parallel — a single pass
+  // building a window->{total, matches, ...} map.
+  // unclassifiable counts videos with descriptions too thin to topic-match
+  // (or no description at all in our cache). These may or may not be about
+  // the tracked story — we can't tell from data alone. Flagged separately
+  // so the headline number stays honest about what we actually verified.
+  const THIN_DESC_THRESHOLD = 50;
+  const stats = {};
+  for (const w of STORY_CONFIG.windows) {
+    stats[w] = { total: 0, matches: 0, unclassifiable: 0, views: 0, likes: 0, videos: [], unclassVideos: [] };
+  }
+  for (const v of candidates) {
+    const ageDays = (now - new Date(v.publishedAt).getTime()) / 86400000;
+    const isMatch = storyMatchesVideo(v, descriptionsCache);
+    const desc = descriptionsCache[v.id] || '';
+    const isThin = !isMatch && desc.trim().length < THIN_DESC_THRESHOLD;
+    for (const w of STORY_CONFIG.windows) {
+      if (ageDays > w) continue;
+      stats[w].total++;
+      if (isMatch) {
+        stats[w].matches++;
+        stats[w].views += v.views || 0;
+        stats[w].likes += v.likes || 0;
+        stats[w].videos.push(v);
+      } else if (isThin) {
+        stats[w].unclassifiable++;
+        stats[w].unclassVideos.push(v);
+      }
+    }
+  }
+
+  // Auto-hide when the story has cooled below the threshold.
+  const primary = stats[STORY_CONFIG.primaryWindowDays];
+  const primarySaturation = primary.total > 0 ? primary.matches / primary.total : 0;
+  if (primarySaturation < STORY_CONFIG.minSaturationToDisplay) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+
+  // Headline: pick the most striking window — the smallest window where
+  // saturation >= 50%, falling back to the primary window. That tends to
+  // surface the "100% of last 3 days" kind of stat when it's available.
+  let headlineWindow = STORY_CONFIG.primaryWindowDays;
+  for (const w of [...STORY_CONFIG.windows].sort((a, b) => a - b)) {
+    const s = stats[w];
+    if (s.total >= 3 && s.matches / s.total >= 0.5) {
+      headlineWindow = w;
+      break;
+    }
+  }
+  const headlineStats = stats[headlineWindow];
+  const headlinePct = headlineStats.total > 0
+    ? Math.round(headlineStats.matches / headlineStats.total * 100)
+    : 0;
+
+  const totalStats = stats[Math.max(...STORY_CONFIG.windows)];
+
+  // Saturation chart — one row per configured window.
+  // Per request: show the fraction (matches/total) without trailing percent.
+  // The bar already encodes the percentage visually.
+  const saturationRows = STORY_CONFIG.windows.map(w => {
+    const s = stats[w];
+    const pct = s.total > 0 ? s.matches / s.total * 100 : 0;
+    return `
+      <div class="story-saturation-row">
+        <span class="story-saturation-window">Last ${w}d</span>
+        <div class="story-saturation-bar">
+          <div class="story-saturation-fill" style="width: ${pct.toFixed(1)}%"></div>
+        </div>
+        <span class="story-saturation-value">${s.matches}/${s.total}</span>
+      </div>
+    `;
+  }).join('');
+
+  const fmt = (n) => n.toLocaleString('en-GB');
+
+  // Decorate videos with computed like_rate so sorting and display are
+  // consistent regardless of which column is active.
+  const decoratedVideos = totalStats.videos.map(v => ({
+    ...v,
+    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
+  }));
+
+  // Active sort indicator arrow for the column header.
+  const arrow = col => storyTrackerSort.col === col
+    ? (storyTrackerSort.dir === 'desc' ? ' ▼' : ' ▲')
+    : '';
+  const activeAttr = col => storyTrackerSort.col === col ? 'true' : 'false';
+
+  panel.innerHTML = `
+    <button type="button" class="story-tracker-toggle" id="storyTrackerToggle"
+            aria-expanded="${storyTrackerExpanded}" aria-controls="storyTrackerBody">
+      <span class="story-tracker-eyebrow">🔥 Story tracker · ${STORY_CONFIG.topic}</span>
+      <span class="story-tracker-headline">
+        <strong>${headlinePct}%</strong> of long-form uploads in the last
+        ${headlineWindow} days have been about the ${STORY_CONFIG.topic} story
+      </span>
+      <span class="story-tracker-chevron">▼</span>
+    </button>
+    <div class="story-tracker-body" id="storyTrackerBody"${storyTrackerExpanded ? '' : ' hidden'}>
+      <div class="story-tracker-stats">
+        <div class="story-tracker-stat">
+          <span class="story-tracker-stat-value">${totalStats.matches}</span>
+          <span class="story-tracker-stat-label">videos · last ${Math.max(...STORY_CONFIG.windows)}d</span>
+        </div>
+        <div class="story-tracker-stat">
+          <span class="story-tracker-stat-value">${fmt(totalStats.views)}</span>
+          <span class="story-tracker-stat-label">total views</span>
+        </div>
+        <div class="story-tracker-stat">
+          <span class="story-tracker-stat-value">${(totalStats.views > 0 ? (totalStats.likes / totalStats.views) * 100 : 0).toFixed(2)}%</span>
+          <span class="story-tracker-stat-label">avg like rate</span>
+        </div>
+      </div>
+      ${totalStats.unclassifiable > 0 ? `
+        <div class="story-tracker-unclassified">
+          + ${totalStats.unclassifiable} video${totalStats.unclassifiable === 1 ? '' : 's'} with descriptions too thin to classify
+          (may also be about this story — descriptions like "<em>this news is totally insane</em>"
+          don't contain the keywords we match on)
+        </div>
+      ` : ''}
+      <div class="story-saturation">${saturationRows}</div>
+      <div class="story-tracker-video-list-header">
+        <button class="story-tracker-sort-btn" data-sort-col="date"
+                data-sort-active="${activeAttr('date')}">Date${arrow('date')}</button>
+        <button class="story-tracker-sort-btn" data-sort-col="title"
+                data-sort-active="${activeAttr('title')}">Title${arrow('title')}</button>
+        <button class="story-tracker-sort-btn" data-sort-col="views"
+                data-sort-active="${activeAttr('views')}">Views${arrow('views')}</button>
+        <button class="story-tracker-sort-btn" data-sort-col="like_rate"
+                data-sort-active="${activeAttr('like_rate')}">Like rate${arrow('like_rate')}</button>
+      </div>
+      <div class="story-tracker-video-list" id="storyTrackerVideoList">
+        ${renderStoryTrackerVideoRows(decoratedVideos)}
+      </div>
+    </div>
+  `;
+
+  // Outer expand/collapse (panel-level, matches revenue/ad panel UX).
+  const toggleBtn = document.getElementById('storyTrackerToggle');
+  const body = document.getElementById('storyTrackerBody');
+  toggleBtn.addEventListener('click', () => {
+    storyTrackerExpanded = !storyTrackerExpanded;
+    toggleBtn.setAttribute('aria-expanded', String(storyTrackerExpanded));
+    body.hidden = !storyTrackerExpanded;
+  });
+
+  // Sort handlers — clicking a column header sorts and re-renders only the
+  // video list (not the whole panel, to avoid resetting expand state).
+  panel.querySelectorAll('.story-tracker-sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const col = btn.dataset.sortCol;
+      // Clicking the same column toggles direction; clicking a new column
+      // starts with a sensible default (desc for numeric, asc for title).
+      if (storyTrackerSort.col === col) {
+        storyTrackerSort.dir = storyTrackerSort.dir === 'desc' ? 'asc' : 'desc';
+      } else {
+        storyTrackerSort.col = col;
+        storyTrackerSort.dir = col === 'title' ? 'asc' : 'desc';
+      }
+      // Re-render the list and the header indicators in place
+      const list = document.getElementById('storyTrackerVideoList');
+      if (list) list.innerHTML = renderStoryTrackerVideoRows(decoratedVideos);
+      panel.querySelectorAll('.story-tracker-sort-btn').forEach(b => {
+        const c = b.dataset.sortCol;
+        b.dataset.sortActive = storyTrackerSort.col === c ? 'true' : 'false';
+        // Map column-id to display label. Most are title-case of the id;
+        // like_rate and date/title/views are explicit so we can adjust
+        // wording without touching the sort logic.
+        const labels = { date: 'Date', title: 'Title', views: 'Views', like_rate: 'Like rate' };
+        const label = labels[c] || c;
+        b.textContent = label + (storyTrackerSort.col === c
+          ? (storyTrackerSort.dir === 'desc' ? ' ▼' : ' ▲')
+          : '');
+      });
+    });
+  });
+}
+
+function renderStoryTrackerVideoRows(videos) {
+  const fmt = (n) => n.toLocaleString('en-GB');
+  const { col, dir } = storyTrackerSort;
+  const sorted = [...videos].sort((a, b) => {
+    let av, bv;
+    if (col === 'date') { av = a.publishedAt; bv = b.publishedAt; }
+    else if (col === 'title') { av = (a.title || '').toLowerCase(); bv = (b.title || '').toLowerCase(); }
+    else if (col === 'views') { av = a.views || 0; bv = b.views || 0; }
+    else { av = a.like_rate; bv = b.like_rate; }
+    if (av < bv) return dir === 'asc' ? -1 : 1;
+    if (av > bv) return dir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return sorted.map(v => {
+    const desc = descriptionsCache[v.id] || '';
+    const firstLine = (desc.split('\n')[0] || '').slice(0, 110);
+    return `
+      <div class="story-tracker-video-item">
+        <span class="story-tracker-video-date">${v.publishedAt.slice(0, 10)}</span>
+        <div>
+          <div class="story-tracker-video-title">
+            <a href="https://youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a>
+          </div>
+          <div class="story-tracker-video-desc">${escapeHtml(firstLine)}</div>
+        </div>
+        <span class="story-tracker-video-views">${fmt(v.views || 0)}</span>
+        <span class="story-tracker-video-likerate">${v.like_rate.toFixed(2)}%</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== Description Patterns =====
+// Analytical companion to the Story Tracker. Surfaces patterns in how the
+// channel writes descriptions — specifically, the share of uploads with
+// thin (uninformative) descriptions and which descriptions get reused
+// verbatim. For TheQuartering, "This news is totally insane" appearing
+// as the entire description on 40+ videos is itself a finding: titles
+// and descriptions are both deliberately uninformative, pushing readers
+// to the video to discover the topic.
+
+const DESC_PATTERN_CONFIG = {
+  // Channels for which this analysis is editorially meaningful. The three
+  // TQ-network channels all show distinctive patterns:
+  //   - TheQuartering: "This news is totally insane" × 43 + thin one-liners
+  //   - JeremyHambly: identical 100-char boilerplate × 102 (incl. typo "Immensly")
+  //   - QuarteringLive: cross-promotion boilerplate template × 4-7 variations
+  channelHandles: ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'],
+  windowDays: 60,
+  // Two ways a description is "uninformative":
+  //   - Thin (under 50 chars) — too short to convey topic
+  //   - Boilerplate (verbatim reuse across 5+ videos) — long but template
+  // Both are functionally equivalent: don't tell you what the video is about.
+  thinDescThreshold: 50,
+  boilerplateReuseThreshold: 5,
+  // Minimum count for a description to appear in the "most-reused" table.
+  // Tightens the table to genuinely repeated patterns rather than noise.
+  minReuseCount: 2,
+  maxTableRows: 10,
+  // Headline trigger: if the top reused description hits this share of
+  // analysed videos, lead with the boilerplate finding; otherwise lead
+  // with the uninformative % stat. % share rather than absolute count so
+  // smaller channels still surface their pattern.
+  headlineReuseShareThreshold: 0.10,
+  // Long descriptions truncate to a single-line preview with an expand
+  // toggle in the table. Threshold chosen to keep ~80-char clickbait
+  // visible in full while collapsing the long sponsor/boilerplate texts
+  // that would otherwise dominate the table.
+  longDescThreshold: 90
+};
+
+// Channel-specific editorial notes — curated findings that get rendered
+// as info-point callouts in the panel body when the relevant channel is
+// active. Keyed by handle (matches channelMap[chId].handle).
+const DESC_PATTERN_INFO_POINTS = {
+  '@JeremyHambly': [
+    {
+      label: 'Spelling note',
+      text: 'The reused membership boilerplate contains a typo — "Immensly" rather than "Immensely" — preserved across every instance. The same mistake appearing on 100+ videos indicates literal copy-paste from a saved template that has never been spell-checked.'
+    }
+  ]
+};
+
+// Per-channel curated typo findings — spelling errors observed in thin
+// descriptions. Each entry: { typo, correct, context (the description it
+// appeared in) }. Rendered as a structured list rather than free-text
+// callout so it's easy to scan.
+const DESC_PATTERN_TYPOS = {
+  '@TheQuartering': [
+    { typo: 'APOCOLYPSE', correct: 'APOCALYPSE', context: 'Youtube APOCOLYPSE Gets Worse' },
+    { typo: 'Malcom', correct: 'Malcolm', context: 'This is not Malcom in the Middle' },
+    { typo: 'Iilhan', correct: 'Ilhan', context: 'Iilhan Omar is in big trouble.' },
+    { typo: 'Illhan', correct: 'Ilhan', context: 'Illhan Omar is trying to cover her tracks!' },
+    { typo: 'underserved', correct: 'undeserved', context: 'Karmelo Anthony gets an underserved win' }
+  ]
+};
+
+let descPatternExpanded = false;
+
+function renderDescPatterns() {
+  const panel = document.getElementById('descPatternPanel');
+  if (!panel) return;
+  if (!dataset) { panel.hidden = true; return; }
+
+  // Channel filter — only renders for relevant channels.
+  const channelMap = dataset.channels || {};
+  const allowedIds = new Set();
+  for (const [chId, ch] of Object.entries(channelMap)) {
+    if (DESC_PATTERN_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
+  }
+  if (!allowedIds.has(selectedChannel)) { panel.hidden = true; return; }
+
+  // Descriptions are loaded lazily; reuse the story tracker's cache.
+  if (!descriptionsCache) {
+    loadDescriptions().then(() => renderDescPatterns());
+    return;
+  }
+
+  const now = Date.now();
+  const windowStart = now - DESC_PATTERN_CONFIG.windowDays * 86400 * 1000;
+
+  // Eligible videos: long-form, in window, on the currently selected channel.
+  // The config's channelHandles list controls which channels the panel
+  // is allowed to render for; the actual data is then scoped to whichever
+  // single channel the user has selected, not the union of allowed channels.
+  const eligible = dataset.videos.filter(v => {
+    if (v.channelId !== selectedChannel) return false;
+    if (v.isShort || v.unavailable) return false;
+    if (new Date(v.publishedAt).getTime() < windowStart) return false;
+    return true;
+  });
+
+  if (eligible.length === 0) { panel.hidden = true; return; }
+
+  // Group videos by their exact description text (normalised to trimmed).
+  // Empty/missing descriptions are excluded from the reuse counts because
+  // we can't distinguish "no description written" from "fetcher hasn't
+  // backfilled this yet". Once the audit completes with the new fetcher
+  // we'll see the true picture.
+  const descCounts = new Map();
+  let totalWithDesc = 0;
+  for (const v of eligible) {
+    const raw = descriptionsCache[v.id];
+    if (raw === undefined) continue; // not yet fetched — skip rather than count
+    totalWithDesc++;
+    const trimmed = raw.trim();
+    if (trimmed.length > 0) {
+      descCounts.set(trimmed, (descCounts.get(trimmed) || 0) + 1);
+    }
+  }
+
+  if (totalWithDesc === 0) { panel.hidden = true; return; }
+
+  // Identify boilerplate: descriptions reused enough to be templates.
+  // Captures cases like JeremyHambly's 100-char "Joining The Channel..."
+  // which is technically long enough to escape the "thin" filter but is
+  // functionally identical across 102 videos.
+  const boilerplateDescs = new Set();
+  for (const [desc, count] of descCounts) {
+    if (count >= DESC_PATTERN_CONFIG.boilerplateReuseThreshold) {
+      boilerplateDescs.add(desc);
+    }
+  }
+
+  // Second pass: classify each video against the broader uninformative set.
+  let uninformativeCount = 0;
+  let thinOnlyCount = 0;
+  let boilerplateOnlyCount = 0;
+  for (const v of eligible) {
+    const raw = descriptionsCache[v.id];
+    if (raw === undefined) continue;
+    const trimmed = raw.trim();
+    const isThin = trimmed.length < DESC_PATTERN_CONFIG.thinDescThreshold;
+    const isBoilerplate = boilerplateDescs.has(trimmed);
+    if (isThin || isBoilerplate) uninformativeCount++;
+    if (isThin && !isBoilerplate) thinOnlyCount++;
+    if (isBoilerplate && !isThin) boilerplateOnlyCount++;
+  }
+
+  const uninformativePct = uninformativeCount / totalWithDesc * 100;
+
+  // Build top-N reused descriptions table.
+  const reused = [...descCounts.entries()]
+    .filter(([, count]) => count >= DESC_PATTERN_CONFIG.minReuseCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, DESC_PATTERN_CONFIG.maxTableRows);
+
+  const topReused = reused[0]; // [desc, count] or undefined
+  // Hide if nothing interesting — neither significant reuse nor meaningful
+  // uninformative share.
+  if (!topReused && uninformativePct < 10) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+
+  const fmt = (n) => n.toLocaleString('en-GB');
+  const escape = escapeHtml;
+
+  // Headline: lead with the most striking finding. If a single description
+  // dominates a meaningful share of uploads, that's the punchier story.
+  // Otherwise fall back to the share of uninformative descriptions overall.
+  const topReuseShare = topReused ? topReused[1] / totalWithDesc : 0;
+  let headlineHTML;
+  if (topReused && topReuseShare >= DESC_PATTERN_CONFIG.headlineReuseShareThreshold) {
+    const [desc, count] = topReused;
+    const pctOfWindow = (topReuseShare * 100).toFixed(0);
+    // Truncate the quoted description so the headline doesn't sprawl
+    // when the boilerplate is the long "Joining The Channel..." text.
+    const quoted = desc.length > 110 ? desc.slice(0, 107) + '…' : desc;
+    headlineHTML = `
+      <strong>${count}</strong> long-form videos in the last
+      ${DESC_PATTERN_CONFIG.windowDays} days (${pctOfWindow}%) share the same description:
+      <span class="desc-pattern-quote">"${escape(quoted)}"</span>
+    `;
+  } else {
+    headlineHTML = `
+      <strong>${uninformativePct.toFixed(0)}%</strong> of long-form videos in the last
+      ${DESC_PATTERN_CONFIG.windowDays} days have descriptions too uninformative
+      to identify the video's topic
+    `;
+  }
+
+  // Render each reused description: if it exceeds the long threshold,
+  // wrap in a collapsible details element so it doesn't dominate the row.
+  // Otherwise show inline as before.
+  const renderDescCell = (desc) => {
+    if (desc.length <= DESC_PATTERN_CONFIG.longDescThreshold) {
+      return `<span class="desc-text">"${escape(desc)}"</span>`;
+    }
+    const previewLen = DESC_PATTERN_CONFIG.longDescThreshold;
+    const preview = desc.slice(0, previewLen).replace(/\s+\S*$/, '') + '…';
+    return `
+      <details class="desc-pattern-long">
+        <summary>
+          <span class="desc-preview">"${escape(preview)}"</span>
+        </summary>
+        <div class="desc-full">${escape(desc)}</div>
+      </details>
+    `;
+  };
+
+  const tableRows = reused.map(([desc, count]) => `
+    <tr>
+      <td>${renderDescCell(desc)}</td>
+      <td class="num">${count}</td>
+      <td class="num">${(count / totalWithDesc * 100).toFixed(1)}%</td>
+    </tr>
+  `).join('');
+
+  // Channel info points — look up by the active channel's handle.
+  const activeChannel = channelMap[selectedChannel];
+  const activeHandle = activeChannel ? activeChannel.handle : null;
+  const infoPoints = (activeHandle && DESC_PATTERN_INFO_POINTS[activeHandle]) || [];
+  const infoPointsHTML = infoPoints.map(pt => `
+    <div class="desc-pattern-info">
+      <div class="desc-pattern-info-label">ⓘ ${escape(pt.label)}</div>
+      <p>${escape(pt.text)}</p>
+    </div>
+  `).join('');
+
+  // Channel typos — separate from info points because they have structure
+  // (typo + correct + context) worth surfacing in a tidy list. Renders as
+  // its own section in the body when populated.
+  const typos = (activeHandle && DESC_PATTERN_TYPOS[activeHandle]) || [];
+  const typosHTML = typos.length === 0 ? '' : `
+    <div class="desc-pattern-typos">
+      <div class="desc-pattern-typos-header">Spelling errors</div>
+      <ul class="desc-pattern-typos-list">
+        ${typos.map(t => `
+          <li>
+            <span class="typo-wrong">${escape(t.typo)}</span>
+            <span class="typo-arrow">→</span>
+            <span class="typo-right">${escape(t.correct)}</span>
+            <span class="typo-context">in "${escape(t.context)}"</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+
+  // Tooltip text for stat-label info icons. Kept short — the goal is
+  // "what does this metric mean", not a full methodology lecture.
+  const tipUninformative = 'Either thin (under 50 characters) or boilerplate (the same text reused across 5+ videos). Both fail to convey what the video is about.';
+  const tipThin = 'Description is under 50 characters long — too short to identify the video\'s topic.';
+  const tipBoilerplate = 'Description is reused verbatim across 5+ videos. Long enough to escape the "thin" filter, but functionally identical across many uploads.';
+
+  panel.innerHTML = `
+    <button type="button" class="desc-pattern-toggle" id="descPatternToggle"
+            aria-expanded="${descPatternExpanded}" aria-controls="descPatternBody">
+      <span class="desc-pattern-eyebrow">📝 Description patterns</span>
+      <span class="desc-pattern-headline">${headlineHTML}</span>
+      <span class="desc-pattern-chevron">▼</span>
+    </button>
+    <div class="desc-pattern-body" id="descPatternBody"${descPatternExpanded ? '' : ' hidden'}>
+      ${infoPointsHTML}
+      <div class="desc-pattern-stats">
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${totalWithDesc}</span>
+          <span class="desc-pattern-stat-label">videos analysed · last ${DESC_PATTERN_CONFIG.windowDays}d</span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${uninformativePct.toFixed(0)}%</span>
+          <span class="desc-pattern-stat-label">uninformative descriptions <span class="info-icon" data-tooltip="${escape(tipUninformative)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${thinOnlyCount}</span>
+          <span class="desc-pattern-stat-label">thin <span class="info-icon" data-tooltip="${escape(tipThin)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${boilerplateOnlyCount}</span>
+          <span class="desc-pattern-stat-label">boilerplate <span class="info-icon" data-tooltip="${escape(tipBoilerplate)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${reused.length}</span>
+          <span class="desc-pattern-stat-label">distinct descriptions reused 2+ times</span>
+        </div>
+      </div>
+      ${reused.length > 0 ? `
+        <table class="desc-pattern-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="num">Count</th>
+              <th class="num">Share</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      ` : '<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">No descriptions reused 2+ times in this window.</p>'}
+      ${typosHTML}
+    </div>
+  `;
+
+  const toggleBtn = document.getElementById('descPatternToggle');
+  const body = document.getElementById('descPatternBody');
+  toggleBtn.addEventListener('click', () => {
+    descPatternExpanded = !descPatternExpanded;
+    toggleBtn.setAttribute('aria-expanded', String(descPatternExpanded));
+    body.hidden = !descPatternExpanded;
+  });
 }
 
 function renderComposition(s) {
