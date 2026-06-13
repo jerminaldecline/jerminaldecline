@@ -1,0 +1,44 @@
+name: Fetch transcripts (incremental)
+
+on:
+  schedule:
+    # 05:17 UTC daily — sits after data updates (00:07/03:17 AM, 13:37/19:47 PM)
+    # and the daily audit (02:00), so the data.json the fetcher reads is fresh
+    # and the new videos from the last 24h are already in it.
+    - cron: '17 5 * * *'
+  workflow_dispatch:  # allows manual runs from the Actions tab
+
+permissions:
+  contents: read  # only needs read on this repo; writes go to the sister repo via PAT
+
+# Prevent this and the backfill from running simultaneously — they both push
+# to the same sister repo and would conflict.
+concurrency:
+  group: transcripts-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # incremental is capped at 100 videos so ~1 minute typical
+    steps:
+      - name: Check out main repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install youtube-transcript
+        # --no-save because we don't carry a package.json in the main repo;
+        # the dep only lives in CI for this run. Pinning would be nicer
+        # long-term but locks us out of upstream fixes if the underlying
+        # YouTube API changes.
+        run: npm install --no-save youtube-transcript
+
+      - name: Run incremental fetch
+        env:
+          TRANSCRIPTS_REPO_TOKEN: ${{ secrets.TRANSCRIPTS_REPO_TOKEN }}
+          TRANSCRIPTS_REPO: jerminaldecline/jerminaldecline-transcripts
+        run: node scripts/fetch-transcripts.js --incremental

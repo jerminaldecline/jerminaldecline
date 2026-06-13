@@ -1,0 +1,50 @@
+name: Backfill transcripts
+
+# Manual-only — runs from Actions tab via "Run workflow". Two modes:
+#   backfill         every unfetched video (resumes from index.json)
+#   retry-failures   reattempt videos previously marked as failures
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode'
+        required: true
+        default: 'backfill'
+        type: choice
+        options:
+          - backfill
+          - retry-failures
+
+permissions:
+  contents: read
+
+# Shares concurrency group with the incremental workflow so they can't clash.
+concurrency:
+  group: transcripts-fetch
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    # 350-minute timeout matches the script's 300-minute soft limit with a
+    # buffer for the final commit + push. GitHub's hard cap is 360.
+    timeout-minutes: 350
+    steps:
+      - name: Check out main repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install youtube-transcript
+        run: npm install --no-save youtube-transcript
+
+      - name: Run ${{ inputs.mode }}
+        env:
+          TRANSCRIPTS_REPO_TOKEN: ${{ secrets.TRANSCRIPTS_REPO_TOKEN }}
+          TRANSCRIPTS_REPO: jerminaldecline/jerminaldecline-transcripts
+        # The flag matches inputs.mode directly — "backfill" → --backfill,
+        # "retry-failures" → --retry-failures. Both are parsed by the script.
+        run: node scripts/fetch-transcripts.js --${{ inputs.mode }}
