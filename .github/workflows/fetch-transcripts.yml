@@ -1,11 +1,11 @@
 name: Fetch transcripts (incremental)
 
 on:
-  schedule:
-    # 05:17 UTC daily — sits after data updates (00:07/03:17 AM, 13:37/19:47 PM)
-    # and the daily audit (02:00), so the data.json the fetcher reads is fresh
-    # and the new videos from the last 24h are already in it.
-    - cron: '17 5 * * *'
+  # schedule:
+  #   # 05:17 UTC daily — sits after data updates (00:07/03:17 AM, 13:37/19:47 PM)
+  #   # and the daily audit (02:00), so the data.json the fetcher reads is fresh
+  #   # and the new videos from the last 24h are already in it.
+  #   - cron: '17 5 * * *'
   workflow_dispatch:  # allows manual runs from the Actions tab
 
 permissions:
