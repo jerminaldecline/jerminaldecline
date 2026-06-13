@@ -6436,6 +6436,14 @@ const STORY_MIN_SATURATION = 0.30;
 const STORY_LONG_FORM_ONLY = true;
 const STORY_MAX_TRACKERS = 2;
 const STORY_THIN_DESC_THRESHOLD = 50;
+// Channels permitted to render story trackers. Detector still runs on all
+// channels (its output is useful for review via topic-candidates.md), but
+// the live UI is gated to channels where we've done the editorial work to
+// label topics meaningfully. Smaller channels get noisy detector clusters
+// like "sparked" that don't correspond to a single coherent story —
+// hiding them avoids misleading readers until we have better signal
+// (e.g. transcripts).
+const STORY_TRACKER_ALLOWED_CHANNELS = ['@TheQuartering'];
 
 // ---- Lazy-loaded data sources ----
 
@@ -6566,6 +6574,13 @@ function renderStoryTracker() {
   const activeChannel = channelMap[selectedChannel];
   const activeHandle = activeChannel ? activeChannel.handle : null;
   if (!activeHandle) { panel.hidden = true; panel.innerHTML = ''; return; }
+
+  // Allowlist gate: only render on channels we've editorially scoped.
+  if (!STORY_TRACKER_ALLOWED_CHANNELS.includes(activeHandle)) {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    return;
+  }
 
   // Build the effective tracker list for this channel:
   //   1) Start with detector output filtered to this channel
