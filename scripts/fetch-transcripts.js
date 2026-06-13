@@ -65,7 +65,9 @@ function sleep(ms) {
 
 function cloneSisterRepo() {
   if (fs.existsSync(SISTER_PATH)) {
-    run(`rm -rf ${SISTER_PATH}`);
+    // Cross-platform recursive delete — Linux/Mac would also have a `rm -rf`
+    // available but Windows doesn't, and fs.rmSync works everywhere.
+    fs.rmSync(SISTER_PATH, { recursive: true, force: true });
   }
   const cloneUrl = `https://x-access-token:${TOKEN}@github.com/${SISTER_REPO}.git`;
   run(`git clone --depth 1 ${cloneUrl} ${SISTER_PATH}`);
@@ -250,7 +252,14 @@ async function main() {
       };
       console.log(`FAIL: ${result.error}`);
       failed++;
-      streakFails++;
+      // Streak counter only catches "we're being blocked" scenarios. A video
+      // with the uploader's captions deliberately disabled doesn't tell us
+      // anything about the network — don't count those toward the streak.
+      // Other failure types (empty transcripts, network errors) still count.
+      const isVideoDisabled = /disabled on this video/i.test(result.error);
+      if (!isVideoDisabled) {
+        streakFails++;
+      }
     }
 
     processed++;
