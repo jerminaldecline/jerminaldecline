@@ -6487,11 +6487,27 @@ function loadTopicLabels() {
   topicLabelsLoadPromise = fetch('topic-labels.json')
     .then(r => r.ok ? r.json() : null)
     .then(json => {
-      // Strip the _comment field if present so it doesn't pollute lookups.
+      // Extended schema supports two forms per entry:
+      //   "termId": "Friendly Name"
+      //     → just renames the tracker; uses detector's keywords
+      //   "termId": { "name": "Friendly Name", "keywords": [...], "channelHandle": "@x" }
+      //     → renames AND overrides keywords; can also create manual trackers
+      //       (when termId doesn't match any detector cluster) via channelHandle
+      // Normalised internal form is always the object shape so downstream code
+      // doesn't need to switch on type.
       const labels = {};
       if (json) {
         for (const [k, v] of Object.entries(json)) {
-          if (k !== '_comment' && typeof v === 'string') labels[k] = v;
+          if (k === '_comment') continue;
+          if (typeof v === 'string') {
+            labels[k] = { name: v };
+          } else if (v && typeof v === 'object') {
+            labels[k] = {
+              name: typeof v.name === 'string' ? v.name : k,
+              keywords: Array.isArray(v.keywords) && v.keywords.length > 0 ? v.keywords : undefined,
+              channelHandle: typeof v.channelHandle === 'string' ? v.channelHandle : undefined
+            };
+          }
         }
       }
       topicLabels = labels;
@@ -6551,9 +6567,38 @@ function renderStoryTracker() {
   const activeHandle = activeChannel ? activeChannel.handle : null;
   if (!activeHandle) { panel.hidden = true; panel.innerHTML = ''; return; }
 
-  // Trackers active on the current channel.
-  const channelTrackers = (topicTrackersData.trackers || [])
-    .filter(t => t.channelHandle === activeHandle);
+  // Build the effective tracker list for this channel:
+  //   1) Start with detector output filtered to this channel
+  //   2) For any detector tracker that has a label override with keywords,
+  //      swap in the curated keywords (editorial wins over auto-detection)
+  //   3) Add manual trackers — entries in topic-labels.json with their own
+  //      channelHandle that don't correspond to any detector cluster
+  const detected = (topicTrackersData.trackers || [])
+    .filter(t => t.channelHandle === activeHandle)
+    .map(t => {
+      const label = topicLabels[t.termId];
+      if (label && Array.isArray(label.keywords)) {
+        return { ...t, keywords: label.keywords, _curated: true };
+      }
+      return { ...t, _curated: false };
+    });
+
+  const detectedIds = new Set(detected.map(t => t.termId));
+  const manual = [];
+  for (const [termId, label] of Object.entries(topicLabels)) {
+    if (detectedIds.has(termId)) continue;
+    if (label.channelHandle !== activeHandle) continue;
+    if (!Array.isArray(label.keywords) || label.keywords.length === 0) continue;
+    manual.push({
+      channelHandle: activeHandle,
+      termId,
+      keywords: label.keywords,
+      detectorMeta: { manual: true },
+      _curated: true
+    });
+  }
+
+  const channelTrackers = [...manual, ...detected];
 
   if (channelTrackers.length === 0) {
     panel.hidden = true;
@@ -6580,16 +6625,48 @@ function renderStoryTracker() {
     return;
   }
 
-  // Sort by primary-window saturation, take top N. With multiple Karmelo
-  // sub-clusters from the detector this prevents near-duplicates filling
-  // the page.
+  // Sort by priority: curated trackers (those with override keywords or
+  // manual additions) take precedence; within each tier, sort by primary-
+  // window saturation. Curated trackers represent your explicit editorial
+  // intent — they should win when there's overlap with detector clusters.
   liveTrackers.sort((a, b) => {
+    const aCurated = a.tracker._curated ? 1 : 0;
+    const bCurated = b.tracker._curated ? 1 : 0;
+    if (aCurated !== bCurated) return bCurated - aCurated;
     const sa = a.stats[STORY_PRIMARY_WINDOW].matches / a.stats[STORY_PRIMARY_WINDOW].total;
     const sb = b.stats[STORY_PRIMARY_WINDOW].matches / b.stats[STORY_PRIMARY_WINDOW].total;
     return sb - sa;
   });
-  const topTrackers = liveTrackers.slice(0, STORY_MAX_TRACKERS);
-  const overflowCount = liveTrackers.length - topTrackers.length;
+
+  // Dedupe overlapping trackers: detector often produces several related
+  // clusters for the same story (Karmelo → trial → jury → conviction etc).
+  // If a lower-priority tracker's matched videos are mostly a subset of an
+  // already-kept tracker's matched videos, suppress it.
+  // 70% overlap = "this is the same story, just a different angle on it".
+  const OVERLAP_SUPPRESS_THRESHOLD = 0.70;
+  const longestWindow = Math.max(...STORY_WINDOWS);
+  const keptTrackers = [];
+  for (const item of liveTrackers) {
+    const myVideoIds = new Set(item.stats[longestWindow].videos.map(v => v.id));
+    if (myVideoIds.size === 0) {
+      keptTrackers.push(item);
+      continue;
+    }
+    let suppressed = false;
+    for (const kept of keptTrackers) {
+      const keptIds = new Set(kept.stats[longestWindow].videos.map(v => v.id));
+      let intersection = 0;
+      for (const id of myVideoIds) if (keptIds.has(id)) intersection++;
+      if (intersection / myVideoIds.size >= OVERLAP_SUPPRESS_THRESHOLD) {
+        suppressed = true;
+        break;
+      }
+    }
+    if (!suppressed) keptTrackers.push(item);
+  }
+
+  const topTrackers = keptTrackers.slice(0, STORY_MAX_TRACKERS);
+  const overflowCount = keptTrackers.length - topTrackers.length;
 
   panel.hidden = false;
   panel.innerHTML = topTrackers.map(({ tracker, stats }) =>
@@ -6652,7 +6729,10 @@ function computeTrackerStats(tracker) {
 function renderTrackerPanelHTML(tracker, stats) {
   const id = sanitiseTrackerId(tracker.termId);
   const state = getTrackerState(id);
-  const displayName = topicLabels[tracker.termId] || tracker.termId;
+  // Labels are normalised to { name, keywords?, channelHandle? }. Fall back
+  // to raw termId if no label entry exists.
+  const labelEntry = topicLabels[tracker.termId];
+  const displayName = (labelEntry && labelEntry.name) || tracker.termId;
 
   // Headline: pick the smallest window with saturation >= 50%, fallback to
   // primary. Surfaces "100% of last 3 days" style stats when available.

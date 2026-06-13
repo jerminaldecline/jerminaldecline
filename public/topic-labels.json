@@ -1,8 +1,7 @@
 {
-  "_comment": "Maps detector term IDs to human-friendly topic names. Detector writes term IDs to topic-trackers.json; this file lets you override the display label without editing site code. Unlabelled trackers still render, using the raw term ID as the name. Add a line here whenever you want a polished label for a newly-detected story.",
-  "karmelo": "Karmelo Anthony",
-  "second karmelo": "Karmelo Anthony",
-  "jury": "Karmelo Anthony trial",
-  "following": "Karmelo Anthony aftermath",
-  "officially": "Karmelo Anthony case"
+  "_comment": "Maps detector term IDs to friendly display names AND optional keyword overrides. Two forms: (1) just a string for the display name (uses detector's keywords); (2) an object with name + optional keywords array (overrides detector's keywords). When keywords are overridden here, this becomes the canonical tracker for that story and any detector sub-clusters whose matched videos overlap heavily with it get suppressed on the site. You can also add manual trackers that don't exist in the detector output by providing keywords + channelHandle.",
+  "karmelo": {
+    "name": "Karmelo Anthony",
+    "keywords": ["karmelo", "metcalf"]
+  }
 }
