@@ -1,0 +1,8 @@
+{
+  "_comment": "Maps detector term IDs to human-friendly topic names. Detector writes term IDs to topic-trackers.json; this file lets you override the display label without editing site code. Unlabelled trackers still render, using the raw term ID as the name. Add a line here whenever you want a polished label for a newly-detected story.",
+  "karmelo": "Karmelo Anthony",
+  "second karmelo": "Karmelo Anthony",
+  "jury": "Karmelo Anthony trial",
+  "following": "Karmelo Anthony aftermath",
+  "officially": "Karmelo Anthony case"
+}

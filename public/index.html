@@ -6421,39 +6421,26 @@ function renderHeroStats(curr, prev) {
 }
 
 // ===== Story Tracker =====
-// Surfaces a dominant single-topic saturation event on the headline area.
-// Currently hardcoded to Karmelo Anthony coverage on TheQuartering; when
-// the next big story breaks, edit the STORY_CONFIG to swap topic. When
-// saturation falls below MIN_SATURATION_TO_DISPLAY for the configured
-// window, the panel auto-hides — no manual cleanup needed when the story
-// cools.
+// Surfaces dominant single-topic saturation events. Configs are loaded
+// from topic-trackers.json (auto-populated nightly by the detection script)
+// and topic-labels.json (curated friendly topic names). The site reads both,
+// finds trackers active on the current channel, and renders the top 2 by
+// saturation. When a story cools below the saturation threshold the panel
+// auto-hides; when the detector flags a new story it appears automatically.
 
-const STORY_CONFIG = {
-  id: 'karmelo-anthony',
-  topic: 'Karmelo Anthony',
-  // Story scope — case-insensitive substring match on the description.
-  // Karmelo's name is uncommon enough to be a clean keyword; Metcalf
-  // catches related family-statement videos that don't name Karmelo
-  // directly but are part of the same trial coverage.
-  keywords: ['karmelo', 'metcalf'],
-  // The story trackers only show when the topic is dominant enough to
-  // earn the headline slot. 30% saturation in the configured window.
-  primaryWindowDays: 7,
-  minSaturationToDisplay: 0.30,
-  // Restrict to channels where the story is actually playing out.
-  channelHandles: ['@TheQuartering'],
-  // Windows shown in the saturation chart, smallest-first feels punchier
-  // visually but largest-first reads more naturally for the story arc.
-  windows: [60, 30, 14, 7, 3],
-  // Only long-form videos counted toward saturation: shorts have minimal
-  // descriptions (often just hashtags), so they can't be reliably
-  // topic-matched and would dilute the percentage.
-  longFormOnly: true
-};
+// Constants — same across all trackers. Used to be per-config STORY_CONFIG
+// fields; now module-level since they don't vary by tracker.
+const STORY_WINDOWS = [60, 30, 14, 7, 3];
+const STORY_PRIMARY_WINDOW = 7;
+const STORY_MIN_SATURATION = 0.30;
+const STORY_LONG_FORM_ONLY = true;
+const STORY_MAX_TRACKERS = 2;
+const STORY_THIN_DESC_THRESHOLD = 50;
+
+// ---- Lazy-loaded data sources ----
 
 let descriptionsCache = null;
 let descriptionsLoadPromise = null;
-
 function loadDescriptions() {
   if (descriptionsCache) return Promise.resolve(descriptionsCache);
   if (descriptionsLoadPromise) return descriptionsLoadPromise;
@@ -6471,66 +6458,179 @@ function loadDescriptions() {
   return descriptionsLoadPromise;
 }
 
-function storyMatchesVideo(v, descriptions) {
+let topicTrackersData = null;
+let topicTrackersLoadPromise = null;
+function loadTopicTrackers() {
+  if (topicTrackersData) return Promise.resolve(topicTrackersData);
+  if (topicTrackersLoadPromise) return topicTrackersLoadPromise;
+  topicTrackersLoadPromise = fetch('topic-trackers.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(json => {
+      // Graceful degradation: missing/broken file = empty tracker list.
+      topicTrackersData = json && Array.isArray(json.trackers)
+        ? json
+        : { trackers: [] };
+      return topicTrackersData;
+    })
+    .catch(() => {
+      topicTrackersData = { trackers: [] };
+      return topicTrackersData;
+    });
+  return topicTrackersLoadPromise;
+}
+
+let topicLabels = null;
+let topicLabelsLoadPromise = null;
+function loadTopicLabels() {
+  if (topicLabels) return Promise.resolve(topicLabels);
+  if (topicLabelsLoadPromise) return topicLabelsLoadPromise;
+  topicLabelsLoadPromise = fetch('topic-labels.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(json => {
+      // Strip the _comment field if present so it doesn't pollute lookups.
+      const labels = {};
+      if (json) {
+        for (const [k, v] of Object.entries(json)) {
+          if (k !== '_comment' && typeof v === 'string') labels[k] = v;
+        }
+      }
+      topicLabels = labels;
+      return topicLabels;
+    })
+    .catch(() => {
+      topicLabels = {};
+      return topicLabels;
+    });
+  return topicLabelsLoadPromise;
+}
+
+// ---- Per-tracker UI state ----
+
+// Map of trackerId -> { expanded, sort: { col, dir } }. Per-tracker because
+// multiple trackers may render simultaneously and each maintains its own
+// expand/sort state across re-renders.
+const trackerStates = new Map();
+function getTrackerState(id) {
+  if (!trackerStates.has(id)) {
+    trackerStates.set(id, { expanded: false, sort: { col: 'date', dir: 'desc' } });
+  }
+  return trackerStates.get(id);
+}
+
+// Sanitise a tracker termId for safe use as part of an HTML element ID.
+// "second karmelo" -> "second-karmelo".
+function sanitiseTrackerId(termId) {
+  return String(termId).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function storyMatchesVideo(v, keywords, descriptions) {
   const desc = descriptions[v.id];
   if (!desc) return false;
   const lower = desc.toLowerCase();
-  return STORY_CONFIG.keywords.some(k => lower.includes(k));
+  return keywords.some(k => lower.includes(String(k).toLowerCase()));
 }
 
-// Persistent UI state across re-renders within the session. The panel
-// re-renders on channel/date changes; without these, expansion state and
-// sort preference would reset every time.
-let storyTrackerExpanded = false;
-let storyTrackerSort = { col: 'date', dir: 'desc' };
+// ---- Main render ----
 
 function renderStoryTracker() {
   const panel = document.getElementById('storyTracker');
   if (!panel) return;
+  if (!dataset) { panel.hidden = true; panel.innerHTML = ''; return; }
 
-  // Channel filter — tracker only renders for relevant channels. If user
-  // is on "ALL" or any non-matching channel, hide and bail.
-  if (!dataset) { panel.hidden = true; return; }
-  const channelMap = dataset.channels || {};
-  const allowedIds = new Set();
-  for (const [chId, ch] of Object.entries(channelMap)) {
-    if (STORY_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
-  }
-  if (!allowedIds.has(selectedChannel)) { panel.hidden = true; return; }
-
-  // Descriptions are loaded lazily; the first call kicks off the fetch
-  // and renders a minimal loading state, then re-renders when ready.
-  // After that the cache is hot for the rest of the session.
-  if (!descriptionsCache) {
-    loadDescriptions().then(() => renderStoryTracker());
+  // Lazy-load all required data in parallel; once any is missing, kick off
+  // the fetches and re-render when ready. After the first call all three
+  // are cached for the session.
+  if (descriptionsCache === null || topicTrackersData === null || topicLabels === null) {
+    Promise.all([loadDescriptions(), loadTopicTrackers(), loadTopicLabels()])
+      .then(() => renderStoryTracker());
     return;
   }
 
-  const now = Date.now();
-  const candidates = dataset.videos.filter(v => {
-    if (!allowedIds.has(v.channelId)) return false;
-    if (STORY_CONFIG.longFormOnly && v.isShort) return false;
-    if (v.unavailable) return false;
-    return true;
+  const channelMap = dataset.channels || {};
+  const activeChannel = channelMap[selectedChannel];
+  const activeHandle = activeChannel ? activeChannel.handle : null;
+  if (!activeHandle) { panel.hidden = true; panel.innerHTML = ''; return; }
+
+  // Trackers active on the current channel.
+  const channelTrackers = (topicTrackersData.trackers || [])
+    .filter(t => t.channelHandle === activeHandle);
+
+  if (channelTrackers.length === 0) {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    return;
+  }
+
+  const trackersWithStats = channelTrackers.map(tracker => ({
+    tracker,
+    stats: computeTrackerStats(tracker)
+  }));
+
+  // Filter to those still meeting the saturation threshold in the primary
+  // window. The detector flags trackers when they cross; this filter
+  // handles trackers that have since cooled.
+  const liveTrackers = trackersWithStats.filter(({ stats }) => {
+    const primary = stats[STORY_PRIMARY_WINDOW];
+    return primary.total > 0 && (primary.matches / primary.total) >= STORY_MIN_SATURATION;
   });
 
-  // Compute saturation for each window in parallel — a single pass
-  // building a window->{total, matches, ...} map.
-  // unclassifiable counts videos with descriptions too thin to topic-match
-  // (or no description at all in our cache). These may or may not be about
-  // the tracked story — we can't tell from data alone. Flagged separately
-  // so the headline number stays honest about what we actually verified.
-  const THIN_DESC_THRESHOLD = 50;
+  if (liveTrackers.length === 0) {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    return;
+  }
+
+  // Sort by primary-window saturation, take top N. With multiple Karmelo
+  // sub-clusters from the detector this prevents near-duplicates filling
+  // the page.
+  liveTrackers.sort((a, b) => {
+    const sa = a.stats[STORY_PRIMARY_WINDOW].matches / a.stats[STORY_PRIMARY_WINDOW].total;
+    const sb = b.stats[STORY_PRIMARY_WINDOW].matches / b.stats[STORY_PRIMARY_WINDOW].total;
+    return sb - sa;
+  });
+  const topTrackers = liveTrackers.slice(0, STORY_MAX_TRACKERS);
+  const overflowCount = liveTrackers.length - topTrackers.length;
+
+  panel.hidden = false;
+  panel.innerHTML = topTrackers.map(({ tracker, stats }) =>
+    renderTrackerPanelHTML(tracker, stats)
+  ).join('') + (overflowCount > 0 ? `
+    <div class="story-tracker-overflow">
+      + ${overflowCount} other candidate${overflowCount === 1 ? '' : 's'} flagged by the detector —
+      see <a href="topic-candidates.md" target="_blank" rel="noopener">topic-candidates.md</a>
+      for the full list.
+    </div>
+  ` : '');
+
+  topTrackers.forEach(({ tracker, stats }) => {
+    attachTrackerListeners(tracker, stats);
+  });
+}
+
+// Compute saturation stats for one tracker against current video data.
+// Returns a window -> { total, matches, unclassifiable, views, likes,
+// videos, unclassVideos } map.
+function computeTrackerStats(tracker) {
+  const channelMap = dataset.channels || {};
+  let trackerChannelId = null;
+  for (const [chId, ch] of Object.entries(channelMap)) {
+    if (ch.handle === tracker.channelHandle) { trackerChannelId = chId; break; }
+  }
+  const now = Date.now();
   const stats = {};
-  for (const w of STORY_CONFIG.windows) {
+  for (const w of STORY_WINDOWS) {
     stats[w] = { total: 0, matches: 0, unclassifiable: 0, views: 0, likes: 0, videos: [], unclassVideos: [] };
   }
-  for (const v of candidates) {
+  const keywords = tracker.keywords || [];
+  for (const v of dataset.videos) {
+    if (v.channelId !== trackerChannelId) continue;
+    if (STORY_LONG_FORM_ONLY && v.isShort) continue;
+    if (v.unavailable) continue;
     const ageDays = (now - new Date(v.publishedAt).getTime()) / 86400000;
-    const isMatch = storyMatchesVideo(v, descriptionsCache);
+    const isMatch = storyMatchesVideo(v, keywords, descriptionsCache);
     const desc = descriptionsCache[v.id] || '';
-    const isThin = !isMatch && desc.trim().length < THIN_DESC_THRESHOLD;
-    for (const w of STORY_CONFIG.windows) {
+    const isThin = !isMatch && desc.trim().length < STORY_THIN_DESC_THRESHOLD;
+    for (const w of STORY_WINDOWS) {
       if (ageDays > w) continue;
       stats[w].total++;
       if (isMatch) {
@@ -6544,38 +6644,30 @@ function renderStoryTracker() {
       }
     }
   }
+  return stats;
+}
 
-  // Auto-hide when the story has cooled below the threshold.
-  const primary = stats[STORY_CONFIG.primaryWindowDays];
-  const primarySaturation = primary.total > 0 ? primary.matches / primary.total : 0;
-  if (primarySaturation < STORY_CONFIG.minSaturationToDisplay) {
-    panel.hidden = true;
-    return;
-  }
-  panel.hidden = false;
+// Build the HTML for one tracker panel. Pure function — no DOM access, no
+// event wiring (that happens in attachTrackerListeners).
+function renderTrackerPanelHTML(tracker, stats) {
+  const id = sanitiseTrackerId(tracker.termId);
+  const state = getTrackerState(id);
+  const displayName = topicLabels[tracker.termId] || tracker.termId;
 
-  // Headline: pick the most striking window — the smallest window where
-  // saturation >= 50%, falling back to the primary window. That tends to
-  // surface the "100% of last 3 days" kind of stat when it's available.
-  let headlineWindow = STORY_CONFIG.primaryWindowDays;
-  for (const w of [...STORY_CONFIG.windows].sort((a, b) => a - b)) {
+  // Headline: pick the smallest window with saturation >= 50%, fallback to
+  // primary. Surfaces "100% of last 3 days" style stats when available.
+  let headlineWindow = STORY_PRIMARY_WINDOW;
+  for (const w of [...STORY_WINDOWS].sort((a, b) => a - b)) {
     const s = stats[w];
-    if (s.total >= 3 && s.matches / s.total >= 0.5) {
-      headlineWindow = w;
-      break;
-    }
+    if (s.total >= 3 && s.matches / s.total >= 0.5) { headlineWindow = w; break; }
   }
   const headlineStats = stats[headlineWindow];
   const headlinePct = headlineStats.total > 0
     ? Math.round(headlineStats.matches / headlineStats.total * 100)
     : 0;
+  const totalStats = stats[Math.max(...STORY_WINDOWS)];
 
-  const totalStats = stats[Math.max(...STORY_CONFIG.windows)];
-
-  // Saturation chart — one row per configured window.
-  // Per request: show the fraction (matches/total) without trailing percent.
-  // The bar already encodes the percentage visually.
-  const saturationRows = STORY_CONFIG.windows.map(w => {
+  const saturationRows = STORY_WINDOWS.map(w => {
     const s = stats[w];
     const pct = s.total > 0 ? s.matches / s.total * 100 : 0;
     return `
@@ -6591,112 +6683,118 @@ function renderStoryTracker() {
 
   const fmt = (n) => n.toLocaleString('en-GB');
 
-  // Decorate videos with computed like_rate so sorting and display are
-  // consistent regardless of which column is active.
   const decoratedVideos = totalStats.videos.map(v => ({
     ...v,
     like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
   }));
 
-  // Active sort indicator arrow for the column header.
-  const arrow = col => storyTrackerSort.col === col
-    ? (storyTrackerSort.dir === 'desc' ? ' ▼' : ' ▲')
+  const arrow = col => state.sort.col === col
+    ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2')
     : '';
-  const activeAttr = col => storyTrackerSort.col === col ? 'true' : 'false';
+  const activeAttr = col => state.sort.col === col ? 'true' : 'false';
 
-  panel.innerHTML = `
-    <button type="button" class="story-tracker-toggle" id="storyTrackerToggle"
-            aria-expanded="${storyTrackerExpanded}" aria-controls="storyTrackerBody">
-      <span class="story-tracker-eyebrow">🔥 Story tracker · ${STORY_CONFIG.topic}</span>
-      <span class="story-tracker-headline">
-        <strong>${headlinePct}%</strong> of long-form uploads in the last
-        ${headlineWindow} days have been about the ${STORY_CONFIG.topic} story
-      </span>
-      <span class="story-tracker-chevron">▼</span>
-    </button>
-    <div class="story-tracker-body" id="storyTrackerBody"${storyTrackerExpanded ? '' : ' hidden'}>
-      <div class="story-tracker-stats">
-        <div class="story-tracker-stat">
-          <span class="story-tracker-stat-value">${totalStats.matches}</span>
-          <span class="story-tracker-stat-label">videos · last ${Math.max(...STORY_CONFIG.windows)}d</span>
+  return `
+    <div class="story-tracker" data-tracker-id="${id}">
+      <button type="button" class="story-tracker-toggle" id="storyTrackerToggle-${id}"
+              aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${id}">
+        <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(displayName)}</span>
+        <span class="story-tracker-headline">
+          <strong>${headlinePct}%</strong> of long-form uploads in the last
+          ${headlineWindow} days have been about the ${escapeHtml(displayName)} story
+        </span>
+        <span class="story-tracker-chevron">\u25BC</span>
+      </button>
+      <div class="story-tracker-body" id="storyTrackerBody-${id}"${state.expanded ? '' : ' hidden'}>
+        <div class="story-tracker-stats">
+          <div class="story-tracker-stat">
+            <span class="story-tracker-stat-value">${totalStats.matches}</span>
+            <span class="story-tracker-stat-label">videos \u00B7 last ${Math.max(...STORY_WINDOWS)}d</span>
+          </div>
+          <div class="story-tracker-stat">
+            <span class="story-tracker-stat-value">${fmt(totalStats.views)}</span>
+            <span class="story-tracker-stat-label">total views</span>
+          </div>
+          <div class="story-tracker-stat">
+            <span class="story-tracker-stat-value">${(totalStats.views > 0 ? (totalStats.likes / totalStats.views) * 100 : 0).toFixed(2)}%</span>
+            <span class="story-tracker-stat-label">avg like rate</span>
+          </div>
         </div>
-        <div class="story-tracker-stat">
-          <span class="story-tracker-stat-value">${fmt(totalStats.views)}</span>
-          <span class="story-tracker-stat-label">total views</span>
+        ${totalStats.unclassifiable > 0 ? `
+          <div class="story-tracker-unclassified">
+            + ${totalStats.unclassifiable} video${totalStats.unclassifiable === 1 ? '' : 's'} with descriptions too thin to classify
+            (may also be about this story — descriptions like "<em>this news is totally insane</em>"
+            don't contain the keywords we match on)
+          </div>
+        ` : ''}
+        <div class="story-saturation">${saturationRows}</div>
+        <div class="story-tracker-video-list-header">
+          <button class="story-tracker-sort-btn" data-sort-col="date"
+                  data-sort-active="${activeAttr('date')}">Date${arrow('date')}</button>
+          <button class="story-tracker-sort-btn" data-sort-col="title"
+                  data-sort-active="${activeAttr('title')}">Title${arrow('title')}</button>
+          <button class="story-tracker-sort-btn" data-sort-col="views"
+                  data-sort-active="${activeAttr('views')}">Views${arrow('views')}</button>
+          <button class="story-tracker-sort-btn" data-sort-col="like_rate"
+                  data-sort-active="${activeAttr('like_rate')}">Like rate${arrow('like_rate')}</button>
         </div>
-        <div class="story-tracker-stat">
-          <span class="story-tracker-stat-value">${(totalStats.views > 0 ? (totalStats.likes / totalStats.views) * 100 : 0).toFixed(2)}%</span>
-          <span class="story-tracker-stat-label">avg like rate</span>
+        <div class="story-tracker-video-list" id="storyTrackerVideoList-${id}">
+          ${renderStoryTrackerVideoRows(decoratedVideos, state.sort)}
         </div>
-      </div>
-      ${totalStats.unclassifiable > 0 ? `
-        <div class="story-tracker-unclassified">
-          + ${totalStats.unclassifiable} video${totalStats.unclassifiable === 1 ? '' : 's'} with descriptions too thin to classify
-          (may also be about this story — descriptions like "<em>this news is totally insane</em>"
-          don't contain the keywords we match on)
-        </div>
-      ` : ''}
-      <div class="story-saturation">${saturationRows}</div>
-      <div class="story-tracker-video-list-header">
-        <button class="story-tracker-sort-btn" data-sort-col="date"
-                data-sort-active="${activeAttr('date')}">Date${arrow('date')}</button>
-        <button class="story-tracker-sort-btn" data-sort-col="title"
-                data-sort-active="${activeAttr('title')}">Title${arrow('title')}</button>
-        <button class="story-tracker-sort-btn" data-sort-col="views"
-                data-sort-active="${activeAttr('views')}">Views${arrow('views')}</button>
-        <button class="story-tracker-sort-btn" data-sort-col="like_rate"
-                data-sort-active="${activeAttr('like_rate')}">Like rate${arrow('like_rate')}</button>
-      </div>
-      <div class="story-tracker-video-list" id="storyTrackerVideoList">
-        ${renderStoryTrackerVideoRows(decoratedVideos)}
       </div>
     </div>
   `;
+}
 
-  // Outer expand/collapse (panel-level, matches revenue/ad panel UX).
-  const toggleBtn = document.getElementById('storyTrackerToggle');
-  const body = document.getElementById('storyTrackerBody');
-  toggleBtn.addEventListener('click', () => {
-    storyTrackerExpanded = !storyTrackerExpanded;
-    toggleBtn.setAttribute('aria-expanded', String(storyTrackerExpanded));
-    body.hidden = !storyTrackerExpanded;
-  });
+// Wire up click handlers (expand toggle, sort headers) for one panel.
+function attachTrackerListeners(tracker, stats) {
+  const id = sanitiseTrackerId(tracker.termId);
+  const state = getTrackerState(id);
+  const panel = document.querySelector(`.story-tracker[data-tracker-id="${id}"]`);
+  if (!panel) return;
 
-  // Sort handlers — clicking a column header sorts and re-renders only the
-  // video list (not the whole panel, to avoid resetting expand state).
+  const toggleBtn = document.getElementById(`storyTrackerToggle-${id}`);
+  const body = document.getElementById(`storyTrackerBody-${id}`);
+  if (toggleBtn && body) {
+    toggleBtn.addEventListener('click', () => {
+      state.expanded = !state.expanded;
+      toggleBtn.setAttribute('aria-expanded', String(state.expanded));
+      body.hidden = !state.expanded;
+    });
+  }
+
+  const totalStats = stats[Math.max(...STORY_WINDOWS)];
+  const decoratedVideos = totalStats.videos.map(v => ({
+    ...v,
+    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
+  }));
+
   panel.querySelectorAll('.story-tracker-sort-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const col = btn.dataset.sortCol;
-      // Clicking the same column toggles direction; clicking a new column
-      // starts with a sensible default (desc for numeric, asc for title).
-      if (storyTrackerSort.col === col) {
-        storyTrackerSort.dir = storyTrackerSort.dir === 'desc' ? 'asc' : 'desc';
+      if (state.sort.col === col) {
+        state.sort.dir = state.sort.dir === 'desc' ? 'asc' : 'desc';
       } else {
-        storyTrackerSort.col = col;
-        storyTrackerSort.dir = col === 'title' ? 'asc' : 'desc';
+        state.sort.col = col;
+        state.sort.dir = col === 'title' ? 'asc' : 'desc';
       }
-      // Re-render the list and the header indicators in place
-      const list = document.getElementById('storyTrackerVideoList');
-      if (list) list.innerHTML = renderStoryTrackerVideoRows(decoratedVideos);
+      const list = document.getElementById(`storyTrackerVideoList-${id}`);
+      if (list) list.innerHTML = renderStoryTrackerVideoRows(decoratedVideos, state.sort);
       panel.querySelectorAll('.story-tracker-sort-btn').forEach(b => {
         const c = b.dataset.sortCol;
-        b.dataset.sortActive = storyTrackerSort.col === c ? 'true' : 'false';
-        // Map column-id to display label. Most are title-case of the id;
-        // like_rate and date/title/views are explicit so we can adjust
-        // wording without touching the sort logic.
+        b.dataset.sortActive = state.sort.col === c ? 'true' : 'false';
         const labels = { date: 'Date', title: 'Title', views: 'Views', like_rate: 'Like rate' };
         const label = labels[c] || c;
-        b.textContent = label + (storyTrackerSort.col === c
-          ? (storyTrackerSort.dir === 'desc' ? ' ▼' : ' ▲')
+        b.textContent = label + (state.sort.col === c
+          ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2')
           : '');
       });
     });
   });
 }
 
-function renderStoryTrackerVideoRows(videos) {
+function renderStoryTrackerVideoRows(videos, sort) {
   const fmt = (n) => n.toLocaleString('en-GB');
-  const { col, dir } = storyTrackerSort;
+  const { col, dir } = sort;
   const sorted = [...videos].sort((a, b) => {
     let av, bv;
     if (col === 'date') { av = a.publishedAt; bv = b.publishedAt; }
