@@ -1,0 +1,321 @@
+{
+  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely — the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
+
+  "trump": {
+    "name": "Donald Trump",
+    "color": "#dc2626",
+    "keywords": ["trump", "donald trump"]
+  },
+  "biden": {
+    "name": "Joe Biden",
+    "color": "#1d4ed8",
+    "keywords": ["joe biden", "biden administration"]
+  },
+  "kamala-harris": {
+    "name": "Kamala Harris",
+    "color": "#7c3aed",
+    "keywords": ["kamala harris", "kamala"]
+  },
+  "obama": {
+    "name": "Barack Obama",
+    "color": "#2563eb",
+    "keywords": ["barack obama"]
+  },
+  "aoc": {
+    "name": "AOC",
+    "color": "#db2777",
+    "keywords": ["ocasio cortez", "aoc"]
+  },
+  "charlie-kirk": {
+    "name": "Charlie Kirk",
+    "color": "#ea580c",
+    "keywords": ["charlie kirk", "tpusa", "turning point usa"]
+  },
+
+  "tim-pool": {
+    "name": "Tim Pool",
+    "color": "#6366f1",
+    "keywords": ["tim pool", "timcast"]
+  },
+  "joe-rogan": {
+    "name": "Joe Rogan",
+    "color": "#4338ca",
+    "keywords": ["joe rogan"]
+  },
+  "tucker-carlson": {
+    "name": "Tucker Carlson",
+    "color": "#5b21b6",
+    "keywords": ["tucker carlson"]
+  },
+  "steven-crowder": {
+    "name": "Steven Crowder",
+    "color": "#7e22ce",
+    "keywords": ["steven crowder"]
+  },
+  "candace-owens": {
+    "name": "Candace Owens",
+    "color": "#a855f7",
+    "keywords": ["candace owens"]
+  },
+  "ben-shapiro": {
+    "name": "Ben Shapiro",
+    "color": "#8b5cf6",
+    "keywords": ["ben shapiro"]
+  },
+  "matt-walsh": {
+    "name": "Matt Walsh",
+    "color": "#9333ea",
+    "keywords": ["matt walsh"]
+  },
+  "jordan-peterson": {
+    "name": "Jordan Peterson",
+    "color": "#6d28d9",
+    "keywords": ["jordan peterson"]
+  },
+  "andrew-tate": {
+    "name": "Andrew Tate",
+    "color": "#4c1d95",
+    "keywords": ["andrew tate"]
+  },
+  "asmongold": {
+    "name": "Asmongold",
+    "color": "#a78bfa",
+    "keywords": ["asmongold", "asmon"]
+  },
+
+  "karmelo-anthony": {
+    "name": "Karmelo Anthony",
+    "color": "#991b1b",
+    "keywords": ["karmelo", "carmelo", "karmello", "metcalf", "metcaf", "mechaf"]
+  },
+  "kyle-rittenhouse": {
+    "name": "Kyle Rittenhouse",
+    "color": "#7f1d1d",
+    "keywords": ["kyle rittenhouse", "rittenhouse"]
+  },
+  "daniel-penny": {
+    "name": "Daniel Penny",
+    "color": "#b91c1c",
+    "keywords": ["daniel penny", "jordan neely"]
+  },
+  "amber-heard": {
+    "name": "Amber Heard / Johnny Depp",
+    "color": "#be185d",
+    "keywords": ["amber heard", "johnny depp"]
+  },
+
+  "elon-musk": {
+    "name": "Elon Musk",
+    "color": "#1e40af",
+    "keywords": ["elon musk", "elon"]
+  },
+  "zuckerberg": {
+    "name": "Mark Zuckerberg",
+    "color": "#3b82f6",
+    "keywords": ["zuckerberg"]
+  },
+
+  "brie-larson": {
+    "name": "Brie Larson",
+    "color": "#c026d3",
+    "keywords": ["brie larson", "captain marvel"]
+  },
+  "kathleen-kennedy": {
+    "name": "Kathleen Kennedy",
+    "color": "#a21caf",
+    "keywords": ["kathleen kennedy"]
+  },
+  "bob-iger": {
+    "name": "Bob Iger",
+    "color": "#86198f",
+    "keywords": ["bob iger"]
+  },
+  "rachel-zegler": {
+    "name": "Rachel Zegler",
+    "color": "#d946ef",
+    "keywords": ["rachel zegler", "zegler", "snow white"]
+  },
+
+  "disney": {
+    "name": "Disney (corporate)",
+    "color": "#0e7490",
+    "keywords": ["walt disney", "disney parks", "disneyland", "disney company"]
+  },
+  "disney-plus": {
+    "name": "Disney Plus",
+    "color": "#0891b2",
+    "keywords": ["disney plus", "disneyplus", "disney+"]
+  },
+  "marvel-mcu": {
+    "name": "Marvel / MCU",
+    "color": "#ef4444",
+    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man"]
+  },
+  "star-wars": {
+    "name": "Star Wars",
+    "color": "#facc15",
+    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith"]
+  },
+  "netflix": {
+    "name": "Netflix",
+    "color": "#b91c1c",
+    "keywords": ["netflix"]
+  },
+  "hbo": {
+    "name": "HBO",
+    "color": "#4f46e5",
+    "keywords": ["hbo"]
+  },
+  "amazon-prime": {
+    "name": "Amazon Prime / Rings of Power",
+    "color": "#f59e0b",
+    "keywords": ["rings of power", "amazon prime video"]
+  },
+  "game-of-thrones": {
+    "name": "Game of Thrones / House of Dragon",
+    "color": "#b45309",
+    "keywords": ["game of thrones", "house of dragon", "house of the dragon"]
+  },
+  "nintendo": {
+    "name": "Nintendo",
+    "color": "#e11d48",
+    "keywords": ["nintendo"]
+  },
+  "pokemon": {
+    "name": "Pokemon",
+    "color": "#fbbf24",
+    "keywords": ["pokemon"]
+  },
+
+  "facebook-meta": {
+    "name": "Facebook / Meta",
+    "color": "#2563eb",
+    "keywords": ["facebook", "meta platforms"]
+  },
+  "tiktok": {
+    "name": "TikTok",
+    "color": "#14b8a6",
+    "keywords": ["tiktok", "tik tok"]
+  },
+
+  "bud-light": {
+    "name": "Bud Light / Mulvaney",
+    "color": "#f97316",
+    "keywords": ["bud light", "dylan mulvaney"]
+  },
+  "target-pride": {
+    "name": "Target (Pride / boycott)",
+    "color": "#ec4899",
+    "keywords": ["target boycott", "target pride", "target ceo", "target stock", "tuck friendly"]
+  },
+  "daily-wire": {
+    "name": "Daily Wire (company drama)",
+    "color": "#65a30d",
+    "keywords": ["daily wire"]
+  },
+  "dei": {
+    "name": "DEI (diversity / corporate policy)",
+    "color": "#84cc16",
+    "keywords": ["dei"]
+  },
+
+  "fast-food-dining": {
+    "name": "Fast food / dining",
+    "color": "#f59e0b",
+    "keywords": [
+      "mcdonald's", "mcdonalds", "mcdonald",
+      "burger king",
+      "wendy's", "wendys",
+      "five guys",
+      "in n out", "in-n-out",
+      "shake shack",
+      "white castle",
+      "jack in the box",
+      "whataburger",
+      "chick fil a", "chick-fil-a",
+      "kfc",
+      "popeyes",
+      "raising canes",
+      "churches chicken",
+      "taco bell",
+      "chipotle",
+      "del taco",
+      "qdoba",
+      "pizza hut",
+      "domino's", "dominos",
+      "papa johns", "papa john's",
+      "little caesars",
+      "cracker barrel",
+      "applebee's", "applebees",
+      "olive garden",
+      "red lobster",
+      "denny's", "dennys",
+      "ihop",
+      "waffle house",
+      "buffalo wild wings",
+      "outback steakhouse",
+      "texas roadhouse",
+      "cheesecake factory",
+      "chilis",
+      "starbucks",
+      "dunkin donuts", "dunkin'",
+      "panera bread", "panera",
+      "arby's", "arbys",
+      "jimmy johns",
+      "jersey mikes"
+    ]
+  },
+
+  "cancel-culture": {
+    "name": "Cancel culture",
+    "color": "#525252",
+    "keywords": ["cancel culture"]
+  },
+  "blm": {
+    "name": "Black Lives Matter",
+    "color": "#1f2937",
+    "keywords": ["black lives matter", "blm"]
+  },
+  "transgender": {
+    "name": "Transgender issues",
+    "color": "#f43f5e",
+    "keywords": ["transgender", "trans woman", "trans women", "trans man", "trans men", "trans athlete"]
+  },
+  "abortion": {
+    "name": "Abortion",
+    "color": "#6b7280",
+    "keywords": ["abortion", "roe wade", "roe v wade"]
+  },
+  "immigration": {
+    "name": "Immigration / border",
+    "color": "#15803d",
+    "keywords": ["illegal immigrant", "illegal immigrants", "illegal aliens", "border crisis", "mass deportation", "ice raid", "ice raids"]
+  },
+  "critical-race-theory": {
+    "name": "Critical race theory",
+    "color": "#404040",
+    "keywords": ["critical race theory"]
+  },
+
+  "january-6": {
+    "name": "January 6",
+    "color": "#78350f",
+    "keywords": ["january sixth", "january 6", "jan 6", "capitol riot", "capitol attack"]
+  },
+  "covid": {
+    "name": "COVID / pandemic",
+    "color": "#0d9488",
+    "keywords": ["covid", "pandemic", "vaccine mandate", "lockdown"]
+  },
+
+  "russia-ukraine": {
+    "name": "Russia / Ukraine",
+    "color": "#0c4a6e",
+    "keywords": ["russia ukraine", "putin", "zelensky", "kyiv"]
+  },
+  "israel-hamas": {
+    "name": "Israel / Hamas / Gaza",
+    "color": "#155e75",
+    "keywords": ["israel", "hamas", "gaza war"]
+  }
+}
