@@ -191,7 +191,14 @@
       "moistcr tikal",
       "angry joe",
       "nick rekieta",
-      "jack murphy"
+      "jack murphy",
+      "invadervie",
+      "twitch girl",
+      "twitch ladies",
+      "twitch clothing",
+      "twitch deer",
+      "twitch streamer",
+      "twitch banned"
     ]
   },
   "late-night-tv": {
@@ -276,7 +283,7 @@
     ]
   },
   "kotaku-gaming-press": {
-    "name": "Kotaku / game journalism",
+    "name": "Gaming press (Kotaku / IGN / Gamespot)",
     "color": "#10b981",
     "group": "media",
     "keywords": [
@@ -286,7 +293,11 @@
       "ign reviews",
       "game journalism",
       "game journalist",
-      "game journalists"
+      "game journalists",
+      "ign",
+      "gamespot",
+      "rotten tomatoes",
+      "metacritic"
     ]
   },
   "karmelo-anthony": {
@@ -580,7 +591,11 @@
       "magic gathering",
       "apex legends",
       "sonic movie",
-      "randy pitchford"
+      "randy pitchford",
+      "fallout 76",
+      "fallout 4",
+      "fallout 5",
+      "bethesda fallout"
     ]
   },
   "nintendo": {
@@ -666,11 +681,18 @@
     ]
   },
   "dei": {
-    "name": "DEI (diversity / corporate policy)",
+    "name": "DEI / corporate woke backlash",
     "color": "#84cc16",
     "group": "politics",
     "keywords": [
-      "dei"
+      "dei",
+      "harley davidson",
+      "tractor supply",
+      "john deere",
+      "anheuser busch",
+      "jaguar rebrand",
+      "coca cola boycott",
+      "cracker barrel boycott"
     ]
   },
   "fast-food-dining": {
@@ -808,7 +830,7 @@
     ]
   },
   "immigration": {
-    "name": "Immigration / border",
+    "name": "Immigration / border / ICE",
     "color": "#15803d",
     "group": "politics",
     "keywords": [
@@ -818,7 +840,18 @@
       "border crisis",
       "mass deportation",
       "ice raid",
-      "ice raids"
+      "ice raids",
+      "ice agents",
+      "ice agent",
+      "ice arrest",
+      "ice arrests",
+      "ice protest",
+      "ice protests",
+      "ice deportation",
+      "abolish ice",
+      "anti-ice",
+      "deport",
+      "deportation"
     ]
   },
   "critical-race-theory": {
@@ -922,6 +955,24 @@
       "billie eilish",
       "beyonce",
       "rihanna"
+    ]
+  },
+  "onlyfans": {
+    "name": "OnlyFans",
+    "color": "#f472b6",
+    "group": "media",
+    "keywords": [
+      "onlyfans",
+      "only fans"
+    ]
+  },
+  "seth-rogen": {
+    "name": "Seth Rogen",
+    "color": "#84cc16",
+    "group": "media",
+    "keywords": [
+      "seth rogen",
+      "seth rogan"
     ]
   }
 }
