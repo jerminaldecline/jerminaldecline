@@ -123,7 +123,10 @@ function main() {
   console.log(`Loading descriptions.json...`);
   let descriptions = {};
   if (fs.existsSync(DESCRIPTIONS_FILE)) {
-    descriptions = JSON.parse(fs.readFileSync(DESCRIPTIONS_FILE, 'utf8'));
+    const parsed = JSON.parse(fs.readFileSync(DESCRIPTIONS_FILE, 'utf8'));
+    // fetch-data.js writes { lastUpdated, descriptions: {...} } — extract the
+    // inner map. Fall back to top-level if a legacy bare-map file is present.
+    descriptions = parsed.descriptions || parsed;
   } else {
     console.warn('  descriptions.json not found — proceeding without descriptions');
   }
