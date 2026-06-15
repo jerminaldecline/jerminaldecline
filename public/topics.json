@@ -31,6 +31,11 @@
     "color": "#16a34a",
     "keywords": ["ilhan omar"]
   },
+  "tim-walz": {
+    "name": "Tim Walz",
+    "color": "#0369a1",
+    "keywords": ["tim walz"]
+  },
   "charlie-kirk": {
     "name": "Charlie Kirk",
     "color": "#ea580c",
@@ -92,11 +97,16 @@
     "color": "#9f1239",
     "keywords": ["alex jones", "infowars"]
   },
+  "don-lemon": {
+    "name": "Don Lemon",
+    "color": "#fb7185",
+    "keywords": ["don lemon"]
+  },
 
   "streamer-drama": {
     "name": "Streamer / podcast drama",
     "color": "#475569",
-    "keywords": ["hasan piker", "ethan klein", "h3h3", "destiny streamer", "vaush", "xqc", "pokimane", "amouranth", "twitchcon", "twitch ban"]
+    "keywords": ["hasan piker", "ethan klein", "h3h3", "destiny streamer", "vaush", "xqc", "pokimane", "amouranth", "twitchcon", "twitch ban", "mxr plays", "moistcr1tikal", "moistcr tikal", "angry joe", "nick rekieta", "jack murphy"]
   },
   "late-night-tv": {
     "name": "Late night TV",
@@ -107,6 +117,41 @@
     "name": "Taylor Lorenz",
     "color": "#f9a8d4",
     "keywords": ["taylor lorenz"]
+  },
+  "pewdiepie": {
+    "name": "PewDiePie",
+    "color": "#fb923c",
+    "keywords": ["pewdiepie"]
+  },
+  "sargon-akkad": {
+    "name": "Sargon of Akkad",
+    "color": "#4b5563",
+    "keywords": ["sargon akkad", "sargon of akkad"]
+  },
+  "count-dankula": {
+    "name": "Count Dankula",
+    "color": "#404040",
+    "keywords": ["count dankula"]
+  },
+  "anita-sarkeesian": {
+    "name": "Anita Sarkeesian",
+    "color": "#c026d3",
+    "keywords": ["anita sarkeesian"]
+  },
+  "project-veritas": {
+    "name": "Project Veritas / James O'Keefe",
+    "color": "#082f49",
+    "keywords": ["project veritas", "james o'keefe"]
+  },
+  "youtube-platform": {
+    "name": "YouTube (platform / policy)",
+    "color": "#b91c1c",
+    "keywords": ["youtube ceo", "youtube bans", "youtube demonetize", "youtube demonetized", "youtube policy", "youtube apologize", "youtube apology", "youtube censor", "youtube removes"]
+  },
+  "kotaku-gaming-press": {
+    "name": "Kotaku / game journalism",
+    "color": "#10b981",
+    "keywords": ["kotaku", "polygon", "gamergate", "ign reviews", "game journalism", "game journalist", "game journalists"]
   },
 
   "karmelo-anthony": {
@@ -144,6 +189,41 @@
     "color": "#92400e",
     "keywords": ["stan lee"]
   },
+  "alec-baldwin": {
+    "name": "Alec Baldwin / Rust",
+    "color": "#57534e",
+    "keywords": ["alec baldwin", "rust shooting", "halyna hutchins"]
+  },
+  "dave-chappelle": {
+    "name": "Dave Chappelle",
+    "color": "#7c2d12",
+    "keywords": ["dave chappelle", "chappelle special"]
+  },
+  "lebron-james": {
+    "name": "LeBron James",
+    "color": "#d97706",
+    "keywords": ["lebron james"]
+  },
+  "russell-brand": {
+    "name": "Russell Brand",
+    "color": "#be123c",
+    "keywords": ["russell brand"]
+  },
+  "diddy": {
+    "name": "Diddy / Sean Combs",
+    "color": "#6b21a8",
+    "keywords": ["diddy", "sean combs", "p diddy"]
+  },
+  "chris-pratt": {
+    "name": "Chris Pratt",
+    "color": "#4d7c0f",
+    "keywords": ["chris pratt"]
+  },
+  "gabby-petito": {
+    "name": "Gabby Petito / Brian Laundrie",
+    "color": "#a16207",
+    "keywords": ["gabby petito", "brian laundrie"]
+  },
 
   "elon-musk": {
     "name": "Elon Musk",
@@ -164,7 +244,12 @@
   "marvel-mcu": {
     "name": "Marvel / MCU",
     "color": "#ef4444",
-    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man", "brie larson", "captain marvel"]
+    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man", "brie larson", "captain marvel", "black widow"]
+  },
+  "dc-comics": {
+    "name": "DC / DCEU",
+    "color": "#1e293b",
+    "keywords": ["birds of prey", "harley quinn movie", "the batman", "batgirl movie", "joker movie", "snyder cut", "james gunn dc", "wonder woman"]
   },
   "star-wars": {
     "name": "Star Wars",
@@ -191,6 +276,11 @@
     "color": "#a3e635",
     "keywords": ["south park"]
   },
+  "harry-potter-rowling": {
+    "name": "Harry Potter / J.K. Rowling",
+    "color": "#b45309",
+    "keywords": ["harry potter", "jk rowling", "j.k. rowling", "hogwarts legacy"]
+  },
 
   "gaming-industry": {
     "name": "Gaming industry",
@@ -201,7 +291,8 @@
       "epic games", "ubisoft", "ea sports", "bethesda",
       "world of warcraft", "wow classic",
       "last of us", "starfield", "veilguard", "dragon age",
-      "concord game", "battlefield"
+      "concord game", "battlefield",
+      "magic gathering", "apex legends", "sonic movie", "randy pitchford"
     ]
   },
   "nintendo": {
@@ -240,6 +331,11 @@
     "name": "Target (Pride / boycott)",
     "color": "#ec4899",
     "keywords": ["target boycott", "target pride", "target ceo", "target stock", "tuck friendly"]
+  },
+  "walmart": {
+    "name": "Walmart",
+    "color": "#0284c7",
+    "keywords": ["walmart"]
   },
   "daily-wire": {
     "name": "Daily Wire (company drama)",
