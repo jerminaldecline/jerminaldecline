@@ -1,367 +1,697 @@
 {
-  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely — the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
-
+  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely \u2014 the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
   "trump": {
     "name": "Donald Trump",
     "color": "#dc2626",
-    "keywords": ["trump", "donald trump"]
+    "group": "politics",
+    "keywords": [
+      "trump",
+      "donald trump"
+    ]
   },
   "biden": {
     "name": "Joe Biden",
     "color": "#1d4ed8",
-    "keywords": ["joe biden", "biden administration"]
+    "group": "politics",
+    "keywords": [
+      "joe biden",
+      "biden administration"
+    ]
   },
   "kamala-harris": {
     "name": "Kamala Harris",
     "color": "#7c3aed",
-    "keywords": ["kamala harris", "kamala"]
+    "group": "politics",
+    "keywords": [
+      "kamala harris",
+      "kamala"
+    ]
   },
   "obama": {
     "name": "Barack Obama",
     "color": "#2563eb",
-    "keywords": ["barack obama"]
+    "group": "politics",
+    "keywords": [
+      "barack obama"
+    ]
   },
   "aoc": {
     "name": "AOC",
     "color": "#db2777",
-    "keywords": ["ocasio cortez", "aoc"]
+    "group": "politics",
+    "keywords": [
+      "ocasio cortez",
+      "aoc"
+    ]
   },
   "ilhan-omar": {
     "name": "Ilhan Omar",
     "color": "#16a34a",
-    "keywords": ["ilhan omar"]
+    "group": "politics",
+    "keywords": [
+      "ilhan omar"
+    ]
   },
   "tim-walz": {
     "name": "Tim Walz",
     "color": "#0369a1",
-    "keywords": ["tim walz"]
+    "group": "politics",
+    "keywords": [
+      "tim walz"
+    ]
   },
   "charlie-kirk": {
     "name": "Charlie Kirk",
     "color": "#ea580c",
-    "keywords": ["charlie kirk", "tpusa", "turning point usa"]
+    "group": "politics",
+    "keywords": [
+      "charlie kirk",
+      "tpusa",
+      "turning point usa"
+    ]
   },
-
   "tim-pool": {
     "name": "Tim Pool",
     "color": "#6366f1",
-    "keywords": ["tim pool", "timcast"]
+    "group": "politics",
+    "keywords": [
+      "tim pool",
+      "timcast"
+    ]
   },
   "joe-rogan": {
     "name": "Joe Rogan",
     "color": "#4338ca",
-    "keywords": ["joe rogan"]
+    "group": "politics",
+    "keywords": [
+      "joe rogan"
+    ]
   },
   "tucker-carlson": {
     "name": "Tucker Carlson",
     "color": "#5b21b6",
-    "keywords": ["tucker carlson"]
+    "group": "politics",
+    "keywords": [
+      "tucker carlson"
+    ]
   },
   "steven-crowder": {
     "name": "Steven Crowder",
     "color": "#7e22ce",
-    "keywords": ["steven crowder"]
+    "group": "politics",
+    "keywords": [
+      "steven crowder"
+    ]
   },
   "candace-owens": {
     "name": "Candace Owens",
     "color": "#a855f7",
-    "keywords": ["candace owens"]
+    "group": "politics",
+    "keywords": [
+      "candace owens"
+    ]
   },
   "ben-shapiro": {
     "name": "Ben Shapiro",
     "color": "#8b5cf6",
-    "keywords": ["ben shapiro"]
+    "group": "politics",
+    "keywords": [
+      "ben shapiro"
+    ]
   },
   "matt-walsh": {
     "name": "Matt Walsh",
     "color": "#9333ea",
-    "keywords": ["matt walsh"]
+    "group": "politics",
+    "keywords": [
+      "matt walsh"
+    ]
   },
   "jordan-peterson": {
     "name": "Jordan Peterson",
     "color": "#6d28d9",
-    "keywords": ["jordan peterson", "jordan b peterson", "dr peterson"]
+    "group": "politics",
+    "keywords": [
+      "jordan peterson",
+      "jordan b peterson",
+      "dr peterson"
+    ]
   },
   "andrew-tate": {
     "name": "Andrew Tate",
     "color": "#4c1d95",
-    "keywords": ["andrew tate"]
+    "group": "politics",
+    "keywords": [
+      "andrew tate"
+    ]
   },
   "asmongold": {
     "name": "Asmongold",
     "color": "#a78bfa",
-    "keywords": ["asmongold", "asmon"]
+    "group": "media",
+    "keywords": [
+      "asmongold",
+      "asmon"
+    ]
   },
   "alex-jones": {
     "name": "Alex Jones / Infowars",
     "color": "#9f1239",
-    "keywords": ["alex jones", "infowars"]
+    "group": "politics",
+    "keywords": [
+      "alex jones",
+      "infowars"
+    ]
   },
   "don-lemon": {
     "name": "Don Lemon",
     "color": "#fb7185",
-    "keywords": ["don lemon"]
+    "group": "politics",
+    "keywords": [
+      "don lemon"
+    ]
   },
-
   "streamer-drama": {
     "name": "Streamer / podcast drama",
     "color": "#475569",
-    "keywords": ["hasan piker", "ethan klein", "h3h3", "destiny streamer", "vaush", "xqc", "pokimane", "amouranth", "twitchcon", "twitch ban", "mxr plays", "moistcr1tikal", "moistcr tikal", "angry joe", "nick rekieta", "jack murphy"]
+    "group": "media",
+    "keywords": [
+      "hasan piker",
+      "ethan klein",
+      "h3h3",
+      "destiny streamer",
+      "vaush",
+      "xqc",
+      "pokimane",
+      "amouranth",
+      "twitchcon",
+      "twitch ban",
+      "mxr plays",
+      "moistcr1tikal",
+      "moistcr tikal",
+      "angry joe",
+      "nick rekieta",
+      "jack murphy"
+    ]
   },
   "late-night-tv": {
     "name": "Late night TV",
     "color": "#1e3a8a",
-    "keywords": ["jimmy kimmel", "stephen colbert", "jimmy fallon", "bill maher", "seth meyers", "trevor noah", "samantha bee", "late night show"]
+    "group": "media",
+    "keywords": [
+      "jimmy kimmel",
+      "stephen colbert",
+      "jimmy fallon",
+      "bill maher",
+      "seth meyers",
+      "trevor noah",
+      "samantha bee",
+      "late night show"
+    ]
   },
   "taylor-lorenz": {
     "name": "Taylor Lorenz",
     "color": "#f9a8d4",
-    "keywords": ["taylor lorenz"]
+    "group": "politics",
+    "keywords": [
+      "taylor lorenz"
+    ]
   },
   "pewdiepie": {
     "name": "PewDiePie",
     "color": "#fb923c",
-    "keywords": ["pewdiepie"]
+    "group": "media",
+    "keywords": [
+      "pewdiepie"
+    ]
   },
   "sargon-akkad": {
     "name": "Sargon of Akkad",
     "color": "#4b5563",
-    "keywords": ["sargon akkad", "sargon of akkad"]
+    "group": "media",
+    "keywords": [
+      "sargon akkad",
+      "sargon of akkad"
+    ]
   },
   "count-dankula": {
     "name": "Count Dankula",
     "color": "#404040",
-    "keywords": ["count dankula"]
+    "group": "media",
+    "keywords": [
+      "count dankula"
+    ]
   },
   "anita-sarkeesian": {
     "name": "Anita Sarkeesian",
     "color": "#c026d3",
-    "keywords": ["anita sarkeesian"]
+    "group": "media",
+    "keywords": [
+      "anita sarkeesian"
+    ]
   },
   "project-veritas": {
     "name": "Project Veritas / James O'Keefe",
     "color": "#082f49",
-    "keywords": ["project veritas", "james o'keefe"]
+    "group": "politics",
+    "keywords": [
+      "project veritas",
+      "james o'keefe"
+    ]
   },
   "youtube-platform": {
     "name": "YouTube (platform / policy)",
     "color": "#b91c1c",
-    "keywords": ["youtube ceo", "youtube bans", "youtube demonetize", "youtube demonetized", "youtube policy", "youtube apologize", "youtube apology", "youtube censor", "youtube removes"]
+    "group": "media",
+    "keywords": [
+      "youtube ceo",
+      "youtube bans",
+      "youtube demonetize",
+      "youtube demonetized",
+      "youtube policy",
+      "youtube apologize",
+      "youtube apology",
+      "youtube censor",
+      "youtube removes"
+    ]
   },
   "kotaku-gaming-press": {
     "name": "Kotaku / game journalism",
     "color": "#10b981",
-    "keywords": ["kotaku", "polygon", "gamergate", "ign reviews", "game journalism", "game journalist", "game journalists"]
+    "group": "media",
+    "keywords": [
+      "kotaku",
+      "polygon",
+      "gamergate",
+      "ign reviews",
+      "game journalism",
+      "game journalist",
+      "game journalists"
+    ]
   },
-
   "karmelo-anthony": {
     "name": "Karmelo Anthony",
     "color": "#991b1b",
-    "keywords": ["karmelo", "carmelo", "karmello", "metcalf", "metcaf", "mechaf"]
+    "group": "politics",
+    "keywords": [
+      "karmelo",
+      "carmelo",
+      "karmello",
+      "metcalf",
+      "metcaf",
+      "mechaf"
+    ]
   },
   "kyle-rittenhouse": {
     "name": "Kyle Rittenhouse",
     "color": "#7f1d1d",
-    "keywords": ["kyle rittenhouse", "rittenhouse"]
+    "group": "politics",
+    "keywords": [
+      "kyle rittenhouse",
+      "rittenhouse"
+    ]
   },
   "daniel-penny": {
     "name": "Daniel Penny",
     "color": "#b91c1c",
-    "keywords": ["daniel penny", "jordan neely"]
+    "group": "politics",
+    "keywords": [
+      "daniel penny",
+      "jordan neely"
+    ]
   },
   "amber-heard": {
     "name": "Amber Heard / Johnny Depp",
     "color": "#be185d",
-    "keywords": ["amber heard", "johnny depp"]
+    "group": "media",
+    "keywords": [
+      "amber heard",
+      "johnny depp"
+    ]
   },
   "will-smith-slap": {
     "name": "Will Smith / Oscars slap",
     "color": "#c2410c",
-    "keywords": ["will smith", "chris rock", "oscars slap", "jada pinkett", "pinkett smith"]
+    "group": "media",
+    "keywords": [
+      "will smith",
+      "chris rock",
+      "oscars slap",
+      "jada pinkett",
+      "pinkett smith"
+    ]
   },
   "jussie-smollett": {
     "name": "Jussie Smollett",
     "color": "#581c87",
-    "keywords": ["jussie smollett", "smollett"]
+    "group": "politics",
+    "keywords": [
+      "jussie smollett",
+      "smollett"
+    ]
   },
   "stan-lee": {
     "name": "Stan Lee (family / elder abuse)",
     "color": "#92400e",
-    "keywords": ["stan lee"]
+    "group": "media",
+    "keywords": [
+      "stan lee"
+    ]
   },
   "alec-baldwin": {
     "name": "Alec Baldwin / Rust",
     "color": "#57534e",
-    "keywords": ["alec baldwin", "rust shooting", "halyna hutchins"]
+    "group": "media",
+    "keywords": [
+      "alec baldwin",
+      "rust shooting",
+      "halyna hutchins"
+    ]
   },
   "dave-chappelle": {
     "name": "Dave Chappelle",
     "color": "#7c2d12",
-    "keywords": ["dave chappelle", "chappelle special"]
+    "group": "media",
+    "keywords": [
+      "dave chappelle",
+      "chappelle special"
+    ]
   },
   "lebron-james": {
     "name": "LeBron James",
     "color": "#d97706",
-    "keywords": ["lebron james"]
+    "group": "media",
+    "keywords": [
+      "lebron james"
+    ]
   },
   "russell-brand": {
     "name": "Russell Brand",
     "color": "#be123c",
-    "keywords": ["russell brand"]
+    "group": "media",
+    "keywords": [
+      "russell brand"
+    ]
   },
   "diddy": {
     "name": "Diddy / Sean Combs",
     "color": "#6b21a8",
-    "keywords": ["diddy", "sean combs", "p diddy"]
+    "group": "media",
+    "keywords": [
+      "diddy",
+      "sean combs",
+      "p diddy"
+    ]
   },
   "chris-pratt": {
     "name": "Chris Pratt",
     "color": "#4d7c0f",
-    "keywords": ["chris pratt"]
+    "group": "media",
+    "keywords": [
+      "chris pratt"
+    ]
   },
   "gabby-petito": {
     "name": "Gabby Petito / Brian Laundrie",
     "color": "#a16207",
-    "keywords": ["gabby petito", "brian laundrie"]
+    "group": "politics",
+    "keywords": [
+      "gabby petito",
+      "brian laundrie"
+    ]
   },
-
   "elon-musk": {
     "name": "Elon Musk",
     "color": "#1e40af",
-    "keywords": ["elon musk", "elon"]
+    "group": "media",
+    "keywords": [
+      "elon musk",
+      "elon"
+    ]
   },
   "zuckerberg": {
     "name": "Mark Zuckerberg",
     "color": "#3b82f6",
-    "keywords": ["zuckerberg"]
+    "group": "media",
+    "keywords": [
+      "zuckerberg"
+    ]
   },
-
   "disney": {
     "name": "Disney",
     "color": "#0e7490",
-    "keywords": ["walt disney", "disney parks", "disneyland", "disney company", "disney plus", "disneyplus", "disney+", "bob iger", "rachel zegler", "zegler", "snow white", "halle bailey", "little mermaid"]
+    "group": "media",
+    "keywords": [
+      "walt disney",
+      "disney parks",
+      "disneyland",
+      "disney company",
+      "disney plus",
+      "disneyplus",
+      "disney+",
+      "bob iger",
+      "rachel zegler",
+      "zegler",
+      "snow white",
+      "halle bailey",
+      "little mermaid"
+    ]
   },
   "marvel-mcu": {
     "name": "Marvel / MCU",
     "color": "#ef4444",
-    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man", "brie larson", "captain marvel", "black widow"]
+    "group": "media",
+    "keywords": [
+      "marvel",
+      "mcu",
+      "avengers",
+      "iron man",
+      "thor",
+      "spider man",
+      "brie larson",
+      "captain marvel",
+      "black widow"
+    ]
   },
   "dc-comics": {
     "name": "DC / DCEU",
     "color": "#1e293b",
-    "keywords": ["birds of prey", "harley quinn movie", "the batman", "batgirl movie", "joker movie", "snyder cut", "james gunn dc", "wonder woman"]
+    "group": "media",
+    "keywords": [
+      "birds of prey",
+      "harley quinn movie",
+      "the batman",
+      "batgirl movie",
+      "joker movie",
+      "snyder cut",
+      "james gunn dc",
+      "wonder woman"
+    ]
   },
   "star-wars": {
     "name": "Star Wars",
     "color": "#facc15",
-    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith", "kathleen kennedy", "gina carano"]
+    "group": "media",
+    "keywords": [
+      "star wars",
+      "mandalorian",
+      "ahsoka",
+      "acolyte",
+      "kenobi",
+      "jedi",
+      "sith",
+      "kathleen kennedy",
+      "gina carano"
+    ]
   },
   "netflix": {
     "name": "Netflix",
     "color": "#b91c1c",
-    "keywords": ["netflix"]
+    "group": "media",
+    "keywords": [
+      "netflix"
+    ]
   },
   "hbo-got": {
     "name": "HBO / Game of Thrones",
     "color": "#4f46e5",
-    "keywords": ["hbo", "game of thrones", "house of dragon", "house of the dragon"]
+    "group": "media",
+    "keywords": [
+      "hbo",
+      "game of thrones",
+      "house of dragon",
+      "house of the dragon"
+    ]
   },
   "amazon-prime": {
     "name": "Amazon Prime / Rings of Power",
     "color": "#f59e0b",
-    "keywords": ["rings of power", "amazon prime video"]
+    "group": "media",
+    "keywords": [
+      "rings of power",
+      "amazon prime video"
+    ]
   },
   "south-park": {
     "name": "South Park",
     "color": "#a3e635",
-    "keywords": ["south park"]
+    "group": "media",
+    "keywords": [
+      "south park"
+    ]
   },
   "harry-potter-rowling": {
     "name": "Harry Potter / J.K. Rowling",
     "color": "#b45309",
-    "keywords": ["harry potter", "jk rowling", "j.k. rowling", "hogwarts legacy"]
+    "group": "media",
+    "keywords": [
+      "harry potter",
+      "jk rowling",
+      "j.k. rowling",
+      "hogwarts legacy"
+    ]
   },
-
   "gaming-industry": {
     "name": "Gaming industry",
     "color": "#059669",
+    "group": "media",
     "keywords": [
-      "blizzard", "activision", "cyberpunk", "cd projekt",
-      "call of duty", "naughty dog", "xbox series", "playstation",
-      "epic games", "ubisoft", "ea sports", "bethesda",
-      "world of warcraft", "wow classic",
-      "last of us", "starfield", "veilguard", "dragon age",
-      "concord game", "battlefield",
-      "magic gathering", "apex legends", "sonic movie", "randy pitchford"
+      "blizzard",
+      "activision",
+      "cyberpunk",
+      "cd projekt",
+      "call of duty",
+      "naughty dog",
+      "xbox series",
+      "playstation",
+      "epic games",
+      "ubisoft",
+      "ea sports",
+      "bethesda",
+      "world of warcraft",
+      "wow classic",
+      "last of us",
+      "starfield",
+      "veilguard",
+      "dragon age",
+      "concord game",
+      "battlefield",
+      "magic gathering",
+      "apex legends",
+      "sonic movie",
+      "randy pitchford"
     ]
   },
   "nintendo": {
     "name": "Nintendo",
     "color": "#e11d48",
-    "keywords": ["nintendo"]
+    "group": "media",
+    "keywords": [
+      "nintendo"
+    ]
   },
   "pokemon": {
     "name": "Pokemon",
     "color": "#fbbf24",
-    "keywords": ["pokemon"]
+    "group": "media",
+    "keywords": [
+      "pokemon"
+    ]
   },
   "lego-bricks": {
     "name": "LEGO / Bricks & Minifigs",
     "color": "#fde047",
-    "keywords": ["lego", "bricks and minifigs", "minifig", "minifigs"]
+    "group": "media",
+    "keywords": [
+      "lego",
+      "bricks and minifigs",
+      "minifig",
+      "minifigs"
+    ]
   },
-
   "facebook-meta": {
     "name": "Facebook / Meta",
     "color": "#2563eb",
-    "keywords": ["facebook", "meta platforms"]
+    "group": "media",
+    "keywords": [
+      "facebook",
+      "meta platforms"
+    ]
   },
   "tiktok": {
     "name": "TikTok",
     "color": "#14b8a6",
-    "keywords": ["tiktok", "tik tok"]
+    "group": "media",
+    "keywords": [
+      "tiktok",
+      "tik tok"
+    ]
   },
-
   "bud-light": {
     "name": "Bud Light / Mulvaney",
     "color": "#f97316",
-    "keywords": ["bud light", "dylan mulvaney"]
+    "group": "media",
+    "keywords": [
+      "bud light",
+      "dylan mulvaney"
+    ]
   },
   "target-pride": {
     "name": "Target (Pride / boycott)",
     "color": "#ec4899",
-    "keywords": ["target boycott", "target pride", "target ceo", "target stock", "tuck friendly"]
+    "group": "media",
+    "keywords": [
+      "target boycott",
+      "target pride",
+      "target ceo",
+      "target stock",
+      "tuck friendly"
+    ]
   },
   "walmart": {
     "name": "Walmart",
     "color": "#0284c7",
-    "keywords": ["walmart"]
+    "group": "media",
+    "keywords": [
+      "walmart"
+    ]
   },
   "daily-wire": {
     "name": "Daily Wire (company drama)",
     "color": "#65a30d",
-    "keywords": ["daily wire"]
+    "group": "politics",
+    "keywords": [
+      "daily wire"
+    ]
   },
   "dei": {
     "name": "DEI (diversity / corporate policy)",
     "color": "#84cc16",
-    "keywords": ["dei"]
+    "group": "politics",
+    "keywords": [
+      "dei"
+    ]
   },
-
   "fast-food-dining": {
     "name": "Fast food / dining",
     "color": "#f59e0b",
+    "group": "media",
     "keywords": [
-      "mcdonald's", "mcdonalds", "mcdonald",
+      "mcdonald's",
+      "mcdonalds",
+      "mcdonald",
       "burger king",
-      "wendy's", "wendys",
+      "wendy's",
+      "wendys",
       "five guys",
-      "in n out", "in-n-out",
+      "in n out",
+      "in-n-out",
       "shake shack",
       "white castle",
       "jack in the box",
       "whataburger",
-      "chick fil a", "chick-fil-a",
+      "chick fil a",
+      "chick-fil-a",
       "kfc",
       "popeyes",
       "raising canes",
@@ -371,14 +701,18 @@
       "del taco",
       "qdoba",
       "pizza hut",
-      "domino's", "dominos",
-      "papa johns", "papa john's",
+      "domino's",
+      "dominos",
+      "papa johns",
+      "papa john's",
       "little caesars",
       "cracker barrel",
-      "applebee's", "applebees",
+      "applebee's",
+      "applebees",
       "olive garden",
       "red lobster",
-      "denny's", "dennys",
+      "denny's",
+      "dennys",
       "ihop",
       "waffle house",
       "buffalo wild wings",
@@ -387,79 +721,153 @@
       "cheesecake factory",
       "chilis",
       "starbucks",
-      "dunkin donuts", "dunkin'",
-      "panera bread", "panera",
-      "arby's", "arbys",
+      "dunkin donuts",
+      "dunkin'",
+      "panera bread",
+      "panera",
+      "arby's",
+      "arbys",
       "jimmy johns",
       "jersey mikes"
     ]
   },
-
   "woke": {
     "name": "Woke / wokeness",
     "color": "#ca8a04",
+    "group": "politics",
     "keywords": [
-      "woke", "wokeness", "wokeism",
-      "woke agenda", "woke left", "woke mob", "woke media", "woke hollywood",
-      "go woke", "go woke go broke", "anti-woke", "get woke",
-      "instant regret", "woke backfire", "woke backfires"
+      "woke",
+      "wokeness",
+      "wokeism",
+      "woke agenda",
+      "woke left",
+      "woke mob",
+      "woke media",
+      "woke hollywood",
+      "go woke",
+      "go woke go broke",
+      "anti-woke",
+      "get woke",
+      "instant regret",
+      "woke backfire",
+      "woke backfires"
     ]
   },
   "black-fatigue": {
     "name": "Black fatigue",
     "color": "#44403c",
-    "keywords": ["black fatigue", "fatigue"]
+    "group": "politics",
+    "keywords": [
+      "black fatigue",
+      "fatigue"
+    ]
   },
   "cancel-culture": {
     "name": "Cancel culture",
     "color": "#525252",
-    "keywords": ["cancel culture"]
+    "group": "politics",
+    "keywords": [
+      "cancel culture"
+    ]
   },
   "blm": {
     "name": "Black Lives Matter",
     "color": "#1f2937",
-    "keywords": ["black lives matter", "blm"]
+    "group": "politics",
+    "keywords": [
+      "black lives matter",
+      "blm"
+    ]
   },
   "transgender": {
     "name": "Transgender issues",
     "color": "#f43f5e",
-    "keywords": ["transgender", "trans woman", "trans women", "trans man", "trans men", "trans athlete", "lia thomas", "planet fitness"]
+    "group": "politics",
+    "keywords": [
+      "transgender",
+      "trans woman",
+      "trans women",
+      "trans man",
+      "trans men",
+      "trans athlete",
+      "lia thomas",
+      "planet fitness"
+    ]
   },
   "abortion": {
     "name": "Abortion",
     "color": "#6b7280",
-    "keywords": ["abortion", "roe wade", "roe v wade"]
+    "group": "politics",
+    "keywords": [
+      "abortion",
+      "roe wade",
+      "roe v wade"
+    ]
   },
   "immigration": {
     "name": "Immigration / border",
     "color": "#15803d",
-    "keywords": ["illegal immigrant", "illegal immigrants", "illegal aliens", "border crisis", "mass deportation", "ice raid", "ice raids"]
+    "group": "politics",
+    "keywords": [
+      "illegal immigrant",
+      "illegal immigrants",
+      "illegal aliens",
+      "border crisis",
+      "mass deportation",
+      "ice raid",
+      "ice raids"
+    ]
   },
   "critical-race-theory": {
     "name": "Critical race theory",
     "color": "#404040",
-    "keywords": ["critical race theory"]
+    "group": "politics",
+    "keywords": [
+      "critical race theory"
+    ]
   },
-
   "january-6": {
     "name": "January 6",
     "color": "#78350f",
-    "keywords": ["january sixth", "january 6", "jan 6", "capitol riot", "capitol attack"]
+    "group": "politics",
+    "keywords": [
+      "january sixth",
+      "january 6",
+      "jan 6",
+      "capitol riot",
+      "capitol attack"
+    ]
   },
   "covid": {
     "name": "COVID / pandemic",
     "color": "#0d9488",
-    "keywords": ["covid", "pandemic", "vaccine mandate", "lockdown"]
+    "group": "politics",
+    "keywords": [
+      "covid",
+      "pandemic",
+      "vaccine mandate",
+      "lockdown"
+    ]
   },
-
   "russia-ukraine": {
     "name": "Russia / Ukraine",
     "color": "#0c4a6e",
-    "keywords": ["russia ukraine", "putin", "zelensky", "kyiv"]
+    "group": "politics",
+    "keywords": [
+      "russia ukraine",
+      "putin",
+      "zelensky",
+      "kyiv"
+    ]
   },
   "israel-hamas": {
     "name": "Israel / Hamas / Gaza",
     "color": "#155e75",
-    "keywords": ["israel", "hamas", "gaza war"]
+    "group": "politics",
+    "keywords": [
+      "israel",
+      "hamas",
+      "gaza war"
+    ]
   }
 }

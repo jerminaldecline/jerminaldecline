@@ -41,37 +41,45 @@
   .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
   .chip-x { opacity: 0.5; font-size: 16px; line-height: 1; padding-left: 2px; }
   .controls {
-    display: flex; gap: 8px; margin-bottom: 16px;
+    display: flex; gap: 8px; margin-bottom: 12px;
     flex-wrap: wrap; align-items: center;
   }
+  .overlay-row {
+    display: flex; gap: 16px; margin-bottom: 16px;
+    flex-wrap: wrap; align-items: center;
+    font-size: 12px; color: var(--text-dim);
+  }
+  .overlay-row label {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none;
+  }
+  .overlay-row input[type="checkbox"] { cursor: pointer; }
   select, button {
     background: var(--bg); color: var(--text); border: 1px solid var(--border);
     border-radius: 6px; padding: 6px 10px; font-size: 13px;
     font-family: inherit; cursor: pointer;
   }
-  select { min-width: 220px; }
+  select { min-width: 200px; }
   button:hover, select:hover { border-color: var(--text-dim); }
+  button:disabled, select:disabled { opacity: 0.4; cursor: not-allowed; }
+  .seg {
+    display: inline-flex; border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden;
+  }
+  .seg button {
+    border: none; border-radius: 0; padding: 6px 12px; font-size: 12px;
+    background: var(--bg); color: var(--text-dim);
+  }
+  .seg button.active { background: var(--border); color: var(--text); }
+  .seg button + button { border-left: 1px solid var(--border); }
   .chart-wrap { position: relative; width: 100%; height: 380px; }
   .footnote { color: var(--text-faint); font-size: 12px; margin: 12px 0 0; }
-  .loading {
-    color: var(--text-dim); font-size: 14px;
-    text-align: center; padding: 80px 0;
-  }
+  .loading { color: var(--text-dim); font-size: 14px; text-align: center; padding: 80px 0; }
   .error {
     color: #f85149; font-size: 14px; padding: 24px;
     border: 1px solid #f85149; border-radius: 6px;
     background: rgba(248, 81, 73, 0.08);
   }
-  .summary {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 8px; margin-top: 20px;
-  }
-  .stat {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 6px; padding: 10px 12px;
-  }
-  .stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-value { font-size: 18px; font-weight: 500; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -93,6 +101,13 @@
   const TQ_CHANNEL = 'UCfwE_ODI1YTbdjkzuSi1Nag';
   const DEFAULT_ACTIVE = ['trump', 'elon-musk', 'marvel-mcu', 'star-wars', 'fast-food-dining'];
   const MIN_TOPIC_TAGS = 5;
+
+  // Group display config
+  const GROUP_META = {
+    politics: { name: 'Politics', color: '#dc2626' },
+    media:    { name: 'Media',    color: '#0891b2' }
+  };
+  const DEFAULT_GROUP_ACTIVE = ['politics', 'media'];
 
   const root = document.getElementById('root');
 
@@ -131,8 +146,7 @@
   const sortedMonths = [...allMonths].sort();
   function nextMonth(ym) {
     let [y, m] = ym.split('-').map(Number);
-    m++;
-    if (m > 12) { m = 1; y++; }
+    m++; if (m > 12) { m = 1; y++; }
     return y + '-' + String(m).padStart(2, '0');
   }
   const months = [];
@@ -143,16 +157,17 @@
   const monthToIdx = new Map(months.map((m, i) => [m, i]));
   const N = months.length;
 
-  // Per-month aggregations
+  // Aggregate per topic, per group, and overall monthly totals
   const monthVideoTotal = new Array(N).fill(0);
   const monthViewTotal = new Array(N).fill(0);
   const topicMonthlyVideos = {};
   const topicMonthlyViews = {};
+  const groupMonthlyVideos = { politics: new Array(N).fill(0), media: new Array(N).fill(0) };
+  const groupMonthlyViews = { politics: new Array(N).fill(0), media: new Array(N).fill(0) };
   for (const id of Object.keys(cleanTopics)) {
     topicMonthlyVideos[id] = new Array(N).fill(0);
     topicMonthlyViews[id] = new Array(N).fill(0);
   }
-
   const topicVideoCount = {};
   const topicTotalViews = {};
   for (const id of Object.keys(cleanTopics)) {
@@ -172,18 +187,36 @@
       topicMonthlyViews[tag][idx] += views;
       topicVideoCount[tag]++;
       topicTotalViews[tag] += views;
+      // Roll up into groups
+      const group = cleanTopics[tag].group;
+      if (group && groupMonthlyVideos[group]) {
+        groupMonthlyVideos[group][idx]++;
+        groupMonthlyViews[group][idx] += views;
+      }
     }
   }
 
-  // Topic catalogue
+  // Per-topic catalogue
   const topicList = Object.entries(cleanTopics)
     .map(([id, t]) => ({
-      id, name: t.name, color: t.color,
-      count: topicVideoCount[id],
-      views: topicTotalViews[id]
+      id, name: t.name, color: t.color, group: t.group,
+      count: topicVideoCount[id], views: topicTotalViews[id]
     }))
     .filter(t => t.count >= MIN_TOPIC_TAGS)
     .sort((a, b) => b.count - a.count);
+
+  // Group totals (for chip labels)
+  const groupTotals = {};
+  for (const gid of Object.keys(GROUP_META)) {
+    let count = 0, views = 0;
+    for (const [tid, t] of Object.entries(cleanTopics)) {
+      if (t.group === gid) {
+        count += topicVideoCount[tid] || 0;
+        views += topicTotalViews[tid] || 0;
+      }
+    }
+    groupTotals[gid] = { count, views };
+  }
 
   root.innerHTML = `
     <div class="toggles" id="toggles"></div>
@@ -196,16 +229,24 @@
         <option value="count-views">Total views per month</option>
         <option value="count-videos">Videos per month</option>
       </select>
+      <div class="seg" id="view-seg">
+        <button data-view="individual" class="active">Individual</button>
+        <button data-view="grouped">Grouped</button>
+      </div>
+    </div>
+    <div class="overlay-row">
+      <label>
+        <input type="checkbox" id="overlay-views">
+        Overlay total monthly channel views
+      </label>
     </div>
     <div class="chart-wrap"><canvas id="chart"
       role="img"
       aria-label="Topic timeline line chart"></canvas></div>
-    <p class="footnote">
-      3-month rolling average. <span id="meta-stats"></span>
-    </p>
-    <div class="summary" id="summary"></div>
+    <p class="footnote">3-month rolling average. <span id="meta-stats"></span></p>
   `;
 
+  // Stats footnote
   const tagged = Object.values(tags).length;
   const totalLF = tqVideos.length;
   const totalViews = tqVideos.reduce((s, v) => s + (v.views || 0), 0);
@@ -214,12 +255,16 @@
     .reduce((s, v) => s + (v.views || 0), 0);
   document.getElementById('meta-stats').textContent =
     tagged.toLocaleString() + ' / ' + totalLF.toLocaleString() + ' videos tagged (' +
-    ((tagged / totalLF) * 100).toFixed(1) + '%), ' +
-    'representing ' + Math.round(taggedViews / 1000000) + 'M of ' +
+    ((tagged / totalLF) * 100).toFixed(1) + '%), representing ' +
+    Math.round(taggedViews / 1000000) + 'M of ' +
     Math.round(totalViews / 1000000) + 'M total views.';
 
+  // State
+  let viewMode = 'individual';            // 'individual' | 'grouped'
   let active = new Set(DEFAULT_ACTIVE.filter(id => topicVideoCount[id] >= MIN_TOPIC_TAGS));
+  let activeGroups = new Set(DEFAULT_GROUP_ACTIVE);
   let mode = 'pct-videos';
+  let overlayViews = false;
   let chart;
 
   function rolling(arr, window) {
@@ -234,63 +279,149 @@
     }
     return out;
   }
-
   function escapeHtml(s) {
     return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
   }
-
-  function buildDatasets() {
-    return topicList.filter(t => active.has(t.id)).map(t => {
-      let series;
-      if (mode === 'pct-videos') {
-        series = topicMonthlyVideos[t.id].map((c, i) =>
-          monthVideoTotal[i] > 0 ? (c / monthVideoTotal[i]) * 100 : 0);
-      } else if (mode === 'pct-views') {
-        series = topicMonthlyViews[t.id].map((c, i) =>
-          monthViewTotal[i] > 0 ? (c / monthViewTotal[i]) * 100 : 0);
-      } else if (mode === 'count-views') {
-        series = topicMonthlyViews[t.id];
-      } else {
-        series = topicMonthlyVideos[t.id];
-      }
-      return {
-        label: t.name,
-        data: rolling(series, 3),
-        borderColor: t.color,
-        backgroundColor: t.color + '20',
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-        tension: 0.35
-      };
-    });
-  }
-
-  function buildSummary() {
-    const el = document.getElementById('summary');
-    if (mode.startsWith('pct') || mode.startsWith('count-videos')) {
-      // Show top tagged topics by video count
-      el.innerHTML = '';
-      return;
-    }
-    // For view modes, show top topics by total views
-    const topByViews = topicList
-      .filter(t => active.has(t.id))
-      .sort((a, b) => b.views - a.views);
-    el.innerHTML = topByViews.map(t => `
-      <div class="stat">
-        <div class="stat-label" style="color: ${t.color}">${escapeHtml(t.name)}</div>
-        <div class="stat-value">${formatViews(t.views)}</div>
-        <div style="font-size: 11px; color: var(--text-dim);">${t.count} videos &middot; ${((t.views / totalViews) * 100).toFixed(1)}% of all views</div>
-      </div>
-    `).join('');
-  }
-
   function formatViews(n) {
     if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
     if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-    if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
-    return n.toString();
+    if (n >= 1e3) return Math.round(n / 1e3) + 'K';
+    return Math.round(n).toString();
+  }
+
+  function buildDatasets() {
+    const datasets = [];
+    if (viewMode === 'grouped') {
+      // Each active group as a line on primary axis
+      for (const gid of Object.keys(GROUP_META)) {
+        if (!activeGroups.has(gid)) continue;
+        const g = GROUP_META[gid];
+        const counts = groupMonthlyVideos[gid];
+        const views = groupMonthlyViews[gid];
+        let series;
+        if (mode === 'pct-videos') {
+          series = counts.map((c, i) => monthVideoTotal[i] > 0 ? (c / monthVideoTotal[i]) * 100 : 0);
+        } else if (mode === 'pct-views') {
+          series = views.map((c, i) => monthViewTotal[i] > 0 ? (c / monthViewTotal[i]) * 100 : 0);
+        } else if (mode === 'count-views') {
+          series = views;
+        } else {
+          series = counts;
+        }
+        datasets.push({
+          label: g.name, data: rolling(series, 3),
+          borderColor: g.color, backgroundColor: g.color + '20',
+          borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, tension: 0.35,
+          yAxisID: 'y'
+        });
+      }
+    } else {
+      for (const t of topicList.filter(t => active.has(t.id))) {
+        const counts = topicMonthlyVideos[t.id];
+        const views = topicMonthlyViews[t.id];
+        let series;
+        if (mode === 'pct-videos') {
+          series = counts.map((c, i) => monthVideoTotal[i] > 0 ? (c / monthVideoTotal[i]) * 100 : 0);
+        } else if (mode === 'pct-views') {
+          series = views.map((c, i) => monthViewTotal[i] > 0 ? (c / monthViewTotal[i]) * 100 : 0);
+        } else if (mode === 'count-views') {
+          series = views;
+        } else {
+          series = counts;
+        }
+        datasets.push({
+          label: t.name, data: rolling(series, 3),
+          borderColor: t.color, backgroundColor: t.color + '20',
+          borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.35,
+          yAxisID: 'y'
+        });
+      }
+    }
+
+    // Channel total views overlay on secondary axis
+    if (overlayViews) {
+      const series = rolling(monthViewTotal, 3);
+      datasets.push({
+        label: 'Channel total monthly views',
+        data: series,
+        borderColor: 'rgba(230, 237, 243, 0.45)',
+        backgroundColor: 'transparent',
+        borderWidth: 1.5,
+        borderDash: [4, 4],
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        tension: 0.35,
+        yAxisID: 'y1'
+      });
+    }
+
+    return datasets;
+  }
+
+  function renderToggles() {
+    const el = document.getElementById('toggles');
+    el.innerHTML = '';
+    if (viewMode === 'grouped') {
+      for (const gid of Object.keys(GROUP_META)) {
+        if (!activeGroups.has(gid)) continue;
+        const g = GROUP_META[gid];
+        const totals = groupTotals[gid];
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.style.background = g.color + '14';
+        chip.style.border = '1px solid ' + g.color + '50';
+        chip.innerHTML =
+          '<span class="chip-dot" style="background:' + g.color + ';"></span>' +
+          '<span>' + escapeHtml(g.name) + '</span>' +
+          '<span style="color: var(--text-dim); font-size: 11px;">' + totals.count.toLocaleString() + ' videos</span>' +
+          '<span class="chip-x">×</span>';
+        chip.addEventListener('click', () => { activeGroups.delete(gid); render(); });
+        el.appendChild(chip);
+      }
+    } else {
+      for (const t of topicList.filter(t => active.has(t.id))) {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.style.background = t.color + '14';
+        chip.style.border = '1px solid ' + t.color + '50';
+        chip.innerHTML =
+          '<span class="chip-dot" style="background:' + t.color + ';"></span>' +
+          '<span>' + escapeHtml(t.name) + '</span>' +
+          '<span class="chip-x">×</span>';
+        chip.addEventListener('click', () => { active.delete(t.id); render(); });
+        el.appendChild(chip);
+      }
+    }
+  }
+
+  function renderAddSelect() {
+    const sel = document.getElementById('add-select');
+    sel.innerHTML = '';
+    if (viewMode === 'grouped') {
+      sel.disabled = true;
+      sel.innerHTML = '<option value="">— group view —</option>';
+      // Allow re-adding any group that's been removed
+      const inactive = Object.keys(GROUP_META).filter(g => !activeGroups.has(g));
+      if (inactive.length > 0) {
+        sel.disabled = false;
+        sel.innerHTML = '<option value="">+ Add group…</option>';
+        for (const gid of inactive) {
+          const opt = document.createElement('option');
+          opt.value = 'group:' + gid;
+          opt.textContent = GROUP_META[gid].name;
+          sel.appendChild(opt);
+        }
+      }
+    } else {
+      sel.disabled = false;
+      sel.innerHTML = '<option value="">+ Add another topic…</option>';
+      for (const t of topicList.filter(t => !active.has(t.id))) {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name + ' (' + t.count + ' videos, ' + formatViews(t.views) + ' views)';
+        sel.appendChild(opt);
+      }
+    }
   }
 
   function getYAxisTitle() {
@@ -300,65 +431,59 @@
     return 'Videos per month';
   }
 
-  function renderToggles() {
-    const el = document.getElementById('toggles');
-    el.innerHTML = '';
-    for (const t of topicList.filter(t => active.has(t.id))) {
-      const chip = document.createElement('button');
-      chip.className = 'chip';
-      chip.style.background = t.color + '14';
-      chip.style.border = '1px solid ' + t.color + '50';
-      chip.innerHTML =
-        '<span class="chip-dot" style="background:' + t.color + ';"></span>' +
-        '<span>' + escapeHtml(t.name) + '</span>' +
-        '<span class="chip-x">×</span>';
-      chip.addEventListener('click', () => { active.delete(t.id); render(); });
-      el.appendChild(chip);
-    }
-  }
-
-  function renderAddSelect() {
-    const sel = document.getElementById('add-select');
-    sel.innerHTML = '<option value="">+ Add another topic…</option>';
-    for (const t of topicList.filter(t => !active.has(t.id))) {
-      const opt = document.createElement('option');
-      opt.value = t.id;
-      opt.textContent = t.name + ' (' + t.count + ' videos, ' + formatViews(t.views) + ' views)';
-      sel.appendChild(opt);
-    }
-    sel.value = '';
-  }
-
-  function render() {
-    renderToggles();
-    renderAddSelect();
-    buildSummary();
-    if (chart) {
-      chart.data.datasets = buildDatasets();
-      chart.options.scales.y.title.text = getYAxisTitle();
-      chart.options.scales.y.ticks.callback = formatYTick;
-      chart.update();
-    }
-  }
-
   function formatYTick(v) {
     if (mode === 'count-views') return formatViews(v);
     if (mode.startsWith('pct')) return v + '%';
     return Math.round(v);
   }
 
+  function render() {
+    renderToggles();
+    renderAddSelect();
+    if (chart) {
+      chart.data.datasets = buildDatasets();
+      chart.options.scales.y.title.text = getYAxisTitle();
+      chart.options.scales.y.ticks.callback = formatYTick;
+      chart.options.scales.y1.display = overlayViews;
+      chart.update();
+    }
+  }
+
+  // Wire controls
   document.getElementById('add-select').addEventListener('change', (e) => {
-    if (e.target.value) { active.add(e.target.value); render(); }
+    if (!e.target.value) return;
+    if (viewMode === 'grouped' && e.target.value.startsWith('group:')) {
+      activeGroups.add(e.target.value.slice('group:'.length));
+    } else {
+      active.add(e.target.value);
+    }
+    render();
   });
   document.getElementById('reset-btn').addEventListener('click', () => {
-    active = new Set(DEFAULT_ACTIVE.filter(id => topicVideoCount[id] >= MIN_TOPIC_TAGS));
+    if (viewMode === 'grouped') {
+      activeGroups = new Set(DEFAULT_GROUP_ACTIVE);
+    } else {
+      active = new Set(DEFAULT_ACTIVE.filter(id => topicVideoCount[id] >= MIN_TOPIC_TAGS));
+    }
     render();
   });
   document.getElementById('mode-select').addEventListener('change', (e) => {
     mode = e.target.value;
     render();
   });
+  document.getElementById('view-seg').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    document.querySelectorAll('#view-seg button').forEach(b => b.classList.toggle('active', b === btn));
+    viewMode = btn.dataset.view;
+    render();
+  });
+  document.getElementById('overlay-views').addEventListener('change', (e) => {
+    overlayViews = e.target.checked;
+    render();
+  });
 
+  // Chart init
   const tickColor = 'rgba(230, 237, 243, 0.55)';
   const gridColor = 'rgba(255, 255, 255, 0.06)';
   const xLabels = months.map(m => m.endsWith('-01') ? m.slice(0, 4) : '');
@@ -383,6 +508,8 @@
             title: (items) => items[0].label,
             label: (item) => {
               const v = item.parsed.y;
+              const isOverlay = item.dataset.yAxisID === 'y1';
+              if (isOverlay) return item.dataset.label + ': ' + formatViews(v) + ' views';
               if (mode === 'pct-videos' || mode === 'pct-views') {
                 return item.dataset.label + ': ' + v.toFixed(1) + '%';
               }
@@ -404,9 +531,18 @@
         },
         y: {
           beginAtZero: true,
+          position: 'left',
           title: { display: true, text: getYAxisTitle(), color: tickColor, font: { size: 12 } },
           ticks: { color: tickColor, callback: formatYTick },
           grid: { color: gridColor }
+        },
+        y1: {
+          beginAtZero: true,
+          position: 'right',
+          display: false,
+          title: { display: true, text: 'Monthly channel views', color: 'rgba(230, 237, 243, 0.45)', font: { size: 12 } },
+          ticks: { color: 'rgba(230, 237, 243, 0.45)', callback: (v) => formatViews(v) },
+          grid: { drawOnChartArea: false }
         }
       }
     }
