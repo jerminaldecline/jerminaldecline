@@ -26,6 +26,11 @@
     "color": "#db2777",
     "keywords": ["ocasio cortez", "aoc"]
   },
+  "ilhan-omar": {
+    "name": "Ilhan Omar",
+    "color": "#16a34a",
+    "keywords": ["ilhan omar"]
+  },
   "charlie-kirk": {
     "name": "Charlie Kirk",
     "color": "#ea580c",
@@ -115,67 +120,37 @@
     "keywords": ["zuckerberg"]
   },
 
-  "brie-larson": {
-    "name": "Brie Larson",
-    "color": "#c026d3",
-    "keywords": ["brie larson", "captain marvel"]
-  },
-  "kathleen-kennedy": {
-    "name": "Kathleen Kennedy",
-    "color": "#a21caf",
-    "keywords": ["kathleen kennedy"]
-  },
-  "bob-iger": {
-    "name": "Bob Iger",
-    "color": "#86198f",
-    "keywords": ["bob iger"]
-  },
-  "rachel-zegler": {
-    "name": "Rachel Zegler",
-    "color": "#d946ef",
-    "keywords": ["rachel zegler", "zegler", "snow white"]
-  },
-
   "disney": {
-    "name": "Disney (corporate)",
+    "name": "Disney",
     "color": "#0e7490",
-    "keywords": ["walt disney", "disney parks", "disneyland", "disney company"]
-  },
-  "disney-plus": {
-    "name": "Disney Plus",
-    "color": "#0891b2",
-    "keywords": ["disney plus", "disneyplus", "disney+"]
+    "keywords": ["walt disney", "disney parks", "disneyland", "disney company", "disney plus", "disneyplus", "disney+", "bob iger", "rachel zegler", "zegler", "snow white"]
   },
   "marvel-mcu": {
     "name": "Marvel / MCU",
     "color": "#ef4444",
-    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man"]
+    "keywords": ["marvel", "mcu", "avengers", "iron man", "thor", "spider man", "brie larson", "captain marvel"]
   },
   "star-wars": {
     "name": "Star Wars",
     "color": "#facc15",
-    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith"]
+    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith", "kathleen kennedy"]
   },
   "netflix": {
     "name": "Netflix",
     "color": "#b91c1c",
     "keywords": ["netflix"]
   },
-  "hbo": {
-    "name": "HBO",
+  "hbo-got": {
+    "name": "HBO / Game of Thrones",
     "color": "#4f46e5",
-    "keywords": ["hbo"]
+    "keywords": ["hbo", "game of thrones", "house of dragon", "house of the dragon"]
   },
   "amazon-prime": {
     "name": "Amazon Prime / Rings of Power",
     "color": "#f59e0b",
     "keywords": ["rings of power", "amazon prime video"]
   },
-  "game-of-thrones": {
-    "name": "Game of Thrones / House of Dragon",
-    "color": "#b45309",
-    "keywords": ["game of thrones", "house of dragon", "house of the dragon"]
-  },
+
   "nintendo": {
     "name": "Nintendo",
     "color": "#e11d48",
@@ -185,6 +160,11 @@
     "name": "Pokemon",
     "color": "#fbbf24",
     "keywords": ["pokemon"]
+  },
+  "lego-bricks": {
+    "name": "LEGO / Bricks & Minifigs",
+    "color": "#fde047",
+    "keywords": ["lego", "bricks and minifigs", "minifig", "minifigs"]
   },
 
   "facebook-meta": {
@@ -266,6 +246,16 @@
     ]
   },
 
+  "woke": {
+    "name": "Woke / wokeness",
+    "color": "#ca8a04",
+    "keywords": ["wokeness", "wokeism", "woke agenda", "woke left", "woke mob", "go woke go broke", "anti-woke", "get woke"]
+  },
+  "black-fatigue": {
+    "name": "Black fatigue",
+    "color": "#44403c",
+    "keywords": ["black fatigue"]
+  },
   "cancel-culture": {
     "name": "Cancel culture",
     "color": "#525252",
