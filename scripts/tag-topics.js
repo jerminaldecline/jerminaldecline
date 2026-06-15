@@ -90,21 +90,31 @@ function scoreTopic(titleText, descText, transcriptText, regexes) {
   const titleHits = countMatches(titleText, regexes);
   const descHits = countMatches(descText, regexes);
   const transcriptHits = countMatches(transcriptText, regexes);
-  return titleHits * W_TITLE + descHits * W_DESC + transcriptHits * W_TRANSCRIPT;
+  const titleScore = titleHits * W_TITLE;
+  const totalScore = titleScore + descHits * W_DESC + transcriptHits * W_TRANSCRIPT;
+  return { titleScore, totalScore };
 }
 
 function pickPrimary(scores) {
-  let primary = null;
-  let primaryScore = MIN_PRIMARY_SCORE - 0.001;
-  for (const [id, score] of Object.entries(scores)) {
-    if (score > primaryScore) {
-      primaryScore = score;
-      primary = id;
-    } else if (score === primaryScore && primary !== null) {
-      if (id < primary) primary = id;
-    }
-  }
-  return primary;
+  // Title-dominant rule: among topics whose total weighted score meets the
+  // threshold, prefer the topic with the highest TITLE score (i.e. the topic
+  // most strongly signaled in the title). Ties broken by total score, then
+  // by topic ID for stability.
+  //
+  // Why: title-keywords are intentional editorial choices about what a video
+  // is "about". Body matches are supporting context that can pile up
+  // misleadingly when a broad-keyword topic (e.g. fast-food with 50+ chain
+  // names) racks up incidental references. Without this rule, a "BLACK
+  // FATIGUE DESTROYED" video that happens to discuss a restaurant gets
+  // mis-tagged as fast-food because the restaurant gets mentioned 20+ times.
+  const candidates = Object.entries(scores)
+    .filter(([_, s]) => s.totalScore >= MIN_PRIMARY_SCORE)
+    .sort((a, b) => {
+      if (b[1].titleScore !== a[1].titleScore) return b[1].titleScore - a[1].titleScore;
+      if (b[1].totalScore !== a[1].totalScore) return b[1].totalScore - a[1].totalScore;
+      return a[0].localeCompare(b[0]);
+    });
+  return candidates.length > 0 ? candidates[0][0] : null;
 }
 
 function main() {
@@ -178,8 +188,8 @@ function main() {
     // Score every topic
     const scores = {};
     for (const id of Object.keys(topics)) {
-      const score = scoreTopic(titleText, descText, transcriptText, topicRegexes[id]);
-      if (score > 0) scores[id] = score;
+      const s = scoreTopic(titleText, descText, transcriptText, topicRegexes[id]);
+      if (s.totalScore > 0) scores[id] = s;
     }
 
     const primary = pickPrimary(scores);
@@ -206,7 +216,7 @@ function main() {
   const output = {
     _generated: new Date().toISOString(),
     _topicsHash: hash,
-    _taggerVersion: 'v2-title-desc-transcript',
+    _taggerVersion: 'v3-title-dominant',
     _stats: {
       tagged,
       untagged,
