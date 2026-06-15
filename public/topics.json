@@ -75,7 +75,7 @@
   "jordan-peterson": {
     "name": "Jordan Peterson",
     "color": "#6d28d9",
-    "keywords": ["jordan peterson"]
+    "keywords": ["jordan peterson", "jordan b peterson", "dr peterson"]
   },
   "andrew-tate": {
     "name": "Andrew Tate",
@@ -86,6 +86,27 @@
     "name": "Asmongold",
     "color": "#a78bfa",
     "keywords": ["asmongold", "asmon"]
+  },
+  "alex-jones": {
+    "name": "Alex Jones / Infowars",
+    "color": "#9f1239",
+    "keywords": ["alex jones", "infowars"]
+  },
+
+  "streamer-drama": {
+    "name": "Streamer / podcast drama",
+    "color": "#475569",
+    "keywords": ["hasan piker", "ethan klein", "h3h3", "destiny streamer", "vaush", "xqc", "pokimane", "amouranth", "twitchcon", "twitch ban"]
+  },
+  "late-night-tv": {
+    "name": "Late night TV",
+    "color": "#1e3a8a",
+    "keywords": ["jimmy kimmel", "stephen colbert", "jimmy fallon", "bill maher", "seth meyers", "trevor noah", "samantha bee", "late night show"]
+  },
+  "taylor-lorenz": {
+    "name": "Taylor Lorenz",
+    "color": "#f9a8d4",
+    "keywords": ["taylor lorenz"]
   },
 
   "karmelo-anthony": {
@@ -108,6 +129,21 @@
     "color": "#be185d",
     "keywords": ["amber heard", "johnny depp"]
   },
+  "will-smith-slap": {
+    "name": "Will Smith / Oscars slap",
+    "color": "#c2410c",
+    "keywords": ["will smith", "chris rock", "oscars slap", "jada pinkett", "pinkett smith"]
+  },
+  "jussie-smollett": {
+    "name": "Jussie Smollett",
+    "color": "#581c87",
+    "keywords": ["jussie smollett", "smollett"]
+  },
+  "stan-lee": {
+    "name": "Stan Lee (family / elder abuse)",
+    "color": "#92400e",
+    "keywords": ["stan lee"]
+  },
 
   "elon-musk": {
     "name": "Elon Musk",
@@ -123,7 +159,7 @@
   "disney": {
     "name": "Disney",
     "color": "#0e7490",
-    "keywords": ["walt disney", "disney parks", "disneyland", "disney company", "disney plus", "disneyplus", "disney+", "bob iger", "rachel zegler", "zegler", "snow white"]
+    "keywords": ["walt disney", "disney parks", "disneyland", "disney company", "disney plus", "disneyplus", "disney+", "bob iger", "rachel zegler", "zegler", "snow white", "halle bailey", "little mermaid"]
   },
   "marvel-mcu": {
     "name": "Marvel / MCU",
@@ -133,7 +169,7 @@
   "star-wars": {
     "name": "Star Wars",
     "color": "#facc15",
-    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith", "kathleen kennedy"]
+    "keywords": ["star wars", "mandalorian", "ahsoka", "acolyte", "kenobi", "jedi", "sith", "kathleen kennedy", "gina carano"]
   },
   "netflix": {
     "name": "Netflix",
@@ -150,7 +186,24 @@
     "color": "#f59e0b",
     "keywords": ["rings of power", "amazon prime video"]
   },
+  "south-park": {
+    "name": "South Park",
+    "color": "#a3e635",
+    "keywords": ["south park"]
+  },
 
+  "gaming-industry": {
+    "name": "Gaming industry",
+    "color": "#059669",
+    "keywords": [
+      "blizzard", "activision", "cyberpunk", "cd projekt",
+      "call of duty", "naughty dog", "xbox series", "playstation",
+      "epic games", "ubisoft", "ea sports", "bethesda",
+      "world of warcraft", "wow classic",
+      "last of us", "starfield", "veilguard", "dragon age",
+      "concord game", "battlefield"
+    ]
+  },
   "nintendo": {
     "name": "Nintendo",
     "color": "#e11d48",
@@ -249,7 +302,12 @@
   "woke": {
     "name": "Woke / wokeness",
     "color": "#ca8a04",
-    "keywords": ["wokeness", "wokeism", "woke agenda", "woke left", "woke mob", "go woke go broke", "anti-woke", "get woke"]
+    "keywords": [
+      "woke", "wokeness", "wokeism",
+      "woke agenda", "woke left", "woke mob", "woke media", "woke hollywood",
+      "go woke", "go woke go broke", "anti-woke", "get woke",
+      "instant regret", "woke backfire", "woke backfires"
+    ]
   },
   "black-fatigue": {
     "name": "Black fatigue",
@@ -269,7 +327,7 @@
   "transgender": {
     "name": "Transgender issues",
     "color": "#f43f5e",
-    "keywords": ["transgender", "trans woman", "trans women", "trans man", "trans men", "trans athlete"]
+    "keywords": ["transgender", "trans woman", "trans women", "trans man", "trans men", "trans athlete", "lia thomas", "planet fitness"]
   },
   "abortion": {
     "name": "Abortion",
