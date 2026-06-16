@@ -1,48 +1,100 @@
 {
-  "lastUpdated": "2026-06-15T19:10:58.550Z",
+  "lastUpdated": "2026-06-16T18:58:26.250Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "karmelo",
+      "channelHandle": "@JeremyHambly",
+      "termId": "erupts",
       "keywords": [
-        "murder",
-        "anthony murder",
-        "murder trial",
-        "our coffee",
-        "coffee second",
-        "anthony's",
-        "karmelo anthony's",
-        "our",
-        "coffee",
-        "second",
-        "jury",
-        "karmelo"
+        "erupts",
+        "guilty",
+        "courthouse",
+        "verdict"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9048,
-        "baselineSaturation": 0.0927,
-        "spikeRatio": 9.76,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-06-15T19:10:58.550Z"
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0122,
+        "spikeRatio": 27.33,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-06-16T18:58:26.250Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "karmelo",
+      "keywords": [
+        "conviction",
+        "following",
+        "murder conviction",
+        "murder",
+        "year",
+        "karmelo",
+        "anthony's",
+        "karmelo anthony's"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.6,
+        "baselineSaturation": 0.0366,
+        "spikeRatio": 16.4,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-06-16T18:58:26.250Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "main",
+      "keywords": [
+        "main",
+        "our coffee",
+        "coffee main",
+        "our",
+        "coffee"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.0447,
+        "spikeRatio": 17.89,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-06-16T18:58:26.250Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "following",
+      "termId": "murder",
       "keywords": [
         "conviction",
         "sentence",
+        "murder",
         "following",
-        "prison"
+        "prison",
+        "second karmelo"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0202,
-        "spikeRatio": 16.53,
-        "recentVideoCount": 7,
+        "recentSaturation": 0.6,
+        "baselineSaturation": 0.0595,
+        "spikeRatio": 10.08,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-06-16T18:58:26.250Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "verdict",
+      "keywords": [
+        "verdict our",
+        "verdict",
+        "jury"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.0198,
+        "spikeRatio": 15.12,
+        "recentVideoCount": 6,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-06-15T19:10:58.550Z"
+        "detectedAt": "2026-06-16T18:58:26.250Z"
       }
     },
     {
@@ -54,56 +106,30 @@
         "austin"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0605,
-        "spikeRatio": 5.51,
+        "recentSaturation": 0.35,
+        "baselineSaturation": 0.0595,
+        "spikeRatio": 5.88,
         "recentVideoCount": 7,
         "baselineVideoCount": 7,
-        "detectedAt": "2026-06-15T19:10:58.550Z"
+        "detectedAt": "2026-06-16T18:58:26.250Z"
       }
     },
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "main",
+      "channelHandle": "@TheQuartering",
+      "termId": "anthony's",
       "keywords": [
-        "anthony's",
-        "karmelo anthony's",
-        "murder",
-        "main",
-        "our coffee",
         "coffee main",
-        "karmelo",
-        "conviction",
-        "following",
-        "murder conviction",
-        "prison",
-        "family"
+        "main",
+        "anthony's",
+        "karmelo anthony's"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.0369,
-        "spikeRatio": 23.5,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-06-15T19:10:58.550Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "verdict",
-      "keywords": [
-        "verdict",
-        "erupts",
-        "guilty",
-        "courthouse"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4,
-        "baselineSaturation": 0.0041,
-        "spikeRatio": 97.6,
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.0357,
+        "spikeRatio": 8.4,
         "recentVideoCount": 6,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-06-15T19:10:58.550Z"
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-06-16T18:58:26.250Z"
       }
     }
   ]
