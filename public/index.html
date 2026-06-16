@@ -4711,7 +4711,15 @@ function renderAllVideosChart(chartData, inProgressMonth) {
   const innerH = H - P.top - P.bottom;
 
   const n = allBuckets.length;
-  const xFor = i => n === 1 ? P.left + innerW / 2 : P.left + (i / (n - 1)) * innerW;
+  // Slot model: each month occupies an equal-width slot of innerW/n. xFor(i)
+  // returns the LEFT edge of slot i; the last slot's right edge lands exactly
+  // at P.left+innerW. This gives every month — including the final in-progress
+  // one — a full slot for its day-of-month dot spread, so late-month videos
+  // never overflow the right axis. xCenter(i) is used for axis tick labels so
+  // they sit under the middle of each month's dot cluster.
+  const slotW = innerW / n;
+  const xFor = i => P.left + i * slotW;
+  const xCenter = i => P.left + (i + 0.5) * slotW;
   const yForDur = v => P.top + (1 - (v - durMin) / (durMax - durMin)) * innerH;
 
   // Grid lines & Y axis ticks (left axis — duration is the only axis now)
@@ -4770,7 +4778,7 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     const tickH = getTickHeight(month);
     if (tickH > 0) {
       quarterTicks.push(
-        `<line class="chart-axis-tick" x1="${xFor(i)}" y1="${P.top + innerH}" x2="${xFor(i)}" y2="${P.top + innerH + tickH}"/>`
+        `<line class="chart-axis-tick" x1="${xCenter(i)}" y1="${P.top + innerH}" x2="${xCenter(i)}" y2="${P.top + innerH + tickH}"/>`
       );
     }
 
@@ -4780,7 +4788,7 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     const monthName = MONTH_NAMES[month - 1];
     if (i === 0) {
       candidates.push({
-        x: xFor(i),
+        x: xCenter(i),
         text: `${monthName} ${year}`,
         isFirst: true,
         month, year, index: i
@@ -4790,7 +4798,7 @@ function renderAllVideosChart(chartData, inProgressMonth) {
       // month name otherwise.
       const text = (month === 1) ? `${monthName} ${year}` : monthName;
       candidates.push({
-        x: xFor(i),
+        x: xCenter(i),
         text,
         isFirst: false,
         month, year, index: i
@@ -4841,8 +4849,11 @@ function renderAllVideosChart(chartData, inProgressMonth) {
     const year = parseInt(yStr);
     const monthNum = parseInt(mStr);
     const daysInMonth = new Date(year, monthNum, 0).getDate();
+    // Each month fills its own slot [xFor(i), xFor(i)+slotW]. This holds for
+    // every bucket including the last, so day-of-month spread stays inside the
+    // plot with no special-casing or overflow.
     const xStart = xFor(i);
-    const xEnd = i + 1 < allBuckets.length ? xFor(i + 1) : xStart + (xFor(1) - xFor(0));
+    const xEnd = xStart + slotW;
     for (const v of monthVids) {
       if (!v.durationSec || v.durationSec <= 0) continue;
       if (v.durationSec > durMax) { outliersAbove++; continue; }
