@@ -109,6 +109,9 @@
       <div class="skeleton-bar" style="width: 100%; height: 200px;"></div>
     </div>
     <div id="resultsBody" style="display: none;">
+      <!-- Premise line — one-sentence framing so a first-time visitor
+           immediately understands what the site shows before hitting controls. -->
+      <p class="site-premise">Long-form view counts with Shorts stripped out. Updated daily.</p>
       <!-- Channel selector sits outside .filter-cluster so its sticky context
            on mobile is bound to #resultsBody (a tall container) rather than
            .filter-cluster (small, fits-content). Without this, the sticky
@@ -172,30 +175,6 @@
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
 
-      <!-- Story Tracker — surfaces a single dominant topic when the channel
-           is saturating with coverage of it. Pulls match data from
-           descriptions.json (fetched on demand) and only renders when the
-           threshold conditions are met (currently hardcoded to Karmelo
-           Anthony coverage on TheQuartering). When the story cools and
-           saturation drops below the threshold, the panel auto-hides. -->
-      <div id="storyTracker" hidden></div>
-
-      <!-- Description Patterns — surfaces channel content patterns that
-           emerge from analysing descriptions in aggregate. Currently
-           highlights the most-repeated description and the share of
-           uploads with thin (uninformative) descriptions. Different
-           editorial register from the story tracker: this is a permanent
-           channel-behavior finding, not a transient topic spike. -->
-      <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
-
-      <!-- Ad campaigns panel — populated only when the selected channel has
-           confirmed ad-promoted videos in ad-videos.json -->
-      <div class="ad-panel" id="adPanel" hidden></div>
-
-      <!-- Estimated ad revenue panel — collapsible, shows category-by-category
-           ranges (long-form vs Shorts) with methodology disclosure. -->
-      <div class="revenue-panel" id="revenuePanel" hidden></div>
-
       <!-- Chart legend lives as a sibling above the chart toggle row. The
            heading "Monthly trend" used to wrap it but became misleading once
            the section grew to include the variance bar chart and "All videos"
@@ -214,6 +193,29 @@
       <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Channel chart — content varies by selected chart type"></svg>
         <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
+      </div>
+
+      <!-- Deep dives — secondary analysis panels, visually quieter than the
+           hero numbers above. Each is conditional/collapsible; the band only
+           shows a heading when at least one panel is visible (CSS :has). -->
+      <div class="deep-dives" id="deepDives">
+        <div class="deep-dives-heading">Deep dives</div>
+
+        <!-- Story Tracker — surfaces a single dominant topic when the channel
+             is saturating with coverage of it. -->
+        <div id="storyTracker" hidden></div>
+
+        <!-- Description Patterns — channel-behaviour finding from analysing
+             descriptions in aggregate. -->
+        <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
+
+        <!-- Ad campaigns panel — populated only when the selected channel has
+             confirmed ad-promoted videos in ad-videos.json -->
+        <div class="ad-panel" id="adPanel" hidden></div>
+
+        <!-- Estimated ad revenue panel — collapsible, category-by-category
+             ranges with methodology disclosure. -->
+        <div class="revenue-panel" id="revenuePanel" hidden></div>
       </div>
 
       <div class="wordcloud-section">
