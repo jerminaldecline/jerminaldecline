@@ -1,5 +1,5 @@
 {
-  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely \u2014 the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
+  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely — the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
   "trump": {
     "name": "Donald Trump",
     "color": "#dc2626",
@@ -973,6 +973,14 @@
     "keywords": [
       "seth rogen",
       "seth rogan"
+    ]
+  },
+  "henry-nowak": {
+    "name": "Henry Nowak",
+    "color": "#06b6d4",
+    "group": "politics",
+    "keywords": [
+      "henry nowak"
     ]
   }
 }
