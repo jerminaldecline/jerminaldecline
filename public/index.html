@@ -6709,7 +6709,7 @@ function computeStoryStats() {
   }
 
   const byTopic = {};
-  const tags = (topicTagsData && topicTagsData.tags) || {};
+  const tags = topicTagsData || {};
 
   for (const v of dataset.videos) {
     if (STORY_LONG_FORM_ONLY && v.isShort) continue;
