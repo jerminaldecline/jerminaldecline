@@ -1,5 +1,5 @@
 {
-  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely — the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
+  "_comment": "Canonical topic taxonomy. Each entry has a display name, a hex colour for the UI, and a keyword array used for transcript matching. Edit freely \u2014 the tagger reads this file as the source of truth, and the site uses it for toggle button labels and chart colours. Adding a new topic: pick an ID (kebab-case), add an entry with name/color/keywords, then re-run scripts/tag-topics.js to apply.",
   "trump": {
     "name": "Donald Trump",
     "color": "#dc2626",
@@ -198,7 +198,9 @@
       "twitch clothing",
       "twitch deer",
       "twitch streamer",
-      "twitch banned"
+      "twitch banned",
+      "hot tub stream",
+      "twitch shuts down"
     ]
   },
   "late-night-tv": {
@@ -279,7 +281,29 @@
       "youtube apologize",
       "youtube apology",
       "youtube censor",
-      "youtube removes"
+      "youtube removes",
+      "youtube revenue",
+      "youtube monetization",
+      "youtube monetisation",
+      "youtube algorithm",
+      "youtube strike",
+      "youtube strikes",
+      "youtube deplatform",
+      "youtube responds",
+      "youtube sides",
+      "youtube screwed",
+      "youtube threatens",
+      "youtube broken",
+      "youtube mistake",
+      "teamyoutube",
+      "youtube terminates",
+      "youtube terminated",
+      "youtube ad",
+      "youtube ads",
+      "adpocalypse",
+      "demonetize",
+      "demonetized",
+      "demonetization"
     ]
   },
   "kotaku-gaming-press": {
@@ -941,7 +965,10 @@
       "ngannou",
       "khabib",
       "conor mcgregor",
-      "jon jones ufc"
+      "jon jones ufc",
+      "ufc",
+      "dana white",
+      "octagon"
     ]
   },
   "pop-stars": {
@@ -975,12 +1002,52 @@
       "seth rogan"
     ]
   },
-  "henry-nowak": {
-    "name": "Henry Nowak",
-    "color": "#06b6d4",
-    "group": "politics",
+  "dr-disrespect": {
+    "name": "Dr Disrespect",
+    "color": "#f43f5e",
+    "group": "media",
     "keywords": [
-      "henry nowak"
+      "dr disrespect",
+      "dr. disrespect",
+      "doctor disrespect"
+    ]
+  },
+  "mrbeast": {
+    "name": "MrBeast",
+    "color": "#fb7185",
+    "group": "media",
+    "keywords": [
+      "mrbeast",
+      "mr beast",
+      "mr. beast"
+    ]
+  },
+  "g4tv": {
+    "name": "G4TV",
+    "color": "#fbbf24",
+    "group": "media",
+    "keywords": [
+      "g4tv",
+      "g4 tv"
+    ]
+  },
+  "raja-jackson": {
+    "name": "Raja Jackson",
+    "color": "#f59e0b",
+    "group": "media",
+    "keywords": [
+      "raja jackson"
+    ]
+  },
+  "livestream": {
+    "name": "Livestream / panel",
+    "color": "#64748b",
+    "group": "media",
+    "keywords": [
+      "w/ ",
+      "/w ",
+      "tune in tonight",
+      "i jeremy hambly"
     ]
   }
 }
