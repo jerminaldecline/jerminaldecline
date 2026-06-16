@@ -2852,39 +2852,59 @@
 
   /* Saturation chart — horizontal bars per time window. The bar visually
      encodes the percentage; the numeric label shows the fraction. */
-  .story-saturation {
+  /* Per-channel saturation rows (new story tracker, replaces the old
+     per-window saturation bars). One row per tagged channel showing how
+     much of that channel's recent output is about this topic. */
+  .story-tracker-channels {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.45rem;
     font-variant-numeric: tabular-nums;
-    margin-bottom: 1rem;
+    margin: 0.6rem 0 0.8rem;
   }
-  .story-saturation-row {
+  .story-channel-row {
     display: grid;
-    grid-template-columns: 56px 1fr 56px;
+    grid-template-columns: 130px 1fr 170px;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.8rem;
+    gap: 0.7rem;
+    font-size: 0.82rem;
   }
-  .story-saturation-window {
+  .story-channel-handle {
     color: var(--text-muted);
+    font-weight: 500;
   }
-  .story-saturation-bar {
+  .story-channel-bar {
     height: 8px;
     background: var(--surface-2);
     border-radius: 4px;
     overflow: hidden;
     position: relative;
   }
-  .story-saturation-fill {
+  .story-channel-fill {
     height: 100%;
-    background: linear-gradient(90deg, #e85d4d, #ff7a6b);
     border-radius: 4px;
+    transition: width 0.25s ease;
   }
-  .story-saturation-value {
+  .story-channel-stats {
     color: var(--text);
-    font-weight: 500;
+    font-size: 0.8rem;
     text-align: right;
+  }
+  .story-channel-pct {
+    color: var(--text-muted);
+    margin: 0 0.1rem;
+  }
+  .story-tracker-totals {
+    padding: 0.6rem 0;
+    margin: 0.4rem 0 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .story-tracker-totals strong {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
   }
   /* Video list — sortable header row, scrollable list below. Both the
      header and the list items have explicit right padding to push the
@@ -6541,29 +6561,24 @@ function renderHeroStats(curr, prev) {
 }
 
 // ===== Story Tracker =====
-// Surfaces dominant single-topic saturation events. Configs are loaded
-// from topic-trackers.json (auto-populated nightly by the detection script)
-// and topic-labels.json (curated friendly topic names). The site reads both,
-// finds trackers active on the current channel, and renders the top 2 by
-// saturation. When a story cools below the saturation threshold the panel
-// auto-hides; when the detector flags a new story it appears automatically.
+// Surfaces which topics are dominating recent content across the three
+// tagged channels (TheQuartering + JeremyHambly + QuarteringLive). Uses
+// topic-tags.json as the primary signal source — 3-source scoring (title +
+// description + transcript) — in contrast to the older description-only
+// detector that still feeds topic-candidates.md as a maintenance helper.
+//
+// Per-topic display: a single 14-day window, with one bar per channel
+// showing what fraction of THAT channel's long-form uploads in the window
+// covered this topic. Plus cross-channel totals at the bottom.
 
-// Constants — same across all trackers. Used to be per-config STORY_CONFIG
-// fields; now module-level since they don't vary by tracker.
-const STORY_WINDOWS = [60, 30, 14, 7, 3];
-const STORY_PRIMARY_WINDOW = 7;
-const STORY_MIN_SATURATION = 0.30;
+const STORY_WINDOW_DAYS = 14;
+const STORY_TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+// Saturation threshold for surfacing a topic. A topic only appears as a
+// "story" if it accounts for at least this share of long-form uploads on
+// at least one channel during the window.
+const STORY_MIN_SATURATION = 0.10;
+const STORY_MAX_TOPICS = 4;
 const STORY_LONG_FORM_ONLY = true;
-const STORY_MAX_TRACKERS = 2;
-const STORY_THIN_DESC_THRESHOLD = 50;
-// Channels permitted to render story trackers. Detector still runs on all
-// channels (its output is useful for review via topic-candidates.md), but
-// the live UI is gated to channels where we've done the editorial work to
-// label topics meaningfully. Smaller channels get noisy detector clusters
-// like "sparked" that don't correspond to a single coherent story —
-// hiding them avoids misleading readers until we have better signal
-// (e.g. transcripts).
-const STORY_TRACKER_ALLOWED_CHANNELS = ['@TheQuartering'];
 
 // ---- Lazy-loaded data sources ----
 
@@ -6648,30 +6663,100 @@ function loadTopicLabels() {
   return topicLabelsLoadPromise;
 }
 
-// ---- Per-tracker UI state ----
+// ---- Per-topic UI state ----
 
-// Map of trackerId -> { expanded, sort: { col, dir } }. Per-tracker because
-// multiple trackers may render simultaneously and each maintains its own
-// expand/sort state across re-renders.
-const trackerStates = new Map();
-function getTrackerState(id) {
-  if (!trackerStates.has(id)) {
-    trackerStates.set(id, { expanded: false, sort: { col: 'date', dir: 'desc' } });
+// Map of topicId -> { expanded, sort: { col, dir } }. Persists across re-renders
+// so user's expand/collapse + sort choices survive channel changes.
+const storyTrackerState = {};
+function getStoryUiState(topicId) {
+  if (!storyTrackerState[topicId]) {
+    storyTrackerState[topicId] = {
+      expanded: false,
+      sort: { col: 'date', dir: 'desc' }
+    };
   }
-  return trackerStates.get(id);
+  return storyTrackerState[topicId];
 }
 
-// Sanitise a tracker termId for safe use as part of an HTML element ID.
-// "second karmelo" -> "second-karmelo".
-function sanitiseTrackerId(termId) {
-  return String(termId).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function sanitiseTopicId(id) {
+  return String(id).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-function storyMatchesVideo(v, keywords, descriptions) {
-  const desc = descriptions[v.id];
-  if (!desc) return false;
-  const lower = desc.toLowerCase();
-  return keywords.some(k => lower.includes(String(k).toLowerCase()));
+function formatViewsShort(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return String(n);
+}
+
+function isStoryTrackerChannel() {
+  if (!topicsData || !topicTagsData) return false;
+  if (selectedChannel === 'ALL') return false;
+  const channelObj = dataset?.channels?.[selectedChannel];
+  return STORY_TAGGED_HANDLES.includes(channelObj?.handle);
+}
+
+// ---- Stats computation ----
+
+// Iterate all videos once, bucket per-topic and per-channel within the window.
+function computeStoryStats() {
+  const channelMap = dataset.channels || {};
+  const now = Date.now();
+  const cutoff = now - STORY_WINDOW_DAYS * 86400000;
+
+  const channelTotals = {};
+  for (const handle of STORY_TAGGED_HANDLES) {
+    channelTotals[handle] = { total: 0 };
+  }
+
+  const byTopic = {};
+  const tags = (topicTagsData && topicTagsData.tags) || {};
+
+  for (const v of dataset.videos) {
+    if (STORY_LONG_FORM_ONLY && v.isShort) continue;
+    if (v.unavailable) continue;
+    const ch = channelMap[v.channelId];
+    if (!ch || !channelTotals[ch.handle]) continue;
+    const pubTime = new Date(v.publishedAt).getTime();
+    if (pubTime < cutoff) continue;
+
+    channelTotals[ch.handle].total++;
+
+    const topicId = tags[v.id];
+    if (!topicId) continue;
+    if (!byTopic[topicId]) {
+      byTopic[topicId] = {
+        topicId,
+        totalVideos: 0,
+        totalViews: 0,
+        videos: [],
+        byChannel: {}
+      };
+      for (const h of STORY_TAGGED_HANDLES) {
+        byTopic[topicId].byChannel[h] = { matches: 0, views: 0 };
+      }
+    }
+    const t = byTopic[topicId];
+    t.totalVideos++;
+    t.totalViews += v.views || 0;
+    t.byChannel[ch.handle].matches++;
+    t.byChannel[ch.handle].views += v.views || 0;
+    t.videos.push(v);
+  }
+
+  // Compute headline (max saturation across channels) for ranking/headline
+  for (const t of Object.values(byTopic)) {
+    t.maxSaturation = 0;
+    t.headlineHandle = STORY_TAGGED_HANDLES[0];
+    for (const handle of STORY_TAGGED_HANDLES) {
+      const total = channelTotals[handle].total;
+      const sat = total > 0 ? t.byChannel[handle].matches / total : 0;
+      if (sat > t.maxSaturation) {
+        t.maxSaturation = sat;
+        t.headlineHandle = handle;
+      }
+    }
+  }
+  return { byTopic, channelTotals };
 }
 
 // ---- Main render ----
@@ -6680,225 +6765,66 @@ function renderStoryTracker() {
   const panel = document.getElementById('storyTracker');
   if (!panel) return;
   if (!dataset) { panel.hidden = true; panel.innerHTML = ''; return; }
-
-  // Lazy-load all required data in parallel; once any is missing, kick off
-  // the fetches and re-render when ready. After the first call all three
-  // are cached for the session.
-  if (descriptionsCache === null || topicTrackersData === null || topicLabels === null) {
-    Promise.all([loadDescriptions(), loadTopicTrackers(), loadTopicLabels()])
-      .then(() => renderStoryTracker());
-    return;
-  }
-
-  const channelMap = dataset.channels || {};
-  const activeChannel = channelMap[selectedChannel];
-  const activeHandle = activeChannel ? activeChannel.handle : null;
-  if (!activeHandle) { panel.hidden = true; panel.innerHTML = ''; return; }
-
-  // Allowlist gate: only render on channels we've editorially scoped.
-  if (!STORY_TRACKER_ALLOWED_CHANNELS.includes(activeHandle)) {
+  if (!isStoryTrackerChannel()) {
     panel.hidden = true;
     panel.innerHTML = '';
     return;
   }
 
-  // Build the effective tracker list for this channel:
-  //   1) Start with detector output filtered to this channel
-  //   2) For any detector tracker that has a label override with keywords,
-  //      swap in the curated keywords (editorial wins over auto-detection)
-  //   3) Add manual trackers — entries in topic-labels.json with their own
-  //      channelHandle that don't correspond to any detector cluster
-  const detected = (topicTrackersData.trackers || [])
-    .filter(t => t.channelHandle === activeHandle)
-    .map(t => {
-      const label = topicLabels[t.termId];
-      if (label && Array.isArray(label.keywords)) {
-        return { ...t, keywords: label.keywords, _curated: true };
-      }
-      return { ...t, _curated: false };
-    });
-
-  const detectedIds = new Set(detected.map(t => t.termId));
-  const manual = [];
-  for (const [termId, label] of Object.entries(topicLabels)) {
-    if (detectedIds.has(termId)) continue;
-    if (label.channelHandle !== activeHandle) continue;
-    if (!Array.isArray(label.keywords) || label.keywords.length === 0) continue;
-    manual.push({
-      channelHandle: activeHandle,
-      termId,
-      keywords: label.keywords,
-      detectorMeta: { manual: true },
-      _curated: true
-    });
+  // Lazy-load descriptions for the per-video preview line; everything else
+  // is already in memory. If descriptions not ready, render once now (preview
+  // line will be empty) and again after they arrive.
+  if (descriptionsCache === null) {
+    loadDescriptions().then(() => renderStoryTracker());
   }
 
-  const channelTrackers = [...manual, ...detected];
+  const { byTopic, channelTotals } = computeStoryStats();
+  const topics = Object.values(byTopic)
+    .filter(t => t.maxSaturation >= STORY_MIN_SATURATION)
+    .sort((a, b) => b.totalViews - a.totalViews)
+    .slice(0, STORY_MAX_TOPICS);
 
-  if (channelTrackers.length === 0) {
+  if (topics.length === 0) {
     panel.hidden = true;
     panel.innerHTML = '';
     return;
   }
-
-  const trackersWithStats = channelTrackers.map(tracker => ({
-    tracker,
-    stats: computeTrackerStats(tracker)
-  }));
-
-  // Filter to those still meeting the saturation threshold in the primary
-  // window. The detector flags trackers when they cross; this filter
-  // handles trackers that have since cooled.
-  const liveTrackers = trackersWithStats.filter(({ stats }) => {
-    const primary = stats[STORY_PRIMARY_WINDOW];
-    return primary.total > 0 && (primary.matches / primary.total) >= STORY_MIN_SATURATION;
-  });
-
-  if (liveTrackers.length === 0) {
-    panel.hidden = true;
-    panel.innerHTML = '';
-    return;
-  }
-
-  // Sort by priority: curated trackers (those with override keywords or
-  // manual additions) take precedence; within each tier, sort by primary-
-  // window saturation. Curated trackers represent your explicit editorial
-  // intent — they should win when there's overlap with detector clusters.
-  liveTrackers.sort((a, b) => {
-    const aCurated = a.tracker._curated ? 1 : 0;
-    const bCurated = b.tracker._curated ? 1 : 0;
-    if (aCurated !== bCurated) return bCurated - aCurated;
-    const sa = a.stats[STORY_PRIMARY_WINDOW].matches / a.stats[STORY_PRIMARY_WINDOW].total;
-    const sb = b.stats[STORY_PRIMARY_WINDOW].matches / b.stats[STORY_PRIMARY_WINDOW].total;
-    return sb - sa;
-  });
-
-  // Dedupe overlapping trackers: detector often produces several related
-  // clusters for the same story (Karmelo → trial → jury → conviction etc).
-  // If a lower-priority tracker's matched videos are mostly a subset of an
-  // already-kept tracker's matched videos, suppress it.
-  // 70% overlap = "this is the same story, just a different angle on it".
-  const OVERLAP_SUPPRESS_THRESHOLD = 0.70;
-  const longestWindow = Math.max(...STORY_WINDOWS);
-  const keptTrackers = [];
-  for (const item of liveTrackers) {
-    const myVideoIds = new Set(item.stats[longestWindow].videos.map(v => v.id));
-    if (myVideoIds.size === 0) {
-      keptTrackers.push(item);
-      continue;
-    }
-    let suppressed = false;
-    for (const kept of keptTrackers) {
-      const keptIds = new Set(kept.stats[longestWindow].videos.map(v => v.id));
-      let intersection = 0;
-      for (const id of myVideoIds) if (keptIds.has(id)) intersection++;
-      if (intersection / myVideoIds.size >= OVERLAP_SUPPRESS_THRESHOLD) {
-        suppressed = true;
-        break;
-      }
-    }
-    if (!suppressed) keptTrackers.push(item);
-  }
-
-  const topTrackers = keptTrackers.slice(0, STORY_MAX_TRACKERS);
-  const overflowCount = keptTrackers.length - topTrackers.length;
 
   panel.hidden = false;
-  panel.innerHTML = topTrackers.map(({ tracker, stats }) =>
-    renderTrackerPanelHTML(tracker, stats)
-  ).join('') + (overflowCount > 0 ? `
-    <div class="story-tracker-overflow">
-      + ${overflowCount} other candidate${overflowCount === 1 ? '' : 's'} flagged by the detector —
-      see <a href="topic-candidates.md" target="_blank" rel="noopener">topic-candidates.md</a>
-      for the full list.
-    </div>
-  ` : '');
-
-  topTrackers.forEach(({ tracker, stats }) => {
-    attachTrackerListeners(tracker, stats);
-  });
+  panel.innerHTML = topics.map(t => renderStoryPanelHTML(t, channelTotals)).join('');
+  for (const t of topics) attachStoryPanelListeners(t);
 }
 
-// Compute saturation stats for one tracker against current video data.
-// Returns a window -> { total, matches, unclassifiable, views, likes,
-// videos, unclassVideos } map.
-function computeTrackerStats(tracker) {
-  const channelMap = dataset.channels || {};
-  let trackerChannelId = null;
-  for (const [chId, ch] of Object.entries(channelMap)) {
-    if (ch.handle === tracker.channelHandle) { trackerChannelId = chId; break; }
-  }
-  const now = Date.now();
-  const stats = {};
-  for (const w of STORY_WINDOWS) {
-    stats[w] = { total: 0, matches: 0, unclassifiable: 0, views: 0, likes: 0, videos: [], unclassVideos: [] };
-  }
-  const keywords = tracker.keywords || [];
-  for (const v of dataset.videos) {
-    if (v.channelId !== trackerChannelId) continue;
-    if (STORY_LONG_FORM_ONLY && v.isShort) continue;
-    if (v.unavailable) continue;
-    const ageDays = (now - new Date(v.publishedAt).getTime()) / 86400000;
-    const isMatch = storyMatchesVideo(v, keywords, descriptionsCache);
-    const desc = descriptionsCache[v.id] || '';
-    const isThin = !isMatch && desc.trim().length < STORY_THIN_DESC_THRESHOLD;
-    for (const w of STORY_WINDOWS) {
-      if (ageDays > w) continue;
-      stats[w].total++;
-      if (isMatch) {
-        stats[w].matches++;
-        stats[w].views += v.views || 0;
-        stats[w].likes += v.likes || 0;
-        stats[w].videos.push(v);
-      } else if (isThin) {
-        stats[w].unclassifiable++;
-        stats[w].unclassVideos.push(v);
-      }
-    }
-  }
-  return stats;
-}
+function renderStoryPanelHTML(stats, channelTotals) {
+  const topicId = stats.topicId;
+  const topic = (topicsData && topicsData[topicId]) || {};
+  const name = topic.name || topicId;
+  const color = topic.color || '#888';
+  const state = getStoryUiState(topicId);
+  const safeId = sanitiseTopicId(topicId);
+  const headlinePct = Math.round(stats.maxSaturation * 100);
 
-// Build the HTML for one tracker panel. Pure function — no DOM access, no
-// event wiring (that happens in attachTrackerListeners).
-function renderTrackerPanelHTML(tracker, stats) {
-  const id = sanitiseTrackerId(tracker.termId);
-  const state = getTrackerState(id);
-  // Labels are normalised to { name, keywords?, channelHandle? }. Fall back
-  // to raw termId if no label entry exists.
-  const labelEntry = topicLabels[tracker.termId];
-  const displayName = (labelEntry && labelEntry.name) || tracker.termId;
-
-  // Headline: pick the smallest window with saturation >= 50%, fallback to
-  // primary. Surfaces "100% of last 3 days" style stats when available.
-  let headlineWindow = STORY_PRIMARY_WINDOW;
-  for (const w of [...STORY_WINDOWS].sort((a, b) => a - b)) {
-    const s = stats[w];
-    if (s.total >= 3 && s.matches / s.total >= 0.5) { headlineWindow = w; break; }
-  }
-  const headlineStats = stats[headlineWindow];
-  const headlinePct = headlineStats.total > 0
-    ? Math.round(headlineStats.matches / headlineStats.total * 100)
-    : 0;
-  const totalStats = stats[Math.max(...STORY_WINDOWS)];
-
-  const saturationRows = STORY_WINDOWS.map(w => {
-    const s = stats[w];
-    const pct = s.total > 0 ? s.matches / s.total * 100 : 0;
+  const channelRows = STORY_TAGGED_HANDLES.map(handle => {
+    const total = channelTotals[handle].total;
+    const bc = stats.byChannel[handle];
+    const pct = total > 0 ? (bc.matches / total) * 100 : 0;
     return `
-      <div class="story-saturation-row">
-        <span class="story-saturation-window">Last ${w}d</span>
-        <div class="story-saturation-bar">
-          <div class="story-saturation-fill" style="width: ${pct.toFixed(1)}%"></div>
+      <div class="story-channel-row">
+        <span class="story-channel-handle">${escapeHtml(handle)}</span>
+        <div class="story-channel-bar">
+          <div class="story-channel-fill" style="width:${pct.toFixed(1)}%; background:${color};"></div>
         </div>
-        <span class="story-saturation-value">${s.matches}/${s.total}</span>
+        <span class="story-channel-stats">
+          <strong>${bc.matches}</strong>/${total}
+          <span class="story-channel-pct">(${pct.toFixed(0)}%)</span>
+          \u00B7
+          ${formatViewsShort(bc.views)} views
+        </span>
       </div>
     `;
   }).join('');
 
-  const fmt = (n) => n.toLocaleString('en-GB');
-
-  const decoratedVideos = totalStats.videos.map(v => ({
+  const decorated = stats.videos.map(v => ({
     ...v,
     like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
   }));
@@ -6909,105 +6835,36 @@ function renderTrackerPanelHTML(tracker, stats) {
   const activeAttr = col => state.sort.col === col ? 'true' : 'false';
 
   return `
-    <div class="story-tracker" data-tracker-id="${id}">
-      <button type="button" class="story-tracker-toggle" id="storyTrackerToggle-${id}"
-              aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${id}">
-        <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(displayName)}</span>
+    <div class="story-tracker" data-story-id="${safeId}">
+      <button type="button" class="story-tracker-toggle" id="storyTrackerToggle-${safeId}"
+              aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${safeId}">
+        <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(name)}</span>
         <span class="story-tracker-headline">
-          <strong>${headlinePct}%</strong> of long-form uploads in the last
-          ${headlineWindow} days have been about the ${escapeHtml(displayName)} story
+          <strong>${headlinePct}%</strong> of ${escapeHtml(stats.headlineHandle)}'s long-form uploads in the last
+          ${STORY_WINDOW_DAYS} days have been about ${escapeHtml(name)}
         </span>
         <span class="story-tracker-chevron">\u25BC</span>
       </button>
-      <div class="story-tracker-body" id="storyTrackerBody-${id}"${state.expanded ? '' : ' hidden'}>
-        <div class="story-tracker-stats">
-          <div class="story-tracker-stat">
-            <span class="story-tracker-stat-value">${totalStats.matches}</span>
-            <span class="story-tracker-stat-label">videos \u00B7 last ${Math.max(...STORY_WINDOWS)}d</span>
-          </div>
-          <div class="story-tracker-stat">
-            <span class="story-tracker-stat-value">${fmt(totalStats.views)}</span>
-            <span class="story-tracker-stat-label">total views</span>
-          </div>
-          <div class="story-tracker-stat">
-            <span class="story-tracker-stat-value">${(totalStats.views > 0 ? (totalStats.likes / totalStats.views) * 100 : 0).toFixed(2)}%</span>
-            <span class="story-tracker-stat-label">avg like rate</span>
-          </div>
+      <div class="story-tracker-body" id="storyTrackerBody-${safeId}" ${state.expanded ? '' : 'hidden'}>
+        <div class="story-tracker-channels">${channelRows}</div>
+        <div class="story-tracker-totals">
+          Total across all three channels: <strong>${stats.totalVideos} videos</strong> \u00B7 <strong>${formatViewsShort(stats.totalViews)} views</strong>
         </div>
-        ${totalStats.unclassifiable > 0 ? `
-          <div class="story-tracker-unclassified">
-            + ${totalStats.unclassifiable} video${totalStats.unclassifiable === 1 ? '' : 's'} with descriptions too thin to classify
-            (may also be about this story — descriptions like "<em>this news is totally insane</em>"
-            don't contain the keywords we match on)
-          </div>
-        ` : ''}
-        <div class="story-saturation">${saturationRows}</div>
         <div class="story-tracker-video-list-header">
-          <button class="story-tracker-sort-btn" data-sort-col="date"
-                  data-sort-active="${activeAttr('date')}">Date${arrow('date')}</button>
-          <button class="story-tracker-sort-btn" data-sort-col="title"
-                  data-sort-active="${activeAttr('title')}">Title${arrow('title')}</button>
-          <button class="story-tracker-sort-btn" data-sort-col="views"
-                  data-sort-active="${activeAttr('views')}">Views${arrow('views')}</button>
-          <button class="story-tracker-sort-btn" data-sort-col="like_rate"
-                  data-sort-active="${activeAttr('like_rate')}">Like rate${arrow('like_rate')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('date')}" data-sort-col="date">Date${arrow('date')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('title')}" data-sort-col="title">Title${arrow('title')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('views')}" data-sort-col="views">Views${arrow('views')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('like_rate')}" data-sort-col="like_rate">Like %${arrow('like_rate')}</button>
         </div>
-        <div class="story-tracker-video-list" id="storyTrackerVideoList-${id}">
-          ${renderStoryTrackerVideoRows(decoratedVideos, state.sort)}
+        <div class="story-tracker-video-list" id="storyTrackerVideos-${safeId}">
+          ${renderStoryVideoRows(decorated, state.sort)}
         </div>
       </div>
     </div>
   `;
 }
 
-// Wire up click handlers (expand toggle, sort headers) for one panel.
-function attachTrackerListeners(tracker, stats) {
-  const id = sanitiseTrackerId(tracker.termId);
-  const state = getTrackerState(id);
-  const panel = document.querySelector(`.story-tracker[data-tracker-id="${id}"]`);
-  if (!panel) return;
-
-  const toggleBtn = document.getElementById(`storyTrackerToggle-${id}`);
-  const body = document.getElementById(`storyTrackerBody-${id}`);
-  if (toggleBtn && body) {
-    toggleBtn.addEventListener('click', () => {
-      state.expanded = !state.expanded;
-      toggleBtn.setAttribute('aria-expanded', String(state.expanded));
-      body.hidden = !state.expanded;
-    });
-  }
-
-  const totalStats = stats[Math.max(...STORY_WINDOWS)];
-  const decoratedVideos = totalStats.videos.map(v => ({
-    ...v,
-    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
-  }));
-
-  panel.querySelectorAll('.story-tracker-sort-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const col = btn.dataset.sortCol;
-      if (state.sort.col === col) {
-        state.sort.dir = state.sort.dir === 'desc' ? 'asc' : 'desc';
-      } else {
-        state.sort.col = col;
-        state.sort.dir = col === 'title' ? 'asc' : 'desc';
-      }
-      const list = document.getElementById(`storyTrackerVideoList-${id}`);
-      if (list) list.innerHTML = renderStoryTrackerVideoRows(decoratedVideos, state.sort);
-      panel.querySelectorAll('.story-tracker-sort-btn').forEach(b => {
-        const c = b.dataset.sortCol;
-        b.dataset.sortActive = state.sort.col === c ? 'true' : 'false';
-        const labels = { date: 'Date', title: 'Title', views: 'Views', like_rate: 'Like rate' };
-        const label = labels[c] || c;
-        b.textContent = label + (state.sort.col === c
-          ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2')
-          : '');
-      });
-    });
-  });
-}
-
-function renderStoryTrackerVideoRows(videos, sort) {
+function renderStoryVideoRows(videos, sort) {
   const fmt = (n) => n.toLocaleString('en-GB');
   const { col, dir } = sort;
   const sorted = [...videos].sort((a, b) => {
@@ -7021,7 +6878,7 @@ function renderStoryTrackerVideoRows(videos, sort) {
     return 0;
   });
   return sorted.map(v => {
-    const desc = descriptionsCache[v.id] || '';
+    const desc = (descriptionsCache && descriptionsCache[v.id]) || '';
     const firstLine = (desc.split('\n')[0] || '').slice(0, 110);
     return `
       <div class="story-tracker-video-item">
@@ -7037,6 +6894,49 @@ function renderStoryTrackerVideoRows(videos, sort) {
       </div>
     `;
   }).join('');
+}
+
+function attachStoryPanelListeners(stats) {
+  const topicId = stats.topicId;
+  const safeId = sanitiseTopicId(topicId);
+  const state = getStoryUiState(topicId);
+
+  const toggle = document.getElementById(`storyTrackerToggle-${safeId}`);
+  const body = document.getElementById(`storyTrackerBody-${safeId}`);
+  if (toggle && body) {
+    toggle.onclick = () => {
+      state.expanded = !state.expanded;
+      body.hidden = !state.expanded;
+      toggle.setAttribute('aria-expanded', state.expanded.toString());
+    };
+  }
+
+  const videoList = document.getElementById(`storyTrackerVideos-${safeId}`);
+  if (!videoList) return;
+  const decorated = stats.videos.map(v => ({
+    ...v,
+    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
+  }));
+
+  document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(btn => {
+    if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/[\u25B2\u25BC\s]+$/, '').trim();
+    btn.onclick = () => {
+      const col = btn.dataset.sortCol;
+      if (state.sort.col === col) {
+        state.sort.dir = state.sort.dir === 'desc' ? 'asc' : 'desc';
+      } else {
+        state.sort.col = col;
+        state.sort.dir = (col === 'date' || col === 'views' || col === 'like_rate') ? 'desc' : 'asc';
+      }
+      videoList.innerHTML = renderStoryVideoRows(decorated, state.sort);
+      document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(b => {
+        const c = b.dataset.sortCol;
+        const arr = state.sort.col === c ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2') : '';
+        b.textContent = b.dataset.label + arr;
+        b.dataset.sortActive = state.sort.col === c ? 'true' : 'false';
+      });
+    };
+  });
 }
 
 // ===== Description Patterns =====
