@@ -1189,18 +1189,14 @@
     margin-bottom: 1.5rem;
   }
   .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
-  /* Featured stat (Long-form views) is the site's headline number — the whole
-     premise is "his real views are lower than they look", so this card is
-     given visual dominance: full-row span, larger value, accent border-left.
-     The rest of the grid reads as supporting context. */
+  /* Featured stat (Long-form views) is the headline number. Kept in the normal
+     grid cell — a subtle accent left-border marks it as primary without the
+     full-row span that left awkward dead space beside it. */
   .hero-stat.featured {
     background: var(--surface);
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
-    grid-column: 1 / -1;
   }
-  .hero-stat.featured .hero-stat-value { font-size: 2.6rem; }
-  .hero-stat.featured .hero-stat-label { font-size: 0.85rem; }
   /* Tablet: 2-column layout — at this width 3 cards squeeze too narrow
      against the medium-sized container. Wrapping to 2 columns keeps cards
      readable; orphan cards in a 6-stat config land bottom-left which still
