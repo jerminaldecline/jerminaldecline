@@ -9590,7 +9590,8 @@ function isTopicChannel() {
   if (!topicsData || !topicTagsData) return false;
   if (selectedChannel === 'ALL') return false;
   const channelObj = dataset?.channels?.[selectedChannel];
-  return channelObj?.handle === '@TheQuartering';
+  const TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+  return TAGGED_HANDLES.includes(channelObj?.handle);
 }
 
 // Build the topic ribbon (two stacked bars showing share of monthly uploads

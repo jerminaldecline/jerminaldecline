@@ -26,8 +26,17 @@ const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 const DESCRIPTIONS_FILE = path.join(__dirname, '..', 'public', 'descriptions.json');
 const TOPICS_FILE = path.join(__dirname, '..', 'public', 'topics.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'public', 'topic-tags.json');
+const OVERRIDES_FILE = path.join(__dirname, '..', 'public', 'topic-tag-overrides.json');
 const TRANSCRIPTS_PATH = process.env.TRANSCRIPTS_PATH || 'C:/tmp/transcripts-repo/transcripts';
-const TQ_CHANNEL = 'UCfwE_ODI1YTbdjkzuSi1Nag';
+
+// Channels to tag. Add more as patterns emerge — topic taxonomy can be shared
+// across channels with similar editorial focus (TQ family + Jeremy Hambly run
+// in adjacent content spaces).
+const CHANNELS_TO_TAG = [
+  'UCfwE_ODI1YTbdjkzuSi1Nag', // TheQuartering
+  'UCEOtZuVe8emWLKRzJIkzVow', // JeremyHambly
+  'UCYtHYzxsUH_QCZtrldLMyUg'  // QuarteringLive
+];
 
 // Minimum total weighted score for a topic to claim primary tag.
 // At weights title=3, desc=1.5, transcript=1, a video with EITHER:
@@ -141,10 +150,26 @@ function main() {
     console.warn('  descriptions.json not found — proceeding without descriptions');
   }
 
+  // Load per-video manual overrides — videos pinned to a specific topic, applied
+  // AFTER scoring. Used for videos where TQ uses euphemistic language (e.g.
+  // saying "fatigue" alone instead of "black fatigue" to dodge YT auto-flagging)
+  // and the keyword scorer can't catch them via signal strength alone.
+  // Value can also be null to force-untag a video the scorer over-claimed.
+  let overrides = {};
+  if (fs.existsSync(OVERRIDES_FILE)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8'));
+      overrides = parsed.overrides || {};
+      console.log(`Loaded ${Object.keys(overrides).length} per-video overrides`);
+    } catch (e) {
+      console.warn(`  Could not parse overrides file: ${e.message}`);
+    }
+  }
+
   const targets = data.videos.filter(v =>
-    v.channelId === TQ_CHANNEL && !v.isShort && !v.unavailable
+    CHANNELS_TO_TAG.includes(v.channelId) && !v.isShort && !v.unavailable
   );
-  console.log(`${targets.length} TQ long-form videos to tag\n`);
+  console.log(`${targets.length} long-form videos to tag across ${CHANNELS_TO_TAG.length} channels\n`);
 
   const transcriptsAvailable = fs.existsSync(TRANSCRIPTS_PATH);
   if (!transcriptsAvailable) {
@@ -158,6 +183,8 @@ function main() {
   let untagged = 0;
   let withTranscript = 0;
   let withoutTranscript = 0;
+  let overrideApplied = 0;
+  let overrideRemovedTag = 0;
   const perTopicCount = {};
   for (const id of Object.keys(topics)) perTopicCount[id] = 0;
 
@@ -192,7 +219,23 @@ function main() {
       if (s.totalScore > 0) scores[id] = s;
     }
 
-    const primary = pickPrimary(scores);
+    let primary = pickPrimary(scores);
+
+    // Manual override: pinned video → topic mapping, applied last. null forces
+    // untagged (useful for over-claimed false positives spotted in the wild).
+    if (Object.prototype.hasOwnProperty.call(overrides, video.id)) {
+      const forced = overrides[video.id];
+      if (forced === null) {
+        if (primary !== null) overrideRemovedTag++;
+        primary = null;
+      } else if (topics[forced]) {
+        if (primary !== forced) overrideApplied++;
+        primary = forced;
+      } else {
+        console.warn(`  Override for ${video.id} → "${forced}" but topic not in topics.json; ignoring`);
+      }
+    }
+
     if (primary) {
       tags[video.id] = primary;
       perTopicCount[primary]++;
@@ -212,6 +255,10 @@ function main() {
   console.log(`  Untagged:                ${untagged}`);
   console.log(`  With transcript:         ${withTranscript}`);
   console.log(`  Without transcript:      ${withoutTranscript}`);
+  if (overrideApplied || overrideRemovedTag) {
+    console.log(`  Overrides applied:       ${overrideApplied} (changed/added a tag)`);
+    console.log(`  Overrides force-untagged: ${overrideRemovedTag}`);
+  }
 
   const output = {
     _generated: new Date().toISOString(),
