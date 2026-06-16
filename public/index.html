@@ -3853,8 +3853,28 @@ function renderTopicRibbon(m) {
     .sort((a, b) => b[1].count - a[1].count);
   const untaggedEntry = byTopic.get(UNTAGGED);
 
-  // Build ribbon segments — same topic order both bars, untagged always last
-  const order = taggedEntries.map(([id]) => id);
+  // "Other" rollup: keep the top N topics individually coloured; collapse the
+  // long tail of smaller topics into a single muted "Other" segment. Without
+  // this, a month spanning a dozen minor topics renders as a dozen tiny
+  // slivers — visually noisy and individually unreadable. The per-video topic
+  // column in the monthly list still shows every topic by name, so nothing is
+  // hidden, just aggregated in the ribbon. Untagged stays its own segment.
+  const RIBBON_TOP_N = 6;
+  const OTHER = '__other__';
+  const topEntries = taggedEntries.slice(0, RIBBON_TOP_N);
+  const tailEntries = taggedEntries.slice(RIBBON_TOP_N);
+  let otherEntry = null;
+  if (tailEntries.length > 0) {
+    otherEntry = tailEntries.reduce(
+      (acc, [, e]) => { acc.count += e.count; acc.views += e.views; acc.topicCount++; return acc; },
+      { count: 0, views: 0, topicCount: 0 }
+    );
+    byTopic.set(OTHER, otherEntry);
+  }
+
+  // Build ribbon segments — top topics, then Other, then untagged (both last)
+  const order = topEntries.map(([id]) => id);
+  if (otherEntry) order.push(OTHER);
   if (untaggedEntry) order.push(UNTAGGED);
 
   const fmtPct = (n) => n < 1 ? n.toFixed(1) + '%' : Math.round(n) + '%';
@@ -3869,25 +3889,25 @@ function renderTopicRibbon(m) {
   const segmentsHtml = (mode) => order.map(id => {
     const entry = byTopic.get(id);
     const isUntagged = id === UNTAGGED;
-    const topic = isUntagged ? null : topicsData[id];
-    const name = isUntagged ? 'Untagged' : (topic?.name || id);
-    const color = isUntagged ? '' : (topic?.color || '#888');
+    const isOther = id === OTHER;
+    const topic = (isUntagged || isOther) ? null : topicsData[id];
+    const name = isUntagged ? 'Untagged' : isOther ? `Other (${entry.topicCount} topics)` : (topic?.name || id);
+    const color = (isUntagged || isOther) ? '' : (topic?.color || '#888');
     const value = mode === 'views' ? entry.views : entry.count;
     const total = mode === 'views' ? totalViews : totalCount;
     const pct = total > 0 ? (value / total) * 100 : 0;
     if (pct < 0.3) return ''; // skip slivers that won't render anyway
-    const styleBg = isUntagged ? '' : `background:${color};`;
+    const segClass = isUntagged ? ' untagged' : isOther ? ' other' : '';
+    const styleBg = (isUntagged || isOther) ? '' : `background:${color};`;
     const titleText = mode === 'views'
       ? `${name} · ${fmtViewsCompact(entry.views)} views (${fmtPct(pct)})`
       : `${name} · ${entry.count} video${entry.count === 1 ? '' : 's'} (${fmtPct(pct)})`;
-    return `<div class="topic-ribbon-seg${isUntagged ? ' untagged' : ''}" style="width:${pct.toFixed(2)}%;${styleBg}" title="${escapeHtml(titleText)}"></div>`;
+    return `<div class="topic-ribbon-seg${segClass}" style="width:${pct.toFixed(2)}%;${styleBg}" title="${escapeHtml(titleText)}"></div>`;
   }).join('');
 
-  // Inline legend — show top 5 by video count, then "+ N more" if more exist
-  const LEGEND_LIMIT = 5;
-  const legendTopics = taggedEntries.slice(0, LEGEND_LIMIT);
-  const remaining = taggedEntries.length - legendTopics.length;
-  const legendHtml = legendTopics.map(([id, entry]) => {
+  // Inline legend — mirror the ribbon: top N topics individually, then an
+  // "Other" summary line if the tail was rolled up.
+  const legendHtml = topEntries.map(([id, entry]) => {
     const topic = topicsData[id];
     const name = topic?.name || id;
     const color = topic?.color || '#888';
@@ -3901,8 +3921,14 @@ function renderTopicRibbon(m) {
       </span>
     `;
   }).join('');
-  const moreHtml = remaining > 0
-    ? `<span class="topic-ribbon-legend-more">+ ${remaining} more ${remaining === 1 ? 'topic' : 'topics'}</span>`
+  const otherHtml = otherEntry
+    ? `
+      <span class="topic-ribbon-legend-item">
+        <span class="topic-ribbon-legend-dot other"></span>
+        <span>Other</span>
+        <span class="topic-ribbon-legend-stats">· ${otherEntry.topicCount} ${otherEntry.topicCount === 1 ? 'topic' : 'topics'} · ${otherEntry.count} ${otherEntry.count === 1 ? 'video' : 'videos'} (${fmtPct((otherEntry.count / totalCount) * 100)}) · ${fmtViewsCompact(otherEntry.views)} views</span>
+      </span>
+    `
     : '';
 
   return `
@@ -3917,7 +3943,7 @@ function renderTopicRibbon(m) {
       </div>
       <div class="topic-ribbon-legend">
         ${legendHtml}
-        ${moreHtml}
+        ${otherHtml}
       </div>
     </div>
   `;

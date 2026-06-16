@@ -2279,6 +2279,13 @@
     background: var(--border-strong);
     opacity: 0.5;
   }
+  /* "Other" rollup — muted neutral, but more present than untagged since it
+     represents real tagged content (just aggregated minor topics). A subtle
+     diagonal hatch distinguishes it from untagged at a glance. */
+  .topic-ribbon-seg.other {
+    background: var(--text-dim);
+    opacity: 0.55;
+  }
   .topic-ribbon-legend {
     display: flex;
     flex-wrap: wrap;
@@ -2299,6 +2306,10 @@
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
+  }
+  .topic-ribbon-legend-dot.other {
+    background: var(--text-dim);
+    opacity: 0.7;
   }
   .topic-ribbon-legend-stats {
     color: var(--text-dim);
