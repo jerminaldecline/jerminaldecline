@@ -352,6 +352,26 @@
     .site-premise { font-size: 0.88rem; margin-bottom: 1rem; }
   }
 
+  /* Insight callout — one dynamic, striking sentence near the top. Quiet card
+     with an accent left-edge; the data's "billboard line". */
+  .insight-callout {
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.95rem;
+    margin: 0 0 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .insight-callout:empty,
+  .insight-callout[hidden] { display: none; }
+  .insight-callout strong { color: var(--accent); font-weight: 600; }
+  .insight-callout-icon { color: var(--accent); font-weight: 700; margin-right: 0.2rem; }
+  @media (max-width: 540px) {
+    .insight-callout { font-size: 0.88rem; padding: 0.6rem 0.8rem; }
+  }
+
   /* Deep dives — a visually quieter band grouping the secondary analysis
      panels (story tracker, description patterns, ads, revenue) so they read as
      optional exploration rather than competing with the hero numbers + chart.
@@ -1197,6 +1217,17 @@
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
   }
+  /* Sparkline in the featured hero stat — small trend line under the sub text. */
+  .hero-stat-spark {
+    margin-top: 0.5rem;
+    height: 28px;
+    line-height: 0;
+  }
+  .hero-stat-spark .sparkline { width: 100%; height: 28px; display: block; }
+  .hero-stat-spark .sparkline.up polyline { stroke: var(--accent); }
+  .hero-stat-spark .sparkline.up circle { fill: var(--accent); }
+  .hero-stat-spark .sparkline.down polyline { stroke: var(--text-dim); }
+  .hero-stat-spark .sparkline.down circle { fill: var(--text-dim); }
   /* Tablet: 2-column layout — at this width 3 cards squeeze too narrow
      against the medium-sized container. Wrapping to 2 columns keeps cards
      readable; orphan cards in a 6-stat config land bottom-left which still
@@ -1350,6 +1381,16 @@
   .composition-legend-dot.short { background: var(--shorts); }
   .composition-legend-text { color: var(--text-muted); }
   .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+  /* Punchy interpretation line under the composition legend — states the
+     uploads-vs-views gap in one sentence. */
+  .composition-punchline {
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .composition-punchline strong { color: var(--text); font-weight: 600; }
   @media (max-width: 540px) {
     .composition { padding: 0.85rem 0.9rem; margin-bottom: 1.1rem; }
     .composition-legend { gap: 1rem; font-size: 0.85rem; }

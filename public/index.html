@@ -112,6 +112,7 @@
       <!-- Premise line — one-sentence framing so a first-time visitor
            immediately understands what the site shows before hitting controls. -->
       <p class="site-premise">Long-form view counts with Shorts stripped out. Updated daily.</p>
+      <div class="insight-callout" id="insightCallout" hidden></div>
       <!-- Channel selector sits outside .filter-cluster so its sticky context
            on mobile is bound to #resultsBody (a tall container) rather than
            .filter-cluster (small, fits-content). Without this, the sticky
@@ -175,6 +176,26 @@
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
 
+      <!-- Chart legend lives as a sibling above the chart toggle row. The
+           heading "Monthly trend" used to wrap it but became misleading once
+           the section grew to include the variance bar chart and "All videos"
+           scatter, neither of which are trend-shaped. Section is now
+           self-evident from the chart toggle + chart content. -->
+      <div class="trend-legend trend-legend-standalone" id="trendLegend"></div>
+      <div class="chart-controls-row">
+        <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
+          <button type="button" data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
+          <button type="button" data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
+          <button type="button" data-chart-metric="views_likes" role="tab" aria-selected="false">Views + like rate</button>
+          <button type="button" data-chart-metric="engagement_variance" role="tab" aria-selected="false">Engagement variance</button>
+          <button type="button" data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
+        </div>
+      </div>
+      <div class="chart-wrap" id="chartWrap">
+        <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Channel chart — content varies by selected chart type"></svg>
+        <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
+      </div>
+
       <!-- Deep dives — secondary analysis panels, visually quieter than the
            hero numbers above. Each is conditional/collapsible; the band only
            shows a heading when at least one panel is visible (CSS :has). -->
@@ -196,26 +217,6 @@
         <!-- Estimated ad revenue panel — collapsible, category-by-category
              ranges with methodology disclosure. -->
         <div class="revenue-panel" id="revenuePanel" hidden></div>
-      </div>
-
-      <!-- Chart legend lives as a sibling above the chart toggle row. The
-           heading "Monthly trend" used to wrap it but became misleading once
-           the section grew to include the variance bar chart and "All videos"
-           scatter, neither of which are trend-shaped. Section is now
-           self-evident from the chart toggle + chart content. -->
-      <div class="trend-legend trend-legend-standalone" id="trendLegend"></div>
-      <div class="chart-controls-row">
-        <div class="chart-metric-toggle" role="tablist" aria-label="Chart metric">
-          <button type="button" data-chart-metric="views" class="active" role="tab" aria-selected="true">Views</button>
-          <button type="button" data-chart-metric="views_length" role="tab" aria-selected="false">Views + video length</button>
-          <button type="button" data-chart-metric="views_likes" role="tab" aria-selected="false">Views + like rate</button>
-          <button type="button" data-chart-metric="engagement_variance" role="tab" aria-selected="false">Engagement variance</button>
-          <button type="button" data-chart-metric="all_videos" role="tab" aria-selected="false">All videos</button>
-        </div>
-      </div>
-      <div class="chart-wrap" id="chartWrap">
-        <svg id="trendChart" viewBox="0 0 720 260" role="img" aria-label="Channel chart — content varies by selected chart type"></svg>
-        <div class="chart-tooltip" id="chartTooltip" style="display: none;"></div>
       </div>
 
       <div class="wordcloud-section">
@@ -1372,6 +1373,7 @@ function rebuild() {
 
   renderHeroStats(currSummary, yoy ? prevSummary : null);
   renderComposition(currSummary);
+  renderInsightCallout(currSummary, yoy ? prevSummary : null);
   // Story tracker — appears above heroStats DOM-wise but renders after
   // because it depends on the same filtered video set and the descriptions
   // side-channel (loaded lazily on first call).
@@ -2556,12 +2558,42 @@ function renderRevenuePanel() {
   if (chartWrap && !chartRendered) chartWrap.style.display = 'none';
 }
 
+// Tiny inline SVG sparkline from a numeric series. Fixed viewBox; the polyline
+// is normalised to the min/max of the series. Used in the featured hero stat
+// to give the headline number a sense of trajectory. Last point gets a dot.
+function buildSparkline(series) {
+  const vals = series.filter(v => typeof v === 'number' && isFinite(v));
+  if (vals.length < 3) return '';
+  const W = 120, H = 28, pad = 2;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const range = max - min || 1;
+  const n = vals.length;
+  const x = i => pad + (i / (n - 1)) * (W - 2 * pad);
+  const y = v => H - pad - ((v - min) / range) * (H - 2 * pad);
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const lastX = x(n - 1).toFixed(1), lastY = y(vals[n - 1]).toFixed(1);
+  // Direction colour: up = accent, down = muted. Compares last vs first.
+  const trendUp = vals[n - 1] >= vals[0];
+  return `<svg class="sparkline ${trendUp ? 'up' : 'down'}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="none" aria-hidden="true">
+    <polyline fill="none" stroke-width="1.5" points="${pts}" />
+    <circle cx="${lastX}" cy="${lastY}" r="2" />
+  </svg>`;
+}
+
 function renderHeroStats(curr, prev) {
   const c = metricsFor(curr);
   const p = prev ? metricsFor(prev) : null;
   const viewLabel = viewMode === 'long' ? 'Long-form views' : 'Total views (incl. Shorts)';
   const countLabel = viewMode === 'long' ? 'Long-form videos' : 'Total videos';
   const avgLabel = viewMode === 'long' ? 'Avg views / long-form' : 'Avg views / video';
+
+  // Build a tiny sparkline for the featured (views) card from the monthly
+  // series — gives the headline number a sense of direction at a glance.
+  // Uses long-form or total views to match the active view mode. Needs at
+  // least 3 months to be meaningful; otherwise omitted.
+  const sparkSeries = (monthlyData || [])
+    .map(m => viewMode === 'long' ? m.curr.longViews : m.curr.totalViews());
+  const featuredSpark = sparkSeries.length >= 3 ? buildSparkline(sparkSeries) : '';
 
   // Big headline numbers go compact for readability (e.g. "105M" not "105,475,680").
   // Full number is preserved in the title attribute for tooltip on hover.
@@ -2573,7 +2605,8 @@ function renderHeroStats(curr, prev) {
       value: fmtCompact(c.views),
       fullValue: fmt(c.views),
       sub: p ? `vs ${fmtCompact(p.views)} last year ${deltaPill(c.views, p.views)}` : `${fmt(c.count)} videos`,
-      featured: true
+      featured: true,
+      spark: featuredSpark
     },
     {
       label: countLabel,
@@ -2676,6 +2709,7 @@ function renderHeroStats(curr, prev) {
         <span class="hero-stat-value-anim" data-target="${s.raw}" data-idx="${i}">${heroAnimated ? s.value : (s.durationStat ? '0:00' : s.hoursStat ? '0m' : s.likeRateStat ? '0%' : '0')}</span>
       </div>
       ${s.sub ? `<div class="hero-stat-sub">${s.sub}</div>` : ''}
+      ${s.spark ? `<div class="hero-stat-spark">${s.spark}</div>` : ''}
     </div>
   `).join('');
 
@@ -3441,10 +3475,73 @@ function renderDescPatterns() {
   });
 }
 
+// Dynamic "worth knowing" callout — picks the single most striking fact about
+// the current view and states it in one plain sentence. Candidate insights are
+// scored by how striking they are; the strongest wins. Computed live, so it
+// always reflects the selected channel + window. Hidden if nothing notable.
+function renderInsightCallout(curr, prev) {
+  const el = document.getElementById('insightCallout');
+  if (!el) return;
+
+  const candidates = [];
+  const totalViews = curr.totalViews();
+
+  // 1. Shorts share of total views — the core debunking fact.
+  if (totalViews > 0 && curr.shorts.length > 0) {
+    const shortsPct = (curr.shortViews / totalViews) * 100;
+    if (shortsPct >= 40) {
+      candidates.push({
+        score: shortsPct,
+        html: `Shorts account for <strong>${Math.round(shortsPct)}%</strong> of total views — but they're not real videos. The long-form numbers below strip them out.`
+      });
+    }
+  }
+
+  // 2. Long-form views YoY change (only meaningful with a comparison period).
+  if (prev && prev.longViews > 0) {
+    const change = ((curr.longViews - prev.longViews) / prev.longViews) * 100;
+    if (Math.abs(change) >= 15) {
+      const dir = change < 0 ? 'down' : 'up';
+      candidates.push({
+        score: Math.abs(change) + 20, // weight YoY swings highly — most newsworthy
+        html: `Long-form views are <strong>${dir} ${Math.abs(Math.round(change))}%</strong> versus the same period a year earlier.`
+      });
+    }
+  }
+
+  // 3. Long-form average view collapse vs short average (engagement gap).
+  if (curr.longAvg > 0 && curr.shortAvg > 0 && curr.shortAvg > curr.longAvg * 2) {
+    const mult = (curr.shortAvg / curr.longAvg);
+    candidates.push({
+      score: Math.min(mult * 8, 60),
+      html: `The average Short pulls <strong>${mult.toFixed(1)}×</strong> the views of the average long-form video.`
+    });
+  }
+
+  if (candidates.length === 0) { el.hidden = true; el.innerHTML = ''; return; }
+  candidates.sort((a, b) => b.score - a.score);
+  el.hidden = false;
+  el.innerHTML = `<span class="insight-callout-icon" aria-hidden="true">→</span> ${candidates[0].html}`;
+}
+
 function renderComposition(s) {
   const total = s.totalViews();
   const longPct = total ? (s.longViews / total) * 100 : 0;
   const shortPct = total ? (s.shortViews / total) * 100 : 0;
+
+  // Punchy interpretation line: contrast Shorts' share of UPLOADS against their
+  // share of VIEWS. The gap is the story — e.g. "Shorts are 18% of uploads but
+  // 71% of views." Only shown when there are both types and the gap is notable.
+  const totalCount = s.totalCount();
+  let punchline = '';
+  if (totalCount > 0 && s.shorts.length > 0 && s.longForm.length > 0) {
+    const shortUploadPct = (s.shorts.length / totalCount) * 100;
+    // Only surface when upload-share and view-share diverge meaningfully.
+    if (Math.abs(shortPct - shortUploadPct) >= 12) {
+      punchline = `<div class="composition-punchline">Shorts are <strong>${Math.round(shortUploadPct)}%</strong> of uploads but <strong>${Math.round(shortPct)}%</strong> of views.</div>`;
+    }
+  }
+
   document.getElementById('composition').innerHTML = `
     <div class="composition-header">
       <span class="composition-title">Period composition</span>
@@ -3468,6 +3565,7 @@ function renderComposition(s) {
         <span class="composition-legend-text">· ${s.shorts.length} videos</span>
       </div>
     </div>
+    ${punchline}
   `;
 }
 
