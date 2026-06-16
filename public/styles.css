@@ -1,0 +1,3859 @@
+/* jerminaldecline.com — styles
+   Extracted from index.html. Loaded via <link> in the document head.
+   All design tokens (CSS custom properties) live in the :root block below. */
+
+  :root, [data-theme="light"] {
+    /* Brand (constant across themes) */
+    --brand: #1b4d9f;
+    --brand-deep: #143b7a;
+    --brand-soft: #e8eef9;
+    --shorts: #ef8e29;
+    --shorts-soft: #fdecd5;
+
+    /* Surfaces (warm off-white, editorial feel) */
+    --bg: #f6f3ec;
+    --surface: #ffffff;
+    --surface-2: #efebe1;
+    --border: #e3ddd0;
+    --border-strong: #cfc8b8;
+
+    /* Text */
+    --text: #1c1a14;
+    --text-muted: #6b665a;
+    --text-dim: #998f7c;
+
+    /* Semantic */
+    --accent: var(--brand);
+    --accent-hover: var(--brand-deep);
+    --accent-soft: var(--brand-soft);
+    --up: #1d9e75;
+    --up-soft: #e1f5ee;
+    --down: #b8302b;
+    --down-soft: #fbe9e8;
+    --flat: #998f7c;
+
+    /* Background gradients */
+    --bg-glow-1: rgba(27, 77, 159, 0.04);
+    --bg-glow-2: rgba(239, 142, 41, 0.04);
+    /* Prediction card text */
+    --pred-text: #f0e9d9;
+
+    /* Scatter dot colour — strong contrast against the light cream background.
+       Teal because it sits well apart from blue (views), purple (duration line),
+       and red (in-progress) on the colour wheel. */
+    --scatter: #0d9488;
+
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 1px 2px rgba(28, 26, 20, 0.04);
+  }
+
+  [data-theme="dark"] {
+    /* Brand tweaked slightly for dark legibility */
+    --brand: #6aa3ff;
+    --brand-deep: #b8d0ff;
+    --brand-soft: #1a2540;
+    --shorts: #ffa752;
+    --shorts-soft: #3a2614;
+
+    /* Surfaces — deep navy that echoes the brand */
+    --bg: #0d1220;
+    --surface: #161c2e;
+    --surface-2: #1d2538;
+    --border: #29314a;
+    --border-strong: #3a4564;
+
+    /* Text — warm off-white for editorial continuity */
+    --text: #ede8d8;
+    --text-muted: #9aa0b3;
+    --text-dim: #6c728a;
+
+    /* Semantic */
+    --accent: var(--brand);
+    --accent-hover: var(--brand-deep);
+    --accent-soft: var(--brand-soft);
+    --up: #4dd0a0;
+    --up-soft: #143028;
+    --down: #ff6b66;
+    --down-soft: #3a1c1c;
+    --flat: #6c728a;
+
+    --bg-glow-1: rgba(106, 163, 255, 0.05);
+    --bg-glow-2: rgba(255, 167, 82, 0.04);
+    --pred-text: #ede8d8;
+
+    /* Scatter dot colour — brighter teal for visibility on the dark navy surface */
+    --scatter: #5eead4;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--bg);
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background:
+      radial-gradient(ellipse at top left, var(--bg-glow-1) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, var(--bg-glow-2) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    margin: 0;
+    padding: 2.5rem 1.5rem 4rem;
+    line-height: 1.5;
+    min-height: 100vh;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  @media (max-width: 540px) {
+    body { padding: 1.25rem 0.85rem 3rem; }
+  }
+  /* Tablet / small-laptop range — the previous design had a single 540px mobile
+     breakpoint, leaving a 540-1100px window where the layout was full desktop
+     density on a partial-screen viewport. iPad portrait (768px) lands in this
+     range. Tighten container padding and grid minimums so cards don't end up
+     awkwardly narrow against an oversized container. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    body { padding: 2rem 1.15rem 3.5rem; }
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Brand header */
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .brand-text { flex: 1; min-width: 0; }
+  @media (max-width: 540px) {
+    .brand-header { gap: 0.6rem; }
+  }
+  .brand-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-name {
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: var(--brand-deep);
+    line-height: 1.05;
+  }
+  .brand-tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0.2rem 0 0;
+    font-style: italic;
+  }
+  .channel-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 0.5rem 0 0.65rem;
+    font-size: 0.95rem;
+    /* Reserve height so chips appearing post-load don't shift the layout below.
+       Matches the rendered height of a single row of channel-chip buttons. */
+    min-height: 2.85rem;
+    /* Sticky on desktop too. Outside .filter-cluster in DOM so its sticky
+       context is bound to #resultsBody (long), not to its small container.
+       Without this, scrolling past the cluster releases the sticky entirely,
+       leaving the user with no quick channel access while reading data. */
+    position: sticky;
+    top: 0;
+    z-index: 21;  /* above filter-cluster (20) since strip stacks on top */
+    background: var(--surface);
+    /* Bleed into card padding so background covers full card width when stuck */
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    /* Pull up to sit flush with the card's top edge — channel strip is the
+       first child of resultsBody so it covers the card's top area when stuck. */
+    margin-top: -1.5rem;
+    padding-top: 1.5rem;
+  }
+  /* Filter cluster — groups date presets + control bar into a single visual
+     block below the channel strip. Bottom separator divides filter controls
+     from the channel-derived context block and data below.
+     Sticky on desktop with top offset = approximate channel-strip rendered
+     height, so it parks just under the strip when the user scrolls down.
+     Together the strip + cluster form a unified sticky filter bar. */
+  .filter-cluster {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    position: sticky;
+    top: 3.85rem;  /* matches channel-strip rendered height (~62px) */
+    z-index: 20;
+    background: var(--surface);
+    box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+  }
+  /* Mobile: filter-cluster scrolls away normally. Only channel-strip stays
+     sticky (its top: 0 below). The cluster is too tall on mobile (presets
+     wrap, control bar wraps) — keeping it sticky would eat too much viewport. */
+  @media (max-width: 540px) {
+    .filter-cluster {
+      margin-left: -0.85rem;
+      margin-right: -0.85rem;
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+      position: static;
+      box-shadow: none;
+      top: auto;
+    }
+  }
+  /* Channel selector — pill row of channel buttons */
+  .channel-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .channel-chip {
+    background: var(--surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.42rem 1rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s, border-color 0.12s, box-shadow 0.12s;
+    white-space: nowrap;
+  }
+  [data-theme="dark"] .channel-chip {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.10);
+  }
+  .channel-chip:hover {
+    color: var(--text);
+    border-color: var(--brand);
+    background: var(--surface);
+  }
+  [data-theme="dark"] .channel-chip:hover {
+    background: rgba(255,255,255,0.08);
+  }
+  .channel-chip.active {
+    background: var(--brand);
+    color: #ffffff;
+    border-color: var(--brand);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(27, 77, 159, 0.25);
+  }
+  .channel-chip.active:hover {
+    background: var(--brand-deep);
+    color: #ffffff;
+    border-color: var(--brand-deep);
+  }
+  .channel-chip.all { font-style: italic; }
+
+  @media (max-width: 540px) {
+    .channel-chip { font-size: 0.85rem; padding: 0.38rem 0.85rem; }
+    /* Centre the chip cluster on mobile — when wrapped across 2-3 rows on a
+       narrow viewport, left-alignment looked like the chips were bunched
+       to one side. Centring evens the visual weight regardless of how many
+       chips land on the last row. */
+    .channel-selector {
+      justify-content: center;
+      width: 100%;
+    }
+    /* Sticky channel chips only on mobile — recovers screen space lost when
+       the full filter cluster was sticky (presets + control bar took too
+       many rows). Date controls scroll away normally; users scroll back to
+       the top of the card to change them (rarer action than channel switch).
+       Background + shadow match the cluster's stuck-state visual so it reads
+       as "the filter bar". Bleeds into the card's horizontal padding so it
+       covers the full card width when stuck. */
+    .channel-strip {
+      justify-content: center;
+      /* Mobile-specific overrides — base rule already sets sticky/z-index.
+         Override the desktop padding/margin values for the smaller card padding. */
+      box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.12);
+      margin-left: -0.85rem;
+      margin-right: -0.85rem;
+      padding-left: 0.85rem;
+      padding-right: 0.85rem;
+      /* Tighter padding when sticky so the bar is as short as we can get it
+         without cramping the chips. */
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      margin-top: -1rem;  /* card has 1rem top padding on mobile */
+      /* min-height was 2.85rem (room for chips + last-updated stacked).
+         With last-updated hidden, drop to fit chips only. */
+      min-height: 0;
+    }
+    /* Last-updated hidden on mobile — it's secondary metadata (which the
+       chips don't need) and consumes a full row on small screens. Available
+       in the footer/source area for anyone who needs it. */
+    .last-updated { display: none; }
+  }
+  .last-updated {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--up);
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--up);
+    opacity: 0.4;
+    animation: livePulse 2s ease-out infinite;
+  }
+  .live-dot.stale { background: var(--shorts); }
+  .live-dot.stale::after { background: var(--shorts); animation: none; opacity: 0; }
+  @keyframes livePulse {
+    0% { transform: scale(1); opacity: 0.4; }
+    70%, 100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  /* Peak strip — surfaces all-time peak as a reference point */
+  .peak-strip {
+    color: var(--text-muted);
+    padding: 0.85rem 0.2rem 1.1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .peak-strip:empty { display: none; }
+  /* Two-column grid: peak on the left, lowest-since-peak on the right.
+     Subtle vertical separator visually reinforces "from A to B" reading.
+     Equal columns; gap is generous so the two stats don't feel cramped.
+     Collapses to single column at ≤540px (mobile rule below). */
+  .peak-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2.25rem;
+    align-items: start;
+  }
+  .peak-grid .peak-line:last-child {
+    /* Right column gets a left border as the divider. The padding-left
+       pulls its content off the divider line so it doesn't crowd. */
+    border-left: 1px solid var(--border);
+    padding-left: 2.25rem;
+    margin-left: -2.25rem;  /* compensates so the grid gap accommodates */
+  }
+  /* Each "line" in the grid is now column-shaped: label on top, value below,
+     month below that. The eyebrow label functions as a column header. */
+  .peak-line {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+  .peak-strip-label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .peak-line-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  /* Value row — big number is the headline, unit is secondary, percentage
+     is a small badge hanging off to the right (or wrapping below on narrow). */
+  .peak-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+  .peak-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .peak-value-unit {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .peak-pct {
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    margin-left: 0.25rem;
+  }
+  .peak-meta-row {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  /* Latest-month row drops below the grid as full-width. It gets the original
+     horizontal layout (label left, content right) since it's a standalone
+     row, not part of a 2-col layout. */
+  .peak-strip > .peak-line {
+    /* This rule targets the latest-row's .peak-line that's a direct child of
+       .peak-strip (not nested in .peak-grid). Restore horizontal layout. */
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .peak-strip > .peak-line > .peak-strip-label {
+    width: 145px;
+    flex-shrink: 0;
+    padding-top: 0.45rem;
+  }
+  .peak-strip > .peak-line > .peak-line-content {
+    flex: 1 1 auto;
+  }
+  .peak-strip strong { color: var(--text); font-weight: 600; }
+  .peak-strip .peak-drop { color: var(--down); }
+  .peak-strip .peak-gain { color: var(--up); }
+  .peak-month-jump {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text);
+    font-weight: 600;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .peak-month-jump:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .peak-month-jump:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  .peak-footnote {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+    font-style: italic;
+    opacity: 0.85;
+  }
+  .peak-throwback {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.1rem;
+  }
+  .peak-throwback-gap {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.92em;
+  }
+  /* Tablet: tighten the gap between columns when there's less horizontal
+     room, so peak and lowest don't crowd against the divider. */
+  @media (max-width: 800px) {
+    .peak-grid { gap: 0 1.5rem; }
+    .peak-grid .peak-line:last-child {
+      padding-left: 1.5rem;
+      margin-left: -1.5rem;
+    }
+  }
+  /* Mobile: collapse grid to single column, drop the divider, restore the
+     old label-on-left / content-on-right inside each line. */
+  @media (max-width: 540px) {
+    .peak-grid {
+      grid-template-columns: 1fr;
+      gap: 0.85rem 0;
+    }
+    .peak-grid .peak-line:last-child {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+    .peak-value { font-size: 1.35rem; }
+    .peak-value-row { gap: 0.45rem; }
+    .peak-pct { margin-left: 0; }
+    .peak-throwback { font-size: 0.78rem; }
+    .peak-strip { gap: 0.85rem; padding: 0.5rem 0.15rem 0.75rem; }
+    /* Latest-row also goes column-stacked on mobile */
+    .peak-strip > .peak-line { flex-direction: column; gap: 0.15rem; }
+    .peak-strip > .peak-line > .peak-strip-label { width: auto; padding-top: 0; }
+  }
+  @media (max-width: 540px) {
+    .brand-name { font-size: 1.5rem; }
+    .brand-logo { width: 54px; height: 54px; }
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .theme-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-toggle button:hover {
+    color: var(--text);
+    background: rgba(127, 127, 127, 0.08);
+  }
+  .theme-toggle button.active {
+    background: var(--surface);
+    color: var(--accent);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] .theme-toggle button.active {
+    background: var(--bg);
+  }
+  @media (max-width: 540px) {
+    .theme-toggle { padding: 2px; }
+    .theme-toggle button { width: 32px; height: 32px; }
+  }
+
+  /* Prediction card — editorial flourish, the satirical voice of the site.
+     Styled deliberately distinct from data cards so first-time visitors
+     immediately read it as commentary, not metrics. Accented left border
+     functions as a "pull quote" tell; subtle quote-mark glyph in the corner
+     reinforces the voice register without being precious about it. */
+  .prediction-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: var(--brand-deep);
+    color: var(--pred-text);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--shorts);
+    padding: 0.85rem 1.1rem 0.85rem 1.25rem;
+    margin: 0.6rem 0 1.25rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s, transform 0.15s;
+  }
+  /* Decorative open-quote glyph in the corner — large, very low opacity,
+     positioned to bleed off the top-left without intercepting clicks. Reads
+     as "this is a quote / opinion" without consuming layout space. */
+  .prediction-card::before {
+    content: '"';
+    position: absolute;
+    top: -0.4rem;
+    right: 0.7rem;
+    font-size: 2.4rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--shorts);
+    opacity: 0.18;
+    pointer-events: none;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .prediction-card:hover {
+    background: #163d80;
+    transform: translateY(-1px);
+  }
+  [data-theme="dark"] .prediction-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--shorts);
+  }
+  [data-theme="dark"] .prediction-card:hover {
+    background: var(--surface);
+  }
+  .prediction-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(237, 232, 216, 0.65);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  [data-theme="dark"] .prediction-label { color: var(--text-muted); }
+  .prediction-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.3;
+    font-style: italic;
+    flex: 1;
+    min-width: 0;
+    transition: opacity 0.2s;
+  }
+  .prediction-text.shaking { opacity: 0; }
+  .prediction-text strong {
+    color: #ffffff;
+    font-style: normal;
+    font-weight: 600;
+  }
+  [data-theme="dark"] .prediction-text strong { color: var(--text); }
+  .prediction-shake {
+    font-size: 0.7rem;
+    background: var(--shorts);
+    color: #1c1a14;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    transition: background 0.15s, transform 0.12s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .prediction-card:hover .prediction-shake { background: #ffaa4d; }
+  .prediction-card:active .prediction-shake { transform: scale(0.92); }
+  .prediction-card:active { transform: scale(0.998); }
+  @media (max-width: 540px) {
+    .prediction-card { padding: 0.65rem 0.85rem; gap: 0.5rem; }
+    .prediction-text { font-size: 0.85rem; }
+  }
+
+  /* Weekend counter — deadpan "days since accident" energy */
+  .weekend-counter {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .weekend-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+  }
+  .weekend-num {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--brand-deep);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  [data-theme="dark"] .weekend-num { color: var(--brand-deep); } /* already light in dark mode */
+  .weekend-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .weekend-divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0.3rem 0;
+  }
+  @media (max-width: 480px) {
+    .weekend-num { font-size: 1.85rem; }
+    .weekend-label { font-size: 0.7rem; }
+  }
+  /* Weekend-day fallback: card collapses to single italic line */
+  .weekend-counter.weekend-now {
+    display: block;
+    text-align: center;
+    padding: 1.25rem 1rem;
+  }
+  .weekend-message {
+    font-size: 1.05rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--brand-deep);
+    line-height: 1.4;
+  }
+
+  /* Coffee button — footer */
+  .coffee-block {
+    margin-top: 2.5rem;
+    padding: 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .coffee-tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+    font-style: italic;
+  }
+  .coffee-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.4rem;
+    background: #ffdd00;
+    color: #1c1a14;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+  .coffee-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+  .coffee-button:active { transform: translateY(0); }
+  .coffee-icon { font-size: 1.05rem; }
+  @media (max-width: 540px) {
+    .coffee-block { padding: 1.1rem 0.9rem; margin-top: 1.75rem; }
+    .coffee-tagline { font-size: 0.85rem; }
+    .coffee-button { padding: 0.7rem 1.2rem; font-size: 0.95rem; }
+  }
+
+  /* Footer X link — inline alongside the other small footer links, with a
+     subtle icon. Quiet by design; the coffee button is the primary CTA. */
+  .footer-x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  header { margin-bottom: 1.5rem; }
+  h1 { font-size: 1.85rem; font-weight: 600; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  @media (max-width: 540px) {
+    .card { padding: 1rem 0.85rem; border-radius: 8px; }
+  }
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .field input {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--surface);
+    color: var(--text);
+    color-scheme: light dark;
+  }
+  /* Make the native date picker icon flip to white in dark mode */
+  .field input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, filter 0.15s;
+  }
+  .field input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+  [data-theme="dark"] .field input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+    opacity: 0.7;
+  }
+  [data-theme="dark"] .field input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(1) brightness(1.8);
+    opacity: 1;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* Date range preset chips — secondary controls, lighter than channel chips */
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    margin-bottom: 0.7rem;
+    align-items: center;
+  }
+  .preset-chip {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.65rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s;
+    position: relative;
+  }
+  .preset-chip:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+  .preset-chip.active {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .preset-chip.active::after {
+    content: '';
+    position: absolute;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: 0.1rem;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  @media (max-width: 540px) {
+    .preset-chip { font-size: 0.78rem; padding: 0.3rem 0.55rem; }
+    .preset-chip.active::after { left: 0.55rem; right: 0.55rem; }
+  }
+
+  /* Compact control bar — date pickers inline */
+  .control-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .control-bar-period { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+  .control-bar-prefix {
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.07em;
+  }
+  .control-bar-dates { display: flex; align-items: center; gap: 0.4rem; }
+  .control-bar-dash { color: var(--text-dim); }
+  .inline-date {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.3rem 0.55rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    color-scheme: light dark;
+  }
+  /* Mobile: bump font to 16px to prevent iOS auto-zoom on tap */
+  @media (max-width: 540px) {
+    .inline-date { font-size: 16px; padding: 0.4rem 0.55rem; }
+    .field input { font-size: 16px; }
+  }
+  .inline-date:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  /* Calendar picker icon — dim by default, brand colour on hover */
+  .inline-date::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, filter 0.15s;
+  }
+  .inline-date::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+  [data-theme="dark"] .inline-date::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+    opacity: 0.7;
+  }
+  [data-theme="dark"] .inline-date::-webkit-calendar-picker-indicator:hover {
+    filter: invert(1) brightness(1.8);
+    opacity: 1;
+  }
+  .control-bar-yoy {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .control-bar-yoy input { accent-color: var(--accent); margin: 0; }
+  .control-bar-yoy:hover { color: var(--text); }
+  .control-bar-yoy.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .control-bar-yoy.disabled:hover { color: var(--text-muted); }
+  .control-bar-yoy.disabled input { cursor: not-allowed; }
+
+  @media (max-width: 540px) {
+    .control-bar { padding: 0.55rem 0.7rem; gap: 0.55rem; }
+    .control-bar-prefix { display: none; }
+    .control-bar-period { gap: 0.4rem; }
+    .control-bar-right { gap: 0.5rem; }
+  }
+
+  .control-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  /* Tablet (541-960px): right-cluster gets tighter spacing so the date range
+     and right-side controls usually fit on one line. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    .control-bar-right { gap: 0.5rem; }
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    background: var(--surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .share-btn:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .share-btn.copied {
+    color: var(--up);
+    border-color: var(--up);
+    background: var(--up-soft);
+  }
+  .share-btn .share-icon-done { display: none; }
+  .share-btn.copied .share-icon-default { display: none; }
+  .share-btn.copied .share-icon-done { display: inline; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    top: 1.25rem;
+    left: 50%;
+    transform: translate(-50%, -120%);
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.65rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s;
+  }
+  .toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  @media (max-width: 480px) {
+    .share-btn-label { display: none; }
+    .control-bar-right { gap: 0.5rem; }
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .options-row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    padding: 0.85rem 1rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+  .options-row label {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .options-row input[type="checkbox"] { accent-color: var(--accent); }
+
+  /* View-mode toggle — now lives inside .control-bar (no own bottom margin).
+     Visually it's a tab strip embedded in the toolbar. Compact slightly so it
+     doesn't dominate the control bar's height. */
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 2px;
+    border: 1px solid var(--border);
+  }
+  .mode-toggle button {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+  }
+  .mode-toggle button:hover { color: var(--text); }
+  .mode-toggle button.active {
+    background: var(--surface-2);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  /* Chart metric toggle — sits between the trend section title and the chart.
+     Matches the .mode-toggle visual style but is more compact and slightly muted
+     so it doesn't compete with the main view-mode toggle higher on the page. */
+  .chart-metric-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 2px;
+    margin: 0 0 0.6rem;
+  }
+  .chart-metric-toggle button {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    border-radius: 0;
+    cursor: pointer;
+    transition: color 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .chart-metric-toggle button:hover { color: var(--text); }
+  .chart-metric-toggle button.active {
+    color: var(--text);
+    box-shadow: inset 0 -2px 0 0 var(--accent);
+  }
+  /* Row containing the metric toggle plus its optional companion controls.
+     Subtle alignment so they read as related but not nested. */
+  .chart-controls-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.85rem;
+    margin: 0 0 0.6rem;
+  }
+  .chart-controls-row .chart-metric-toggle { margin: 0; }
+  /* Sub-toggle (e.g. "Show all videos") — appears alongside the metric toggle
+     when it's contextually relevant. Smaller and quieter than the main toggle. */
+  .chart-sub-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .chart-sub-toggle input { cursor: pointer; accent-color: #7c3aed; }
+  .chart-sub-toggle:hover { color: var(--text); }
+
+  /* Section heading style — used on h2 elements throughout the page.
+     Overrides browser h2 defaults so semantic markup doesn't bring its own size. */
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1.3;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-actions { display: flex; gap: 0.4rem; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { background: var(--surface-2); }
+
+  /* Hero stat grid — explicit 3-column layout on desktop.
+     With 6 stat cards, auto-fit was producing 5+1 (orphan card on the second
+     row at common container widths). Explicit 3 columns guarantees a clean
+     2×3 layout regardless of how many cards are present (3 cards = 1 row,
+     6 cards = 2 rows of 3, 4 or 5 cards = first row of 3 + remainder filling
+     left-aligned which still reads well). */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
+  .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
+  /* Tablet: 2-column layout — at this width 3 cards squeeze too narrow
+     against the medium-sized container. Wrapping to 2 columns keeps cards
+     readable; orphan cards in a 6-stat config land bottom-left which still
+     reads cleanly. */
+  @media (min-width: 541px) and (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 540px) {
+    .hero-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+    }
+    .hero-stat.featured { grid-column: 1 / -1; }
+    /* Production-side stats (duration, total hours uploaded) sit below the
+       audience stats and go full-width on mobile. This avoids a stranded card
+       in a row of two and visually separates the "creator output" group from
+       the "audience response" group above. */
+    .hero-stat.duration-stat { grid-column: 1 / -1; }
+    .hero-stat.hours-stat { grid-column: 1 / -1; }
+    /* Like rate also goes full-width on mobile — it's the last card in the
+       set (variable position depending on what else is shown), so without
+       this rule it would frequently appear as an orphan half-card. */
+    .hero-stat.likerate-stat { grid-column: 1 / -1; }
+    .hero-stat { padding: 0.85rem 0.9rem; }
+    .hero-stat-value { font-size: 1.5rem; }
+    .hero-stat.featured .hero-stat-value { font-size: 1.85rem; }
+    .hero-stat-label { font-size: 0.7rem; }
+    .hero-stat-sub { font-size: 0.78rem; }
+  }
+  .hero-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+  /* Info pill in a hero stat label — small (ⓘ). Hover (desktop) or tap
+     (mobile) shows a styled popover with the explanation text. Uses the
+     `data-popover` attribute consumed by the popover delegation handler. */
+  .hero-stat-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    margin-left: 0.15rem;
+    font-size: 0.85em;
+    vertical-align: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: color 0.15s;
+    /* Pad out the tap target while keeping the visible icon small. The
+       padding extends the click hit area to roughly 24px on each side without
+       adding layout space (negative margins absorb it). On mobile this means
+       the tap reliably lands even with imprecise fingers. */
+    padding: 6px;
+    margin: -6px -6px -6px calc(0.15rem - 6px);
+    border-radius: 3px;
+  }
+  .hero-stat-info:hover,
+  .hero-stat-info:focus-visible {
+    color: var(--accent);
+    outline: none;
+    background: var(--surface-2);
+  }
+  .hero-stat-value {
+    font-size: 1.85rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    /* The value container is a relative positioning context.
+       Spacer (visible final value) reserves layout space.
+       Anim (animated counter) overlays via absolute positioning. */
+    position: relative;
+    display: inline-block;
+  }
+  .hero-stat-value-spacer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .hero-stat-value-anim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: left;
+  }
+  .hero-stat-value[data-compact="1"] {
+    cursor: help;
+  }
+  .hero-stat.featured .hero-stat-value { font-size: 2.4rem; }
+  .hero-stat-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.45rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .composition {
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .composition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+  }
+  .composition-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .composition-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .composition-bar {
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 0.65rem;
+  }
+  .composition-bar-fill.long { background: var(--accent); height: 100%; }
+  .composition-bar-fill.short { background: var(--shorts); height: 100%; }
+  .composition-legend {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .composition-legend-item { display: flex; align-items: center; gap: 0.45rem; }
+  .composition-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .composition-legend-dot.long { background: var(--accent); }
+  .composition-legend-dot.short { background: var(--shorts); }
+  .composition-legend-text { color: var(--text-muted); }
+  .composition-legend-pct { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+  @media (max-width: 540px) {
+    .composition { padding: 0.85rem 0.9rem; margin-bottom: 1.1rem; }
+    .composition-legend { gap: 1rem; font-size: 0.85rem; }
+    .composition-meta { font-size: 0.78rem; }
+  }
+
+  /* Chart legend — sits above the chart toggle row as a standalone element
+     (no longer wrapped by a section heading). Wraps to multiple lines when
+     legend items run long, with sensible bottom margin so the toggle row
+     doesn't crowd against it. */
+  .trend-legend {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    flex-wrap: wrap;
+  }
+  .trend-legend-standalone {
+    margin-bottom: 0.7rem;
+    min-height: 1.2rem;  /* reserve space so layout doesn't jump on chart switches */
+  }
+  .trend-legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .trend-legend-swatch {
+    display: inline-block;
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .trend-legend-swatch.prev {
+    background: var(--text-dim);
+    height: 0;
+    border-top: 2px dashed var(--text-dim);
+  }
+  .trend-legend-swatch.gap {
+    opacity: 0.45;
+    height: 10px;
+    border-radius: 2px;
+  }
+  .trend-legend-swatch.gap.deficit { background: #ff6b66; }
+  .trend-legend-swatch.gap.surplus { background: #1d9e75; }
+  /* Duration line swatch — matches the dashed pattern of the actual chart line */
+  .trend-legend-swatch.duration {
+    background: transparent;
+    height: 0;
+    border-top: 2px dashed #7c3aed;
+  }
+  /* Revenue band swatch — translucent fill matching the chart's revenue band. */
+  .trend-legend-swatch.revenue-band {
+    background: var(--up);
+    opacity: 0.22;
+    height: 10px;
+    border-radius: 2px;
+  }
+  /* Revenue band path on the chart itself — soft green fill, no stroke. */
+  .chart-revenue-band {
+    fill: var(--up);
+    fill-opacity: 0.18;
+    stroke: none;
+  }
+  /* Revenue mid-line — solid line through the middle of the band. Must be
+     explicit about fill:none, otherwise the browser fills the path's closed
+     region with black (SVG default) and the entire chart becomes a black
+     polygon. */
+  .chart-line-revenue {
+    fill: none;
+    stroke: var(--up);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  /* In-progress connector specifically for the revenue chart — dashed line
+     in the same green family as the main line, lower opacity so it reads
+     as "tentative / not yet complete" alongside the solid pre-complete line. */
+  .chart-line-revenue-inprogress {
+    fill: none;
+    stroke: var(--up);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  /* Like rate chart — distinct accent colour (purple) so it doesn't visually
+     conflict with the views (accent) or revenue (green) lines. Like rate is
+     a derived engagement signal, separate aesthetically from both. */
+  .chart-line-likerate {
+    fill: none;
+    stroke: #7c3aed;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .chart-line-likerate-inprogress {
+    fill: none;
+    stroke: #7c3aed;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .chart-dot-likerate-inprogress {
+    fill: #7c3aed;
+    stroke: var(--surface-2);
+    stroke-width: 1.5;
+  }
+  .chart-dot-likerate-inprogress-pulse {
+    fill: #7c3aed;
+    opacity: 0.6;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: chart-pulse 1.8s ease-out infinite;
+  }
+  .trend-legend-swatch.likerate {
+    background: #7c3aed;
+    height: 2px;
+  }
+  .chart-wrap {
+    position: relative;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 0.85rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  #trendChart {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  @media (max-width: 540px) {
+    .chart-wrap { padding: 0.65rem 0.35rem 0.5rem; }
+  }
+  .chart-axis-line { stroke: var(--border-strong); stroke-width: 1; }
+  /* Small tick marks at quarter boundaries on the X axis (scatter chart).
+     Gives a measurable scale reference between year labels. */
+  .chart-axis-tick { stroke: var(--border-strong); stroke-width: 1; opacity: 0.6; }
+  .chart-grid-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 3; }
+  .chart-axis-label { fill: var(--text-dim); font-size: 13px; font-family: inherit; }
+  .chart-axis-label.x { text-anchor: middle; }
+  .chart-axis-label.y { text-anchor: end; }
+  /* Axis title (rotated for Y axis). Slightly more emphasis than tick labels
+     since this is naming the axis variable, not enumerating its values. */
+  .chart-axis-title {
+    fill: var(--text-muted);
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .chart-line-curr { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-line-prev { fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
+  /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
+     with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
+  .chart-line-duration { fill: none; stroke: #7c3aed; stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-dot.duration { fill: #7c3aed; }
+  /* Like-rate dots — match the chart-line-likerate colour (purple) so the
+     rate line and its data points read as a single visual unit. */
+  .chart-dot.likerate { fill: #7c3aed; }
+  /* Engagement variance bars — colour-coded by whether they clear the
+     "expected" 10% reference line (p90 means 10% of all-time videos beat
+     the threshold by definition). Bars above reference pop in vivid purple;
+     bars at-or-below are muted, so months with engagement upswings visually
+     dominate the chart. */
+  .chart-bar-variance {
+    transition: opacity 0.12s;
+  }
+  .chart-bar-variance.high {
+    fill: #7c3aed;
+  }
+  .chart-bar-variance.low {
+    fill: var(--text-dim);
+    opacity: 0.4;
+  }
+  .chart-bar-variance.in-progress {
+    opacity: 0.55;
+    stroke: #7c3aed;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+  }
+  .chart-bar-variance:hover {
+    opacity: 0.85;
+  }
+  /* Reference line on the variance chart — drawn over the bars to keep it
+     visible regardless of how tall the bars are. Higher contrast than a
+     normal gridline. */
+  .chart-bar-ref-line {
+    stroke: var(--text);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+    opacity: 0.6;
+  }
+  .chart-bar-ref-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    fill: var(--text);
+    opacity: 0.85;
+  }
+  /* No-data tick — small vertical mark at the X-axis baseline indicating
+     a month was checked but had no measurable like data (e.g. early channel
+     years before YouTube's API reliably exposed like counts). Renders as a
+     dim hint that the gap is intentional, not a chart bug. */
+  .chart-bar-nodata {
+    stroke: var(--text-dim);
+    stroke-width: 1;
+    opacity: 0.4;
+  }
+  /* Scatter dots — one per long-form video in "All videos" mode.
+     Theme-aware colour so they contrast well in both light and dark. Opacity
+     tuned for ~7000 dots: low enough that overlapping dots build into a
+     readable density field, high enough that the band of typical durations
+     reads distinctly from the chart background. */
+  .chart-scatter-dot {
+    fill: var(--scatter);
+    opacity: 0.32;
+    pointer-events: none;
+  }
+  /* Legend swatch for scatter — solid filled circle equivalent */
+  .trend-legend-swatch.scatter {
+    background: var(--scatter);
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+  }
+  /* Right-axis labels for the duration scale */
+  .chart-axis-label.y.dur { text-anchor: start; fill: #7c3aed; }
+
+  /* In-progress month indicator — a pulsing red dot connected by a dashed line
+     to the last complete month. The dashed connector visually separates the
+     partial data from the trend without hiding it. */
+  .chart-line-inprogress {
+    fill: none;
+    stroke: #dc3232;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    stroke-linecap: round;
+    opacity: 0.7;
+  }
+  .chart-line-inprogress.dur {
+    stroke: #dc3232;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    opacity: 0.6;
+  }
+  .chart-dot-inprogress {
+    fill: #dc3232;
+    stroke: var(--surface-2);
+    stroke-width: 1.5;
+  }
+  /* Revenue-specific in-progress dot — green to match the revenue chart palette.
+     Scoped by the wrapping #revenueChart so it only applies inside the panel. */
+  #revenueChart .chart-dot-inprogress {
+    fill: var(--up);
+  }
+  #revenueChart .chart-dot-inprogress-pulse {
+    fill: var(--up);
+  }
+  /* The pulse circle starts at the dot's size and expands outward while fading.
+     Looping animation creates the "alive, in progress" cue. */
+  .chart-dot-inprogress-pulse {
+    fill: #dc3232;
+    opacity: 0.6;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: chart-pulse 1.8s ease-out infinite;
+  }
+  @keyframes chart-pulse {
+    0%   { transform: scale(1);   opacity: 0.55; }
+    70%  { transform: scale(3);   opacity: 0;    }
+    100% { transform: scale(3);   opacity: 0;    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chart-dot-inprogress-pulse { animation: none; opacity: 0; }
+  }
+  .chart-gap { pointer-events: none; }
+  .chart-gap.deficit { fill: #ff6b66; opacity: 0.13; }
+  .chart-gap.surplus { fill: #1d9e75; opacity: 0.13; }
+  .chart-annotation-label {
+    fill: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    font-family: inherit;
+    text-anchor: middle;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-attribution {
+    fill: var(--text-dim);
+    font-size: 11px;
+    font-family: inherit;
+    text-anchor: end;
+    opacity: 0.75;
+  }
+  /* On mobile, the SVG renders smaller; bump text size in the viewBox to compensate */
+  @media (max-width: 540px) {
+    .chart-axis-label { font-size: 18px; }
+    .chart-annotation-label { font-size: 17px; }
+    .chart-attribution { font-size: 15px; }
+  }
+  .chart-dot { fill: var(--surface); stroke-width: 2; }
+  .chart-dot.curr { stroke: var(--accent); }
+  .chart-dot.curr.in-progress { stroke-dasharray: 2 1.5; opacity: 0.7; }
+  .chart-dot.prev { stroke: var(--text-dim); }
+  .chart-hit { fill: transparent; cursor: pointer; }
+
+  /* Custom info popover — replaces native `title` tooltips for the (i) icons
+     and any other element with data-popover. Positioned in document space
+     (absolute relative to body), max-width clamped so long text wraps cleanly,
+     pointer triangle indicates which element the popover belongs to. */
+  .info-popover {
+    position: absolute;
+    display: none;
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.6rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    font-weight: 400;
+    max-width: min(320px, calc(100vw - 32px));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    /* Force the text out of any inherited uppercase/letter-spacing — labels
+       on hero stats use those properties, but the popover content should
+       read as plain prose. */
+    text-transform: none;
+    letter-spacing: 0;
+    /* Pointer triangle below the popover by default — sits at the position
+       defined by --popover-pointer-x which is set from JS to align with the
+       trigger element's centre. */
+  }
+  .info-popover::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: var(--popover-pointer-x, 50%);
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 5px solid var(--text);
+  }
+  /* When popover flips above the trigger, point the arrow downward instead */
+  .info-popover.flipped::before {
+    top: auto;
+    bottom: -5px;
+    border-bottom: none;
+    border-top: 5px solid var(--text);
+  }
+
+  /* Trigger element styling — clickable cursor + ensure mobile gets a usable
+     hit target. The visual ⓘ is small (~12px); but the click area extends a
+     few pixels around it via padding so finger taps land reliably. */
+  [data-popover] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .chart-tooltip {
+    position: absolute;
+    background: var(--text);
+    color: var(--surface);
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+    margin-top: -8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+  .chart-tooltip-month { font-weight: 600; margin-bottom: 0.2rem; }
+  .chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-tooltip-row .swatch {
+    width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+  }
+  .chart-tooltip-row .swatch.curr { background: var(--accent); }
+  .chart-tooltip-row .swatch.prev { background: var(--text-dim); }
+  .chart-tooltip-row .swatch.duration { background: #7c3aed; }
+  .chart-tooltip-row .swatch.likes { background: #7c3aed; }
+  /* In-progress caveat — small italic footer in the tooltip */
+  .chart-tooltip-inprogress {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 0.35rem;
+    padding-top: 0.3rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.3;
+  }
+  .chart-tooltip-inprogress-tag {
+    display: inline-block;
+    background: #dc3232;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .chart-tooltip-delta { font-weight: 500; margin-left: 0.3rem; }
+  .chart-tooltip-delta.up { color: #4dd0a0; }
+  .chart-tooltip-delta.down { color: #ff8a8a; }
+  /* Inline reference label inside a delta — e.g. "vs Jun 2025" — quieter than
+     the main delta value, so the percentage stays the dominant element. */
+  .chart-tooltip-delta-ref {
+    font-weight: 400;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    margin-left: 0.15rem;
+  }
+  /* Window mode — flat video list for sub-monthly ranges */
+  .window-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .window-list .window-list-search {
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .window-list .window-list-search input {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+  .window-list .window-list-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  .window-list .window-list-stats {
+    padding: 0.55rem 0.9rem;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  /* Group header inside the window list — sits between the sortable column
+     header and the actual video rows, labels each group (Long-form / Shorts)
+     and shows its count + total views for fast scanning. Visually quieter
+     than the main stats line so it reads as a section divider. */
+  .window-list-group + .window-list-group {
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .window-list-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0.9rem;
+    background: var(--surface);
+    font-size: 0.78rem;
+  }
+  .window-list-group-label {
+    font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.78rem;
+  }
+  .window-list-group-meta {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Channel breakdown chips above the window list */
+  .channel-breakdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  /* Window-mode variant: sits inside the window-list card */
+  .window-list .channel-breakdown {
+    padding: 0.7rem 0.9rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  /* Monthly-mode variant: standalone informational strip above the monthly list */
+  #monthlyBreakdownChips .channel-breakdown {
+    padding: 0.6rem 0;
+    margin-bottom: 0.7rem;
+    gap: 0.5rem;
+  }
+  #monthlyBreakdownChips .channel-breakdown:empty { display: none; }
+  /* Static chips render as small two-line cards (used in monthly mode) */
+  .channel-breakdown-chip.static {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 8px;
+    min-width: 160px;
+  }
+  .channel-breakdown-chip.static .cbc-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .channel-breakdown-chip.static .cbc-detail {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .channel-breakdown-chip.static .cbc-long-num,
+  .channel-breakdown-chip.static .cbc-short-num,
+  .channel-breakdown-chip.static .cbc-views-num {
+    color: var(--text);
+    font-weight: 500;
+  }
+  @media (max-width: 540px) {
+    .channel-breakdown-chip.static { min-width: 140px; padding: 0.5rem 0.8rem; }
+    .channel-breakdown-chip.static .cbc-name { font-size: 0.85rem; }
+    .channel-breakdown-chip.static .cbc-detail { font-size: 0.78rem; }
+  }
+  .channel-breakdown-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.32rem 0.85rem 0.32rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s, color 0.12s;
+  }
+  .channel-breakdown-chip:hover {
+    border-color: var(--brand);
+    color: var(--brand-deep);
+  }
+  [data-theme="dark"] .channel-breakdown-chip:hover { color: var(--text); }
+  .channel-breakdown-chip.static {
+    cursor: default;
+  }
+  .channel-breakdown-chip.static:hover {
+    border-color: var(--border);
+    color: var(--text);
+  }
+  [data-theme="dark"] .channel-breakdown-chip.static:hover { color: var(--text); }
+  .channel-breakdown-chip.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .channel-breakdown-chip.empty {
+    opacity: 0.45;
+  }
+  .channel-breakdown-chip .cbc-name {
+    font-weight: 600;
+  }
+  .channel-breakdown-chip .cbc-counts {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .channel-breakdown-chip.active .cbc-counts {
+    color: var(--accent);
+    opacity: 0.85;
+  }
+  .channel-breakdown-chip .cbc-views {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;
+  }
+  .channel-breakdown-chip.active .cbc-views {
+    color: var(--accent);
+    opacity: 0.75;
+  }
+  .channel-breakdown-clear {
+    background: transparent;
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .channel-breakdown-clear:hover {
+    color: var(--text);
+    border-color: var(--text-muted);
+  }
+
+  /* Clickable channel cells in data rows */
+  .video-channel.clickable {
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+  .video-channel.clickable:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .video-title-channel-tag.clickable-inline {
+    cursor: pointer;
+  }
+  .video-title-channel-tag.clickable-inline:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 540px) {
+    .channel-breakdown { padding: 0.55rem 0.7rem; gap: 0.3rem; }
+    .channel-breakdown-chip { font-size: 0.78rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem; }
+    .channel-breakdown-chip .cbc-views { display: none; }
+  }
+  .window-list .window-list-rows {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .window-list .video-row-header {
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .window-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+  @media (max-width: 540px) {
+    .window-list .window-list-search input { font-size: 16px; padding: 0.5rem 0.7rem; }
+  }
+
+  /* Word cloud section — header is a full-width card-style toggle that
+     matches the visual weight of the ad/revenue panels, so users know
+     there's something worth opening here. */
+  .wordcloud-section {
+    margin: 0 0 1.5rem;
+  }
+  .wordcloud-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid #7c3aed;  /* purple accent — matches the like-rate visualisations */
+    border-radius: var(--radius);
+    padding: 0.85rem 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+  }
+  .wordcloud-toggle:hover {
+    background: var(--surface-2);
+    transform: translateY(-1px);
+  }
+  .wordcloud-toggle[aria-expanded="true"] {
+    background: var(--surface-2);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  /* Icon block — uses an SVG that visually suggests "scattered words" so the
+     user gets an at-a-glance hint of what the panel contains. */
+  .wordcloud-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(124, 58, 237, 0.10);
+    color: #7c3aed;
+  }
+  [data-theme="dark"] .wordcloud-icon {
+    background: rgba(124, 58, 237, 0.18);
+  }
+  .wordcloud-toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .wordcloud-eyebrow {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .wordcloud-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+  .wordcloud-caret {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.18s, border-color 0.18s;
+    margin-right: 0.4rem;
+  }
+  .wordcloud-toggle[aria-expanded="true"] .wordcloud-caret {
+    transform: rotate(-135deg);
+    border-color: #7c3aed;
+  }
+  .wordcloud-hint {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+  .wordcloud-panel {
+    margin-top: 0;
+    padding: 1.1rem 1.2rem 1.4rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-left: 4px solid #7c3aed;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
+  .wordcloud-meta {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+  }
+  .wordcloud-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.65rem;
+    align-items: baseline;
+    line-height: 1.4;
+  }
+  .wordcloud-word {
+    color: var(--text);
+    transition: color 0.12s;
+    font-weight: 500;
+    display: inline-block;
+  }
+  .wordcloud-word:hover {
+    color: var(--accent);
+  }
+  .wordcloud-empty {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 1rem 0;
+  }
+  @media (max-width: 540px) {
+    .wordcloud-panel { padding: 0.9rem 0.95rem 1.1rem; }
+    .wordcloud-body { gap: 0.25rem 0.5rem; }
+  }
+  .empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 3rem 1.5rem;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+  .empty-state strong { color: var(--text); }
+  .empty-state-msg { margin-bottom: 1.1rem; }
+  .empty-state-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+  .empty-state-btn {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s, border-color 0.12s;
+  }
+  .empty-state-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  /* "Reset to default" button — bigger commitment than date-only resets
+     (also changes channel), so it gets a slightly heavier visual treatment. */
+  .empty-state-btn-reset {
+    background: var(--surface-2);
+    font-weight: 600;
+  }
+
+  .delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+    padding: 0.12rem 0.45rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .delta.up { color: var(--up); background: var(--up-soft); }
+  .delta.down { color: var(--down); background: var(--down-soft); }
+  .delta.flat { color: var(--flat); background: var(--surface-2); }
+  .delta.large { font-size: 0.95rem; padding: 0.2rem 0.55rem; }
+  .delta-arrow { font-size: 0.78rem; line-height: 1; }
+  .delta-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 0.2rem;
+  }
+
+  .monthly-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .month-row {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    transition: background 0.1s;
+  }
+  .month-row:last-child { border-bottom: none; }
+  .month-header {
+    display: grid;
+    grid-template-columns: 1.1fr 0.55fr 1.4fr 0.9fr 0.7fr 1.3fr;
+    gap: 1rem;
+    padding: 0.95rem 1.1rem;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .month-header:hover { background: var(--surface-2); }
+  .month-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .in-progress-badge {
+    background: var(--shorts-soft);
+    color: var(--shorts);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.12rem 0.42rem;
+    border-radius: 999px;
+    border: 1px solid var(--shorts);
+    line-height: 1.4;
+  }
+  [data-theme="dark"] .in-progress-badge {
+    background: transparent;
+    color: var(--shorts);
+  }
+  .caret {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(-45deg);
+    transition: transform 0.15s;
+  }
+  .month-row.expanded .caret { transform: rotate(45deg); }
+  .month-cell { font-variant-numeric: tabular-nums; }
+  .month-cell.num { text-align: right; }
+  .month-cell-value { font-weight: 500; font-size: 0.95rem; }
+  .month-cell-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .deltas-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+  }
+  .delta-line { display: flex; align-items: center; gap: 0.35rem; }
+
+  .stack-bar-wrap { margin-top: 0.4rem; }
+  .stack-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+  }
+  .stack-bar-long { background: var(--accent); height: 100%; }
+  .stack-bar-short { background: var(--shorts); height: 100%; }
+  .stack-bar-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .month-detail {
+    display: none;
+    background: var(--surface-2);
+    padding: 1rem 1.1rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .month-row.expanded .month-detail { display: block; }
+
+  /* Topic ribbon — two stacked thin bars showing share of monthly uploads
+     and share of monthly views per topic. Lives at the top of the month
+     detail expansion. Only rendered for TheQuartering (the only channel
+     with transcript-based topic tags). */
+  .topic-ribbon-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 0.9rem 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  .topic-ribbon-row {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 0.35rem 0.6rem;
+    align-items: center;
+  }
+  .topic-ribbon-row + .topic-ribbon-row { margin-top: 0.3rem; }
+  .topic-ribbon-label {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: right;
+    font-weight: 500;
+  }
+  .topic-ribbon {
+    display: flex;
+    height: 7px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .topic-ribbon-seg {
+    transition: opacity 0.1s;
+    cursor: help;
+  }
+  .topic-ribbon-seg:hover { opacity: 0.75; }
+  .topic-ribbon-seg.untagged {
+    background: var(--border-strong);
+    opacity: 0.5;
+  }
+  .topic-ribbon-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.85rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.55rem;
+  }
+  .topic-ribbon-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+  }
+  .topic-ribbon-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .topic-ribbon-legend-stats {
+    color: var(--text-dim);
+  }
+  .topic-ribbon-legend-more {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Topic cell in per-video rows */
+  .video-topic {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .video-topic-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .video-topic.untagged { color: var(--text-dim); font-style: italic; opacity: 0.6; }
+
+  .group {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+  }
+  .group:last-child { margin-bottom: 0; }
+  .group-header {
+    padding: 0.7rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .group-title { font-weight: 500; display: flex; align-items: center; gap: 0.45rem; }
+  .group-stats { color: var(--text-muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .group-empty { padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center; }
+  .split-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .split-dot.long { background: var(--accent); }
+  .split-dot.short { background: var(--shorts); }
+  .video-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 80px 110px 130px;
+    gap: 0.75rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.85rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-row.with-channel {
+    grid-template-columns: 90px 120px 1fr 80px 110px 130px;
+  }
+  /* When topic data unavailable (non-TQ channels), the .no-topics modifier
+     drops the topic column so rows still align cleanly. */
+  .video-row.no-topics { grid-template-columns: 90px 1fr 80px 110px; }
+  .video-row.with-channel.no-topics { grid-template-columns: 90px 120px 1fr 80px 110px; }
+  .video-row:last-child { border-bottom: none; }
+  .video-row:hover { background: var(--surface-2); }
+  .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+  .video-channel {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .video-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .video-title a { color: var(--text); text-decoration: none; }
+  .video-title a:hover { color: var(--accent); text-decoration: underline; }
+  /* Mobile: channel becomes a subtitle under the title */
+  .video-title-channel-tag {
+    display: none;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    font-weight: 400;
+    margin-top: 0.15rem;
+    white-space: nowrap;
+  }
+  /* Inline "ad" badge — appears next to video titles for videos that have been
+     identified as paid Google Ad campaigns via the Google Ads Transparency Centre.
+     Subtle but visible: factual annotation, not editorial commentary. */
+  .ad-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--shorts-soft);
+    color: var(--shorts);
+    border: 1px solid var(--shorts);
+    border-radius: 4px;
+    padding: 0 5px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: help;
+  }
+  [data-theme="dark"] .ad-badge {
+    background: transparent;
+  }
+  /* Info hint inside the ad badge — quieter than the "ad" text but still
+     part of the same hover target. Signals there's more info on hover. */
+  .ad-badge-info {
+    font-size: 0.78em;
+    opacity: 0.7;
+    margin-left: 1px;
+    font-weight: 500;
+  }
+
+  /* Like-rate outlier badge — appears on individual videos whose like rate
+     falls outside the channel's normal p10-p90 band. Two variants:
+     'high' (green, ▲) flags above-typical engagement; 'low' (red, ▼) flags
+     below-typical. Tooltip shows the actual rate vs channel median. */
+  .like-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Thumbs-up icon inside the badge — inherits the badge's text colour via
+     fill="currentColor" so it tints green or red to match the variant.
+     Small vertical nudge to optically align with the text baseline. */
+  .like-badge-icon {
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+  .like-badge-high {
+    background: rgba(29, 158, 117, 0.12);
+    color: var(--up);
+    border: 1px solid var(--up);
+  }
+  .like-badge-low {
+    background: rgba(220, 50, 50, 0.10);
+    color: var(--down);
+    border: 1px solid var(--down);
+  }
+  [data-theme="dark"] .like-badge-high,
+  [data-theme="dark"] .like-badge-low {
+    background: transparent;
+  }
+
+  /* Ad campaigns panel — shows the channel's confirmed paid promotion data.
+     Collapsible: header is always visible (summary stats in one line);
+     body with full per-campaign performance table appears on click. */
+  .ad-panel {
+    background: var(--surface);
+    border: 1px solid var(--shorts);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 1rem 0 1.5rem;
+    overflow: hidden;
+  }
+  /* The whole header is a button so the entire bar is the click target.
+     Reset native button styling so it looks like a panel header. */
+  .ad-panel-toggle {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;
+  }
+  .ad-panel-toggle:hover { background: var(--surface-2); }
+  .ad-panel-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .ad-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+  }
+  .ad-panel-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .ad-panel-eyebrow {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--shorts);
+  }
+  .ad-panel-summary {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  /* Caret rotates to indicate expanded state */
+  .ad-panel-caret {
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;
+  }
+  .ad-panel-toggle[aria-expanded="true"] .ad-panel-caret {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+  }
+
+  /* Expanded body */
+  .ad-panel-body {
+    padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  /* Performance callout — three stat blocks side-by-side at the top of the
+     panel body. Each stat: big number on top, descriptor underneath. Reads
+     like a proper KPI dashboard: parallel, scannable, no awkward "label —
+     value — label" rhythm. Collapses to single column on narrow viewports.
+     Background tint + left border accent in the panel's --shorts theme tie
+     this visually to "paid promotion". */
+  .ad-panel-callout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    padding: 1rem 1.1rem;
+    margin: 0.85rem 0 1.1rem;
+    background: var(--shorts-soft);
+    border-left: 3px solid var(--shorts);
+    border-radius: var(--radius-sm);
+  }
+  [data-theme="dark"] .ad-panel-callout {
+    background: rgba(225, 117, 23, 0.08);
+  }
+  .ad-panel-callout-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+  .ad-panel-callout-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .ad-panel-callout-of {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  .ad-panel-callout-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  /* (ⓘ) icon inside a callout label — small info hint, matches the
+     hero-stat-info pattern but lighter weight for the smaller text. */
+  .ad-panel-callout-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    margin-left: 0.1rem;
+    font-size: 0.95em;
+    transition: color 0.15s;
+    padding: 6px;
+    margin: -6px -6px -6px calc(0.1rem - 6px);
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  .ad-panel-callout-info:hover,
+  .ad-panel-callout-info:focus-visible {
+    color: var(--shorts);
+    outline: none;
+    background: rgba(225, 117, 23, 0.12);
+  }
+  /* Mobile: stack the stats vertically so they don't squeeze to unreadable
+     widths. Each stat still has the big-number-on-top layout. */
+  @media (max-width: 720px) {
+    .ad-panel-callout {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .ad-panel-callout-value { font-size: 1.25rem; }
+  }
+
+  /* Performance table — scrollable on overflow */
+  .ad-perf-table-wrap {
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .ad-perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .ad-perf-table thead th {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  /* Sortable header cells — click affordance, hover state, active indicator.
+     Uses the same .sort-arrow component as the window-list sortable rows. */
+  .ad-perf-table thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.12s, background 0.12s;
+  }
+  .ad-perf-table thead th.sortable:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+  .ad-perf-table thead th.sortable.active-sort {
+    color: var(--text);
+  }
+  .ad-perf-table thead th.sortable:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .ad-perf-table thead th .sort-arrow {
+    margin-left: 0.35rem;
+  }
+  /* For numeric-aligned (right-aligned) columns, the arrow sits to the right
+     of the label which is already at the right edge — same pattern as text columns. */
+  .ad-perf-table th.col-num,
+  .ad-perf-table td.col-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ad-perf-table td {
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ad-perf-table tbody tr:last-child td { border-bottom: none; }
+  .ad-perf-table tbody tr:hover { background: var(--surface-2); }
+  .ad-perf-table .col-vid a {
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    line-height: 1.3;
+  }
+  .ad-perf-table .col-vid a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .ad-perf-date {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+  }
+
+  .ad-panel-footnote {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.85rem;
+    line-height: 1.5;
+  }
+  .ad-panel-footnote a {
+    color: var(--text-muted);
+    text-decoration: underline;
+  }
+  .ad-panel-footnote a:hover { color: var(--accent); }
+
+  @media (max-width: 540px) {
+    .ad-panel-toggle { padding: 0.7rem 0.85rem; }
+    .ad-panel-body { padding: 0 0.85rem 0.85rem; }
+    .ad-perf-table { font-size: 0.85rem; }
+    .ad-perf-table thead th,
+    .ad-perf-table td { padding: 0.45rem 0.55rem; }
+  }
+
+  /* Estimated revenue panel — same architectural pattern as the ad panel
+     (collapsible toggle with one-line summary, expandable detail) but
+     visually distinguished with a different accent colour so users can tell
+     them apart at a glance. Green accent reads as "money" without being too
+     on-the-nose about it. */
+  /* Story tracker — surfaces a dominant single-topic saturation event
+     while it's ongoing. Collapsible like the revenue and ad panels: header
+     button always shows the headline; body (stats, saturation chart,
+     video list) reveals on expand. */
+  .story-tracker {
+    background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border);
+    border-left: 3px solid #e85d4d;
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;
+  }
+  .story-tracker-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;
+  }
+  .story-tracker-toggle:hover { background: rgba(255,255,255,0.02); }
+  .story-tracker-eyebrow {
+    grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #e85d4d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .story-tracker-headline {
+    grid-column: 1;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .story-tracker-headline strong {
+    color: #e85d4d;
+  }
+  .story-tracker-chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .story-tracker-toggle[aria-expanded="true"] .story-tracker-chevron {
+    transform: rotate(180deg);
+  }
+  .story-tracker-body {
+    padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .story-tracker-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .story-tracker-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .story-tracker-stat-value {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .story-tracker-stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  /* "Unclassifiable" note — appears when some videos have descriptions
+     too thin for keyword matching. Visually subordinate to the main stats:
+     muted, italic-ish. Honest about a known limitation without distracting
+     from the verified count above. */
+  .story-tracker-unclassified {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding: 0.5rem 0.7rem;
+    margin: 0 0 0.9rem;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--border);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .story-tracker-unclassified em {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Saturation chart — horizontal bars per time window. The bar visually
+     encodes the percentage; the numeric label shows the fraction. */
+  /* Per-channel saturation rows (new story tracker, replaces the old
+     per-window saturation bars). One row per tagged channel showing how
+     much of that channel's recent output is about this topic. */
+  .story-tracker-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-variant-numeric: tabular-nums;
+    margin: 0.6rem 0 0.8rem;
+  }
+  .story-channel-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 170px;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.82rem;
+  }
+  .story-channel-handle {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .story-channel-bar {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .story-channel-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.25s ease;
+  }
+  .story-channel-stats {
+    color: var(--text);
+    font-size: 0.8rem;
+    text-align: right;
+  }
+  .story-channel-pct {
+    color: var(--text-muted);
+    margin: 0 0.1rem;
+  }
+  .story-tracker-totals {
+    padding: 0.6rem 0;
+    margin: 0.4rem 0 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .story-tracker-totals strong {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Video list — sortable header row, scrollable list below. Both the
+     header and the list items have explicit right padding to push the
+     rightmost column (like rate) away from where the scrollbar appears.
+     scrollbar-gutter: stable alone wasn't enough — Chrome's overlay
+     scrollbar can still visually crowd the content. Explicit padding
+     reserves the space whether the scrollbar shows or not. */
+  .story-tracker-video-list-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    padding: 0.4rem 14px 0.4rem 0;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .story-tracker-sort-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .story-tracker-sort-btn:hover { color: var(--text); }
+  .story-tracker-sort-btn[data-sort-active="true"] {
+    color: var(--text);
+  }
+  /* Numeric columns right-aligned (header + body) */
+  .story-tracker-sort-btn[data-sort-col="views"],
+  .story-tracker-sort-btn[data-sort-col="like_rate"],
+  .story-tracker-video-list-header > :nth-child(3),
+  .story-tracker-video-list-header > :nth-child(4) {
+    text-align: right;
+  }
+  .story-tracker-video-list {
+    font-size: 0.82rem;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  .story-tracker-video-item {
+    padding: 0.4rem 14px 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .story-tracker-video-item:last-child { border-bottom: none; }
+  .story-tracker-video-date {
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .story-tracker-video-title a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .story-tracker-video-title a:hover { text-decoration: underline; }
+  .story-tracker-video-desc {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  .story-tracker-video-views,
+  .story-tracker-video-likerate {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Description Patterns panel — same collapsible structure as the story
+     tracker but distinct visual identity (muted accent, analytical
+     register, no urgency cue) so the two read as different kinds of
+     finding. Used for channel-behavior patterns that are interesting in
+     aggregate rather than tied to a single hot story. */
+  .desc-pattern-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;
+  }
+  .desc-pattern-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;
+  }
+  .desc-pattern-toggle:hover { background: rgba(255,255,255,0.02); }
+  .desc-pattern-eyebrow {
+    grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .desc-pattern-headline {
+    grid-column: 1;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .desc-pattern-headline strong {
+    color: var(--brand);
+    font-weight: 700;
+  }
+  .desc-pattern-quote {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .desc-pattern-chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .desc-pattern-toggle[aria-expanded="true"] .desc-pattern-chevron {
+    transform: rotate(180deg);
+  }
+  .desc-pattern-body {
+    padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .desc-pattern-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .desc-pattern-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .desc-pattern-stat-value {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .desc-pattern-stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .desc-pattern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .desc-pattern-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .desc-pattern-table th.num { text-align: right; }
+  .desc-pattern-table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .desc-pattern-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .desc-pattern-table tr:last-child td { border-bottom: none; }
+  .desc-pattern-table .desc-text {
+    font-style: italic;
+    color: var(--text);
+    word-break: break-word;
+  }
+  /* Long descriptions collapse to a single-line preview with a chevron.
+     Native <details>/<summary> for accessibility; default marker hidden
+     so the row layout stays clean. */
+  .desc-pattern-long {
+    overflow: hidden;
+  }
+  .desc-pattern-long summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    color: var(--text);
+    font-style: italic;
+  }
+  .desc-pattern-long summary::-webkit-details-marker { display: none; }
+  .desc-pattern-long summary::after {
+    content: '▼';
+    font-size: 0.65em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+  .desc-pattern-long[open] summary::after {
+    transform: rotate(180deg);
+  }
+  .desc-pattern-long .desc-preview {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+  }
+  .desc-pattern-long .desc-full {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-style: italic;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Info point callout — curated editorial annotations specific to the
+     selected channel (e.g. "this typo appears on 100 videos"). Sits at
+     the top of the expanded body, brand-tinted background to read as
+     informational rather than warning. */
+  .desc-pattern-info {
+    background: rgba(106, 163, 255, 0.06);
+    border-left: 2px solid var(--brand);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.9rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .desc-pattern-info-label {
+    color: var(--brand);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+  .desc-pattern-info p { margin: 0; }
+  .desc-pattern-info + .desc-pattern-info { margin-top: -0.4rem; }
+
+  /* Small ⓘ icon next to stat labels — uses a CSS-driven tooltip rather
+     than the native title attribute, which has a ~1 second hover delay
+     and inconsistent rendering. Tooltip appears immediately on hover. */
+  .info-icon {
+    color: var(--text-dim);
+    cursor: help;
+    font-size: 0.85em;
+    margin-left: 0.15rem;
+    user-select: none;
+    position: relative;
+  }
+  .info-icon:hover { color: var(--text-muted); }
+  .info-icon[data-tooltip]:hover::after,
+  .info-icon[data-tooltip]:focus::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.65rem;
+    width: max-content;
+    max-width: 280px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.45;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 100;
+    white-space: normal;
+    pointer-events: none;
+  }
+  .desc-pattern-typos {
+    margin-top: 1rem;
+    padding: 0.8rem 0.95rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+  }
+  .desc-pattern-typos-header {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.55rem;
+    font-weight: 600;
+  }
+  .desc-pattern-typos-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+  .desc-pattern-typos-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .desc-pattern-typos-list .typo-wrong {
+    color: #e85d4d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 600;
+  }
+  .desc-pattern-typos-list .typo-arrow {
+    color: var(--text-dim);
+  }
+  .desc-pattern-typos-list .typo-right {
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .desc-pattern-typos-list .typo-context {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.8rem;
+  }
+
+  .revenue-panel {
+    background: var(--surface);
+    border: 1px solid var(--up);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 0 0 1.5rem;
+    /* Note: no `overflow: hidden` here — the chart tooltip inside the panel
+       body needs to be free to extend beyond the panel edges. The toggle
+       button below clips its own hover background to the rounded corners
+       individually via the toggle's own border-radius. */
+  }
+  .revenue-panel-toggle {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;
+    /* Match panel's top corners so hover background doesn't bleed past them
+       (the panel no longer uses overflow:hidden — see note there). */
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+  }
+  .revenue-panel-toggle:hover { background: var(--surface-2); }
+  .revenue-panel-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .revenue-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+  }
+  .revenue-panel-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .revenue-panel-eyebrow {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--up);
+  }
+  .revenue-panel-summary {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-panel-caret {
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;
+  }
+  .revenue-panel-toggle[aria-expanded="true"] .revenue-panel-caret {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+  }
+  /* Expanded body — chart, breakdown table, methodology */
+  .revenue-panel-body {
+    padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  /* Chart wrap inside the panel — relative-positioned so the absolute
+     tooltip can anchor to it. Slightly inset from the panel body padding
+     so the chart doesn't bleed visually into the table below. */
+  .revenue-chart-wrap {
+    position: relative;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 0.85rem 0.5rem;
+    margin: 1rem 0 0.5rem;
+  }
+  #revenueChart {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .revenue-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.4rem;
+  }
+  .trend-legend-swatch.revenue-mid {
+    background: var(--up);
+    height: 2px;
+  }
+  .revenue-breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-breakdown th {
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .revenue-breakdown th.num { text-align: right; }
+  .revenue-breakdown td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .revenue-breakdown td.num { text-align: right; }
+  .revenue-breakdown tr.total td {
+    border-bottom: none;
+    border-top: 2px solid var(--border-strong);
+    font-weight: 700;
+    padding-top: 0.7rem;
+  }
+  /* Scenario toggle sits at the top of the panel body, above the chart. */
+  .revenue-scenario-toggle {
+    margin: 0 0 0.8rem;
+  }
+  /* Per-scenario explanation — directly under the breakdown table, visually
+     distinct from the footnote (slightly larger, brighter) so it reads as
+     the explanation OF the numbers, not boilerplate. */
+  .revenue-scenario-explanation {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    padding: 0.8rem 0.9rem;
+    margin-top: 0.8rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+  .revenue-scenario-explanation strong {
+    color: var(--text);
+  }
+  .revenue-breakdown .rev-category {
+    color: var(--text);
+  }
+  .revenue-breakdown .rev-subdetail {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-breakdown .rev-range {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-panel-footnote {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 1rem;
+    line-height: 1.55;
+  }
+  .revenue-panel-footnote strong { color: var(--text); }
+  @media (max-width: 540px) {
+    .revenue-panel-toggle { padding: 0.7rem 0.85rem; }
+    .revenue-panel-body { padding: 0 0.85rem 0.85rem; }
+    .revenue-breakdown { font-size: 0.85rem; }
+    .revenue-breakdown th,
+    .revenue-breakdown td { padding: 0.45rem 0.4rem; }
+  }
+  .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
+  .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+  .group-content { max-height: 360px; overflow-y: auto; }
+
+  /* Column header row inside groups */
+  .video-row-header {
+    background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-row-header:hover { background: var(--surface-2); }
+  .video-row-header .sortable {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.12s;
+  }
+  .video-row-header .sortable:hover { color: var(--text); }
+  .video-row-header .sortable.active-sort {
+    color: var(--accent);
+  }
+  .video-row-header .sortable.active-sort:hover {
+    color: var(--accent);
+  }
+  .video-row-header .video-date { font-size: 0.78rem; }
+  .video-row-header .video-channel { font-size: 0.78rem; }
+  .video-row-header .video-duration { font-size: 0.78rem; }
+  .sort-arrow {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: var(--text-dim);
+  }
+  .sort-arrow.active { color: var(--accent); }
+
+  /* Search input above the groups */
+  .detail-controls {
+    padding: 0 0 0.7rem;
+  }
+  .detail-search {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+  .detail-search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  .detail-search::placeholder { color: var(--text-dim); }
+  @media (max-width: 540px) {
+    .detail-search { font-size: 16px; padding: 0.5rem 0.7rem; }
+  }
+
+  .loading, .error {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .error { color: #791f1f; background: var(--down-soft); border-radius: var(--radius-sm); }
+
+  /* Loading skeleton */
+  .loading { padding: 0; text-align: left; }
+  .skeleton-bar, .skeleton-card {
+    background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: var(--radius-sm);
+  }
+  .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .skeleton-card { height: 110px; border-radius: var(--radius); }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--text-muted); }
+
+  @media (max-width: 720px) {
+    .month-header { grid-template-columns: 1fr 1.2fr 1fr; padding: 0.8rem 0.85rem; }
+    .month-cell.hide-mobile { display: none; }
+    .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
+    .video-row.with-channel { grid-template-columns: 70px 1fr 90px; }
+    .video-row .video-duration,
+    .video-row .video-channel,
+    .video-row .hide-mobile { display: none !important; }
+    .video-title { white-space: normal; }
+    .video-title-channel-tag { display: block; }
+    .month-detail { padding: 0.7rem 0.7rem 0.85rem; }
+    .group-header { padding: 0.55rem 0.7rem; }
+    .group-stats { font-size: 0.78rem; }
+  }
+  /* Larger phones (e.g. modern Samsungs) can run >720px CSS px in portrait —
+     catch them with a coarse-pointer media query to hide duration on touch devices regardless of width */
+  @media (pointer: coarse) and (max-width: 1000px) {
+    .video-row { grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem; }
+    .video-row.with-channel { grid-template-columns: 70px 1fr 90px; }
+    .video-row .video-duration,
+    .video-row .video-channel,
+    .video-row .hide-mobile { display: none !important; }
+    .video-title { white-space: normal; }
+    .video-title-channel-tag { display: block; }
+  }
+  /* ===== MOOD MODES ===== */
+
+  /* Hidden audio player — iframe needs to exist in DOM for audio, just visually hidden */
+  .audio-player {
+    position: fixed;
+    bottom: -200px;
+    left: -200px;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* Mood control buttons — floating bottom-right */
+  .mood-controls {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 90;
+  }
+  .mood-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  }
+  .mood-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  .mood-btn[aria-pressed="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+  .mood-party[aria-pressed="true"] {
+    animation: moodPartyPulse 0.9s ease-in-out infinite;
+  }
+  .mood-funeral[aria-pressed="true"] {
+    animation: moodFuneralPulse 2s ease-in-out infinite;
+  }
+  @keyframes moodPartyPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(239, 142, 41, 0.5), 0 6px 18px rgba(239, 142, 41, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(239, 142, 41, 0.3), 0 6px 22px rgba(239, 142, 41, 0.5); }
+  }
+  @keyframes moodFuneralPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(120, 120, 130, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(120, 120, 130, 0.25), 0 6px 22px rgba(0, 0, 0, 0.4); }
+  }
+  .mood-icon { font-size: 1rem; line-height: 1; }
+  /* When mood-controls move, animate the transition */
+  .mood-controls { transition: bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (max-width: 540px) {
+    .mood-controls { bottom: 0.6rem; right: 0.6rem; gap: 0.35rem; }
+    .mood-btn { font-size: 0.78rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; }
+    /* On mobile, lift the buttons clear of the mascot area when a mode is active.
+       Both the party mascots and unconscious_jer occupy the bottom-center of the
+       viewport; the buttons normally sit bottom-right where the mascots' wider
+       silhouettes can overlap them. Lift to ~30vh from the bottom while active. */
+    body.party-mode .mood-controls,
+    body.funeral-mode .mood-controls {
+      bottom: 32vh;
+    }
+  }
+
+  /* Party mode — disco lights overlay */
+  .disco-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s;
+    overflow: hidden;
+    mix-blend-mode: screen;
+  }
+  body.party-mode .disco-overlay { opacity: 1; }
+  .disco-light {
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+  .disco-light-1 {
+    background: radial-gradient(circle, rgba(255, 50, 100, 0.9), transparent 70%);
+    animation: discoMove1 7s ease-in-out infinite;
+  }
+  .disco-light-2 {
+    background: radial-gradient(circle, rgba(50, 150, 255, 0.9), transparent 70%);
+    animation: discoMove2 9s ease-in-out infinite;
+  }
+  .disco-light-3 {
+    background: radial-gradient(circle, rgba(120, 255, 100, 0.9), transparent 70%);
+    animation: discoMove3 8s ease-in-out infinite;
+  }
+  .disco-light-4 {
+    background: radial-gradient(circle, rgba(255, 200, 50, 0.9), transparent 70%);
+    animation: discoMove4 11s ease-in-out infinite;
+  }
+  .disco-light-5 {
+    background: radial-gradient(circle, rgba(200, 100, 255, 0.9), transparent 70%);
+    animation: discoMove5 10s ease-in-out infinite;
+  }
+  @keyframes discoMove1 {
+    0%, 100% { top: -10%; left: -10%; }
+    25% { top: 30%; left: 70%; }
+    50% { top: 70%; left: 20%; }
+    75% { top: 10%; left: 50%; }
+  }
+  @keyframes discoMove2 {
+    0%, 100% { top: 60%; left: 70%; }
+    33% { top: 10%; left: 30%; }
+    66% { top: 70%; left: -10%; }
+  }
+  @keyframes discoMove3 {
+    0%, 100% { top: 30%; left: 40%; }
+    50% { top: 70%; left: 60%; }
+  }
+  @keyframes discoMove4 {
+    0%, 100% { top: 80%; left: 20%; }
+    40% { top: 0%; left: 60%; }
+    80% { top: 50%; left: 80%; }
+  }
+  @keyframes discoMove5 {
+    0%, 100% { top: 20%; left: 75%; }
+    50% { top: 60%; left: 15%; }
+  }
+  /* On mobile, the disco lights need bigger size, less blur, and higher opacity
+     to read properly. 80px blur on a 200px-wide light at 50vw dissolves them
+     to near-invisibility on phone screens. */
+  @media (max-width: 540px) {
+    .disco-light {
+      width: 85vw;
+      height: 85vw;
+      max-width: none;
+      max-height: none;
+      filter: blur(45px);
+      opacity: 0.75;
+    }
+  }
+  /* Subtle hue cycling in party mode — applied to .container so the mood
+     buttons keep their natural brand colours and stay clearly clickable. */
+  body.party-mode .container { animation: partyHue 6s linear infinite; }
+  @keyframes partyHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(15deg); }
+  }
+
+  /* Party mode mascots — slide up from below the viewport */
+  .party-mascots {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* above disco lights (1), below mood-controls (90) and toast (100) */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.25));
+  }
+  body.party-mode .party-mascots {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+    animation: mascotBob 2.4s ease-in-out infinite 0.7s;
+  }
+  @keyframes mascotBob {
+    0%, 100% { transform: translate(-50%, 0%); }
+    50%      { transform: translate(-50%, -6px); }
+  }
+  @media (max-width: 540px) {
+    .party-mascots { width: 70vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.party-mode .party-mascots { animation: none; }
+  }
+
+  /* Funeral mode mascot — slow, mournful slide up from below. No bob. */
+  .funeral-mascot {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* same layer as party-mascots */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 2s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.35));
+  }
+  body.funeral-mode .funeral-mascot {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+  }
+  @media (max-width: 540px) {
+    .funeral-mascot { width: 70vw; }
+  }
+
+  /* ===== FLOATING LOW-FIGURE TEXT ===== */
+
+  /* Funeral mode: dust effect — a single canvas covers the viewport.
+     One-shot text appearance: fades in, holds, crumbles to dust over ~17s. */
+  .floaters-funeral {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s;
+  }
+  body.funeral-mode .floaters-funeral { opacity: 1; }
+  .floaters-funeral canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* Party mode: multiple instances bouncing across the screen,
+     flashing colours via filter hue rotation. */
+  .floaters-party {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  body.party-mode .floaters-party { opacity: 1; }
+  .floater-party {
+    position: absolute;
+    font-weight: 800;
+    white-space: nowrap;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.4);
+    animation:
+      floaterPartyMove var(--move-dur, 8s) cubic-bezier(0.4, 0, 0.6, 1) infinite alternate,
+      floaterPartyHue var(--hue-dur, 2s) linear infinite;
+  }
+  @keyframes floaterPartyMove {
+    0%   { transform: translate(0, 0) rotate(var(--rot-start, -8deg)); }
+    100% { transform: translate(var(--move-x, 60vw), var(--move-y, 40vh)) rotate(var(--rot-end, 12deg)); }
+  }
+  @keyframes floaterPartyHue {
+    0%, 100% { filter: hue-rotate(0deg); color: hsl(340, 90%, 60%); }
+    16%      { color: hsl(30, 95%, 60%); }
+    33%      { color: hsl(55, 95%, 60%); }
+    50%      { color: hsl(140, 80%, 55%); filter: hue-rotate(0deg); }
+    66%      { color: hsl(200, 90%, 60%); }
+    83%      { color: hsl(280, 85%, 65%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .floater-party { animation: none !important; }
+  }
+
+  /* Funeral mode — greyscale + rain.
+     We apply the filter to .container rather than body so the mood-controls,
+     toast, and overlays (which are body-level siblings) stay vibrant and
+     remain obviously interactive. */
+  body.funeral-mode .container {
+    filter: grayscale(1) brightness(0.92);
+    transition: filter 0.5s;
+  }
+  body:not(.funeral-mode) .container { transition: filter 0.5s; }
+
+  .rain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.6s;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(40, 50, 60, 0.18), rgba(20, 25, 30, 0.32));
+    /* Subtle backdrop blur — the "glass" the drops sit on. Kept light so
+       the data on the page stays readable through it. */
+    backdrop-filter: blur(0.6px);
+    -webkit-backdrop-filter: blur(0.6px);
+  }
+  body.funeral-mode .rain-overlay { opacity: 1; }
+  .rain-overlay canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Respect reduced-motion preferences for both modes */
+  @media (prefers-reduced-motion: reduce) {
+    .disco-light, body.party-mode .container { animation: none !important; }
+    /* Canvas rain animation is gated by JS — see setupMoodModes */
+  }
