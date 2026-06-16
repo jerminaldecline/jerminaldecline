@@ -2717,14 +2717,60 @@ function renderHeroStats(curr, prev) {
 // showing what fraction of THAT channel's long-form uploads in the window
 // covered this topic. Plus cross-channel totals at the bottom.
 
-const STORY_WINDOW_DAYS = 14;
+// Window: month-to-date by default ("so far in June"), with a count-based
+// fallback when the current month has too few videos to be statistically
+// meaningful (early-month noise guard). If month-to-date has fewer than
+// STORY_MIN_MONTH_VIDEOS long-form videos across the tagged channels, we
+// instead use the most recent STORY_FALLBACK_VIDEO_COUNT videos and relabel.
 const STORY_TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+const STORY_MIN_MONTH_VIDEOS = 15;       // below this, use the count-based window
+const STORY_FALLBACK_VIDEO_COUNT = 20;   // size of the count-based fallback window
 // Saturation threshold for surfacing a topic. A topic only appears as a
 // "story" if it accounts for at least this share of long-form uploads on
 // at least one channel during the window.
 const STORY_MIN_SATURATION = 0.10;
 const STORY_MAX_TOPICS = 1;
 const STORY_LONG_FORM_ONLY = true;
+
+const STORY_MONTH_NAMES = ['January','February','March','April','May','June',
+  'July','August','September','October','November','December'];
+
+// Resolve which videos are "in the window" and how to label that window.
+// Returns { videoIds:Set, label:string, isMonthMode:bool }.
+function resolveStoryWindow() {
+  const channelMap = dataset.channels || {};
+  // Eligible = tagged channels, long-form, available
+  const eligible = dataset.videos.filter(v => {
+    if (STORY_LONG_FORM_ONLY && v.isShort) return false;
+    if (v.unavailable) return false;
+    const ch = channelMap[v.channelId];
+    return ch && STORY_TAGGED_HANDLES.includes(ch.handle);
+  });
+
+  const now = new Date();
+  const monthStart = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).getTime();
+  const monthName = STORY_MONTH_NAMES[now.getUTCMonth()];
+
+  const monthVids = eligible.filter(v => new Date(v.publishedAt).getTime() >= monthStart);
+
+  if (monthVids.length >= STORY_MIN_MONTH_VIDEOS) {
+    return {
+      videoIds: new Set(monthVids.map(v => v.id)),
+      label: `so far in ${monthName}`,
+      isMonthMode: true
+    };
+  }
+
+  // Fallback: most recent N videos by publish date
+  const recent = [...eligible]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, STORY_FALLBACK_VIDEO_COUNT);
+  return {
+    videoIds: new Set(recent.map(v => v.id)),
+    label: `across the last ${recent.length} videos`,
+    isMonthMode: false
+  };
+}
 
 // ---- Lazy-loaded data sources ----
 
@@ -2846,8 +2892,7 @@ function isStoryTrackerChannel() {
 // Iterate all videos once, bucket per-topic and per-channel within the window.
 function computeStoryStats() {
   const channelMap = dataset.channels || {};
-  const now = Date.now();
-  const cutoff = now - STORY_WINDOW_DAYS * 86400000;
+  const win = resolveStoryWindow();
 
   const channelTotals = {};
   for (const handle of STORY_TAGGED_HANDLES) {
@@ -2858,12 +2903,9 @@ function computeStoryStats() {
   const tags = topicTagsData || {};
 
   for (const v of dataset.videos) {
-    if (STORY_LONG_FORM_ONLY && v.isShort) continue;
-    if (v.unavailable) continue;
+    if (!win.videoIds.has(v.id)) continue;
     const ch = channelMap[v.channelId];
     if (!ch || !channelTotals[ch.handle]) continue;
-    const pubTime = new Date(v.publishedAt).getTime();
-    if (pubTime < cutoff) continue;
 
     channelTotals[ch.handle].total++;
 
@@ -2902,7 +2944,7 @@ function computeStoryStats() {
       }
     }
   }
-  return { byTopic, channelTotals };
+  return { byTopic, channelTotals, windowLabel: win.label, isMonthMode: win.isMonthMode };
 }
 
 // ---- Main render ----
@@ -2924,7 +2966,7 @@ function renderStoryTracker() {
     loadDescriptions().then(() => renderStoryTracker());
   }
 
-  const { byTopic, channelTotals } = computeStoryStats();
+  const { byTopic, channelTotals, windowLabel } = computeStoryStats();
   const topics = Object.values(byTopic)
     .filter(t => t.maxSaturation >= STORY_MIN_SATURATION)
     .sort((a, b) => b.totalViews - a.totalViews)
@@ -2937,11 +2979,11 @@ function renderStoryTracker() {
   }
 
   panel.hidden = false;
-  panel.innerHTML = topics.map(t => renderStoryPanelHTML(t, channelTotals)).join('');
+  panel.innerHTML = topics.map(t => renderStoryPanelHTML(t, channelTotals, windowLabel)).join('');
   for (const t of topics) attachStoryPanelListeners(t);
 }
 
-function renderStoryPanelHTML(stats, channelTotals) {
+function renderStoryPanelHTML(stats, channelTotals, windowLabel) {
   const topicId = stats.topicId;
   const topic = (topicsData && topicsData[topicId]) || {};
   const name = topic.name || topicId;
@@ -2987,8 +3029,8 @@ function renderStoryPanelHTML(stats, channelTotals) {
               aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${safeId}">
         <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(name)}</span>
         <span class="story-tracker-headline">
-          <strong>${headlinePct}%</strong> of long-form videos on the ${escapeHtml(stats.headlineHandle.replace(/^@/, ''))} YouTube channel in the last
-          ${STORY_WINDOW_DAYS} days have been about ${escapeHtml(name)}
+          <strong>${headlinePct}%</strong> of long-form videos on the ${escapeHtml(stats.headlineHandle.replace(/^@/, ''))} YouTube channel
+          ${escapeHtml(windowLabel)} have been about ${escapeHtml(name)}
         </span>
         <span class="story-tracker-chevron">\u25BC</span>
       </button>
