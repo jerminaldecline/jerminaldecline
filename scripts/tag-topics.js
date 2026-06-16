@@ -104,6 +104,11 @@ function scoreTopic(titleText, descText, transcriptText, regexes) {
   return { titleScore, totalScore };
 }
 
+// Topics that describe FORMAT rather than SUBJECT. These should only win when
+// no real subject topic qualifies — a stream about Trump is editorially "Trump",
+// not "Livestream". They compete normally only among themselves.
+const FALLBACK_TOPICS = new Set(['livestream']);
+
 function pickPrimary(scores) {
   // Title-dominant rule: among topics whose total weighted score meets the
   // threshold, prefer the topic with the highest TITLE score (i.e. the topic
@@ -116,14 +121,22 @@ function pickPrimary(scores) {
   // names) racks up incidental references. Without this rule, a "BLACK
   // FATIGUE DESTROYED" video that happens to discuss a restaurant gets
   // mis-tagged as fast-food because the restaurant gets mentioned 20+ times.
-  const candidates = Object.entries(scores)
-    .filter(([_, s]) => s.totalScore >= MIN_PRIMARY_SCORE)
-    .sort((a, b) => {
-      if (b[1].titleScore !== a[1].titleScore) return b[1].titleScore - a[1].titleScore;
-      if (b[1].totalScore !== a[1].totalScore) return b[1].totalScore - a[1].totalScore;
-      return a[0].localeCompare(b[0]);
-    });
-  return candidates.length > 0 ? candidates[0][0] : null;
+  const qualifying = Object.entries(scores)
+    .filter(([_, s]) => s.totalScore >= MIN_PRIMARY_SCORE);
+
+  // Split into real-subject topics and format/fallback topics. A collab
+  // livestream titled "Trump Wins w/ Luke Rudkowski" matches BOTH trump and
+  // livestream; the subject must win. Only fall back to format topics when no
+  // real subject qualifies (e.g. "Dating Apps Crashing w/ Melonie Mac").
+  const realCandidates = qualifying.filter(([id]) => !FALLBACK_TOPICS.has(id));
+  const pool = realCandidates.length > 0 ? realCandidates : qualifying;
+
+  const sorted = pool.sort((a, b) => {
+    if (b[1].titleScore !== a[1].titleScore) return b[1].titleScore - a[1].titleScore;
+    if (b[1].totalScore !== a[1].totalScore) return b[1].totalScore - a[1].totalScore;
+    return a[0].localeCompare(b[0]);
+  });
+  return sorted.length > 0 ? sorted[0][0] : null;
 }
 
 function main() {
