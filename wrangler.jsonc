@@ -1,0 +1,16 @@
+{
+  // Explicit Workers config so Cloudflare stops auto-generating throwaway
+  // configs on the cloudflare/workers-autoconfig branch. This is committed to
+  // the repo so production and any preview branch (e.g. staging) build from
+  // identical, version-controlled settings.
+  "name": "jerminaldecline",
+  "compatibility_date": "2026-06-16",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // The site is a static asset bundle — all served files live in ./public
+  // (index.html, data.json, topic-tags.json, images, etc). No Worker script;
+  // Cloudflare serves the directory directly.
+  "assets": {
+    "directory": "./public"
+  }
+}
