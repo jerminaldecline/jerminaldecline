@@ -6808,9 +6808,10 @@ function renderStoryPanelHTML(stats, channelTotals) {
     const total = channelTotals[handle].total;
     const bc = stats.byChannel[handle];
     const pct = total > 0 ? (bc.matches / total) * 100 : 0;
+    const displayHandle = handle.replace(/^@/, '');
     return `
       <div class="story-channel-row">
-        <span class="story-channel-handle">${escapeHtml(handle)}</span>
+        <span class="story-channel-handle">${escapeHtml(displayHandle)}</span>
         <div class="story-channel-bar">
           <div class="story-channel-fill" style="width:${pct.toFixed(1)}%; background:${color};"></div>
         </div>
@@ -6840,7 +6841,7 @@ function renderStoryPanelHTML(stats, channelTotals) {
               aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${safeId}">
         <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(name)}</span>
         <span class="story-tracker-headline">
-          <strong>${headlinePct}%</strong> of ${escapeHtml(stats.headlineHandle)}'s long-form uploads in the last
+          <strong>${headlinePct}%</strong> of long-form videos on the ${escapeHtml(stats.headlineHandle.replace(/^@/, ''))} YouTube channel in the last
           ${STORY_WINDOW_DAYS} days have been about ${escapeHtml(name)}
         </span>
         <span class="story-tracker-chevron">\u25BC</span>
