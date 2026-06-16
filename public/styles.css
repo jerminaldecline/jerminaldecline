@@ -339,6 +339,43 @@
   }
 
   /* Peak strip — surfaces all-time peak as a reference point */
+  /* Premise line — sits at the very top of the results body, framing what the
+     site shows before any controls. Quiet but present; reads as a subtitle. */
+  .site-premise {
+    margin: 0 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 60ch;
+  }
+  @media (max-width: 540px) {
+    .site-premise { font-size: 0.88rem; margin-bottom: 1rem; }
+  }
+
+  /* Deep dives — a visually quieter band grouping the secondary analysis
+     panels (story tracker, description patterns, ads, revenue) so they read as
+     optional exploration rather than competing with the hero numbers + chart.
+     A labelled heading and top divider set them apart as a tier. */
+  .deep-dives {
+    margin: 0.5rem 0 1.5rem;
+  }
+  .deep-dives-heading {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    padding-top: 1.1rem;
+    margin-bottom: 0.9rem;
+    border-top: 1px dashed var(--border);
+  }
+  /* Hide the whole band (heading included) when none of its panels are visible
+     — each panel is [hidden] until it has content. :has keeps the heading from
+     showing as a lonely label. */
+  .deep-dives:not(:has(> *:not(.deep-dives-heading):not([hidden]))) {
+    display: none;
+  }
+
   .peak-strip {
     color: var(--text-muted);
     padding: 0.85rem 0.2rem 1.1rem;
@@ -1152,7 +1189,18 @@
     margin-bottom: 1.5rem;
   }
   .hero-stat { background: var(--surface-2); padding: 1.1rem 1.2rem; border-radius: var(--radius); }
-  .hero-stat.featured { background: var(--surface); border: 1px solid var(--border); }
+  /* Featured stat (Long-form views) is the site's headline number — the whole
+     premise is "his real views are lower than they look", so this card is
+     given visual dominance: full-row span, larger value, accent border-left.
+     The rest of the grid reads as supporting context. */
+  .hero-stat.featured {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    grid-column: 1 / -1;
+  }
+  .hero-stat.featured .hero-stat-value { font-size: 2.6rem; }
+  .hero-stat.featured .hero-stat-label { font-size: 0.85rem; }
   /* Tablet: 2-column layout — at this width 3 cards squeeze too narrow
      against the medium-sized container. Wrapping to 2 columns keeps cards
      readable; orphan cards in a 6-stat config land bottom-left which still
