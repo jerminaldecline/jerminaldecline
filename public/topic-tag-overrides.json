@@ -1,0 +1,7 @@
+{
+  "_doc": "Per-video topic overrides applied AFTER keyword scoring. Add video IDs here to force a specific topic when the keyword scorer can't catch it. Value must be a topic ID from topics.json. Use null to force-untag a video the tagger over-claimed.",
+  "_lastUpdated": "2026-06-17",
+  "overrides": {
+    "LP94fw5JtYk": "black-fatigue"
+  }
+}
