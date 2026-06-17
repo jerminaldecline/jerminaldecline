@@ -12,6 +12,11 @@ on:
     - cron: '37 13 * * *'  # 13:37 UTC — PM primary
     - cron: '47 19 * * *'  # 19:47 UTC — PM backup
   workflow_dispatch:  # allows manual runs from the Actions tab
+    inputs:
+      backfill:
+        description: 'Full historical backfill — refreshes ALL titles/views across the whole catalogue, not just the 60-day window. Leave off for a normal run.'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -31,17 +36,24 @@ jobs:
       - name: Run fetcher
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-        run: node scripts/fetch-data.js
+          BACKFILL: ${{ inputs.backfill }}
+        run: |
+          if [ "$BACKFILL" = "true" ]; then
+            echo "Manual full backfill requested."
+            node scripts/fetch-data.js --backfill
+          else
+            node scripts/fetch-data.js
+          fi
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Stage both the channel data and the descriptions side-file.
-          # The fetcher writes descriptions.json alongside data.json; without
-          # staging it explicitly it would be silently dropped when the
-          # workflow runner is torn down.
-          git add public/data.json public/descriptions.json
+          # Stage the channel data, the descriptions side-file, and the
+          # title-change ledger. The fetcher writes all three alongside
+          # data.json; without staging each explicitly they'd be silently
+          # dropped when the workflow runner is torn down.
+          git add public/data.json public/descriptions.json public/title-history.json
           if git diff --staged --quiet; then
             echo "No data changes to commit."
             exit 0

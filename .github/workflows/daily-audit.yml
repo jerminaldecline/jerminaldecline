@@ -29,9 +29,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Audit also refreshes descriptions (older videos get description
-          # edits checked), so stage both files.
-          git add public/data.json public/descriptions.json
+          # Audit also refreshes descriptions and titles on older videos, so
+          # stage those side-files alongside data.json (the title-change ledger
+          # is where re-titles of aged-out videos get recorded).
+          git add public/data.json public/descriptions.json public/title-history.json
           if git diff --staged --quiet; then
             echo "Audit found no changes."
             exit 0
