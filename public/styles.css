@@ -2517,6 +2517,35 @@
     background: transparent;
   }
 
+  /* Renamed-video badge — flags a video whose title has changed since we first
+     captured it (sourced from title-history.json). Same shape as the like
+     badge; brand blue keeps it distinct from the ad badge (orange) and the
+     like badges (green/red). Click/hover shows the full title chain. */
+  .renamed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: pointer;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .renamed-badge-icon {
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+  [data-theme="dark"] .renamed-badge {
+    background: transparent;
+  }
+
   /* Ad campaigns panel — shows the channel's confirmed paid promotion data.
      Collapsible: header is always visible (summary stats in one line);
      body with full per-campaign performance table appears on click. */

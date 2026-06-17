@@ -333,6 +333,7 @@ let adVideoIds = new Set();
 let adVideoData = null;  // Full ad data including channel metadata
 let topicsData = null;       // { topicId: { name, color, keywords } } — taxonomy
 let topicTagsData = null;    // { videoId: topicId } — primary tag per video
+let titleHistoryData = null; // { videoId: { first, current, changes:[{from,to,at,via}] } } — re-title ledger
 // Sort state for the ad panel performance table.
 // 'views' (desc) is the default because top performers carry the most editorial weight.
 let adPanelSort = { col: 'views', dir: 'desc' };
@@ -1163,6 +1164,19 @@ async function loadData() {
       }
     } catch (err) {
       console.warn('Could not load topic data:', err);
+    }
+
+    // Load the title-change ledger (re-titles caught over time + the ones mined
+    // from data.json's git history). Non-fatal: the "renamed" badge simply
+    // won't render if this is missing.
+    try {
+      const thRes = await fetch('title-history.json?t=' + Date.now());
+      if (thRes.ok) {
+        const thRaw = await thRes.json();
+        titleHistoryData = thRaw.videos || {};
+      }
+    } catch (err) {
+      console.warn('Could not load title-history.json:', err);
     }
 
     // Default to TheQuartering, override from URL if specified
@@ -3636,11 +3650,29 @@ function renderVideoRows(videos, emptyText) {
       const thumbsIcon = `<svg class="like-badge-icon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 7.59 6.59C7.22 6.95 7 7.45 7 8v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/></svg>`;
       likeBadge = `<span class="like-badge like-badge-${likeClass}" tabindex="0" role="button" aria-label="${escapeHtml(tooltip)}" data-popover="${escapeHtml(tooltip)}">${thumbsIcon} ${symbol} ${multiplierStr} typical</span>`;
     }
+    // "Renamed" badge — renders when this video's title has changed since we
+    // first captured it. The popover reveals the full chain (original → … →
+    // current); the count flags repeat offenders at a glance.
+    let renamedBadge = '';
+    const th = titleHistoryData && titleHistoryData[v.id];
+    if (th && th.changes && th.changes.length) {
+      const n = th.changes.length;
+      const chain = [th.first, ...th.changes.map(c => c.to)];
+      const lastAt = th.changes[n - 1].at;
+      let dateStr = '';
+      try { dateStr = new Date(lastAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); } catch (e) {}
+      const chainStr = chain.map(t => `"${t}"`).join('  →  ');
+      const lead = n === 1 ? 'Renamed once' : `Renamed ${n}×`;
+      const pop = `${lead}${dateStr ? ' · last change ' + dateStr : ''}:  ${chainStr}`;
+      const penIcon = `<svg class="renamed-badge-icon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+      const label = n === 1 ? 'renamed' : `renamed ${n}×`;
+      renamedBadge = `<span class="renamed-badge" tabindex="0" role="button" aria-label="${escapeHtml(pop)}" data-popover="${escapeHtml(pop)}">${penIcon} ${label}</span>`;
+    }
     return `
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${titleSubtitle}</div>
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${renamedBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         ${showTopics ? renderTopicCell(v) : ''}
