@@ -74,6 +74,10 @@ const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 // would 4x the raw size, parsed by every page load even though only the
 // topic-analysis features actually need them). Loaded on demand by the site.
 const DESCRIPTIONS_FILE = path.join(__dirname, '..', 'public', 'descriptions.json');
+// Title-change ledger. Records, per video, the first title we saw, the current
+// title, and every change in between ({from, to, at, via}). Kept in its own file
+// so data.json stays the "current state" and this stays the "history".
+const TITLE_HISTORY_FILE = path.join(__dirname, '..', 'public', 'title-history.json');
 
 const IS_AUDIT = process.argv.includes('--audit');
 const IS_BACKFILL = process.argv.includes('--backfill');
@@ -227,10 +231,12 @@ async function enrichVideos(videos, descriptions) {
  * meaningfully over months) and the `unavailable` flag. Logs what changed.
  *
  * Differs from enrichVideos:
- * - Doesn't touch publishedAt, title, channelId, id
+ * - Doesn't touch publishedAt, channelId, id
+ * - Refreshes the title (and records any change in the title-history ledger) —
+ *   this is the path that catches re-titles of videos older than the daily window
  * - Tracks transitions and prints a deletion summary at the end
  */
-async function auditEnrich(videos, descriptions) {
+async function auditEnrich(videos, descriptions, titleHistory) {
   console.log(`  AUDIT: Re-checking ${videos.length} videos for availability...`);
   const newlyUnavailable = [];
   const restoredToLive = [];
@@ -255,6 +261,17 @@ async function auditEnrich(videos, descriptions) {
         v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
         if (descriptions && det.snippet && det.snippet.description !== undefined) {
           descriptions[v.id] = det.snippet.description;
+        }
+        // The audit already fetched the live title here — record any change
+        // against the ledger, then bring the stored title up to date so
+        // data.json reflects the current title for older videos too.
+        if (titleHistory && det.snippet && det.snippet.title) {
+          if (recordTitle(titleHistory, v.id, det.snippet.title, 'audit')) {
+            const rec = titleHistory[v.id];
+            const last = rec.changes[rec.changes.length - 1];
+            console.log(`    ⚑ re-titled: "${last.from}" → "${last.to}"`);
+          }
+          v.title = det.snippet.title;
         }
         if (wasUnavailable) {
           delete v.unavailable;
@@ -312,6 +329,70 @@ function writeDescriptions(descriptions, validVideoIds) {
   fs.mkdirSync(path.dirname(DESCRIPTIONS_FILE), { recursive: true });
   fs.writeFileSync(DESCRIPTIONS_FILE, JSON.stringify(output));
   console.log(`  Descriptions: ${Object.keys(pruned).length} entries written to ${DESCRIPTIONS_FILE}`);
+}
+
+// --- Title-change tracking ---
+
+// Load the existing ledger, or seed a fresh one from the current dataset so we
+// have a baseline title for every video already on record. Seeding only happens
+// once (when title-history.json doesn't yet exist); after that it's loaded and
+// appended to. The seed's "first"/"current" is whatever title data.json holds
+// at adoption time — honest as "what we had on record when tracking started".
+function loadOrSeedTitleHistory(existing) {
+  if (fs.existsSync(TITLE_HISTORY_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(TITLE_HISTORY_FILE, 'utf8')).videos || {};
+    } catch (e) {
+      console.log(`Could not parse title-history (${e.message}); reseeding from current data.`);
+    }
+  }
+  const seeded = {};
+  if (existing && existing.videos) {
+    for (const v of existing.videos) {
+      if (v.title) seeded[v.id] = { first: v.title, current: v.title, changes: [] };
+    }
+    console.log(`  Title history: seeding baseline from ${Object.keys(seeded).length} existing videos.`);
+  }
+  return seeded;
+}
+
+// Record an observed (freshly-fetched) title against the ledger. First sighting
+// of a video seeds it with no change logged; an observed title that differs from
+// what we last had on record logs a {from, to, at, via} entry and advances
+// "current". Returns true iff a change was logged.
+function recordTitle(history, id, observedTitle, via) {
+  if (!observedTitle) return false;
+  const rec = history[id];
+  if (!rec) {
+    history[id] = { first: observedTitle, current: observedTitle, changes: [] };
+    return false;
+  }
+  if (observedTitle !== rec.current) {
+    rec.changes.push({ from: rec.current, to: observedTitle, at: new Date().toISOString(), via });
+    rec.current = observedTitle;
+    return true;
+  }
+  return false;
+}
+
+function writeTitleHistory(history, validVideoIds) {
+  const valid = new Set(validVideoIds);
+  const pruned = {};
+  for (const [id, rec] of Object.entries(history)) {
+    if (valid.has(id)) pruned[id] = rec;
+  }
+  const totalChanges = Object.values(pruned).reduce((n, r) => n + (r.changes ? r.changes.length : 0), 0);
+  const changed = Object.values(pruned).filter(r => r.changes && r.changes.length).length;
+  const output = {
+    _generated: new Date().toISOString(),
+    _videosTracked: Object.keys(pruned).length,
+    _videosRetitled: changed,
+    _totalChanges: totalChanges,
+    videos: pruned
+  };
+  fs.mkdirSync(path.dirname(TITLE_HISTORY_FILE), { recursive: true });
+  fs.writeFileSync(TITLE_HISTORY_FILE, JSON.stringify(output, null, 2));
+  console.log(`  Title history: ${Object.keys(pruned).length} tracked · ${changed} ever re-titled · ${totalChanges} total change(s) → ${TITLE_HISTORY_FILE}`);
 }
 
 function loadExistingData() {
@@ -411,6 +492,7 @@ async function main() {
 async function runIncremental(startTime) {
   const existing = loadExistingData();
   const descriptions = loadExistingDescriptions();
+  const titleHistory = loadOrSeedTitleHistory(existing);
   const isFirstRun = !existing;
 
   // Backfill mode: pretend we have no recent-window optimisation and fetch
@@ -472,6 +554,23 @@ async function runIncremental(startTime) {
     return;
   }
 
+  // Detect title changes. Each fresh record carries the live title from the
+  // playlist snippet; compare against what we last had on record. On a normal
+  // incremental run this covers the last-60-days window; on a --backfill it
+  // covers the entire catalogue in one pass (the way to catch up on every
+  // re-title of older videos that the daily window never revisits).
+  let titleChanges = 0;
+  const via = IS_BACKFILL ? 'backfill' : 'incremental';
+  for (const v of freshVideos) {
+    if (recordTitle(titleHistory, v.id, v.title, via)) {
+      titleChanges++;
+      const rec = titleHistory[v.id];
+      const last = rec.changes[rec.changes.length - 1];
+      console.log(`  ⚑ re-titled: "${last.from}" → "${last.to}"`);
+    }
+  }
+  if (titleChanges > 0) console.log(`\n⚑ ${titleChanges} title change(s) detected this run.`);
+
   const allVideos = isFirstRun
     ? freshVideos
     : mergeVideos(existing.videos, freshVideos);
@@ -484,6 +583,7 @@ async function runIncremental(startTime) {
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
   writeDescriptions(descriptions, allVideos.map(v => v.id));
+  writeTitleHistory(titleHistory, allVideos.map(v => v.id));
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ Done in ${elapsed}s`);
@@ -503,6 +603,7 @@ async function runIncremental(startTime) {
 async function runAudit(startTime) {
   const existing = loadExistingData();
   const descriptions = loadExistingDescriptions();
+  const titleHistory = loadOrSeedTitleHistory(existing);
   if (!existing) {
     console.log('AUDIT: no existing data to audit. Run a normal fetch first.');
     return;
@@ -538,7 +639,7 @@ async function runAudit(startTime) {
   }
 
   // Run audit enrichment, capturing deletions and restorations
-  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets, descriptions);
+  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets, descriptions, titleHistory);
 
   // Merge audited records back into the full dataset (audit changed objects in-place
   // since they're the same references, but be defensive)
@@ -550,6 +651,7 @@ async function runAudit(startTime) {
   fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   fs.writeFileSync(DATA_FILE, JSON.stringify(output, null, 2));
   writeDescriptions(descriptions, allVideos.map(v => v.id));
+  writeTitleHistory(titleHistory, allVideos.map(v => v.id));
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ AUDIT done in ${elapsed}s`);
