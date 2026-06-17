@@ -3319,6 +3319,21 @@
     font-style: italic;
     font-size: 0.8rem;
   }
+  .desc-pattern-typos-list .typo-count {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 0.78rem;
+    background: var(--surface-2);
+    border-radius: 4px;
+    padding: 0 0.35rem;
+  }
+  .desc-pattern-typos-header .desc-pattern-typos-total {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-left: 0.4rem;
+  }
 
   .revenue-panel {
     background: var(--surface);

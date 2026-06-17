@@ -3195,19 +3195,37 @@ const DESC_PATTERN_INFO_POINTS = {
   ]
 };
 
-// Per-channel curated typo findings — spelling errors observed in thin
-// descriptions. Each entry: { typo, correct, context (the description it
-// appeared in) }. Rendered as a structured list rather than free-text
-// callout so it's easy to scan.
-const DESC_PATTERN_TYPOS = {
-  '@TheQuartering': [
-    { typo: 'APOCOLYPSE', correct: 'APOCALYPSE', context: 'Youtube APOCOLYPSE Gets Worse' },
-    { typo: 'Malcom', correct: 'Malcolm', context: 'This is not Malcom in the Middle' },
-    { typo: 'Iilhan', correct: 'Ilhan', context: 'Iilhan Omar is in big trouble.' },
-    { typo: 'Illhan', correct: 'Ilhan', context: 'Illhan Omar is trying to cover her tracks!' },
-    { typo: 'underserved', correct: 'undeserved', context: 'Karmelo Anthony gets an underserved win' }
-  ]
+// Common-misspelling dictionary for the live spelling scan. Keys are lowercased
+// misspellings, values the correction. Every entry is unambiguously wrong (not a
+// valid English word and not a name/slang), so matching them across all titles
+// produces near-zero false positives. The panel scans the channel's full
+// title set, counts each misspelling, and surfaces the repeat offenders — so it
+// updates automatically as new uploads land, no manual curation. (Name typos
+// and wrong-word errors can't be caught this way and aren't attempted.)
+const SPELLING_DICTIONARY = {
+  'accidently':'accidentally','embarass':'embarrass','embarassed':'embarrassed',
+  'embarassing':'embarrassing','embarassment':'embarrassment','hilarous':'hilarious',
+  'releaes':'release','releaed':'released','apocolypse':'apocalypse','immediatly':'immediately',
+  'publically':'publicly','definately':'definitely','recieve':'receive','occured':'occurred',
+  'seperate':'separate','untill':'until','goverment':'government','tommorow':'tomorrow',
+  'tommorrow':'tomorrow','wierd':'weird','accross':'across','beleive':'believe','reccomend':'recommend',
+  'refered':'referred','succesful':'successful','arguement':'argument','begining':'beginning',
+  'buisness':'business','commited':'committed','completly':'completely','dissapoint':'disappoint',
+  'dissapointed':'disappointed','facist':'fascist','fourty':'forty','freind':'friend','gaurd':'guard',
+  'grammer':'grammar','greatful':'grateful','knowlege':'knowledge','neccessary':'necessary',
+  'noticable':'noticeable','occurence':'occurrence','posession':'possession','rediculous':'ridiculous',
+  'supress':'suppress','tatoo':'tattoo','threatning':'threatening','truely':'truly','wonderfull':'wonderful',
+  'suprise':'surprise','suprised':'surprised','accidentaly':'accidentally','aparently':'apparently',
+  'becuase':'because','contraversy':'controversy','controvery':'controversy','desparate':'desperate',
+  'hilarious':'hilarious','liscense':'license','occasionaly':'occasionally','persue':'pursue',
+  'vaccum':'vacuum','wellfare':'welfare','wothout':'without','definitley':'definitely',
+  'embarrased':'embarrassed','goverment':'government','independant':'independent','occassion':'occasion',
+  'priviledge':'privilege','seperately':'separately','speach':'speech','succesfully':'successfully',
 };
+// drop any accidental self-maps
+for (const k of Object.keys(SPELLING_DICTIONARY)) {
+  if (SPELLING_DICTIONARY[k] === k) delete SPELLING_DICTIONARY[k];
+}
 
 let descPatternExpanded = false;
 
@@ -3373,20 +3391,42 @@ function renderDescPatterns() {
     </div>
   `).join('');
 
-  // Channel typos — separate from info points because they have structure
-  // (typo + correct + context) worth surfacing in a tidy list. Renders as
-  // its own section in the body when populated.
-  const typos = (activeHandle && DESC_PATTERN_TYPOS[activeHandle]) || [];
-  const typosHTML = typos.length === 0 ? '' : `
+  // Spelling scan — count common misspellings across ALL of this channel's
+  // long-form titles (not just the 60-day window: spelling is a lifetime
+  // habit, and the repeat-offender counts are the story). Self-updating as new
+  // uploads land. Shows each misspelling with how many times he's used it,
+  // plus one example title for context.
+  const spellingCounts = new Map(); // typo(lower) -> { display, correct, count, example }
+  for (const v of dataset.videos) {
+    if (v.channelId !== selectedChannel || v.isShort || v.unavailable) continue;
+    const title = v.title || '';
+    const words = title.match(/[A-Za-z']+/g) || [];
+    for (const w of words) {
+      const lw = w.toLowerCase();
+      const correct = SPELLING_DICTIONARY[lw];
+      if (!correct) continue;
+      const entry = spellingCounts.get(lw) || { display: lw, correct, count: 0, example: title };
+      entry.count++;
+      if (entry.count === 1) entry.example = title;
+      spellingCounts.set(lw, entry);
+    }
+  }
+  const spellingList = [...spellingCounts.values()]
+    .filter(e => e.count >= 2)
+    .sort((a, b) => b.count - a.count);
+  const spellingTotal = spellingList.reduce((s, e) => s + e.count, 0);
+
+  const typosHTML = spellingList.length === 0 ? '' : `
     <div class="desc-pattern-typos">
-      <div class="desc-pattern-typos-header">Spelling errors</div>
+      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'}</span></div>
       <ul class="desc-pattern-typos-list">
-        ${typos.map(t => `
+        ${spellingList.map(t => `
           <li>
-            <span class="typo-wrong">${escape(t.typo)}</span>
+            <span class="typo-wrong">${escape(t.display)}</span>
             <span class="typo-arrow">→</span>
             <span class="typo-right">${escape(t.correct)}</span>
-            <span class="typo-context">in "${escape(t.context)}"</span>
+            <span class="typo-count">${t.count}&times;</span>
+            <span class="typo-context">e.g. "${escape(t.example.length > 52 ? t.example.slice(0, 52) + '…' : t.example)}"</span>
           </li>
         `).join('')}
       </ul>
