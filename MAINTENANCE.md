@@ -40,7 +40,7 @@ Both could be re-enabled if YouTube ever unblocks GitHub IPs. For now, transcrip
 **How:**
 
 ```powershell
-cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\Transcripts\transcript-runner"
+cd "<runner>"
 .\refresh-topics.ps1
 ```
 
@@ -73,7 +73,7 @@ Runtime: 3-5 minutes typical.
 4. Update `meta.lastUpdated` to today's date
 5. Commit and push:
    ```powershell
-   cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\jerminaldecline"
+   cd "<repo>"
    git add public/ad-videos.json
    git commit -m "Ad data: add N new campaigns"
    git push
@@ -102,7 +102,7 @@ Runtime: 3-5 minutes typical.
 When the story tracker shows a noisy/wrong label (e.g. the detector picked "trial" instead of "Karmelo Anthony"), edit `public/topic-labels.json`.
 
 ```powershell
-cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\jerminaldecline"
+cd "<repo>"
 # Edit public/topic-labels.json
 git add public/topic-labels.json
 git commit -m "Story labels: refine X"
@@ -118,14 +118,14 @@ Takes effect on next Cloudflare deploy (~1 minute).
 When you want to add a new topic to the timeline, refine keywords, or change colors, edit `public/topics.json`.
 
 ```powershell
-cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\jerminaldecline"
+cd "<repo>"
 # Edit public/topics.json
 git add public/topics.json
 git commit -m "Topics: add/refine X"
 git push
 
 # Then re-tag all videos against the new taxonomy:
-cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\Transcripts\transcript-runner"
+cd "<runner>"
 .\refresh-topics.ps1
 ```
 
@@ -134,7 +134,7 @@ cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\Transcripts\transcript-runner"
 Standard edit-commit-push. Cloudflare auto-deploys.
 
 ```powershell
-cd "C:\Users\bradw\OneDrive\Desktop\Project FIles\jerminaldecline"
+cd "<repo>"
 # Edit public/index.html or other files
 git add .
 git commit -m "Site: describe change"
@@ -207,3 +207,4 @@ Daily archive of data.json. Auto-populated. No manual maintenance.
 **Topic tags look wrong:** Edit `topics.json`, push, re-run `refresh-topics.ps1`.
 
 **Story tracker shows wrong label:** Edit `topic-labels.json`, push. Effect is immediate on next page load.
+
