@@ -2409,7 +2409,7 @@
   .split-dot.short { background: var(--shorts); }
   .video-row {
     display: grid;
-    grid-template-columns: 90px 1fr 80px 110px 130px;
+    grid-template-columns: 90px 1fr 80px 110px 90px 80px 130px;
     gap: 0.75rem;
     padding: 0.55rem 0.9rem;
     font-size: 0.85rem;
@@ -2417,12 +2417,12 @@
     border-bottom: 1px solid var(--border);
   }
   .video-row.with-channel {
-    grid-template-columns: 90px 120px 1fr 80px 110px 130px;
+    grid-template-columns: 90px 120px 1fr 80px 110px 90px 80px 130px;
   }
   /* When topic data unavailable (non-TQ channels), the .no-topics modifier
      drops the topic column so rows still align cleanly. */
-  .video-row.no-topics { grid-template-columns: 90px 1fr 80px 110px; }
-  .video-row.with-channel.no-topics { grid-template-columns: 90px 120px 1fr 80px 110px; }
+  .video-row.no-topics { grid-template-columns: 90px 1fr 80px 110px 90px 80px; }
+  .video-row.with-channel.no-topics { grid-template-columns: 90px 120px 1fr 80px 110px 90px 80px; }
   .video-row:last-child { border-bottom: none; }
   .video-row:hover { background: var(--surface-2); }
   .video-date { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
@@ -3319,21 +3319,6 @@
     font-style: italic;
     font-size: 0.8rem;
   }
-  .desc-pattern-typos-list .typo-count {
-    color: var(--text);
-    font-weight: 700;
-    font-size: 0.78rem;
-    background: var(--surface-2);
-    border-radius: 4px;
-    padding: 0 0.35rem;
-  }
-  .desc-pattern-typos-header .desc-pattern-typos-total {
-    text-transform: none;
-    letter-spacing: 0;
-    font-weight: 400;
-    color: var(--text-dim);
-    margin-left: 0.4rem;
-  }
 
   .revenue-panel {
     background: var(--surface);
@@ -3513,6 +3498,8 @@
   }
   .video-duration { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
   .video-views { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+  .video-comments { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
+  .video-likepct { color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem; }
   .group-content { max-height: 360px; overflow-y: auto; }
 
   /* Column header row inside groups */

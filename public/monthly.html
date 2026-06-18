@@ -41,6 +41,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-inline{font-size:1.05rem;font-weight:800;color:var(--accent);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.55rem;cursor:pointer;font-family:inherit;text-align:left}
 .month-inline:hover{border-color:var(--accent)}
 
+.peak-headline{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.peak-item .peak-label{font-size:0.74rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.3rem}
+.peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
+.peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
+.peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
+.peak-item .peak-sub{font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
+@media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
 .hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
 .hero-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.45rem}
 .hero-label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.5rem}
@@ -219,12 +226,28 @@ async function loadAndCompute(){
     for(const h of CHAN_ORDER){ const d=netbm[m][h]; if(d && (d.ln+d.sn)>0) rows.push({h, ln:d.ln, lv:d.lv, sn:d.sn, sv:d.sv}); }
     net[m]=rows;
   }
-  return { scopes, net, channels: CHAN_ORDER };
+
+  // Per-scope peak + lowest-since-peak (long-form monthly totals; exclude the
+  // current in-progress month so a partial month can't masquerade as a low).
+  const nowMonth = new Date().toISOString().slice(0,7);
+  const peaks={};
+  for(const sc of Object.keys(scopes)){
+    const S=scopes[sc];
+    const ms=Object.keys(S).filter(m=>m>=MIN_MONTH && m<nowMonth && !S[m].shortsOnly && S[m].tot!=null).sort();
+    if(!ms.length){ peaks[sc]=null; continue; }
+    let pk=ms[0]; for(const m of ms){ if(S[m].tot>S[pk].tot) pk=m; }
+    const after=ms.filter(m=>m>pk);
+    let low=pk; for(const m of after){ if(S[m].tot<S[low].tot) low=m; }
+    peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
+      pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0 };
+  }
+
+  return { scopes, net, channels: CHAN_ORDER, peaks };
 }
 
 /* ---------- render (ported from prototype, reads PAYLOAD) ---------- */
 
-let SCOPES, NET, CHANNELS;
+let SCOPES, NET, CHANNELS, PEAKS;
 const fmt = n => n>=1000000 ? (n/1000000).toFixed(1)+'M' : n>=1000 ? (n/1000).toFixed(0)+'K' : ''+n;
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
@@ -331,6 +354,20 @@ function render(m){
       <div><h2>Monthly Report</h2><div class="rsub-row"><select id="scopeSel" class="scope-inline"></select><span class="rsub-sep">·</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
       <div class="report-month-wrap"><select id="msel" class="month-inline"></select></div>
     </div>
+    ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
+      return `<div class="peak-headline">
+        <div class="peak-item">
+          <div class="peak-label">All-time peak</div>
+          <div class="peak-val"><span class="peak-num">${fmt(pk.peakViews)}</span> long-form views</div>
+          <div class="peak-sub">${monthName(pk.peakMonth)}</div>
+        </div>
+        <div class="peak-item">
+          <div class="peak-label">Lowest since peak</div>
+          <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
+          <div class="peak-sub">${monthName(pk.lowMonth)}</div>
+        </div>
+      </div>`;
+    })()}
     <div class="hero">
       <div class="hero-card">
         <div class="hero-label">Total views</div>
@@ -409,7 +446,7 @@ function refresh(month){
 (async function init(){
   try {
     PAYLOAD = await loadAndCompute();
-    SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels;
+    SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
     buildScopeLabels();
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }

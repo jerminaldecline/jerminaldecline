@@ -80,3 +80,11 @@
 /* ---------- section divider (optional) ---------- */
 .ds-divider{display:flex;align-items:center;gap:0.9rem;margin:1.6rem 0 1rem;color:var(--label);font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
 .ds-divider::before,.ds-divider::after{content:"";height:1px;background:var(--border);flex:1}
+
+/* ---------- segmented toggle (long-form/Shorts, view modes, etc.) ---------- */
+.ds-seg{display:inline-flex;gap:0.2rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.2rem;margin:0.5rem 0}
+.ds-seg-btn{appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.4rem 0.85rem;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem}
+.ds-seg-btn:hover{color:var(--text)}
+.ds-seg-btn.active{background:var(--surface);color:var(--accent)}
+.ds-seg-count{font-size:0.78rem;font-weight:600;color:var(--text-dim);font-variant-numeric:tabular-nums}
+.ds-seg-btn.active .ds-seg-count{color:var(--accent)}

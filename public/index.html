@@ -985,7 +985,7 @@ function formatWindowTitle(startDate, endDate) {
 }
 
 // Window-list state: sort + search, shared single state (one window at a time)
-const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null };
+const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long' };
 
 // --- Theme toggle ---
 (function() {
@@ -1618,6 +1618,8 @@ function renderWindowList(startDate, endDate) {
       <div class="video-title">Title</div>
       <div class="video-duration sortable hide-mobile${sortableClass(windowListState, 'duration')}" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
+      <div class="video-comments sortable hide-mobile${sortableClass(windowListState, 'comments')}" data-sort="comments">Comments${sortArrow(windowListState, 'comments')}</div>
+      <div class="video-likepct sortable hide-mobile${sortableClass(windowListState, 'likepct')}" data-sort="likepct">Like %${sortArrow(windowListState, 'likepct')}</div>
     </div>
   `;
 
@@ -1655,16 +1657,27 @@ function renderWindowList(startDate, endDate) {
     `;
   }
 
+  const fmtFilter = windowListState.formatFilter || 'long';
+  const formatToggle = `
+    <div class="window-format-toggle ds-seg" role="tablist" aria-label="Format">
+      <button type="button" class="ds-seg-btn${fmtFilter === 'long' ? ' active' : ''}" data-format-filter="long" role="tab" aria-selected="${fmtFilter === 'long'}">Long-form <span class="ds-seg-count">${longSorted.length}</span></button>
+      <button type="button" class="ds-seg-btn${fmtFilter === 'shorts' ? ' active' : ''}" data-format-filter="shorts" role="tab" aria-selected="${fmtFilter === 'shorts'}">Shorts <span class="ds-seg-count">${shortSorted.length}</span></button>
+    </div>
+  `;
+  const activeGroup = fmtFilter === 'shorts'
+    ? group('Shorts', shortSorted, shortViewsTotal)
+    : group('Long-form', longSorted, longViewsTotal);
+
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
     </div>
     ${breakdownHtml}
     <div class="window-list-stats">${statsLine}</div>
+    ${formatToggle}
     <div class="window-list-rows">
       ${colHeader}
-      ${group('Long-form', longSorted, longViewsTotal)}
-      ${group('Shorts', shortSorted, shortViewsTotal)}
+      ${activeGroup}
     </div>
   `;
 }
@@ -1674,6 +1687,15 @@ document.addEventListener('click', (e) => {
   // Clear filter
   if (e.target.id === 'clearChannelFilter') {
     windowListState.channelFilter = null;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (startDate && endDate) renderWindowList(startDate, endDate);
+    return;
+  }
+  // Long-form / Shorts format toggle
+  const fmtBtn = e.target.closest('[data-format-filter]');
+  if (fmtBtn && document.getElementById('windowList')?.contains(fmtBtn)) {
+    windowListState.formatFilter = fmtBtn.dataset.formatFilter;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     if (startDate && endDate) renderWindowList(startDate, endDate);
@@ -3653,6 +3675,12 @@ function sortVideos(list, sortBy, sortDir) {
       cmp = a.publishedAt.localeCompare(b.publishedAt);
     } else if (sortBy === 'duration') {
       cmp = (a.durationSec || 0) - (b.durationSec || 0);
+    } else if (sortBy === 'comments') {
+      cmp = (a.comments || 0) - (b.comments || 0);
+    } else if (sortBy === 'likepct') {
+      const ra = (a.views > 0) ? (a.likes || 0) / a.views : 0;
+      const rb = (b.views > 0) ? (b.likes || 0) / b.views : 0;
+      cmp = ra - rb;
     } else { // views
       cmp = (a.views || 0) - (b.views || 0);
     }
@@ -3755,6 +3783,8 @@ function renderVideoRows(videos, emptyText) {
         <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${renamedBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
+        <div class="video-comments">${v.comments != null ? fmt(v.comments) : '—'}</div>
+        <div class="video-likepct">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
         ${showTopics ? renderTopicCell(v) : ''}
       </div>
     `;
