@@ -137,44 +137,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .net-ch.dim{color:var(--text-dim);font-weight:500}
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-/* ---- month detail (bottom of report) ---- */
-.month-detail{margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
-.md-head{display:flex;align-items:center;gap:2rem;flex-wrap:wrap;padding-bottom:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
-.md-month{font-size:1.15rem;font-weight:800;color:var(--text);letter-spacing:-0.01em}
-.md-progress{font-size:0.65rem;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:20px;padding:0.15rem 0.6rem;margin-left:0.5rem;text-transform:uppercase;letter-spacing:0.05em;vertical-align:middle}
-.md-head-stats{display:flex;gap:2rem;flex-wrap:wrap;flex:1}
-.md-hstat .md-hnum{font-size:1.2rem;font-weight:800;color:var(--text);letter-spacing:-0.01em}
-.md-hstat .md-slash{color:var(--text-dim);font-weight:600}
-.md-hstat .md-hlbl{font-size:0.72rem;color:var(--subtext);text-transform:uppercase;letter-spacing:0.03em;margin-top:0.15rem}
-.md-hsplit{min-width:200px}
-.md-splitbar{display:flex;height:6px;border-radius:4px;overflow:hidden;margin:0.35rem 0}
-.md-split-long{background:var(--accent)} .md-split-short{background:#e0a23c}
-.md-ribbon{margin-bottom:1rem}
-.md-ribbon-legend{display:flex;flex-wrap:wrap;gap:0.5rem 1.1rem;font-size:0.76rem;color:var(--subtext)}
-.md-leg{display:inline-flex;align-items:center;gap:0.35rem}
-.md-leg-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.7}
-.md-search input{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;color:var(--text);font-family:inherit;font-size:0.9rem;margin-bottom:0.5rem}
-.md-group-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;margin:0.75rem 0 0.5rem}
-.md-group-label{font-size:0.92rem;font-weight:700;color:var(--text)}
-.md-group-meta{font-size:0.78rem;color:var(--subtext);font-variant-numeric:tabular-nums}
-.md-rows{display:flex;flex-direction:column}
-.md-row{display:grid;grid-template-columns:1fr 80px 110px 90px 70px 150px;gap:0.75rem;padding:0.5rem 0.4rem;align-items:center;border-bottom:1px solid var(--border);font-size:0.84rem}
-.md-row.md-with-ch{grid-template-columns:1fr 110px 80px 110px 90px 70px 150px}
-.md-row-head{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.03em;color:var(--label);font-weight:700}
-.md-row:last-child{border-bottom:none}
-.md-row:not(.md-row-head):hover{background:var(--surface-2)}
-.md-c-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.md-c-title a{color:var(--text);text-decoration:none}
-.md-c-title a:hover{color:var(--accent);text-decoration:underline}
-.md-c-dur,.md-c-views,.md-c-comm,.md-c-like{text-align:right;font-variant-numeric:tabular-nums}
-.md-c-views{font-weight:700;color:var(--text)}
-.md-c-dur,.md-c-comm,.md-c-like{color:var(--text-muted)}
-.md-c-ch,.md-c-topic{color:var(--subtext);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.md-topic-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.7;margin-right:0.4rem;vertical-align:middle}
-.md-sortable{cursor:pointer;user-select:none}
-.md-sortable:hover{color:var(--accent)}
-.md-empty{color:var(--text-dim);font-size:0.85rem;padding:1rem 0.4rem}
-@media(max-width:680px){.md-c-comm,.md-c-topic,.md-c-ch{display:none}.md-row,.md-row.md-with-ch{grid-template-columns:1fr 70px 90px 60px}}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
 @media(max-width:680px){.hero,.lower,.highlights,.breadth{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -228,7 +190,8 @@ async function loadAndCompute(){
       const medCr=median(crs);
       const durs=vs.filter(v=>v.durationSec).map(v=>v.durationSec);
       const tc={}; for(const v of vs){ const t=tags[v.id]; if(t) tc[t]=(tc[t]||0)+1; }
-      // Lean per-video records for the month-detail list (long-form + shorts).
+      // Lean per-video records, kept for the future Overview merge (month-detail
+      // component). Currently unused by the standalone report render.
       // Only the fields the detail view needs, to keep the payload reasonable.
       const leanVid = v => ({
         id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
@@ -344,107 +307,6 @@ function availableMonths(){
   return Object.keys(SCOPES[scope]||{}).filter(m=>m>='2017-07' && !SCOPES[scope][m].shortsOnly).sort().reverse();
 }
 // both selectors are populated + bound inside render() (they live in the re-rendered report header)
-
-// ---- month-detail (bottom of report) state + render ----
-const mdState = { query:'', sortBy:'views', sortDir:'desc', format:'long' };
-const fmtDur = sec => { sec=Math.round(sec||0); const h=Math.floor(sec/3600), mm=Math.floor((sec%3600)/60), ss=sec%60; return (h>0?h+':'+String(mm).padStart(2,'0'):mm)+':'+String(ss).padStart(2,'0'); };
-function mdSortArrow(col){ return mdState.sortBy===col ? (mdState.sortDir==='asc'?' ▲':' ▼') : ''; }
-function mdSortVids(list){
-  const s=list.slice().sort((a,b)=>{
-    let c=0;
-    if(mdState.sortBy==='date') c=0; // lean records have no date; default keeps source order
-    else if(mdState.sortBy==='duration') c=(a.d||0)-(b.d||0);
-    else if(mdState.sortBy==='comments') c=(a.c||0)-(b.c||0);
-    else if(mdState.sortBy==='likepct'){ const ra=a.v>0?a.l/a.v:0, rb=b.v>0?b.l/b.v:0; c=ra-rb; }
-    else c=(a.v||0)-(b.v||0);
-    return mdState.sortDir==='asc'?c:-c;
-  });
-  return s;
-}
-function renderMonthDetail(m){
-  const D=SCOPES[scope], d=D[m]; if(!d||!d.vlist) return '';
-  const isAll = scope==='ALL';
-  const nowMonth = new Date().toISOString().slice(0,7);
-  const inProgress = (m===nowMonth);
-  const longV = d.vlist.filter(v=>!v.s), shortV = d.vlist.filter(v=>v.s);
-  const longViews = longV.reduce((s,v)=>s+v.v,0), shortViews=shortV.reduce((s,v)=>s+v.v,0);
-  const totalViews = longViews+shortViews;
-  const longPct = totalViews? Math.round(longViews/totalViews*100):0;
-  const shortPct = totalViews? 100-longPct:0;
-  const avgLong = longV.length? Math.round(longViews/longV.length):0;
-  const medLen = d.avglen;
-  // header
-  const header = `
-    <div class="md-head">
-      <div class="md-month">${monthName(m)}${inProgress?' <span class="md-progress">IN PROGRESS</span>':''}</div>
-      <div class="md-head-stats">
-        <div class="md-hstat"><div class="md-hnum">${longV.length} <span class="md-slash">/</span> ${shortV.length}</div><div class="md-hlbl">long / shorts</div></div>
-        <div class="md-hstat md-hsplit">
-          <div class="md-hnum">${fmt(totalViews)}</div>
-          <div class="md-splitbar"><span class="md-split-long" style="width:${longPct}%"></span><span class="md-split-short" style="width:${shortPct}%"></span></div>
-          <div class="md-hlbl">${fmt(longViews)} long · ${longPct}%　${fmt(shortViews)} shorts · ${shortPct}%</div>
-        </div>
-        <div class="md-hstat"><div class="md-hnum">${fmt(avgLong)}</div><div class="md-hlbl">avg / long-form</div></div>
-        <div class="md-hstat"><div class="md-hnum">${medLen} min</div><div class="md-hlbl">median length</div></div>
-      </div>
-    </div>`;
-  // topic ribbon (long-form topic distribution by video count + views)
-  const topicAgg = {};
-  for(const v of longV){ const k=v.tp||'Other'; (topicAgg[k]=topicAgg[k]||{n:0,views:0}); topicAgg[k].n++; topicAgg[k].views+=v.v; }
-  const topicRows = Object.entries(topicAgg).sort((a,b)=>b[1].views-a[1].views);
-  const ribbon = topicRows.length ? `
-    <div class="md-ribbon">
-      <div class="md-ribbon-legend">
-        ${topicRows.slice(0,8).map(([name,s])=>`<span class="md-leg"><span class="md-leg-dot"></span>${name} · ${s.n} vid${s.n!==1?'s':''} · ${fmt(s.views)} views</span>`).join('')}
-      </div>
-    </div>` : '';
-  // search
-  const search = `<div class="md-search"><input type="text" id="mdSearch" placeholder="Search titles…" value="${mdState.query.replace(/"/g,'&quot;')}"></div>`;
-  // video rows
-  const activeList = mdState.format==='shorts' ? shortV : longV;
-  const q = mdState.query.toLowerCase();
-  const filtered = q ? activeList.filter(v=>v.t.toLowerCase().includes(q)) : activeList;
-  const sorted = mdSortVids(filtered);
-  const groupLabel = mdState.format==='shorts' ? 'Shorts (≤3 min)' : 'Long-form videos (>3 min)';
-  const groupViews = mdState.format==='shorts' ? shortViews : longViews;
-  const groupAvg = activeList.length ? Math.round(groupViews/activeList.length) : 0;
-  const toggle = `
-    <div class="ds-seg" role="tablist" aria-label="Format">
-      <button type="button" class="ds-seg-btn${mdState.format==='long'?' active':''}" data-md-format="long">Long-form <span class="ds-seg-count">${longV.length}</span></button>
-      <button type="button" class="ds-seg-btn${mdState.format==='shorts'?' active':''}" data-md-format="shorts">Shorts <span class="ds-seg-count">${shortV.length}</span></button>
-    </div>`;
-  const colHeader = `
-    <div class="md-row md-row-head${isAll?' md-with-ch':''}">
-      <div class="md-c-title">Title</div>
-      ${isAll?'<div class="md-c-ch">Channel</div>':''}
-      <div class="md-c-dur md-sortable" data-md-sort="duration">Duration${mdSortArrow('duration')}</div>
-      <div class="md-c-views md-sortable" data-md-sort="views">Views${mdSortArrow('views')}</div>
-      <div class="md-c-comm md-sortable" data-md-sort="comments">Comments${mdSortArrow('comments')}</div>
-      <div class="md-c-like md-sortable" data-md-sort="likepct">Like %${mdSortArrow('likepct')}</div>
-      <div class="md-c-topic">Topic</div>
-    </div>`;
-  const rows = sorted.length ? sorted.map(v=>{
-    const likePct = v.v>0 ? ((v.l/v.v)*100).toFixed(1)+'%' : '—';
-    return `<div class="md-row${isAll?' md-with-ch':''}">
-      <div class="md-c-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${v.t.replace(/</g,'&lt;')}</a></div>
-      ${isAll?`<div class="md-c-ch">${v.ch}</div>`:''}
-      <div class="md-c-dur">${fmtDur(v.d)}</div>
-      <div class="md-c-views">${fmt(v.v)}</div>
-      <div class="md-c-comm">${v.c?fmt(v.c):'—'}</div>
-      <div class="md-c-like">${likePct}</div>
-      <div class="md-c-topic">${v.tp?`<span class="md-topic-dot"></span>${v.tp}`:'—'}</div>
-    </div>`;
-  }).join('') : `<div class="md-empty">${q?'No videos match your search.':'No videos this month.'}</div>`;
-  return `
-    <div class="month-detail">
-      ${header}
-      ${ribbon}
-      ${search}
-      ${toggle}
-      <div class="md-group-head"><span class="md-group-label">${groupLabel}</span><span class="md-group-meta">${sorted.length} of ${activeList.length} · ${fmt(groupViews)} views · avg ${fmt(groupAvg)}</span></div>
-      <div class="md-rows">${colHeader}${rows}</div>
-    </div>`;
-}
 
 function render(m){
   const D=SCOPES[scope]; const d=D[m]; if(!d){return;}
@@ -588,7 +450,6 @@ function render(m){
         </table>
       </div>
     </div>
-    ${renderMonthDetail(m)}
     <div class="report-foot"><span class="site">jerminaldecline.com</span></div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
@@ -598,34 +459,7 @@ function render(m){
   const ms=document.getElementById('msel');
   ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
   ms.onchange = (e)=>{ refresh(e.target.value); };
-
-  // ---- month-detail interactions: re-render only the detail section ----
-  CURRENT_MONTH = m;
-  function rerenderDetail(){
-    const host = document.querySelector('.month-detail');
-    if(!host) return;
-    const tmp = document.createElement('div');
-    tmp.innerHTML = renderMonthDetail(CURRENT_MONTH);
-    const fresh = tmp.firstElementChild;
-    host.replaceWith(fresh);
-    bindDetail();
-  }
-  function bindDetail(){
-    const search=document.getElementById('mdSearch');
-    if(search){ search.oninput=(e)=>{ mdState.query=e.target.value; const pos=e.target.selectionStart; rerenderDetail(); const ni=document.getElementById('mdSearch'); if(ni){ni.focus(); ni.setSelectionRange(pos,pos);} }; }
-    document.querySelectorAll('.month-detail [data-md-format]').forEach(b=>{
-      b.onclick=()=>{ mdState.format=b.dataset.mdFormat; rerenderDetail(); };
-    });
-    document.querySelectorAll('.month-detail .md-sortable').forEach(h=>{
-      h.onclick=()=>{ const col=h.dataset.mdSort;
-        if(mdState.sortBy===col){ mdState.sortDir=mdState.sortDir==='asc'?'desc':'asc'; }
-        else { mdState.sortBy=col; mdState.sortDir='desc'; }
-        rerenderDetail(); };
-    });
-  }
-  bindDetail();
 }
-let CURRENT_MONTH=null;
 
 function refresh(month){
   const months=availableMonths();
