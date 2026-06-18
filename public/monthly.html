@@ -137,6 +137,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .net-ch.dim{color:var(--text-dim);font-weight:500}
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.monthly-history{margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
+.monthly-history .mh-title{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
+.mh-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+.mh-table th{text-align:right;font-size:0.7rem;color:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.4rem 0.5rem;border-bottom:1px solid var(--border)}
+.mh-table th:first-child{text-align:left}
+.mh-table td{text-align:right;padding:0.5rem 0.5rem;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;color:var(--text)}
+.mh-table td:first-child{text-align:left;color:var(--label)}
+.mh-table tr:last-child td{border-bottom:none}
+.mh-table .mh-month{font-weight:600;color:var(--text)}
+.mh-table tr.mh-sel td{background:var(--surface-2)}
+.mh-table tr.mh-sel .mh-month{color:var(--accent)}
+.mh-delta{font-weight:700}
+.mh-delta.up{color:var(--up)} .mh-delta.down{color:var(--down)} .mh-delta.flat{color:var(--text-dim)}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
 @media(max-width:680px){.hero,.lower,.highlights,.breadth{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -238,8 +251,15 @@ async function loadAndCompute(){
     let pk=ms[0]; for(const m of ms){ if(S[m].tot>S[pk].tot) pk=m; }
     const after=ms.filter(m=>m>pk);
     let low=pk; for(const m of after){ if(S[m].tot<S[low].tot) low=m; }
+    // "Last seen at this level": the most recent month BEFORE the peak whose
+    // long-form views were at or below the current low — i.e. the channel has
+    // fallen back to where it was then. Null if it was never this low pre-peak.
+    let lastSeen=null;
+    const beforePeak=ms.filter(m=>m<pk);
+    for(let i=beforePeak.length-1;i>=0;i--){ if(S[beforePeak[i]].tot<=S[low].tot){ lastSeen=beforePeak[i]; break; } }
     peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
-      pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0 };
+      pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0,
+      lastSeenMonth:lastSeen };
   }
 
   return { scopes, net, channels: CHAN_ORDER, peaks };
@@ -253,6 +273,15 @@ const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const monthName = m => {const [y,mo]=m.split('-');return MONTHS[mo-1]+' '+y;};
+const yearsAgoStr = m => {
+  const [y,mo]=m.split('-').map(Number);
+  const then=new Date(y,mo-1,1), now=new Date();
+  const months=(now.getFullYear()-then.getFullYear())*12+(now.getMonth()-then.getMonth());
+  if(months<1) return 'this month';
+  if(months<12) return '≈ '+months+(months===1?' month':' months')+' ago';
+  const yrs=Math.round(months/12);
+  return '≈ '+yrs+(yrs===1?' year':' years')+' ago';
+};
 const monthShort = m => {const [y,mo]=m.split('-');return MONTHS[mo-1].slice(0,3)+' '+y;};
 const moAbbr = mm => {const [y,mo]=mm.split('-');return 'vs '+MONTHS[mo-1].slice(0,3);};
 const moAbbrYr = mm => {const [y,mo]=mm.split('-');return "vs "+MONTHS[mo-1].slice(0,3)+" '"+y.slice(2);};
@@ -364,7 +393,7 @@ function render(m){
         <div class="peak-item">
           <div class="peak-label">Lowest since peak</div>
           <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
-          <div class="peak-sub">${monthName(pk.lowMonth)}</div>
+          <div class="peak-sub">${monthName(pk.lowMonth)}${pk.lastSeenMonth ? ` · Last seen at this level: <strong>${monthName(pk.lastSeenMonth)}</strong> · ${yearsAgoStr(pk.lastSeenMonth)}` : ''}</div>
         </div>
       </div>`;
     })()}
@@ -423,6 +452,26 @@ function render(m){
           ${netRows}
         </table>
       </div>
+    </div>
+    <div class="monthly-history">
+      <h3 class="mh-title">Full monthly history${isAll ? '' : ' · '+scope}</h3>
+      <table class="mh-table">
+        <tr><th>Month</th><th>Views</th><th>Uploads</th><th>Median</th><th>Like %</th><th>vs prev</th></tr>
+        ${(()=>{
+          const ms=Object.keys(D).filter(mm=>mm>='2017-07' && !D[mm].shortsOnly).sort().reverse();
+          return ms.map((mm,i)=>{
+            const row=D[mm]; const prevKey=ms[i+1]; const prev=prevKey?D[prevKey]:null;
+            const delta=dcls(row.tot, prev&&prev.tot, true);
+            const deltaCell = delta ? `<span class="mh-delta ${delta.cls}">${delta.txt}</span>` : '<span class="mh-delta flat">—</span>';
+            const isSel = mm===m;
+            return `<tr class="${isSel?'mh-sel':''}">
+              <td class="mh-month">${monthName(mm)}${isSel?' ◂':''}</td>
+              <td>${fmt(row.tot)}</td><td>${row.n}</td><td>${fmt(row.med)}</td>
+              <td>${row.lv}%</td><td>${deltaCell}</td>
+            </tr>`;
+          }).join('');
+        })()}
+      </table>
     </div>
     <div class="report-foot"><span class="site">jerminaldecline.com</span></div>
   `;
