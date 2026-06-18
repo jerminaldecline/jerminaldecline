@@ -33,6 +33,18 @@
 </script>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="design-system.css">
+<style>
+  /* Critical tab-shell fallback — inlined so the tabs stay usable and visible
+     even if design-system.css fails to load (defensive; the full styling lives
+     in design-system.css). Uses the site's own --vars where available. */
+  .ds-tabpanel[hidden]{display:none !important}
+  .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border,#29314a);margin-bottom:1.5rem;flex-wrap:wrap}
+  .ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;
+    color:var(--text-dim,#8b93a8);font-family:inherit;font-size:0.95rem;font-weight:700;
+    padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
+  .ds-tab:hover{color:var(--text,#ede8d8)}
+  .ds-tab[aria-selected="true"]{color:var(--accent,#6aa3ff);border-bottom-color:var(--accent,#6aa3ff)}
+</style>
 </head>
 <body>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
