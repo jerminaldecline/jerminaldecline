@@ -32,6 +32,7 @@
   })();
 </script>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="design-system.css">
 </head>
 <body>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -161,6 +162,24 @@
         </div>
       </div>
 
+      <!-- ============================================================
+           TAB SHELL (redesign Phase 3 — scaffolding step).
+           Global controls (channel strip, filter cluster) stay ABOVE the tabs.
+           Existing content is re-housed into three .ds-tabpanel containers.
+           IMPORTANT: panels hide via [hidden] (not removal), so every element
+           remains in the DOM and reachable by getElementById — no JS change
+           needed. Tab + scope sync to ?tab= / existing ?channel= URL params.
+           Window/monthly view toggling is UNCHANGED and lives inside the tabs.
+           ============================================================ -->
+      <nav class="ds-tabs" role="tablist" aria-label="Sections" id="dsTabs">
+        <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true" id="dsTabOverview">Overview</button>
+        <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false" id="dsTabAnalysis">Analysis</button>
+        <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false" id="dsTabVideos">Videos</button>
+      </nav>
+
+      <!-- ===== OVERVIEW tab: glance — peak/prediction + hero + composition ===== -->
+      <section class="ds-tabpanel" data-panel="overview" id="dsPanelOverview">
+
       <!-- Channel-derived summary block: peak/low strip and the satirical
            prediction card. Sits just above the hero stats so it reads as
            "what to watch for" framing immediately before the numbers themselves. -->
@@ -174,6 +193,10 @@
 
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
+      </section><!-- /Overview -->
+
+      <!-- ===== ANALYSIS tab: investigate — chart + deep dives + word cloud + monthly ===== -->
+      <section class="ds-tabpanel" data-panel="analysis" id="dsPanelAnalysis" hidden>
 
       <!-- Chart legend lives as a sibling above the chart toggle row. The
            heading "Monthly trend" used to wrap it but became misleading once
@@ -258,6 +281,21 @@
         </h2>
         <div class="window-list" id="windowList"></div>
       </div>
+      </section><!-- /Analysis -->
+
+      <!-- ===== VIDEOS tab: browse — catalogue home (placeholder this step) =====
+           DEFERRED: the video list currently lives as #windowSection inside
+           Analysis, toggled by date-range (isWindowMode). Splitting it cleanly
+           into this tab requires reconciling that date-mode toggle with the tab
+           system (see redesign blueprint §7.2 / Phase 3 follow-up). Kept in
+           Analysis for now to avoid touching that logic. This panel is the
+           reserved home; the catalogue + ad panel move here in the follow-up. -->
+      <section class="ds-tabpanel" data-panel="videos" id="dsPanelVideos" hidden>
+        <div class="ds-card" style="text-align:center;color:var(--subtext);padding:2.5rem">
+          The video catalogue is being moved here. For now, use the date-range
+          controls above to browse videos in a range (shown under Analysis).
+        </div>
+      </section><!-- /Videos -->
     </div>
   </div>
 
@@ -5248,6 +5286,37 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && currentMode) setMode(null);
   });
+})();
+
+/* ============================================================
+   Tab shell controller (redesign Phase 3 — scaffolding).
+   Self-contained: own scope, no dependency on existing globals.
+   Switches .ds-tabpanel visibility + syncs ?tab= URL param.
+   Fails silently if the shell markup isn't present (defensive).
+   ============================================================ */
+(function tabShell(){
+  const TABS = ['overview','analysis','videos'];
+  const tabs = document.querySelectorAll('.ds-tab');
+  const panels = document.querySelectorAll('.ds-tabpanel');
+  if (!tabs.length || !panels.length) return; // shell absent — no-op
+
+  function show(tab){
+    if (!TABS.includes(tab)) tab = 'overview';
+    tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
+    panels.forEach(p => { p.hidden = p.dataset.panel !== tab; });
+    try {
+      const u = new URL(location);
+      u.searchParams.set('tab', tab);
+      history.replaceState(null, '', u);
+    } catch (_) {}
+  }
+
+  tabs.forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+
+  // init from ?tab= (defaults to overview); leaves all other params untouched
+  let initial = 'overview';
+  try { initial = new URLSearchParams(location.search).get('tab') || 'overview'; } catch (_) {}
+  show(initial);
 })();
 
 loadData();

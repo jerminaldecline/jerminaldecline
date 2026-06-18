@@ -1,0 +1,82 @@
+/* ============================================================
+   jerminaldecline.com — shared design system
+   Extracted from the Monthly Report (the proven design language).
+   Both the report and the redesigned site consume this.
+   Phase 2 of the redesign blueprint.
+   ============================================================ */
+
+/* ---------- tokens ---------- */
+:root{
+  color-scheme: light dark;
+  --brand:#6aa3ff;--bg:#0d1220;--surface:#161c2e;--surface-2:#1d2538;--border:#29314a;
+  --text:#ede8d8;--text-muted:#9aa0b3;--text-dim:#6c728a;--accent:var(--brand);
+  --up:#4dd0a0;--down:#ff6b66;--label:#b9c0d0;--subtext:#8b93a8;
+  --up-bg:rgba(77,208,160,0.15);--down-bg:rgba(255,107,102,0.15);--flat-bg:rgba(108,114,138,0.14);
+  --radius:14px;--radius-sm:8px;
+  --font:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --brand:#1b4d9f;--bg:#f6f3ec;--surface:#ffffff;--surface-2:#efebe1;--border:#e3ddd0;
+    --text:#1c1a14;--text-muted:#6b665a;--text-dim:#998f7c;--accent:var(--brand);
+    --up:#1d9e75;--down:#b8302b;--label:#534e44;--subtext:#736d5f;
+    --up-bg:rgba(29,158,117,0.13);--down-bg:rgba(184,48,43,0.11);--flat-bg:rgba(153,143,124,0.14);
+  }
+}
+
+/* ---------- base ---------- */
+.ds *{box-sizing:border-box}
+.ds{color:var(--text);font-family:var(--font);line-height:1.5}
+
+/* ---------- card ---------- */
+.ds-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.4rem}
+.ds-card--accent{border-left:3px solid var(--accent)}
+.ds-card--down{border-left:3px solid var(--down)}
+.ds-card--muted{border-left:3px solid var(--text-dim)}
+
+/* ---------- panel heading ---------- */
+.ds-h{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
+
+/* ---------- stat card ---------- */
+.ds-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
+.ds-stat__num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
+.ds-stat__lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
+
+/* ---------- hero number ---------- */
+.ds-hero__label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.5rem}
+.ds-hero__num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
+.ds-hero__sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
+
+/* ---------- delta pills + minis ---------- */
+.ds-pill{display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.65rem;border-radius:var(--radius-sm);font-size:0.82rem;background:var(--surface-2)}
+.ds-pill__l{color:var(--subtext);font-size:0.78rem}
+.ds-pill__v{font-weight:700}
+.ds-pill.up .ds-pill__v{color:var(--up)} .ds-pill.down .ds-pill__v{color:var(--down)} .ds-pill.flat .ds-pill__v{color:var(--text-dim)}
+.ds-mini{font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem}
+.ds-mini__l{color:var(--subtext)} .ds-mini__v{font-weight:700}
+.ds-mini.up .ds-mini__v{color:var(--up)} .ds-mini.down .ds-mini__v{color:var(--down)} .ds-mini.flat .ds-mini__v{color:var(--text-dim)}
+
+/* ---------- comparison / data table ---------- */
+.ds-table{width:100%;border-collapse:collapse;font-size:0.86rem}
+.ds-table th{text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
+.ds-table th:first-child{text-align:left}
+.ds-table td{text-align:right;padding:0.5rem 0.4rem;border-bottom:1px solid var(--border)}
+.ds-table td:first-child{text-align:left;color:var(--label)}
+.ds-table tr:last-child td{border-bottom:none}
+.ds-table .now{color:var(--text);font-weight:700}
+
+/* ---------- inline select control (scope / month pickers) ---------- */
+.ds-select{background:var(--surface-2);color:var(--accent);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.3rem 0.55rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit}
+.ds-select:hover{border-color:var(--accent)}
+.ds-select option{background:var(--surface);color:var(--text)}
+
+/* ---------- tab navigation (Phase 3 shell) ---------- */
+.ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.95rem;font-weight:700;padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
+.ds-tab:hover{color:var(--text)}
+.ds-tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.ds-tabpanel[hidden]{display:none}
+
+/* ---------- section divider (optional) ---------- */
+.ds-divider{display:flex;align-items:center;gap:0.9rem;margin:1.6rem 0 1rem;color:var(--label);font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+.ds-divider::before,.ds-divider::after{content:"";height:1px;background:var(--border);flex:1}
