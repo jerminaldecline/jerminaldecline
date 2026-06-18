@@ -286,26 +286,17 @@
         <div id="monthlyBreakdownChips"></div>
         <div class="monthly-list" id="monthlyList"></div>
       </div>
-
-      <div id="windowSection" hidden>
-        <h2 class="section-title">
-          <span id="windowTitle">Videos in range</span>
-        </h2>
-        <div class="window-list" id="windowList"></div>
-      </div>
       </section><!-- /Analysis -->
 
-      <!-- ===== VIDEOS tab: browse — catalogue home (placeholder this step) =====
-           DEFERRED: the video list currently lives as #windowSection inside
-           Analysis, toggled by date-range (isWindowMode). Splitting it cleanly
-           into this tab requires reconciling that date-mode toggle with the tab
-           system (see redesign blueprint §7.2 / Phase 3 follow-up). Kept in
-           Analysis for now to avoid touching that logic. This panel is the
-           reserved home; the catalogue + ad panel move here in the follow-up. -->
+      <!-- ===== VIDEOS tab: browse — the catalogue (filtered by the date range) =====
+           Model A: the video list always renders here, filtered by the current
+           date-range controls above. Independent of the chart/monthly in Analysis. -->
       <section class="ds-tabpanel" data-panel="videos" id="dsPanelVideos" hidden>
-        <div class="ds-card" style="text-align:center;color:var(--subtext);padding:2.5rem">
-          The video catalogue is being moved here. For now, use the date-range
-          controls above to browse videos in a range (shown under Analysis).
+        <div id="windowSection">
+          <h2 class="section-title">
+            <span id="windowTitle">Videos in range</span>
+          </h2>
+          <div class="window-list" id="windowList"></div>
         </div>
       </section><!-- /Videos -->
     </div>
@@ -1375,12 +1366,11 @@ function rebuild() {
     document.querySelector('.chart-wrap').style.display = 'none';
     document.getElementById('monthlyList').style.display = 'none';
     document.querySelectorAll('.section-title').forEach(el => el.style.display = 'none');
-    // Also hide the window list and ad panel — these aren't section-titles so the
-    // querySelectorAll above doesn't catch them. Without this, switching to a
-    // channel with no uploads in the current range still showed the previous
-    // channel's data in the window list (since we early-return before reaching
-    // the windowMode visibility toggles below).
-    document.getElementById('windowSection').hidden = true;
+    // Model A: do NOT hide windowSection — the Videos tab shows its own
+    // "No videos uploaded in this range" message via renderWindowList, so the
+    // tab stays navigable and self-explanatory rather than vanishing.
+    document.getElementById('windowSection').hidden = false;
+    renderWindowList(startDate, endDate);
     const adPanel = document.getElementById('adPanel');
     if (adPanel) adPanel.hidden = true;
     const revPanel = document.getElementById('revenuePanel');
@@ -1395,14 +1385,15 @@ function rebuild() {
   document.getElementById('monthlyList').style.display = '';
   document.querySelectorAll('.section-title').forEach(el => el.style.display = '');
 
-  // Apply window-mode visibility (chart hidden, monthly hidden, window list shown).
-  // We hide the chart, its legend, and the metric toggle in window mode since
-  // the chart's monthly aggregation doesn't apply to a per-day view.
-  document.getElementById('trendLegend').style.display = windowMode ? 'none' : '';
-  document.querySelector('.chart-controls-row').style.display = windowMode ? 'none' : '';
-  document.getElementById('chartWrap').style.display = windowMode ? 'none' : '';
-  document.getElementById('monthlySection').hidden = windowMode;
-  document.getElementById('windowSection').hidden = !windowMode;
+  // Model A: chart + monthly breakdown are ALWAYS visible in the Analysis tab,
+  // regardless of date range. The video list (windowSection) lives in the Videos
+  // tab and is always populated (date range just filters it) — see the render
+  // block below. Date range no longer suppresses the chart/monthly view.
+  document.getElementById('trendLegend').style.display = '';
+  document.querySelector('.chart-controls-row').style.display = '';
+  document.getElementById('chartWrap').style.display = '';
+  document.getElementById('monthlySection').hidden = false;
+  document.getElementById('windowSection').hidden = false;
 
   const orderedKeys = monthsBetween(currStart, currEnd);
   monthlyData = orderedKeys.map(key => {
@@ -1468,7 +1459,7 @@ function rebuild() {
   const likeRateEligible = viewMode === 'long' && selectedChannel !== 'ALL';
   const varianceEligible = likeRateEligible && channelQualifiesForEngagementVariance(selectedChannel);
   if (metricToggle) {
-    metricToggle.style.display = windowMode ? 'none' : '';
+    metricToggle.style.display = '';  // Model A: chart always visible, so toggle always shown
     const btnLength = metricToggle.querySelector('[data-chart-metric="views_length"]');
     const btnScatter = metricToggle.querySelector('[data-chart-metric="all_videos"]');
     const btnViewsLikes = metricToggle.querySelector('[data-chart-metric="views_likes"]');
@@ -1497,18 +1488,17 @@ function rebuild() {
     });
   }
 
-  if (windowMode) {
-    renderWindowList(startDate, endDate);
-    document.getElementById('monthlyBreakdownChips').innerHTML = '';
-  } else {
-    renderTrendChart(yoy);
-    renderMonthlyList(yoy);
-    // Informational per-channel chips above the monthly breakdown (All combined only)
-    const chipsEl = document.getElementById('monthlyBreakdownChips');
-    chipsEl.innerHTML = (selectedChannel === 'ALL')
-      ? buildChannelBreakdownHtml(currentVids, { interactive: false })
-      : '';
-  }
+  // Model A: always render the chart + monthly (Analysis tab) AND the video
+  // list (Videos tab). The window list is filtered by the current date range;
+  // it is no longer an either/or with the chart.
+  renderTrendChart(yoy);
+  renderMonthlyList(yoy);
+  renderWindowList(startDate, endDate);
+  // Per-channel chips above the monthly breakdown (All combined only)
+  const chipsEl = document.getElementById('monthlyBreakdownChips');
+  chipsEl.innerHTML = (selectedChannel === 'ALL')
+    ? buildChannelBreakdownHtml(currentVids, { interactive: false })
+    : '';
   updateWordCloudHint();
 }
 
