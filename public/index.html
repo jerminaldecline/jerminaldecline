@@ -195,6 +195,7 @@ async function loadAndCompute(){
     fetch('data.json'+bust), fetch('topic-tags.json'+bust), fetch('topics.json'+bust)
   ]);
   const data = await dataRes.json();
+  ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tagsRaw = await tagsRes.json(); const tags = tagsRaw.tags || {};
   const topicsRaw = await topicsRes.json();
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
@@ -502,6 +503,106 @@ function refresh(month){
 }
 
 // async bootstrap: load live data, compute, then render
+/* ============================================================
+   Analytics data layer (for Analysis/Videos tabs) — ported from the
+   old index.html. Produces the monthlyData[] shape the old charts +
+   video code expect. Kept separate from the report's SCOPES layer.
+   ============================================================ */
+let ANALYTICS_DATASET = null;
+const AN_RPM = {
+  longFormMidRoll: { low: 2.0, high: 3.25 },
+  longFormShort: { low: 1.0, high: 2.0 },
+  shorts: { low: 0.02, high: 0.07 }
+};
+const AN_RPM_PESSIMISTIC = {
+  longFormMidRoll: { low: 0.85, high: 1.28 },
+  longFormShort: { low: 0.43, high: 0.85 },
+  shorts: { low: 0.02, high: 0.02 }
+};
+const AN_MID_ROLL_THRESHOLD_SEC = 480;
+
+function anSummarise(videos) {
+  const longForm = videos.filter(v => !v.isShort && !v.unavailable);
+  const shorts = videos.filter(v => v.isShort && !v.unavailable);
+  const longViews = longForm.reduce((s, v) => s + v.views, 0);
+  const shortViews = shorts.reduce((s, v) => s + v.views, 0);
+  const longLikes = longForm.reduce((s, v) => s + (v.likes || 0), 0);
+  const shortLikes = shorts.reduce((s, v) => s + (v.likes || 0), 0);
+  const durations = longForm.filter(v => v.durationSec > 0).map(v => v.durationSec);
+  let medianDuration = 0;
+  if (durations.length) {
+    durations.sort((a, b) => a - b);
+    const mid = Math.floor(durations.length / 2);
+    medianDuration = durations.length % 2 ? durations[mid] : (durations[mid - 1] + durations[mid]) / 2;
+  }
+  const longFormTotalSeconds = durations.reduce((s, d) => s + d, 0);
+  const midRollViews = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC).reduce((s, v) => s + v.views, 0);
+  const shortLongViews = longViews - midRollViews;
+  const revLow = (midRollViews/1000)*AN_RPM.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
+  const revHigh = (midRollViews/1000)*AN_RPM.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM.longFormShort.high + (shortViews/1000)*AN_RPM.shorts.high;
+  const revMid = (revLow + revHigh) / 2;
+  const revPessLow = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
+  const revPessHigh = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
+  const revPessMid = (revPessLow + revPessHigh) / 2;
+  const minLikeRateAgeMs = 3 * 86400 * 1000;
+  const nowTs = Date.now();
+  const eligibleRates = [];
+  for (const v of longForm) {
+    if ((v.views || 0) < 1000) continue;
+    if ((v.likes || 0) <= 0) continue;
+    if (nowTs - new Date(v.publishedAt).getTime() < minLikeRateAgeMs) continue;
+    eligibleRates.push((v.likes || 0) / v.views);
+  }
+  let longLikeRateMedian = 0;
+  if (eligibleRates.length) {
+    eligibleRates.sort((a, b) => a - b);
+    const mid = Math.floor(eligibleRates.length / 2);
+    longLikeRateMedian = eligibleRates.length % 2 ? eligibleRates[mid] : (eligibleRates[mid - 1] + eligibleRates[mid]) / 2;
+  }
+  return {
+    longForm, shorts, longViews, shortViews, longLikes, shortLikes,
+    longAvg: longForm.length ? longViews / longForm.length : 0,
+    shortAvg: shorts.length ? shortViews / shorts.length : 0,
+    longLikeRate: longViews ? longLikes / longViews : 0,
+    shortLikeRate: shortViews ? shortLikes / shortViews : 0,
+    longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
+    medianDuration, longFormDurations: durations.length, longFormTotalSeconds,
+    revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid,
+    totalViews() { return this.longViews + this.shortViews; },
+    totalCount() { return this.longForm.length + this.shorts.length; },
+    totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
+  };
+}
+
+function anMonthKey(iso){ return iso.slice(0,7); }
+// Build the monthlyData[] array the old charts/video code expects, for a
+// channel scope ('ALL' or channelId), across all available months.
+function buildMonthlyData(scope){
+  if (!ANALYTICS_DATASET?.videos) return [];
+  const inScope = v => scope === 'ALL' ? true : v.channelId === scope;
+  const byMonth = new Map();
+  for (const v of ANALYTICS_DATASET.videos) {
+    if (!inScope(v)) continue;
+    const k = anMonthKey(v.publishedAt);
+    if (!byMonth.has(k)) byMonth.set(k, []);
+    byMonth.get(k).push(v);
+  }
+  const keys = [...byMonth.keys()].filter(k => k >= '2017-07').sort();
+  return keys.map(key => {
+    const [y, mo] = key.split('-');
+    const yoyKey = `${parseInt(y)-1}-${mo}`;
+    const d = new Date(parseInt(y), parseInt(mo)-1, 1); d.setMonth(d.getMonth()-1);
+    const momKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return {
+      key, label: `${MONTHS[parseInt(mo)-1]} ${y}`,
+      curr: anSummarise(byMonth.get(key) || []),
+      yoy: byMonth.has(yoyKey) ? anSummarise(byMonth.get(yoyKey)) : null,
+      mom: byMonth.has(momKey) ? anSummarise(byMonth.get(momKey)) : null
+    };
+  });
+}
+
 (function tabShell(){
   const TABS = ['overview','analysis','videos'];
   const tabs = document.querySelectorAll('.ds-tab');
