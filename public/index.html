@@ -613,6 +613,936 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .revenue-breakdown {font-size: 0.85rem;}
 .revenue-breakdown th,
     .revenue-breakdown td {padding: 0.45rem 0.4rem;}
+
+/* Videos tab containers */
+.window-list-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-top:1.25rem}
+.window-title{margin:0 0 1rem;font-size:1.05rem;font-weight:800;color:var(--text)}
+.ad-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
+.ad-panel-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
+.ad-panel-body{padding:0 1.4rem 1.4rem}
+.vid-time-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--subtext);font-family:inherit;font-size:0.8rem;font-weight:700;padding:0.4rem 0.7rem;border-radius:7px;cursor:pointer}
+.vid-time-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.vid-time-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Window mode — flat video list for sub-monthly ranges */
+  .window-list {background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;}
+.window-list .window-list-search {padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);}
+.window-list .window-list-search input {width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.85rem;}
+.window-list .window-list-search input:focus {outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);}
+.window-list .window-list-stats {padding: 0.55rem 0.9rem;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);}
+/* Group header inside the window list — sits between the sortable column
+     header and the actual video rows, labels each group (Long-form / Shorts)
+     and shows its count + total views for fast scanning. Visually quieter
+     than the main stats line so it reads as a section divider. */
+  .window-list-group + .window-list-group {margin-top: 0.5rem;
+    border-top: 1px solid var(--border);}
+.window-list-group-header {display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0.9rem;
+    background: var(--surface);
+    font-size: 0.78rem;}
+.window-list-group-label {font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.78rem;}
+.window-list-group-meta {color: var(--text-muted);
+    font-variant-numeric: tabular-nums;}
+/* Channel breakdown chips above the window list */
+  .channel-breakdown {display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;}
+/* Window-mode variant: sits inside the window-list card */
+  .window-list .channel-breakdown {padding: 0.7rem 0.9rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);}
+/* Monthly-mode variant: standalone informational strip above the monthly list */
+  #monthlyBreakdownChips .channel-breakdown {padding: 0.6rem 0;
+    margin-bottom: 0.7rem;
+    gap: 0.5rem;}
+#monthlyBreakdownChips .channel-breakdown:empty {display: none;}
+/* Static chips render as small two-line cards (used in monthly mode) */
+  .channel-breakdown-chip.static {display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 8px;
+    min-width: 160px;}
+.channel-breakdown-chip.static .cbc-name {font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);}
+.channel-breakdown-chip.static .cbc-detail {font-size: 0.78rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;}
+.channel-breakdown-chip.static .cbc-long-num,
+  .channel-breakdown-chip.static .cbc-short-num,
+  .channel-breakdown-chip.static .cbc-views-num {color: var(--text);
+    font-weight: 500;}
+.channel-breakdown-chip.static {min-width: 140px; padding: 0.5rem 0.8rem;}
+.channel-breakdown-chip.static .cbc-name {font-size: 0.85rem;}
+.channel-breakdown-chip.static .cbc-detail {font-size: 0.78rem;}
+.channel-breakdown-chip {display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.32rem 0.85rem 0.32rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s, color 0.12s;}
+.channel-breakdown-chip:hover {border-color: var(--brand);
+    color: var(--brand-deep);}
+[data-theme="dark"] .channel-breakdown-chip:hover {color: var(--text);}
+.channel-breakdown-chip.static {cursor: default;}
+.channel-breakdown-chip.static:hover {border-color: var(--border);
+    color: var(--text);}
+[data-theme="dark"] .channel-breakdown-chip.static:hover {color: var(--text);}
+.channel-breakdown-chip.active {background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);}
+.channel-breakdown-chip.empty {opacity: 0.45;}
+.channel-breakdown-chip .cbc-name {font-weight: 600;}
+.channel-breakdown-chip .cbc-counts {color: var(--text-muted);
+    font-variant-numeric: tabular-nums;}
+.channel-breakdown-chip.active .cbc-counts {color: var(--accent);
+    opacity: 0.85;}
+.channel-breakdown-chip .cbc-views {color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;}
+.channel-breakdown-chip.active .cbc-views {color: var(--accent);
+    opacity: 0.75;}
+.channel-breakdown-clear {background: transparent;
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;}
+.channel-breakdown-clear:hover {color: var(--text);
+    border-color: var(--text-muted);}
+/* Clickable channel cells in data rows */
+  .video-channel.clickable {cursor: pointer;
+    transition: color 0.12s;}
+.video-channel.clickable:hover {color: var(--accent);
+    text-decoration: underline;}
+.video-title-channel-tag.clickable-inline {cursor: pointer;}
+.video-title-channel-tag.clickable-inline:hover {color: var(--accent);
+    text-decoration: underline;}
+.channel-breakdown {padding: 0.55rem 0.7rem; gap: 0.3rem;}
+.channel-breakdown-chip {font-size: 0.78rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem;}
+.channel-breakdown-chip .cbc-views {display: none;}
+.window-list .window-list-rows {max-height: 600px;
+    overflow-y: auto;}
+.window-list .video-row-header {background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;}
+.window-empty {padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95rem;}
+.window-list .window-list-search input {font-size: 16px; padding: 0.5rem 0.7rem;}
+/* Topic cell in per-video rows */
+  .video-topic {font-size: 0.78rem;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;}
+.video-topic-dot {width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;}
+.video-topic.untagged {color: var(--text-dim); font-style: italic; opacity: 0.6;}
+.group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
+.video-row {display: grid;
+    grid-template-columns: 90px 1fr 80px 110px 130px;
+    gap: 0.75rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.85rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);}
+.video-row.with-channel {grid-template-columns: 90px 120px 1fr 80px 110px 130px;}
+/* When topic data unavailable (non-TQ channels), the .no-topics modifier
+     drops the topic column so rows still align cleanly. */
+  .video-row.no-topics {grid-template-columns: 90px 1fr 80px 110px;}
+.video-row.with-channel.no-topics {grid-template-columns: 90px 120px 1fr 80px 110px;}
+.video-row:last-child {border-bottom: none;}
+.video-row:hover {background: var(--surface-2);}
+.video-date {color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.85rem;}
+.video-channel {color: var(--text-muted);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;}
+.video-title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.video-title a {color: var(--text); text-decoration: none;}
+.video-title a:hover {color: var(--accent); text-decoration: underline;}
+/* Mobile: channel becomes a subtitle under the title */
+  .video-title-channel-tag {display: none;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    font-weight: 400;
+    margin-top: 0.15rem;
+    white-space: nowrap;}
+/* Inline "ad" badge — appears next to video titles for videos that have been
+     identified as paid Google Ad campaigns via the Google Ads Transparency Centre.
+     Subtle but visible: factual annotation, not editorial commentary. */
+  .ad-badge {display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--shorts-soft);
+    color: var(--shorts);
+    border: 1px solid var(--shorts);
+    border-radius: 4px;
+    padding: 0 5px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: help;}
+[data-theme="dark"] .ad-badge {background: transparent;}
+/* Info hint inside the ad badge — quieter than the "ad" text but still
+     part of the same hover target. Signals there's more info on hover. */
+  .ad-badge-info {font-size: 0.78em;
+    opacity: 0.7;
+    margin-left: 1px;
+    font-weight: 500;}
+/* Like-rate outlier badge — appears on individual videos whose like rate
+     falls outside the channel's normal p10-p90 band. Two variants:
+     'high' (green, ▲) flags above-typical engagement; 'low' (red, ▼) flags
+     below-typical. Tooltip shows the actual rate vs channel median. */
+  .like-badge {display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;}
+/* Thumbs-up icon inside the badge — inherits the badge's text colour via
+     fill="currentColor" so it tints green or red to match the variant.
+     Small vertical nudge to optically align with the text baseline. */
+  .like-badge-icon {flex-shrink: 0;
+    margin-top: -1px;}
+.like-badge-high {background: rgba(29, 158, 117, 0.12);
+    color: var(--up);
+    border: 1px solid var(--up);}
+.like-badge-low {background: rgba(220, 50, 50, 0.10);
+    color: var(--down);
+    border: 1px solid var(--down);}
+[data-theme="dark"] .like-badge-high,
+  [data-theme="dark"] .like-badge-low {background: transparent;}
+/* Renamed-video badge — flags a video whose title has changed since we first
+     captured it (sourced from title-history.json). Same shape as the like
+     badge; brand blue keeps it distinct from the ad badge (orange) and the
+     like badges (green/red). Click/hover shows the full title chain. */
+  .renamed-badge {display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 0.4rem;
+    line-height: 1.5;
+    vertical-align: 1px;
+    cursor: pointer;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    -webkit-tap-highlight-color: transparent;}
+.renamed-badge-icon {flex-shrink: 0;
+    margin-top: -1px;}
+[data-theme="dark"] .renamed-badge {background: transparent;}
+/* Ad campaigns panel — shows the channel's confirmed paid promotion data.
+     Collapsible: header is always visible (summary stats in one line);
+     body with full per-campaign performance table appears on click. */
+  .ad-panel {background: var(--surface);
+    border: 1px solid var(--shorts);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 1rem 0 1.5rem;
+    overflow: hidden;}
+/* The whole header is a button so the entire bar is the click target.
+     Reset native button styling so it looks like a panel header. */
+  .ad-panel-toggle {display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;}
+.ad-panel-toggle:hover {background: var(--surface-2);}
+.ad-panel-toggle:focus-visible {outline: 2px solid var(--accent); outline-offset: -2px;}
+.ad-panel-header {display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;}
+.ad-panel-header-left {display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;}
+.ad-panel-eyebrow {font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--shorts);}
+.ad-panel-summary {font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;}
+/* Caret rotates to indicate expanded state */
+  .ad-panel-caret {width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;}
+.ad-panel-toggle[aria-expanded="true"] .ad-panel-caret {transform: rotate(-135deg);
+    margin-top: 4px;}
+/* Expanded body */
+  .ad-panel-body {padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);}
+/* Performance callout — three stat blocks side-by-side at the top of the
+     panel body. Each stat: big number on top, descriptor underneath. Reads
+     like a proper KPI dashboard: parallel, scannable, no awkward "label —
+     value — label" rhythm. Collapses to single column on narrow viewports.
+     Background tint + left border accent in the panel's --shorts theme tie
+     this visually to "paid promotion". */
+  .ad-panel-callout {display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    padding: 1rem 1.1rem;
+    margin: 0.85rem 0 1.1rem;
+    background: var(--shorts-soft);
+    border-left: 3px solid var(--shorts);
+    border-radius: var(--radius-sm);}
+[data-theme="dark"] .ad-panel-callout {background: rgba(225, 117, 23, 0.08);}
+.ad-panel-callout-stat {display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;}
+.ad-panel-callout-value {font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    white-space: nowrap;}
+.ad-panel-callout-of {font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-muted);}
+.ad-panel-callout-label {font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.4;}
+/* (ⓘ) icon inside a callout label — small info hint, matches the
+     hero-stat-info pattern but lighter weight for the smaller text. */
+  .ad-panel-callout-info {display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    margin-left: 0.1rem;
+    font-size: 0.95em;
+    transition: color 0.15s;
+    padding: 6px;
+    margin: -6px -6px -6px calc(0.1rem - 6px);
+    border-radius: 3px;
+    vertical-align: middle;}
+.ad-panel-callout-info:hover,
+  .ad-panel-callout-info:focus-visible {color: var(--shorts);
+    outline: none;
+    background: rgba(225, 117, 23, 0.12);}
+.ad-panel-callout {grid-template-columns: 1fr;
+      gap: 0.85rem;}
+.ad-panel-callout-value {font-size: 1.25rem;}
+/* Sortable header cells — click affordance, hover state, active indicator.
+     Uses the same .sort-arrow component as the window-list sortable rows. */
+  .ad-perf-table thead th.sortable {cursor: pointer;
+    user-select: none;
+    transition: color 0.12s, background 0.12s;}
+.ad-perf-table thead th.sortable:hover {color: var(--text);
+    background: var(--surface);}
+.ad-perf-table thead th.sortable.active-sort {color: var(--text);}
+.ad-perf-table thead th.sortable:focus-visible {outline: 2px solid var(--accent);
+    outline-offset: -2px;}
+.ad-perf-table thead th .sort-arrow {margin-left: 0.35rem;}
+.ad-panel-footnote {font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.85rem;
+    line-height: 1.5;}
+.ad-panel-footnote a {color: var(--text-muted);
+    text-decoration: underline;}
+.ad-panel-footnote a:hover {color: var(--accent);}
+.ad-panel-toggle {padding: 0.7rem 0.85rem;}
+.ad-panel-body {padding: 0 0.85rem 0.85rem;}
+.video-duration {color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem;}
+.video-views {font-weight: 500; font-variant-numeric: tabular-nums; text-align: right;}
+/* Column header row inside groups */
+  .video-row-header {background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-bottom: 1px solid var(--border);}
+.video-row-header:hover {background: var(--surface-2);}
+.video-row-header .sortable {cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.12s;}
+.video-row-header .sortable:hover {color: var(--text);}
+.video-row-header .sortable.active-sort {color: var(--accent);}
+.video-row-header .sortable.active-sort:hover {color: var(--accent);}
+.video-row-header .video-date {font-size: 0.78rem;}
+.video-row-header .video-channel {font-size: 0.78rem;}
+.video-row-header .video-duration {font-size: 0.78rem;}
+.sort-arrow {display: inline-block;
+    width: 10px;
+    height: 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: var(--text-dim);}
+.sort-arrow.active {color: var(--accent);}
+.video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
+.video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
+.video-row .video-duration,
+    .video-row .video-channel,
+    .video-row .hide-mobile {display: none !important;}
+.video-title {white-space: normal;}
+.video-title-channel-tag {display: block;}
+.video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
+.video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
+.video-row .video-duration,
+    .video-row .video-channel,
+    .video-row .hide-mobile {display: none !important;}
+.video-title {white-space: normal;}
+.video-title-channel-tag {display: block;}
+
+/* Overview collapsible month-detail (video list at bottom of report) */
+.ov-month-detail{margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1rem}
+.ov-md-toggle{width:100%;display:flex;align-items:center;gap:0.6rem;background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:700;color:var(--text);padding:0.5rem 0}
+.ov-md-caret{width:0;height:0;border-left:6px solid var(--subtext);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform 0.15s}
+.ov-month-detail.open .ov-md-caret{transform:rotate(90deg)}
+.ov-md-body{margin-top:0.75rem}
+.ov-md-empty{color:var(--text-dim);font-size:0.88rem;padding:1rem 0}
+.ov-vgroup{margin-bottom:1rem}
+.ov-vgroup-head{display:flex;justify-content:space-between;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--label);font-weight:700;padding:0.4rem 0;border-bottom:1px solid var(--border)}
+.ov-vrow{display:grid;grid-template-columns:1fr 90px 80px;gap:0.75rem;align-items:center;padding:0.45rem 0;border-bottom:1px solid var(--border);font-size:0.85rem}
+.ov-month-detail.has-ch .ov-vrow{grid-template-columns:1fr 110px 90px 80px}
+.ov-vtitle{color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov-vtitle:hover{color:var(--accent);text-decoration:underline}
+.ov-vch{color:var(--subtext);font-size:0.8rem}
+.ov-vdur,.ov-vviews{text-align:right;font-variant-numeric:tabular-nums;color:var(--text-muted)}
+.ov-vviews{font-weight:700;color:var(--text)}
+
+
+/* Word cloud section */
+.wordcloud-section{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.wordcloud-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;font-family:inherit;text-align:left}
+.wordcloud-eyebrow{display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700}
+.wordcloud-title{font-size:1rem;font-weight:800;color:var(--text)}
+.wordcloud-hint{font-weight:400;color:var(--subtext);font-size:0.85rem;margin-left:0.4rem}
+.wordcloud-panel{padding:0 1.4rem 1.4rem}
+.wordcloud-meta{font-size:0.8rem;color:var(--subtext);margin-bottom:1rem}
+.wordcloud-body{display:flex;flex-wrap:wrap;gap:0.4rem 0.9rem;align-items:center;line-height:1.4}
+.wordcloud-word{color:var(--accent);font-weight:700}
+.wordcloud-empty{color:var(--text-dim);font-size:0.88rem}
+
+/* Word cloud section — header is a full-width card-style toggle that
+     matches the visual weight of the ad/revenue panels, so users know
+     there's something worth opening here. */
+  .wordcloud-section {margin: 0 0 1.5rem;}
+.wordcloud-toggle {display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid #7c3aed;  /* purple accent — matches the like-rate visualisations */
+    border-radius: var(--radius);
+    padding: 0.85rem 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;}
+.wordcloud-toggle:hover {background: var(--surface-2);
+    transform: translateY(-1px);}
+.wordcloud-toggle[aria-expanded="true"] {background: var(--surface-2);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;}
+/* Icon block — uses an SVG that visually suggests "scattered words" so the
+     user gets an at-a-glance hint of what the panel contains. */
+  .wordcloud-icon {flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(124, 58, 237, 0.10);
+    color: #7c3aed;}
+[data-theme="dark"] .wordcloud-icon {background: rgba(124, 58, 237, 0.18);}
+.wordcloud-toggle-text {display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1 1 auto;
+    min-width: 0;}
+.wordcloud-eyebrow {text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;}
+.wordcloud-title {font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    flex-wrap: wrap;}
+.wordcloud-caret {flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.18s, border-color 0.18s;
+    margin-right: 0.4rem;}
+.wordcloud-toggle[aria-expanded="true"] .wordcloud-caret {transform: rotate(-135deg);
+    border-color: #7c3aed;}
+.wordcloud-hint {color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 400;}
+.wordcloud-panel {margin-top: 0;
+    padding: 1.1rem 1.2rem 1.4rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-left: 4px solid #7c3aed;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);}
+.wordcloud-meta {font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;}
+.wordcloud-body {display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.65rem;
+    align-items: baseline;
+    line-height: 1.4;}
+.wordcloud-word {color: var(--text);
+    transition: color 0.12s;
+    font-weight: 500;
+    display: inline-block;}
+.wordcloud-word:hover {color: var(--accent);}
+.wordcloud-empty {color: var(--text-dim);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 1rem 0;}
+.wordcloud-panel {padding: 0.9rem 0.95rem 1.1rem;}
+.wordcloud-body {gap: 0.25rem 0.5rem;}
+
+/* Description patterns panel */
+.desc-pattern-panel{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.desc-pattern-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
+.desc-pattern-body{padding:0 1.4rem 1.4rem}
+
+/* Description Patterns panel — same collapsible structure as the story
+     tracker but distinct visual identity (muted accent, analytical
+     register, no urgency cue) so the two read as different kinds of
+     finding. Used for channel-behavior patterns that are interesting in
+     aggregate rather than tied to a single hot story. */
+  .desc-pattern-panel {background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;}
+.desc-pattern-toggle {width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;}
+.desc-pattern-toggle:hover {background: rgba(255,255,255,0.02);}
+.desc-pattern-eyebrow {grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;}
+.desc-pattern-headline {grid-column: 1;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;}
+.desc-pattern-headline strong {color: var(--brand);
+    font-weight: 700;}
+.desc-pattern-quote {color: var(--text-muted);
+    font-style: italic;}
+.desc-pattern-chevron {grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;}
+.desc-pattern-toggle[aria-expanded="true"] .desc-pattern-chevron {transform: rotate(180deg);}
+.desc-pattern-body {padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;}
+.desc-pattern-stats {display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);}
+.desc-pattern-stat {display: flex;
+    flex-direction: column;}
+.desc-pattern-stat-value {color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;}
+.desc-pattern-stat-label {font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;}
+.desc-pattern-table {width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;}
+.desc-pattern-table th {text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;}
+.desc-pattern-table th.num {text-align: right;}
+.desc-pattern-table td {padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;}
+.desc-pattern-table td.num {text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    white-space: nowrap;}
+.desc-pattern-table tr:last-child td {border-bottom: none;}
+.desc-pattern-table .desc-text {font-style: italic;
+    color: var(--text);
+    word-break: break-word;}
+/* Long descriptions collapse to a single-line preview with a chevron.
+     Native <details>/<summary> for accessibility; default marker hidden
+     so the row layout stays clean. */
+  .desc-pattern-long {overflow: hidden;}
+.desc-pattern-long summary {cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    color: var(--text);
+    font-style: italic;}
+.desc-pattern-long summary::-webkit-details-marker {display: none;}
+.desc-pattern-long summary::after {content: '▼';
+    font-size: 0.65em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.15s;}
+.desc-pattern-long[open] summary::after {transform: rotate(180deg);}
+.desc-pattern-long .desc-preview {white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;}
+.desc-pattern-long .desc-full {margin-top: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-style: italic;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text);
+    line-height: 1.5;}
+/* Info point callout — curated editorial annotations specific to the
+     selected channel (e.g. "this typo appears on 100 videos"). Sits at
+     the top of the expanded body, brand-tinted background to read as
+     informational rather than warning. */
+  .desc-pattern-info {background: rgba(106, 163, 255, 0.06);
+    border-left: 2px solid var(--brand);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.9rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--text-muted);}
+.desc-pattern-info-label {color: var(--brand);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;}
+.desc-pattern-info p {margin: 0;}
+.desc-pattern-info + .desc-pattern-info {margin-top: -0.4rem;}
+.desc-pattern-typos {margin-top: 1rem;
+    padding: 0.8rem 0.95rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);}
+.desc-pattern-typos-header {font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.55rem;
+    font-weight: 600;}
+.desc-pattern-typos-list {list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.83rem;
+    line-height: 1.5;}
+.desc-pattern-typos-list li {display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;}
+.desc-pattern-typos-list .typo-wrong {color: #e85d4d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 600;}
+.desc-pattern-typos-list .typo-arrow {color: var(--text-dim);}
+.desc-pattern-typos-list .typo-right {color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;}
+.desc-pattern-typos-list .typo-context {color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.8rem;}
+/* Estimated revenue panel — same architectural pattern as the ad panel
+     (collapsible toggle with one-line summary, expandable detail) but
+     visually distinguished with a different accent colour so users can tell
+     them apart at a glance. Green accent reads as "money" without being too
+     on-the-nose about it. */
+  /* Story tracker — surfaces a dominant single-topic saturation event
+     while it's ongoing. Collapsible like the revenue and ad panels: header
+     button always shows the headline; body (stats, saturation chart,
+     video list) reveals on expand. */
+  .story-tracker {background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border);
+    border-left: 3px solid #e85d4d;
+    border-radius: var(--radius-md);
+    margin: 0 0 1rem;
+    overflow: hidden;}
+.story-tracker-toggle {width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.8rem;
+    row-gap: 0.3rem;
+    align-items: center;}
+.story-tracker-toggle:hover {background: rgba(255,255,255,0.02);}
+.story-tracker-eyebrow {grid-column: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #e85d4d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;}
+.story-tracker-headline {grid-column: 1;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;}
+.story-tracker-headline strong {color: #e85d4d;}
+.story-tracker-chevron {grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;}
+.story-tracker-toggle[aria-expanded="true"] .story-tracker-chevron {transform: rotate(180deg);}
+.story-tracker-body {padding: 0 1.2rem 1.1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;}
+.story-tracker-stats {display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0.6rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);}
+.story-tracker-stat {display: flex;
+    flex-direction: column;}
+.story-tracker-stat-value {color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;}
+.story-tracker-stat-label {font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;}
+/* "Unclassifiable" note — appears when some videos have descriptions
+     too thin for keyword matching. Visually subordinate to the main stats:
+     muted, italic-ish. Honest about a known limitation without distracting
+     from the verified count above. */
+  .story-tracker-unclassified {font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding: 0.5rem 0.7rem;
+    margin: 0 0 0.9rem;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--border);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;}
+.story-tracker-unclassified em {color: var(--text-dim);
+    font-style: italic;}
+/* Saturation chart — horizontal bars per time window. The bar visually
+     encodes the percentage; the numeric label shows the fraction. */
+  /* Per-channel saturation rows (new story tracker, replaces the old
+     per-window saturation bars). One row per tagged channel showing how
+     much of that channel's recent output is about this topic. */
+  .story-tracker-channels {display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-variant-numeric: tabular-nums;
+    margin: 0.6rem 0 0.8rem;}
+.story-channel-row {display: grid;
+    grid-template-columns: 130px 1fr 170px;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.82rem;}
+.story-channel-handle {color: var(--text-muted);
+    font-weight: 500;}
+.story-channel-bar {height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;}
+.story-channel-fill {height: 100%;
+    border-radius: 4px;
+    transition: width 0.25s ease;}
+.story-channel-stats {color: var(--text);
+    font-size: 0.8rem;
+    text-align: right;}
+.story-channel-pct {color: var(--text-muted);
+    margin: 0 0.1rem;}
+.story-tracker-totals {padding: 0.6rem 0;
+    margin: 0.4rem 0 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);}
+.story-tracker-totals strong {color: var(--text);
+    font-variant-numeric: tabular-nums;}
+/* Video list — sortable header row, scrollable list below. Both the
+     header and the list items have explicit right padding to push the
+     rightmost column (like rate) away from where the scrollbar appears.
+     scrollbar-gutter: stable alone wasn't enough — Chrome's overlay
+     scrollbar can still visually crowd the content. Explicit padding
+     reserves the space whether the scrollbar shows or not. */
+  .story-tracker-video-list-header {display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    padding: 0.4rem 14px 0.4rem 0;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);}
+.story-tracker-sort-btn {background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    text-align: left;}
+.story-tracker-sort-btn:hover {color: var(--text);}
+.story-tracker-sort-btn[data-sort-active="true"] {color: var(--text);}
+/* Numeric columns right-aligned (header + body) */
+  .story-tracker-sort-btn[data-sort-col="views"],
+  .story-tracker-sort-btn[data-sort-col="like_rate"],
+  .story-tracker-video-list-header > :nth-child(3),
+  .story-tracker-video-list-header > :nth-child(4) {text-align: right;}
+.story-tracker-video-list {font-size: 0.82rem;
+    max-height: 320px;
+    overflow-y: auto;}
+.story-tracker-video-item {padding: 0.4rem 14px 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 80px;
+    gap: 0.6rem;
+    align-items: baseline;}
+.story-tracker-video-item:last-child {border-bottom: none;}
+.story-tracker-video-date {color: var(--text-dim);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;}
+.story-tracker-video-title a {color: var(--text);
+    text-decoration: none;}
+.story-tracker-video-title a:hover {text-decoration: underline;}
+.story-tracker-video-desc {color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    font-style: italic;}
+.story-tracker-video-views,
+  .story-tracker-video-likerate {color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;}
 </style>
 </head>
 <body>
@@ -641,6 +1571,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-time-btn active" data-preset="all">All time</button>
       </div>
     </div>
+    <div class="story-tracker-mount" id="storyTracker" hidden></div>
     <div class="an-chart-card">
       <div class="an-metric-toggle" id="anMetricToggle" role="tablist" aria-label="Chart metric">
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
@@ -659,13 +1590,40 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <input type="hidden" id="startDate"><input type="hidden" id="endDate">
     </div>
     <div class="revenue-panel" id="revenuePanel" hidden></div>
+    <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
+    <div class="wordcloud-section">
+      <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">Most-used words</span>
+          <span class="wordcloud-title">Title word cloud <span class="wordcloud-hint" id="wordcloudHint"></span></span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="wordcloudPanel" hidden>
+        <div class="wordcloud-meta" id="wordcloudMeta"></div>
+        <div class="wordcloud-body" id="wordcloudBody"></div>
+      </div>
+    </div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
-    <div class="tab-placeholder">
-      <h3>Videos</h3>
-      <p>The full searchable, sortable video catalogue — with per-video stats, topic tags, and ad-campaign tracking — is being rebuilt in this new design.</p>
-      <p class="tab-placeholder-note">The previous video list remains available on the live site while this is rebuilt.</p>
+    <div class="an-controls" id="vidControls">
+      <div class="an-control-group">
+        <span class="an-control-label">Channel</span>
+        <select id="vidChannelSel" class="scope-inline"></select>
+      </div>
+      <div class="an-control-group an-time">
+        <button type="button" class="vid-time-btn" data-preset="ytd">YTD</button>
+        <button type="button" class="vid-time-btn" data-preset="12m">Last 12 months</button>
+        <button type="button" class="vid-time-btn" data-preset="24m">Last 24 months</button>
+        <button type="button" class="vid-time-btn" data-preset="since-peak">Since peak</button>
+        <button type="button" class="vid-time-btn active" data-preset="all">All time</button>
+      </div>
+    </div>
+    <div class="ad-panel" id="adPanel" hidden></div>
+    <div class="window-list-card">
+      <h3 class="window-title" id="windowTitle"></h3>
+      <div id="windowList"></div>
     </div>
   </section>
 </div>
@@ -689,6 +1647,8 @@ async function loadAndCompute(){
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tagsRaw = await tagsRes.json(); const tags = tagsRaw.tags || {};
   const topicsRaw = await topicsRes.json();
+  // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
+  ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
   const hid = {}; for(const [cid,h] of Object.entries(handle)) hid[h]=cid;
@@ -834,6 +1794,25 @@ function availableMonths(){
 }
 // both selectors are populated + bound inside render() (they live in the re-rendered report header)
 
+function fmtDurOv(sec){ sec=Math.round(sec||0); const h=Math.floor(sec/3600),mm=Math.floor((sec%3600)/60),ss=sec%60; return (h>0?h+':'+String(mm).padStart(2,'0'):mm)+':'+String(ss).padStart(2,'0'); }
+function renderOvMonthVideos(vlist, monthKey){
+  if (!vlist.length) return '<div class="ov-md-empty">No videos this month.</div>';
+  const longs = vlist.filter(v=>!v.s).sort((a,b)=>b.v-a.v);
+  const shorts = vlist.filter(v=>v.s).sort((a,b)=>b.v-a.v);
+  const isAll = scope==='ALL';
+  const row = v => `<div class="ov-vrow">
+      <a class="ov-vtitle" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${(v.t||'').replace(/</g,'&lt;')}</a>
+      ${isAll?`<span class="ov-vch">${v.ch}</span>`:''}
+      <span class="ov-vdur">${fmtDurOv(v.d)}</span>
+      <span class="ov-vviews">${fmt(v.v)}</span>
+    </div>`;
+  const group = (label, arr) => arr.length ? `<div class="ov-vgroup">
+      <div class="ov-vgroup-head"><span>${label}</span><span class="ov-vgroup-meta">${arr.length} · ${fmt(arr.reduce((s,v)=>s+v.v,0))} views</span></div>
+      ${arr.map(row).join('')}
+    </div>` : '';
+  return group('Long-form', longs) + group('Shorts', shorts);
+}
+
 function render(m){
   const D=SCOPES[scope]; const d=D[m]; if(!d){return;}
   const SD=d.shorts||{n:0,v:0,best:null};
@@ -976,6 +1955,15 @@ function render(m){
         </table>
       </div>
     </div>
+    <div class="ov-month-detail" id="ovMonthDetail">
+      <button type="button" class="ov-md-toggle" id="ovMdToggle" aria-expanded="false">
+        <span class="ov-md-caret"></span>
+        <span class="ov-md-label">${monthName(m)} — all ${(d.vlist||[]).length} videos</span>
+      </button>
+      <div class="ov-md-body" id="ovMdBody" hidden>
+        ${renderOvMonthVideos(d.vlist || [], m)}
+      </div>
+    </div>
     <div class="report-foot"><span class="site">jerminaldecline.com</span></div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
@@ -985,6 +1973,17 @@ function render(m){
   const ms=document.getElementById('msel');
   ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
   ms.onchange = (e)=>{ refresh(e.target.value); };
+  // Overview month-detail collapse toggle
+  const mdToggle = document.getElementById('ovMdToggle');
+  if (mdToggle) {
+    mdToggle.onclick = () => {
+      const exp = mdToggle.getAttribute('aria-expanded') === 'true';
+      mdToggle.setAttribute('aria-expanded', String(!exp));
+      const body = document.getElementById('ovMdBody');
+      if (body) body.hidden = exp;
+      mdToggle.parentElement.classList.toggle('open', !exp);
+    };
+  }
 }
 
 function refresh(month){
@@ -1002,6 +2001,8 @@ function refresh(month){
    ============================================================ */
 let ANALYTICS_DATASET = null;
 let ANALYTICS_CHANNEL = "ALL";
+let ANALYTICS_TOPIC_TAGS = null;
+let ANALYTICS_TOPICS = null;
 const AN_RPM = {
   longFormMidRoll: { low: 2.0, high: 3.25 },
   longFormShort: { low: 1.0, high: 2.0 },
@@ -3054,6 +4055,8 @@ function niceDurationAxis(minSec, maxSec) {
     likeRateBaselines = computeAnalyticsBaselines();
     renderTrendChart(true);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
+    if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
+    if (typeof window.renderStoryTracker === 'function') { try { window.renderStoryTracker(); } catch(e){ console.error('story tracker', e); } }
   };
   // Set #startDate/#endDate to span the currently-filtered monthlyData window,
   // so the revenue panel (which reads those inputs) matches the chart.
@@ -3072,6 +4075,768 @@ function niceDurationAxis(minSec, maxSec) {
   window.setAnalysisMetric = function(m){ chartMetric = m; window.renderAnalysisChart(); };
   window.setAnalysisViewMode = function(v){ viewMode = v; window.renderAnalysisChart(); };
   // like-rate baselines (ported)
+
+  // ---- Word cloud (ported, Analysis deep-dive) ----
+  const STOPWORDS = new Set([
+  // Standard English stopwords
+  'the','and','for','are','but','not','you','all','any','can','her','was','one','our','out',
+  'has','his','had','how','its','may','new','now','old','see','two','way','who','boy','did',
+  'get','him','let','put','say','she','too','use','this','that','with','from','they','were',
+  'have','what','when','your','will','would','there','their','some','more','then','about',
+  'just','like','make','than','only','very','also','into','over','well','been','being',
+  // YouTube/title filler
+  'video','videos','watch','full','episode','part','live','stream','today','him','her',
+  // Common contractions stripped of apostrophes
+  'doesnt','dont','wont','isnt','arent','wasnt','werent','hasnt','havent','hadnt','cant',
+  'shouldnt','wouldnt','couldnt','its','im','ive','youre','youve','theyre','weve','well',
+  // Generic verbs that show up a lot but mean nothing alone
+  'gets','got','goes','went','going','make','makes','made','take','takes','took','says',
+  'said','saw','seen','tell','told','call','calls','called'
+]);
+  function extractWords(videos) {
+  const counts = new Map();
+  for (const v of videos) {
+    if (!v.title || v.unavailable) continue;
+    // Find tokens: words (possibly with apostrophes) and hashtags
+    const tokens = v.title.match(/#[\w]+|[A-Za-z][A-Za-z']*/g) || [];
+    for (let tok of tokens) {
+      // Normalise: lowercase, strip apostrophes from words (but keep hashtags as-is in case)
+      let key;
+      if (tok.startsWith('#')) {
+        key = tok.toLowerCase();
+      } else {
+        key = tok.toLowerCase().replace(/'/g, '');
+      }
+      if (key.length < 3) continue;
+      if (STOPWORDS.has(key)) continue;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+  }
+  return counts;
+}
+  function renderWordCloud() {
+  const panel = document.getElementById('wordcloudPanel');
+  const body = document.getElementById('wordcloudBody');
+  const meta = document.getElementById('wordcloudMeta');
+  const hint = document.getElementById('wordcloudHint');
+  const toggle = document.getElementById('wordcloudToggle');
+  if (!panel || !body || !meta) return;
+
+  // Operate on the currently visible date range + channel + mode
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (!startDate || !endDate) {
+    body.innerHTML = '<div class="wordcloud-empty">Set a valid date range first.</div>';
+    return;
+  }
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+
+  let videos = anFilteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+  // Respect long-form vs Including-Shorts toggle
+  if (viewMode === 'long') {
+    videos = videos.filter(v => !v.isShort);
+  }
+
+  if (videos.length < 20) {
+    body.innerHTML = `<div class="wordcloud-empty">Not enough titles in this range to draw a meaningful cloud (${videos.length} found, need at least 20).</div>`;
+    meta.textContent = '';
+    if (hint) hint.textContent = `(${videos.length} titles)`;
+    return;
+  }
+
+  const counts = extractWords(videos);
+  if (counts.size === 0) {
+    body.innerHTML = '<div class="wordcloud-empty">No usable words in this range.</div>';
+    meta.textContent = '';
+    if (hint) hint.textContent = `(0 words from ${videos.length} titles)`;
+    return;
+  }
+
+  // Sort by frequency descending, take top 40
+  const TOP_N = 40;
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP_N);
+  const maxFreq = sorted[0][1];
+  const minFreq = sorted[sorted.length - 1][1];
+
+  // Size mapping: linear from 0.85rem (min) to 2.2rem (max)
+  // Use sqrt to dampen extreme outliers so the highest-frequency word doesn't dwarf everything
+  function fontSizeFor(freq) {
+    if (maxFreq === minFreq) return 1.2;
+    const t = Math.sqrt((freq - minFreq) / (maxFreq - minFreq));
+    return 0.85 + t * (2.2 - 0.85);
+  }
+
+  // Render
+  body.innerHTML = sorted.map(([word, freq]) => {
+    const size = fontSizeFor(freq).toFixed(2);
+    // Slightly higher opacity for more frequent words
+    const opacity = (0.6 + 0.4 * Math.sqrt((freq - minFreq) / Math.max(1, (maxFreq - minFreq)))).toFixed(2);
+    return `<span class="wordcloud-word" style="font-size:${size}rem;opacity:${opacity};" title="${freq} occurrence${freq === 1 ? '' : 's'}">${escapeHtml(word)}</span>`;
+  }).join('');
+
+  const modeLabel = viewMode === 'long' ? 'long-form titles' : 'all titles';
+  meta.textContent = `Top ${sorted.length} words from ${videos.length} ${modeLabel} in the selected range. Stopwords and very short tokens excluded. Hashtags preserved.`;
+  if (hint) hint.textContent = `(${sorted.length} words from ${videos.length} titles)`;
+}
+  window.renderWordCloud = renderWordCloud;
+
+
+  // ---- Description patterns (ported, Analysis deep-dive) ----
+  let descriptionsCache = null;
+  let descriptionsLoadPromise = null;
+  let descPatternExpanded = false;
+  const DESC_PATTERN_CONFIG = {
+  // Channels for which this analysis is editorially meaningful. The three
+  // TQ-network channels all show distinctive patterns:
+  //   - TheQuartering: "This news is totally insane" × 43 + thin one-liners
+  //   - JeremyHambly: identical 100-char boilerplate × 102 (incl. typo "Immensly")
+  //   - QuarteringLive: cross-promotion boilerplate template × 4-7 variations
+  channelHandles: ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'],
+  windowDays: 60,
+  // Two ways a description is "uninformative":
+  //   - Thin (under 50 chars) — too short to convey topic
+  //   - Boilerplate (verbatim reuse across 5+ videos) — long but template
+  // Both are functionally equivalent: don't tell you what the video is about.
+  thinDescThreshold: 50,
+  boilerplateReuseThreshold: 5,
+  // Minimum count for a description to appear in the "most-reused" table.
+  // Tightens the table to genuinely repeated patterns rather than noise.
+  minReuseCount: 2,
+  maxTableRows: 10,
+  // Headline trigger: if the top reused description hits this share of
+  // analysed videos, lead with the boilerplate finding; otherwise lead
+  // with the uninformative % stat. % share rather than absolute count so
+  // smaller channels still surface their pattern.
+  headlineReuseShareThreshold: 0.10,
+  // Long descriptions truncate to a single-line preview with an expand
+  // toggle in the table. Threshold chosen to keep ~80-char clickbait
+  // visible in full while collapsing the long sponsor/boilerplate texts
+  // that would otherwise dominate the table.
+  longDescThreshold: 90
+};
+  function loadDescriptions() {
+  if (descriptionsCache) return Promise.resolve(descriptionsCache);
+  if (descriptionsLoadPromise) return descriptionsLoadPromise;
+  descriptionsLoadPromise = fetch('descriptions.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(json => {
+      descriptionsCache = json && json.descriptions ? json.descriptions : {};
+      return descriptionsCache;
+    })
+    .catch(err => {
+      console.warn('descriptions.json failed to load', err);
+      descriptionsCache = {};
+      return descriptionsCache;
+    });
+  return descriptionsLoadPromise;
+}
+  
+  window.renderDescPatterns = function renderDescPatterns() {
+  const panel = document.getElementById('descPatternPanel');
+  if (!panel) return;
+  if (!ANALYTICS_DATASET) { panel.hidden = true; return; }
+
+  // Channel filter — only renders for relevant channels.
+  const channelMap = ANALYTICS_DATASET.channels || {};
+  const allowedIds = new Set();
+  for (const [chId, ch] of Object.entries(channelMap)) {
+    if (DESC_PATTERN_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
+  }
+  if (!allowedIds.has(ANALYTICS_CHANNEL)) { panel.hidden = true; return; }
+
+  // Descriptions are loaded lazily; reuse the story tracker's cache.
+  if (!descriptionsCache) {
+    loadDescriptions().then(() => window.renderDescPatterns());
+    return;
+  }
+
+  const now = Date.now();
+  const windowStart = now - DESC_PATTERN_CONFIG.windowDays * 86400 * 1000;
+
+  // Eligible videos: long-form, in window, on the currently selected channel.
+  // The config's channelHandles list controls which channels the panel
+  // is allowed to render for; the actual data is then scoped to whichever
+  // single channel the user has selected, not the union of allowed channels.
+  const eligible = ANALYTICS_DATASET.videos.filter(v => {
+    if (v.channelId !== ANALYTICS_CHANNEL) return false;
+    if (v.isShort || v.unavailable) return false;
+    if (new Date(v.publishedAt).getTime() < windowStart) return false;
+    return true;
+  });
+
+  if (eligible.length === 0) { panel.hidden = true; return; }
+
+  // Group videos by their exact description text (normalised to trimmed).
+  // Empty/missing descriptions are excluded from the reuse counts because
+  // we can't distinguish "no description written" from "fetcher hasn't
+  // backfilled this yet". Once the audit completes with the new fetcher
+  // we'll see the true picture.
+  const descCounts = new Map();
+  let totalWithDesc = 0;
+  for (const v of eligible) {
+    const raw = descriptionsCache[v.id];
+    if (raw === undefined) continue; // not yet fetched — skip rather than count
+    totalWithDesc++;
+    const trimmed = raw.trim();
+    if (trimmed.length > 0) {
+      descCounts.set(trimmed, (descCounts.get(trimmed) || 0) + 1);
+    }
+  }
+
+  if (totalWithDesc === 0) { panel.hidden = true; return; }
+
+  // Identify boilerplate: descriptions reused enough to be templates.
+  // Captures cases like JeremyHambly's 100-char "Joining The Channel..."
+  // which is technically long enough to escape the "thin" filter but is
+  // functionally identical across 102 videos.
+  const boilerplateDescs = new Set();
+  for (const [desc, count] of descCounts) {
+    if (count >= DESC_PATTERN_CONFIG.boilerplateReuseThreshold) {
+      boilerplateDescs.add(desc);
+    }
+  }
+
+  // Second pass: classify each video against the broader uninformative set.
+  let uninformativeCount = 0;
+  let thinOnlyCount = 0;
+  let boilerplateOnlyCount = 0;
+  for (const v of eligible) {
+    const raw = descriptionsCache[v.id];
+    if (raw === undefined) continue;
+    const trimmed = raw.trim();
+    const isThin = trimmed.length < DESC_PATTERN_CONFIG.thinDescThreshold;
+    const isBoilerplate = boilerplateDescs.has(trimmed);
+    if (isThin || isBoilerplate) uninformativeCount++;
+    if (isThin && !isBoilerplate) thinOnlyCount++;
+    if (isBoilerplate && !isThin) boilerplateOnlyCount++;
+  }
+
+  const uninformativePct = uninformativeCount / totalWithDesc * 100;
+
+  // Build top-N reused descriptions table.
+  const reused = [...descCounts.entries()]
+    .filter(([, count]) => count >= DESC_PATTERN_CONFIG.minReuseCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, DESC_PATTERN_CONFIG.maxTableRows);
+
+  const topReused = reused[0]; // [desc, count] or undefined
+  // Hide if nothing interesting — neither significant reuse nor meaningful
+  // uninformative share.
+  if (!topReused && uninformativePct < 10) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+
+  const fmt = (n) => n.toLocaleString('en-GB');
+  const escape = escapeHtml;
+
+  // Headline: lead with the most striking finding. If a single description
+  // dominates a meaningful share of uploads, that's the punchier story.
+  // Otherwise fall back to the share of uninformative descriptions overall.
+  const topReuseShare = topReused ? topReused[1] / totalWithDesc : 0;
+  let headlineHTML;
+  if (topReused && topReuseShare >= DESC_PATTERN_CONFIG.headlineReuseShareThreshold) {
+    const [desc, count] = topReused;
+    const pctOfWindow = (topReuseShare * 100).toFixed(0);
+    // Truncate the quoted description so the headline doesn't sprawl
+    // when the boilerplate is the long "Joining The Channel..." text.
+    const quoted = desc.length > 110 ? desc.slice(0, 107) + '…' : desc;
+    headlineHTML = `
+      <strong>${count}</strong> long-form videos in the last
+      ${DESC_PATTERN_CONFIG.windowDays} days (${pctOfWindow}%) share the same description:
+      <span class="desc-pattern-quote">"${escape(quoted)}"</span>
+    `;
+  } else {
+    headlineHTML = `
+      <strong>${uninformativePct.toFixed(0)}%</strong> of long-form videos in the last
+      ${DESC_PATTERN_CONFIG.windowDays} days have descriptions too uninformative
+      to identify the video's topic
+    `;
+  }
+
+  // Render each reused description: if it exceeds the long threshold,
+  // wrap in a collapsible details element so it doesn't dominate the row.
+  // Otherwise show inline as before.
+  const renderDescCell = (desc) => {
+    if (desc.length <= DESC_PATTERN_CONFIG.longDescThreshold) {
+      return `<span class="desc-text">"${escape(desc)}"</span>`;
+    }
+    const previewLen = DESC_PATTERN_CONFIG.longDescThreshold;
+    const preview = desc.slice(0, previewLen).replace(/\s+\S*$/, '') + '…';
+    return `
+      <details class="desc-pattern-long">
+        <summary>
+          <span class="desc-preview">"${escape(preview)}"</span>
+        </summary>
+        <div class="desc-full">${escape(desc)}</div>
+      </details>
+    `;
+  };
+
+  const tableRows = reused.map(([desc, count]) => `
+    <tr>
+      <td>${renderDescCell(desc)}</td>
+      <td class="num">${count}</td>
+      <td class="num">${(count / totalWithDesc * 100).toFixed(1)}%</td>
+    </tr>
+  `).join('');
+
+  // Channel info points — look up by the active channel's handle.
+  const activeChannel = channelMap[ANALYTICS_CHANNEL];
+  const activeHandle = activeChannel ? activeChannel.handle : null;
+  const infoPoints = (activeHandle && DESC_PATTERN_INFO_POINTS[activeHandle]) || [];
+  const infoPointsHTML = infoPoints.map(pt => `
+    <div class="desc-pattern-info">
+      <div class="desc-pattern-info-label">ⓘ ${escape(pt.label)}</div>
+      <p>${escape(pt.text)}</p>
+    </div>
+  `).join('');
+
+  // Spelling scan — count common misspellings across ALL of this channel's
+  // long-form titles (not just the 60-day window: spelling is a lifetime
+  // habit, and the repeat-offender counts are the story). Self-updating as new
+  // uploads land. Shows each misspelling with how many times he's used it,
+  // plus one example title for context.
+  const spellingCounts = new Map(); // typo(lower) -> { display, correct, count, example }
+  for (const v of ANALYTICS_DATASET.videos) {
+    if (v.channelId !== ANALYTICS_CHANNEL || v.isShort || v.unavailable) continue;
+    const title = v.title || '';
+    const words = title.match(/[A-Za-z']+/g) || [];
+    for (const w of words) {
+      const lw = w.toLowerCase();
+      const correct = SPELLING_DICTIONARY[lw];
+      if (!correct) continue;
+      const entry = spellingCounts.get(lw) || { display: lw, correct, count: 0, example: title };
+      entry.count++;
+      if (entry.count === 1) entry.example = title;
+      spellingCounts.set(lw, entry);
+    }
+  }
+  const spellingList = [...spellingCounts.values()]
+    .filter(e => e.count >= 2)
+    .sort((a, b) => b.count - a.count);
+  const spellingTotal = spellingList.reduce((s, e) => s + e.count, 0);
+
+  const typosHTML = spellingList.length === 0 ? '' : `
+    <div class="desc-pattern-typos">
+      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'}</span></div>
+      <ul class="desc-pattern-typos-list">
+        ${spellingList.map(t => `
+          <li>
+            <span class="typo-wrong">${escape(t.display)}</span>
+            <span class="typo-arrow">→</span>
+            <span class="typo-right">${escape(t.correct)}</span>
+            <span class="typo-count">${t.count}&times;</span>
+            <span class="typo-context">e.g. "${escape(t.example.length > 52 ? t.example.slice(0, 52) + '…' : t.example)}"</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+
+  // Tooltip text for stat-label info icons. Kept short — the goal is
+  // "what does this metric mean", not a full methodology lecture.
+  const tipUninformative = 'Either thin (under 50 characters) or boilerplate (the same text reused across 5+ videos). Both fail to convey what the video is about.';
+  const tipThin = 'Description is under 50 characters long — too short to identify the video\'s topic.';
+  const tipBoilerplate = 'Description is reused verbatim across 5+ videos. Long enough to escape the "thin" filter, but functionally identical across many uploads.';
+
+  panel.innerHTML = `
+    <button type="button" class="desc-pattern-toggle" id="descPatternToggle"
+            aria-expanded="${descPatternExpanded}" aria-controls="descPatternBody">
+      <span class="desc-pattern-eyebrow">📝 Description patterns</span>
+      <span class="desc-pattern-headline">${headlineHTML}</span>
+      <span class="desc-pattern-chevron">▼</span>
+    </button>
+    <div class="desc-pattern-body" id="descPatternBody"${descPatternExpanded ? '' : ' hidden'}>
+      ${infoPointsHTML}
+      <div class="desc-pattern-stats">
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${totalWithDesc}</span>
+          <span class="desc-pattern-stat-label">videos analysed · last ${DESC_PATTERN_CONFIG.windowDays}d</span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${uninformativePct.toFixed(0)}%</span>
+          <span class="desc-pattern-stat-label">uninformative descriptions <span class="info-icon" data-tooltip="${escape(tipUninformative)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${thinOnlyCount}</span>
+          <span class="desc-pattern-stat-label">thin <span class="info-icon" data-tooltip="${escape(tipThin)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${boilerplateOnlyCount}</span>
+          <span class="desc-pattern-stat-label">boilerplate <span class="info-icon" data-tooltip="${escape(tipBoilerplate)}" tabindex="0">ⓘ</span></span>
+        </div>
+        <div class="desc-pattern-stat">
+          <span class="desc-pattern-stat-value">${reused.length}</span>
+          <span class="desc-pattern-stat-label">distinct descriptions reused 2+ times</span>
+        </div>
+      </div>
+      ${reused.length > 0 ? `
+        <table class="desc-pattern-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="num">Count</th>
+              <th class="num">Share</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      ` : '<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">No descriptions reused 2+ times in this window.</p>'}
+      ${typosHTML}
+    </div>
+  `;
+
+  const toggleBtn = document.getElementById('descPatternToggle');
+  const body = document.getElementById('descPatternBody');
+  toggleBtn.addEventListener('click', () => {
+    descPatternExpanded = !descPatternExpanded;
+    toggleBtn.setAttribute('aria-expanded', String(descPatternExpanded));
+    body.hidden = !descPatternExpanded;
+  });
+};
+
+
+  // ---- Story tracker (ported, Analysis deep-dive) ----
+  let topicTrackersData = null;
+  let topicTrackersLoadPromise = null;
+  let storyTrackerState = {};
+  const STORY_TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+const STORY_MIN_MONTH_VIDEOS = 15;       // below this, use the count-based window
+const STORY_FALLBACK_VIDEO_COUNT = 20;   // size of the count-based fallback window
+// Saturation threshold for surfacing a topic. A topic only appears as a
+// "story" if it accounts for at least this share of long-form uploads on
+// at least one channel during the window.
+const STORY_MIN_SATURATION = 0.10;
+const STORY_MAX_TOPICS = 1;
+const STORY_LONG_FORM_ONLY = true;
+
+const STORY_MONTH_NAMES = ['January','February','March','April','May','June',
+  'July','August','September','October','November','December'];
+
+// Resolve which videos are "in the window" and how to label that window.
+  function loadTopicTrackers() {
+  if (topicTrackersData) return Promise.resolve(topicTrackersData);
+  if (topicTrackersLoadPromise) return topicTrackersLoadPromise;
+  topicTrackersLoadPromise = fetch('topic-trackers.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(json => {
+      // Graceful degradation: missing/broken file = empty tracker list.
+      topicTrackersData = json && Array.isArray(json.trackers)
+        ? json
+        : { trackers: [] };
+      return topicTrackersData;
+    })
+    .catch(() => {
+      topicTrackersData = { trackers: [] };
+      return topicTrackersData;
+    });
+  return topicTrackersLoadPromise;
+}
+  function resolveStoryWindow() {
+  const channelMap = ANALYTICS_DATASET.channels || {};
+  // Eligible = tagged channels, long-form, available
+  const eligible = ANALYTICS_DATASET.videos.filter(v => {
+    if (STORY_LONG_FORM_ONLY && v.isShort) return false;
+    if (v.unavailable) return false;
+    const ch = channelMap[v.channelId];
+    return ch && STORY_TAGGED_HANDLES.includes(ch.handle);
+  });
+
+  const now = new Date();
+  const monthStart = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).getTime();
+  const monthName = STORY_MONTH_NAMES[now.getUTCMonth()];
+
+  const monthVids = eligible.filter(v => new Date(v.publishedAt).getTime() >= monthStart);
+
+  if (monthVids.length >= STORY_MIN_MONTH_VIDEOS) {
+    return {
+      videoIds: new Set(monthVids.map(v => v.id)),
+      label: `so far in ${monthName}`,
+      isMonthMode: true
+    };
+  }
+
+  // Fallback: most recent N videos by publish date
+  const recent = [...eligible]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, STORY_FALLBACK_VIDEO_COUNT);
+  return {
+    videoIds: new Set(recent.map(v => v.id)),
+    label: `across the last ${recent.length} videos`,
+    isMonthMode: false
+  };
+}
+
+function isStoryTrackerChannel() {
+  if (!ANALYTICS_TOPICS || !ANALYTICS_TOPIC_TAGS) return false;
+  if (ANALYTICS_CHANNEL === 'ALL') return false;
+  const channelObj = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL];
+  return STORY_TAGGED_HANDLES.includes(channelObj?.handle);
+}
+
+function computeStoryStats() {
+  const channelMap = ANALYTICS_DATASET.channels || {};
+  const win = resolveStoryWindow();
+
+  const channelTotals = {};
+  for (const handle of STORY_TAGGED_HANDLES) {
+    channelTotals[handle] = { total: 0 };
+  }
+
+  const byTopic = {};
+  const tags = ANALYTICS_TOPIC_TAGS || {};
+
+  for (const v of ANALYTICS_DATASET.videos) {
+    if (!win.videoIds.has(v.id)) continue;
+    const ch = channelMap[v.channelId];
+    if (!ch || !channelTotals[ch.handle]) continue;
+
+    channelTotals[ch.handle].total++;
+
+    const topicId = tags[v.id];
+    if (!topicId) continue;
+    if (!byTopic[topicId]) {
+      byTopic[topicId] = {
+        topicId,
+        totalVideos: 0,
+        totalViews: 0,
+        videos: [],
+        byChannel: {}
+      };
+      for (const h of STORY_TAGGED_HANDLES) {
+        byTopic[topicId].byChannel[h] = { matches: 0, views: 0 };
+      }
+    }
+    const t = byTopic[topicId];
+    t.totalVideos++;
+    t.totalViews += v.views || 0;
+    t.byChannel[ch.handle].matches++;
+    t.byChannel[ch.handle].views += v.views || 0;
+    t.videos.push(v);
+  }
+
+  // Compute headline (max saturation across channels) for ranking/headline
+  for (const t of Object.values(byTopic)) {
+    t.maxSaturation = 0;
+    t.headlineHandle = STORY_TAGGED_HANDLES[0];
+    for (const handle of STORY_TAGGED_HANDLES) {
+      const total = channelTotals[handle].total;
+      const sat = total > 0 ? t.byChannel[handle].matches / total : 0;
+      if (sat > t.maxSaturation) {
+        t.maxSaturation = sat;
+        t.headlineHandle = handle;
+      }
+    }
+  }
+  return { byTopic, channelTotals, windowLabel: win.label, isMonthMode: win.isMonthMode };
+}
+
+function renderStoryTracker() {
+  const panel = document.getElementById('storyTracker');
+  if (!panel) return;
+  if (!ANALYTICS_DATASET) { panel.hidden = true; panel.innerHTML = ''; return; }
+  if (!isStoryTrackerChannel()) {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    return;
+  }
+
+  // Lazy-load descriptions for the per-video preview line; everything else
+  // is already in memory. If descriptions not ready, render once now (preview
+  // line will be empty) and again after they arrive.
+  if (descriptionsCache === null) {
+    loadDescriptions().then(() => window.renderStoryTracker());
+  }
+
+  const { byTopic, channelTotals, windowLabel } = computeStoryStats();
+  const topics = Object.values(byTopic)
+    .filter(t => t.maxSaturation >= STORY_MIN_SATURATION)
+    .sort((a, b) => b.totalViews - a.totalViews)
+    .slice(0, STORY_MAX_TOPICS);
+
+  if (topics.length === 0) {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    return;
+  }
+
+  panel.hidden = false;
+  panel.innerHTML = topics.map(t => renderStoryPanelHTML(t, channelTotals, windowLabel)).join('');
+  for (const t of topics) attachStoryPanelListeners(t);
+}
+
+function renderStoryPanelHTML(stats, channelTotals, windowLabel) {
+  const topicId = stats.topicId;
+  const topic = (ANALYTICS_TOPICS && ANALYTICS_TOPICS[topicId]) || {};
+  const name = topic.name || topicId;
+  const color = topic.color || '#888';
+  const state = getStoryUiState(topicId);
+  const safeId = sanitiseTopicId(topicId);
+  const headlinePct = Math.round(stats.maxSaturation * 100);
+
+  const channelRows = STORY_TAGGED_HANDLES.map(handle => {
+    const total = channelTotals[handle].total;
+    const bc = stats.byChannel[handle];
+    const pct = total > 0 ? (bc.matches / total) * 100 : 0;
+    const displayHandle = handle.replace(/^@/, '');
+    return `
+      <div class="story-channel-row">
+        <span class="story-channel-handle">${escapeHtml(displayHandle)}</span>
+        <div class="story-channel-bar">
+          <div class="story-channel-fill" style="width:${pct.toFixed(1)}%; background:${color};"></div>
+        </div>
+        <span class="story-channel-stats">
+          <strong>${bc.matches}</strong>/${total}
+          <span class="story-channel-pct">(${pct.toFixed(0)}%)</span>
+          \u00B7
+          ${formatViewsShort(bc.views)} views
+        </span>
+      </div>
+    `;
+  }).join('');
+
+  const decorated = stats.videos.map(v => ({
+    ...v,
+    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
+  }));
+
+  const arrow = col => state.sort.col === col
+    ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2')
+    : '';
+  const activeAttr = col => state.sort.col === col ? 'true' : 'false';
+
+  return `
+    <div class="story-tracker" data-story-id="${safeId}">
+      <button type="button" class="story-tracker-toggle" id="storyTrackerToggle-${safeId}"
+              aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${safeId}">
+        <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(name)}</span>
+        <span class="story-tracker-headline">
+          <strong>${headlinePct}%</strong> of long-form videos on the ${escapeHtml(stats.headlineHandle.replace(/^@/, ''))} YouTube channel
+          ${escapeHtml(windowLabel)} have been about ${escapeHtml(name)}
+        </span>
+        <span class="story-tracker-chevron">\u25BC</span>
+      </button>
+      <div class="story-tracker-body" id="storyTrackerBody-${safeId}" ${state.expanded ? '' : 'hidden'}>
+        <div class="story-tracker-channels">${channelRows}</div>
+        <div class="story-tracker-totals">
+          Total across all three channels: <strong>${stats.totalVideos} videos</strong> \u00B7 <strong>${formatViewsShort(stats.totalViews)} views</strong>
+        </div>
+        <div class="story-tracker-video-list-header">
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('date')}" data-sort-col="date">Date${arrow('date')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('title')}" data-sort-col="title">Title${arrow('title')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('views')}" data-sort-col="views">Views${arrow('views')}</button>
+          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('like_rate')}" data-sort-col="like_rate">Like %${arrow('like_rate')}</button>
+        </div>
+        <div class="story-tracker-video-list" id="storyTrackerVideos-${safeId}">
+          ${renderStoryVideoRows(decorated, state.sort)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStoryVideoRows(videos, sort) {
+  const fmt = (n) => n.toLocaleString('en-GB');
+  const { col, dir } = sort;
+  const sorted = [...videos].sort((a, b) => {
+    let av, bv;
+    if (col === 'date') { av = a.publishedAt; bv = b.publishedAt; }
+    else if (col === 'title') { av = (a.title || '').toLowerCase(); bv = (b.title || '').toLowerCase(); }
+    else if (col === 'views') { av = a.views || 0; bv = b.views || 0; }
+    else { av = a.like_rate; bv = b.like_rate; }
+    if (av < bv) return dir === 'asc' ? -1 : 1;
+    if (av > bv) return dir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return sorted.map(v => {
+    const desc = (descriptionsCache && descriptionsCache[v.id]) || '';
+    const firstLine = (desc.split('\n')[0] || '').slice(0, 110);
+    return `
+      <div class="story-tracker-video-item">
+        <span class="story-tracker-video-date">${v.publishedAt.slice(0, 10)}</span>
+        <div>
+          <div class="story-tracker-video-title">
+            <a href="https://youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a>
+          </div>
+          <div class="story-tracker-video-desc">${escapeHtml(firstLine)}</div>
+        </div>
+        <span class="story-tracker-video-views">${fmt(v.views || 0)}</span>
+        <span class="story-tracker-video-likerate">${v.like_rate.toFixed(2)}%</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function attachStoryPanelListeners(stats) {
+  const topicId = stats.topicId;
+  const safeId = sanitiseTopicId(topicId);
+  const state = getStoryUiState(topicId);
+
+  const toggle = document.getElementById(`storyTrackerToggle-${safeId}`);
+  const body = document.getElementById(`storyTrackerBody-${safeId}`);
+  if (toggle && body) {
+    toggle.onclick = () => {
+      state.expanded = !state.expanded;
+      body.hidden = !state.expanded;
+      toggle.setAttribute('aria-expanded', state.expanded.toString());
+    };
+  }
+
+  const videoList = document.getElementById(`storyTrackerVideos-${safeId}`);
+  if (!videoList) return;
+  const decorated = stats.videos.map(v => ({
+    ...v,
+    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
+  }));
+
+  document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(btn => {
+    if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/[\u25B2\u25BC\s]+$/, '').trim();
+    btn.onclick = () => {
+      const col = btn.dataset.sortCol;
+      if (state.sort.col === col) {
+        state.sort.dir = state.sort.dir === 'desc' ? 'asc' : 'desc';
+      } else {
+        state.sort.col = col;
+        state.sort.dir = (col === 'date' || col === 'views' || col === 'like_rate') ? 'desc' : 'asc';
+      }
+      videoList.innerHTML = renderStoryVideoRows(decorated, state.sort);
+      document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(b => {
+        const c = b.dataset.sortCol;
+        const arr = state.sort.col === c ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2') : '';
+        b.textContent = b.dataset.label + arr;
+        b.dataset.sortActive = state.sort.col === c ? 'true' : 'false';
+      });
+    };
+  });
+}
+
+function getStoryUiState(topicId) {
+  if (!storyTrackerState[topicId]) {
+    storyTrackerState[topicId] = {
+      expanded: false,
+      sort: { col: 'date', dir: 'desc' }
+    };
+  }
+  return storyTrackerState[topicId];
+}
+
+function sanitiseTopicId(id) {
+  return String(id).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function formatViewsShort(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return String(n);
+}
+  window.renderStoryTracker = renderStoryTracker;
+
   function computeAnalyticsBaselines(){
     const m = new Map();
     if (!ANALYTICS_DATASET?.videos) return m;
@@ -3335,6 +5100,673 @@ function niceDurationAxis(minSec, maxSec) {
   if (chartWrap && !chartRendered) chartWrap.style.display = 'none';
 };
 
+
+  // ---- Videos tab (ported) ----
+  const CHANNEL_DISPLAY_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@rcnightmare','@UnSleevedMedia'];
+  function orderChannelIds(ids){
+    const ordered=[];
+    for (const handle of CHANNEL_DISPLAY_ORDER){ const id=ids.find(i=>ANALYTICS_DATASET?.channels?.[i]?.handle===handle); if(id) ordered.push(id); }
+    for (const id of ids){ if(!ordered.includes(id)) ordered.push(id); }
+    return ordered;
+  }
+  let adVideoIds = new Set();
+  let adVideoData = null;
+  let titleHistoryData = null;
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null };
+  function ymLabel(isoDate){ const d=new Date(isoDate); const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getUTCMonth()]+" '"+String(d.getUTCFullYear()).slice(2); }
+  async function loadVideosExtraData(){
+    try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
+    try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
+  }
+  window.__loadVideosExtraData = loadVideosExtraData;
+  let adPanelExpanded = false;
+  let adPanelSort = { col: 'views', dir: 'desc' };
+function renderVideoRows(videos, emptyText) {
+  if (videos.length === 0) {
+    return `<div class="group-empty">${emptyText}</div>`;
+  }
+  const showChannel = ANALYTICS_CHANNEL === 'ALL';
+  const showTopics = isTopicChannel();
+  const topicColClass = showTopics ? '' : ' no-topics';
+  return videos.map(v => {
+    const channelName = showChannel
+      ? (ANALYTICS_DATASET?.channels?.[v.channelId]?.title || '?')
+      : '';
+    const channelCell = showChannel
+      ? `<div class="video-channel clickable" data-channel-filter="${v.channelId}" title="Click to filter to ${escapeHtml(channelName)}">${escapeHtml(channelName)}</div>`
+      : '';
+    const titleSubtitle = showChannel
+      ? `<div class="video-title-channel-tag clickable-inline" data-channel-filter="${v.channelId}">${escapeHtml(channelName)}</div>`
+      : '';
+    // Inline "ad" badge if this video appears in the Google Ads Transparency Centre
+    // as one of the channel's paid promotional campaigns. The ⓘ icon signals
+    // hoverable detail; the tooltip explains provenance.
+    const adBadge = adVideoIds.has(v.id)
+      ? `<span class="ad-badge" tabindex="0" role="button" aria-label="Video promoted through paid advertisement" data-popover="Video promoted through paid advertisement (Google Ads Transparency Centre)">ad <span class="ad-badge-info" aria-hidden="true">ⓘ</span></span>`
+      : '';
+    // Like-rate outlier badge — only renders when the video's like-to-view
+    // ratio falls outside the channel's p10-p90 band. The number shown is the
+    // % deviation from the channel's median (e.g. ▲ 44% means the rate was
+    // 44% higher than typical for this channel). The arrow carries the sign;
+    // numbers are absolute magnitude. Tooltip shows the raw rate for anyone
+    // who wants the underlying value.
+    const likeClass = classifyLikeRate(v);
+    let likeBadge = '';
+    if (likeClass) {
+      const rate = ((v.likes || 0) / (v.views || 1)) * 100;
+      const baseline = likeRateBaselines.get(v.channelId);
+      const medianRate = baseline ? baseline.median * 100 : 0;
+      // Multiplier vs the channel's median rate. Reads unambiguously: "2×"
+      // means "twice as much", which is much harder to misread than "+100%"
+      // (which a casual reader might parse as "100% of viewers liked it"
+      // or "100 percentage points up" — both wrong).
+      //
+      // Format:
+      //  - For high outliers (rate > median): show as Nx (1.4×, 2×, 3.5×).
+      //    Round to 1 decimal below 10×, to nearest int above (rare).
+      //  - For low outliers (rate < median): same Nx format but the value is
+      //    < 1 (e.g. 0.6×). Combined with the ▼ arrow this reads as "less
+      //    than typical". Fractional multipliers feel slightly clunky but are
+      //    statistically honest — alternatives like "60% of typical" introduce
+      //    the same % confusion we're trying to avoid here.
+      const multiplier = medianRate > 0 ? rate / medianRate : 0;
+      const multiplierStr = multiplier >= 10
+        ? Math.round(multiplier) + '×'
+        : multiplier.toFixed(1) + '×';
+      const tooltip = likeClass === 'high'
+        ? `Like rate ${rate.toFixed(1)}% — well above the channel's all-time typical ${medianRate.toFixed(1)}%`
+        : `Like rate ${rate.toFixed(1)}% — well below the channel's all-time typical ${medianRate.toFixed(1)}%`;
+      const symbol = likeClass === 'high' ? '▲' : '▼';
+      // Small thumbs-up SVG — signals "this is about likes" at a glance,
+      // so users don't have to read the badge to know what it relates to.
+      // Inline rather than CSS background so the icon inherits the badge's
+      // text colour (green for high, red for low) automatically.
+      const thumbsIcon = `<svg class="like-badge-icon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 7.59 6.59C7.22 6.95 7 7.45 7 8v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1z"/></svg>`;
+      likeBadge = `<span class="like-badge like-badge-${likeClass}" tabindex="0" role="button" aria-label="${escapeHtml(tooltip)}" data-popover="${escapeHtml(tooltip)}">${thumbsIcon} ${symbol} ${multiplierStr} typical</span>`;
+    }
+    // "Renamed" badge — renders when this video's title has changed since we
+    // first captured it. The popover reveals the full chain (original → … →
+    // current); the count flags repeat offenders at a glance.
+    let renamedBadge = '';
+    const th = titleHistoryData && titleHistoryData[v.id];
+    if (th && th.changes && th.changes.length) {
+      const n = th.changes.length;
+      const chain = [th.first, ...th.changes.map(c => c.to)];
+      const lastAt = th.changes[n - 1].at;
+      let dateStr = '';
+      try { dateStr = new Date(lastAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); } catch (e) {}
+      const chainStr = chain.map(t => `"${t}"`).join('  →  ');
+      const lead = n === 1 ? 'Renamed once' : `Renamed ${n}×`;
+      const pop = `${lead}${dateStr ? ' · last change ' + dateStr : ''}:  ${chainStr}`;
+      const penIcon = `<svg class="renamed-badge-icon" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+      const label = n === 1 ? 'renamed' : `renamed ${n}×`;
+      renamedBadge = `<span class="renamed-badge" tabindex="0" role="button" aria-label="${escapeHtml(pop)}" data-popover="${escapeHtml(pop)}">${penIcon} ${label}</span>`;
+    }
+    return `
+      <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
+        <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+        ${channelCell}
+        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${renamedBadge}${titleSubtitle}</div>
+        <div class="video-duration">${formatDuration(v.durationSec)}</div>
+        <div class="video-views">${fmt(v.views)}</div>
+        ${showTopics ? renderTopicCell(v) : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function filterVideos(list, query) {
+  if (!query) return list;
+  const q = query.toLowerCase();
+  return list.filter(v => v.title.toLowerCase().includes(q));
+}
+
+function sortVideos(list, sortBy, sortDir) {
+  const sorted = list.slice().sort((a, b) => {
+    let cmp = 0;
+    if (sortBy === 'date') {
+      cmp = a.publishedAt.localeCompare(b.publishedAt);
+    } else if (sortBy === 'duration') {
+      cmp = (a.durationSec || 0) - (b.durationSec || 0);
+    } else { // views
+      cmp = (a.views || 0) - (b.views || 0);
+    }
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+  return sorted;
+}
+
+function sortArrow(state, col) {
+  if (state.sortBy !== col) return '<span class="sort-arrow"></span>';
+  return state.sortDir === 'asc'
+    ? '<span class="sort-arrow active">↑</span>'
+    : '<span class="sort-arrow active">↓</span>';
+}
+
+function sortableClass(state, col) {
+  return state.sortBy === col ? ' active-sort' : '';
+}
+
+function isTopicChannel() {
+  if (!ANALYTICS_TOPICS || !ANALYTICS_TOPIC_TAGS) return false;
+  if (ANALYTICS_CHANNEL === 'ALL') return false;
+  const channelObj = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL];
+  const TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+  return TAGGED_HANDLES.includes(channelObj?.handle);
+}
+
+function classifyLikeRate(v) {
+  if (v.isShort || v.unavailable) return null;
+  const views = v.views || 0;
+  const likes = v.likes || 0;
+  if (views < 1000 || likes <= 0) return null;
+  const ageMs = Date.now() - new Date(v.publishedAt).getTime();
+  if (ageMs < 3 * 86400 * 1000) return null;
+  const baseline = likeRateBaselines.get(v.channelId);
+  if (!baseline) return null;
+  const rate = likes / views;
+  if (rate >= baseline.p90) return 'high';
+  if (rate <= baseline.p10) return 'low';
+  return null;
+}
+
+function buildChannelBreakdownHtml(videos, opts) {
+  const interactive = !!(opts && opts.interactive);
+  const activeFilter = (opts && opts.activeFilter) || null;
+  const showClear = !!(opts && opts.showClear);
+  if (!ANALYTICS_DATASET?.channels) return '';
+
+  // Aggregate counts per channel from the supplied video set
+  const perChannel = new Map();
+  for (const id of Object.keys(ANALYTICS_DATASET.channels)) {
+    perChannel.set(id, { longCount: 0, shortCount: 0, views: 0 });
+  }
+  for (const v of videos) {
+    const stats = perChannel.get(v.channelId);
+    if (!stats) continue;
+    if (v.unavailable) continue;
+    if (v.isShort) stats.shortCount++;
+    else stats.longCount++;
+    stats.views += v.views || 0;
+  }
+
+  // Order chips using the canonical channel display order — same one used by
+  // the selector chips at the top of the page, so the visual rhythm stays
+  // consistent across the site.
+  const orderedIds = orderChannelIds(Object.keys(ANALYTICS_DATASET.channels));
+
+  const chips = orderedIds.map(id => {
+    const ch = ANALYTICS_DATASET.channels[id];
+    const stats = perChannel.get(id) || { longCount: 0, shortCount: 0, views: 0 };
+    const isActive = activeFilter === id;
+    const isEmpty = stats.longCount + stats.shortCount === 0;
+    const dataAttr = interactive ? ` data-channel-filter="${id}"` : '';
+    const titleAttr = interactive ? ` title="Click to filter to ${escapeHtml(ch.title)}"` : '';
+    const tag = interactive ? 'button' : 'div';
+
+    // Interactive (window) mode: compact pill — name + L/S counts + views, single line
+    // Static (monthly) mode: small card — name on top, "X long · Y Shorts · ZM views" below
+    const body = interactive
+      ? `
+          <span class="cbc-name">${escapeHtml(ch.title)}</span>
+          <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
+          <span class="cbc-views">${fmtCompact(stats.views)}</span>
+        `
+      : `
+          <div class="cbc-name">${escapeHtml(ch.title)}</div>
+          <div class="cbc-detail">
+            <span class="cbc-long-num">${fmt(stats.longCount)}</span> long ·
+            <span class="cbc-short-num">${fmt(stats.shortCount)}</span> Shorts ·
+            <span class="cbc-views-num">${fmtCompact(stats.views)}</span> views
+          </div>
+        `;
+
+    return `
+      <${tag} class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}${interactive ? '' : ' static'}"${dataAttr}${titleAttr}>
+        ${body}
+      </${tag}>
+    `;
+  }).join('');
+
+  const clearChip = (interactive && showClear)
+    ? `<button type="button" class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
+    : '';
+  return `<div class="channel-breakdown">${chips}${clearChip}</div>`;
+}
+
+function renderAdPanel() {
+  const panel = document.getElementById('adPanel');
+  if (!panel) return;
+
+  // Only show if we have ad data for the selected channel
+  if (!adVideoData || ANALYTICS_CHANNEL === 'ALL' || !adVideoIds.size) {
+    panel.hidden = true;
+    return;
+  }
+  const channelHandle = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL]?.handle;
+  if (!channelHandle) { panel.hidden = true; return; }
+  const channelEntry = adVideoData.channels?.[channelHandle];
+  if (!channelEntry || !channelEntry.videoIds?.length) {
+    panel.hidden = true;
+    return;
+  }
+
+  // Pull metadata about the matching videos from the main dataset
+  const idSet = new Set(channelEntry.videoIds);
+  const matched = (ANALYTICS_DATASET.videos || []).filter(v => idSet.has(v.id) && v.channelId === ANALYTICS_CHANNEL);
+  if (!matched.length) { panel.hidden = true; return; }
+
+  // Headline stats
+  const totalViews = matched.reduce((s, v) => s + (v.views || 0), 0);
+  const dates = matched.map(v => v.publishedAt).sort();
+  const earliest = dates[0].slice(0, 10);
+  const latest = dates[dates.length - 1].slice(0, 10);
+
+  // Pre-compute monthly medians of LONG-FORM videos for this channel.
+  // Used to contextualise each ad video's performance against its peers
+  // (controls for the temporal view-decline trend).
+  const monthlyLongFormViews = {};  // 'YYYY-MM' -> [views, views, ...]
+  for (const v of ANALYTICS_DATASET.videos) {
+    if (v.channelId !== ANALYTICS_CHANNEL) continue;
+    if (v.unavailable || v.isShort) continue;
+    if (!(v.views > 0)) continue;
+    const key = v.publishedAt.slice(0, 7);
+    (monthlyLongFormViews[key] ||= []).push(v.views);
+  }
+  function median(arr) {
+    if (!arr.length) return 0;
+    const s = arr.slice().sort((a, b) => a - b);
+    return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2;
+  }
+  const monthlyMedians = {};
+  for (const [k, arr] of Object.entries(monthlyLongFormViews)) {
+    monthlyMedians[k] = median(arr);
+  }
+
+  // Build per-ad performance rows. For each ad video:
+  //   - views (actual)
+  //   - median of long-form videos uploaded in the same month
+  //   - delta: views − median (the "excess" over typical)
+  //   - multiplier: views / median (X.Xx the typical video)
+  const rows = matched.map(v => {
+    const monthKey = v.publishedAt.slice(0, 7);
+    const monthMedian = monthlyMedians[monthKey] || 0;
+    const views = v.views || 0;
+    const excess = monthMedian > 0 ? views - monthMedian : null;
+    const multiplier = monthMedian > 0 ? views / monthMedian : null;
+    return { v, views, monthMedian, excess, multiplier, monthKey };
+  });
+
+  // Aggregate: how many ads outperformed their month's median? Total excess views?
+  const outperformed = rows.filter(r => r.excess !== null && r.excess > 0).length;
+  const totalExcess = rows.reduce((s, r) => s + (r.excess && r.excess > 0 ? r.excess : 0), 0);
+
+  function ymLabel(isoDate) {
+    const d = new Date(isoDate);
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+  function fmtMult(m) {
+    if (m == null) return '—';
+    if (m >= 1) return `${m.toFixed(1)}× median`;
+    return `${(m * 100).toFixed(0)}% of median`;
+  }
+
+  // Sort the rows in place according to the current adPanelSort state.
+  // Each column has its own sort key extractor and a sensible null/missing
+  // handling (missing values always sort to the bottom regardless of direction
+  // so they don't pollute either end of the visible list).
+  function sortRows(rs) {
+    const { col, dir } = adPanelSort;
+    const factor = dir === 'asc' ? 1 : -1;
+    const keyFns = {
+      title: r => r.v.title.toLowerCase(),
+      date:  r => r.v.publishedAt,
+      views: r => r.views,
+      median: r => r.monthMedian,
+      perf: r => r.multiplier,
+      excess: r => r.excess,
+    };
+    const keyFn = keyFns[col] || keyFns.views;
+    return rs.slice().sort((a, b) => {
+      const av = keyFn(a), bv = keyFn(b);
+      // Push null/undefined/0-median rows to the bottom regardless of direction
+      const aMissing = av == null || (col === 'median' && av === 0);
+      const bMissing = bv == null || (col === 'median' && bv === 0);
+      if (aMissing && bMissing) return 0;
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      if (av < bv) return -1 * factor;
+      if (av > bv) return 1 * factor;
+      return 0;
+    });
+  }
+
+  // Render just the tbody — called on initial render AND on sort changes.
+  // Pulled out so sort clicks don't re-render the whole panel (which would
+  // collapse it back to closed, lose scroll position, etc).
+  function renderAdTableBody() {
+    const sorted = sortRows(rows);
+    return sorted.map(r => `
+      <tr>
+        <td class="col-vid">
+          <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
+          <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}</span>
+        </td>
+        <td class="col-num">${fmt(r.views)}</td>
+        <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
+        <td class="col-num">${fmtMult(r.multiplier)}</td>
+        <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Header cell with sort indicator. Active column gets an arrow; inactive
+  // columns get a faint placeholder so the layout doesn't shift on sort change.
+  function sortHeader(label, colKey, extraClass = '') {
+    const isActive = adPanelSort.col === colKey;
+    const arrow = isActive
+      ? (adPanelSort.dir === 'asc' ? '<span class="sort-arrow active">↑</span>' : '<span class="sort-arrow active">↓</span>')
+      : '<span class="sort-arrow"></span>';
+    // Use proper table semantics: aria-sort communicates state to screen readers
+    // ("Views, column header, sorted descending"). Native <th> already implies
+    // columnheader role, so we don't override with role="button" — that would
+    // confuse assistive tech into announcing "button" instead of "column header".
+    const ariaSort = isActive ? (adPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
+    return `<th class="${extraClass} sortable${isActive ? ' active-sort' : ''}" data-ad-sort="${colKey}" aria-sort="${ariaSort}" tabindex="0">${label}${arrow}</th>`;
+  }
+
+  panel.hidden = false;
+  // Apply persisted state — ad panel only re-renders on channel changes (it
+  // doesn't depend on the date filter), so the issue is milder than the
+  // revenue panel, but consistent UX wins by preserving state here too.
+  panel.innerHTML = `
+    <button type="button" class="ad-panel-toggle" aria-expanded="${adPanelExpanded}" id="adPanelToggle">
+      <div class="ad-panel-header">
+        <div class="ad-panel-header-left">
+          <span class="ad-panel-eyebrow">Confirmed paid promotion</span>
+          <span class="ad-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span></span>
+        </div>
+        <span class="ad-panel-caret" aria-hidden="true"></span>
+      </div>
+    </button>
+    <div class="ad-panel-body" id="adPanelBody"${adPanelExpanded ? '' : ' hidden'}>
+      ${outperformed > 0 ? `
+        <div class="ad-panel-callout">
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">${outperformed} <span class="ad-panel-callout-of">/ ${rows.length}</span></div>
+            <div class="ad-panel-callout-label">ad-promoted videos beat their month's median</div>
+          </div>
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">+${fmtCompact(totalExcess)}</div>
+            <div class="ad-panel-callout-label">excess views above the monthly median</div>
+          </div>
+          <div class="ad-panel-callout-stat">
+            <div class="ad-panel-callout-value">${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</div>
+            <div class="ad-panel-callout-label">estimated paid-promotion spend
+              <span class="ad-panel-callout-info" tabindex="0" role="button"
+                    aria-label="About the spend estimate"
+                    data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      <div class="ad-perf-table-wrap">
+        <table class="ad-perf-table">
+          <thead>
+            <tr>
+              ${sortHeader('Video', 'title', 'col-vid')}
+              ${sortHeader('Views', 'views', 'col-num')}
+              ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Performance', 'perf', 'col-num')}
+              ${sortHeader('Excess over median', 'excess', 'col-num hide-mobile')}
+            </tr>
+          </thead>
+          <tbody id="adPerfTableBody">
+            ${renderAdTableBody()}
+          </tbody>
+        </table>
+      </div>
+      <div class="ad-panel-footnote">
+        <strong>Reading this table:</strong> each video's views compared to the median views of long-form videos uploaded the same month.
+        A video at 2× median earned twice as many views as the typical upload that month. "Excess over median" is the views above the typical baseline —
+        a rough proxy for the impact of paid promotion, though some excess may reflect organic virality.
+        Individual videos are also flagged with an <span class="ad-badge">ad</span> badge in the lists below.
+        <br><br>
+        <strong>Estimated spend</strong> multiplies excess views by industry CPV (cost-per-view) benchmarks of $0.03–$0.10
+        (good–expensive bands for YouTube ad campaigns). This is an UPPER-BOUND estimate: excess views are a proxy for the paid uplift,
+        but some excess may be organic (a hit video doing well on its own merits), and Google bills per qualified view rather than total view, so total view counts
+        don't directly map to ad spend. Actual spend is likely lower than the upper bound.
+        Identified via the <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
+      </div>
+    </div>
+  `;
+
+  // Toggle handler
+  const toggle = document.getElementById('adPanelToggle');
+  const body = document.getElementById('adPanelBody');
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    const next = !expanded;
+    toggle.setAttribute('aria-expanded', String(next));
+    body.hidden = !next;
+    adPanelExpanded = next;  // persist across re-renders
+  });
+
+  // Sort handlers — attach to each sortable header.
+  // Clicking the active column flips direction; clicking a new column starts at
+  // descending (intuitive default for numeric columns where users typically want
+  // "biggest first"). Exception: title column starts at ascending (A–Z is the
+  // natural first read).
+  panel.querySelectorAll('[data-ad-sort]').forEach(th => {
+    function doSort() {
+      const col = th.getAttribute('data-ad-sort');
+      if (adPanelSort.col === col) {
+        adPanelSort.dir = adPanelSort.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        adPanelSort.col = col;
+        adPanelSort.dir = col === 'title' ? 'asc' : 'desc';
+      }
+      // Re-render tbody + refresh header arrows (without rebuilding the whole panel)
+      document.getElementById('adPerfTableBody').innerHTML = renderAdTableBody();
+      panel.querySelectorAll('[data-ad-sort]').forEach(hdr => {
+        const isActive = hdr.getAttribute('data-ad-sort') === adPanelSort.col;
+        hdr.classList.toggle('active-sort', isActive);
+        // Update aria-sort so screen readers announce the current sort state
+        hdr.setAttribute('aria-sort', isActive ? (adPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
+        const arrow = hdr.querySelector('.sort-arrow');
+        if (arrow) {
+          arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
+          arrow.textContent = isActive ? (adPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+        }
+      });
+    }
+    th.addEventListener('click', doSort);
+    th.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        doSort();
+      }
+    });
+  });
+}
+
+function renderTopicCell(v) {
+  const tagId = ANALYTICS_TOPIC_TAGS?.[v.id];
+  if (!tagId) {
+    return `<div class="video-topic untagged hide-mobile">—</div>`;
+  }
+  const topic = ANALYTICS_TOPICS?.[tagId];
+  if (!topic) {
+    return `<div class="video-topic untagged hide-mobile">—</div>`;
+  }
+  return `
+    <div class="video-topic hide-mobile" title="${escapeHtml(topic.name)}">
+      <span class="video-topic-dot" style="background:${topic.color}"></span>
+      <span>${escapeHtml(topic.name)}</span>
+    </div>
+  `;
+}
+
+function formatWindowTitle(startDate, endDate) {
+  // Single day vs multi-day window
+  const sameDay = startDate === endDate;
+  function pretty(d) {
+    const dt = new Date(d + 'T00:00:00Z');
+    return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  }
+  if (sameDay) return `Videos uploaded on ${pretty(startDate)}`;
+  return `Videos from ${pretty(startDate)} to ${pretty(endDate)}`;
+}
+
+function renderWindowList(startDate, endDate) {
+  document.getElementById('windowTitle').textContent = formatWindowTitle(startDate, endDate);
+
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+  const allWindowVideos = anFilteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+
+  // Compute per-channel breakdown (only meaningful in All-combined mode)
+  const showChannel = ANALYTICS_CHANNEL === 'ALL';
+
+  // Apply channel filter if active
+  let scopedVideos = allWindowVideos;
+  if (showChannel && windowListState.channelFilter) {
+    scopedVideos = allWindowVideos.filter(v => v.channelId === windowListState.channelFilter);
+  }
+
+  // Summary over the (channel-filtered) scope
+  const longCount = scopedVideos.filter(v => !v.isShort && !v.unavailable).length;
+  const shortCount = scopedVideos.filter(v => v.isShort && !v.unavailable).length;
+  const totalViews = scopedVideos.reduce((s, v) => s + (v.views || 0), 0);
+
+  // Filter + sort
+  const filtered = filterVideos(scopedVideos, windowListState.query);
+  const sorted = sortVideos(filtered, windowListState.sortBy, windowListState.sortDir);
+
+  const list = document.getElementById('windowList');
+  if (allWindowVideos.length === 0) {
+    list.innerHTML = `<div class="window-empty">No videos uploaded in this range.</div>`;
+    return;
+  }
+
+  // Build per-channel chip row (All-combined only) — interactive filter mode
+  const breakdownHtml = showChannel
+    ? buildChannelBreakdownHtml(allWindowVideos, {
+        interactive: true,
+        activeFilter: windowListState.channelFilter,
+        showClear: !!windowListState.channelFilter
+      })
+    : '';
+
+  const colHeader = `
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
+      <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
+      ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
+      <div class="video-title">Title</div>
+      <div class="video-duration sortable hide-mobile${sortableClass(windowListState, 'duration')}" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
+      <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
+    </div>
+  `;
+
+  const filterLabel = windowListState.channelFilter
+    ? ` · filtered to ${escapeHtml(ANALYTICS_DATASET.channels[windowListState.channelFilter]?.title || '?')}`
+    : '';
+  const statsLine = `${sorted.length} of ${scopedVideos.length} video${scopedVideos.length === 1 ? '' : 's'} · ${longCount} long-form · ${shortCount} Shorts · ${fmt(totalViews)} total views${filterLabel}`;
+
+  // Split the sorted video list into long-form and shorts. The monthly view
+  // already separates these into expandable groups; the window view follows the
+  // same pattern so the long-form story stays uncluttered by Shorts noise (which
+  // typically dominates by count but contributes a small share of views). Each
+  // group has its own count + total-views header. Sort order is shared so toggling
+  // a column header applies consistently across both groups.
+  const longSorted = sorted.filter(v => !v.isShort && !v.unavailable);
+  const shortSorted = sorted.filter(v => v.isShort && !v.unavailable);
+  const longViewsTotal = longSorted.reduce((s, v) => s + (v.views || 0), 0);
+  const shortViewsTotal = shortSorted.reduce((s, v) => s + (v.views || 0), 0);
+
+  function group(label, videos, totalViews) {
+    if (videos.length === 0 && !windowListState.query) {
+      // Skip empty groups entirely when no search is active.
+      // (When a search IS active, we still show "no matches" so the user
+      // doesn't think their search broke the page.)
+      return '';
+    }
+    return `
+      <div class="window-list-group">
+        <div class="window-list-group-header">
+          <span class="window-list-group-label">${label}</span>
+          <span class="window-list-group-meta">${videos.length} video${videos.length === 1 ? '' : 's'} · ${fmt(totalViews)} views</span>
+        </div>
+        ${renderVideoRows(videos, windowListState.query ? `No ${label.toLowerCase()} match your search` : `No ${label.toLowerCase()} in this range`)}
+      </div>
+    `;
+  }
+
+  list.innerHTML = `
+    <div class="window-list-search">
+      <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
+    </div>
+    ${breakdownHtml}
+    <div class="window-list-stats">${statsLine}</div>
+    <div class="window-list-rows">
+      ${colHeader}
+      ${group('Long-form', longSorted, longViewsTotal)}
+      ${group('Shorts', shortSorted, shortViewsTotal)}
+    </div>
+  `;
+}
+
+  // Entry: render the Videos tab for the current channel + time window.
+  window.renderVideosTab = function(){
+    const sc = (typeof scope !== 'undefined') ? scope : 'ALL';
+    ANALYTICS_CHANNEL = sc === 'ALL' ? 'ALL' : (HANDLE_TO_ID[sc] || 'ALL');
+    likeRateBaselines = computeAnalyticsBaselines();
+    const sd = document.getElementById('startDate'), ed = document.getElementById('endDate');
+    if (sd && ed && sd.value && ed.value) {
+      renderWindowList(sd.value, ed.value);
+    }
+    if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){ console.error('ad panel', e); } }
+  };
+  // Window-list interactions (delegated; scoped to #windowList)
+  document.addEventListener('click', (e) => {
+    if (e.target.id === 'clearChannelFilter') {
+      windowListState.channelFilter = null;
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    const chip = e.target.closest('[data-channel-filter]');
+    if (chip && document.getElementById('windowList')?.contains(chip)) {
+      const id = chip.dataset.channelFilter;
+      windowListState.channelFilter = (windowListState.channelFilter === id) ? null : id;
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    const header = e.target.closest('#windowList .video-row-header .sortable');
+    if (!header) return;
+    const col = header.dataset.sort;
+    if (windowListState.sortBy === col) windowListState.sortDir = windowListState.sortDir === 'asc' ? 'desc' : 'asc';
+    else { windowListState.sortBy = col; windowListState.sortDir = 'desc'; }
+    const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+    if (sd && ed) renderWindowList(sd, ed);
+  });
+  document.addEventListener('input', (e) => {
+    if (e.target.id !== 'windowListSearch') return;
+    windowListState.query = e.target.value;
+    const caretPos = e.target.selectionStart;
+    const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+    if (sd && ed) renderWindowList(sd, ed);
+    const ni = document.getElementById('windowListSearch');
+    if (ni){ ni.focus(); ni.setSelectionRange(caretPos, caretPos); }
+  });
+  // ad panel toggle (delegated)
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('#adPanelToggle');
+    if (t) { const exp = t.getAttribute('aria-expanded')==='true'; t.setAttribute('aria-expanded', String(!exp)); const body=document.getElementById('adPanelBody'); if(body) body.hidden = exp; if (typeof adPanelExpanded!=='undefined') {} }
+  });
+
 })();
 
 
@@ -3349,6 +5781,9 @@ function niceDurationAxis(minSec, maxSec) {
     panels.forEach(p => { p.hidden = p.dataset.panel !== tab; });
     if (tab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
       try { if (window.__populateAnChannel) window.__populateAnChannel(); window.renderAnalysisChart(); } catch(e){ console.error('analysis chart', e); }
+    }
+    if (tab === 'videos' && typeof window.renderVideosTab === 'function') {
+      try { if (window.__populateVidChannel) window.__populateVidChannel(); if (window.__syncVidWindow) window.__syncVidWindow(); window.renderVideosTab(); } catch(e){ console.error('videos tab', e); }
     }
     try { const u = new URL(location); u.searchParams.set('tab', tab); history.replaceState(null,'',u); } catch(_){}
   }
@@ -3398,6 +5833,77 @@ function niceDurationAxis(minSec, maxSec) {
       if (typeof window.setAnalysisTimePreset === 'function') window.setAnalysisTimePreset(btn.dataset.preset);
     });
   }
+  // ---- Videos tab controls ----
+  let vidTimePreset = 'all';
+  function vidCutoffMonth(preset){
+    const now = new Date(); const y=now.getFullYear(), mo=now.getMonth()+1;
+    const k=(yy,mm)=>`${yy}-${String(mm).padStart(2,'0')}`;
+    if (preset==='ytd') return `${y}-01`;
+    if (preset==='12m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-12); return k(d.getFullYear(),d.getMonth()+1); }
+    if (preset==='24m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-24); return k(d.getFullYear(),d.getMonth()+1); }
+    if (preset==='since-peak'){
+      const sc=(typeof scope!=='undefined')?scope:'ALL';
+      const cid = sc==='ALL'?'ALL':(HANDLE_TO_ID[sc]||'ALL');
+      const md = buildMonthlyData(cid);
+      let pk=null,pv=-1; for(const m of md){ if(m.curr.longViews>pv){pv=m.curr.longViews;pk=m.key;} }
+      return pk;
+    }
+    return null;
+  }
+  window.__syncVidWindow = function(){
+    const sd=document.getElementById('startDate'), ed=document.getElementById('endDate');
+    if (!sd||!ed) return;
+    const sc=(typeof scope!=='undefined')?scope:'ALL';
+    const cid = sc==='ALL'?'ALL':(HANDLE_TO_ID[sc]||'ALL');
+    let md = buildMonthlyData(cid);
+    const cutoff = vidCutoffMonth(vidTimePreset);
+    if (cutoff) md = md.filter(m=>m.key>=cutoff);
+    if (!md.length){ sd.value=''; ed.value=''; return; }
+    const first=md[0].key, last=md[md.length-1].key;
+    sd.value=first+'-01';
+    const [ly,lm]=last.split('-').map(Number); const lastDay=new Date(ly,lm,0).getDate();
+    ed.value=`${last}-${String(lastDay).padStart(2,'0')}`;
+  };
+  window.__populateVidChannel = function(){
+    const sel=document.getElementById('vidChannelSel');
+    if (!sel || typeof CHANNELS==='undefined' || !CHANNELS) return;
+    const cur=(typeof scope!=='undefined')?scope:'ALL';
+    sel.innerHTML=['ALL',...CHANNELS].map(s=>`<option value="${s}"${s===cur?' selected':''}>${(typeof SCOPE_LABEL!=='undefined'&&SCOPE_LABEL[s])||s}</option>`).join('');
+  };
+  const vidChannelSel = document.getElementById('vidChannelSel');
+  if (vidChannelSel) {
+    vidChannelSel.addEventListener('change', (e) => {
+      if (typeof scope !== 'undefined') {
+        scope = e.target.value;
+        if (typeof availableMonths==='function' && typeof refresh==='function') {
+          const months=availableMonths(); const cm=(typeof m!=='undefined')?m:months[0];
+          refresh(months.includes(cm)?cm:months[0]);
+        }
+      }
+      if (window.__populateAnChannel) window.__populateAnChannel();
+      window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
+    });
+  }
+  const vidTime = document.querySelector('#vidControls .an-time');
+  if (vidTime) {
+    vidTime.addEventListener('click', (e) => {
+      const btn=e.target.closest('.vid-time-btn'); if(!btn) return;
+      vidTime.querySelectorAll('.vid-time-btn').forEach(b=>b.classList.toggle('active', b===btn));
+      vidTimePreset = btn.dataset.preset;
+      window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
+    });
+  }
+  // Word cloud toggle (Analysis deep-dive)
+  const wcToggle = document.getElementById('wordcloudToggle');
+  if (wcToggle) {
+    wcToggle.addEventListener('click', () => {
+      const exp = wcToggle.getAttribute('aria-expanded') === 'true';
+      wcToggle.setAttribute('aria-expanded', String(!exp));
+      const panel = document.getElementById('wordcloudPanel');
+      if (panel) panel.hidden = exp;
+      if (!exp && typeof window.renderWordCloud === 'function') { try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); } }
+    });
+  }
   let initial = 'overview';
   try { initial = new URLSearchParams(location.search).get('tab') || 'overview'; } catch(_){}
   show(initial);
@@ -3408,6 +5914,7 @@ function niceDurationAxis(minSec, maxSec) {
     PAYLOAD = await loadAndCompute();
     SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
     HANDLE_TO_ID = PAYLOAD.handleToId || {};
+    if (window.__loadVideosExtraData) { try { await window.__loadVideosExtraData(); } catch(e){} }
     buildScopeLabels();
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }
