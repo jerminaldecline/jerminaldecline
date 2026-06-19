@@ -66,7 +66,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 
 
-.report{background:var(--bg);border-radius:16px;max-width:880px;margin-left:auto;margin-right:auto}
+.report{background:var(--bg);border-radius:16px;max-width:1060px;margin-left:auto;margin-right:auto}
 .brand{display:flex;align-items:center;gap:0.7rem;margin-bottom:1.15rem}
 .brand-logo{width:40px;height:40px;flex:0 0 40px}
 .brand-text .bn{font-size:1.18rem;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
@@ -95,6 +95,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-item .peak-sub{font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
 @media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
 .hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
+.report-topgrid .peak-headline{margin-bottom:0;padding-bottom:0;border-bottom:none;grid-template-columns:1fr;align-content:start;gap:0.9rem}
+.report-topgrid .hero{margin-bottom:0}
 .hero-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.45rem}
 .hero-label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.5rem}
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
@@ -218,7 +221,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -2208,6 +2211,7 @@ function render(m){
       <div><h2>Monthly Report</h2><div class="rsub-row"><select id="scopeSel" class="scope-inline"></select><span class="rsub-sep">·</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
       <div class="report-month-wrap"><select id="msel" class="month-inline"></select></div>
     </div>
+    <div class="report-topgrid">
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
         <div class="peak-item">
@@ -2235,6 +2239,7 @@ function render(m){
         <div class="hero-sub">pessimistic estimate · long-form only</div>
         <div class="deltas">${pill(lblMo,d.revlo,p&&p.revlo,true)}${pill(lblYr,d.revlo,y&&y.revlo,true)}</div>
       </div>
+    </div>
     </div>
     <div class="stat-row">${cardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
