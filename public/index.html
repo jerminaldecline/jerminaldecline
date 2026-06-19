@@ -53,6 +53,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .util-social.bmac:hover{background:#ffe533;border-color:#ffe533;color:#0d0c0c}
 .bmac-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
+.tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.tabbar-row .ds-tabs{border-bottom:none}
+.sticky-controls{display:flex;align-items:center;padding-bottom:0.35rem}
+.bar-controls{display:flex;gap:0.4rem;align-items:center}
+.bar-controls[hidden]{display:none}
+.bar-sel{background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:0.32rem 0.5rem;font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;max-width:200px}
+.bar-sel:hover{border-color:var(--accent)}
+.bar-sel option{background:var(--surface);color:var(--text)}
 .ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
 .ds-tab:hover{color:var(--text)}
 .ds-tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
@@ -1671,11 +1679,38 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       </a>
     </div>
   </div>
+  <div class="tabbar-row">
   <nav class="ds-tabs" role="tablist" aria-label="Sections" id="dsTabs">
     <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
     <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Analysis</button>
     <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false">Videos</button>
   </nav>
+  <div class="sticky-controls" id="stickyControls">
+    <div class="bar-controls" data-for="overview" id="ovBarControls">
+      <select id="scopeSel" class="bar-sel" aria-label="Channel"></select>
+      <select id="msel" class="bar-sel" aria-label="Month"></select>
+    </div>
+    <div class="bar-controls" data-for="analysis" id="anBarControls" hidden>
+      <select id="anChannelSel" class="bar-sel" aria-label="Channel"></select>
+      <select id="anPeriodSel" class="bar-sel" aria-label="Time period">
+        <option value="ytd">YTD</option>
+        <option value="12m">Last 12 months</option>
+        <option value="24m">Last 24 months</option>
+        <option value="since-peak">Since peak</option>
+        <option value="all" selected>All time</option>
+      </select>
+    </div>
+    <div class="bar-controls" data-for="videos" id="vidBarControls" hidden>
+      <select id="vidChannelSel" class="bar-sel" aria-label="Channel"></select>
+      <select id="vidPeriodSel" class="bar-sel" aria-label="Time period">
+        <option value="ytd">YTD</option>
+        <option value="12m">Last 12 months</option>
+        <option value="24m">Last 24 months</option>
+        <option value="since-peak">Since peak</option>
+        <option value="all" selected>All time</option>
+      </select>
+    </div>
+  </div>
   </div>
 
   <section class="ds-tabpanel" data-panel="overview" id="panelOverview">
@@ -1683,19 +1718,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </section>
 
   <section class="ds-tabpanel" data-panel="analysis" id="panelAnalysis" hidden>
-    <div class="an-controls" id="anControls">
-      <div class="an-control-group">
-        <span class="an-control-label">Channel</span>
-        <select id="anChannelSel" class="scope-inline"></select>
-      </div>
-      <div class="an-control-group an-time">
-        <button type="button" class="an-time-btn" data-preset="ytd">YTD</button>
-        <button type="button" class="an-time-btn" data-preset="12m">Last 12 months</button>
-        <button type="button" class="an-time-btn" data-preset="24m">Last 24 months</button>
-        <button type="button" class="an-time-btn" data-preset="since-peak">Since peak</button>
-        <button type="button" class="an-time-btn active" data-preset="all">All time</button>
-      </div>
-    </div>
     <div class="an-chart-card">
       <div class="an-metric-toggle" id="anMetricToggle" role="tablist" aria-label="Chart metric">
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
@@ -1731,19 +1753,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
-    <div class="an-controls" id="vidControls">
-      <div class="an-control-group">
-        <span class="an-control-label">Channel</span>
-        <select id="vidChannelSel" class="scope-inline"></select>
-      </div>
-      <div class="an-control-group an-time">
-        <button type="button" class="vid-time-btn" data-preset="ytd">YTD</button>
-        <button type="button" class="vid-time-btn" data-preset="12m">Last 12 months</button>
-        <button type="button" class="vid-time-btn" data-preset="24m">Last 24 months</button>
-        <button type="button" class="vid-time-btn" data-preset="since-peak">Since peak</button>
-        <button type="button" class="vid-time-btn active" data-preset="all">All time</button>
-      </div>
-    </div>
     <div class="ad-panel" id="adPanel" hidden></div>
     <div class="window-list-card">
       <h3 class="window-title" id="windowTitle"></h3>
@@ -2213,8 +2222,8 @@ function render(m){
   document.getElementById('report').innerHTML = `
     <div class="brand">${BRAND_LOGO}<div class="brand-text"><div class="bn">Jerminal Decline</div><div class="bd">YouTube analytics · The Quartering network</div></div></div>
     <div class="report-head">
-      <div><h2>Monthly Report</h2><div class="rsub-row"><select id="scopeSel" class="scope-inline"></select><span class="rsub-sep">·</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
-      <div class="report-month-wrap"><select id="msel" class="month-inline"></select></div>
+      <div><h2>Monthly Report</h2><div class="rsub-row"><span class="rsub">${headSub.toLowerCase()}</span></div></div>
+    </div>
     </div>
     <div class="report-topgrid">
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
@@ -6233,6 +6242,7 @@ function renderWindowList(startDate, endDate) {
     if (!TABS.includes(tab)) tab = 'overview';
     tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
     panels.forEach(p => { p.hidden = p.dataset.panel !== tab; });
+    document.querySelectorAll('#stickyControls .bar-controls').forEach(c => { c.hidden = c.dataset.for !== tab; });
     if (tab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
       try { if (window.__populateAnChannel) window.__populateAnChannel(); window.renderAnalysisChart(); } catch(e){ console.error('analysis chart', e); }
     }
@@ -6263,8 +6273,8 @@ function renderWindowList(startDate, endDate) {
     if (window.__populateAnChannel) window.__populateAnChannel();
     // Apply period: sync the Analysis time-preset buttons + state, then render
     if (per) {
-      const anTime = document.querySelector('#panelAnalysis .an-time');
-      if (anTime) anTime.querySelectorAll('.an-time-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === per));
+      const anPeriodSel = document.getElementById('anPeriodSel');
+      if (anPeriodSel) anPeriodSel.value = per;
       if (typeof window.setAnalysisTimePreset === 'function') window.setAnalysisTimePreset(per);
     } else if (typeof window.renderAnalysisChart === 'function') {
       window.renderAnalysisChart();
@@ -6315,14 +6325,11 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.renderAnalysisChart === 'function') window.renderAnalysisChart();
     });
   }
-  // Time-filter presets (Analysis-only)
-  const anTime = document.querySelector('.an-time');
-  if (anTime) {
-    anTime.addEventListener('click', (e) => {
-      const btn = e.target.closest('.an-time-btn');
-      if (!btn) return;
-      anTime.querySelectorAll('.an-time-btn').forEach(b => b.classList.toggle('active', b === btn));
-      if (typeof window.setAnalysisTimePreset === 'function') window.setAnalysisTimePreset(btn.dataset.preset);
+  // Time-filter period (Analysis-only) — dropdown in the sticky bar
+  const anPeriod = document.getElementById('anPeriodSel');
+  if (anPeriod) {
+    anPeriod.addEventListener('change', (e) => {
+      if (typeof window.setAnalysisTimePreset === 'function') window.setAnalysisTimePreset(e.target.value);
     });
   }
   // ---- Videos tab controls ----
@@ -6377,12 +6384,10 @@ function renderWindowList(startDate, endDate) {
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
   }
-  const vidTime = document.querySelector('#vidControls .an-time');
-  if (vidTime) {
-    vidTime.addEventListener('click', (e) => {
-      const btn=e.target.closest('.vid-time-btn'); if(!btn) return;
-      vidTime.querySelectorAll('.vid-time-btn').forEach(b=>b.classList.toggle('active', b===btn));
-      vidTimePreset = btn.dataset.preset;
+  const vidPeriod = document.getElementById('vidPeriodSel');
+  if (vidPeriod) {
+    vidPeriod.addEventListener('change', (e) => {
+      vidTimePreset = e.target.value;
       if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
