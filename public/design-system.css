@@ -95,8 +95,22 @@
    ============================================================ */
 .overview-controls{display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem}
 .overview-controls-label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700}
-#overviewReport{margin-bottom:1.5rem}
+/* Constrain the report body to the report's contained column (was 880px in
+   monthly.html) so it doesn't stretch full-bleed like the rest of the site. */
+#overviewReport{margin:0 auto 1.5rem;max-width:880px}
 #overviewReport .rpt-empty{padding:2rem;text-align:center;color:var(--subtext);font-size:0.9rem}
+/* Report header (brand + Monthly Report title + inline scope/month dropdowns) */
+#overviewReport .rpt-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+#overviewReport .rpt-head h2{margin:0;font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;color:var(--text)}
+#overviewReport .rsub-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;flex-wrap:wrap}
+#overviewReport .rsub{color:var(--subtext);font-size:0.88rem}
+#overviewReport .rsub-sep{color:var(--text-dim)}
+#overviewReport .scope-inline,#overviewReport .month-inline{background:var(--surface-2);color:var(--accent);border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.55rem;cursor:pointer;font-family:inherit;font-weight:800}
+#overviewReport .scope-inline{font-size:0.95rem}
+#overviewReport .month-inline{font-size:1.05rem;text-align:left}
+#overviewReport .scope-inline:hover,#overviewReport .month-inline:hover{border-color:var(--accent)}
+#overviewReport .scope-inline option,#overviewReport .month-inline option{background:var(--surface);color:var(--text)}
+#overviewReport .report-month-wrap{display:flex;align-items:center}
 #overviewReport .brand-text .bn {font-size:1.18rem;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
 #overviewReport .brand-text .bd {font-size:0.8rem;color:var(--subtext)}
 #overviewReport .report-head .rsub {margin:0.15rem 0 0;color:var(--subtext);font-size:0.88rem}
@@ -201,3 +215,9 @@
 /* Legacy Overview elements retained for code paths (prediction reads peakStrip)
    but superseded by #overviewReport — force-hide despite their class display. */
 #peakStrip[hidden], #heroStats[hidden], #composition[hidden]{display:none !important}
+
+/* Global channel dropdown (replaces the old chip row; report-style) */
+.channel-select{font-size:1rem;font-weight:800;color:var(--accent);min-width:160px}
+
+/* Hide the date-range filter cluster on Overview (single-month tab) */
+#filterCluster[hidden]{display:none !important}

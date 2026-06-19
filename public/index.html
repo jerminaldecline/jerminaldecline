@@ -1789,16 +1789,15 @@ function renderChannelSelector() {
   const el = document.getElementById('channelSelector');
   if (!el || !dataset?.channels) return;
   const orderedIds = orderChannelIds(Object.keys(dataset.channels));
-
-  const chips = [];
+  // Report-style channel dropdown (replaces the old chip row). Drives the same
+  // global selectedChannel; all tabs respond.
+  const opts = [];
+  opts.push(`<option value="ALL"${selectedChannel === 'ALL' ? ' selected' : ''}>All combined</option>`);
   for (const id of orderedIds) {
     const ch = dataset.channels[id];
-    const active = selectedChannel === id;
-    chips.push(`<button type="button" class="channel-chip${active ? ' active' : ''}" data-channel-id="${id}" role="tab" aria-selected="${active}">${escapeHtml(ch.title)}</button>`);
+    opts.push(`<option value="${id}"${selectedChannel === id ? ' selected' : ''}>${escapeHtml(ch.title)}</option>`);
   }
-  // "All combined" goes last
-  chips.push(`<button type="button" class="channel-chip all${selectedChannel === 'ALL' ? ' active' : ''}" data-channel-id="ALL" role="tab" aria-selected="${selectedChannel === 'ALL'}">All combined</button>`);
-  el.innerHTML = chips.join('');
+  el.innerHTML = `<select id="channelSelect" class="ds-select channel-select" aria-label="Channel">${opts.join('')}</select>`;
 }
 
 function renderFooterMeta() {
@@ -4368,10 +4367,10 @@ document.querySelectorAll('.mode-toggle button').forEach(btn => {
 });
 
 // --- Channel selector wiring ---
-document.getElementById('channelSelector').addEventListener('click', (e) => {
-  const chip = e.target.closest('.channel-chip');
-  if (!chip) return;
-  const newChannel = chip.dataset.channelId;
+document.getElementById('channelSelector').addEventListener('change', (e) => {
+  const sel = e.target.closest('#channelSelect');
+  if (!sel) return;
+  const newChannel = sel.value;
   if (newChannel === selectedChannel) return;
   selectedChannel = newChannel;
   windowListState.channelFilter = null;  // filter only meaningful in "All combined"
@@ -5702,6 +5701,11 @@ function renderOverviewReport(monthKey){
     if (!TABS.includes(tab)) tab = 'overview';
     tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
     panels.forEach(p => { p.hidden = p.dataset.panel !== tab; });
+    // The date-range filter cluster (presets, dates, mode toggle, YoY, share)
+    // only applies to the range-based tabs. Overview is single-month (its own
+    // month dropdown), so hide the cluster there to avoid misleading controls.
+    const fc = document.getElementById('filterCluster');
+    if (fc) fc.hidden = (tab === 'overview');
     try {
       const u = new URL(location);
       u.searchParams.set('tab', tab);
