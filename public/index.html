@@ -192,6 +192,14 @@
       <!-- ===== OVERVIEW tab: glance — peak/prediction + hero + composition ===== -->
       <section class="ds-tabpanel" data-panel="overview" id="dsPanelOverview">
 
+      <!-- Overview is single-month: this selector drives the peak strip, hero,
+           composition, and the month-detail below. Independent of the date-range
+           controls (which belong to Analysis/Videos). -->
+      <div class="overview-controls">
+        <span class="overview-controls-label">Month</span>
+        <select id="overviewMonthSel" class="ds-select"></select>
+      </div>
+
       <!-- Channel-derived summary block: peak/low strip and the satirical
            prediction card. Sits just above the hero stats so it reads as
            "what to watch for" framing immediately before the numbers themselves. -->
@@ -372,6 +380,9 @@ let revenueScenario = 'pessimistic';
 // Same treatment for the ad campaigns panel for consistency.
 let adPanelExpanded = false;
 let monthlyData = [];
+// Overview is single-month (independent of the date-range). This holds the
+// month-key (YYYY-MM) the Overview tab is focused on; null = use latest.
+let overviewMonth = null;
 let heroAnimated = false;
 // Set of YouTube video IDs identified as paid Google Ad campaigns
 // (loaded from ad-videos.json, curated from Google Ads Transparency Centre)
@@ -1432,8 +1443,9 @@ function rebuild() {
     monthlyData = monthlyData.slice(firstNonEmpty);
   }
 
-  renderHeroStats(currSummary, yoy ? prevSummary : null);
-  renderComposition(currSummary);
+  // NOTE: hero stats + composition are now owned by the Overview tab
+  // (single-month), rendered by renderOverview() — NOT here in the range-based
+  // rebuild. They live inside #dsPanelOverview and reflect the Overview month.
   // Story tracker — appears above heroStats DOM-wise but renders after
   // because it depends on the same filtered video set and the descriptions
   // side-channel (loaded lazily on first call).
@@ -1500,7 +1512,7 @@ function rebuild() {
   // it is no longer an either/or with the chart.
   renderTrendChart(yoy);
   renderMonthlyList(yoy);
-  renderOverviewMonthDetail();
+  renderOverview();
   renderWindowList(startDate, endDate);
   // Per-channel chips above the monthly breakdown (All combined only)
   const chipsEl = document.getElementById('monthlyBreakdownChips');
@@ -3598,20 +3610,70 @@ function renderComposition(s) {
 // Chart rendering functions live in charts.js (loaded before this block).
 
 
-function renderOverviewMonthDetail() {
-  // Render a single collapsible month card at the bottom of Overview, bound to
-  // the latest month, reusing the exact Analysis component (renderMonthDetail +
-  // renderTopicRibbon — the topic share bars). When the full report→Overview
-  // merge lands, this binds to the report's month dropdown instead of "latest".
+function overviewMonthMap() {
+  // All-time month-key -> videos for the selected channel (not range-limited).
+  const map = new Map();
+  for (const v of filteredVideos()) {
+    const k = monthKey(v.publishedAt);
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(v);
+  }
+  return map;
+}
+
+function renderOverview() {
+  // Overview is single-month. Drives the month selector, peak strip, hero,
+  // composition, and the month-detail — all scoped to overviewMonth, decoupled
+  // from the date-range (which belongs to Analysis/Videos).
+  const map = overviewMonthMap();
+  const allKeys = [...map.keys()].filter(k => k >= '2017-07').sort(); // ascending
+  if (allKeys.length === 0) return;
+  const latest = allKeys[allKeys.length - 1];
+  // resolve the active month (fall back to latest if unset/unavailable)
+  if (!overviewMonth || !map.has(overviewMonth)) overviewMonth = latest;
+  const key = overviewMonth;
+
+  // populate the month selector (newest first)
+  const sel = document.getElementById('overviewMonthSel');
+  if (sel) {
+    sel.innerHTML = allKeys.slice().reverse().map(k =>
+      `<option value="${k}"${k === key ? ' selected' : ''}>${monthLabel(k)}</option>`).join('');
+    sel.onchange = (e) => { overviewMonth = e.target.value; renderOverview(); };
+  }
+
+  // month-scoped summaries (curr / MoM / YoY)
+  const currVids = map.get(key) || [];
+  const momVids = map.get(prevMonthKey(key)) || [];
+  const [y, mo] = key.split('-');
+  const yoyVids = map.get(`${parseInt(y) - 1}-${mo}`) || [];
+  const curr = summarise(currVids);
+  const mom = momVids.length ? summarise(momVids) : null;
+  const yoy = yoyVids.length ? summarise(yoyVids) : null;
+
+  // hero + composition (reuse existing renderers, month-scoped)
+  document.getElementById('heroStats').style.display = '';
+  document.getElementById('composition').style.display = '';
+  renderHeroStats(curr, yoy);
+  renderComposition(curr);
+  renderPeakStrip(); // peak strip is already channel-scoped/all-time
+
+  // month detail (the collapsible card + topic ribbon) for the selected month
+  renderOverviewMonthDetail(key, currVids);
+}
+
+function renderOverviewMonthDetail(key, currVids) {
+  // Single collapsible month card at the bottom of Overview, bound to the
+  // Overview-selected month, reusing the exact Analysis component
+  // (renderMonthDetail + renderTopicRibbon — the topic share bars).
   const host = document.getElementById('overviewMonthDetail');
   if (!host) return;
-  if (!monthlyData || monthlyData.length === 0) { host.innerHTML = ''; return; }
-  // latest non-empty month (monthlyData is chronological; last entry is newest)
-  let idx = monthlyData.length - 1;
-  while (idx > 0 && monthlyData[idx].curr.totalCount() === 0) idx--;
-  const m = monthlyData[idx];
+  // Build a month object in the shape renderMonthDetail expects (.curr summary).
+  const m = { key, label: monthLabel(key), curr: summarise(currVids) };
+  // Use a distinct idx namespace for Overview so its per-month UI state and
+  // refresh targeting don't collide with the Analysis monthly list.
+  const idx = 'ov:' + key;
   const now = new Date();
-  const isInProgress = m.key === `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const isInProgress = key === `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
   host.innerHTML = `
     <h2 class="section-title overview-md-title">${m.label} in detail</h2>
     <div class="monthly-list overview-md-list">
@@ -3627,11 +3689,16 @@ function renderOverviewMonthDetail() {
       </div>
     </div>
   `;
-  // Wire expand/collapse (same as renderMonthlyList)
+  // expand/collapse
   host.querySelectorAll('.month-header').forEach(header => {
     header.addEventListener('click', () => header.parentElement.classList.toggle('expanded'));
   });
+  // stash the month object so refreshMonthDetail can find it by the string idx
+  overviewDetailMonth = m;
 }
+let overviewDetailMonth = null;
+
+
 
 
 function renderMonthlyList(yoy) {
@@ -4181,12 +4248,16 @@ function renderTopicRibbon(m) {
 }
 
 function refreshMonthDetail(idx) {
-  // There can be more than one .month-row with this idx now: the Analysis
-  // monthly list AND the Overview bottom card share the latest-month idx.
-  // Refresh all matches so search/sort stays consistent across both.
+  // idx is numeric for the Analysis monthly list, or a string 'ov:YYYY-MM' for
+  // the Overview month-detail. Resolve the right month object accordingly.
   const rows = document.querySelectorAll(`.month-row[data-idx="${idx}"]`);
   if (!rows.length) return;
-  const m = monthlyData[idx];
+  let m;
+  if (typeof idx === 'string' && idx.startsWith('ov:')) {
+    m = overviewDetailMonth;
+  } else {
+    m = monthlyData[idx];
+  }
   if (!m) return;
   rows.forEach(row => {
     const detail = row.querySelector('.month-detail');
@@ -4200,8 +4271,9 @@ document.addEventListener('click', (e) => {
   if (!sortHeader) return;
   const group = sortHeader.closest('.group');
   if (!group) return;
-  const idx = parseInt(group.dataset.monthIdx);
-  if (isNaN(idx)) return;
+  const rawIdx = group.dataset.monthIdx;
+  const idx = rawIdx.startsWith('ov:') ? rawIdx : parseInt(rawIdx);
+  if (idx === '' || (typeof idx === 'number' && isNaN(idx))) return;
   const state = getMonthState(idx);
   const col = sortHeader.dataset.sort;
   if (state.sortBy === col) {
@@ -4215,8 +4287,9 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('input', (e) => {
   if (!e.target.classList.contains('detail-search')) return;
-  const idx = parseInt(e.target.dataset.monthIdx);
-  if (isNaN(idx)) return;
+  const rawIdx = e.target.dataset.monthIdx;
+  const idx = rawIdx.startsWith('ov:') ? rawIdx : parseInt(rawIdx);
+  if (idx === '' || (typeof idx === 'number' && isNaN(idx))) return;
   const state = getMonthState(idx);
   state.query = e.target.value;
   // Preserve focus and caret position across re-render
