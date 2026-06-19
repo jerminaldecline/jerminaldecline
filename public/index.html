@@ -80,6 +80,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-inline:hover{border-color:var(--accent)}
 
 .peak-headline{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.peak-spark{grid-column:1 / -1;display:flex;align-items:center;gap:0.75rem;width:100%;margin-top:0.4rem;padding:0.5rem 0.7rem;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s}
+.peak-spark:hover{border-color:var(--accent);background:var(--surface)}
+.peak-spark svg{flex:1;height:40px;width:100%;min-width:0}
+.peak-spark-line{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.peak-spark-area{fill:var(--accent);opacity:0.12}
+.peak-spark-peak{fill:var(--accent)}
+.peak-spark-last{fill:var(--surface);stroke:var(--accent);stroke-width:1.6}
+.peak-spark-cta{flex:none;font-size:0.8rem;font-weight:700;color:var(--accent);white-space:nowrap}
 .peak-item .peak-label{font-size:0.74rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.3rem}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
 .peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
@@ -717,6 +725,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-size: 0.78rem;}
 .window-list-group-meta {color: var(--text-muted);
     font-variant-numeric: tabular-nums;}
+.window-list-more {display: block; width: 100%; margin-top: 0.4rem; padding: 0.6rem;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--accent); font-family: inherit; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; transition: background .12s, border-color .12s;}
+.window-list-more:hover {background: var(--surface); border-color: var(--accent);}
+.window-list-more .wlm-rem {color: var(--text-dim); font-weight: 500;}
 /* Channel breakdown chips above the window list */
   .channel-breakdown {display: flex;
     flex-wrap: wrap;
@@ -1060,10 +1074,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ad-panel-footnote a:hover {color: var(--accent);}
 .ad-panel-toggle {padding: 0.7rem 0.85rem;}
 .ad-panel-body {padding: 0 0.85rem 0.85rem;}
-.video-duration {color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem;}
-.video-views {font-weight: 500; font-variant-numeric: tabular-nums; text-align: right;}
-.video-likepct {font-variant-numeric: tabular-nums; text-align: right; color: var(--text-muted);}
-.video-comments {font-variant-numeric: tabular-nums; text-align: right; color: var(--text-muted);}
+.video-duration {color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: center; font-size: 0.85rem;}
+.video-views {font-weight: 500; font-variant-numeric: tabular-nums; text-align: center;}
+.video-likepct {font-variant-numeric: tabular-nums; text-align: center; color: var(--text-muted);}
+.video-comments {font-variant-numeric: tabular-nums; text-align: center; color: var(--text-muted);}
 /* Column header row inside groups */
   .video-row-header {background: var(--surface-2);
     position: sticky;
@@ -1841,7 +1855,8 @@ async function loadAndCompute(){
     for(let i=beforePeak.length-1;i>=0;i--){ if(S[beforePeak[i]].tot<=S[low].tot){ lastSeen=beforePeak[i]; break; } }
     peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
       pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0,
-      lastSeenMonth:lastSeen };
+      lastSeenMonth:lastSeen,
+      series: ms.map(m=>({ m, v: S[m].tot||0 })) };
   }
 
   return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid, meta: data.meta || null };
@@ -1866,6 +1881,35 @@ const yearsAgoStr = m => {
   return '≈ '+yrs+(yrs===1?' year':' years')+' ago';
 };
 const monthShort = m => {const [y,mo]=m.split('-');return MONTHS[mo-1].slice(0,3)+' '+y;};
+// Compact sparkline for the peak headline — shows the long-form views trend
+// across all complete months for the current scope. Marks the all-time peak
+// (accent dot) and the latest month (hollow dot). Clickable to the full
+// Analysis chart. Pure SVG, no axis/labels — it's a teaser, not the full chart.
+function renderPeakSparkline(series, peakMonth){
+  if(!series || series.length < 3) return '';
+  const W=160, H=40, pad=4;
+  const vals=series.map(p=>p.v);
+  const max=Math.max(...vals,1), min=Math.min(...vals);
+  const span=max-min||1;
+  const x=i=> pad + i*(W-2*pad)/(series.length-1);
+  const y=v=> pad + (1-(v-min)/span)*(H-2*pad);
+  const pts=series.map((p,i)=>`${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  // area fill path (line down to baseline)
+  const area=`${pad},${H-pad} ${pts} ${(W-pad)},${H-pad}`;
+  const peakIdx=series.findIndex(p=>p.m===peakMonth);
+  const lastIdx=series.length-1;
+  const dot=(i,cls)=> i>=0 ? `<circle cx="${x(i).toFixed(1)}" cy="${y(series[i].v).toFixed(1)}" r="2.6" class="${cls}"/>` : '';
+  return `
+    <button type="button" class="peak-spark" data-goto-analysis aria-label="View the full views trend on the Analysis tab">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+        <polygon class="peak-spark-area" points="${area}"/>
+        <polyline class="peak-spark-line" points="${pts}"/>
+        ${dot(peakIdx,'peak-spark-peak')}
+        ${dot(lastIdx,'peak-spark-last')}
+      </svg>
+      <span class="peak-spark-cta">Full trend →</span>
+    </button>`;
+}
 const moAbbr = mm => {const [y,mo]=mm.split('-');return 'vs '+MONTHS[mo-1].slice(0,3);};
 const moAbbrYr = mm => {const [y,mo]=mm.split('-');return "vs "+MONTHS[mo-1].slice(0,3)+" '"+y.slice(2);};
 const prevMonth = m => {const [y,mo]=m.split('-').map(Number);const d=new Date(y,mo-2);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
@@ -2026,6 +2070,7 @@ function render(m){
           <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
           <div class="peak-sub">${monthName(pk.lowMonth)}${pk.lastSeenMonth ? ` · Last seen at this level: <strong>${monthName(pk.lastSeenMonth)}</strong> · ${yearsAgoStr(pk.lastSeenMonth)}` : ''}</div>
         </div>
+        ${renderPeakSparkline(pk.series, pk.peakMonth)}
       </div>`;
     })()}
     <div class="hero">
@@ -5262,7 +5307,8 @@ function formatViewsShort(n) {
   let adVideoIds = new Set();
   let adVideoData = null;
   let titleHistoryData = null;
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null };
+  const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   function ymLabel(isoDate){ const d=new Date(isoDate); const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getUTCMonth()]+" '"+String(d.getUTCFullYear()).slice(2); }
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -5847,20 +5893,28 @@ function renderWindowList(startDate, endDate) {
   const longViewsTotal = longSorted.reduce((s, v) => s + (v.views || 0), 0);
   const shortViewsTotal = shortSorted.reduce((s, v) => s + (v.views || 0), 0);
 
-  function group(label, videos, totalViews) {
+  function group(label, videos, totalViews, key) {
     if (videos.length === 0 && !windowListState.query) {
       // Skip empty groups entirely when no search is active.
       // (When a search IS active, we still show "no matches" so the user
       // doesn't think their search broke the page.)
       return '';
     }
+    const shownKey = key === 'long' ? 'longShown' : 'shortShown';
+    const shown = Math.min(windowListState[shownKey], videos.length);
+    const visible = videos.slice(0, shown);
+    const remaining = videos.length - shown;
+    const moreBtn = remaining > 0
+      ? `<button type="button" class="window-list-more" data-show-more="${key}">Show ${Math.min(VIDEO_BATCH, remaining)} more <span class="wlm-rem">(${fmt(remaining)} remaining)</span></button>`
+      : '';
     return `
       <div class="window-list-group">
         <div class="window-list-group-header">
           <span class="window-list-group-label">${label}</span>
           <span class="window-list-group-meta">${videos.length} video${videos.length === 1 ? '' : 's'} · ${fmt(totalViews)} views</span>
         </div>
-        ${renderVideoRows(videos, windowListState.query ? `No ${label.toLowerCase()} match your search` : `No ${label.toLowerCase()} in this range`)}
+        ${renderVideoRows(visible, windowListState.query ? `No ${label.toLowerCase()} match your search` : `No ${label.toLowerCase()} in this range`)}
+        ${moreBtn}
       </div>
     `;
   }
@@ -5873,8 +5927,8 @@ function renderWindowList(startDate, endDate) {
     <div class="window-list-stats">${statsLine}</div>
     <div class="window-list-rows">
       ${colHeader}
-      ${group('Long-form', longSorted, longViewsTotal)}
-      ${group('Shorts', shortSorted, shortViewsTotal)}
+      ${group('Long-form', longSorted, longViewsTotal, 'long')}
+      ${group('Shorts', shortSorted, shortViewsTotal, 'short')}
     </div>
   `;
 }
@@ -5891,9 +5945,21 @@ function renderWindowList(startDate, endDate) {
     if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){ console.error('ad panel', e); } }
   };
   // Window-list interactions (delegated; scoped to #windowList)
+  function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
+  window.__resetVideoBatches = resetVideoBatches;
   document.addEventListener('click', (e) => {
+    // Incremental loading: reveal the next batch of rows for a group
+    const moreBtn = e.target.closest('[data-show-more]');
+    if (moreBtn && document.getElementById('windowList')?.contains(moreBtn)) {
+      const key = moreBtn.dataset.showMore;
+      if (key === 'long') windowListState.longShown += VIDEO_BATCH;
+      else windowListState.shortShown += VIDEO_BATCH;
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
     if (e.target.id === 'clearChannelFilter') {
       windowListState.channelFilter = null;
+      resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
@@ -5901,6 +5967,7 @@ function renderWindowList(startDate, endDate) {
     if (chip && document.getElementById('windowList')?.contains(chip)) {
       const id = chip.dataset.channelFilter;
       windowListState.channelFilter = (windowListState.channelFilter === id) ? null : id;
+      resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
@@ -5909,12 +5976,14 @@ function renderWindowList(startDate, endDate) {
     const col = header.dataset.sort;
     if (windowListState.sortBy === col) windowListState.sortDir = windowListState.sortDir === 'asc' ? 'desc' : 'asc';
     else { windowListState.sortBy = col; windowListState.sortDir = 'desc'; }
+    resetVideoBatches();
     const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
     if (sd && ed) renderWindowList(sd, ed);
   });
   document.addEventListener('input', (e) => {
     if (e.target.id !== 'windowListSearch') return;
     windowListState.query = e.target.value;
+    resetVideoBatches();
     const caretPos = e.target.selectionStart;
     const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
     if (sd && ed) renderWindowList(sd, ed);
@@ -5948,6 +6017,11 @@ function renderWindowList(startDate, endDate) {
     try { const u = new URL(location); u.searchParams.set('tab', tab); history.replaceState(null,'',u); } catch(_){}
   }
   tabs.forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  window.__showTab = show;
+  // Sparkline (in the Overview report) → jump to the Analysis trend chart
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-goto-analysis]')) { show('analysis'); window.scrollTo({top:0,behavior:'smooth'}); }
+  });
   // metric toggle
   const metricToggle = document.getElementById('anMetricToggle');
   if (metricToggle) {
@@ -6041,6 +6115,7 @@ function renderWindowList(startDate, endDate) {
         }
       }
       if (window.__populateAnChannel) window.__populateAnChannel();
+      if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
   }
@@ -6050,6 +6125,7 @@ function renderWindowList(startDate, endDate) {
       const btn=e.target.closest('.vid-time-btn'); if(!btn) return;
       vidTime.querySelectorAll('.vid-time-btn').forEach(b=>b.classList.toggle('active', b===btn));
       vidTimePreset = btn.dataset.preset;
+      if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
   }
