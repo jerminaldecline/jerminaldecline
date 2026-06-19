@@ -7,6 +7,7 @@
   --text:#ede8d8;--text-muted:#9aa0b3;--text-dim:#6c728a;--accent:var(--brand);
   --up:#4dd0a0;--down:#ff6b66;--label:#b9c0d0;--subtext:#8b93a8;
   --up-bg:rgba(77,208,160,0.15);--down-bg:rgba(255,107,102,0.15);--flat-bg:rgba(108,114,138,0.14);
+  --accent-2:#e0a458;--accent-2-bg:rgba(224,164,88,0.14);
 }
 @media (prefers-color-scheme: light){
   :root{
@@ -14,6 +15,7 @@
     --text:#1c1a14;--text-muted:#6b665a;--text-dim:#998f7c;--accent:var(--brand);
     --up:#1d9e75;--down:#b8302b;--label:#534e44;--subtext:#736d5f;
     --up-bg:rgba(29,158,117,0.13);--down-bg:rgba(184,48,43,0.11);--flat-bg:rgba(153,143,124,0.14);
+    --accent-2:#b07818;--accent-2-bg:rgba(176,120,24,0.12);
   }
 }
 *{box-sizing:border-box}
@@ -151,10 +153,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
-.an-metric-toggle{display:inline-flex;flex-wrap:wrap;gap:0.2rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.2rem;margin-bottom:1rem}
-.an-metric-btn{appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.82rem;font-weight:700;padding:0.4rem 0.8rem;border-radius:6px;cursor:pointer}
-.an-metric-btn:hover{color:var(--text)}
-.an-metric-btn.active{background:var(--surface);color:var(--accent)}
+.an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
+.an-metric-toggle::before{content:"Chart:";align-self:center;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:0.15rem}
+.an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
+.an-metric-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
+.an-metric-btn:active{transform:translateY(1px)}
+.an-metric-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.an-metric-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 1px 6px rgba(106,163,255,0.35)}
+@media (prefers-color-scheme: light){.an-metric-btn.active{color:#fff;box-shadow:0 1px 6px rgba(27,77,159,0.28)}}
 .chart-wrap{position:relative;width:100%}
 #trendChart{width:100%;height:auto;display:block}
 
@@ -197,7 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     color: var(--text-muted);
     cursor: pointer;
     user-select: none;}
-.chart-sub-toggle input {cursor: pointer; accent-color: #7c3aed;}
+.chart-sub-toggle input {cursor: pointer; accent-color: var(--accent-2);}
 .chart-sub-toggle:hover {color: var(--text);}
 /* Chart legend — sits above the chart toggle row as a standalone element
      (no longer wrapped by a section heading). Wraps to multiple lines when
@@ -231,7 +237,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Duration line swatch — matches the dashed pattern of the actual chart line */
   .trend-legend-swatch.duration {background: transparent;
     height: 0;
-    border-top: 2px dashed #7c3aed;}
+    border-top: 2px dashed var(--accent-2);}
 /* Revenue band swatch — translucent fill matching the chart's revenue band. */
   .trend-legend-swatch.revenue-band {background: var(--up);
     opacity: 0.22;
@@ -263,25 +269,25 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      conflict with the views (accent) or revenue (green) lines. Like rate is
      a derived engagement signal, separate aesthetically from both. */
   .chart-line-likerate {fill: none;
-    stroke: #7c3aed;
+    stroke: var(--accent-2);
     stroke-width: 2;
     stroke-linejoin: round;
     stroke-linecap: round;}
 .chart-line-likerate-inprogress {fill: none;
-    stroke: #7c3aed;
+    stroke: var(--accent-2);
     stroke-width: 1.5;
     stroke-dasharray: 3 3;
     stroke-linecap: round;
     opacity: 0.55;}
-.chart-dot-likerate-inprogress {fill: #7c3aed;
+.chart-dot-likerate-inprogress {fill: var(--accent-2);
     stroke: var(--surface-2);
     stroke-width: 1.5;}
-.chart-dot-likerate-inprogress-pulse {fill: #7c3aed;
+.chart-dot-likerate-inprogress-pulse {fill: var(--accent-2);
     opacity: 0.6;
     transform-origin: center;
     transform-box: fill-box;
     animation: chart-pulse 1.8s ease-out infinite;}
-.trend-legend-swatch.likerate {background: #7c3aed;
+.trend-legend-swatch.likerate {background: var(--accent-2);
     height: 2px;}
 .chart-wrap {position: relative;
     background: var(--surface-2);
@@ -312,22 +318,22 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
 /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
-  .chart-line-duration {fill: none; stroke: #7c3aed; stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round;}
-.chart-dot.duration {fill: #7c3aed;}
+  .chart-line-duration {fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round;}
+.chart-dot.duration {fill: var(--accent-2);}
 /* Like-rate dots — match the chart-line-likerate colour (purple) so the
      rate line and its data points read as a single visual unit. */
-  .chart-dot.likerate {fill: #7c3aed;}
+  .chart-dot.likerate {fill: var(--accent-2);}
 /* Engagement variance bars — colour-coded by whether they clear the
      "expected" 10% reference line (p90 means 10% of all-time videos beat
      the threshold by definition). Bars above reference pop in vivid purple;
      bars at-or-below are muted, so months with engagement upswings visually
      dominate the chart. */
   .chart-bar-variance {transition: opacity 0.12s;}
-.chart-bar-variance.high {fill: #7c3aed;}
+.chart-bar-variance.high {fill: var(--accent-2);}
 .chart-bar-variance.low {fill: var(--text-dim);
     opacity: 0.4;}
 .chart-bar-variance.in-progress {opacity: 0.55;
-    stroke: #7c3aed;
+    stroke: var(--accent-2);
     stroke-width: 1.5;
     stroke-dasharray: 3 3;}
 .chart-bar-variance:hover {opacity: 0.85;}
@@ -363,7 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     width: 8px;
     height: 8px;}
 /* Right-axis labels for the duration scale */
-  .chart-axis-label.y.dur {text-anchor: start; fill: #7c3aed;}
+  .chart-axis-label.y.dur {text-anchor: start; fill: var(--accent-2);}
 /* In-progress month indicator — a pulsing red dot connected by a dashed line
      to the last complete month. The dashed connector visually separates the
      partial data from the trend without hiding it. */
@@ -434,8 +440,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-tooltip-row .swatch {width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;}
 .chart-tooltip-row .swatch.curr {background: var(--accent);}
 .chart-tooltip-row .swatch.prev {background: var(--text-dim);}
-.chart-tooltip-row .swatch.duration {background: #7c3aed;}
-.chart-tooltip-row .swatch.likes {background: #7c3aed;}
+.chart-tooltip-row .swatch.duration {background: var(--accent-2);}
+.chart-tooltip-row .swatch.likes {background: var(--accent-2);}
 /* In-progress caveat — small italic footer in the tooltip */
   .chart-tooltip-inprogress {font-size: 0.7rem;
     color: var(--text-dim);
@@ -1106,7 +1112,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     width: 100%;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-left: 4px solid #7c3aed;  /* purple accent — matches the like-rate visualisations */
+    border-left: 4px solid var(--accent-2);  /* purple accent — matches the like-rate visualisations */
     border-radius: var(--radius);
     padding: 0.85rem 1.1rem;
     font-family: inherit;
@@ -1127,9 +1133,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     width: 36px;
     height: 36px;
     border-radius: 6px;
-    background: rgba(124, 58, 237, 0.10);
-    color: #7c3aed;}
-[data-theme="dark"] .wordcloud-icon {background: rgba(124, 58, 237, 0.18);}
+    background: var(--accent-2-bg);
+    color: var(--accent-2);}
+[data-theme="dark"] .wordcloud-icon {background: var(--accent-2-bg);}
 .wordcloud-toggle-text {display: flex;
     flex-direction: column;
     gap: 0.1rem;
@@ -1156,7 +1162,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     transition: transform 0.18s, border-color 0.18s;
     margin-right: 0.4rem;}
 .wordcloud-toggle[aria-expanded="true"] .wordcloud-caret {transform: rotate(-135deg);
-    border-color: #7c3aed;}
+    border-color: var(--accent-2);}
 .wordcloud-hint {color: var(--text-dim);
     font-size: 0.85rem;
     font-weight: 400;}
@@ -1165,7 +1171,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-top: none;
-    border-left: 4px solid #7c3aed;
+    border-left: 4px solid var(--accent-2);
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);}
 .wordcloud-meta {font-size: 0.78rem;
