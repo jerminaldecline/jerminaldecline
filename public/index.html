@@ -131,6 +131,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hl-stat .hsl{font-size:0.7rem;color:var(--subtext);text-transform:uppercase;letter-spacing:0.04em}
 
 .lower{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.mini-trend-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;background:transparent;border:none;cursor:pointer;font-family:inherit;padding:0;text-align:left;color:inherit}
+.mini-trend-toggle h3{margin:0}
+.mini-trend-caret{width:9px;height:9px;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg);transition:transform .15s;flex:none;margin-bottom:3px}
+.mini-trend-toggle[aria-expanded="true"] .mini-trend-caret{transform:rotate(-135deg);margin-bottom:-3px}
+.mini-trend-body{margin-top:0.9rem}
+.mini-trend-body[hidden]{display:none}
+.mini-trend-chart svg{width:100%;height:150px;display:block}
+.mini-trend-axis{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-dim);margin-top:0.2rem}
+.mini-trend-foot{display:flex;justify-content:space-between;align-items:center;margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border);gap:0.5rem;flex-wrap:wrap}
+.mini-trend-range{font-size:0.78rem;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.mini-trend-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;padding:0}
+.mini-trend-link:hover{text-decoration:underline}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
 .panel h3{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
 .toplist{list-style:none;margin:0;padding:0;font-size:0.87rem;display:flex;flex-direction:column;gap:0.65rem}
@@ -1910,6 +1922,39 @@ function renderPeakSparkline(series, peakMonth){
       <span class="peak-spark-cta">Full trend →</span>
     </button>`;
 }
+// Collapsible mini trend chart for the lower grid (next to the comparison table).
+// A fuller take than the headline sparkline: larger, with min/max value hints and
+// peak/latest markers. Collapsed by default; expand reveals the chart, and a link
+// inside jumps to the full Analysis chart.
+function renderMiniTrend(series, peakMonth){
+  if(!series || series.length < 3) return '<div class="empty">Not enough history to chart.</div>';
+  const W=400, H=150, padL=8, padR=8, padT=12, padB=18;
+  const vals=series.map(p=>p.v);
+  const max=Math.max(...vals,1), min=Math.min(...vals);
+  const span=max-min||1;
+  const x=i=> padL + i*(W-padL-padR)/(series.length-1);
+  const y=v=> padT + (1-(v-min)/span)*(H-padT-padB);
+  const pts=series.map((p,i)=>`${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  const area=`${padL},${H-padB} ${pts} ${(W-padR)},${H-padB}`;
+  const peakIdx=series.findIndex(p=>p.m===peakMonth);
+  const lastIdx=series.length-1;
+  const dot=(i,cls)=> i>=0 ? `<circle cx="${x(i).toFixed(1)}" cy="${y(series[i].v).toFixed(1)}" r="3.2" class="${cls}"/>` : '';
+  const firstM=monthShort(series[0].m), lastM=monthShort(series[lastIdx].m);
+  return `
+    <div class="mini-trend-chart">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Long-form views trend">
+        <polygon class="peak-spark-area" points="${area}"/>
+        <polyline class="peak-spark-line" points="${pts}"/>
+        ${dot(peakIdx,'peak-spark-peak')}
+        ${dot(lastIdx,'peak-spark-last')}
+      </svg>
+      <div class="mini-trend-axis"><span>${firstM}</span><span>${lastM}</span></div>
+      <div class="mini-trend-foot">
+        <span class="mini-trend-range">${fmt(min)} – ${fmt(max)} monthly views</span>
+        <button type="button" class="mini-trend-link" data-goto-analysis>Open full chart →</button>
+      </div>
+    </div>`;
+}
 const moAbbr = mm => {const [y,mo]=mm.split('-');return 'vs '+MONTHS[mo-1].slice(0,3);};
 const moAbbrYr = mm => {const [y,mo]=mm.split('-');return "vs "+MONTHS[mo-1].slice(0,3)+" '"+y.slice(2);};
 const prevMonth = m => {const [y,mo]=m.split('-').map(Number);const d=new Date(y,mo-2);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
@@ -2008,10 +2053,10 @@ function render(m){
       ${hlStats(d.debate)}
     </div>` : '';
 
-  const topicsHTML = (()=>{
+  const topicBars = (()=>{
     const byCount = d.topicsByCount || [];
     const byViews = d.topicsByViews || [];
-    if (!byCount.length) return '<div class="empty">No tagged uploads this month.</div>';
+    if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads this month.</div>', views: '<div class="empty">No tagged uploads this month.</div>' };
     const tagged = d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
     const totV = byViews.reduce((s,t)=>s+t.views,0) || 1;
     const maxCount = Math.max(...byCount.map(t=>t.count),1);
@@ -2030,15 +2075,10 @@ function render(m){
         <div class="tb-track"><span class="tb-fill" style="width:${Math.round(t.views/maxViews*100)}%;background:${t.color}"></span></div>
       </li>`;
     }).join('');
-    return `
-      <div class="tb-group">
-        <div class="tb-grouplabel">Share of uploads</div>
-        <ul class="tb-list">${countRows}</ul>
-      </div>
-      <div class="tb-group">
-        <div class="tb-grouplabel">Share of views</div>
-        <ul class="tb-list">${viewRows}</ul>
-      </div>`;
+    return {
+      uploads: `<ul class="tb-list">${countRows}</ul>`,
+      views: `<ul class="tb-list">${viewRows}</ul>`
+    };
   })();
 
   // network breakdown (always all-channel) — highlight the active scope row
@@ -2090,7 +2130,8 @@ function render(m){
     <div class="stat-row">${cardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
     <div class="lower">
-      <div class="panel"><h3>Top topics this month</h3>${topicsHTML}</div>
+      <div class="panel"><h3>Top topics — share of uploads</h3>${topicBars.uploads}</div>
+      <div class="panel"><h3>Top topics — share of views</h3>${topicBars.views}</div>
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -2102,6 +2143,15 @@ function render(m){
           <tr><td>Comments</td><td class="now">${fmt(d.comments)}</td><td>${p?fmt(p.comments):'—'}</td><td>${y?fmt(y.comments):'—'}</td></tr>
           <tr><td>Est. revenue</td><td class="now">${money(d.revlo)}</td><td>${p?money(p.revlo):'—'}</td><td>${y?money(y.revlo):'—'}</td></tr>
         </table>
+      </div>
+      <div class="panel mini-trend-panel">
+        <button type="button" class="mini-trend-toggle" id="miniTrendToggle" aria-expanded="false" aria-controls="miniTrendBody">
+          <h3>Views trend</h3>
+          <span class="mini-trend-caret" aria-hidden="true"></span>
+        </button>
+        <div class="mini-trend-body" id="miniTrendBody" hidden>
+          ${(()=>{ const pk=PEAKS&&PEAKS[scope]; return pk ? renderMiniTrend(pk.series, pk.peakMonth) : '<div class="empty">No trend data.</div>'; })()}
+        </div>
       </div>
     </div>
     <div class="breadth">
@@ -6020,7 +6070,15 @@ function renderWindowList(startDate, endDate) {
   window.__showTab = show;
   // Sparkline (in the Overview report) → jump to the Analysis trend chart
   document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-goto-analysis]')) { show('analysis'); window.scrollTo({top:0,behavior:'smooth'}); }
+    if (e.target.closest('[data-goto-analysis]')) { show('analysis'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    // Collapsible mini trend chart in the lower grid
+    const mt = e.target.closest('#miniTrendToggle');
+    if (mt) {
+      const exp = mt.getAttribute('aria-expanded') === 'true';
+      mt.setAttribute('aria-expanded', String(!exp));
+      const body = document.getElementById('miniTrendBody');
+      if (body) body.hidden = exp;
+    }
   });
   // metric toggle
   const metricToggle = document.getElementById('anMetricToggle');
