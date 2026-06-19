@@ -1089,7 +1089,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ad-panel-callout-value {font-size: 1.25rem;}
 /* Sortable header cells — click affordance, hover state, active indicator.
      Uses the same .sort-arrow component as the window-list sortable rows. */
-  .ad-perf-table thead th.sortable {cursor: pointer;
+  .ad-perf-table-wrap {max-height: 420px; overflow-y: auto; margin-top: 0.4rem;}
+.ad-perf-table {width: 100%; border-collapse: collapse; font-size: 0.85rem;}
+.ad-perf-table th, .ad-perf-table td {padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top;}
+.ad-perf-table thead th {position: sticky; top: 0; background: var(--surface-2); z-index: 1;
+    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;}
+.ad-perf-table th.col-vid, .ad-perf-table td.col-vid {text-align: left; width: auto;}
+.ad-perf-table th.col-num, .ad-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
+.ad-perf-table td.col-vid a {color: var(--text); text-decoration: none; font-weight: 600; display: block;}
+.ad-perf-table td.col-vid a:hover {color: var(--accent); text-decoration: underline;}
+.ad-perf-date {display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 0.15rem; font-variant-numeric: tabular-nums;}
+.ad-perf-table td.col-num {color: var(--text);}
+.ad-perf-table tbody tr:last-child td {border-bottom: none;}
+.ad-perf-table thead th.sortable {cursor: pointer;
     user-select: none;
     transition: color 0.12s, background 0.12s;}
 .ad-perf-table thead th.sortable:hover {color: var(--text);
@@ -1150,8 +1162,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 @media(max-width:760px){
   .video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
   .video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
-  .video-row.ovw-row {grid-template-columns: 1fr 90px;}
-  .video-row.ovw-row.with-channel {grid-template-columns: 1fr 90px;}
+  .video-row.ovw-row {grid-template-columns: 70px 1fr 90px;}
+  .video-row.ovw-row.with-channel {grid-template-columns: 70px 1fr 90px;}
   .video-row .video-duration,
     .video-row .video-channel,
     .video-row .hide-mobile {display: none !important;}
@@ -1170,10 +1182,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Overview month-detail rows reuse .video-row base styling (padding, font,
    centring, responsive hide-mobile) but define their own column templates —
    no Date column since every video is from the same month. */
-.video-row.ovw-row{grid-template-columns:1fr 110px 75px 90px;}
-.video-row.ovw-row.with-channel{grid-template-columns:120px 1fr 110px 75px 90px;}
-.video-row.ovw-row:not(.no-topics){grid-template-columns:1fr 110px 75px 90px 130px;}
-.video-row.ovw-row.with-channel:not(.no-topics){grid-template-columns:120px 1fr 110px 75px 90px 130px;}
+.video-row.ovw-row{grid-template-columns:90px 1fr 110px 75px 90px;}
+.video-row.ovw-row.with-channel{grid-template-columns:90px 120px 1fr 110px 75px 90px;}
+.video-row.ovw-row:not(.no-topics){grid-template-columns:90px 1fr 110px 75px 90px 130px;}
+.video-row.ovw-row.with-channel:not(.no-topics){grid-template-columns:90px 120px 1fr 110px 75px 90px 130px;}
 
 
 /* Word cloud section */
@@ -2031,11 +2043,12 @@ function fmtDurOv(sec){ sec=Math.round(sec||0); const h=Math.floor(sec/3600),mm=
 const OV_BATCH = 25;
 let ovMonthShown = { long: OV_BATCH, short: OV_BATCH };
 // Sort state for the Overview month-detail list (shared across both groups).
-let ovSort = { by: 'views', dir: 'desc' };
+let ovSort = { by: 'date', dir: 'desc' };
 function ovSortVideos(arr){
   const { by, dir } = ovSort;
   const sign = dir === 'asc' ? 1 : -1;
   const val = v => {
+    if (by === 'date') return v.dt || '';
     if (by === 'title') return (v.t||'').toLowerCase();
     if (by === 'duration') return v.d||0;
     if (by === 'likepct') return (v.v>0 && v.l!=null) ? v.l/v.v : -1;
@@ -2065,6 +2078,7 @@ function renderOvMonthVideos(vlist, monthKey){
   const rowCls = `ovw-row${isAll?' with-channel':''}${showTopics?'':' no-topics'}`;
   const header = `
     <div class="video-row video-row-header ${rowCls}">
+      <div class="video-date sortable${ovSortCls('date')}" data-ov-sort="date">Date${ovSortArrow('date')}</div>
       ${isAll?'<div class="video-channel">Channel</div>':''}
       <div class="video-title sortable${ovSortCls('title')}" data-ov-sort="title">Title${ovSortArrow('title')}</div>
       <div class="video-duration sortable hide-mobile${ovSortCls('duration')}" data-ov-sort="duration">Duration${ovSortArrow('duration')}</div>
@@ -2074,6 +2088,7 @@ function renderOvMonthVideos(vlist, monthKey){
       ${showTopics?'<div class="video-topic hide-mobile">Topic</div>':''}
     </div>`;
   const row = v => `<div class="video-row ${rowCls}">
+      <div class="video-date">${v.dt || '—'}</div>
       ${isAll?`<div class="video-channel">${v.ch}</div>`:''}
       <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${(v.t||'').replace(/</g,'&lt;')}</a></div>
       <div class="video-duration hide-mobile">${fmtDurOv(v.d)}</div>
@@ -5717,22 +5732,27 @@ function renderAdPanel() {
   const panel = document.getElementById('adPanel');
   if (!panel) return;
 
-  // Only show if we have ad data for the selected channel
-  if (!adVideoData || ANALYTICS_CHANNEL === 'ALL' || !adVideoIds.size) {
+  // Show whenever we have any ad data loaded (works for a single channel OR
+  // All channels — in the latter case we aggregate every channel's ad videos).
+  if (!adVideoData || !adVideoIds.size) {
     panel.hidden = true;
     return;
   }
-  const channelHandle = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL]?.handle;
-  if (!channelHandle) { panel.hidden = true; return; }
-  const channelEntry = adVideoData.channels?.[channelHandle];
-  if (!channelEntry || !channelEntry.videoIds?.length) {
-    panel.hidden = true;
-    return;
-  }
+  const isAll = ANALYTICS_CHANNEL === 'ALL';
 
-  // Pull metadata about the matching videos from the main dataset
-  const idSet = new Set(channelEntry.videoIds);
-  const matched = (ANALYTICS_DATASET.videos || []).filter(v => idSet.has(v.id) && v.channelId === ANALYTICS_CHANNEL);
+  // Collect the matched ad videos. For a single channel: just that channel's
+  // ad list. For All: every channel's ad list combined.
+  let matched = [];
+  if (isAll) {
+    matched = (ANALYTICS_DATASET.videos || []).filter(v => adVideoIds.has(v.id));
+  } else {
+    const channelHandle = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL]?.handle;
+    if (!channelHandle) { panel.hidden = true; return; }
+    const channelEntry = adVideoData.channels?.[channelHandle];
+    if (!channelEntry || !channelEntry.videoIds?.length) { panel.hidden = true; return; }
+    const idSet = new Set(channelEntry.videoIds);
+    matched = (ANALYTICS_DATASET.videos || []).filter(v => idSet.has(v.id) && v.channelId === ANALYTICS_CHANNEL);
+  }
   if (!matched.length) { panel.hidden = true; return; }
 
   // Headline stats
@@ -5741,15 +5761,15 @@ function renderAdPanel() {
   const earliest = dates[0].slice(0, 10);
   const latest = dates[dates.length - 1].slice(0, 10);
 
-  // Pre-compute monthly medians of LONG-FORM videos for this channel.
-  // Used to contextualise each ad video's performance against its peers
-  // (controls for the temporal view-decline trend).
-  const monthlyLongFormViews = {};  // 'YYYY-MM' -> [views, views, ...]
+  // Pre-compute monthly medians of LONG-FORM videos, keyed by channel+month so
+  // each ad video is compared against its OWN channel's peers (channels have
+  // very different baselines, so a global median would be misleading in All mode).
+  const monthlyLongFormViews = {};  // 'channelId|YYYY-MM' -> [views, ...]
   for (const v of ANALYTICS_DATASET.videos) {
-    if (v.channelId !== ANALYTICS_CHANNEL) continue;
     if (v.unavailable || v.isShort) continue;
     if (!(v.views > 0)) continue;
-    const key = v.publishedAt.slice(0, 7);
+    if (!isAll && v.channelId !== ANALYTICS_CHANNEL) continue;
+    const key = v.channelId + '|' + v.publishedAt.slice(0, 7);
     (monthlyLongFormViews[key] ||= []).push(v.views);
   }
   function median(arr) {
@@ -5764,11 +5784,11 @@ function renderAdPanel() {
 
   // Build per-ad performance rows. For each ad video:
   //   - views (actual)
-  //   - median of long-form videos uploaded in the same month
+  //   - median of long-form videos from the same channel + month
   //   - delta: views − median (the "excess" over typical)
   //   - multiplier: views / median (X.Xx the typical video)
   const rows = matched.map(v => {
-    const monthKey = v.publishedAt.slice(0, 7);
+    const monthKey = v.channelId + '|' + v.publishedAt.slice(0, 7);
     const monthMedian = monthlyMedians[monthKey] || 0;
     const views = v.views || 0;
     const excess = monthMedian > 0 ? views - monthMedian : null;
@@ -5829,7 +5849,7 @@ function renderAdPanel() {
       <tr>
         <td class="col-vid">
           <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-          <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}</span>
+          <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}${isAll ? ' · ' + escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '') : ''}</span>
         </td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
