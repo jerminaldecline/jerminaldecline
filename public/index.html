@@ -205,6 +205,11 @@
 
       <div class="hero-grid" id="heroStats"></div>
       <div class="composition" id="composition"></div>
+      <!-- Month detail at the bottom of Overview: a single collapsible month card
+           (the same component as the Analysis monthly list), bound to the latest
+           month, including the topic ribbon (share-of-videos + share-of-views
+           horizontal bars). Reuses renderMonthDetail/renderTopicRibbon. -->
+      <div id="overviewMonthDetail"></div>
       </section><!-- /Overview -->
 
       <!-- ===== ANALYSIS tab: investigate — chart + deep dives + word cloud + monthly ===== -->
@@ -1371,6 +1376,8 @@ function rebuild() {
     // tab stays navigable and self-explanatory rather than vanishing.
     document.getElementById('windowSection').hidden = false;
     renderWindowList(startDate, endDate);
+    const ovmd = document.getElementById('overviewMonthDetail');
+    if (ovmd) ovmd.innerHTML = '';
     const adPanel = document.getElementById('adPanel');
     if (adPanel) adPanel.hidden = true;
     const revPanel = document.getElementById('revenuePanel');
@@ -1493,6 +1500,7 @@ function rebuild() {
   // it is no longer an either/or with the chart.
   renderTrendChart(yoy);
   renderMonthlyList(yoy);
+  renderOverviewMonthDetail();
   renderWindowList(startDate, endDate);
   // Per-channel chips above the monthly breakdown (All combined only)
   const chipsEl = document.getElementById('monthlyBreakdownChips');
@@ -3590,9 +3598,46 @@ function renderComposition(s) {
 // Chart rendering functions live in charts.js (loaded before this block).
 
 
+function renderOverviewMonthDetail() {
+  // Render a single collapsible month card at the bottom of Overview, bound to
+  // the latest month, reusing the exact Analysis component (renderMonthDetail +
+  // renderTopicRibbon — the topic share bars). When the full report→Overview
+  // merge lands, this binds to the report's month dropdown instead of "latest".
+  const host = document.getElementById('overviewMonthDetail');
+  if (!host) return;
+  if (!monthlyData || monthlyData.length === 0) { host.innerHTML = ''; return; }
+  // latest non-empty month (monthlyData is chronological; last entry is newest)
+  let idx = monthlyData.length - 1;
+  while (idx > 0 && monthlyData[idx].curr.totalCount() === 0) idx--;
+  const m = monthlyData[idx];
+  const now = new Date();
+  const isInProgress = m.key === `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  host.innerHTML = `
+    <h2 class="section-title overview-md-title">${m.label} in detail</h2>
+    <div class="monthly-list overview-md-list">
+      <div class="month-row expanded${isInProgress ? ' in-progress' : ''}" data-idx="${idx}">
+        <div class="month-header">
+          <div class="month-name"><span class="caret"></span>${m.label}</div>
+          <div class="month-cell num hide-mobile">
+            <div class="month-cell-value">${m.curr.longForm.length} <span style="color: var(--text-dim); font-weight: 400;">/ ${m.curr.shorts.length}</span></div>
+            <div class="month-cell-sub">long / shorts</div>
+          </div>
+        </div>
+        <div class="month-detail">${renderMonthDetail(m, idx)}</div>
+      </div>
+    </div>
+  `;
+  // Wire expand/collapse (same as renderMonthlyList)
+  host.querySelectorAll('.month-header').forEach(header => {
+    header.addEventListener('click', () => header.parentElement.classList.toggle('expanded'));
+  });
+}
+
+
 function renderMonthlyList(yoy) {
   const list = document.getElementById('monthlyList');
   const now = new Date();
+
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
   list.innerHTML = monthlyData.map((m, idx) => {
     const longViews = m.curr.longViews;
@@ -4136,13 +4181,17 @@ function renderTopicRibbon(m) {
 }
 
 function refreshMonthDetail(idx) {
-  const row = document.querySelector(`.month-row[data-idx="${idx}"]`);
-  if (!row) return;
-  const detail = row.querySelector('.month-detail');
-  if (!detail) return;
+  // There can be more than one .month-row with this idx now: the Analysis
+  // monthly list AND the Overview bottom card share the latest-month idx.
+  // Refresh all matches so search/sort stays consistent across both.
+  const rows = document.querySelectorAll(`.month-row[data-idx="${idx}"]`);
+  if (!rows.length) return;
   const m = monthlyData[idx];
   if (!m) return;
-  detail.innerHTML = renderMonthDetail(m, idx);
+  rows.forEach(row => {
+    const detail = row.querySelector('.month-detail');
+    if (detail) detail.innerHTML = renderMonthDetail(m, idx);
+  });
 }
 
 // Event delegation: handle sort header clicks and search input across all expanded months
