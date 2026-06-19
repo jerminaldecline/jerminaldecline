@@ -329,6 +329,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-standalone {margin-bottom: 0.7rem;
     min-height: 1.2rem;  /* reserve space so layout doesn't jump on chart switches */}
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
+.trend-legend-toggle{display:inline-flex;align-items:center;gap:0.35rem;background:transparent;border:1px solid var(--border);border-radius:6px;padding:0.15rem 0.5rem;font-family:inherit;font-size:0.78rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:border-color .12s,color .12s,opacity .12s}
+.trend-legend-toggle:hover{border-color:var(--accent);color:var(--text)}
+.trend-legend-toggle.off{opacity:0.5;text-decoration:line-through;text-decoration-thickness:1px}
+.trend-legend-toggle.off .trend-legend-swatch{opacity:0.4}
 .trend-legend-swatch {display: inline-block;
     width: 18px;
     height: 3px;
@@ -1755,9 +1759,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <select id="anPeriodSel" class="bar-sel" aria-label="Time period">
         <option value="ytd">YTD</option>
         <option value="12m">Last 12 months</option>
-        <option value="24m">Last 24 months</option>
+        <option value="24m" selected>Last 24 months</option>
         <option value="since-peak">Since peak</option>
-        <option value="all" selected>All time</option>
+        <option value="all">All time</option>
       </select>
     </div>
     <div class="bar-controls" data-for="videos" id="vidBarControls" hidden>
@@ -2641,6 +2645,7 @@ function buildMonthlyData(scope){
   let likeRateBaselines = new Map();
   // analytics-local chart state
   let chartMetric = 'views';
+  let showPrevYear = true;
   let viewMode = 'long';
   let monthlyData = [];
   // selectedChannel + dataset come from the outer scope (shared globals)
@@ -2798,10 +2803,13 @@ function renderTrendChart(yoy) {
   // The view-history alone is the story; duration overlay is the story.
   const effectiveYoy = yoy && !showDuration;
 
-  // Legend (gap-fill swatches added later, once we know which colours appear)
+  // "Previous year" is a user-toggleable series in the Views chart. Show the
+  // toggle whenever we're in the views chart (not the duration overlay), so it
+  // can be turned back on after being switched off.
+  const showPrevToggle = !showDuration && chartMetric === 'views';
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
-    ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+    ${showPrevToggle ? `<button type="button" class="trend-legend-toggle${showPrevYear?' on':' off'}" id="prevYearToggle" aria-pressed="${showPrevYear}"><span class="trend-legend-swatch prev"></span> Previous year</button>` : (effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : '')}
     ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Median length</span>' : ''}
   `;
 
@@ -4541,7 +4549,7 @@ function niceDurationAxis(minSec, maxSec) {
 
   // Analysis time-filter state (Analysis-only). Maps a preset to a cutoff month
   // key; the chart shows months >= cutoff. null cutoff = all time.
-  let anTimePreset = 'all';
+  let anTimePreset = '24m';
   function anCutoffMonth(preset, allKeys){
     const now = new Date();
     const y = now.getFullYear(), mo = now.getMonth()+1;
@@ -4575,7 +4583,7 @@ function niceDurationAxis(minSec, maxSec) {
     // Sync the hidden date inputs the revenue panel reads, to the active window.
     syncDateInputsToWindow();
     likeRateBaselines = computeAnalyticsBaselines();
-    renderTrendChart(true);
+    renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
     if (typeof window.renderStoryTracker === 'function') { try { window.renderStoryTracker(); } catch(e){ console.error('story tracker', e); } }
@@ -4594,6 +4602,8 @@ function niceDurationAxis(minSec, maxSec) {
   }
   window.setAnalysisTimePreset = function(p){ anTimePreset = p; window.renderAnalysisChart(); };
   window.__getAnalysisPreset = function(){ return anTimePreset; };
+  window.setShowPrevYear = function(v){ showPrevYear = !!v; window.renderAnalysisChart(); };
+  window.__getShowPrevYear = function(){ return showPrevYear; };
   // expose metric/viewMode setters for the controls
   const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate']);
   window.setAnalysisMetric = function(m){
@@ -6463,6 +6473,13 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
     });
   }
+  // Previous-year series toggle (lives in the chart legend, re-rendered each draw)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#prevYearToggle')) {
+      const cur = (typeof window.__getShowPrevYear === 'function') ? window.__getShowPrevYear() : true;
+      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(!cur);
+    }
+  });
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
   // Populate a period <select> with the broad presets, a separator, then each
   // individual month (newest first). Specific months use their YYYY-MM as value.
