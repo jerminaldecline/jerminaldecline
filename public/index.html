@@ -9,6 +9,7 @@
   --up-bg:rgba(77,208,160,0.15);--down-bg:rgba(255,107,102,0.15);--flat-bg:rgba(108,114,138,0.14);
   --accent-2:#e0a458;--accent-2-bg:rgba(224,164,88,0.14);
   --scatter:#6aa3ff;
+  --shorts:#e8923a;--shorts-soft:rgba(232,146,58,0.16);
 }
 /* Light palette: applied when the OS prefers light (System mode, no manual override)
    OR when the user explicitly picks Light via the theme toggle. Both selectors carry
@@ -20,7 +21,7 @@
     --up:#1d9e75;--down:#b8302b;--label:#534e44;--subtext:#736d5f;
     --up-bg:rgba(29,158,117,0.13);--down-bg:rgba(184,48,43,0.11);--flat-bg:rgba(153,143,124,0.14);
     --accent-2:#b07818;--accent-2-bg:rgba(176,120,24,0.12);
-    --scatter:#1b4d9f;
+    --scatter:#1b4d9f;--shorts:#c2691a;--shorts-soft:rgba(194,105,26,0.13);
   }
 }
 :root[data-theme="light"]{
@@ -30,7 +31,7 @@
   --up:#1d9e75;--down:#b8302b;--label:#534e44;--subtext:#736d5f;
   --up-bg:rgba(29,158,117,0.13);--down-bg:rgba(184,48,43,0.11);--flat-bg:rgba(153,143,124,0.14);
   --accent-2:#b07818;--accent-2-bg:rgba(176,120,24,0.12);
-  --scatter:#1b4d9f;
+  --scatter:#1b4d9f;--shorts:#c2691a;--shorts-soft:rgba(194,105,26,0.13);
 }
 :root[data-theme="dark"]{ color-scheme: dark; }
 
@@ -921,7 +922,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     border: 1px solid var(--shorts);
     border-radius: 4px;
     padding: 0 5px;
-    margin-left: 0.4rem;
+    margin-right: 0.4rem;
     line-height: 1.5;
     vertical-align: 1px;
     cursor: help;}
@@ -1149,6 +1150,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 @media(max-width:760px){
   .video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
   .video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
+  .video-row.ovw-row {grid-template-columns: 1fr 90px;}
+  .video-row.ovw-row.with-channel {grid-template-columns: 1fr 90px;}
   .video-row .video-duration,
     .video-row .video-channel,
     .video-row .hide-mobile {display: none !important;}
@@ -1163,15 +1166,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ov-month-detail.open .ov-md-caret{transform:rotate(90deg)}
 .ov-md-body{margin-top:0.75rem}
 .ov-md-empty{color:var(--text-dim);font-size:0.88rem;padding:1rem 0}
-.ov-vgroup{margin-bottom:1rem}
-.ov-vgroup-head{display:flex;justify-content:space-between;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--label);font-weight:700;padding:0.4rem 0;border-bottom:1px solid var(--border)}
-.ov-vrow{display:grid;grid-template-columns:1fr 90px 80px;gap:0.75rem;align-items:center;padding:0.45rem 0;border-bottom:1px solid var(--border);font-size:0.85rem}
-.ov-month-detail.has-ch .ov-vrow{grid-template-columns:1fr 110px 90px 80px}
-.ov-vtitle{color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ov-vtitle:hover{color:var(--accent);text-decoration:underline}
-.ov-vch{color:var(--subtext);font-size:0.8rem}
-.ov-vdur,.ov-vviews{text-align:right;font-variant-numeric:tabular-nums;color:var(--text-muted)}
-.ov-vviews{font-weight:700;color:var(--text)}
+.ovw-group{margin-bottom:1.2rem}
+/* Overview month-detail rows reuse .video-row base styling (padding, font,
+   centring, responsive hide-mobile) but define their own column templates —
+   no Date column since every video is from the same month. */
+.video-row.ovw-row{grid-template-columns:1fr 110px 75px 90px;}
+.video-row.ovw-row.with-channel{grid-template-columns:120px 1fr 110px 75px 90px;}
+.video-row.ovw-row:not(.no-topics){grid-template-columns:1fr 110px 75px 90px 130px;}
+.video-row.ovw-row.with-channel:not(.no-topics){grid-template-columns:120px 1fr 110px 75px 90px 130px;}
 
 
 /* Word cloud section */
@@ -1824,8 +1826,9 @@ async function loadAndCompute(){
       // Only the fields the detail view needs, to keep the payload reasonable.
       const leanVid = v => ({
         id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
-        d:v.durationSec||0, s:!!v.isShort,
+        d:v.durationSec||0, s:!!v.isShort, dt:(v.publishedAt||'').slice(0,10),
         tp: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
+        tpc: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
         ch: handle[v.channelId]||'?'
       });
       const vlist = [...vs, ...sh].map(leanVid);
@@ -2024,22 +2027,50 @@ function availableMonths(){
 // both selectors are populated + bound inside render() (they live in the re-rendered report header)
 
 function fmtDurOv(sec){ sec=Math.round(sec||0); const h=Math.floor(sec/3600),mm=Math.floor((sec%3600)/60),ss=sec%60; return (h>0?h+':'+String(mm).padStart(2,'0'):mm)+':'+String(ss).padStart(2,'0'); }
+// Incremental-loading state for the Overview month-detail list (per group).
+const OV_BATCH = 25;
+let ovMonthShown = { long: OV_BATCH, short: OV_BATCH };
 function renderOvMonthVideos(vlist, monthKey){
   if (!vlist.length) return '<div class="ov-md-empty">No videos this month.</div>';
   const longs = vlist.filter(v=>!v.s).sort((a,b)=>b.v-a.v);
   const shorts = vlist.filter(v=>v.s).sort((a,b)=>b.v-a.v);
   const isAll = scope==='ALL';
-  const row = v => `<div class="ov-vrow">
-      <a class="ov-vtitle" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${(v.t||'').replace(/</g,'&lt;')}</a>
-      ${isAll?`<span class="ov-vch">${v.ch}</span>`:''}
-      <span class="ov-vdur">${fmtDurOv(v.d)}</span>
-      <span class="ov-vviews">${fmt(v.v)}</span>
+  // Reuse the Videos-tab .video-row grid so columns, centring and responsive
+  // behaviour stay consistent. No date column (single month) — lead with title.
+  const showTopics = vlist.some(v=>v.tp);
+  const rowCls = `ovw-row${isAll?' with-channel':''}${showTopics?'':' no-topics'}`;
+  const header = `
+    <div class="video-row video-row-header ${rowCls}">
+      ${isAll?'<div class="video-channel">Channel</div>':''}
+      <div class="video-title">Title</div>
+      <div class="video-duration hide-mobile">Duration</div>
+      <div class="video-views">Views</div>
+      <div class="video-likepct hide-mobile">Like %</div>
+      <div class="video-comments hide-mobile">Comments</div>
+      ${showTopics?'<div class="video-topic hide-mobile">Topic</div>':''}
     </div>`;
-  const group = (label, arr) => arr.length ? `<div class="ov-vgroup">
-      <div class="ov-vgroup-head"><span>${label}</span><span class="ov-vgroup-meta">${arr.length} · ${fmt(arr.reduce((s,v)=>s+v.v,0))} views</span></div>
-      ${arr.map(row).join('')}
-    </div>` : '';
-  return group('Long-form', longs) + group('Shorts', shorts);
+  const row = v => `<div class="video-row ${rowCls}">
+      ${isAll?`<div class="video-channel">${v.ch}</div>`:''}
+      <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${(v.t||'').replace(/</g,'&lt;')}</a></div>
+      <div class="video-duration hide-mobile">${fmtDurOv(v.d)}</div>
+      <div class="video-views">${fmt(v.v)}</div>
+      <div class="video-likepct hide-mobile">${(v.v>0 && v.l!=null)?((v.l/v.v)*100).toFixed(1)+'%':'—'}</div>
+      <div class="video-comments hide-mobile">${v.c!=null?fmt(v.c):'—'}</div>
+      ${showTopics?`<div class="video-topic hide-mobile">${v.tp?`<span class="video-topic-dot" style="background:${v.tpc||'#888'}"></span>${v.tp}`:''}</div>`:''}
+    </div>`;
+  const group = (label, arr, key) => {
+    if (!arr.length) return '';
+    const shown = Math.min(ovMonthShown[key], arr.length);
+    const remaining = arr.length - shown;
+    const moreBtn = remaining>0 ? `<button type="button" class="window-list-more" data-ov-more="${key}">Show ${Math.min(OV_BATCH,remaining)} more <span class="wlm-rem">(${fmt(remaining)} remaining)</span></button>` : '';
+    return `<div class="ovw-group">
+      <div class="window-list-group-header"><span class="window-list-group-label">${label}</span><span class="window-list-group-meta">${arr.length} · ${fmt(arr.reduce((s,v)=>s+v.v,0))} views</span></div>
+      ${header}
+      ${arr.slice(0,shown).map(row).join('')}
+      ${moreBtn}
+    </div>`;
+  };
+  return group('Long-form', longs, 'long') + group('Shorts', shorts, 'short');
 }
 
 function render(m){
@@ -2252,11 +2283,26 @@ function render(m){
 function refresh(month){
   const months=availableMonths();
   const sel = months.includes(month) ? month : months[0];
+  ovMonthShown = { long: OV_BATCH, short: OV_BATCH };
   render(sel);
   const u=new URL(location); u.searchParams.set('view',scope); u.searchParams.set('month',sel); history.replaceState(null,'',u);
 }
 
 // async bootstrap: load live data, compute, then render
+// Overview month-detail "show more" — bumps the per-group visible count and
+// re-renders just the month-detail body (preserves the expanded state).
+document.addEventListener('click', (e) => {
+  const mb = e.target.closest('[data-ov-more]');
+  if (!mb) return;
+  const key = mb.dataset.ovMore;
+  ovMonthShown[key] = (ovMonthShown[key] || OV_BATCH) + OV_BATCH;
+  const ms = document.getElementById('msel');
+  const body = document.getElementById('ovMdBody');
+  if (ms && body && typeof SCOPES !== 'undefined') {
+    const d = SCOPES[scope] && SCOPES[scope][ms.value];
+    if (d) body.innerHTML = renderOvMonthVideos(d.vlist || [], ms.value);
+  }
+});
 /* ============================================================
    Analytics data layer (for Analysis/Videos tabs) — ported from the
    old index.html. Produces the monthlyData[] shape the old charts +
@@ -5491,7 +5537,7 @@ function renderVideoRows(videos, emptyText) {
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${renamedBadge}${titleSubtitle}</div>
+        <div class="video-title">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -5834,17 +5880,6 @@ function renderAdPanel() {
     </div>
   `;
 
-  // Toggle handler
-  const toggle = document.getElementById('adPanelToggle');
-  const body = document.getElementById('adPanelBody');
-  toggle.addEventListener('click', () => {
-    const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    const next = !expanded;
-    toggle.setAttribute('aria-expanded', String(next));
-    body.hidden = !next;
-    adPanelExpanded = next;  // persist across re-renders
-  });
-
   // Sort handlers — attach to each sortable header.
   // Clicking the active column flips direction; clicking a new column starts at
   // descending (intuitive default for numeric columns where users typically want
@@ -6105,10 +6140,15 @@ function renderWindowList(startDate, endDate) {
     const ni = document.getElementById('windowListSearch');
     if (ni){ ni.focus(); ni.setSelectionRange(caretPos, caretPos); }
   });
-  // ad panel toggle (delegated)
+  // ad panel toggle (delegated; single handler to avoid double-toggle)
   document.addEventListener('click', (e) => {
     const t = e.target.closest('#adPanelToggle');
-    if (t) { const exp = t.getAttribute('aria-expanded')==='true'; t.setAttribute('aria-expanded', String(!exp)); const body=document.getElementById('adPanelBody'); if(body) body.hidden = exp; if (typeof adPanelExpanded!=='undefined') {} }
+    if (!t) return;
+    const exp = t.getAttribute('aria-expanded') === 'true';
+    t.setAttribute('aria-expanded', String(!exp));
+    const body = document.getElementById('adPanelBody');
+    if (body) body.hidden = exp;
+    if (typeof adPanelExpanded !== 'undefined') adPanelExpanded = !exp;
   });
 
 })();
