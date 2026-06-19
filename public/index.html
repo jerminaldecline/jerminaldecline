@@ -107,6 +107,21 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .toplist li:first-child .tbar span{opacity:1}
 .toplist li:first-child .row span:first-child{font-weight:700}
 .toplist .empty{color:var(--text-dim);font-size:0.82rem}
+/* Topic horizontal bars (share of uploads / share of views) */
+.tb-group{margin-bottom:1.1rem}
+.tb-group:last-child{margin-bottom:0}
+.tb-grouplabel{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:0.6rem}
+.tb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.6rem}
+.tb-item{font-size:0.86rem}
+.tb-head{display:flex;justify-content:space-between;align-items:baseline;gap:0.75rem;margin-bottom:0.32rem}
+.tb-name{display:flex;align-items:center;gap:0.45rem;font-weight:600;color:var(--text);min-width:0}
+.tb-name>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-dot{flex:none;width:9px;height:9px;border-radius:50%}
+.tb-val{flex:none;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+.tb-unit{color:var(--subtext);font-weight:500;font-size:0.78rem}
+.tb-track{height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.tb-fill{display:block;height:100%;border-radius:5px;min-width:2px;transition:width .3s ease}
+.tb-item:first-child .tb-track{height:10px}
 .cmp-table{width:100%;border-collapse:collapse;font-size:0.86rem}
 .cmp-table th{text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
 .cmp-table th:first-child{text-align:left}
@@ -300,6 +315,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     overflow: visible;}
 .chart-wrap {padding: 0.65rem 0.35rem 0.5rem;}
 .chart-axis-line {stroke: var(--border-strong); stroke-width: 1;}
+.chart-empty-title {fill: var(--text); font-size: 15px; font-weight: 700; font-family: inherit;}
+.chart-empty-sub {fill: var(--text-muted); font-size: 13px; font-family: inherit;}
 /* Small tick marks at quarter boundaries on the X axis (scatter chart).
      Gives a measurable scale reference between year labels. */
   .chart-axis-tick {stroke: var(--border-strong); stroke-width: 1; opacity: 0.6;}
@@ -1656,6 +1673,7 @@ async function loadAndCompute(){
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
+  const tcolor = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.color) tcolor[k]=v.color; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
   const hid = {}; for(const [cid,h] of Object.entries(handle)) hid[h]=cid;
   const vids = data.videos || [];
@@ -1680,7 +1698,7 @@ async function loadAndCompute(){
       const crs=vs.filter(v=>v.views>0&&v.comments!=null).map(v=>v.comments/v.views);
       const medCr=median(crs);
       const durs=vs.filter(v=>v.durationSec).map(v=>v.durationSec);
-      const tc={}; for(const v of vs){ const t=tags[v.id]; if(t) tc[t]=(tc[t]||0)+1; }
+      const tc={}; for(const v of vs){ const t=tags[v.id]; if(t){ if(!tc[t]) tc[t]={n:0,v:0}; tc[t].n++; tc[t].v+=(v.views||0); } }
       // Lean per-video records, kept for the future Overview merge (month-detail
       // component). Currently unused by the standalone report render.
       // Only the fields the detail view needs, to keep the payload reasonable.
@@ -1691,7 +1709,14 @@ async function loadAndCompute(){
         ch: handle[v.channelId]||'?'
       });
       const vlist = [...vs, ...sh].map(leanVid);
-      const top=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([t,n])=>[tname[t]||t,n]);
+      const topicEntries = Object.entries(tc).map(([t,o])=>({
+        id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v
+      }));
+      const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
+      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,6);
+      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      // legacy shape kept in case anything still reads [name,count]
+      const top=topicsByCount.map(e=>[e.name,e.count]);
       const topvid=vstats([...vs].sort((a,b)=>(b.views||0)-(a.views||0))[0]);
       const cand=vs.filter(v=>(v.views||0)>=3000 && v.comments).map(v=>[v.comments/v.views,v]).sort((a,b)=>b[0]-a[0]);
       let debate=null;
@@ -1704,7 +1729,8 @@ async function loadAndCompute(){
         runtime: durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/3600*10)/10:0,
         revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
         revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
-        top, topvid, debate, shorts, vlist
+        top, topvid, debate, shorts, vlist,
+        topicsByCount, topicsByViews, taggedCount
       };
     }
     return out;
@@ -1870,9 +1896,38 @@ function render(m){
       ${hlStats(d.debate)}
     </div>` : '';
 
-  const topicsHTML = d.top && d.top.length ? (()=>{ const maxTop=Math.max(...d.top.map(t=>t[1]),1);
-    return `<ul class="toplist">${d.top.map(t=>`<li><div class="row"><span>${t[0]}</span><span class="cnt">${t[1]} video${t[1]>1?'s':''}</span></div><div class="tbar"><span style="width:${Math.round(t[1]/maxTop*100)}%"></span></div></li>`).join('')}</ul>`;
-  })() : '<div class="empty">No tagged uploads this month.</div>';
+  const topicsHTML = (()=>{
+    const byCount = d.topicsByCount || [];
+    const byViews = d.topicsByViews || [];
+    if (!byCount.length) return '<div class="empty">No tagged uploads this month.</div>';
+    const tagged = d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
+    const totV = byViews.reduce((s,t)=>s+t.views,0) || 1;
+    const maxCount = Math.max(...byCount.map(t=>t.count),1);
+    const maxViews = Math.max(...byViews.map(t=>t.views),1);
+    const countRows = byCount.map(t=>{
+      const pct = Math.round(t.count/tagged*100);
+      return `<li class="tb-item">
+        <div class="tb-head"><span class="tb-name"><span class="tb-dot" style="background:${t.color}"></span>${t.name}</span><span class="tb-val">${t.count} <span class="tb-unit">video${t.count>1?'s':''} · ${pct}%</span></span></div>
+        <div class="tb-track"><span class="tb-fill" style="width:${Math.round(t.count/maxCount*100)}%;background:${t.color}"></span></div>
+      </li>`;
+    }).join('');
+    const viewRows = byViews.map(t=>{
+      const pct = Math.round(t.views/totV*100);
+      return `<li class="tb-item">
+        <div class="tb-head"><span class="tb-name"><span class="tb-dot" style="background:${t.color}"></span>${t.name}</span><span class="tb-val">${fmt(t.views)} <span class="tb-unit">views · ${pct}%</span></span></div>
+        <div class="tb-track"><span class="tb-fill" style="width:${Math.round(t.views/maxViews*100)}%;background:${t.color}"></span></div>
+      </li>`;
+    }).join('');
+    return `
+      <div class="tb-group">
+        <div class="tb-grouplabel">Share of uploads</div>
+        <ul class="tb-list">${countRows}</ul>
+      </div>
+      <div class="tb-group">
+        <div class="tb-grouplabel">Share of views</div>
+        <ul class="tb-list">${viewRows}</ul>
+      </div>`;
+  })();
 
   // network breakdown (always all-channel) — highlight the active scope row
   const netRows = (NET[m]||[]).map(r=>{
@@ -2212,6 +2267,27 @@ function renderTrendChart(yoy) {
   if (!chartData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
+    return;
+  }
+
+  // Single-channel-only modes: when the user picks one of these while the
+  // scope is "All channels", the old behaviour silently fell through to the
+  // plain views line — the button looked active but nothing changed, reading
+  // as a dead click. Instead, show an explicit message telling them to pick a
+  // channel. (These metrics are per-channel by nature: duration/like-rate
+  // baselines and engagement outliers aren't meaningful aggregated across five
+  // channels with different norms.)
+  const SINGLE_CHANNEL_METRICS = {
+    views_length: 'Views + length',
+    views_likes: 'Views + likes',
+    engagement_variance: 'Engagement variance',
+    all_videos: 'All videos'
+  };
+  if (ANALYTICS_CHANNEL === 'ALL' && SINGLE_CHANNEL_METRICS[chartMetric]) {
+    legend.innerHTML = '';
+    svg.innerHTML = `
+      <text x="360" y="128" text-anchor="middle" class="chart-empty-title">${SINGLE_CHANNEL_METRICS[chartMetric]} is a per-channel view</text>
+      <text x="360" y="156" text-anchor="middle" class="chart-empty-sub">Pick a single channel above to see it.</text>`;
     return;
   }
 
