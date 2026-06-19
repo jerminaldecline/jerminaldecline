@@ -1851,6 +1851,7 @@ async function loadAndCompute(){
         id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v
       }));
       const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
+      const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
       const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,3);
       const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,3);
       // legacy shape kept in case anything still reads [name,count]
@@ -1868,7 +1869,7 @@ async function loadAndCompute(){
         revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
         revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
         top, topvid, debate, shorts, vlist,
-        topicsByCount, topicsByViews, taggedCount
+        topicsByCount, topicsByViews, taggedCount, taggedViews
       };
     }
     return out;
@@ -2170,8 +2171,12 @@ function render(m){
     const byCount = d.topicsByCount || [];
     const byViews = d.topicsByViews || [];
     if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads this month.</div>', views: '<div class="empty">No tagged uploads this month.</div>' };
-    const tagged = d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
-    const totV = byViews.reduce((s,t)=>s+t.views,0) || 1;
+    // Share of ALL long-form uploads this month (tagged or not), matching the
+    // views denominator so both bars read as true shares of the channel's output.
+    const tagged = d.n || d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
+    // Share of ALL long-form views this month (tagged or not), so the figure
+    // reads as a true share of the channel's output, not just the tagged slice.
+    const totV = d.tot || d.taggedViews || byViews.reduce((s,t)=>s+t.views,0) || 1;
     const maxCount = Math.max(...byCount.map(t=>t.count),1);
     const maxViews = Math.max(...byViews.map(t=>t.views),1);
     const countRows = byCount.map(t=>{
