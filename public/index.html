@@ -466,6 +466,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     margin-left: 0.15rem;}
 .trend-legend-swatch.revenue-mid {background: var(--up);
     height: 2px;}
+
+/* Analysis controls bar — sticky so it stays in view while scrolling the chart */
+.an-controls{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem;
+  background:var(--bg);border-bottom:1px solid var(--border);padding:0.85rem 0;margin-bottom:1.25rem}
+.an-control-group{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.an-control-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700}
+.an-time{gap:0.25rem}
+.an-time-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--subtext);
+  font-family:inherit;font-size:0.8rem;font-weight:700;padding:0.4rem 0.7rem;border-radius:7px;cursor:pointer}
+.an-time-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.an-time-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 </style>
 </head>
 <body>
@@ -481,6 +493,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </section>
 
   <section class="ds-tabpanel" data-panel="analysis" id="panelAnalysis" hidden>
+    <div class="an-controls" id="anControls">
+      <div class="an-control-group">
+        <span class="an-control-label">Channel</span>
+        <select id="anChannelSel" class="scope-inline"></select>
+      </div>
+      <div class="an-control-group an-time">
+        <button type="button" class="an-time-btn" data-preset="ytd">YTD</button>
+        <button type="button" class="an-time-btn" data-preset="12m">Last 12 months</button>
+        <button type="button" class="an-time-btn" data-preset="24m">Last 24 months</button>
+        <button type="button" class="an-time-btn" data-preset="since-peak">Since peak</button>
+        <button type="button" class="an-time-btn active" data-preset="all">All time</button>
+      </div>
+    </div>
     <div class="an-chart-card">
       <div class="an-metric-toggle" id="anMetricToggle" role="tablist" aria-label="Chart metric">
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
@@ -623,12 +648,13 @@ async function loadAndCompute(){
       lastSeenMonth:lastSeen };
   }
 
-  return { scopes, net, channels: CHAN_ORDER, peaks };
+  return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid };
 }
 
 /* ---------- render (ported from prototype, reads PAYLOAD) ---------- */
 
 let SCOPES, NET, CHANNELS, PEAKS;
+let HANDLE_TO_ID = {}; // handle (e.g. '@TheQuartering') -> channelId; for Analysis channel sync
 const fmt = n => n>=1000000 ? (n/1000000).toFixed(1)+'M' : n>=1000 ? (n/1000).toFixed(0)+'K' : ''+n;
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
@@ -2856,16 +2882,44 @@ function niceDurationAxis(minSec, maxSec) {
 }
 
 
-  // Entry point: refresh state from the current channel + render the chart.
+  // Analysis time-filter state (Analysis-only). Maps a preset to a cutoff month
+  // key; the chart shows months >= cutoff. null cutoff = all time.
+  let anTimePreset = 'all';
+  function anCutoffMonth(preset, allKeys){
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth()+1;
+    const k = (yy,mm) => `${yy}-${String(mm).padStart(2,'0')}`;
+    if (preset === 'ytd') return `${y}-01`;
+    if (preset === '12m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-12); return k(d.getFullYear(), d.getMonth()+1); }
+    if (preset === '24m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-24); return k(d.getFullYear(), d.getMonth()+1); }
+    if (preset === 'since-peak'){
+      // peak = month with max long-form views in the full series
+      let peakKey=null, peakV=-1;
+      for (const m of monthlyData){ const v=m.curr.longViews; if(v>peakV){ peakV=v; peakKey=m.key; } }
+      return peakKey;
+    }
+    return null; // 'all'
+  }
+  function applyTimeFilter(){
+    if (anTimePreset === 'all') return;
+    const cutoff = anCutoffMonth(anTimePreset, monthlyData.map(m=>m.key));
+    if (cutoff) monthlyData = monthlyData.filter(m => m.key >= cutoff);
+  }
+
+  // Entry point: refresh state from the shared channel + render the chart.
   window.renderAnalysisChart = function(){
-    ANALYTICS_CHANNEL = (typeof selectedChannel !== 'undefined') ? selectedChannel : 'ALL';
+    // The single source of truth for channel is the report's `scope` (handle or 'ALL').
+    const sc = (typeof scope !== 'undefined') ? scope : 'ALL';
+    ANALYTICS_CHANNEL = sc === 'ALL' ? 'ALL' : (HANDLE_TO_ID[sc] || 'ALL');
     monthlyData = buildMonthlyData(ANALYTICS_CHANNEL);
+    applyTimeFilter();
     likeRateBaselines = computeAnalyticsBaselines();
     renderTrendChart(true);
   };
+  window.setAnalysisTimePreset = function(p){ anTimePreset = p; window.renderAnalysisChart(); };
   // expose metric/viewMode setters for the controls
-  window.setAnalysisMetric = function(m){ chartMetric = m; renderTrendChart(true); };
-  window.setAnalysisViewMode = function(v){ viewMode = v; renderTrendChart(true); };
+  window.setAnalysisMetric = function(m){ chartMetric = m; window.renderAnalysisChart(); };
+  window.setAnalysisViewMode = function(v){ viewMode = v; window.renderAnalysisChart(); };
   // like-rate baselines (ported)
   function computeAnalyticsBaselines(){
     const m = new Map();
@@ -2900,7 +2954,7 @@ function niceDurationAxis(minSec, maxSec) {
     tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
     panels.forEach(p => { p.hidden = p.dataset.panel !== tab; });
     if (tab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
-      try { window.renderAnalysisChart(); } catch(e){ console.error('analysis chart', e); }
+      try { if (window.__populateAnChannel) window.__populateAnChannel(); window.renderAnalysisChart(); } catch(e){ console.error('analysis chart', e); }
     }
     try { const u = new URL(location); u.searchParams.set('tab', tab); history.replaceState(null,'',u); } catch(_){}
   }
@@ -2915,6 +2969,41 @@ function niceDurationAxis(minSec, maxSec) {
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
     });
   }
+  // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
+  function populateAnChannel(){
+    const sel = document.getElementById('anChannelSel');
+    if (!sel || typeof CHANNELS === 'undefined' || !CHANNELS) return;
+    const cur = (typeof scope !== 'undefined') ? scope : 'ALL';
+    sel.innerHTML = ['ALL', ...CHANNELS].map(s =>
+      `<option value="${s}"${s===cur?' selected':''}>${(typeof SCOPE_LABEL!=='undefined'&&SCOPE_LABEL[s])||s}</option>`).join('');
+  }
+  window.__populateAnChannel = populateAnChannel;
+  const anChannelSel = document.getElementById('anChannelSel');
+  if (anChannelSel) {
+    anChannelSel.addEventListener('change', (e) => {
+      // Update the shared channel state, re-render the report (so Overview stays
+      // in sync) and the chart.
+      if (typeof scope !== 'undefined') {
+        scope = e.target.value;
+        if (typeof availableMonths === 'function' && typeof refresh === 'function') {
+          const months = availableMonths();
+          const curMonth = (typeof m !== 'undefined') ? m : months[0];
+          refresh(months.includes(curMonth) ? curMonth : months[0]);
+        }
+      }
+      if (typeof window.renderAnalysisChart === 'function') window.renderAnalysisChart();
+    });
+  }
+  // Time-filter presets (Analysis-only)
+  const anTime = document.querySelector('.an-time');
+  if (anTime) {
+    anTime.addEventListener('click', (e) => {
+      const btn = e.target.closest('.an-time-btn');
+      if (!btn) return;
+      anTime.querySelectorAll('.an-time-btn').forEach(b => b.classList.toggle('active', b === btn));
+      if (typeof window.setAnalysisTimePreset === 'function') window.setAnalysisTimePreset(btn.dataset.preset);
+    });
+  }
   let initial = 'overview';
   try { initial = new URLSearchParams(location.search).get('tab') || 'overview'; } catch(_){}
   show(initial);
@@ -2924,6 +3013,7 @@ function niceDurationAxis(minSec, maxSec) {
   try {
     PAYLOAD = await loadAndCompute();
     SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
+    HANDLE_TO_ID = PAYLOAD.handleToId || {};
     buildScopeLabels();
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }
