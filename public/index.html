@@ -2030,10 +2030,34 @@ function fmtDurOv(sec){ sec=Math.round(sec||0); const h=Math.floor(sec/3600),mm=
 // Incremental-loading state for the Overview month-detail list (per group).
 const OV_BATCH = 25;
 let ovMonthShown = { long: OV_BATCH, short: OV_BATCH };
+// Sort state for the Overview month-detail list (shared across both groups).
+let ovSort = { by: 'views', dir: 'desc' };
+function ovSortVideos(arr){
+  const { by, dir } = ovSort;
+  const sign = dir === 'asc' ? 1 : -1;
+  const val = v => {
+    if (by === 'title') return (v.t||'').toLowerCase();
+    if (by === 'duration') return v.d||0;
+    if (by === 'likepct') return (v.v>0 && v.l!=null) ? v.l/v.v : -1;
+    if (by === 'comments') return v.c||0;
+    return v.v||0; // views
+  };
+  return [...arr].sort((a,b)=>{
+    const av=val(a), bv=val(b);
+    if (av < bv) return -1*sign;
+    if (av > bv) return 1*sign;
+    return 0;
+  });
+}
+function ovSortArrow(col){
+  if (ovSort.by !== col) return '';
+  return ovSort.dir === 'asc' ? ' <span class="sort-arrow active">▲</span>' : ' <span class="sort-arrow active">▼</span>';
+}
+function ovSortCls(col){ return ovSort.by === col ? ' active-sort' : ''; }
 function renderOvMonthVideos(vlist, monthKey){
   if (!vlist.length) return '<div class="ov-md-empty">No videos this month.</div>';
-  const longs = vlist.filter(v=>!v.s).sort((a,b)=>b.v-a.v);
-  const shorts = vlist.filter(v=>v.s).sort((a,b)=>b.v-a.v);
+  const longs = ovSortVideos(vlist.filter(v=>!v.s));
+  const shorts = ovSortVideos(vlist.filter(v=>v.s));
   const isAll = scope==='ALL';
   // Reuse the Videos-tab .video-row grid so columns, centring and responsive
   // behaviour stay consistent. No date column (single month) — lead with title.
@@ -2042,11 +2066,11 @@ function renderOvMonthVideos(vlist, monthKey){
   const header = `
     <div class="video-row video-row-header ${rowCls}">
       ${isAll?'<div class="video-channel">Channel</div>':''}
-      <div class="video-title">Title</div>
-      <div class="video-duration hide-mobile">Duration</div>
-      <div class="video-views">Views</div>
-      <div class="video-likepct hide-mobile">Like %</div>
-      <div class="video-comments hide-mobile">Comments</div>
+      <div class="video-title sortable${ovSortCls('title')}" data-ov-sort="title">Title${ovSortArrow('title')}</div>
+      <div class="video-duration sortable hide-mobile${ovSortCls('duration')}" data-ov-sort="duration">Duration${ovSortArrow('duration')}</div>
+      <div class="video-views sortable${ovSortCls('views')}" data-ov-sort="views">Views${ovSortArrow('views')}</div>
+      <div class="video-likepct sortable hide-mobile${ovSortCls('likepct')}" data-ov-sort="likepct">Like %${ovSortArrow('likepct')}</div>
+      <div class="video-comments sortable hide-mobile${ovSortCls('comments')}" data-ov-sort="comments">Comments${ovSortArrow('comments')}</div>
       ${showTopics?'<div class="video-topic hide-mobile">Topic</div>':''}
     </div>`;
   const row = v => `<div class="video-row ${rowCls}">
@@ -2293,14 +2317,30 @@ function refresh(month){
 // re-renders just the month-detail body (preserves the expanded state).
 document.addEventListener('click', (e) => {
   const mb = e.target.closest('[data-ov-more]');
-  if (!mb) return;
-  const key = mb.dataset.ovMore;
-  ovMonthShown[key] = (ovMonthShown[key] || OV_BATCH) + OV_BATCH;
-  const ms = document.getElementById('msel');
-  const body = document.getElementById('ovMdBody');
-  if (ms && body && typeof SCOPES !== 'undefined') {
-    const d = SCOPES[scope] && SCOPES[scope][ms.value];
-    if (d) body.innerHTML = renderOvMonthVideos(d.vlist || [], ms.value);
+  if (mb) {
+    const key = mb.dataset.ovMore;
+    ovMonthShown[key] = (ovMonthShown[key] || OV_BATCH) + OV_BATCH;
+    const ms = document.getElementById('msel');
+    const body = document.getElementById('ovMdBody');
+    if (ms && body && typeof SCOPES !== 'undefined') {
+      const d = SCOPES[scope] && SCOPES[scope][ms.value];
+      if (d) body.innerHTML = renderOvMonthVideos(d.vlist || [], ms.value);
+    }
+    return;
+  }
+  // Overview list column sort
+  const sb = e.target.closest('#ovMdBody [data-ov-sort]');
+  if (sb) {
+    const col = sb.dataset.ovSort;
+    if (ovSort.by === col) ovSort.dir = ovSort.dir === 'asc' ? 'desc' : 'asc';
+    else { ovSort.by = col; ovSort.dir = col === 'title' ? 'asc' : 'desc'; }
+    ovMonthShown = { long: OV_BATCH, short: OV_BATCH }; // reset paging on re-sort
+    const ms = document.getElementById('msel');
+    const body = document.getElementById('ovMdBody');
+    if (ms && body && typeof SCOPES !== 'undefined') {
+      const d = SCOPES[scope] && SCOPES[scope][ms.value];
+      if (d) body.innerHTML = renderOvMonthVideos(d.vlist || [], ms.value);
+    }
   }
 });
 /* ============================================================
