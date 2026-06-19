@@ -36,7 +36,7 @@
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:28px;line-height:1.5}
-.wrap{max-width:880px;margin:0 auto}
+.wrap{max-width:1060px;margin:0 auto}
 .util-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:0.9rem;flex-wrap:wrap}
 .util-updated{font-size:0.78rem;color:var(--text-dim);font-weight:600}
 .util-cluster{display:flex;align-items:center;gap:0.5rem;margin-left:auto}
@@ -62,7 +62,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 
 
-.report{background:var(--bg);border-radius:16px}
+.report{background:var(--bg);border-radius:16px;max-width:880px;margin-left:auto;margin-right:auto}
 .brand{display:flex;align-items:center;gap:0.7rem;margin-bottom:1.15rem}
 .brand-logo{width:40px;height:40px;flex:0 0 40px}
 .brand-text .bn{font-size:1.18rem;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
@@ -833,17 +833,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .video-topic.untagged {color: var(--text-dim); font-style: italic; opacity: 0.6;}
 .group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
 .video-row {display: grid;
-    grid-template-columns: 90px 1fr 80px 110px 130px;
+    grid-template-columns: 90px 1fr 80px 110px 75px 90px 130px;
     gap: 0.75rem;
     padding: 0.55rem 0.9rem;
     font-size: 0.85rem;
     align-items: center;
     border-bottom: 1px solid var(--border);}
-.video-row.with-channel {grid-template-columns: 90px 120px 1fr 80px 110px 130px;}
+.video-row.with-channel {grid-template-columns: 90px 120px 1fr 80px 110px 75px 90px 130px;}
 /* When topic data unavailable (non-TQ channels), the .no-topics modifier
      drops the topic column so rows still align cleanly. */
-  .video-row.no-topics {grid-template-columns: 90px 1fr 80px 110px;}
-.video-row.with-channel.no-topics {grid-template-columns: 90px 120px 1fr 80px 110px;}
+  .video-row.no-topics {grid-template-columns: 90px 1fr 80px 110px 75px 90px;}
+.video-row.with-channel.no-topics {grid-template-columns: 90px 120px 1fr 80px 110px 75px 90px;}
 .video-row:last-child {border-bottom: none;}
 .video-row:hover {background: var(--surface-2);}
 .video-date {color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.85rem;}
@@ -1062,6 +1062,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ad-panel-body {padding: 0 0.85rem 0.85rem;}
 .video-duration {color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.85rem;}
 .video-views {font-weight: 500; font-variant-numeric: tabular-nums; text-align: right;}
+.video-likepct {font-variant-numeric: tabular-nums; text-align: right; color: var(--text-muted);}
+.video-comments {font-variant-numeric: tabular-nums; text-align: right; color: var(--text-muted);}
 /* Column header row inside groups */
   .video-row-header {background: var(--surface-2);
     position: sticky;
@@ -1094,20 +1096,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     line-height: 1;
     color: var(--text-dim);}
 .sort-arrow.active {color: var(--accent);}
-.video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
-.video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
-.video-row .video-duration,
+@media(max-width:760px){
+  .video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
+  .video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
+  .video-row .video-duration,
     .video-row .video-channel,
     .video-row .hide-mobile {display: none !important;}
-.video-title {white-space: normal;}
-.video-title-channel-tag {display: block;}
-.video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
-.video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
-.video-row .video-duration,
-    .video-row .video-channel,
-    .video-row .hide-mobile {display: none !important;}
-.video-title {white-space: normal;}
-.video-title-channel-tag {display: block;}
+  .video-title {white-space: normal;}
+  .video-title-channel-tag {display: block;}
+}
 
 /* Overview collapsible month-detail (video list at bottom of report) */
 .ov-month-detail{margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1rem}
@@ -5362,6 +5359,8 @@ function renderVideoRows(videos, emptyText) {
         <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${adBadge}${likeBadge}${renamedBadge}${titleSubtitle}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
+        <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
+        <div class="video-comments hide-mobile">${v.comments != null ? fmt(v.comments) : '—'}</div>
         ${showTopics ? renderTopicCell(v) : ''}
       </div>
     `;
@@ -5381,6 +5380,12 @@ function sortVideos(list, sortBy, sortDir) {
       cmp = a.publishedAt.localeCompare(b.publishedAt);
     } else if (sortBy === 'duration') {
       cmp = (a.durationSec || 0) - (b.durationSec || 0);
+    } else if (sortBy === 'likepct') {
+      const ra = (a.views > 0 && a.likes != null) ? a.likes / a.views : -1;
+      const rb = (b.views > 0 && b.likes != null) ? b.likes / b.views : -1;
+      cmp = ra - rb;
+    } else if (sortBy === 'comments') {
+      cmp = (a.comments || 0) - (b.comments || 0);
     } else { // views
       cmp = (a.views || 0) - (b.views || 0);
     }
@@ -5821,6 +5826,8 @@ function renderWindowList(startDate, endDate) {
       <div class="video-title">Title</div>
       <div class="video-duration sortable hide-mobile${sortableClass(windowListState, 'duration')}" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
+      <div class="video-likepct sortable hide-mobile${sortableClass(windowListState, 'likepct')}" data-sort="likepct">Like %${sortArrow(windowListState, 'likepct')}</div>
+      <div class="video-comments sortable hide-mobile${sortableClass(windowListState, 'comments')}" data-sort="comments">Comments${sortArrow(windowListState, 'comments')}</div>
     </div>
   `;
 
