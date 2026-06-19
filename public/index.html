@@ -478,6 +478,141 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-time-btn:hover{color:var(--text);border-color:var(--border-strong)}
 .an-time-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
+
+/* Revenue panel container */
+.revenue-panel{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.revenue-panel-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
+.revenue-panel-body{padding:0 1.4rem 1.4rem}
+.revenue-chart-wrap{position:relative;margin:1rem 0}
+#revenueChart{width:100%;height:auto;display:block}
+
+/* Revenue band swatch — translucent fill matching the chart's revenue band. */
+  .trend-legend-swatch.revenue-band {background: var(--up);
+    opacity: 0.22;
+    height: 10px;
+    border-radius: 2px;}
+.revenue-panel {background: var(--surface);
+    border: 1px solid var(--up);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    margin: 0 0 1.5rem;
+    /* Note: no `overflow: hidden` here — the chart tooltip inside the panel
+       body needs to be free to extend beyond the panel edges. The toggle
+       button below clips its own hover background to the rounded corners
+       individually via the toggle's own border-radius. */}
+.revenue-panel-toggle {display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background 0.12s;
+    /* Match panel's top corners so hover background doesn't bleed past them
+       (the panel no longer uses overflow:hidden — see note there). */
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);}
+.revenue-panel-toggle:hover {background: var(--surface-2);}
+.revenue-panel-toggle:focus-visible {outline: 2px solid var(--accent); outline-offset: -2px;}
+.revenue-panel-header {display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;}
+.revenue-panel-header-left {display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;}
+.revenue-panel-eyebrow {font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--up);}
+.revenue-panel-summary {font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;}
+.revenue-panel-caret {width: 9px;
+    height: 9px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    margin-right: 0.15rem;}
+.revenue-panel-toggle[aria-expanded="true"] .revenue-panel-caret {transform: rotate(-135deg);
+    margin-top: 4px;}
+/* Expanded body — chart, breakdown table, methodology */
+  .revenue-panel-body {padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);}
+/* Chart wrap inside the panel — relative-positioned so the absolute
+     tooltip can anchor to it. Slightly inset from the panel body padding
+     so the chart doesn't bleed visually into the table below. */
+  .revenue-chart-wrap {position: relative;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 1rem 0.85rem 0.5rem;
+    margin: 1rem 0 0.5rem;}
+.revenue-chart-legend {display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 0.4rem;}
+.trend-legend-swatch.revenue-mid {background: var(--up);
+    height: 2px;}
+.revenue-breakdown {width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;}
+.revenue-breakdown th {text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);}
+.revenue-breakdown th.num {text-align: right;}
+.revenue-breakdown td {padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--border);}
+.revenue-breakdown td.num {text-align: right;}
+.revenue-breakdown tr.total td {border-bottom: none;
+    border-top: 2px solid var(--border-strong);
+    font-weight: 700;
+    padding-top: 0.7rem;}
+/* Scenario toggle sits at the top of the panel body, above the chart. */
+  .revenue-scenario-toggle {margin: 0 0 0.8rem;}
+/* Per-scenario explanation — directly under the breakdown table, visually
+     distinct from the footnote (slightly larger, brighter) so it reads as
+     the explanation OF the numbers, not boilerplate. */
+  .revenue-scenario-explanation {font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    padding: 0.8rem 0.9rem;
+    margin-top: 0.8rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);}
+.revenue-scenario-explanation strong {color: var(--text);}
+.revenue-breakdown .rev-category {color: var(--text);}
+.revenue-breakdown .rev-subdetail {color: var(--text-dim);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;}
+.revenue-breakdown .rev-range {color: var(--text);
+    font-variant-numeric: tabular-nums;}
+.revenue-panel-footnote {font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 1rem;
+    line-height: 1.55;}
+.revenue-panel-footnote strong {color: var(--text);}
+.revenue-panel-toggle {padding: 0.7rem 0.85rem;}
+.revenue-panel-body {padding: 0 0.85rem 0.85rem;}
+.revenue-breakdown {font-size: 0.85rem;}
+.revenue-breakdown th,
+    .revenue-breakdown td {padding: 0.45rem 0.4rem;}
 </style>
 </head>
 <body>
@@ -523,6 +658,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
            full-history chart, so these stay empty/unused but must exist) -->
       <input type="hidden" id="startDate"><input type="hidden" id="endDate">
     </div>
+    <div class="revenue-panel" id="revenuePanel" hidden></div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
@@ -2913,9 +3049,24 @@ function niceDurationAxis(minSec, maxSec) {
     ANALYTICS_CHANNEL = sc === 'ALL' ? 'ALL' : (HANDLE_TO_ID[sc] || 'ALL');
     monthlyData = buildMonthlyData(ANALYTICS_CHANNEL);
     applyTimeFilter();
+    // Sync the hidden date inputs the revenue panel reads, to the active window.
+    syncDateInputsToWindow();
     likeRateBaselines = computeAnalyticsBaselines();
     renderTrendChart(true);
+    if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
   };
+  // Set #startDate/#endDate to span the currently-filtered monthlyData window,
+  // so the revenue panel (which reads those inputs) matches the chart.
+  function syncDateInputsToWindow(){
+    const sd = document.getElementById('startDate'), ed = document.getElementById('endDate');
+    if (!sd || !ed) return;
+    if (!monthlyData.length) { sd.value=''; ed.value=''; return; }
+    const first = monthlyData[0].key, last = monthlyData[monthlyData.length-1].key;
+    sd.value = first + '-01';
+    const [ly, lm] = last.split('-').map(Number);
+    const lastDay = new Date(ly, lm, 0).getDate();
+    ed.value = `${last}-${String(lastDay).padStart(2,'0')}`;
+  }
   window.setAnalysisTimePreset = function(p){ anTimePreset = p; window.renderAnalysisChart(); };
   // expose metric/viewMode setters for the controls
   window.setAnalysisMetric = function(m){ chartMetric = m; window.renderAnalysisChart(); };
@@ -2941,6 +3092,249 @@ function niceDurationAxis(minSec, maxSec) {
     }
     return m;
   }
+
+  // ---- Revenue panel (ported) ----
+  let revenueScenario = 'pessimistic';
+  let revenuePanelExpanded = false;
+  function anFilteredVideos(){
+  if (!ANALYTICS_DATASET?.videos) return [];
+  if (ANALYTICS_CHANNEL === 'ALL') return ANALYTICS_DATASET.videos;
+  return ANALYTICS_DATASET.videos.filter(v => v.channelId === ANALYTICS_CHANNEL);
+}
+  function fmtUSD(amount, compact = false) {
+  amount = Math.max(0, amount);
+  if (compact && amount >= 1000) {
+    if (amount >= 1e6) return '$' + (amount / 1e6).toFixed(amount >= 1e7 ? 0 : 1) + 'M';
+    return '$' + (amount / 1000).toFixed(amount >= 10000 ? 0 : 1) + 'k';
+  }
+  return '$' + Math.round(amount).toLocaleString('en-US');
+}
+  function summariseRevenue(videos) {
+  const buckets = {
+    longFormMidRoll: { views: 0, count: 0 },
+    longFormShort: { views: 0, count: 0 },
+    shorts: { views: 0, count: 0 }
+  };
+  for (const v of videos) {
+    if (v.unavailable) continue;
+    const views = v.views || 0;
+    if (!views) continue;
+    if (v.isShort) {
+      buckets.shorts.views += views;
+      buckets.shorts.count++;
+    } else if ((v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC) {
+      buckets.longFormMidRoll.views += views;
+      buckets.longFormMidRoll.count++;
+    } else {
+      buckets.longFormShort.views += views;
+      buckets.longFormShort.count++;
+    }
+  }
+  function bucketRevenue(b, rpm, rpmPess) {
+    return {
+      ...b,
+      low: (b.views / 1000) * rpm.low,
+      high: (b.views / 1000) * rpm.high,
+      pessLow: (b.views / 1000) * rpmPess.low,
+      pessHigh: (b.views / 1000) * rpmPess.high,
+      rpmLow: rpm.low,
+      rpmHigh: rpm.high
+    };
+  }
+  return {
+    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, AN_RPM.longFormMidRoll, AN_RPM_PESSIMISTIC.longFormMidRoll),
+    longFormShort: bucketRevenue(buckets.longFormShort, AN_RPM.longFormShort, AN_RPM_PESSIMISTIC.longFormShort),
+    shorts: bucketRevenue(buckets.shorts, AN_RPM.shorts, AN_RPM_PESSIMISTIC.shorts),
+    totalLow: 0,
+    totalHigh: 0,
+    totalViews: 0
+  };
+}
+  window.renderRevenuePanel = function renderRevenuePanel() {
+  const panel = document.getElementById('revenuePanel');
+  if (!panel) return;
+
+  // Show for any view including ALL — all the channels we track are in the
+  // same broad niche (political/commentary/creator drama), so the blended
+  // estimate is meaningful as "network total". Only suppress if there's no
+  // dataset at all.
+  if (!ANALYTICS_DATASET?.videos) {
+    panel.hidden = true;
+    return;
+  }
+  // Use the currently-filtered video set so the estimate matches the user's
+  // active date range. Reuses existing video filter logic from rebuild().
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  if (!startDate || !endDate) { panel.hidden = true; return; }
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
+  const videos = anFilteredVideos().filter(v => {
+    const d = new Date(v.publishedAt);
+    return d >= start && d <= end;
+  });
+  if (!videos.length) { panel.hidden = true; return; }
+
+  const rev = summariseRevenue(videos);
+  rev.totalLow = rev.longFormMidRoll.low + rev.longFormShort.low + rev.shorts.low;
+  rev.totalHigh = rev.longFormMidRoll.high + rev.longFormShort.high + rev.shorts.high;
+  rev.totalPessLow = rev.longFormMidRoll.pessLow + rev.longFormShort.pessLow + rev.shorts.pessLow;
+  rev.totalPessHigh = rev.longFormMidRoll.pessHigh + rev.longFormShort.pessHigh + rev.shorts.pessHigh;
+  rev.totalViews = rev.longFormMidRoll.views + rev.longFormShort.views + rev.shorts.views;
+
+  if (rev.totalViews === 0) { panel.hidden = true; return; }
+
+  function rangeLabel() {
+    const dayMs = 86400000;
+    // Floor, not round — the end date is set to 23:59:59 to include videos
+    // published anytime on that day, so the raw delta is always (N days + ~24h).
+    // Rounding would consistently produce N+1; flooring gives the intuitive N.
+    const days = Math.floor((end - start) / dayMs);
+    if (days <= 32) return `${days} days`;
+    const months = Math.round(days / 30.4);
+    if (months <= 14) return `${months} months`;
+    const years = (days / 365.25);
+    return years < 2 ? `${years.toFixed(1)} years` : `${Math.round(years)} years`;
+  }
+
+  // Scenario-aware accessors. 'pessimistic' uses the pess* figures and
+  // AN_RPM_PESSIMISTIC labels; 'optimistic' uses the published-rate figures.
+  const isPess = revenueScenario === 'pessimistic';
+  const activeRPM = isPess ? AN_RPM_PESSIMISTIC : AN_RPM;
+  const bucketLow = b => isPess ? b.pessLow : b.low;
+  const bucketHigh = b => isPess ? b.pessHigh : b.high;
+  const activeTotalLow = isPess ? rev.totalPessLow : rev.totalLow;
+  const activeTotalHigh = isPess ? rev.totalPessHigh : rev.totalHigh;
+
+  function row(label, bucket, tier) {
+    if (bucket.count === 0) return '';
+    const rpm = activeRPM[tier];
+    const sublabel = `RPM $${rpm.low.toFixed(2)}-$${rpm.high.toFixed(2)}`;
+    return `
+      <tr>
+        <td>
+          <div class="rev-category">${label}</div>
+          <div class="rev-subdetail">${fmt(bucket.count)} videos · ${fmt(bucket.views)} views · ${sublabel}</div>
+        </td>
+        <td class="num"><span class="rev-range">${fmtUSD(bucketLow(bucket))} – ${fmtUSD(bucketHigh(bucket))}</span></td>
+      </tr>
+    `;
+  }
+
+  const summary = `${fmtUSD(activeTotalLow, true)} – ${fmtUSD(activeTotalHigh, true)} over ${rangeLabel()} (${isPess ? 'Pessimistic' : 'Optimistic'})`;
+
+  // Per-scenario explanation shown directly under the breakdown table.
+  // Kept punchy — the shared methodology details live in the footnote below.
+  const scenarioExplanation = isPess
+    ? `<strong>Pessimistic scenario.</strong> Stacks three drags specific to this channel:
+       an audience demographic with the web's highest ad-block rates (blocked views count
+       as views but earn $0); routine limited-ads ("yellow icon") treatment on culture-war
+       topics; and 80+ uploads a month watched by the same core viewers, which trips
+       YouTube's per-viewer ad frequency caps. Long-form RPM floor: $0.85-$1.28.`
+    : `<strong>Optimistic scenario.</strong> Uses published RPM ranges for commentary/creator-drama
+       channels, already discounted for this channel's documented demonetisation drag. Assumes a
+       mostly-monetisable catalogue, US-heavy audience, and typical ad-block mix. Long-form RPM:
+       $2.00-$3.25.`;
+
+  panel.hidden = false;
+  // Apply the persisted expanded state so the panel doesn't snap closed
+  // every time a filter change triggers a re-render.
+  panel.innerHTML = `
+    <button type="button" class="revenue-panel-toggle" aria-expanded="${revenuePanelExpanded}" id="revenuePanelToggle">
+      <div class="revenue-panel-header">
+        <div class="revenue-panel-header-left">
+          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
+          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Two scenarios available — expand to switch and see the assumptions behind each.">${summary}</span>
+        </div>
+        <span class="revenue-panel-caret" aria-hidden="true"></span>
+      </div>
+    </button>
+    <div class="revenue-panel-body" id="revenuePanelBody"${revenuePanelExpanded ? '' : ' hidden'}>
+      <!-- Scenario toggle — reuses the chart-metric-toggle tab styling for
+           visual consistency with the main chart's tabs. -->
+      <div class="chart-metric-toggle revenue-scenario-toggle" role="tablist" aria-label="Revenue scenario">
+        <button type="button" data-revenue-scenario="pessimistic" role="tab" aria-selected="${isPess}" class="${isPess ? 'active' : ''}">Pessimistic</button>
+        <button type="button" data-revenue-scenario="optimistic" role="tab" aria-selected="${!isPess}" class="${isPess ? '' : 'active'}">Optimistic</button>
+      </div>
+      <!-- Revenue chart — sized to the panel width, sits above the breakdown
+           table as the dramatic visual that sells the story. -->
+      <div class="revenue-chart-wrap" id="revenueChartWrap">
+        <svg id="revenueChart" viewBox="0 0 720 280" role="img" aria-label="Estimated revenue trend over time"></svg>
+        <div class="chart-tooltip" id="revenueChartTooltip" style="display: none;"></div>
+        <div class="revenue-chart-legend" id="revenueChartLegend"></div>
+      </div>
+      <table class="revenue-breakdown">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th class="num">Estimated range (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${row('Long-form (8 min+, mid-roll eligible)', rev.longFormMidRoll, 'longFormMidRoll')}
+          ${row('Long-form (under 8 min)', rev.longFormShort, 'longFormShort')}
+          ${row('Shorts', rev.shorts, 'shorts')}
+          <tr class="total">
+            <td><strong>Total estimated ad revenue</strong></td>
+            <td class="num"><strong>${fmtUSD(activeTotalLow)} – ${fmtUSD(activeTotalHigh)}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="revenue-scenario-explanation">${scenarioExplanation}</div>
+    </div>
+  `;
+
+  const toggle = document.getElementById('revenuePanelToggle');
+  const body = document.getElementById('revenuePanelBody');
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    const next = !expanded;
+    toggle.setAttribute('aria-expanded', String(next));
+    body.hidden = !next;
+    // Persist so subsequent re-renders (from filter changes) don't reset.
+    revenuePanelExpanded = next;
+  });
+
+  // Scenario toggle — switching re-renders the whole panel (summary, chart,
+  // table, and explanation all depend on the active scenario).
+  panel.querySelectorAll('[data-revenue-scenario]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.revenueScenario;
+      if (next === revenueScenario) return;
+      revenueScenario = next;
+      window.renderRevenuePanel();
+    });
+  });
+
+  // Render the trend chart inside the panel body. Uses the same monthlyData
+  // that the main views chart uses, so the chart's window matches the
+  // user's active date filter (and the headline summary above it).
+  // The chart is hidden along with the rest of the body when the panel is
+  // collapsed; expanding the panel reveals the chart with its data already
+  // there — no lazy load needed since the SVG is cheap.
+  // In short windows (≤32 days) the chart is month-to-month so there's
+  // nothing meaningful to plot — toggle, table, and explanation still work,
+  // but the chart wrap must be explicitly hidden so it doesn't take space.
+  const chartWrap = document.getElementById('revenueChartWrap');
+  let chartRendered = false;
+  if (monthlyData && monthlyData.length) {
+    const now = new Date();
+    const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+    const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
+    const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
+    if (chartData.length >= 2) {
+      renderRevenueChart(chartData, inProgressMonth, {
+        svgId: 'revenueChart',
+        legendId: 'revenueChartLegend',
+        wrapEl: chartWrap,
+        tooltipEl: 'revenueChartTooltip'
+      });
+      chartRendered = true;
+    }
+  }
+  if (chartWrap && !chartRendered) chartWrap.style.display = 'none';
+};
+
 })();
 
 
