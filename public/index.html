@@ -48,7 +48,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .util-social{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:background .12s,color .12s,border-color .12s}
 .util-social:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
-.util-social.bmac:hover{color:#0d0c0c;background:#ffdd00;border-color:#ffdd00}
+.util-social.bmac{width:auto;gap:0.4rem;padding:0 0.7rem;background:#ffdd00;border-color:#ffdd00;color:#0d0c0c;font-family:inherit;font-size:0.8rem;font-weight:800;text-decoration:none}
+.util-social.bmac:hover{background:#ffe533;border-color:#ffe533;color:#0d0c0c}
+.bmac-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
 .ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
 .ds-tab:hover{color:var(--text)}
@@ -722,6 +724,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     border-radius: 5px; cursor: pointer; white-space: nowrap; transition: background .12s, color .12s;}
 .wf-btn:hover {color: var(--text);}
 .wf-btn.active {background: var(--accent); color: #fff;}
+.ad-only-btn {flex: none; appearance: none; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 7px; color: var(--text-muted);
+    font-family: inherit; font-size: 0.78rem; font-weight: 700; padding: 0.36rem 0.65rem;
+    cursor: pointer; white-space: nowrap; transition: background .12s, color .12s, border-color .12s;}
+.ad-only-btn:hover {color: var(--text); border-color: var(--accent);}
+.ad-only-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
 .window-list .window-list-search input:focus {outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-soft);}
@@ -1117,10 +1125,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .video-row-header:hover {background: var(--surface-2);}
 .video-row-header .sortable {cursor: pointer;
     user-select: none;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.25rem;
     transition: color 0.12s;}
+.video-row-header .video-duration.sortable,
+  .video-row-header .video-views.sortable,
+  .video-row-header .video-likepct.sortable,
+  .video-row-header .video-comments.sortable {justify-content: center;}
 .video-row-header .sortable:hover {color: var(--text);}
 .video-row-header .sortable.active-sort {color: var(--accent);}
 .video-row-header .sortable.active-sort:hover {color: var(--accent);}
@@ -1630,6 +1642,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <div class="util-cluster">
       <a class="util-social bmac" href="https://buymeacoffee.com/jerminaldecline" target="_blank" rel="noopener" title="Buy Me a Coffee" aria-label="Support on Buy Me a Coffee">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.241-.152-.143-.196-.366-.231-.572-.065-.378-.125-.756-.192-1.133-.057-.325-.102-.69-.25-.987-.195-.4-.597-.634-.996-.788a5.723 5.723 0 00-.626-.194c-1-.263-2.05-.36-3.077-.416a25.834 25.834 0 00-3.7.062c-.915.083-1.88.184-2.75.5-.318.116-.646.256-.888.501-.297.302-.393.77-.177 1.146.154.267.415.456.692.58.36.162.737.284 1.123.366 1.075.238 2.189.331 3.287.37 1.218.05 2.437.01 3.65-.118.299-.033.598-.073.896-.119.352-.054.578-.513.474-.834-.124-.383-.457-.531-.834-.473-.466.074-.96.108-1.382.146-1.177.08-2.358.082-3.536.006a22.228 22.228 0 01-1.157-.107c-.086-.01-.18-.025-.258-.036-.243-.036-.484-.08-.724-.13-.111-.027-.111-.185 0-.212h.005c.277-.06.557-.108.838-.147h.002c.131-.009.263-.032.394-.048a25.076 25.076 0 013.426-.12c.674.019 1.347.067 2.017.144l.228.031c.267.04.533.088.798.145.392.085.895.113 1.07.542.055.137.08.288.111.431l.319 1.484a.237.237 0 01-.199.284h-.003c-.037.006-.075.01-.112.015a36.704 36.704 0 01-4.743.295 37.059 37.059 0 01-4.699-.304c-.14-.017-.293-.042-.417-.06-.326-.048-.649-.108-.973-.161-.393-.065-.768-.032-1.123.161-.29.16-.527.404-.675.701-.154.316-.199.66-.267 1.004-.069.346-.176.708-.135 1.061.087.753.613 1.365 1.37 1.502a39.69 39.69 0 0011.343.376.483.483 0 01.535.53l-.071.697-1.018 9.907c-.041.41-.047.832-.125 1.237-.122.637-.553 1.028-1.182 1.171-.577.131-1.165.2-1.756.205-.656.004-1.31-.025-1.966-.022-.699.004-1.556-.06-2.095-.58-.475-.458-.54-1.174-.605-1.793l-.731-7.013-.322-3.094c-.037-.351-.286-.695-.678-.678-.336.015-.718.3-.678.679l.228 2.185.949 9.112c.147 1.344 1.174 2.068 2.446 2.272.742.12 1.503.144 2.257.156.966.016 1.942.053 2.892-.122 1.408-.258 2.465-1.198 2.616-2.657.34-3.332.683-6.663 1.024-9.995l.215-2.087a.484.484 0 01.39-.426c.402-.078.787-.212 1.074-.518.455-.488.546-1.124.385-1.766zm-1.478.772c-.145.137-.363.201-.578.233-2.416.359-4.866.54-7.308.46-1.748-.06-3.477-.254-5.207-.498-.17-.024-.353-.055-.47-.18-.22-.236-.111-.71-.054-.995.052-.26.152-.609.463-.646.484-.057 1.046.148 1.526.22.577.088 1.156.159 1.737.212 2.48.226 5.002.19 7.472-.14.45-.06.899-.13 1.345-.21.399-.072.84-.206 1.08.206.166.281.188.657.162.974a.544.544 0 01-.169.283zm-9.728 3.95l.005-.005c.003-.003.005-.005.008-.005l-.013.01z"/></svg>
+        <span class="bmac-label">Buy me a coffee</span>
       </a>
       <div class="theme-seg" id="themeSeg" role="group" aria-label="Colour theme">
         <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system">System</button>
@@ -5384,7 +5397,7 @@ function formatViewsShort(n) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'all', longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   function ymLabel(isoDate){ const d=new Date(isoDate); const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getUTCMonth()]+" '"+String(d.getUTCFullYear()).slice(2); }
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -5916,6 +5929,11 @@ function renderWindowList(startDate, endDate) {
   if (showChannel && windowListState.channelFilter) {
     scopedVideos = allWindowVideos.filter(v => v.channelId === windowListState.channelFilter);
   }
+  // Apply ad-only filter if active (only meaningful when ad data is loaded)
+  const adDataAvailable = !!(adVideoIds && adVideoIds.size);
+  if (windowListState.adOnly && adDataAvailable) {
+    scopedVideos = scopedVideos.filter(v => adVideoIds.has(v.id));
+  }
 
   // Summary over the (channel-filtered) scope
   const longCount = scopedVideos.filter(v => !v.isShort && !v.unavailable).length;
@@ -5999,10 +6017,10 @@ function renderWindowList(startDate, endDate) {
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
       <div class="window-format-toggle" id="windowFormatToggle" role="group" aria-label="Video format">
-        <button type="button" class="wf-btn${windowListState.formatFilter==='all'?' active':''}" data-format="all">All</button>
         <button type="button" class="wf-btn${windowListState.formatFilter==='long'?' active':''}" data-format="long">Long-form</button>
         <button type="button" class="wf-btn${windowListState.formatFilter==='short'?' active':''}" data-format="short">Shorts</button>
       </div>
+      ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
     </div>
     ${breakdownHtml}
     <div class="window-list-stats">${statsLine}</div>
@@ -6048,6 +6066,14 @@ function renderWindowList(startDate, endDate) {
     if (chip && document.getElementById('windowList')?.contains(chip)) {
       const id = chip.dataset.channelFilter;
       windowListState.channelFilter = (windowListState.channelFilter === id) ? null : id;
+      resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Ads-only filter
+    const adBtn = e.target.closest('#adOnlyBtn');
+    if (adBtn && document.getElementById('windowList')?.contains(adBtn)) {
+      windowListState.adOnly = !windowListState.adOnly;
       resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
