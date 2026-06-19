@@ -88,3 +88,116 @@
 .ds-seg-btn.active{background:var(--surface);color:var(--accent)}
 .ds-seg-count{font-size:0.78rem;font-weight:600;color:var(--text-dim);font-variant-numeric:tabular-nums}
 .ds-seg-btn.active .ds-seg-count{color:var(--accent)}
+
+/* ============================================================
+   Report-style Overview body (ported from monthly.html, scoped
+   under #overviewReport to avoid collisions with styles.css).
+   ============================================================ */
+.overview-controls{display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem}
+.overview-controls-label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700}
+#overviewReport{margin-bottom:1.5rem}
+#overviewReport .rpt-empty{padding:2rem;text-align:center;color:var(--subtext);font-size:0.9rem}
+#overviewReport .brand-text .bn {font-size:1.18rem;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
+#overviewReport .brand-text .bd {font-size:0.8rem;color:var(--subtext)}
+#overviewReport .report-head .rsub {margin:0.15rem 0 0;color:var(--subtext);font-size:0.88rem}
+#overviewReport .scope-inline:hover {border-color:var(--accent)}
+#overviewReport .scope-inline option, #overviewReport .month-inline option {background:var(--surface);color:var(--text)}
+#overviewReport .peak-headline {display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+#overviewReport .peak-item .peak-label {font-size:0.74rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.3rem}
+#overviewReport .peak-item .peak-val {font-size:0.92rem;color:var(--subtext)}
+#overviewReport .peak-item .peak-num {font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
+#overviewReport .peak-item .peak-delta {color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
+#overviewReport .peak-item .peak-sub {font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
+#overviewReport .peak-headline {grid-template-columns:1fr}
+#overviewReport .hero {display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+#overviewReport .hero-card {background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.45rem}
+#overviewReport .hero-label {font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.5rem}
+#overviewReport .hero-num {font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
+#overviewReport .hero-sub {font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
+#overviewReport .deltas {display:flex;gap:0.6rem;margin-top:0.95rem;padding-top:0.8rem;border-top:1px solid var(--border)}
+#overviewReport .pill {display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.65rem;border-radius:8px;font-size:0.82rem;background:var(--surface-2)}
+#overviewReport .pill .pl {color:var(--subtext);font-size:0.78rem}
+#overviewReport .pill .pv {font-weight:700}
+#overviewReport .pill.up .pv {color:var(--up)}
+#overviewReport .pill.down .pv {color:var(--down)}
+#overviewReport .pill.flat .pv {color:var(--text-dim)}
+#overviewReport .stat-row {display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+#overviewReport .stat {background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
+#overviewReport .stat-num {font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
+#overviewReport .stat-lbl {font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
+#overviewReport .stat-deltas {display:flex;gap:0.5rem;margin-top:0.6rem}
+#overviewReport .mini {font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem}
+#overviewReport .mini .ml {color:var(--subtext)}
+#overviewReport .mini .mv {font-weight:700}
+#overviewReport .mini.up .mv {color:var(--up)}
+#overviewReport .mini.down .mv {color:var(--down)}
+#overviewReport .mini.flat .mv {color:var(--text-dim)}
+#overviewReport .highlights {display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+#overviewReport .hl {background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.95rem 1.15rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:0.7rem}
+#overviewReport .hl::before {content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+#overviewReport .hl.debate::before {background:var(--down)}
+#overviewReport .hl-label {font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.4rem;font-weight:700}
+#overviewReport .hl-title {display:inline;font-size:0.95rem;font-weight:700;line-height:1.3;margin-bottom:0.35rem;color:var(--text);text-decoration:none}
+#overviewReport .hl-title:hover {color:var(--accent);text-decoration:underline}
+#overviewReport .link-icon {display:inline-block;vertical-align:-1px;margin-left:0.3rem;color:var(--accent)}
+#overviewReport .hl-note {font-size:0.78rem;color:var(--subtext);line-height:1.4}
+#overviewReport .hl-ch {font-size:0.72rem;color:var(--text-dim);margin-top:0.15rem}
+#overviewReport .hl-stats {display:flex;gap:1.75rem;flex-wrap:wrap;padding-top:0.8rem;border-top:1px solid var(--border)}
+#overviewReport .hl-stat {display:flex;flex-direction:column;gap:0.1rem}
+#overviewReport .hl-stat .hsv {font-size:1.05rem;font-weight:800;color:var(--text);line-height:1.1}
+#overviewReport .hl-stat .hsl {font-size:0.7rem;color:var(--subtext);text-transform:uppercase;letter-spacing:0.04em}
+#overviewReport .lower {display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+#overviewReport .panel {background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
+#overviewReport .panel h3 {margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
+#overviewReport .toplist {list-style:none;margin:0;padding:0;font-size:0.87rem;display:flex;flex-direction:column;gap:0.65rem}
+#overviewReport .toplist li .row {display:flex;justify-content:space-between;margin-bottom:0.3rem}
+#overviewReport .toplist .cnt {color:var(--subtext);font-size:0.8rem}
+#overviewReport .toplist .tbar {height:7px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+#overviewReport .toplist .tbar span {display:block;height:100%;background:var(--accent);border-radius:4px;opacity:0.6}
+#overviewReport .toplist li:first-child .tbar {height:9px}
+#overviewReport .toplist li:first-child .tbar span {opacity:1}
+#overviewReport .toplist li:first-child .row span:first-child {font-weight:700}
+#overviewReport .toplist .empty {color:var(--text-dim);font-size:0.82rem}
+#overviewReport .cmp-table {width:100%;border-collapse:collapse;font-size:0.86rem}
+#overviewReport .cmp-table th {text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
+#overviewReport .cmp-table th:first-child {text-align:left}
+#overviewReport .cmp-table td {text-align:right;padding:0.5rem 0.4rem;border-bottom:1px solid var(--border)}
+#overviewReport .cmp-table td:first-child {text-align:left;color:var(--label)}
+#overviewReport .cmp-table tr:last-child td {border-bottom:none}
+#overviewReport .cmp-table .now {color:var(--text);font-weight:700}
+#overviewReport .section-divider {display:flex;align-items:center;gap:0.9rem;margin:1.6rem 0 1rem;color:var(--label);font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+#overviewReport .section-divider::before, #overviewReport .section-divider::after {content:"";height:1px;background:var(--border);flex:1}
+#overviewReport .breadth {display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0.5rem;margin-top:1rem}
+#overviewReport .shorts-strip {background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.35rem;display:flex;flex-direction:column;justify-content:flex-start;gap:1.3rem;border-left:3px solid var(--text-dim)}
+#overviewReport .shorts-label {font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700;margin-bottom:0.3rem}
+#overviewReport .shorts-sub {font-size:0.78rem;color:var(--subtext);line-height:1.45}
+#overviewReport .shorts-nums {display:flex;gap:2.5rem}
+#overviewReport .shorts-stat {display:flex;flex-direction:column;gap:0.2rem}
+#overviewReport .shorts-stat .ss-num {font-size:2rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);line-height:1}
+#overviewReport .shorts-stat .ss-lbl {font-size:0.72rem;color:var(--subtext);text-transform:uppercase;letter-spacing:0.04em}
+#overviewReport .best-short {margin-top:0.2rem;padding-top:1rem;border-top:1px solid var(--border)}
+#overviewReport .best-short .bs-label {font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700;margin-bottom:0.4rem}
+#overviewReport .best-short .bs-title {display:inline;font-size:0.9rem;font-weight:700;line-height:1.3;color:var(--text);text-decoration:none}
+#overviewReport .best-short .bs-title:hover {color:var(--accent);text-decoration:underline}
+#overviewReport .best-short .bs-meta {font-size:0.78rem;color:var(--subtext);margin-top:0.35rem}
+#overviewReport .best-short .bs-meta b {color:var(--text-muted);font-weight:700}
+#overviewReport .net-panel h3 {margin:0 0 0.85rem}
+#overviewReport .net-table {width:100%;border-collapse:collapse;font-size:0.84rem}
+#overviewReport .net-table th {font-size:0.68rem;color:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:0.25rem 0.35rem}
+#overviewReport .net-table .net-ch-h {text-align:left;vertical-align:bottom;padding-bottom:0.5rem}
+#overviewReport .net-table .net-grp {text-align:center;border-bottom:1px solid var(--border);padding-bottom:0.3rem}
+#overviewReport .net-table .net-grp-s {border-left:1px solid var(--border)}
+#overviewReport .net-table .net-sub {text-align:right;color:var(--subtext);font-size:0.62rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
+#overviewReport .net-table .net-sub.divcol {border-left:1px solid var(--border)}
+#overviewReport .net-table td {text-align:right;padding:0.45rem 0.35rem;border-bottom:1px solid var(--border)}
+#overviewReport .net-table td:first-child {text-align:left}
+#overviewReport .net-table td.divcol {border-left:1px solid var(--border)}
+#overviewReport .net-table tr:last-child td {border-bottom:none}
+#overviewReport .net-table tr.active td {color:var(--text)}
+#overviewReport .net-ch {color:var(--text);font-weight:600}
+#overviewReport .net-ch.dim {color:var(--text-dim);font-weight:500}
+#overviewReport .hero, #overviewReport .lower, #overviewReport .highlights, #overviewReport .breadth {grid-template-columns:1fr}
+#overviewReport .stat-row {grid-template-columns:repeat(2,1fr)}
+/* Legacy Overview elements retained for code paths (prediction reads peakStrip)
+   but superseded by #overviewReport — force-hide despite their class display. */
+#peakStrip[hidden], #heroStats[hidden], #composition[hidden]{display:none !important}

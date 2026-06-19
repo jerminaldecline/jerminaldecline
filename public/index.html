@@ -192,18 +192,15 @@
       <!-- ===== OVERVIEW tab: glance — peak/prediction + hero + composition ===== -->
       <section class="ds-tabpanel" data-panel="overview" id="dsPanelOverview">
 
-      <!-- Overview is single-month: this selector drives the peak strip, hero,
-           composition, and the month-detail below. Independent of the date-range
-           controls (which belong to Analysis/Videos). -->
+      <!-- Overview is single-month: this selector drives the report body
+           (peak headline + hero + stat cards + highlights + comparison +
+           shorts/network) and the month-detail below. -->
       <div class="overview-controls">
         <span class="overview-controls-label">Month</span>
         <select id="overviewMonthSel" class="ds-select"></select>
       </div>
 
-      <!-- Channel-derived summary block: peak/low strip and the satirical
-           prediction card. Sits just above the hero stats so it reads as
-           "what to watch for" framing immediately before the numbers themselves. -->
-      <div class="peak-strip" id="peakStrip"></div>
+      <!-- The satirical prediction card (kept; the report body renders below it). -->
       <div class="prediction-card" id="predictionCard" role="button" tabindex="0" aria-label="Shake for another opinion">
         <span class="prediction-text" id="predictionText">
           This channel is dying because… <strong id="predictionReason">…</strong>
@@ -211,12 +208,16 @@
         <span class="prediction-shake">New excuse</span>
       </div>
 
-      <div class="hero-grid" id="heroStats"></div>
-      <div class="composition" id="composition"></div>
-      <!-- Month detail at the bottom of Overview: a single collapsible month card
-           (the same component as the Analysis monthly list), bound to the latest
-           month, including the topic ribbon (share-of-videos + share-of-views
-           horizontal bars). Reuses renderMonthDetail/renderTopicRibbon. -->
+      <!-- Report-style Overview body (ported from monthly.html via renderOverviewReport). -->
+      <div id="overviewReport"></div>
+
+      <!-- Hidden legacy elements retained so existing code paths that reference
+           them don't error; the report body above supersedes them visually. -->
+      <div class="peak-strip" id="peakStrip" hidden></div>
+      <div class="hero-grid" id="heroStats" hidden></div>
+      <div class="composition" id="composition" hidden></div>
+      <!-- Month detail at the bottom of Overview: collapsible month card with the
+           topic ribbon (share-of-videos + share-of-views bars). -->
       <div id="overviewMonthDetail"></div>
       </section><!-- /Overview -->
 
@@ -3650,12 +3651,9 @@ function renderOverview() {
   const mom = momVids.length ? summarise(momVids) : null;
   const yoy = yoyVids.length ? summarise(yoyVids) : null;
 
-  // hero + composition (reuse existing renderers, month-scoped)
-  document.getElementById('heroStats').style.display = '';
-  document.getElementById('composition').style.display = '';
-  renderHeroStats(curr, yoy);
-  renderComposition(curr);
-  renderPeakStrip(); // peak strip is already channel-scoped/all-time
+  // report-style body (peak headline + hero + cards + highlights + comparison +
+  // shorts/network), scoped to the selected month + channel
+  renderOverviewReport(key);
 
   // month detail (the collapsible card + topic ribbon) for the selected month
   renderOverviewMonthDetail(key, currVids);
@@ -3677,7 +3675,7 @@ function renderOverviewMonthDetail(key, currVids) {
   host.innerHTML = `
     <h2 class="section-title overview-md-title">${m.label} in detail</h2>
     <div class="monthly-list overview-md-list">
-      <div class="month-row expanded${isInProgress ? ' in-progress' : ''}" data-idx="${idx}">
+      <div class="month-row${isInProgress ? ' in-progress' : ''}" data-idx="${idx}">
         <div class="month-header">
           <div class="month-name"><span class="caret"></span>${m.label}</div>
           <div class="month-cell num hide-mobile">
@@ -5441,6 +5439,252 @@ document.getElementById('downloadMonthlyCsv').addEventListener('click', () => {
     if (e.key === 'Escape' && currentMode) setMode(null);
   });
 })();
+
+/* ============================================================
+   Report-style Overview module (ported from monthly.html).
+   All rpt-namespaced to avoid collision with index.html.
+   Computes the report's per-month shape for ONE month+channel from
+   dataset.videos, then renders the report markup (hero + stat cards +
+   highlights + comparison + shorts/network) into #overviewReport.
+   Reuses index's existing `fmt`. selectedChannel + overviewMonth drive it.
+   ============================================================ */
+const RPT_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const rptFmtFull = n => (n||0).toLocaleString();
+const rptMoney = n => '$' + (n||0).toLocaleString();
+const rptMonthName = m => { const [y,mo]=m.split('-'); return RPT_MONTHS[mo-1]+' '+y; };
+const rptMonthShort = m => { const [y,mo]=m.split('-'); return RPT_MONTHS[mo-1].slice(0,3)+' '+y; };
+const rptMoAbbr = mm => { const [,mo]=mm.split('-'); return 'vs '+RPT_MONTHS[mo-1].slice(0,3); };
+const rptMoAbbrYr = mm => { const [y,mo]=mm.split('-'); return "vs "+RPT_MONTHS[mo-1].slice(0,3)+" '"+y.slice(2); };
+const rptPrevMonth = m => { const [y,mo]=m.split('-').map(Number); const d=new Date(y,mo-2); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
+const rptYoyMonth = m => { const [y,mo]=m.split('-'); return (y-1)+'-'+mo; };
+const rptYtLink = id => 'https://www.youtube.com/watch?v='+id;
+const RPT_LINK_ICON = `<svg class="link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>`;
+const RPT_RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60] };
+function rptRpmFor(d){ if(d>=480) return RPT_RPM.l8; if(d>=180) return RPT_RPM.l38; return RPT_RPM.sub3; }
+const RPT_CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@rcnightmare','@UnSleevedMedia'];
+function rptMedian(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
+function rptYm(v){ return v.publishedAt.slice(0,7); }
+
+function rptDcls(cur,prev,goodUp){
+  if(prev==null||prev===0||cur==null) return null;
+  const d=Math.round((cur-prev)/prev*100);
+  if(d===0) return {cls:'flat',txt:'▬ 0%'};
+  const pos=d>0; const arrow=(pos?'▲':'▼')+' '+Math.abs(d)+'%';
+  if(goodUp===null) return {cls:'flat',txt:arrow};
+  const good=goodUp?pos:!pos;
+  return {cls:good?'up':'down',txt:arrow};
+}
+function rptPill(label,cur,prev,goodUp){ const d=rptDcls(cur,prev,goodUp);
+  if(!d) return '<span class="pill flat"><span class="pl">'+label+'</span><span class="pv">—</span></span>';
+  return '<span class="pill '+d.cls+'"><span class="pl">'+label+'</span><span class="pv">'+d.txt+'</span></span>'; }
+function rptMini(label,cur,prev,goodUp){ const d=rptDcls(cur,prev,goodUp); if(!d) return '';
+  return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span> <span class="mv">'+d.txt+'</span></span>'; }
+
+// channelId -> handle
+function rptHandle(channelId){ return (dataset?.channels?.[channelId]?.handle) || '?'; }
+function rptVstats(v){ return { title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:rptHandle(v.channelId) }; }
+function rptTopicName(topicId){ return (topicsData && topicsData[topicId] && topicsData[topicId].name) || topicId; }
+
+// Compute the report shape for ONE month, for a given channel scope.
+// scope: 'ALL' or a channelId. Returns null if no long-form that month.
+function rptComputeMonth(monthKey, scope){
+  const tags = topicTagsData || {};
+  const inScope = v => scope==='ALL' ? true : v.channelId===scope;
+  const vs=[], sh=[];
+  for(const v of dataset.videos){
+    if(!inScope(v)) continue;
+    if(rptYm(v)!==monthKey) continue;
+    if(v.isShort) sh.push(v); else vs.push(v);
+  }
+  const shorts={ n:sh.length, v:sh.reduce((s,x)=>s+(x.views||0),0), best:null };
+  if(sh.length){ const b=[...sh].sort((a,b)=>(b.views||0)-(a.views||0))[0]; shorts.best=rptVstats(b); }
+  if(!vs.length){ return { shortsOnly:true, shorts, n:0, tot:0 }; }
+  const views=vs.map(v=>v.views||0);
+  const lvs=vs.filter(v=>v.views>0&&v.likes!=null).map(v=>v.likes/v.views);
+  const crs=vs.filter(v=>v.views>0&&v.comments!=null).map(v=>v.comments/v.views);
+  const medCr=rptMedian(crs);
+  const durs=vs.filter(v=>v.durationSec).map(v=>v.durationSec);
+  const tc={}; for(const v of vs){ const t=tags[v.id]; if(t) tc[t]=(tc[t]||0)+1; }
+  const top=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([t,n])=>[rptTopicName(t),n]);
+  const topvid=rptVstats([...vs].sort((a,b)=>(b.views||0)-(a.views||0))[0]);
+  const cand=vs.filter(v=>(v.views||0)>=3000 && v.comments).map(v=>[v.comments/v.views,v]).sort((a,b)=>b[0]-a[0]);
+  let debate=null;
+  if(cand.length){ const [r,dv]=cand[0]; debate=rptVstats(dv); debate.crate=Math.round(r*1000)/10; debate.mult=medCr>0?Math.round(r/medCr*10)/10:null; }
+  return {
+    n:vs.length, tot:views.reduce((a,b)=>a+b,0), med:Math.round(rptMedian(views)),
+    lv: lvs.length?Math.round(rptMedian(lvs)*1000)/10:0,
+    comments: vs.reduce((s,v)=>s+(v.comments||0),0),
+    avglen: durs.length?Math.round(rptMedian(durs)/60*10)/10:0,
+    runtime: durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/3600*10)/10:0,
+    revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rptRpmFor(v.durationSec||600)[0],0)),
+    revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rptRpmFor(v.durationSec||600)[1],0)),
+    top, topvid, debate, shorts
+  };
+}
+
+// Network breakdown for one month (always all-channel)
+function rptNetRows(monthKey, scope){
+  const agg={};
+  for(const v of dataset.videos){
+    if(rptYm(v)!==monthKey) continue;
+    const h=rptHandle(v.channelId);
+    (agg[h]=agg[h]||{ln:0,lv:0,sn:0,sv:0});
+    if(v.isShort){ agg[h].sn++; agg[h].sv+=v.views||0; } else { agg[h].ln++; agg[h].lv+=v.views||0; }
+  }
+  return RPT_CHAN_ORDER.filter(h=>agg[h] && (agg[h].ln+agg[h].sn)>0).map(h=>({h, ...agg[h]}));
+}
+
+// Peak / lowest-since-peak / last-seen for the scope (all-time long-form monthly totals)
+function rptPeaks(scope){
+  const inScope = v => scope==='ALL' ? true : v.channelId===scope;
+  const bym={};
+  for(const v of dataset.videos){ if(v.isShort||!inScope(v)) continue; const m=rptYm(v); bym[m]=(bym[m]||0)+(v.views||0); }
+  const nowMonth = new Date().toISOString().slice(0,7);
+  const ms=Object.keys(bym).filter(m=>m>='2017-07' && m<nowMonth).sort();
+  if(!ms.length) return null;
+  let pk=ms[0]; for(const m of ms){ if(bym[m]>bym[pk]) pk=m; }
+  const after=ms.filter(m=>m>pk);
+  let low=pk; for(const m of after){ if(bym[m]<bym[low]) low=m; }
+  let lastSeen=null;
+  const beforePeak=ms.filter(m=>m<pk);
+  for(let i=beforePeak.length-1;i>=0;i--){ if(bym[beforePeak[i]]<=bym[low]){ lastSeen=beforePeak[i]; break; } }
+  return { peakMonth:pk, peakViews:bym[pk], lowMonth:low, lowViews:bym[low],
+    pctFromPeak: bym[pk]>0?Math.round((bym[low]-bym[pk])/bym[pk]*100):0, lastSeenMonth:lastSeen };
+}
+
+function rptYearsAgo(m){
+  const [y,mo]=m.split('-').map(Number);
+  const then=new Date(y,mo-1,1), now=new Date();
+  const months=(now.getFullYear()-then.getFullYear())*12+(now.getMonth()-then.getMonth());
+  if(months<1) return 'this month';
+  if(months<12) return '≈ '+months+(months===1?' month':' months')+' ago';
+  const yrs=Math.round(months/12);
+  return '≈ '+yrs+(yrs===1?' year':' years')+' ago';
+}
+
+// Render the report-style Overview body for the given month + selectedChannel.
+function renderOverviewReport(monthKey){
+  const host = document.getElementById('overviewReport');
+  if(!host) return;
+  const scope = selectedChannel; // 'ALL' or channelId
+  const isAll = scope==='ALL';
+  const d = rptComputeMonth(monthKey, scope);
+  if(!d || d.shortsOnly || !d.n){ host.innerHTML = '<div class="rpt-empty">No long-form uploads for this month.</div>'; return; }
+  const pm=rptPrevMonth(monthKey), yo=rptYoyMonth(monthKey);
+  const p=rptComputeMonth(pm, scope); const pp = (p && !p.shortsOnly && p.n) ? p : null;
+  const y=rptComputeMonth(yo, scope); const yy = (y && !y.shortsOnly && y.n) ? y : null;
+  const lblMo=rptMoAbbr(pm), lblYr=rptMoAbbrYr(yo);
+  const SD=d.shorts||{n:0,v:0,best:null};
+  const revStr = rptMoney(d.revlo)+' – '+rptMoney(d.revhi);
+  const pk = rptPeaks(scope);
+
+  const cards=[
+    {num:d.n,lbl:'Long-form uploads',cur:d.n,p:pp&&pp.n,y:yy&&yy.n,goodUp:true},
+    {num:fmt(d.med),lbl:'Median views',cur:d.med,p:pp&&pp.med,y:yy&&yy.med,goodUp:true},
+    {num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:pp&&pp.lv,y:yy&&yy.lv,goodUp:true},
+    {num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:pp&&pp.comments,y:yy&&yy.comments,goodUp:true},
+    {num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:pp&&pp.runtime,y:yy&&yy.runtime,goodUp:null},
+    {num:d.avglen+' min',lbl:'Median video length',cur:d.avglen,p:pp&&pp.avglen,y:yy&&yy.avglen,goodUp:null}
+  ];
+  const cardHTML=cards.map(c=>{
+    const mm=rptMini(lblMo,c.cur,c.p,c.goodUp), my=rptMini(lblYr,c.cur,c.y,c.goodUp);
+    const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
+    return `<div class="stat"><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}</div>${deltas}</div>`;
+  }).join('');
+
+  const hlStats = (s)=>{ const item=(label,val)=>`<div class="hl-stat"><span class="hsv">${val.toLocaleString()}</span><span class="hsl">${label}</span></div>`;
+    return `<div class="hl-stats">${item('views',s.views)}${item('comments',s.comments)}${item('likes',s.likes)}</div>`; };
+  const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
+  const topHTML = d.topvid ? `<div class="hl"><div>
+      <div class="hl-label">Top video this month</div>
+      <a class="hl-title" href="${rptYtLink(d.topvid.id)}" target="_blank" rel="noopener">${escapeHtml(d.topvid.title)}${RPT_LINK_ICON}</a>
+      <div class="hl-note">The month's most-watched upload.</div>${chTag(d.topvid)}
+    </div>${hlStats(d.topvid)}</div>` : '';
+  const debHTML = d.debate ? `<div class="hl debate"><div>
+      <div class="hl-label">Most contentious</div>
+      <a class="hl-title" href="${rptYtLink(d.debate.id)}" target="_blank" rel="noopener">${escapeHtml(d.debate.title)}${RPT_LINK_ICON}</a>
+      <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>${chTag(d.debate)}
+    </div>${hlStats(d.debate)}</div>` : '';
+
+  const topicsHTML = d.top && d.top.length ? (()=>{ const maxTop=Math.max(...d.top.map(t=>t[1]),1);
+    return `<ul class="toplist">${d.top.map(t=>`<li><div class="row"><span>${escapeHtml(t[0])}</span><span class="cnt">${t[1]} video${t[1]>1?'s':''}</span></div><div class="tbar"><span style="width:${Math.round(t[1]/maxTop*100)}%"></span></div></li>`).join('')}</ul>`;
+  })() : '<div class="rpt-empty">No tagged uploads this month.</div>';
+
+  const netRows = rptNetRows(monthKey, scope).map(r=>{
+    const active = (!isAll && r.h===scope);
+    return `<tr class="${active?'active':''}"><td class="net-ch">${r.h}${active?' ◂':''}</td>
+      <td>${r.ln}</td><td>${fmt(r.lv)}</td><td class="divcol">${r.sn}</td><td>${fmt(r.sv)}</td></tr>`;
+  }).join('');
+
+  const peakHTML = pk ? `<div class="peak-headline">
+      <div class="peak-item"><div class="peak-label">All-time peak</div>
+        <div class="peak-val"><span class="peak-num">${fmt(pk.peakViews)}</span> long-form views</div>
+        <div class="peak-sub">${rptMonthName(pk.peakMonth)}</div></div>
+      <div class="peak-item"><div class="peak-label">Lowest since peak</div>
+        <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
+        <div class="peak-sub">${rptMonthName(pk.lowMonth)}${pk.lastSeenMonth ? ` · Last seen at this level: <strong>${rptMonthName(pk.lastSeenMonth)}</strong> · ${rptYearsAgo(pk.lastSeenMonth)}` : ''}</div></div>
+    </div>` : '';
+
+  host.innerHTML = `
+    ${peakHTML}
+    <div class="hero">
+      <div class="hero-card">
+        <div class="hero-label">Total views</div>
+        <div class="hero-num">${fmt(d.tot)}</div>
+        <div class="hero-sub">${rptFmtFull(d.tot)} views on ${d.n} long-form uploads</div>
+        <div class="deltas">${rptPill(lblMo,d.tot,pp&&pp.tot,true)}${rptPill(lblYr,d.tot,yy&&yy.tot,true)}</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Estimated ad revenue</div>
+        <div class="hero-num" style="font-size:2.05rem">${revStr}</div>
+        <div class="hero-sub">pessimistic estimate · long-form only</div>
+        <div class="deltas">${rptPill(lblMo,d.revlo,pp&&pp.revlo,true)}${rptPill(lblYr,d.revlo,yy&&yy.revlo,true)}</div>
+      </div>
+    </div>
+    <div class="stat-row">${cardHTML}</div>
+    <div class="highlights">${topHTML}${debHTML}</div>
+    <div class="lower">
+      <div class="panel"><h3>Top topics this month</h3>${topicsHTML}</div>
+      <div class="panel"><h3>Month &amp; year comparison</h3>
+        <table class="cmp-table">
+          <tr><th></th><th class="now">${rptMonthShort(monthKey)}</th><th>${rptMonthShort(pm)}</th><th>${rptMonthShort(yo)}</th></tr>
+          <tr><td>Total views</td><td class="now">${fmt(d.tot)}</td><td>${pp?fmt(pp.tot):'—'}</td><td>${yy?fmt(yy.tot):'—'}</td></tr>
+          <tr><td>Median views</td><td class="now">${fmt(d.med)}</td><td>${pp?fmt(pp.med):'—'}</td><td>${yy?fmt(yy.med):'—'}</td></tr>
+          <tr><td>Uploads</td><td class="now">${d.n}</td><td>${pp?pp.n:'—'}</td><td>${yy?yy.n:'—'}</td></tr>
+          <tr><td>Like rate</td><td class="now">${d.lv}%</td><td>${pp?pp.lv+'%':'—'}</td><td>${yy?yy.lv+'%':'—'}</td></tr>
+          <tr><td>Comments</td><td class="now">${fmt(d.comments)}</td><td>${pp?fmt(pp.comments):'—'}</td><td>${yy?fmt(yy.comments):'—'}</td></tr>
+          <tr><td>Est. revenue</td><td class="now">${rptMoney(d.revlo)}</td><td>${pp?rptMoney(pp.revlo):'—'}</td><td>${yy?rptMoney(yy.revlo):'—'}</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="breadth">
+      <div class="shorts-strip">
+        <div class="shorts-head">
+          <div class="shorts-label">Shorts activity this month</div>
+          <div class="shorts-sub">${isAll ? 'Across all channels' : 'On '+scope}</div>
+        </div>
+        <div class="shorts-nums">
+          <div class="shorts-stat"><span class="ss-num">${(SD.n).toLocaleString()}</span><span class="ss-lbl">Shorts uploaded</span></div>
+          <div class="shorts-stat"><span class="ss-num">${fmt(SD.v)}</span><span class="ss-lbl">Shorts views</span></div>
+        </div>
+        ${SD.best ? `<div class="best-short">
+          <div class="bs-label">Best short this month</div>
+          <a class="bs-title" href="${rptYtLink(SD.best.id)}" target="_blank" rel="noopener">${escapeHtml(SD.best.title)}${RPT_LINK_ICON}</a>
+          <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+SD.best.ch : ''}</div>
+        </div>` : ''}
+      </div>
+      <div class="panel net-panel">
+        <h3>Across the network</h3>
+        <table class="net-table">
+          <tr><th rowspan="2" class="net-ch-h">Channel</th><th colspan="2" class="net-grp">Long-form</th><th colspan="2" class="net-grp net-grp-s">Shorts</th></tr>
+          <tr><th class="net-sub">Uploads</th><th class="net-sub">Views</th><th class="net-sub divcol">Uploads</th><th class="net-sub">Views</th></tr>
+          ${netRows}
+        </table>
+      </div>
+    </div>
+  `;
+}
+
 
 /* ============================================================
    Tab shell controller (redesign Phase 3 — scaffolding).
