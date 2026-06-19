@@ -185,6 +185,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tb-group:last-child{margin-bottom:0}
 .tb-grouplabel{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:0.6rem}
 .tb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.6rem}
+.tsb{display:flex;flex-direction:column;gap:0.85rem}
+.tsb-bar{display:flex;width:100%;height:18px;border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.tsb-seg{height:100%;min-width:2px;transition:opacity .12s}
+.tsb-bar:hover .tsb-seg{opacity:0.55}
+.tsb-bar .tsb-seg:hover{opacity:1}
+.tsb-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 1rem}
+.tsb-leg-item{display:flex;align-items:center;gap:0.45rem;font-size:0.82rem;min-width:0}
+.tsb-leg-dot{width:9px;height:9px;border-radius:2px;flex:none}
+.tsb-leg-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tsb-leg-val{margin-left:auto;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.tsb-leg-other .tsb-leg-name{color:var(--text-muted);font-weight:500}
 .tb-item{font-size:0.86rem}
 .tb-head{display:flex;justify-content:space-between;align-items:baseline;gap:0.75rem;margin-bottom:0.32rem}
 .tb-name{display:flex;align-items:center;gap:0.45rem;font-weight:600;color:var(--text);min-width:0}
@@ -1876,8 +1887,8 @@ async function loadAndCompute(){
       }));
       const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
       const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
-      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,3);
-      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,3);
+      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,6);
+      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,6);
       // legacy shape kept in case anything still reads [name,count]
       const top=topicsByCount.map(e=>[e.name,e.count]);
       const topvid=vstats([...vs].sort((a,b)=>(b.views||0)-(a.views||0))[0]);
@@ -2195,31 +2206,34 @@ function render(m){
     const byCount = d.topicsByCount || [];
     const byViews = d.topicsByViews || [];
     if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads this month.</div>', views: '<div class="empty">No tagged uploads this month.</div>' };
-    // Share of ALL long-form uploads this month (tagged or not), matching the
-    // views denominator so both bars read as true shares of the channel's output.
-    const tagged = d.n || d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
-    // Share of ALL long-form views this month (tagged or not), so the figure
-    // reads as a true share of the channel's output, not just the tagged slice.
-    const totV = d.tot || d.taggedViews || byViews.reduce((s,t)=>s+t.views,0) || 1;
-    const maxCount = Math.max(...byCount.map(t=>t.count),1);
-    const maxViews = Math.max(...byViews.map(t=>t.views),1);
-    const countRows = byCount.map(t=>{
-      const pct = Math.round(t.count/tagged*100);
-      return `<li class="tb-item">
-        <div class="tb-head"><span class="tb-name"><span class="tb-dot" style="background:${t.color}"></span>${t.name}</span><span class="tb-val">${t.count} <span class="tb-unit">video${t.count>1?'s':''} · ${pct}%</span></span></div>
-        <div class="tb-track"><span class="tb-fill" style="width:${Math.round(t.count/maxCount*100)}%;background:${t.color}"></span></div>
-      </li>`;
-    }).join('');
-    const viewRows = byViews.map(t=>{
-      const pct = Math.round(t.views/totV*100);
-      return `<li class="tb-item">
-        <div class="tb-head"><span class="tb-name"><span class="tb-dot" style="background:${t.color}"></span>${t.name}</span><span class="tb-val">${fmt(t.views)} <span class="tb-unit">views · ${pct}%</span></span></div>
-        <div class="tb-track"><span class="tb-fill" style="width:${Math.round(t.views/maxViews*100)}%;background:${t.color}"></span></div>
-      </li>`;
-    }).join('');
+    const totCount = d.n || d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
+    const totViews = d.tot || d.taggedViews || byViews.reduce((s,t)=>s+t.views,0) || 1;
+    const OTHER_COLOR = 'var(--text-dim)';
+    // Build a single stacked bar + legend from the top-6 topics. Anything beyond
+    // the top 6 (and untagged output) is folded into a muted "Other" segment so
+    // the segments always sum to the month's full total.
+    const stacked = (items, total, valOf, unit, fmtVal) => {
+      const top = items.slice(0, 6);
+      const topSum = top.reduce((s,t)=>s+valOf(t), 0);
+      const otherVal = Math.max(0, total - topSum);
+      const segs = top.map(t => ({ name:t.name, color:t.color, val:valOf(t) }));
+      if (otherVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:otherVal, isOther:true });
+      const pct = v => (v/total*100);
+      const barSegs = segs.map(s =>
+        `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${s.name}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
+      ).join('');
+      const legend = segs.map(s =>
+        `<li class="tsb-leg-item${s.isOther?' tsb-leg-other':''}">
+          <span class="tsb-leg-dot" style="background:${s.color}"></span>
+          <span class="tsb-leg-name">${s.name}</span>
+          <span class="tsb-leg-val">${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%</span>
+        </li>`
+      ).join('');
+      return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul></div>`;
+    };
     return {
-      uploads: `<ul class="tb-list">${countRows}</ul>`,
-      views: `<ul class="tb-list">${viewRows}</ul>`
+      uploads: stacked(byCount, totCount, t=>t.count, 'videos', v=>String(v)),
+      views: stacked(byViews, totViews, t=>t.views, 'views', v=>fmt(v))
     };
   })();
 
