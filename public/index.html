@@ -894,8 +894,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;}
-.video-title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.video-title a {color: var(--text); text-decoration: none;}
+.video-title {display: flex; align-items: center; gap: 0; min-width: 0; overflow: hidden;}
+.video-title a {color: var(--text); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 0 1 auto;}
+.video-title .ad-badge, .video-title .like-badge, .video-title .renamed-badge {flex: 0 0 auto;}
 .video-title a:hover {color: var(--accent); text-decoration: underline;}
 /* Mobile: channel becomes a subtitle under the title */
   .video-title-channel-tag {display: none;
@@ -5176,7 +5177,7 @@ function niceDurationAxis(minSec, maxSec) {
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
-    try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
+    try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
   }
   window.__loadVideosExtraData = loadVideosExtraData;
   let adPanelExpanded = false;
