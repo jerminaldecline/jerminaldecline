@@ -91,6 +91,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .report-head h2{margin:0;font-size:1.4rem;font-weight:800;letter-spacing:-0.02em}
 .report-head .rsub{margin:0.15rem 0 0;color:var(--subtext);font-size:0.88rem}
 .rsub-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;flex-wrap:wrap}
+.report-scope-pill{display:inline-flex;align-items:center;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0.18rem 0.7rem;font-size:0.82rem;font-weight:700;letter-spacing:0.01em}
+.rsub-row .rsub::before{content:"·";margin-right:0.5rem;color:var(--text-dim)}
 .rsub-sep{color:var(--text-dim)}
 .scope-inline{background:var(--surface-2);color:var(--accent);border:1px solid var(--border);border-radius:8px;padding:0.25rem 0.5rem;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:inherit}
 .scope-inline:hover{border-color:var(--accent)}
@@ -2094,7 +2096,7 @@ function render(m){
 
   document.getElementById('report').innerHTML = `
     <div class="report-head">
-      <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="rsub">${headSub.toLowerCase()}</span></div></div>
+      <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
       <div class="dying-ticker" id="dyingTicker" role="button" tabindex="0" title="New excuse">
         <span class="dying-ticker-lead">This channel is dying because…</span>
         <span class="dying-ticker-excuse" id="dyingExcuse"></span>
