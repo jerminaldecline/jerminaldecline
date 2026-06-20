@@ -42,7 +42,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .util-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:0.9rem;flex-wrap:wrap}
 .util-updated{font-size:0.78rem;color:var(--text-dim);font-weight:600;display:flex;align-items:center;gap:0.4rem}
 .util-brand{display:flex;align-items:center;gap:0.6rem}
-.util-brand .brand-logo{width:34px;height:34px;flex:0 0 34px}
+.util-brand .brand-logo{width:34px;height:34px;flex:0 0 34px;border-radius:8px;object-fit:cover}
+.util-brand-tagline{font-size:0.78rem;font-weight:600;color:var(--down,#ff6b66);line-height:1.2;margin-top:0.05rem}
 .util-brand-name{font-size:1.02rem;font-weight:800;letter-spacing:-0.01em;line-height:1.15}
 .status-dot{width:8px;height:8px;border-radius:50%;background:var(--up);flex:none;box-shadow:0 0 0 0 var(--up);animation:statusPulse 2.4s ease-out infinite}
 @keyframes statusPulse{0%{box-shadow:0 0 0 0 rgba(77,208,160,0.5)}70%{box-shadow:0 0 0 5px rgba(77,208,160,0)}100%{box-shadow:0 0 0 0 rgba(77,208,160,0)}}
@@ -128,7 +129,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;max-width:340px;cursor:pointer;padding:0.4rem 0.6rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
 .dying-ticker:hover{border-color:var(--accent)}
 .dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
-.dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--down,#ff6b66);font-style:italic;line-height:1.25}
+.dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--shorts,#e8923a);font-style:italic;line-height:1.25}
 .dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
 .dying-ticker:hover .dying-ticker-new{opacity:1}
 @media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none}}
@@ -1491,9 +1492,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   <div class="sticky-head" id="stickyHead">
   <div class="util-bar">
     <div class="util-brand">
-      <svg class="brand-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="var(--accent)"/><g fill="#fff"><ellipse cx="50" cy="38" rx="20" ry="19"/><path d="M30 40 Q30 70 50 86 Q70 70 70 40 Q70 58 50 60 Q30 58 30 40Z"/><circle cx="42" cy="36" r="3.2" fill="var(--accent)"/><circle cx="58" cy="36" r="3.2" fill="var(--accent)"/></g></svg>
+      <img class="brand-logo" src="logo.png" alt="Jerminal Decline logo" width="34" height="34" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='block';">
+      <svg class="brand-logo brand-logo-fallback" style="display:none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="var(--accent)"/><g fill="#fff"><ellipse cx="50" cy="38" rx="20" ry="19"/><path d="M30 40 Q30 70 50 86 Q70 70 70 40 Q70 58 50 60 Q30 58 30 40Z"/><circle cx="42" cy="36" r="3.2" fill="var(--accent)"/><circle cx="58" cy="36" r="3.2" fill="var(--accent)"/></g></svg>
       <div class="util-brand-text">
         <div class="util-brand-name">Jerminal Decline</div>
+        <div class="util-brand-tagline">My channel is under attack!</div>
         <div class="util-updated" id="lastUpdated"><span class="status-dot"></span><span class="status-text">The Quartering network</span></div>
       </div>
     </div>
@@ -2224,7 +2227,6 @@ function render(m){
         ${renderOvMonthVideos(d.vlist || [], m)}
       </div>
     </div>
-    <div class="report-foot"><span class="site">jerminaldecline.com</span></div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
   const ss=document.getElementById('scopeSel');
@@ -5673,11 +5675,6 @@ function renderWindowList(startDate, endDate) {
     scopedVideos = scopedVideos.filter(v => adVideoIds.has(v.id));
   }
 
-  // Summary over the (channel-filtered) scope
-  const longCount = scopedVideos.filter(v => !v.isShort && !v.unavailable).length;
-  const shortCount = scopedVideos.filter(v => v.isShort && !v.unavailable).length;
-  const totalViews = scopedVideos.reduce((s, v) => s + (v.views || 0), 0);
-
   // Filter + sort
   const filtered = filterVideos(scopedVideos, windowListState.query);
   const sorted = sortVideos(filtered, windowListState.sortBy, windowListState.sortDir);
@@ -5703,11 +5700,6 @@ function renderWindowList(startDate, endDate) {
       ${showTopics ? '<div class="video-topic hide-mobile">Topic</div>' : ''}
     </div>
   `;
-
-  const filterLabel = windowListState.channelFilter
-    ? ` · filtered to ${escapeHtml(ANALYTICS_DATASET.channels[windowListState.channelFilter]?.title || '?')}`
-    : '';
-  const statsLine = `<span class="wls-stat"><strong>${fmt(sorted.length)}</strong> of ${fmt(scopedVideos.length)} videos</span><span class="wls-sep">·</span><span class="wls-stat"><strong>${fmt(longCount)}</strong> long-form</span><span class="wls-sep">·</span><span class="wls-stat"><strong>${fmt(shortCount)}</strong> Shorts</span><span class="wls-sep">·</span><span class="wls-stat"><strong>${fmt(totalViews)}</strong> total views</span>${filterLabel}`;
 
   // Split the sorted video list into long-form and shorts. The monthly view
   // already separates these into expandable groups; the window view follows the
@@ -5756,7 +5748,6 @@ function renderWindowList(startDate, endDate) {
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
     </div>
     ${breakdownHtml}
-    <div class="window-list-stats">${statsLine}</div>
     <div class="window-list-rows">
       ${colHeader}
       ${windowListState.formatFilter !== 'short' ? group('Long-form', longSorted, longViewsTotal, 'long') : ''}
