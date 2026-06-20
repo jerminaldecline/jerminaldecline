@@ -5884,9 +5884,9 @@ function renderWindowList(startDate, endDate) {
   // Goto-analysis links (mini-trend "Open full chart") — carry the mini-trend's
   // channel + period selection through so the full chart shows the same data.
   document.addEventListener('click', (e) => {
-    // Revenue card → Videos tab, expand the revenue panel
+    // Revenue card "full chart →" → Analysis tab, expand the revenue panel
     if (e.target.closest('[data-goto-revenue]')) {
-      show('videos');
+      show('analysis');
       setTimeout(() => {
         const t = document.getElementById('revenuePanelToggle');
         const body = document.getElementById('revenuePanelBody');
