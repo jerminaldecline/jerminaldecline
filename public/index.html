@@ -105,12 +105,23 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mini-trend-peak{fill:var(--accent)}
 .mini-trend-last{fill:var(--surface);stroke:var(--accent);stroke-width:1.6}
 .peak-item .peak-label{font-size:0.74rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.3rem}
-.peak-when{color:var(--text-dim);font-weight:600}
+.peak-when{color:var(--accent);font-weight:700}
 .jd-popover{position:absolute;z-index:200;max-width:280px;background:var(--surface);color:var(--text);border:1px solid var(--border-strong,var(--border));border-radius:8px;padding:0.6rem 0.75rem;font-size:0.8rem;line-height:1.45;font-weight:500;box-shadow:0 8px 24px -8px rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .12s}
 .jd-popover.visible{opacity:1}
 .hero-stat-info,.ad-badge-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;font-size:0.7rem;font-weight:700;color:var(--text-dim);border:1px solid var(--border);cursor:help;line-height:1}
 .hero-stat-info:hover,.ad-badge-info:hover{color:var(--accent);border-color:var(--accent)}
 .report-head-sub-inline{font-size:0.82rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em}
+.report-head-main{min-width:0}
+.month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
+@keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
+@media(prefers-reduced-motion:reduce){.month-in-progress{animation:none}}
+.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;max-width:340px;cursor:pointer;padding:0.4rem 0.6rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
+.dying-ticker:hover{border-color:var(--accent)}
+.dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
+.dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--down,#ff6b66);font-style:italic;line-height:1.25}
+.dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
+.dying-ticker:hover .dying-ticker-new{opacity:1}
+@media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none}}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
 .peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
@@ -329,10 +340,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-standalone {margin-bottom: 0.7rem;
     min-height: 1.2rem;  /* reserve space so layout doesn't jump on chart switches */}
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
-.trend-legend-toggle{display:inline-flex;align-items:center;gap:0.35rem;background:transparent;border:1px solid var(--border);border-radius:6px;padding:0.15rem 0.5rem;font-family:inherit;font-size:0.78rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:border-color .12s,color .12s,opacity .12s}
-.trend-legend-toggle:hover{border-color:var(--accent);color:var(--text)}
-.trend-legend-toggle.off{opacity:0.5;text-decoration:line-through;text-decoration-thickness:1px}
-.trend-legend-toggle.off .trend-legend-swatch{opacity:0.4}
+.an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.an-chart-controls .an-metric-toggle{margin-bottom:0}
+.prev-year-control{display:inline-flex;align-items:center;gap:0.45rem;margin-left:auto;cursor:pointer;font-size:0.8rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;transition:border-color .12s,color .12s}
+.prev-year-control:hover{border-color:var(--accent);color:var(--text)}
+.prev-year-control[hidden]{display:none}
+.prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
+.prev-year-control-swatch{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--text-dim)}
 .trend-legend-swatch {display: inline-block;
     width: 18px;
     height: 3px;
@@ -1784,12 +1798,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="analysis" id="panelAnalysis" hidden>
     <div class="an-chart-card">
+      <div class="an-chart-controls">
       <div class="an-metric-toggle" id="anMetricToggle" role="tablist" aria-label="Chart metric">
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">All videos</button>
+      </div>
+      <label class="prev-year-control" id="prevYearControl" hidden>
+        <input type="checkbox" id="prevYearCheckbox" checked>
+        <span class="prev-year-control-swatch"></span>
+        <span class="prev-year-control-label">Compare previous year</span>
+      </label>
       </div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
@@ -1806,10 +1827,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
     <div class="ad-panel" id="adPanel" hidden></div>
-    <div class="window-list-card">
-      <h3 class="window-title" id="windowTitle"></h3>
-      <div id="windowList"></div>
-    </div>
     <div class="wordcloud-section">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="wordcloud-toggle-text">
@@ -1822,6 +1839,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="wordcloud-meta" id="wordcloudMeta"></div>
         <div class="wordcloud-body" id="wordcloudBody"></div>
       </div>
+    </div>
+    <div class="window-list-card">
+      <h3 class="window-title" id="windowTitle"></h3>
+      <div id="windowList"></div>
     </div>
   </section>
 </div>
@@ -2001,6 +2022,31 @@ const fmt = n => n>=1000000 ? (n/1000000).toFixed(1)+'M' : n>=1000 ? (n/1000).to
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CURRENT_MONTH_KEY = (()=>{ const d=new Date(); return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`; })();
+// Satirical "this channel is dying because…" excuses — a running gag mocking the
+// genre of creators blaming everything but the content. Cycled on click.
+const DYING_EXCUSES = [
+  "the algorithm is shadowbanning me.",
+  "YouTube hates free speech.",
+  "the mainstream media got to them.",
+  "Big Tech is suppressing the truth.",
+  "the advertisers are woke now.",
+  "everyone's on summer break.",
+  "it's a slow news month.",
+  "the haters are mass-flagging my videos.",
+  "the thumbnail wasn't clickbait enough.",
+  "Mercury is in retrograde.",
+  "the bots aren't watching like they used to.",
+  "people just aren't ready for this conversation.",
+  "the demonetization is political.",
+  "my competitors are colluding against me.",
+  "the audience has been brainwashed.",
+  "YouTube changed the algorithm again.",
+  "it's not me, it's the platform.",
+  "the engagement pod fell through.",
+  "everyone's watching Shorts now.",
+  "the truth doesn't trend.",
+];
 const monthName = m => {const [y,mo]=m.split('-');return MONTHS[mo-1]+' '+y;};
 const yearsAgoStr = m => {
   const [y,mo]=m.split('-').map(Number);
@@ -2297,7 +2343,12 @@ function render(m){
 
   document.getElementById('report').innerHTML = `
     <div class="report-head">
-      <div><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span></h2><div class="rsub-row"><span class="rsub">${headSub.toLowerCase()}</span></div></div>
+      <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="rsub">${headSub.toLowerCase()}</span></div></div>
+      <div class="dying-ticker" id="dyingTicker" role="button" tabindex="0" title="New excuse">
+        <span class="dying-ticker-lead">This channel is dying because…</span>
+        <span class="dying-ticker-excuse" id="dyingExcuse"></span>
+        <span class="dying-ticker-new">New excuse ↻</span>
+      </div>
     </div>
 
     <div class="report-topgrid">
@@ -2400,6 +2451,18 @@ function render(m){
   ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
   ms.onchange = (e)=>{ refresh(e.target.value); };
   // Overview month-detail collapse toggle
+  // Dying-channel ticker — pick a random excuse, cycle on click/Enter.
+  const dyingEl = document.getElementById('dyingExcuse');
+  const dyingTicker = document.getElementById('dyingTicker');
+  if (dyingEl && dyingTicker) {
+    let dyingIdx = Math.floor(Math.random() * DYING_EXCUSES.length);
+    const setExcuse = () => { dyingEl.textContent = DYING_EXCUSES[dyingIdx % DYING_EXCUSES.length]; };
+    setExcuse();
+    const cycle = () => { dyingIdx = (dyingIdx + 1) % DYING_EXCUSES.length; setExcuse(); };
+    dyingTicker.onclick = cycle;
+    dyingTicker.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cycle(); } };
+  }
+
   const mdToggle = document.getElementById('ovMdToggle');
   if (mdToggle) {
     mdToggle.onclick = () => {
@@ -2807,9 +2870,17 @@ function renderTrendChart(yoy) {
   // toggle whenever we're in the views chart (not the duration overlay), so it
   // can be turned back on after being switched off.
   const showPrevToggle = !showDuration && chartMetric === 'views';
+  // Show the dedicated "Compare previous year" control only on the Views chart;
+  // keep its checkbox in sync with the current state.
+  (function(){
+    const ctrl = document.getElementById('prevYearControl');
+    const cb = document.getElementById('prevYearCheckbox');
+    if (ctrl) ctrl.hidden = !showPrevToggle;
+    if (cb) cb.checked = showPrevYear;
+  })();
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
-    ${showPrevToggle ? `<button type="button" class="trend-legend-toggle${showPrevYear?' on':' off'}" id="prevYearToggle" aria-pressed="${showPrevYear}"><span class="trend-legend-swatch prev"></span> Previous year</button>` : (effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : '')}
+    ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
     ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Median length</span>' : ''}
   `;
 
@@ -6473,13 +6544,13 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
     });
   }
-  // Previous-year series toggle (lives in the chart legend, re-rendered each draw)
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('#prevYearToggle')) {
-      const cur = (typeof window.__getShowPrevYear === 'function') ? window.__getShowPrevYear() : true;
-      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(!cur);
-    }
-  });
+  // Previous-year series toggle (dedicated checkbox control)
+  const prevYearCb = document.getElementById('prevYearCheckbox');
+  if (prevYearCb) {
+    prevYearCb.addEventListener('change', (e) => {
+      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(e.target.checked);
+    });
+  }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
   // Populate a period <select> with the broad presets, a separator, then each
   // individual month (newest first). Specific months use their YYYY-MM as value.
