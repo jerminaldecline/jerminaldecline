@@ -1,5 +1,24 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Jerminal Decline — HE'S SHORTLESS!</title>
+<meta name="description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network — views, revenue estimates, retitles and more across five channels.">
+<link rel="canonical" href="https://jerminaldecline.com/">
+<meta name="theme-color" content="#0d1220">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<!-- Open Graph (Facebook, LinkedIn, Discord, Slack, iMessage, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jerminal Decline">
+<meta property="og:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta property="og:description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network — views, revenue estimates, retitles and more.">
+<meta property="og:url" content="https://jerminaldecline.com/">
+<meta property="og:image" content="https://jerminaldecline.com/logo.png">
+<meta property="og:locale" content="en_GB">
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta name="twitter:description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network.">
+<meta name="twitter:image" content="https://jerminaldecline.com/logo.png">
+<meta name="twitter:site" content="@JerminalDecline">
 <style>
 :root{
   color-scheme: light dark;
@@ -50,7 +69,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 @media(prefers-reduced-motion:reduce){.status-dot{animation:none}}
 .util-cluster{display:flex;align-items:center;gap:0.5rem;margin-left:auto}
 .theme-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.15rem;gap:0.1rem}
-.theme-seg-btn{appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.74rem;font-weight:700;padding:0.3rem 0.55rem;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+.theme-seg-btn{display:inline-flex;align-items:center;gap:0.32rem;appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.74rem;font-weight:700;padding:0.3rem 0.55rem;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+.theme-ico{flex:0 0 auto}
 .theme-seg-btn:hover{color:var(--text)}
 .theme-seg-btn.active{background:var(--accent);color:#fff}
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -126,13 +146,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
 @media(prefers-reduced-motion:reduce){.month-in-progress{animation:none}}
-.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;max-width:340px;cursor:pointer;padding:0.4rem 0.6rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
+.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;flex:1 1 auto;max-width:560px;min-width:300px;cursor:pointer;padding:0.5rem 0.85rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
 .dying-ticker:hover{border-color:var(--accent)}
 .dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
 .dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--shorts,#e8923a);font-style:italic;line-height:1.25}
 .dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
 .dying-ticker:hover .dying-ticker-new{opacity:1}
-@media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none}}
+@media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none;min-width:0;flex:1 1 100%}}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
 .peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
@@ -265,7 +285,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-cluster{flex-wrap:wrap;justify-content:flex-end}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -872,6 +892,32 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     display: inline-block;
     flex-shrink: 0;}
 .video-topic.untagged {color: var(--text-dim); font-style: italic; opacity: 0.6;}
+/* Three-axis topic display: per-video summary + subject/theme/mode chips,
+   shown inside the title cell (visible on mobile). Chips are click-to-filter. */
+.video-summary {font-size: 0.8rem; color: var(--text-muted); margin-top: 0.28rem; line-height: 1.35;}
+.video-chips {display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.38rem;}
+.vchip {display: inline-flex; align-items: center; gap: 0.32rem; padding: 0.1rem 0.5rem;
+    font-size: 0.715rem; line-height: 1.5; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--text-muted); cursor: pointer; font-family: inherit;
+    white-space: nowrap; transition: border-color .12s, background .12s, color .12s;}
+.vchip:hover {border-color: var(--accent); color: var(--text);}
+.vchip-on {border-color: var(--accent); color: var(--text); background: var(--flat-bg); font-weight: 600;}
+.vchip-mode {font-weight: 600; color: var(--text);}
+.vchip-dot {width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto;}
+.topic-filter-bar {display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;
+    font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0.1rem 0.2rem;}
+.topic-filter-bar .tf-kind {color: var(--text-dim);}
+.topic-filter-bar .tf-name {display: inline-flex; align-items: center; gap: 0.32rem; color: var(--text); font-weight: 600;}
+.tf-clear {cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+    border-radius: 999px; padding: 0.12rem 0.55rem; font-size: 0.715rem; font-family: inherit;}
+.tf-clear:hover {color: var(--text); border-color: var(--accent);}
+/* On narrow viewports the title column is only ~110px wide, narrower than some
+   chip labels — let chip text wrap (and shrink slightly) so nothing clips. */
+@media (max-width: 680px) {
+  .vchip {white-space: normal; font-size: 0.68rem; padding: 0.1rem 0.42rem; line-height: 1.3;}
+  .video-chips {gap: 0.25rem; margin-top: 0.3rem;}
+  .video-summary {font-size: 0.76rem; margin-top: 0.2rem;}
+}
 .group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
 .video-row {display: grid;
     grid-template-columns: 90px 1fr 80px 110px 75px 90px 130px;
@@ -893,8 +939,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;}
-.video-title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.video-title a {color: var(--text); text-decoration: none;}
+.video-title {display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; overflow: hidden;}
+.video-title-main {display: flex; align-items: center; gap: 0; min-width: 0; max-width: 100%; overflow: hidden;}
+.video-title a {color: var(--text); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 0 1 auto;}
+.video-title .ad-badge, .video-title .like-badge, .video-title .renamed-badge {flex: 0 0 auto;}
 .video-title a:hover {color: var(--accent); text-decoration: underline;}
 /* Mobile: channel becomes a subtitle under the title */
   .video-title-channel-tag {display: none;
@@ -1506,9 +1554,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="bmac-label">Buy me a coffee</span>
       </a>
       <div class="theme-seg" id="themeSeg" role="group" aria-label="Colour theme">
-        <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system">System</button>
-        <button type="button" class="theme-seg-btn" data-theme-choice="light" title="Light mode" aria-label="Light mode">Light</button>
-        <button type="button" class="theme-seg-btn" data-theme-choice="dark" title="Dark mode" aria-label="Dark mode">Dark</button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system" aria-label="Match system"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 5h18v11H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8 20h8"/></svg><span class="theme-lbl">System</span></button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="light" title="Light mode" aria-label="Light mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg><span class="theme-lbl">Light</span></button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="dark" title="Dark mode" aria-label="Dark mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg><span class="theme-lbl">Dark</span></button>
       </div>
       <a class="util-social" href="https://x.com/JerminalDecline" target="_blank" rel="noopener" title="@JerminalDecline on X" aria-label="Follow on X">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1662,13 +1710,17 @@ async function loadAndCompute(){
   };
   const [data, tagsRaw, topicsRaw] = await Promise.all([
     fetch('data.json'+bust).then(r => r.json()),
-    safeJson('topic-tags.json'+bust, { tags: {} }),
+    safeJson('topic-tags-llm.json'+bust, { tags: {} }),
     safeJson('topics.json'+bust, {})
   ]);
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
+  // Three-axis LLM tagging: subjects (tags), themes, modes, plus per-video summaries.
+  ANALYTICS_TOPIC_THEMES = (tagsRaw && tagsRaw.themes) || {};
+  ANALYTICS_TOPIC_MODES  = (tagsRaw && tagsRaw.modes)  || {};
+  ANALYTICS_SUMMARIES    = (tagsRaw && tagsRaw._summary) || {};
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
   const tcolor = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.color) tcolor[k]=v.color; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
@@ -1806,7 +1858,7 @@ const DYING_EXCUSES = [
   "HE'S FAT!",
   "HE'S CRYPTOZOOLOGICAL, BUDDY!",
   "HE HAS PANIC DIARRHEA!",
-  "HE CAM'T READ!",
+  "HE CAN'T READ!",
   "Grok, write me a 30-minute deep-dive script that explains why my channel is dying.",
   "It's fall.",
   "I'm shadow banned!",
@@ -2354,6 +2406,9 @@ let ANALYTICS_DATASET = null;
 let ANALYTICS_CHANNEL = "ALL";
 let ANALYTICS_TOPIC_TAGS = null;
 let ANALYTICS_TOPICS = null;
+let ANALYTICS_TOPIC_THEMES = null;
+let ANALYTICS_TOPIC_MODES = null;
+let ANALYTICS_SUMMARIES = null;
 const AN_RPM = {
   longFormMidRoll: { low: 2.0, high: 3.25 },
   longFormShort: { low: 1.0, high: 2.0 },
@@ -5172,10 +5227,10 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
-    try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
+    try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
   }
   window.__loadVideosExtraData = loadVideosExtraData;
   let adPanelExpanded = false;
@@ -5186,7 +5241,10 @@ function renderVideoRows(videos, emptyText) {
   }
   const showChannel = ANALYTICS_CHANNEL === 'ALL';
   const showTopics = isTopicChannel();
-  const topicColClass = showTopics ? '' : ' no-topics';
+  // Subject/theme/mode now render as chips inside the title cell (with the
+  // per-video summary), so the separate topic column is retired — every row
+  // uses the no-topics grid template.
+  const topicColClass = ' no-topics';
   return videos.map(v => {
     const channelName = showChannel
       ? (ANALYTICS_DATASET?.channels?.[v.channelId]?.title || '?')
@@ -5265,12 +5323,11 @@ function renderVideoRows(videos, emptyText) {
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${titleSubtitle}</div>
+        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}</div>${titleSubtitle}${showTopics ? renderVideoSummary(v) : ''}${showTopics ? renderTopicChips(v) : ''}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
         <div class="video-comments hide-mobile">${v.comments != null ? fmt(v.comments) : '—'}</div>
-        ${showTopics ? renderTopicCell(v) : ''}
       </div>
     `;
   }).join('');
@@ -5618,21 +5675,57 @@ function renderAdPanel() {
   });
 }
 
-function renderTopicCell(v) {
-  const tagId = ANALYTICS_TOPIC_TAGS?.[v.id];
-  if (!tagId) {
-    return `<div class="video-topic untagged hide-mobile">—</div>`;
+// Shorten a mode's display name for a compact chip (full name stays in the
+// tooltip). "Woke / culture war" -> "Woke"; "Politics & current events" ->
+// "Politics"; "'[Group] fatigue' rhetoric" -> "Group fatigue".
+function shortModeLabel(name) {
+  let s = String(name || '').replace(/['"\[\]]/g, '').trim();
+  s = s.split(/\s+[/&]\s+/)[0].trim();
+  const w = s.split(/\s+/);
+  if (w.length > 2) s = w.slice(0, 2).join(' ');
+  return s || String(name || '');
+}
+
+// One clickable chip for a given axis (subject | theme | mode). Clicking filters
+// the window list to that value (handled by the delegated #windowList listener).
+function topicChip(kind, id) {
+  const t = ANALYTICS_TOPICS?.[id];
+  if (!t) return '';
+  const full = t.name || id;
+  const label = kind === 'mode' ? shortModeLabel(full) : full;
+  const kindLabel = kind === 'subject' ? 'Subject' : kind === 'theme' ? 'Theme' : 'Mode';
+  const tf = windowListState.topicFilter;
+  const activeCls = (tf && tf.kind === kind && tf.id === id) ? ' vchip-on' : '';
+  return `<button type="button" class="vchip vchip-${kind}${activeCls}" data-tfk="${kind}" data-tfi="${escapeHtml(id)}" title="${escapeHtml(kindLabel + ': ' + full)} — click to filter" aria-label="Filter by ${escapeHtml(kindLabel)}: ${escapeHtml(full)}"><span class="vchip-dot" style="background:${t.color || '#888'}"></span>${escapeHtml(label)}</button>`;
+}
+
+// Per-video human-readable summary (the LLM one-liner) shown under the title.
+function renderVideoSummary(v) {
+  const s = ANALYTICS_SUMMARIES?.[v.id];
+  return s ? `<div class="video-summary">${escapeHtml(s)}</div>` : '';
+}
+
+// Subject · theme · mode chip row. Any axis may be absent for a given video.
+function renderTopicChips(v) {
+  const subj = ANALYTICS_TOPIC_TAGS?.[v.id];
+  const thm = ANALYTICS_TOPIC_THEMES?.[v.id];
+  const mod = ANALYTICS_TOPIC_MODES?.[v.id];
+  // Suppress a theme chip that merely echoes the mode (e.g. theme "Politics"
+  // next to mode "Politics & current events", or "Woke Culture" next to "Woke").
+  // Specific themes (Race & Crime, DEI, Immigration…) are unaffected and still show.
+  let showTheme = !!thm;
+  if (thm && mod) {
+    const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const tn = norm(ANALYTICS_TOPICS?.[thm]?.name);
+    const mShort = norm(shortModeLabel(ANALYTICS_TOPICS?.[mod]?.name || ''));
+    if (tn && mShort && (tn === mShort || tn.includes(mShort) || mShort.includes(tn))) showTheme = false;
   }
-  const topic = ANALYTICS_TOPICS?.[tagId];
-  if (!topic) {
-    return `<div class="video-topic untagged hide-mobile">—</div>`;
-  }
-  return `
-    <div class="video-topic hide-mobile" title="${escapeHtml(topic.name)}">
-      <span class="video-topic-dot" style="background:${topic.color}"></span>
-      <span>${escapeHtml(topic.name)}</span>
-    </div>
-  `;
+  const chips = [
+    subj ? topicChip('subject', subj) : '',
+    showTheme ? topicChip('theme', thm) : '',
+    mod ? topicChip('mode', mod) : ''
+  ].filter(Boolean).join('');
+  return chips ? `<div class="video-chips">${chips}</div>` : '';
 }
 
 function formatWindowTitle(startDate, endDate) {
@@ -5674,6 +5767,14 @@ function renderWindowList(startDate, endDate) {
   if (windowListState.adOnly && adDataAvailable) {
     scopedVideos = scopedVideos.filter(v => adVideoIds.has(v.id));
   }
+  // Apply topic-chip filter (subject / theme / mode), set by clicking a chip.
+  if (windowListState.topicFilter) {
+    const { kind, id } = windowListState.topicFilter;
+    const map = kind === 'subject' ? ANALYTICS_TOPIC_TAGS
+      : kind === 'theme' ? ANALYTICS_TOPIC_THEMES
+      : ANALYTICS_TOPIC_MODES;
+    scopedVideos = scopedVideos.filter(v => map && map[v.id] === id);
+  }
 
   // Filter + sort
   const filtered = filterVideos(scopedVideos, windowListState.query);
@@ -5689,7 +5790,7 @@ function renderWindowList(startDate, endDate) {
   const breakdownHtml = showChannel ? buildChannelBreakdownTable(allWindowVideos) : '';
 
   const colHeader = `
-    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}${topicColClass}">
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''} no-topics">
       <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
       ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
@@ -5697,7 +5798,6 @@ function renderWindowList(startDate, endDate) {
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
       <div class="video-likepct sortable hide-mobile${sortableClass(windowListState, 'likepct')}" data-sort="likepct">Like %${sortArrow(windowListState, 'likepct')}</div>
       <div class="video-comments sortable hide-mobile${sortableClass(windowListState, 'comments')}" data-sort="comments">Comments${sortArrow(windowListState, 'comments')}</div>
-      ${showTopics ? '<div class="video-topic hide-mobile">Topic</div>' : ''}
     </div>
   `;
 
@@ -5738,6 +5838,17 @@ function renderWindowList(startDate, endDate) {
     `;
   }
 
+  // Active topic-chip filter indicator (when a chip has been clicked)
+  let topicFilterBar = '';
+  if (windowListState.topicFilter) {
+    const tf = windowListState.topicFilter;
+    const t = ANALYTICS_TOPICS?.[tf.id];
+    const nm = t?.name || tf.id;
+    const kindLabel = tf.kind === 'subject' ? 'Subject' : tf.kind === 'theme' ? 'Theme' : 'Mode';
+    const shown = tf.kind === 'mode' ? shortModeLabel(nm) : nm;
+    topicFilterBar = `<div class="topic-filter-bar">Filtered to <span class="tf-kind">${kindLabel}</span><span class="tf-name"><span class="vchip-dot" style="background:${t?.color || '#888'}"></span>${escapeHtml(shown)}</span><button type="button" class="tf-clear" id="topicFilterClear" aria-label="Clear topic filter">clear ✕</button></div>`;
+  }
+
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
@@ -5747,6 +5858,7 @@ function renderWindowList(startDate, endDate) {
       </div>
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
     </div>
+    ${topicFilterBar}
     ${breakdownHtml}
     <div class="window-list-rows">
       ${colHeader}
@@ -5783,6 +5895,24 @@ function renderWindowList(startDate, endDate) {
       const key = moreBtn.dataset.showMore;
       if (key === 'long') windowListState.longShown += VIDEO_BATCH;
       else windowListState.shortShown += VIDEO_BATCH;
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Topic chip clicked → filter the list to that subject/theme/mode (toggle off if same)
+    const chip = e.target.closest('.vchip[data-tfk]');
+    if (chip && document.getElementById('windowList')?.contains(chip)) {
+      const kind = chip.dataset.tfk, id = chip.dataset.tfi;
+      const cur = windowListState.topicFilter;
+      windowListState.topicFilter = (cur && cur.kind === kind && cur.id === id) ? null : { kind, id };
+      resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Clear the active topic filter
+    const tfClear = e.target.closest('#topicFilterClear');
+    if (tfClear && document.getElementById('windowList')?.contains(tfClear)) {
+      windowListState.topicFilter = null;
+      resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
@@ -5863,9 +5993,9 @@ function renderWindowList(startDate, endDate) {
   // Goto-analysis links (mini-trend "Open full chart") — carry the mini-trend's
   // channel + period selection through so the full chart shows the same data.
   document.addEventListener('click', (e) => {
-    // Revenue card → Videos tab, expand the revenue panel
+    // Revenue card "full chart →" → Analysis tab, expand the revenue panel
     if (e.target.closest('[data-goto-revenue]')) {
-      show('videos');
+      show('analysis');
       setTimeout(() => {
         const t = document.getElementById('revenuePanelToggle');
         const body = document.getElementById('revenuePanelBody');
@@ -6092,6 +6222,22 @@ function renderWindowList(startDate, endDate) {
     const months = availableMonths();
     const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : months[0];
     refresh(startMonth);
+    // refresh() only paints the Overview tab. On a hard refresh the active tab
+    // may be Analysis or Videos (restored from ?tab=), and tabShell's initial
+    // show() ran BEFORE data finished loading — so those tabs rendered against
+    // no data and came up blank. Now that data is in, re-render whichever tab
+    // is actually active so it paints. (Overview is already handled by refresh.)
+    try {
+      const activeTab = (new URLSearchParams(location.search).get('tab')) || 'overview';
+      if (activeTab === 'videos' && typeof window.renderVideosTab === 'function') {
+        if (window.__populateVidChannel) window.__populateVidChannel();
+        if (window.__syncVidWindow) window.__syncVidWindow();
+        window.renderVideosTab();
+      } else if (activeTab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
+        if (window.__populateAnChannel) window.__populateAnChannel();
+        window.renderAnalysisChart();
+      }
+    } catch(e){ console.error('post-load active-tab render', e); }
   } catch(err){
     document.getElementById('report').innerHTML =
       '<div style="padding:3rem;text-align:center;color:var(--down)">Could not load report data. '
