@@ -2023,29 +2023,32 @@ const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const CURRENT_MONTH_KEY = (()=>{ const d=new Date(); return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`; })();
-// Satirical "this channel is dying because…" excuses — a running gag mocking the
-// genre of creators blaming everything but the content. Cycled on click.
+// Satirical "this channel is dying because…" excuses — the real list from the
+// live site. Cycled on click.
 const DYING_EXCUSES = [
-  "the algorithm is shadowbanning me.",
-  "YouTube hates free speech.",
-  "the mainstream media got to them.",
-  "Big Tech is suppressing the truth.",
-  "the advertisers are woke now.",
-  "everyone's on summer break.",
-  "it's a slow news month.",
-  "the haters are mass-flagging my videos.",
-  "the thumbnail wasn't clickbait enough.",
-  "Mercury is in retrograde.",
-  "the bots aren't watching like they used to.",
-  "people just aren't ready for this conversation.",
-  "the demonetization is political.",
-  "my competitors are colluding against me.",
-  "the audience has been brainwashed.",
-  "YouTube changed the algorithm again.",
-  "it's not me, it's the platform.",
-  "the engagement pod fell through.",
-  "everyone's watching Shorts now.",
-  "the truth doesn't trend.",
+  "HE'S FATIRED!",
+  "It's summer.",
+  "The culture war is over.",
+  "Crowder read the news first.",
+  "The algorithm has changed.",
+  "The timeslot is wrong.",
+  "Actually, it's not dying, it's as successful as it has ever been.",
+  "It's not an election year.",
+  "HE POOPED HIS PANTS.",
+  "It's hot outside.",
+  "There is a holiday next week.",
+  "Uhhhm, it's because, uhhh, because, it's uhhh, uhhh, how's everyone's weekend going?",
+  "HE'S FAT!",
+  "HE'S CRYPTOZOOLOGICAL, BUDDY!",
+  "HE HAS PANIC DIARRHEA!",
+  "HE CAM'T READ!",
+  "Grok, write me a 30-minute deep-dive script that explains why my channel is dying.",
+  "It's fall.",
+  "I'm shadow banned!",
+  "WHOOOOOOOOOOOOOOOOOOAH BUUUUUUUUUUUUUUUUUUUUUDY!!!",
+  "It's winter.",
+  "We're in the middle of a dead news cycle.",
+  "It's spring.",
 ];
 const monthName = m => {const [y,mo]=m.split('-');return MONTHS[mo-1]+' '+y;};
 const yearsAgoStr = m => {
@@ -4755,10 +4758,11 @@ function niceDurationAxis(minSec, maxSec) {
     const d = new Date(v.publishedAt);
     return d >= start && d <= end;
   });
-  // Respect long-form vs Including-Shorts toggle
-  if (viewMode === 'long') {
-    videos = videos.filter(v => !v.isShort);
-  }
+  // Respect the Videos-tab format filter (the word cloud now lives on the
+  // Videos tab): 'long' → long-form only, 'short' → Shorts only, 'all' → both.
+  const fmt = (typeof windowListState !== 'undefined' && windowListState.formatFilter) ? windowListState.formatFilter : (viewMode === 'long' ? 'long' : 'all');
+  if (fmt === 'long') videos = videos.filter(v => !v.isShort);
+  else if (fmt === 'short') videos = videos.filter(v => v.isShort);
 
   if (videos.length < 20) {
     body.innerHTML = `<div class="wordcloud-empty">Not enough titles in this range to draw a meaningful cloud (${videos.length} found, need at least 20).</div>`;
@@ -6402,6 +6406,11 @@ function renderWindowList(startDate, endDate) {
     }
     if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){ console.error('ad panel', e); } }
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
+    // Keep the word cloud in sync with the Videos-tab filters when it's open.
+    const wcToggle = document.getElementById('wordcloudToggle');
+    if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
+      try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); }
+    }
   };
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
@@ -6430,7 +6439,12 @@ function renderWindowList(startDate, endDate) {
       windowListState.formatFilter = wf.dataset.format;
       resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
-      if (sd && ed) renderWindowList(sd, ed); return;
+      if (sd && ed) renderWindowList(sd, ed);
+      const wcToggle = document.getElementById('wordcloudToggle');
+      if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
+        try { window.renderWordCloud(); } catch(_){}
+      }
+      return;
     }
     const header = e.target.closest('#windowList .video-row-header .sortable');
     if (!header) return;
