@@ -103,6 +103,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .peak-headline{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .mini-trend-line{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.mini-trend-line-prev{fill:none;stroke:var(--text-dim);stroke-width:1.4;stroke-dasharray:3 2.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0.85}
+.mini-trend-legend{display:flex;gap:0.9rem;margin-bottom:0.5rem;font-size:0.72rem;color:var(--text-muted);font-weight:600}
+.mtl-item{display:inline-flex;align-items:center;gap:0.3rem}
+.mtl-swatch{display:inline-block;width:14px;height:2.5px;border-radius:2px;background:var(--accent)}
+.mtl-swatch.prev{background:var(--text-dim);height:0;border-top:2px dashed var(--text-dim)}
+.mini-trend-yoy{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.76rem;font-weight:700;color:var(--text-muted);cursor:pointer;user-select:none;padding:0.25rem 0.45rem;border:1px solid var(--border);border-radius:7px;transition:border-color .12s,color .12s}
+.mini-trend-yoy:hover{border-color:var(--accent);color:var(--text)}
+.mini-trend-yoy input{accent-color:var(--accent);cursor:pointer;margin:0}
 .mini-trend-area{fill:var(--accent);opacity:0.12}
 .mini-trend-peak{fill:var(--accent)}
 .mini-trend-last{fill:var(--surface);stroke:var(--accent);stroke-width:1.6}
@@ -256,7 +264,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px;overflow-x:hidden}html{overflow-x:hidden}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-cluster{flex-wrap:wrap;justify-content:flex-end}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -1823,7 +1831,7 @@ const MINI_TREND_PERIODS = [
   ['ytd','YTD'], ['12m','12 months'], ['24m','24 months'],
   ['since-peak','Since peak'], ['all','All time']
 ];
-let miniTrendState = { scope: null, period: 'all' };
+let miniTrendState = { scope: null, period: 'all', yoy: true };
 function miniTrendCutoff(period, series, peakMonth){
   if (period === 'all') return null;
   const now = new Date();
@@ -1841,14 +1849,29 @@ function renderMiniTrendChart(){
   const cutoff = miniTrendCutoff(miniTrendState.period, pk.series, pk.peakMonth);
   let series = cutoff ? pk.series.filter(p => p.m >= cutoff) : pk.series.slice();
   if (series.length < 2) series = pk.series.slice();
+  // Previous-year overlay: map each visible month to the value 12 months earlier
+  // (looked up from the FULL series so prior-year data exists even off-window).
+  const fullByMonth = new Map(pk.series.map(p => [p.m, p.v]));
+  const showYoy = miniTrendState.yoy;
+  const yoyVals = series.map(p => { const v = fullByMonth.get(yoyMonth(p.m)); return (v != null) ? v : null; });
+  const hasYoy = showYoy && yoyVals.some(v => v != null);
   const W=400, H=150, padL=8, padR=8, padT=12, padB=18;
   const vals=series.map(p=>p.v);
-  const max=Math.max(...vals,1), min=Math.min(...vals);
+  const axisVals = hasYoy ? vals.concat(yoyVals.filter(v=>v!=null)) : vals;
+  const max=Math.max(...axisVals,1), min=Math.min(...axisVals);
   const span=max-min||1;
   const x=i=> padL + i*(W-padL-padR)/(series.length-1);
   const y=v=> padT + (1-(v-min)/span)*(H-padT-padB);
   const pts=series.map((p,i)=>`${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
   const area=`${padL},${H-padB} ${pts} ${(W-padR)},${H-padB}`;
+  // Previous-year polyline — only spans the contiguous run of points that have YoY data
+  let yoyPolylines = '';
+  if (hasYoy) {
+    let runPts = [];
+    const flush = () => { if (runPts.length >= 2) yoyPolylines += `<polyline class="mini-trend-line-prev" points="${runPts.join(' ')}"/>`; runPts = []; };
+    yoyVals.forEach((v,i) => { if (v != null) runPts.push(`${x(i).toFixed(1)},${y(v).toFixed(1)}`); else flush(); });
+    flush();
+  }
   const peakIdx=series.findIndex(p=>p.m===pk.peakMonth);
   const lastIdx=series.length-1;
   const dot=(i,cls)=> i>=0 ? `<circle cx="${x(i).toFixed(1)}" cy="${y(series[i].v).toFixed(1)}" r="3.2" class="${cls}"/>` : '';
@@ -1860,10 +1883,12 @@ function renderMiniTrendChart(){
   const chgLabel = chgPct === 0 ? `Flat since ${firstM}` : `${chgArrow} ${Math.abs(chgPct)}% since ${firstM}`;
   return `
     <div class="mini-trend-chart">
+      ${hasYoy ? '<div class="mini-trend-legend"><span class="mtl-item"><span class="mtl-swatch"></span>This period</span><span class="mtl-item"><span class="mtl-swatch prev"></span>Previous year</span></div>' : ''}
       <div class="mini-trend-plot">
         <div class="mini-trend-yaxis"><span>${fmt(max)}</span><span>${fmt(min)}</span></div>
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Long-form views trend">
           <polygon class="mini-trend-area" points="${area}"/>
+          ${yoyPolylines}
           <polyline class="mini-trend-line" points="${pts}"/>
           ${dot(peakIdx,'mini-trend-peak')}
           ${dot(lastIdx,'mini-trend-last')}
@@ -1887,6 +1912,7 @@ function miniTrendPeriodOptions(){
 function renderMiniTrendControls(){
   return `
     <div class="mini-trend-controls">
+      <label class="mini-trend-yoy"><input type="checkbox" id="miniTrendYoy"${miniTrendState.yoy?' checked':''}> YoY</label>
       <select id="miniTrendChannel" class="mini-trend-sel" aria-label="Trend channel">${miniTrendChannelOptions()}</select>
       <select id="miniTrendPeriod" class="mini-trend-sel" aria-label="Trend period">${miniTrendPeriodOptions()}</select>
     </div>`;
@@ -5883,11 +5909,12 @@ function renderWindowList(startDate, endDate) {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-  // Mini-trend dropdowns (channel + period) — re-render just the chart body
+  // Mini-trend dropdowns (channel + period + YoY) — re-render just the chart body
   document.addEventListener('change', (e) => {
-    if (e.target.id === 'miniTrendChannel' || e.target.id === 'miniTrendPeriod') {
+    if (e.target.id === 'miniTrendChannel' || e.target.id === 'miniTrendPeriod' || e.target.id === 'miniTrendYoy') {
       if (e.target.id === 'miniTrendChannel') miniTrendState.scope = e.target.value;
-      else miniTrendState.period = e.target.value;
+      else if (e.target.id === 'miniTrendPeriod') miniTrendState.period = e.target.value;
+      else miniTrendState.yoy = e.target.checked;
       const body = document.getElementById('miniTrendBody');
       if (body && typeof renderMiniTrendChart === 'function') body.innerHTML = renderMiniTrendChart();
     }
