@@ -50,7 +50,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 @media(prefers-reduced-motion:reduce){.status-dot{animation:none}}
 .util-cluster{display:flex;align-items:center;gap:0.5rem;margin-left:auto}
 .theme-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.15rem;gap:0.1rem}
-.theme-seg-btn{appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.74rem;font-weight:700;padding:0.3rem 0.55rem;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+.theme-seg-btn{display:inline-flex;align-items:center;gap:0.32rem;appearance:none;background:transparent;border:none;color:var(--subtext);font-family:inherit;font-size:0.74rem;font-weight:700;padding:0.3rem 0.55rem;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+.theme-ico{flex:0 0 auto}
 .theme-seg-btn:hover{color:var(--text)}
 .theme-seg-btn.active{background:var(--accent);color:#fff}
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -265,7 +266,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-cluster{flex-wrap:wrap;justify-content:flex-end}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -1506,9 +1507,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="bmac-label">Buy me a coffee</span>
       </a>
       <div class="theme-seg" id="themeSeg" role="group" aria-label="Colour theme">
-        <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system">System</button>
-        <button type="button" class="theme-seg-btn" data-theme-choice="light" title="Light mode" aria-label="Light mode">Light</button>
-        <button type="button" class="theme-seg-btn" data-theme-choice="dark" title="Dark mode" aria-label="Dark mode">Dark</button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system" aria-label="Match system"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 5h18v11H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8 20h8"/></svg><span class="theme-lbl">System</span></button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="light" title="Light mode" aria-label="Light mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg><span class="theme-lbl">Light</span></button>
+        <button type="button" class="theme-seg-btn" data-theme-choice="dark" title="Dark mode" aria-label="Dark mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg><span class="theme-lbl">Dark</span></button>
       </div>
       <a class="util-social" href="https://x.com/JerminalDecline" target="_blank" rel="noopener" title="@JerminalDecline on X" aria-label="Follow on X">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
