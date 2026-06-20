@@ -108,8 +108,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-when{color:var(--accent);font-weight:700}
 .jd-popover{position:absolute;z-index:200;max-width:280px;background:var(--surface);color:var(--text);border:1px solid var(--border-strong,var(--border));border-radius:8px;padding:0.6rem 0.75rem;font-size:0.8rem;line-height:1.45;font-weight:500;box-shadow:0 8px 24px -8px rgba(0,0,0,0.6);opacity:0;pointer-events:none;transition:opacity .12s}
 .jd-popover.visible{opacity:1}
-.hero-stat-info,.ad-badge-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;font-size:0.7rem;font-weight:700;color:var(--text-dim);border:1px solid var(--border);cursor:help;line-height:1}
-.hero-stat-info:hover,.ad-badge-info:hover{color:var(--accent);border-color:var(--accent)}
+.hero-stat-info,.ad-badge-info,.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;font-size:0.7rem;font-weight:700;color:var(--text-dim);border:1px solid var(--border);cursor:help;line-height:1}
+.hero-stat-info:hover,.ad-badge-info:hover,.info-icon:hover{color:var(--accent);border-color:var(--accent)}
 .report-head-sub-inline{font-size:0.82rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em}
 .report-head-main{min-width:0}
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
@@ -201,10 +201,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .toplist li:first-child .row span:first-child{font-weight:700}
 .toplist .empty{color:var(--text-dim);font-size:0.82rem}
 /* Topic horizontal bars (share of uploads / share of views) */
-.tb-group{margin-bottom:1.1rem}
-.tb-group:last-child{margin-bottom:0}
-.tb-grouplabel{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:0.6rem}
-.tb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.6rem}
 .tsb{display:flex;flex-direction:column;gap:0.85rem}
 .tsb-bar{display:flex;width:100%;height:18px;border-radius:6px;overflow:hidden;background:var(--surface-2)}
 .tsb-seg{height:100%;min-width:2px;transition:opacity .12s}
@@ -216,16 +212,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tsb-leg-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tsb-leg-val{margin-left:auto;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 .tsb-leg-other .tsb-leg-name{color:var(--text-muted);font-weight:500}
-.tb-item{font-size:0.86rem}
-.tb-head{display:flex;justify-content:space-between;align-items:baseline;gap:0.75rem;margin-bottom:0.32rem}
-.tb-name{display:flex;align-items:center;gap:0.45rem;font-weight:600;color:var(--text);min-width:0}
-.tb-name>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-dot{flex:none;width:9px;height:9px;border-radius:50%}
-.tb-val{flex:none;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
-.tb-unit{color:var(--subtext);font-weight:500;font-size:0.78rem}
-.tb-track{height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
-.tb-fill{display:block;height:100%;border-radius:5px;min-width:2px;transition:width .3s ease}
-.tb-item:first-child .tb-track{height:10px}
 .cmp-table{width:100%;border-collapse:collapse;font-size:0.86rem}
 .cmp-table th{text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
 .cmp-table th:first-child{text-align:left}
@@ -837,82 +823,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .channel-breakdown-table tr.cbt-empty td {color: var(--text-dim); opacity: 0.5;}
 .channel-breakdown-table tfoot td {border-bottom: none; border-top: 2px solid var(--border); font-weight: 700; color: var(--text); padding-top: 0.45rem;}
 .channel-breakdown-table tfoot td.cbt-num {color: var(--text);}
-  .channel-breakdown {display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    align-items: center;}
 /* Window-mode variant: sits inside the window-list card */
-  .window-list .channel-breakdown {padding: 0.7rem 0.9rem;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border);}
 /* Monthly-mode variant: standalone informational strip above the monthly list */
-  #monthlyBreakdownChips .channel-breakdown {padding: 0.6rem 0;
-    margin-bottom: 0.7rem;
-    gap: 0.5rem;}
-#monthlyBreakdownChips .channel-breakdown:empty {display: none;}
 /* Static chips render as small two-line cards (used in monthly mode) */
-  .channel-breakdown-chip.static {display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.2rem;
-    padding: 0.55rem 0.95rem;
-    border-radius: 8px;
-    min-width: 160px;}
-.channel-breakdown-chip.static .cbc-name {font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);}
-.channel-breakdown-chip.static .cbc-detail {font-size: 0.78rem;
-    color: var(--text-muted);
-    font-variant-numeric: tabular-nums;}
-.channel-breakdown-chip.static .cbc-long-num,
-  .channel-breakdown-chip.static .cbc-short-num,
-  .channel-breakdown-chip.static .cbc-views-num {color: var(--text);
-    font-weight: 500;}
-.channel-breakdown-chip.static {min-width: 140px; padding: 0.5rem 0.8rem;}
-.channel-breakdown-chip.static .cbc-name {font-size: 0.85rem;}
-.channel-breakdown-chip.static .cbc-detail {font-size: 0.78rem;}
-.channel-breakdown-chip {display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    background: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.32rem 0.85rem 0.32rem 0.75rem;
-    font-family: inherit;
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: border-color 0.12s, background 0.12s, color 0.12s;}
-.channel-breakdown-chip:hover {border-color: var(--brand);
-    color: var(--brand-deep);}
-.channel-breakdown-chip.static {cursor: default;}
-.channel-breakdown-chip.static:hover {border-color: var(--border);
-    color: var(--text);}
-.channel-breakdown-chip.active {background: var(--accent-soft);
-    border-color: var(--accent);
-    color: var(--accent);}
-.channel-breakdown-chip.empty {opacity: 0.45;}
-.channel-breakdown-chip .cbc-name {font-weight: 600;}
-.channel-breakdown-chip .cbc-counts {color: var(--text-muted);
-    font-variant-numeric: tabular-nums;}
-.channel-breakdown-chip.active .cbc-counts {color: var(--accent);
-    opacity: 0.85;}
-.channel-breakdown-chip .cbc-views {color: var(--text-dim);
-    font-variant-numeric: tabular-nums;
-    font-size: 0.78rem;}
-.channel-breakdown-chip.active .cbc-views {color: var(--accent);
-    opacity: 0.75;}
-.channel-breakdown-clear {background: transparent;
-    border: 1px dashed var(--border-strong);
-    color: var(--text-muted);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    font-family: inherit;
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: color 0.12s, border-color 0.12s;}
-.channel-breakdown-clear:hover {color: var(--text);
-    border-color: var(--text-muted);}
 /* Clickable channel cells in data rows */
   .video-channel.clickable {cursor: pointer;
     transition: color 0.12s;}
@@ -922,8 +835,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .video-title-channel-tag.clickable-inline:hover {color: var(--accent);
     text-decoration: underline;}
 .channel-breakdown {padding: 0.55rem 0.7rem; gap: 0.3rem;}
-.channel-breakdown-chip {font-size: 0.78rem; padding: 0.28rem 0.7rem 0.28rem 0.6rem; gap: 0.4rem;}
-.channel-breakdown-chip .cbc-views {display: none;}
 .window-list .window-list-rows {max-height: 600px;
     overflow-y: auto;}
 .window-list .video-row-header {background: var(--surface-2);
@@ -1559,176 +1470,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      visually distinguished with a different accent colour so users can tell
      them apart at a glance. Green accent reads as "money" without being too
      on-the-nose about it. */
-  /* Story tracker — surfaces a dominant single-topic saturation event
-     while it's ongoing. Collapsible like the revenue and ad panels: header
-     button always shows the headline; body (stats, saturation chart,
-     video list) reveals on expand. */
-  .story-tracker {background: linear-gradient(135deg, var(--surface), var(--surface-2));
-    border: 1px solid var(--border);
-    border-left: 3px solid #e85d4d;
-    border-radius: var(--radius-md);
-    margin: 0 0 1rem;
-    overflow: hidden;}
-.story-tracker-toggle {width: 100%;
-    background: none;
-    border: none;
-    padding: 1rem 1.2rem;
-    text-align: left;
-    cursor: pointer;
-    color: inherit;
-    font-family: inherit;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    column-gap: 0.8rem;
-    row-gap: 0.3rem;
-    align-items: center;}
-.story-tracker-toggle:hover {background: rgba(255,255,255,0.02);}
-.story-tracker-eyebrow {grid-column: 1;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #e85d4d;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;}
-.story-tracker-headline {grid-column: 1;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;}
-.story-tracker-headline strong {color: #e85d4d;}
-.story-tracker-chevron {grid-column: 2;
-    grid-row: 1 / span 2;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    transition: transform 0.2s;}
-.story-tracker-toggle[aria-expanded="true"] .story-tracker-chevron {transform: rotate(180deg);}
-.story-tracker-body {padding: 0 1.2rem 1.1rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1rem;}
-.story-tracker-stats {display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    padding: 0.6rem 0;
-    margin-bottom: 0.9rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.85rem;
-    color: var(--text-muted);}
-.story-tracker-stat {display: flex;
-    flex-direction: column;}
-.story-tracker-stat-value {color: var(--text);
-    font-weight: 600;
-    font-size: 1rem;
-    font-variant-numeric: tabular-nums;}
-.story-tracker-stat-label {font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;}
-/* "Unclassifiable" note — appears when some videos have descriptions
-     too thin for keyword matching. Visually subordinate to the main stats:
-     muted, italic-ish. Honest about a known limitation without distracting
-     from the verified count above. */
-  .story-tracker-unclassified {font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    padding: 0.5rem 0.7rem;
-    margin: 0 0 0.9rem;
-    background: rgba(255,255,255,0.02);
-    border-left: 2px solid var(--border);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;}
-.story-tracker-unclassified em {color: var(--text-dim);
-    font-style: italic;}
-/* Saturation chart — horizontal bars per time window. The bar visually
-     encodes the percentage; the numeric label shows the fraction. */
-  /* Per-channel saturation rows (new story tracker, replaces the old
-     per-window saturation bars). One row per tagged channel showing how
-     much of that channel's recent output is about this topic. */
-  .story-tracker-channels {display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-    font-variant-numeric: tabular-nums;
-    margin: 0.6rem 0 0.8rem;}
-.story-channel-row {display: grid;
-    grid-template-columns: 130px 1fr 170px;
-    align-items: center;
-    gap: 0.7rem;
-    font-size: 0.82rem;}
-.story-channel-handle {color: var(--text-muted);
-    font-weight: 500;}
-.story-channel-bar {height: 8px;
-    background: var(--surface-2);
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;}
-.story-channel-fill {height: 100%;
-    border-radius: 4px;
-    transition: width 0.25s ease;}
-.story-channel-stats {color: var(--text);
-    font-size: 0.8rem;
-    text-align: right;}
-.story-channel-pct {color: var(--text-muted);
-    margin: 0 0.1rem;}
-.story-tracker-totals {padding: 0.6rem 0;
-    margin: 0.4rem 0 0.9rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);}
-.story-tracker-totals strong {color: var(--text);
-    font-variant-numeric: tabular-nums;}
-/* Video list — sortable header row, scrollable list below. Both the
-     header and the list items have explicit right padding to push the
-     rightmost column (like rate) away from where the scrollbar appears.
-     scrollbar-gutter: stable alone wasn't enough — Chrome's overlay
-     scrollbar can still visually crowd the content. Explicit padding
-     reserves the space whether the scrollbar shows or not. */
-  .story-tracker-video-list-header {display: grid;
-    grid-template-columns: 80px 1fr 80px 80px;
-    gap: 0.6rem;
-    padding: 0.4rem 14px 0.4rem 0;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);}
-.story-tracker-sort-btn {background: none;
-    border: none;
-    padding: 0;
-    color: inherit;
-    font: inherit;
-    text-transform: inherit;
-    letter-spacing: inherit;
-    cursor: pointer;
-    text-align: left;}
-.story-tracker-sort-btn:hover {color: var(--text);}
-.story-tracker-sort-btn[data-sort-active="true"] {color: var(--text);}
-/* Numeric columns right-aligned (header + body) */
-  .story-tracker-sort-btn[data-sort-col="views"],
-  .story-tracker-sort-btn[data-sort-col="like_rate"],
-  .story-tracker-video-list-header > :nth-child(3),
-  .story-tracker-video-list-header > :nth-child(4) {text-align: right;}
-.story-tracker-video-list {font-size: 0.82rem;
-    max-height: 320px;
-    overflow-y: auto;}
-.story-tracker-video-item {padding: 0.4rem 14px 0.4rem 0;
-    border-bottom: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: 80px 1fr 80px 80px;
-    gap: 0.6rem;
-    align-items: baseline;}
-.story-tracker-video-item:last-child {border-bottom: none;}
-.story-tracker-video-date {color: var(--text-dim);
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;}
-.story-tracker-video-title a {color: var(--text);
-    text-decoration: none;}
-.story-tracker-video-title a:hover {text-decoration: underline;}
-.story-tracker-video-desc {color: var(--text-muted);
-    font-size: 0.75rem;
-    margin-top: 0.2rem;
-    font-style: italic;}
-.story-tracker-video-views,
-  .story-tracker-video-likerate {color: var(--text-muted);
-    font-size: 0.78rem;
-    text-align: right;
-    font-variant-numeric: tabular-nums;}
 </style>
 </head>
 <body>
@@ -1895,13 +1636,20 @@ let PAYLOAD = null; // {scopes, net, channels}
 
 async function loadAndCompute(){
   const bust = '?t='+Date.now();
-  const [dataRes, tagsRes, topicsRes] = await Promise.all([
-    fetch('data.json'+bust), fetch('topic-tags.json'+bust), fetch('topics.json'+bust)
+  // data.json is required; topics/tags are optional enrichments. Fetch them
+  // resiliently so a 404 or parse error on the optional files degrades to
+  // "no topic data" rather than hanging the entire report on "Loading…".
+  const safeJson = async (url, fallback) => {
+    try { const r = await fetch(url); if (!r.ok) return fallback; return await r.json(); }
+    catch(e){ console.warn('optional fetch failed:', url, e); return fallback; }
+  };
+  const [data, tagsRaw, topicsRaw] = await Promise.all([
+    fetch('data.json'+bust).then(r => r.json()),
+    safeJson('topic-tags.json'+bust, { tags: {} }),
+    safeJson('topics.json'+bust, {})
   ]);
-  const data = await dataRes.json();
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
-  const tagsRaw = await tagsRes.json(); const tags = tagsRaw.tags || {};
-  const topicsRaw = await topicsRes.json();
+  const tags = (tagsRaw && tagsRaw.tags) || {};
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
@@ -2143,7 +1891,7 @@ const prevMonth = m => {const [y,mo]=m.split('-').map(Number);const d=new Date(y
 const yoyMonth = m => {const [y,mo]=m.split('-');return (y-1)+'-'+mo;};
 const ytLink = id => 'https://www.youtube.com/watch?v='+id;
 const LINK_ICON = `<svg class="link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>`;
-const BRAND_LOGO = `<svg class="brand-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="var(--accent)"/><g fill="#fff"><ellipse cx="50" cy="38" rx="20" ry="19"/><path d="M30 40 Q30 70 50 86 Q70 70 70 40 Q70 58 50 60 Q30 58 30 40Z"/><circle cx="42" cy="36" r="3.2" fill="var(--accent)"/><circle cx="58" cy="36" r="3.2" fill="var(--accent)"/></g></svg>`;
+
 
 function dcls(cur,prev,goodUp){ if(prev==null||prev===0||cur==null) return null; const d=Math.round((cur-prev)/prev*100);
   if(d===0) return {cls:'flat',txt:'▬ 0%'}; const pos=d>0; const arrow=(pos?'▲':'▼')+' '+Math.abs(d)+'%';
@@ -2674,6 +2422,11 @@ function buildMonthlyData(scope){
    ============================================================ */
 (function analyticsChartEngine(){
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  // Shared "YYYY-MM" → "Jan".."Dec" helper (was duplicated in 4 chart fns).
+  function monthShort(key) {
+    const [, mo] = String(key).split('-').map(Number);
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
+  }
   function metricsFor(summary) {
     if (!summary) return null;
     if (viewMode === 'long') {
@@ -3393,10 +3146,6 @@ function renderLikeRateChart(chartData, inProgressMonth) {
   const years = new Set(chartData.map(m => m.key.slice(0, 4)));
   const spansMultipleYears = years.size > 1;
   let xLabels = '';
-  function monthShort(key) {
-    const [, mo] = key.split('-').map(Number);
-    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
-  }
   if (spansMultipleYears && n > 24) {
     const yearFirstIdx = new Map();
     chartData.forEach((m, i) => {
@@ -3596,10 +3345,6 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   const years = new Set(chartData.map(m => m.key.slice(0, 4)));
   const spansMultipleYears = years.size > 1;
   let xLabels = '';
-  function monthShort(key) {
-    const [, mo] = key.split('-').map(Number);
-    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
-  }
   if (spansMultipleYears && n > 24) {
     const yearFirstIdx = new Map();
     chartData.forEach((m, i) => {
@@ -3876,10 +3621,6 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
   const years = new Set(chartData.map(m => m.key.slice(0, 4)));
   const spansMultipleYears = years.size > 1;
   let xLabels = '';
-  function monthShort(key) {
-    const [, mo] = key.split('-').map(Number);
-    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
-  }
   if (spansMultipleYears && n > 24) {
     const yearFirstIdx = new Map();
     chartData.forEach((m, i) => {
@@ -4407,10 +4148,6 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   const years = new Set(chartData.map(m => m.key.slice(0, 4)));
   const spansMultipleYears = years.size > 1;
   let xLabels = '';
-  function monthShort(key) {
-    const [y, mo] = key.split('-').map(Number);
-    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
-  }
   if (spansMultipleYears && n > 24) {
     // Long range: just years, at the first month of each year (or chart start)
     const yearFirstIdx = new Map();
@@ -4660,7 +4397,6 @@ function niceDurationAxis(minSec, maxSec) {
     renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
-    if (typeof window.renderStoryTracker === 'function') { try { window.renderStoryTracker(); } catch(e){ console.error('story tracker', e); } }
   };
   // Set #startDate/#endDate to span the currently-filtered monthlyData window,
   // so the revenue panel (which reads those inputs) matches the chart.
@@ -5084,15 +4820,15 @@ function niceDurationAxis(minSec, maxSec) {
         </div>
         <div class="desc-pattern-stat">
           <span class="desc-pattern-stat-value">${uninformativePct.toFixed(0)}%</span>
-          <span class="desc-pattern-stat-label">uninformative descriptions <span class="info-icon" data-tooltip="${escape(tipUninformative)}" tabindex="0">ⓘ</span></span>
+          <span class="desc-pattern-stat-label">uninformative descriptions <span class="info-icon" data-popover="${escape(tipUninformative)}" tabindex="0">ⓘ</span></span>
         </div>
         <div class="desc-pattern-stat">
           <span class="desc-pattern-stat-value">${thinOnlyCount}</span>
-          <span class="desc-pattern-stat-label">thin <span class="info-icon" data-tooltip="${escape(tipThin)}" tabindex="0">ⓘ</span></span>
+          <span class="desc-pattern-stat-label">thin <span class="info-icon" data-popover="${escape(tipThin)}" tabindex="0">ⓘ</span></span>
         </div>
         <div class="desc-pattern-stat">
           <span class="desc-pattern-stat-value">${boilerplateOnlyCount}</span>
-          <span class="desc-pattern-stat-label">boilerplate <span class="info-icon" data-tooltip="${escape(tipBoilerplate)}" tabindex="0">ⓘ</span></span>
+          <span class="desc-pattern-stat-label">boilerplate <span class="info-icon" data-popover="${escape(tipBoilerplate)}" tabindex="0">ⓘ</span></span>
         </div>
         <div class="desc-pattern-stat">
           <span class="desc-pattern-stat-value">${reused.length}</span>
@@ -5125,340 +4861,6 @@ function niceDurationAxis(minSec, maxSec) {
 };
 
 
-  // ---- Story tracker (ported, Analysis deep-dive) ----
-  let topicTrackersData = null;
-  let topicTrackersLoadPromise = null;
-  let storyTrackerState = {};
-  const STORY_TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
-const STORY_MIN_MONTH_VIDEOS = 15;       // below this, use the count-based window
-const STORY_FALLBACK_VIDEO_COUNT = 20;   // size of the count-based fallback window
-// Saturation threshold for surfacing a topic. A topic only appears as a
-// "story" if it accounts for at least this share of long-form uploads on
-// at least one channel during the window.
-const STORY_MIN_SATURATION = 0.10;
-const STORY_MAX_TOPICS = 1;
-const STORY_LONG_FORM_ONLY = true;
-
-const STORY_MONTH_NAMES = ['January','February','March','April','May','June',
-  'July','August','September','October','November','December'];
-
-// Resolve which videos are "in the window" and how to label that window.
-  function loadTopicTrackers() {
-  if (topicTrackersData) return Promise.resolve(topicTrackersData);
-  if (topicTrackersLoadPromise) return topicTrackersLoadPromise;
-  topicTrackersLoadPromise = fetch('topic-trackers.json')
-    .then(r => r.ok ? r.json() : null)
-    .then(json => {
-      // Graceful degradation: missing/broken file = empty tracker list.
-      topicTrackersData = json && Array.isArray(json.trackers)
-        ? json
-        : { trackers: [] };
-      return topicTrackersData;
-    })
-    .catch(() => {
-      topicTrackersData = { trackers: [] };
-      return topicTrackersData;
-    });
-  return topicTrackersLoadPromise;
-}
-  function resolveStoryWindow() {
-  const channelMap = ANALYTICS_DATASET.channels || {};
-  // Eligible = tagged channels, long-form, available
-  const eligible = ANALYTICS_DATASET.videos.filter(v => {
-    if (STORY_LONG_FORM_ONLY && v.isShort) return false;
-    if (v.unavailable) return false;
-    const ch = channelMap[v.channelId];
-    return ch && STORY_TAGGED_HANDLES.includes(ch.handle);
-  });
-
-  const now = new Date();
-  const monthStart = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1).getTime();
-  const monthName = STORY_MONTH_NAMES[now.getUTCMonth()];
-
-  const monthVids = eligible.filter(v => new Date(v.publishedAt).getTime() >= monthStart);
-
-  if (monthVids.length >= STORY_MIN_MONTH_VIDEOS) {
-    return {
-      videoIds: new Set(monthVids.map(v => v.id)),
-      label: `so far in ${monthName}`,
-      isMonthMode: true
-    };
-  }
-
-  // Fallback: most recent N videos by publish date
-  const recent = [...eligible]
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, STORY_FALLBACK_VIDEO_COUNT);
-  return {
-    videoIds: new Set(recent.map(v => v.id)),
-    label: `across the last ${recent.length} videos`,
-    isMonthMode: false
-  };
-}
-
-function isStoryTrackerChannel() {
-  if (!ANALYTICS_TOPICS || !ANALYTICS_TOPIC_TAGS) return false;
-  if (ANALYTICS_CHANNEL === 'ALL') return false;
-  const channelObj = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL];
-  return STORY_TAGGED_HANDLES.includes(channelObj?.handle);
-}
-
-function computeStoryStats() {
-  const channelMap = ANALYTICS_DATASET.channels || {};
-  const win = resolveStoryWindow();
-
-  const channelTotals = {};
-  for (const handle of STORY_TAGGED_HANDLES) {
-    channelTotals[handle] = { total: 0 };
-  }
-
-  const byTopic = {};
-  const tags = ANALYTICS_TOPIC_TAGS || {};
-
-  for (const v of ANALYTICS_DATASET.videos) {
-    if (!win.videoIds.has(v.id)) continue;
-    const ch = channelMap[v.channelId];
-    if (!ch || !channelTotals[ch.handle]) continue;
-
-    channelTotals[ch.handle].total++;
-
-    const topicId = tags[v.id];
-    if (!topicId) continue;
-    if (!byTopic[topicId]) {
-      byTopic[topicId] = {
-        topicId,
-        totalVideos: 0,
-        totalViews: 0,
-        videos: [],
-        byChannel: {}
-      };
-      for (const h of STORY_TAGGED_HANDLES) {
-        byTopic[topicId].byChannel[h] = { matches: 0, views: 0 };
-      }
-    }
-    const t = byTopic[topicId];
-    t.totalVideos++;
-    t.totalViews += v.views || 0;
-    t.byChannel[ch.handle].matches++;
-    t.byChannel[ch.handle].views += v.views || 0;
-    t.videos.push(v);
-  }
-
-  // Compute headline (max saturation across channels) for ranking/headline
-  for (const t of Object.values(byTopic)) {
-    t.maxSaturation = 0;
-    t.headlineHandle = STORY_TAGGED_HANDLES[0];
-    for (const handle of STORY_TAGGED_HANDLES) {
-      const total = channelTotals[handle].total;
-      const sat = total > 0 ? t.byChannel[handle].matches / total : 0;
-      if (sat > t.maxSaturation) {
-        t.maxSaturation = sat;
-        t.headlineHandle = handle;
-      }
-    }
-  }
-  return { byTopic, channelTotals, windowLabel: win.label, isMonthMode: win.isMonthMode };
-}
-
-function renderStoryTracker() {
-  const panel = document.getElementById('storyTracker');
-  if (!panel) return;
-  if (!ANALYTICS_DATASET) { panel.hidden = true; panel.innerHTML = ''; return; }
-  if (!isStoryTrackerChannel()) {
-    panel.hidden = true;
-    panel.innerHTML = '';
-    return;
-  }
-
-  // Lazy-load descriptions for the per-video preview line; everything else
-  // is already in memory. If descriptions not ready, render once now (preview
-  // line will be empty) and again after they arrive.
-  if (descriptionsCache === null) {
-    loadDescriptions().then(() => window.renderStoryTracker());
-  }
-
-  const { byTopic, channelTotals, windowLabel } = computeStoryStats();
-  const topics = Object.values(byTopic)
-    .filter(t => t.maxSaturation >= STORY_MIN_SATURATION)
-    .sort((a, b) => b.totalViews - a.totalViews)
-    .slice(0, STORY_MAX_TOPICS);
-
-  if (topics.length === 0) {
-    panel.hidden = true;
-    panel.innerHTML = '';
-    return;
-  }
-
-  panel.hidden = false;
-  panel.innerHTML = topics.map(t => renderStoryPanelHTML(t, channelTotals, windowLabel)).join('');
-  for (const t of topics) attachStoryPanelListeners(t);
-}
-
-function renderStoryPanelHTML(stats, channelTotals, windowLabel) {
-  const topicId = stats.topicId;
-  const topic = (ANALYTICS_TOPICS && ANALYTICS_TOPICS[topicId]) || {};
-  const name = topic.name || topicId;
-  const color = topic.color || '#888';
-  const state = getStoryUiState(topicId);
-  const safeId = sanitiseTopicId(topicId);
-  const headlinePct = Math.round(stats.maxSaturation * 100);
-
-  const channelRows = STORY_TAGGED_HANDLES.map(handle => {
-    const total = channelTotals[handle].total;
-    const bc = stats.byChannel[handle];
-    const pct = total > 0 ? (bc.matches / total) * 100 : 0;
-    const displayHandle = handle.replace(/^@/, '');
-    return `
-      <div class="story-channel-row">
-        <span class="story-channel-handle">${escapeHtml(displayHandle)}</span>
-        <div class="story-channel-bar">
-          <div class="story-channel-fill" style="width:${pct.toFixed(1)}%; background:${color};"></div>
-        </div>
-        <span class="story-channel-stats">
-          <strong>${bc.matches}</strong>/${total}
-          <span class="story-channel-pct">(${pct.toFixed(0)}%)</span>
-          \u00B7
-          ${formatViewsShort(bc.views)} views
-        </span>
-      </div>
-    `;
-  }).join('');
-
-  const decorated = stats.videos.map(v => ({
-    ...v,
-    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
-  }));
-
-  const arrow = col => state.sort.col === col
-    ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2')
-    : '';
-  const activeAttr = col => state.sort.col === col ? 'true' : 'false';
-
-  return `
-    <div class="story-tracker" data-story-id="${safeId}">
-      <button type="button" class="story-tracker-toggle" id="storyTrackerToggle-${safeId}"
-              aria-expanded="${state.expanded}" aria-controls="storyTrackerBody-${safeId}">
-        <span class="story-tracker-eyebrow">\u{1F525} Story tracker \u00B7 ${escapeHtml(name)}</span>
-        <span class="story-tracker-headline">
-          <strong>${headlinePct}%</strong> of long-form videos on the ${escapeHtml(stats.headlineHandle.replace(/^@/, ''))} YouTube channel
-          ${escapeHtml(windowLabel)} have been about ${escapeHtml(name)}
-        </span>
-        <span class="story-tracker-chevron">\u25BC</span>
-      </button>
-      <div class="story-tracker-body" id="storyTrackerBody-${safeId}" ${state.expanded ? '' : 'hidden'}>
-        <div class="story-tracker-channels">${channelRows}</div>
-        <div class="story-tracker-totals">
-          Total across all three channels: <strong>${stats.totalVideos} videos</strong> \u00B7 <strong>${formatViewsShort(stats.totalViews)} views</strong>
-        </div>
-        <div class="story-tracker-video-list-header">
-          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('date')}" data-sort-col="date">Date${arrow('date')}</button>
-          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('title')}" data-sort-col="title">Title${arrow('title')}</button>
-          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('views')}" data-sort-col="views">Views${arrow('views')}</button>
-          <button class="story-tracker-sort-btn" data-sort-active="${activeAttr('like_rate')}" data-sort-col="like_rate">Like %${arrow('like_rate')}</button>
-        </div>
-        <div class="story-tracker-video-list" id="storyTrackerVideos-${safeId}">
-          ${renderStoryVideoRows(decorated, state.sort)}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderStoryVideoRows(videos, sort) {
-  const fmt = (n) => n.toLocaleString('en-GB');
-  const { col, dir } = sort;
-  const sorted = [...videos].sort((a, b) => {
-    let av, bv;
-    if (col === 'date') { av = a.publishedAt; bv = b.publishedAt; }
-    else if (col === 'title') { av = (a.title || '').toLowerCase(); bv = (b.title || '').toLowerCase(); }
-    else if (col === 'views') { av = a.views || 0; bv = b.views || 0; }
-    else { av = a.like_rate; bv = b.like_rate; }
-    if (av < bv) return dir === 'asc' ? -1 : 1;
-    if (av > bv) return dir === 'asc' ? 1 : -1;
-    return 0;
-  });
-  return sorted.map(v => {
-    const desc = (descriptionsCache && descriptionsCache[v.id]) || '';
-    const firstLine = (desc.split('\n')[0] || '').slice(0, 110);
-    return `
-      <div class="story-tracker-video-item">
-        <span class="story-tracker-video-date">${v.publishedAt.slice(0, 10)}</span>
-        <div>
-          <div class="story-tracker-video-title">
-            <a href="https://youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a>
-          </div>
-          <div class="story-tracker-video-desc">${escapeHtml(firstLine)}</div>
-        </div>
-        <span class="story-tracker-video-views">${fmt(v.views || 0)}</span>
-        <span class="story-tracker-video-likerate">${v.like_rate.toFixed(2)}%</span>
-      </div>
-    `;
-  }).join('');
-}
-
-function attachStoryPanelListeners(stats) {
-  const topicId = stats.topicId;
-  const safeId = sanitiseTopicId(topicId);
-  const state = getStoryUiState(topicId);
-
-  const toggle = document.getElementById(`storyTrackerToggle-${safeId}`);
-  const body = document.getElementById(`storyTrackerBody-${safeId}`);
-  if (toggle && body) {
-    toggle.onclick = () => {
-      state.expanded = !state.expanded;
-      body.hidden = !state.expanded;
-      toggle.setAttribute('aria-expanded', state.expanded.toString());
-    };
-  }
-
-  const videoList = document.getElementById(`storyTrackerVideos-${safeId}`);
-  if (!videoList) return;
-  const decorated = stats.videos.map(v => ({
-    ...v,
-    like_rate: (v.views || 0) > 0 ? ((v.likes || 0) / v.views) * 100 : 0
-  }));
-
-  document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(btn => {
-    if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/[\u25B2\u25BC\s]+$/, '').trim();
-    btn.onclick = () => {
-      const col = btn.dataset.sortCol;
-      if (state.sort.col === col) {
-        state.sort.dir = state.sort.dir === 'desc' ? 'asc' : 'desc';
-      } else {
-        state.sort.col = col;
-        state.sort.dir = (col === 'date' || col === 'views' || col === 'like_rate') ? 'desc' : 'asc';
-      }
-      videoList.innerHTML = renderStoryVideoRows(decorated, state.sort);
-      document.querySelectorAll(`#storyTrackerBody-${safeId} .story-tracker-sort-btn`).forEach(b => {
-        const c = b.dataset.sortCol;
-        const arr = state.sort.col === c ? (state.sort.dir === 'desc' ? ' \u25BC' : ' \u25B2') : '';
-        b.textContent = b.dataset.label + arr;
-        b.dataset.sortActive = state.sort.col === c ? 'true' : 'false';
-      });
-    };
-  });
-}
-
-function getStoryUiState(topicId) {
-  if (!storyTrackerState[topicId]) {
-    storyTrackerState[topicId] = {
-      expanded: false,
-      sort: { col: 'date', dir: 'desc' }
-    };
-  }
-  return storyTrackerState[topicId];
-}
-
-function sanitiseTopicId(id) {
-  return String(id).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
-function formatViewsShort(n) {
-  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-  return String(n);
-}
-  window.renderStoryTracker = renderStoryTracker;
 
   function computeAnalyticsBaselines(){
     const m = new Map();
@@ -5737,7 +5139,6 @@ function formatViewsShort(n) {
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
-  function ymLabel(isoDate){ const d=new Date(isoDate); const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return M[d.getUTCMonth()]+" '"+String(d.getUTCFullYear()).slice(2); }
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
     try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
@@ -5938,70 +5339,6 @@ function buildChannelBreakdownTable(videos) {
   </div>`;
 }
 
-function buildChannelBreakdownHtml(videos, opts) {
-  const interactive = !!(opts && opts.interactive);
-  const activeFilter = (opts && opts.activeFilter) || null;
-  const showClear = !!(opts && opts.showClear);
-  if (!ANALYTICS_DATASET?.channels) return '';
-
-  // Aggregate counts per channel from the supplied video set
-  const perChannel = new Map();
-  for (const id of Object.keys(ANALYTICS_DATASET.channels)) {
-    perChannel.set(id, { longCount: 0, shortCount: 0, views: 0 });
-  }
-  for (const v of videos) {
-    const stats = perChannel.get(v.channelId);
-    if (!stats) continue;
-    if (v.unavailable) continue;
-    if (v.isShort) stats.shortCount++;
-    else stats.longCount++;
-    stats.views += v.views || 0;
-  }
-
-  // Order chips using the canonical channel display order — same one used by
-  // the selector chips at the top of the page, so the visual rhythm stays
-  // consistent across the site.
-  const orderedIds = orderChannelIds(Object.keys(ANALYTICS_DATASET.channels));
-
-  const chips = orderedIds.map(id => {
-    const ch = ANALYTICS_DATASET.channels[id];
-    const stats = perChannel.get(id) || { longCount: 0, shortCount: 0, views: 0 };
-    const isActive = activeFilter === id;
-    const isEmpty = stats.longCount + stats.shortCount === 0;
-    const dataAttr = interactive ? ` data-channel-filter="${id}"` : '';
-    const titleAttr = interactive ? ` title="Click to filter to ${escapeHtml(ch.title)}"` : '';
-    const tag = interactive ? 'button' : 'div';
-
-    // Interactive (window) mode: compact pill — name + L/S counts + views, single line
-    // Static (monthly) mode: small card — name on top, "X long · Y Shorts · ZM views" below
-    const body = interactive
-      ? `
-          <span class="cbc-name">${escapeHtml(ch.title)}</span>
-          <span class="cbc-counts">${stats.longCount}L · ${stats.shortCount}S</span>
-          <span class="cbc-views">${fmtCompact(stats.views)}</span>
-        `
-      : `
-          <div class="cbc-name">${escapeHtml(ch.title)}</div>
-          <div class="cbc-detail">
-            <span class="cbc-long-num">${fmt(stats.longCount)}</span> long ·
-            <span class="cbc-short-num">${fmt(stats.shortCount)}</span> Shorts ·
-            <span class="cbc-views-num">${fmtCompact(stats.views)}</span> views
-          </div>
-        `;
-
-    return `
-      <${tag} class="channel-breakdown-chip${isActive ? ' active' : ''}${isEmpty ? ' empty' : ''}${interactive ? '' : ' static'}"${dataAttr}${titleAttr}>
-        ${body}
-      </${tag}>
-    `;
-  }).join('');
-
-  const clearChip = (interactive && showClear)
-    ? `<button type="button" class="channel-breakdown-clear" id="clearChannelFilter">Clear filter</button>`
-    : '';
-  return `<div class="channel-breakdown">${chips}${clearChip}</div>`;
-}
-
 function renderAdPanel() {
   const panel = document.getElementById('adPanel');
   if (!panel) return;
@@ -6045,11 +5382,6 @@ function renderAdPanel() {
     if (!isAll && v.channelId !== ANALYTICS_CHANNEL) continue;
     const key = v.channelId + '|' + v.publishedAt.slice(0, 7);
     (monthlyLongFormViews[key] ||= []).push(v.views);
-  }
-  function median(arr) {
-    if (!arr.length) return 0;
-    const s = arr.slice().sort((a, b) => a - b);
-    return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2;
   }
   const monthlyMedians = {};
   for (const [k, arr] of Object.entries(monthlyLongFormViews)) {
