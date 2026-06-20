@@ -1,64 +1,45 @@
 {
-  "lastUpdated": "2026-06-19T16:14:01.813Z",
+  "lastUpdated": "2026-06-20T11:33:29.974Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "karmelo",
+      "termId": "surrounding",
+      "keywords": [
+        "controversy",
+        "allegations",
+        "fresh",
+        "second fresh",
+        "surrounding",
+        "public",
+        "case",
+        "conviction"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4706,
+        "baselineSaturation": 0.0699,
+        "spikeRatio": 6.74,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-06-20T11:33:29.974Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "online",
       "keywords": [
         "fallout",
         "anthony case",
         "continues",
         "online",
-        "public",
-        "case",
-        "karmelo"
+        "aftermath"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5625,
-        "baselineSaturation": 0.1815,
-        "spikeRatio": 3.1,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 24,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "social",
-      "keywords": [
-        "social",
-        "social media",
-        "controversy",
-        "media"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0111,
-        "spikeRatio": 28.13,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "following",
-      "keywords": [
-        "fresh",
-        "efforts",
-        "second fresh",
-        "surrounding",
-        "scrutiny",
-        "following",
-        "conviction"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4375,
-        "baselineSaturation": 0.0704,
-        "spikeRatio": 6.22,
+        "recentSaturation": 0.4118,
+        "baselineSaturation": 0.0184,
+        "spikeRatio": 22.4,
         "recentVideoCount": 7,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-06-20T11:33:29.974Z"
       }
     },
     {
@@ -72,53 +53,19 @@
         "coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.875,
-        "baselineSaturation": 0.1444,
-        "spikeRatio": 6.06,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "viral",
-      "keywords": [
-        "viral",
-        "sparked",
-        "debate"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4167,
-        "baselineSaturation": 0.0433,
-        "spikeRatio": 9.62,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "tyler",
-      "keywords": [
-        "tyler",
-        "robinson",
-        "tyler robinson",
-        "case"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0118,
-        "spikeRatio": 28.22,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
+        "recentSaturation": 0.8824,
+        "baselineSaturation": 0.1507,
+        "spikeRatio": 5.85,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 20,
+        "detectedAt": "2026-06-20T11:33:29.974Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "main",
       "keywords": [
+        "case",
         "main",
         "our coffee",
         "coffee main",
@@ -127,11 +74,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8333,
-        "baselineSaturation": 0.0906,
-        "spikeRatio": 9.2,
+        "baselineSaturation": 0.1063,
+        "spikeRatio": 7.84,
         "recentVideoCount": 10,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-06-20T11:33:29.974Z"
       }
     },
     {
@@ -144,15 +91,16 @@
         "pmest",
         "est tue",
         "tue thursday",
-        "thursday pmest"
+        "thursday pmest",
+        "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.75,
-        "baselineSaturation": 0.0075,
-        "spikeRatio": 100.5,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-06-19T16:14:01.813Z"
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.0227,
+        "spikeRatio": 36.67,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-06-20T11:33:29.974Z"
       }
     }
   ]
