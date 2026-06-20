@@ -191,7 +191,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-chart-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;padding:0;margin-top:0.7rem;display:inline-block}
 .hero-chart-link:hover{text-decoration:underline}
 .mini-trend-link:hover{text-decoration:underline}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;min-width:0}
 .panel h3{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
 .toplist{list-style:none;margin:0;padding:0;font-size:0.87rem;display:flex;flex-direction:column;gap:0.65rem}
 .toplist li .row{display:flex;justify-content:space-between;margin-bottom:0.3rem}
@@ -256,7 +256,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px;overflow-x:hidden}html{overflow-x:hidden}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -1152,10 +1152,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     color: var(--text-dim);}
 .sort-arrow.active {color: var(--accent);}
 @media(max-width:760px){
-  .video-row {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
-  .video-row.with-channel {grid-template-columns: 70px 1fr 90px;}
-  .video-row.ovw-row {grid-template-columns: 70px 1fr 90px;}
-  .video-row.ovw-row.with-channel {grid-template-columns: 70px 1fr 90px;}
+  .video-row,
+  .video-row.with-channel,
+  .video-row.no-topics,
+  .video-row.with-channel.no-topics,
+  .video-row.ovw-row,
+  .video-row.ovw-row.with-channel,
+  .video-row.ovw-row.no-topics,
+  .video-row.ovw-row.with-channel.no-topics {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
   .video-row .video-duration,
     .video-row .video-channel,
     .video-row .hide-mobile {display: none !important;}
@@ -5626,6 +5630,11 @@ function renderWindowList(startDate, endDate) {
 
   // Compute per-channel breakdown (only meaningful in All-combined mode)
   const showChannel = ANALYTICS_CHANNEL === 'ALL';
+  // Topic column only shows for single tagged channels (matches the data-row
+  // logic in the row builder). Header must use the same flag so its grid
+  // template and cells line up with the rows.
+  const showTopics = isTopicChannel();
+  const topicColClass = showTopics ? '' : ' no-topics';
 
   // Apply channel filter if active
   let scopedVideos = allWindowVideos;
@@ -5657,7 +5666,7 @@ function renderWindowList(startDate, endDate) {
   const breakdownHtml = showChannel ? buildChannelBreakdownTable(allWindowVideos) : '';
 
   const colHeader = `
-    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}">
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}${topicColClass}">
       <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
       ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
@@ -5665,6 +5674,7 @@ function renderWindowList(startDate, endDate) {
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
       <div class="video-likepct sortable hide-mobile${sortableClass(windowListState, 'likepct')}" data-sort="likepct">Like %${sortArrow(windowListState, 'likepct')}</div>
       <div class="video-comments sortable hide-mobile${sortableClass(windowListState, 'comments')}" data-sort="comments">Comments${sortArrow(windowListState, 'comments')}</div>
+      ${showTopics ? '<div class="video-topic hide-mobile">Topic</div>' : ''}
     </div>
   `;
 
