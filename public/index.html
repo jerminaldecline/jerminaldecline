@@ -6113,6 +6113,22 @@ function renderWindowList(startDate, endDate) {
     const months = availableMonths();
     const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : months[0];
     refresh(startMonth);
+    // refresh() only paints the Overview tab. On a hard refresh the active tab
+    // may be Analysis or Videos (restored from ?tab=), and tabShell's initial
+    // show() ran BEFORE data finished loading — so those tabs rendered against
+    // no data and came up blank. Now that data is in, re-render whichever tab
+    // is actually active so it paints. (Overview is already handled by refresh.)
+    try {
+      const activeTab = (new URLSearchParams(location.search).get('tab')) || 'overview';
+      if (activeTab === 'videos' && typeof window.renderVideosTab === 'function') {
+        if (window.__populateVidChannel) window.__populateVidChannel();
+        if (window.__syncVidWindow) window.__syncVidWindow();
+        window.renderVideosTab();
+      } else if (activeTab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
+        if (window.__populateAnChannel) window.__populateAnChannel();
+        window.renderAnalysisChart();
+      }
+    } catch(e){ console.error('post-load active-tab render', e); }
   } catch(err){
     document.getElementById('report').innerHTML =
       '<div style="padding:3rem;text-align:center;color:var(--down)">Could not load report data. '
