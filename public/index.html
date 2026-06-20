@@ -1,5 +1,24 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Jerminal Decline — HE'S SHORTLESS!</title>
+<meta name="description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network — views, revenue estimates, retitles and more across five channels.">
+<link rel="canonical" href="https://jerminaldecline.com/">
+<meta name="theme-color" content="#0d1220">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<!-- Open Graph (Facebook, LinkedIn, Discord, Slack, iMessage, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jerminal Decline">
+<meta property="og:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta property="og:description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network — views, revenue estimates, retitles and more.">
+<meta property="og:url" content="https://jerminaldecline.com/">
+<meta property="og:image" content="https://jerminaldecline.com/logo.png">
+<meta property="og:locale" content="en_GB">
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jerminal Decline — HE'S SHORTLESS!">
+<meta name="twitter:description" content="A satirical analytics dashboard tracking the decline of TheQuartering's YouTube network.">
+<meta name="twitter:image" content="https://jerminaldecline.com/logo.png">
+<meta name="twitter:site" content="@JerminalDecline">
 <style>
 :root{
   color-scheme: light dark;
@@ -127,13 +146,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
 @media(prefers-reduced-motion:reduce){.month-in-progress{animation:none}}
-.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;max-width:340px;cursor:pointer;padding:0.4rem 0.6rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
+.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;flex:1 1 auto;max-width:560px;min-width:300px;cursor:pointer;padding:0.5rem 0.85rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
 .dying-ticker:hover{border-color:var(--accent)}
 .dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
 .dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--shorts,#e8923a);font-style:italic;line-height:1.25}
 .dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
 .dying-ticker:hover .dying-ticker-new{opacity:1}
-@media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none}}
+@media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none;min-width:0;flex:1 1 100%}}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
 .peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
