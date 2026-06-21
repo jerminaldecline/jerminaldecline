@@ -362,7 +362,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-.prev-year-control{display:inline-flex;align-items:center;gap:0.45rem;margin-left:auto;cursor:pointer;font-size:0.8rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;transition:border-color .12s,color .12s}
+.prev-year-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
 .prev-year-control:hover{border-color:var(--accent);color:var(--text)}
 .prev-year-control[hidden]{display:none}
 .prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
@@ -1904,8 +1904,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .see-vids-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;white-space:nowrap;flex:0 0 auto}
 .see-vids-link:hover{text-decoration:underline}
 /* Videos summary strip (aggregate stats above the column headers) */
-.vid-summary{display:flex;flex-wrap:wrap;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
-.vs-item{display:flex;flex-direction:column;gap:0.12rem;min-width:0}
+.vid-summary{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
+.vs-item{display:flex;flex-direction:column;align-items:flex-end;gap:0.12rem;min-width:0}
 .vs-num{font-size:1.05rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;line-height:1}
 .vs-lbl{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:600}
 /* Topics container pills (browse + filter by subject) */
@@ -2032,15 +2032,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
       </div>
-      <label class="prev-year-control" id="prevYearControl" hidden>
-        <input type="checkbox" id="prevYearCheckbox" checked>
-        <span class="prev-year-control-swatch"></span>
-        <span class="prev-year-control-label">Compare previous year</span>
-      </label>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
+        <label class="prev-year-control" id="prevYearControl" hidden>
+          <input type="checkbox" id="prevYearCheckbox" checked>
+          <span class="prev-year-control-swatch"></span>
+          <span class="prev-year-control-label">Compare previous year</span>
+        </label>
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
@@ -3110,6 +3110,19 @@ function renderTrendChart(yoy) {
     return;
   }
 
+  // Prev-year toggle visibility — decided here (before the metric dispatch) so the
+  // branched charts get it right too, not just the main views path. Only metrics that
+  // actually draw a previous-year line expose the control: Views and Median views.
+  // The control is absolutely positioned inside the chart, so toggling it never
+  // reflows the surrounding layout.
+  (function(){
+    const ctrl = document.getElementById('prevYearControl');
+    const cb = document.getElementById('prevYearCheckbox');
+    const supports = (chartMetric === 'views' || chartMetric === 'median_views');
+    if (ctrl) ctrl.hidden = !supports;
+    if (cb) cb.checked = showPrevYear;
+  })();
+
   // Single-channel-only modes: when the user picks one of these while the
   // scope is "All channels", the old behaviour silently fell through to the
   // plain views line — the button looked active but nothing changed, reading
@@ -3211,18 +3224,6 @@ function renderTrendChart(yoy) {
   // The view-history alone is the story; duration overlay is the story.
   const effectiveYoy = yoy && !showDuration;
 
-  // "Previous year" is a user-toggleable series in the Views chart. Show the
-  // toggle whenever we're in the views chart (not the duration overlay), so it
-  // can be turned back on after being switched off.
-  const showPrevToggle = !showDuration && chartMetric === 'views';
-  // Show the dedicated "Compare previous year" control only on the Views chart;
-  // keep its checkbox in sync with the current state.
-  (function(){
-    const ctrl = document.getElementById('prevYearControl');
-    const cb = document.getElementById('prevYearCheckbox');
-    if (ctrl) ctrl.hidden = !showPrevToggle;
-    if (cb) cb.checked = showPrevYear;
-  })();
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
     ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
@@ -3852,6 +3853,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   legend.innerHTML = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Median long-form views per upload</span>
+    ${showPrevYear ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
   `;
 
   const W = 720, H = 280;
@@ -3865,8 +3867,11 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   const meds = chartData.map(m => ({ key: m.key, med: m.curr.longViewsMedian || 0 }));
   const ipMed = inProgressMonth ? (inProgressMonth.curr.longViewsMedian || 0) : null;
+  // Previous-year median per month (toggleable comparison line)
+  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && m.yoy.longViewsMedian > 0) ? m.yoy.longViewsMedian : null) : [];
+  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && inProgressMonth.yoy.longViewsMedian > 0) ? inProgressMonth.yoy.longViewsMedian : null;
 
-  const allMeds = [...meds.map(r => r.med), ipMed].filter(v => v != null && v > 0);
+  const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
   if (allMeds.length < 2) { svg.innerHTML = ''; return; }
   const maxMed = Math.max(...allMeds);
   const axis = tightNiceAxis(maxMed);
@@ -3926,6 +3931,24 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     lastValid = i;
   }
 
+  // Previous-year line + dots (break the line on months with no prior-year data)
+  let prevPath = '', prevDots = '';
+  if (showPrevYear) {
+    let pStarted = false;
+    prevMeds.forEach((v, i) => {
+      if (v == null) { pStarted = false; return; }
+      const x = xFor(i), y = yFor(v);
+      prevPath += `${pStarted ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)} `;
+      prevDots += `<circle class="chart-dot prev" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;
+      pStarted = true;
+    });
+    if (ipPrevMed != null) {
+      const x = xFor(n), y = yFor(ipPrevMed);
+      prevPath += `${pStarted ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)} `;
+      prevDots += `<circle class="chart-dot prev" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;
+    }
+  }
+
   let hovers = '';
   const wHover = innerW / Math.max(1, nTotal - 1);
   for (let i = 0; i < n; i++) {
@@ -3946,8 +3969,10 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${linePath}" />
     ${ipConnector}
+    ${prevDots}
     ${dots}
     ${ipDot}
     ${xLabels}
@@ -3970,6 +3995,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
         <div class="tooltip-row"><strong>${fmt(med)}</strong> median views</div>
         <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
+        ${showPrevYear && m.yoy && m.yoy.longViewsMedian > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(m.yoy.longViewsMedian)}</div>` : ''}
       `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
       const tipWidth = tooltip.offsetWidth || 200;
@@ -6621,11 +6647,11 @@ function renderWindowList(startDate, endDate) {
     const _tv = shownForStats.reduce((s,v)=>s+(v.views||0),0);
     const _tc = shownForStats.reduce((s,v)=>s+(v.comments||0),0);
     const _tl = shownForStats.reduce((s,v)=>s+(v.likes||0),0);
-    const _durs = shownForStats.filter(v=>v.durationSec>0).map(v=>v.durationSec);
-    const _md = _durs.length ? _durs.reduce((a,b)=>a+b,0)/_durs.length : 0;
+    const _durs = shownForStats.filter(v=>v.durationSec>0).map(v=>v.durationSec).sort((a,b)=>a-b);
+    const _md = _durs.length ? (_durs.length % 2 ? _durs[(_durs.length-1)/2] : (_durs[_durs.length/2-1] + _durs[_durs.length/2]) / 2) : 0;
     const _lr = _tv>0 ? (_tl/_tv*100) : 0;
     summaryStrip = `<div class="vid-summary" aria-label="Summary of shown videos">
-      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Mean duration</span></div>
+      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Median duration</span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tv)}</span><span class="vs-lbl">Total views</span></div>
       <div class="vs-item"><span class="vs-num">${_lr.toFixed(1)}%</span><span class="vs-lbl">Like rate</span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tc)}</span><span class="vs-lbl">Comments</span></div>
