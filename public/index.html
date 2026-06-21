@@ -2166,12 +2166,13 @@ function render(m){
     return `<div class="hl-stats">${item('views',s.views)}${item('comments',s.comments)}${item('likes',s.likes)}</div>`;
   };
   const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
+  const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${ANALYTICS_SUMMARIES[vid]}</div>` : '';
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
         <div class="hl-label">Top video this month</div>
         <a class="hl-title" href="${ytLink(d.topvid.id)}" target="_blank" rel="noopener">${d.topvid.title}${LINK_ICON}</a>
-        <div class="hl-note">The month's most-watched upload.</div>
+        ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
         ${chTag(d.topvid)}
       </div>
       ${hlStats(d.topvid)}
@@ -2181,6 +2182,7 @@ function render(m){
       <div>
         <div class="hl-label">Most contentious</div>
         <a class="hl-title" href="${ytLink(d.debate.id)}" target="_blank" rel="noopener">${d.debate.title}${LINK_ICON}</a>
+        ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
         ${chTag(d.debate)}
       </div>
