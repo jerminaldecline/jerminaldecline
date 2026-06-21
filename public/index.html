@@ -435,11 +435,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     animation: chart-pulse 1.8s ease-out infinite;}
 .trend-legend-swatch.likerate {background: var(--accent-2);
     height: 2px;}
-.chart-line-medianviews {fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round;}
-.chart-line-medianviews-inprogress {fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; stroke-linecap: round; opacity: 0.55;}
-.chart-dot-medianviews-inprogress {fill: var(--accent); stroke: var(--surface-2); stroke-width: 1.5;}
-.chart-dot-medianviews-inprogress-pulse {fill: var(--accent); opacity: 0.6; transform-origin: center; transform-box: fill-box; animation: chart-pulse 1.8s ease-out infinite;}
-.trend-legend-swatch.medianviews {background: var(--accent); height: 2px;}
 .chart-wrap {position: relative;
     background: var(--surface-2);
     border-radius: var(--radius);
@@ -1922,6 +1917,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tp-name{white-space:nowrap}
 .tp-count{font-variant-numeric:tabular-nums;font-weight:800;opacity:0.65;font-size:0.76rem}
 .topic-pill.active .tp-count{opacity:0.95}
+.an-chart-title{margin:0.1rem 0 0.7rem}
+.an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
+.an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
 </style>
 </head>
 <body>
@@ -2040,6 +2038,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="prev-year-control-label">Compare previous year</span>
       </label>
       </div>
+      <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
@@ -3063,10 +3062,34 @@ function buildMonthlyData(scope){
    call time (inside rebuild), not at parse time, so load order only requires
    this file to be parsed before the main block runs loadData(). */
 
+// Chart title + one-line description per metric, shown above the chart on every
+// render so each view has a clear headline (the tab labels are deliberately terse).
+function setChartTitle(metric, mode) {
+  const el = document.getElementById('anChartTitle');
+  if (!el) return;
+  const isShort = mode === 'short';
+  const viewsT = isShort ? 'Shorts views by month' : 'Long-form views by month';
+  const viewsS = isShort
+    ? "Total views on each month's Shorts, with year-over-year shading."
+    : "Total views on each month's long-form uploads, with year-over-year shading.";
+  const T = {
+    views: [viewsT, viewsS],
+    views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
+    views_likes: ['Views vs. like rate', 'Monthly views against the like rate — did engagement hold as reach shrank?'],
+    median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
+    engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
+    all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
+    like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.']
+  };
+  const [t, s] = T[metric] || T.views;
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
+}
+
 function renderTrendChart(yoy) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
+  setChartTitle(chartMetric, viewMode);
   if (!monthlyData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
@@ -3828,7 +3851,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   if (tooltip) tooltip.style.display = 'none';
 
   legend.innerHTML = `
-    <span class="trend-legend-item"><span class="trend-legend-swatch medianviews"></span> Median long-form views per upload</span>
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Median long-form views per upload</span>
   `;
 
   const W = 720, H = 280;
@@ -3891,6 +3914,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   }
 
   let linePath = '';
+  let dots = '';
   let lastValid = -1;
   for (let i = 0; i < n; i++) {
     const v = meds[i].med;
@@ -3898,6 +3922,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     const x = xFor(i);
     const y = yFor(v);
     linePath += `${lastValid < 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    dots += `<circle class="chart-dot curr" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5"/>`;
     lastValid = i;
   }
 
@@ -3914,15 +3939,16 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     const y = yFor(ipMed);
     const lastX = xFor(lastValid);
     const lastY = yFor(meds[lastValid].med);
-    ipConnector = `<path class="chart-line-medianviews-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
-    ipDot = `<circle class="chart-dot-medianviews-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-medianviews-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    ipConnector = `<path class="chart-line-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}"/>`;
+    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
   svg.innerHTML = `
     ${gridLines}
-    <path class="chart-line-medianviews" d="${linePath}" />
+    <path class="chart-line-curr" d="${linePath}" />
     ${ipConnector}
+    ${dots}
     ${ipDot}
     ${xLabels}
     ${yLabels}
