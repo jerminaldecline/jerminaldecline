@@ -2155,6 +2155,12 @@ async function loadAndCompute(){
   ANALYTICS_TOPIC_THEMES = (tagsRaw && tagsRaw.themes) || {};
   ANALYTICS_TOPIC_MODES  = (tagsRaw && tagsRaw.modes)  || {};
   ANALYTICS_SUMMARIES    = (tagsRaw && tagsRaw._summary) || {};
+  // Promotion is a DISPLAY decision: every video keeps its subject in `tags`
+  // (rows/search/chips show it), but only promoted subjects become first-class
+  // pills + leaderboard rows. Recomputed offline at the 3/6 gate; falls back to
+  // "all subjects promoted" if the field is absent (older data files).
+  ANALYTICS_PROMOTED_SUBJECTS = (tagsRaw && Array.isArray(tagsRaw._promotedSubjects))
+    ? new Set(tagsRaw._promotedSubjects) : null;
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
   const tcolor = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.color) tcolor[k]=v.color; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
@@ -2867,6 +2873,7 @@ let ANALYTICS_TOPICS = null;
 let ANALYTICS_TOPIC_THEMES = null;
 let ANALYTICS_TOPIC_MODES = null;
 let ANALYTICS_SUMMARIES = null;
+let ANALYTICS_PROMOTED_SUBJECTS = null;
 const AN_RPM = {
   longFormMidRoll: { low: 2.0, high: 3.25 },
   longFormShort: { low: 1.0, high: 2.0 },
@@ -5263,6 +5270,7 @@ function niceDurationAxis(minSec, maxSec) {
     for (const v of vids){
       const id = map[v.id]; if (!id) continue;
       if (excludeSet && excludeSet.has(id)) continue;
+      if (kind === 'subject' && ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue;
       counts.set(id, (counts.get(id)||0) + 1);
     }
     const ranked=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15);
@@ -6725,7 +6733,7 @@ function renderWindowList(startDate, endDate) {
     else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
     const counts = new Map();
     let tagged = 0;
-    for (const v of videos) { const id = ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]; if (!id) continue; tagged++; counts.set(id, (counts.get(id) || 0) + 1); }
+    for (const v of videos) { const id = ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]; if (!id) continue; tagged++; if (ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue; counts.set(id, (counts.get(id) || 0) + 1); }
     const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
     if (hint) hint.textContent = ranked.length ? `(${ranked.length} subject${ranked.length === 1 ? '' : 's'})` : '';
     if (!ranked.length) { body.innerHTML = '<div class="wordcloud-empty">No tagged subjects in this range.</div>'; if (meta) meta.textContent = ''; return; }
