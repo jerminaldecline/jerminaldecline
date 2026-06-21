@@ -1562,9 +1562,70 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      visually distinguished with a different accent colour so users can tell
      them apart at a glance. Green accent reads as "money" without being too
      on-the-nose about it. */
+/* === Mood modes (party / funeral) === */
+.mood-controls{position:fixed;right:14px;bottom:14px;z-index:95;display:flex;flex-direction:column;gap:0.5rem}
+.mood-btn{display:flex;align-items:center;gap:0.45rem;padding:0.5rem 0.8rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.12);transition:transform .12s ease,border-color .12s ease}
+.mood-btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+.mood-btn .mood-icon{font-size:1.05rem;line-height:1}
+.mood-party[aria-pressed="true"]{border-color:#d946ef;box-shadow:0 0 0 2px rgba(217,70,239,0.45),0 2px 10px rgba(0,0,0,0.2)}
+.mood-funeral[aria-pressed="true"]{border-color:#64748b;box-shadow:0 0 0 2px rgba(100,116,139,0.45),0 2px 10px rgba(0,0,0,0.2)}
+@media(max-width:680px){.mood-controls{right:10px;bottom:10px}.mood-btn .mood-label{display:none}.mood-btn{padding:0.55rem;border-radius:50%}}
+/* Disco overlay (party): coloured lights, screen blend, click-through */
+.disco-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s ease;mix-blend-mode:screen}
+body.party-mode .disco-overlay{opacity:1}
+.disco-light{position:absolute;width:55vw;height:55vw;border-radius:50%;filter:blur(60px);opacity:0.55;animation:discoMove 7s ease-in-out infinite}
+.disco-light-1{background:#ff2d95;top:-10%;left:-8%;animation-delay:0s}
+.disco-light-2{background:#23d5ab;top:-5%;right:-10%;animation-delay:-1.4s}
+.disco-light-3{background:#ffd600;bottom:-12%;left:8%;animation-delay:-2.8s}
+.disco-light-4{background:#2d7dff;bottom:-8%;right:0%;animation-delay:-4.2s}
+.disco-light-5{background:#b14dff;top:30%;left:35%;animation-delay:-5.6s}
+@keyframes discoMove{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(12vw,8vh) scale(1.15)}50%{transform:translate(-8vw,14vh) scale(0.9)}75%{transform:translate(6vw,-6vh) scale(1.1)}}
+/* Rain overlay (funeral): two parallax sheets, click-through; dashboard greyscales */
+.rain-overlay{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;overflow:hidden;transition:opacity .6s ease}
+body.funeral-mode .rain-overlay{opacity:1}
+.rain-overlay::before,.rain-overlay::after{content:'';position:absolute;inset:-50% 0 -50% 0;background-image:linear-gradient(110deg,transparent 0%,transparent 49.7%,rgba(200,215,230,0.42) 49.8%,rgba(200,215,230,0.42) 50.2%,transparent 50.3%,transparent 100%);background-size:9px 100px;animation:rainFall 0.55s linear infinite;opacity:0.8}
+.rain-overlay::after{background-image:linear-gradient(112deg,transparent 0%,transparent 49.7%,rgba(180,195,210,0.30) 49.85%,rgba(180,195,210,0.30) 50.15%,transparent 50.3%,transparent 100%);background-size:13px 140px;animation:rainFall 0.85s linear infinite;opacity:0.55}
+@keyframes rainFall{0%{transform:translate(0,-50px)}100%{transform:translate(-20px,50px)}}
+body.funeral-mode .wrap{filter:grayscale(1);transition:filter .6s ease}
+/* Mascots (slide up from bottom centre) */
+.party-mascots{position:fixed;left:50%;bottom:0;width:min(460px,72vw);height:auto;z-index:80;pointer-events:none;opacity:0;transform:translate(-50%,100%);transition:transform .8s cubic-bezier(.22,.61,.36,1),opacity .6s ease}
+body.party-mode .party-mascots{opacity:1;transform:translate(-50%,0);animation:partyBob 1.1s ease-in-out infinite alternate}
+@keyframes partyBob{from{transform:translate(-50%,0)}to{transform:translate(-50%,-16px)}}
+.funeral-mascot{position:fixed;left:50%;bottom:0;width:min(420px,60vw);height:auto;z-index:80;pointer-events:none;opacity:0;transform:translate(-50%,100%);transition:transform 1.6s cubic-bezier(.22,.61,.36,1),opacity .9s ease;filter:drop-shadow(0 -4px 12px rgba(0,0,0,0.35))}
+body.funeral-mode .funeral-mascot{opacity:1;transform:translate(-50%,0)}
+/* Floating all-time-low figure */
+.mood-floaters{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.floater{position:absolute;font-weight:800;white-space:nowrap;will-change:transform;text-shadow:0 1px 4px rgba(0,0,0,0.25)}
+.floater-party{animation:floatParty 6s ease-in-out infinite}
+.floater-funeral{color:rgba(220,60,60,0.6);font-size:2.2rem;animation:floatFuneral 26s linear infinite}
+@keyframes floatParty{0%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(0,-32px) rotate(8deg)}100%{transform:translate(0,0) rotate(-8deg)}}
+@keyframes floatFuneral{0%{transform:translate(-25vw,0)}100%{transform:translate(125vw,0)}}
+.audio-player{position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden}
+@media(prefers-reduced-motion:reduce){.disco-light,.party-mascots,.floater,.rain-overlay::before,.rain-overlay::after{animation:none!important}}
 </style>
 </head>
 <body>
+<!-- Mood modes (party / funeral): overlays, mascots, hidden audio + controls -->
+<div class="rain-overlay" id="rainOverlay" aria-hidden="true"></div>
+<div class="disco-overlay" id="discoOverlay" aria-hidden="true">
+  <span class="disco-light disco-light-1"></span>
+  <span class="disco-light disco-light-2"></span>
+  <span class="disco-light disco-light-3"></span>
+  <span class="disco-light disco-light-4"></span>
+  <span class="disco-light disco-light-5"></span>
+</div>
+<img class="party-mascots" id="partyMascots" src="" alt="" aria-hidden="true" />
+<img class="funeral-mascot" id="funeralMascot" src="" alt="" aria-hidden="true" />
+<div class="mood-floaters" id="moodFloaters" aria-hidden="true"></div>
+<div class="audio-player" id="audioPlayer" aria-hidden="true"><div id="ytPlayer"></div></div>
+<div class="mood-controls" role="group" aria-label="Mood">
+  <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false">
+    <span class="mood-icon">🎉</span><span class="mood-label">Party mode</span>
+  </button>
+  <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false">
+    <span class="mood-icon">⚰️</span><span class="mood-label">Funeral mode</span>
+  </button>
+</div>
 <div class="wrap">
   <div class="sticky-head" id="stickyHead">
   <div class="util-bar">
@@ -2210,6 +2271,7 @@ function render(m){
     </tr>`;
   }).join('');
 
+  try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? fmt(_pk.lowViews) : ''; } catch(e){}
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
@@ -6403,6 +6465,90 @@ function renderWindowList(startDate, endDate) {
       + 'Please refresh.</div>';
     console.error('Monthly report load failed:', err);
   }
+})();
+// === Mood modes (party / funeral) with hidden YouTube audio ===
+(function setupMoodModes(){
+  const VIDEOS = { party:'Vz60le50JL8', funeral:'xTyLzSUea0U' }; // Crab Rave / RDR2 "That's The Way It Is"
+  const DEFAULT_VOLUME = 30;
+  const MASCOTS = { party:'party-mascots.gif', funeral:'unconscious_jer.png' };
+  let ytPlayer=null, ytReady=false, currentMode=null, apiRequested=false, queued=null;
+
+  // Lazy-load the YouTube IFrame API on first activation.
+  function ensurePlayer(cb){
+    if (ytReady && ytPlayer){ if(cb) cb(); return; }
+    queued = cb || queued;
+    if (apiRequested) return;
+    apiRequested = true;
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function(){
+      if (typeof prev === 'function') { try{ prev(); }catch(e){} }
+      ytPlayer = new YT.Player('ytPlayer', {
+        height:'1', width:'1',
+        playerVars:{ autoplay:0, controls:0, disablekb:1, fs:0, playsinline:1 },
+        events:{ onReady:function(){ ytReady=true; if(queued){ const c=queued; queued=null; try{ c(); }catch(e){} } } }
+      });
+    };
+    const tag=document.createElement('script'); tag.src='https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+
+  // Lazy mascot loader — hides gracefully if the asset isn't deployed.
+  function loadMascot(which){
+    const img = document.getElementById(which==='party'?'partyMascots':'funeralMascot');
+    if (!img || img.dataset.loaded) return;
+    img.onerror = function(){ img.style.display='none'; };
+    img.src = MASCOTS[which];
+    img.dataset.loaded='1';
+  }
+
+  // Floating all-time-low figure: rainbow + bouncing for party, single red drift for funeral.
+  function buildFloaters(mode){
+    const host = document.getElementById('moodFloaters');
+    if (!host) return;
+    host.innerHTML='';
+    const low = (window.__moodLowText||'').trim();
+    if (!low || !mode) return;
+    const label = low + ' views';
+    if (mode==='funeral'){
+      const el=document.createElement('div');
+      el.className='floater floater-funeral';
+      el.textContent=label;
+      el.style.top=(20+Math.random()*50).toFixed(0)+'%';
+      host.appendChild(el);
+    } else if (mode==='party'){
+      for(let i=0;i<8;i++){
+        const el=document.createElement('div');
+        el.className='floater floater-party';
+        el.textContent=label;
+        el.style.top=(8+Math.random()*78).toFixed(0)+'%';
+        el.style.left=(4+Math.random()*82).toFixed(0)+'%';
+        el.style.fontSize=(1.1+Math.random()*1.6).toFixed(2)+'rem';
+        el.style.color='hsl('+Math.floor(Math.random()*360)+',90%,60%)';
+        el.style.animationDelay=(-Math.random()*6).toFixed(2)+'s';
+        host.appendChild(el);
+      }
+    }
+  }
+
+  function setMode(newMode){
+    currentMode = newMode;
+    const pB=document.getElementById('moodParty'), fB=document.getElementById('moodFuneral');
+    if (pB){ pB.setAttribute('aria-pressed', newMode==='party'?'true':'false'); pB.querySelector('.mood-label').textContent = newMode==='party'?'Stop party':'Party mode'; }
+    if (fB){ fB.setAttribute('aria-pressed', newMode==='funeral'?'true':'false'); fB.querySelector('.mood-label').textContent = newMode==='funeral'?'End service':'Funeral mode'; }
+    document.body.classList.toggle('party-mode', newMode==='party');
+    document.body.classList.toggle('funeral-mode', newMode==='funeral');
+    if (newMode==='party') loadMascot('party');
+    if (newMode==='funeral') loadMascot('funeral');
+    buildFloaters(newMode);
+    if (!newMode){ if (ytPlayer && ytReady){ try{ ytPlayer.stopVideo(); }catch(e){} } return; }
+    const vid = VIDEOS[newMode]; if(!vid) return;
+    ensurePlayer(function(){ try{ ytPlayer.loadVideoById({videoId:vid}); ytPlayer.setVolume(DEFAULT_VOLUME); ytPlayer.playVideo(); }catch(e){} });
+  }
+
+  const pBtn=document.getElementById('moodParty'), fBtn=document.getElementById('moodFuneral');
+  if (pBtn) pBtn.addEventListener('click', function(){ setMode(currentMode==='party'?null:'party'); });
+  if (fBtn) fBtn.addEventListener('click', function(){ setMode(currentMode==='funeral'?null:'funeral'); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && currentMode) setMode(null); });
 })();
 
 </script>
