@@ -918,6 +918,31 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .video-chips {gap: 0.25rem; margin-top: 0.3rem;}
   .video-summary {font-size: 0.76rem; margin-top: 0.2rem;}
 }
+/* ---- Phase 2: Analysis topic charts (mode-over-time + subject/theme leaderboards) ---- */
+.an-topic-section {display: flex; flex-direction: column; gap: 1rem; margin-top: 1.1rem;}
+.an-mode-card, .an-rank-card {background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem;}
+.an-topic-head {margin-bottom: 0.75rem;}
+.an-topic-eyebrow {display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim);}
+.an-topic-title {margin: 0.15rem 0 0; font-size: 1.05rem; color: var(--text);}
+.an-topic-sub {margin: 0.3rem 0 0; font-size: 0.8rem; color: var(--text-muted);}
+.an-mode-chartwrap {width: 100%;}
+.an-mode-chartwrap svg {width: 100%; height: auto; display: block;}
+.an-mode-xlabel {fill: var(--text-dim); font-size: 11px; font-family: inherit;}
+.an-mode-note {fill: var(--text-muted); font-size: 13px; font-family: inherit;}
+.an-mode-legend {display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin-top: 0.75rem;}
+.an-mode-leg {display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-muted);}
+.an-mode-swatch {width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto;}
+.an-rank-row {display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;}
+.an-rank-bar {display: grid; grid-template-columns: minmax(84px, 36%) 1fr auto; align-items: center; gap: 0.55rem; padding: 0.22rem 0;}
+.an-rank-name {font-size: 0.78rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.an-rank-track {height: 14px; background: var(--surface-2); border-radius: 7px; overflow: hidden;}
+.an-rank-fill {display: block; height: 100%; border-radius: 7px; min-width: 3px;}
+.an-rank-count {font-size: 0.74rem; color: var(--text-muted); font-variant-numeric: tabular-nums; font-weight: 600;}
+.an-rank-empty {font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0;}
+@media (max-width: 680px) {
+  .an-rank-row {grid-template-columns: 1fr;}
+  .an-rank-name {font-size: 0.74rem;}
+}
 .group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
 .video-row {display: grid;
     grid-template-columns: 90px 1fr 80px 110px 75px 90px 130px;
@@ -1627,6 +1652,35 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
            full-history chart, so these stay empty/unused but must exist) -->
       <input type="hidden" id="startDate"><input type="hidden" id="endDate">
     </div>
+    <section class="an-topic-section" id="anTopicSection" hidden>
+      <div class="an-mode-card">
+        <div class="an-topic-head">
+          <span class="an-topic-eyebrow">Rhetorical register over time</span>
+          <h3 class="an-topic-title">How the framing has shifted</h3>
+          <p class="an-topic-sub">Share of long-form uploads by mode, each month.</p>
+        </div>
+        <div class="an-mode-chartwrap">
+          <svg id="anModeChart" viewBox="0 0 720 300" role="img" aria-label="Mode mix over time"></svg>
+        </div>
+        <div class="an-mode-legend" id="anModeLegend"></div>
+      </div>
+      <div class="an-rank-row">
+        <div class="an-rank-card">
+          <div class="an-topic-head">
+            <span class="an-topic-eyebrow">Who he covers</span>
+            <h3 class="an-topic-title">Top subjects</h3>
+          </div>
+          <div id="anSubjectsBars"></div>
+        </div>
+        <div class="an-rank-card">
+          <div class="an-topic-head">
+            <span class="an-topic-eyebrow">What it's about</span>
+            <h3 class="an-topic-title">Top themes</h3>
+          </div>
+          <div id="anThemesBars"></div>
+        </div>
+      </div>
+    </section>
     <div class="revenue-panel" id="revenuePanel" hidden></div>
     <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
   </section>
@@ -2179,6 +2233,31 @@ function render(m){
     </tr>`;
   }).join('');
 
+  // Phase 3: rhetorical register (mode mix) for the displayed month + scope.
+  // Reuses the .tsb stacked-bar component; based on this month's long-form
+  // tagged uploads so it reads as "of what he posted, how he framed it".
+  const modeBarHTML = (()=>{
+    if (!ANALYTICS_TOPIC_MODES || !ANALYTICS_DATASET || !ANALYTICS_DATASET.videos) return '';
+    const chId = (scope==='ALL') ? null : (HANDLE_TO_ID[scope] ||
+      Object.keys(ANALYTICS_DATASET.channels||{}).find(cid => ((ANALYTICS_DATASET.channels[cid]||{}).handle)===scope));
+    const counts={}; let total=0;
+    for (const v of ANALYTICS_DATASET.videos){
+      if (v.isShort || v.unavailable) continue;
+      if (chId && v.channelId !== chId) continue;
+      if (String(v.publishedAt).slice(0,7) !== m) continue;
+      const md = ANALYTICS_TOPIC_MODES[v.id]; if (!md) continue;
+      counts[md]=(counts[md]||0)+1; total++;
+    }
+    if (!total) return '<div class="empty">No tagged uploads this month.</div>';
+    const ORDER=['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
+    const defOf = id => (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id]) || {};
+    const items = ORDER.filter(id=>counts[id]).map(id=>({ name:(defOf(id).name||id), color:(defOf(id).color||'var(--text-dim)'), val:counts[id] }));
+    const pct = v => v/total*100;
+    const bar = items.map(s=>`<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${s.name}: ${s.val} videos · ${Math.round(pct(s.val))}%"></span>`).join('');
+    const legend = items.map(s=>`<li class="tsb-leg-item"><span class="tsb-leg-dot" style="background:${s.color}"></span><span class="tsb-leg-name">${s.name}</span><span class="tsb-leg-val">${s.val} videos · ${Math.round(pct(s.val))}%</span></li>`).join('');
+    return `<div class="tsb"><div class="tsb-bar">${bar}</div><ul class="tsb-legend">${legend}</ul></div>`;
+  })();
+
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
@@ -2222,6 +2301,7 @@ function render(m){
     <div class="lower">
       <div class="panel"><h3>Top topics — share of uploads</h3>${topicBars.uploads}</div>
       <div class="panel"><h3>Top topics — share of views</h3>${topicBars.views}</div>
+      ${modeBarHTML ? `<div class="panel"><h3>Rhetorical register — share of uploads</h3>${modeBarHTML}</div>` : ''}
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -4486,7 +4566,126 @@ function niceDurationAxis(minSec, maxSec) {
     renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
+    try { renderAnalysisTopics(); } catch(e){ console.error('topic analysis', e); }
   };
+
+  // ===== Phase 2: topic analysis — mode-over-time + subject/theme leaderboards =====
+  const MODE_ORDER = ['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
+  function topicColorOf(id, fallback){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].color) || fallback || '#888'; }
+  function topicNameOf(id){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || id; }
+
+  // Channel + period-scoped, long-form, available videos (the tagged universe).
+  function anTopicVideos(){
+    const sdEl = document.getElementById('startDate'), edEl = document.getElementById('endDate');
+    const sd = sdEl && sdEl.value, ed = edEl && edEl.value;
+    let vids = anFilteredVideos().filter(v => !v.isShort && !v.unavailable);
+    if (sd && ed){
+      const start = new Date(sd+'T00:00:00Z'), end = new Date(ed+'T23:59:59Z');
+      vids = vids.filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    }
+    return vids;
+  }
+
+  // Theme ids whose name merely echoes a mode's short label (Woke Culture, Politics,
+  // Gaming, Viral Video Review, Other) — excluded from the themes board so it shows
+  // specific topics (Censorship, Court Cases, DEI, Trans Issues…) not mode restatements.
+  function echoThemeIds(){
+    const norm = s => String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const modeShorts = MODE_ORDER.map(m => norm(shortModeLabel(topicNameOf(m)))).filter(Boolean);
+    const set = new Set();
+    if (!ANALYTICS_TOPICS) return set;
+    for (const id of Object.keys(ANALYTICS_TOPICS)){
+      const def = ANALYTICS_TOPICS[id];
+      if (!def || def.kind !== 'theme') continue;
+      const tn = norm(def.name);
+      if (modeShorts.some(ms => ms && (tn===ms || tn.indexOf(ms)>=0 || ms.indexOf(tn)>=0))) set.add(id);
+    }
+    return set;
+  }
+
+  function renderAnalysisTopics(){
+    const section = document.getElementById('anTopicSection');
+    if (!section) return;
+    const tagged = anTopicVideos().filter(v => ANALYTICS_TOPIC_MODES && ANALYTICS_TOPIC_MODES[v.id]);
+    if (!ANALYTICS_TOPIC_MODES || tagged.length < 8){ section.hidden = true; return; }
+    section.hidden = false;
+    renderModeOverTime(tagged);
+    renderTopRank('anSubjectsBars', tagged, ANALYTICS_TOPIC_TAGS, null, 'subject');
+    renderTopRank('anThemesBars', tagged, ANALYTICS_TOPIC_THEMES, echoThemeIds(), 'theme');
+  }
+
+  // 100%-stacked area: each month's mode mix as a share of that month's long-form uploads.
+  function renderModeOverTime(vids){
+    const svg = document.getElementById('anModeChart');
+    const legend = document.getElementById('anModeLegend');
+    if (!svg) return;
+    const byMonth = new Map();
+    for (const v of vids){
+      const mode = ANALYTICS_TOPIC_MODES[v.id]; if (!mode) continue;
+      const key = String(v.publishedAt).slice(0,7);
+      if (!/^\d{4}-\d{2}$/.test(key)) continue;
+      let rec = byMonth.get(key); if (!rec){ rec = { _total: 0 }; byMonth.set(key, rec); }
+      rec[mode] = (rec[mode]||0) + 1; rec._total++;
+    }
+    const months = [...byMonth.keys()].filter(k => byMonth.get(k)._total >= 3).sort();
+    if (legend){
+      legend.innerHTML = MODE_ORDER.map(m =>
+        `<span class="an-mode-leg"><span class="an-mode-swatch" style="background:${topicColorOf(m)}"></span>${escapeHtml(topicNameOf(m))}</span>`
+      ).join('');
+    }
+    if (months.length < 2){
+      svg.innerHTML = `<text x="360" y="150" text-anchor="middle" class="an-mode-note">Not enough months in this range to show a trend.</text>`;
+      return;
+    }
+    const W=720,H=300, padL=8,padR=8,padT=12,padB=26;
+    const plotW=W-padL-padR, plotH=H-padT-padB, n=months.length;
+    const X = i => padL + (i/(n-1))*plotW;
+    const Y = share => padT + (1-share)*plotH;
+    let grid='';
+    [0.25,0.5,0.75].forEach(s=>{ const yp=Y(s); grid += `<line x1="${padL}" y1="${yp.toFixed(1)}" x2="${(padL+plotW).toFixed(1)}" y2="${yp.toFixed(1)}" stroke="var(--border)" stroke-width="1" opacity="0.35" stroke-dasharray="3 3"/>`; });
+    const cum = months.map(()=>0);
+    let bands='';
+    for (const mode of MODE_ORDER){
+      const lower = months.map((k,i)=>cum[i]);
+      const upper = months.map((k,i)=>{ const rec=byMonth.get(k); const sh = rec._total ? (rec[mode]||0)/rec._total : 0; cum[i]+=sh; return cum[i]; });
+      const pts=[];
+      for (let i=0;i<n;i++) pts.push(`${X(i).toFixed(1)},${Y(upper[i]).toFixed(1)}`);
+      for (let i=n-1;i>=0;i--) pts.push(`${X(i).toFixed(1)},${Y(lower[i]).toFixed(1)}`);
+      bands += `<polygon points="${pts.join(' ')}" fill="${topicColorOf(mode)}" opacity="0.92"><title>${escapeHtml(topicNameOf(mode))}</title></polygon>`;
+    }
+    let xaxis='', lastYear=null;
+    months.forEach((k,i)=>{
+      const yr=k.slice(0,4);
+      if (yr!==lastYear){ lastYear=yr; const xp=X(i);
+        if (i>0) xaxis += `<line x1="${xp.toFixed(1)}" y1="${padT}" x2="${xp.toFixed(1)}" y2="${(padT+plotH).toFixed(1)}" stroke="var(--bg)" stroke-width="1" opacity="0.4"/>`;
+        const anchor = i===0 ? 'start' : (xp > padL+plotW-20 ? 'end' : 'middle');
+        xaxis += `<text x="${xp.toFixed(1)}" y="${H-8}" class="an-mode-xlabel" text-anchor="${anchor}">${yr}</text>`;
+      }
+    });
+    svg.innerHTML = grid + bands + xaxis;
+  }
+
+  // Ranked horizontal bars for a tag dimension (subjects or themes), period-scoped.
+  function renderTopRank(containerId, vids, map, excludeSet, kind){
+    const el = document.getElementById(containerId);
+    if (!el || !map) return;
+    const counts = new Map();
+    for (const v of vids){
+      const id = map[v.id]; if (!id) continue;
+      if (excludeSet && excludeSet.has(id)) continue;
+      counts.set(id, (counts.get(id)||0) + 1);
+    }
+    const ranked=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15);
+    if (!ranked.length){ el.innerHTML = `<div class="an-rank-empty">No ${kind}s tagged in this range.</div>`; return; }
+    const max=ranked[0][1];
+    el.innerHTML = ranked.map(([id,c])=>{
+      const pct=Math.max(3,(c/max)*100);
+      return `<div class="an-rank-bar"><span class="an-rank-name" title="${escapeHtml(topicNameOf(id))}">${escapeHtml(topicNameOf(id))}</span>`+
+        `<span class="an-rank-track"><span class="an-rank-fill" style="width:${pct.toFixed(1)}%;background:${topicColorOf(id)}"></span></span>`+
+        `<span class="an-rank-count">${c}</span></div>`;
+    }).join('');
+  }
+
   // Set #startDate/#endDate to span the currently-filtered monthlyData window,
   // so the revenue panel (which reads those inputs) matches the chart.
   function syncDateInputsToWindow(){
