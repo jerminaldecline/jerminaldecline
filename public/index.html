@@ -158,7 +158,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
 .peak-item .peak-sub{font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
 @media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
 .report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
 .report-topgrid .peak-headline{margin-bottom:0;padding-bottom:0;border-bottom:none;grid-template-columns:1fr;align-content:start;gap:0.9rem}
 .report-topgrid .hero{margin-bottom:0}
@@ -2045,7 +2045,7 @@ function mini(label,cur,prev,goodUp){ const d=dcls(cur,prev,goodUp); if(!d) retu
   return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span><span class="mv">'+d.txt+'</span></span>'; }
 
 // scope state
-let scope='ALL';
+let scope='@TheQuartering';
 const SCOPE_LABEL = {'ALL':'All channels'};
 function buildScopeLabels(){ CHANNELS.forEach(c=>SCOPE_LABEL[c]=c); }
 // months available in the current scope, trimmed to where TheQuartering era begins (2017-07)
@@ -2150,7 +2150,6 @@ function render(m){
   // cards
   const cards=[];
   cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true});
-  cards.push({num:fmt(d.med),lbl:'Median views',cur:d.med,p:p&&p.med,y:y&&y.med,goodUp:true});
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null});
@@ -2235,31 +2234,6 @@ function render(m){
     </tr>`;
   }).join('');
 
-  // Phase 3: rhetorical register (mode mix) for the displayed month + scope.
-  // Reuses the .tsb stacked-bar component; based on this month's long-form
-  // tagged uploads so it reads as "of what he posted, how he framed it".
-  const modeBarHTML = (()=>{
-    if (!ANALYTICS_TOPIC_MODES || !ANALYTICS_DATASET || !ANALYTICS_DATASET.videos) return '';
-    const chId = (scope==='ALL') ? null : (HANDLE_TO_ID[scope] ||
-      Object.keys(ANALYTICS_DATASET.channels||{}).find(cid => ((ANALYTICS_DATASET.channels[cid]||{}).handle)===scope));
-    const counts={}; let total=0;
-    for (const v of ANALYTICS_DATASET.videos){
-      if (v.isShort || v.unavailable) continue;
-      if (chId && v.channelId !== chId) continue;
-      if (String(v.publishedAt).slice(0,7) !== m) continue;
-      const md = ANALYTICS_TOPIC_MODES[v.id]; if (!md) continue;
-      counts[md]=(counts[md]||0)+1; total++;
-    }
-    if (!total) return '<div class="empty">No tagged uploads this month.</div>';
-    const ORDER=['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
-    const defOf = id => (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id]) || {};
-    const items = ORDER.filter(id=>counts[id]).map(id=>({ name:(defOf(id).name||id), color:(defOf(id).color||'var(--text-dim)'), val:counts[id] }));
-    const pct = v => v/total*100;
-    const bar = items.map(s=>`<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${s.name}: ${s.val} videos · ${Math.round(pct(s.val))}%"></span>`).join('');
-    const legend = items.map(s=>`<li class="tsb-leg-item"><span class="tsb-leg-dot" style="background:${s.color}"></span><span class="tsb-leg-name">${s.name}</span><span class="tsb-leg-val">${s.val} videos · ${Math.round(pct(s.val))}%</span></li>`).join('');
-    return `<div class="tsb"><div class="tsb-bar">${bar}</div><ul class="tsb-legend">${legend}</ul></div>`;
-  })();
-
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
@@ -2270,7 +2244,6 @@ function render(m){
       </div>
     </div>
 
-    <div class="report-topgrid">
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
         <div class="peak-item">
@@ -2292,18 +2265,22 @@ function render(m){
         <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
       </div>
       <div class="hero-card">
+        <div class="hero-label">Median views</div>
+        <div class="hero-num">${fmt(d.med)}</div>
+        <div class="hero-sub">per long-form upload</div>
+        <div class="deltas">${pill(lblMo,d.med,p&&p.med,true)}${pill(lblYr,d.med,y&&y.med,true)}</div>
+      </div>
+      <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
         <div class="hero-num" style="font-size:2.05rem">${revStr}</div>
         <div class="deltas">${pill(lblMo,d.revlo,p&&p.revlo,true)}${pill(lblYr,d.revlo,y&&y.revlo,true)}</div>
       </div>
-    </div>
     </div>
     <div class="stat-row">${cardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
     <div class="lower">
       <div class="panel"><h3>Top topics — share of uploads</h3>${topicBars.uploads}</div>
       <div class="panel"><h3>Top topics — share of views</h3>${topicBars.views}</div>
-      ${modeBarHTML ? `<div class="panel"><h3>Rhetorical register — share of uploads</h3>${modeBarHTML}</div>` : ''}
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -6310,7 +6287,7 @@ function renderWindowList(startDate, endDate) {
     });
   }
   // ---- Videos tab controls ----
-  let vidTimePreset = 'all';
+  let vidTimePreset = CURRENT_MONTH_KEY;
   function vidCutoffMonth(preset){
     const now = new Date(); const y=now.getFullYear(), mo=now.getMonth()+1;
     const k=(yy,mm)=>`${yy}-${String(mm).padStart(2,'0')}`;
