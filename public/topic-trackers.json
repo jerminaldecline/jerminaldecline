@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-20T11:33:29.974Z",
+  "lastUpdated": "2026-06-21T12:22:13.180Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -16,11 +16,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.4706,
-        "baselineSaturation": 0.0699,
-        "spikeRatio": 6.74,
+        "baselineSaturation": 0.0709,
+        "spikeRatio": 6.64,
         "recentVideoCount": 8,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-06-20T11:33:29.974Z"
+        "detectedAt": "2026-06-21T12:22:13.180Z"
       }
     },
     {
@@ -35,30 +35,30 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.4118,
-        "baselineSaturation": 0.0184,
-        "spikeRatio": 22.4,
+        "baselineSaturation": 0.0187,
+        "spikeRatio": 22.07,
         "recentVideoCount": 7,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-06-20T11:33:29.974Z"
+        "detectedAt": "2026-06-21T12:22:13.180Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "coffee second",
+      "termId": "our",
       "keywords": [
         "coffee second",
         "second",
-        "our coffee",
         "our",
+        "our coffee",
         "coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8824,
-        "baselineSaturation": 0.1507,
-        "spikeRatio": 5.85,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-06-20T11:33:29.974Z"
+        "recentSaturation": 0.9412,
+        "baselineSaturation": 0.1455,
+        "spikeRatio": 6.47,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-06-21T12:22:13.180Z"
       }
     },
     {
@@ -74,11 +74,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1063,
-        "spikeRatio": 7.84,
+        "baselineSaturation": 0.1089,
+        "spikeRatio": 7.65,
         "recentVideoCount": 10,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-06-20T11:33:29.974Z"
+        "detectedAt": "2026-06-21T12:22:13.180Z"
       }
     },
     {
@@ -95,12 +95,12 @@
         "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8333,
+        "recentSaturation": 1,
         "baselineSaturation": 0.0227,
-        "spikeRatio": 36.67,
+        "spikeRatio": 44,
         "recentVideoCount": 5,
         "baselineVideoCount": 1,
-        "detectedAt": "2026-06-20T11:33:29.974Z"
+        "detectedAt": "2026-06-21T12:22:13.180Z"
       }
     }
   ]
