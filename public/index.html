@@ -146,11 +146,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
 @media(prefers-reduced-motion:reduce){.month-in-progress{animation:none}}
-.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;flex:1 1 auto;max-width:560px;min-width:300px;cursor:pointer;padding:0.5rem 0.85rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
-.dying-ticker:hover{border-color:var(--accent)}
-.dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
-.dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--shorts,#e8923a);font-style:italic;line-height:1.25}
-.dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
+.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.18rem;flex:1 1 auto;max-width:560px;min-width:280px;cursor:pointer;padding:0;border:none}
+.dying-ticker-lead{font-size:0.8rem;font-weight:600;color:var(--text-muted)}
+.dying-ticker-excuse{font-size:1.08rem;font-weight:800;color:var(--shorts,#e8923a);font-style:italic;line-height:1.3}
+.dying-ticker-new{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);opacity:0.5;transition:opacity .12s}
 .dying-ticker:hover .dying-ticker-new{opacity:1}
 @media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none;min-width:0;flex:1 1 100%}}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
@@ -158,7 +157,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
 .peak-item .peak-sub{font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
 @media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
 .report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
 .report-topgrid .peak-headline{margin-bottom:0;padding-bottom:0;border-bottom:none;grid-template-columns:1fr;align-content:start;gap:0.9rem}
 .report-topgrid .hero{margin-bottom:0}
@@ -178,6 +177,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
 .stat-deltas{display:flex;gap:0.5rem;margin-top:0.6rem}
+.stat-link,.shorts-link{cursor:pointer;transition:border-color .12s ease,transform .12s ease,box-shadow .12s ease}
+.stat-link:hover,.shorts-link:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.stat-link:focus-visible,.shorts-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stat-go{color:var(--accent);font-weight:800;margin-left:0.15rem}
 .mini{font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem}
 .mini .ml{color:var(--subtext)}
 .mini .mv{font-weight:700}
@@ -359,7 +362,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-.prev-year-control{display:inline-flex;align-items:center;gap:0.45rem;margin-left:auto;cursor:pointer;font-size:0.8rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;transition:border-color .12s,color .12s}
+.prev-year-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
 .prev-year-control:hover{border-color:var(--accent);color:var(--text)}
 .prev-year-control[hidden]{display:none}
 .prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
@@ -892,6 +895,57 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     display: inline-block;
     flex-shrink: 0;}
 .video-topic.untagged {color: var(--text-dim); font-style: italic; opacity: 0.6;}
+/* Three-axis topic display: per-video summary + subject/theme/mode chips,
+   shown inside the title cell (visible on mobile). Chips are click-to-filter. */
+.video-summary {font-size: 0.8rem; color: var(--text-muted); margin-top: 0.28rem; line-height: 1.35;}
+.video-chips {display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.38rem;}
+.vchip {display: inline-flex; align-items: center; gap: 0.32rem; padding: 0.1rem 0.5rem;
+    font-size: 0.715rem; line-height: 1.5; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--text-muted); cursor: pointer; font-family: inherit;
+    white-space: nowrap; transition: border-color .12s, background .12s, color .12s;}
+.vchip:hover {border-color: var(--accent); color: var(--text);}
+.vchip-on {border-color: var(--accent); color: var(--text); background: var(--flat-bg); font-weight: 600;}
+.vchip-mode {font-weight: 600; color: var(--text);}
+.vchip-dot {width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto;}
+.topic-filter-bar {display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;
+    font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0.1rem 0.2rem;}
+.topic-filter-bar .tf-kind {color: var(--text-dim);}
+.topic-filter-bar .tf-name {display: inline-flex; align-items: center; gap: 0.32rem; color: var(--text); font-weight: 600;}
+.tf-clear {cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+    border-radius: 999px; padding: 0.12rem 0.55rem; font-size: 0.715rem; font-family: inherit;}
+.tf-clear:hover {color: var(--text); border-color: var(--accent);}
+/* On narrow viewports the title column is only ~110px wide, narrower than some
+   chip labels — let chip text wrap (and shrink slightly) so nothing clips. */
+@media (max-width: 680px) {
+  .vchip {white-space: normal; font-size: 0.68rem; padding: 0.1rem 0.42rem; line-height: 1.3;}
+  .video-chips {gap: 0.25rem; margin-top: 0.3rem;}
+  .video-summary {font-size: 0.76rem; margin-top: 0.2rem;}
+}
+/* ---- Phase 2: Analysis topic charts (mode-over-time + subject/theme leaderboards) ---- */
+.an-topic-section {display: flex; flex-direction: column; gap: 1rem; margin-top: 1.1rem;}
+.an-mode-card, .an-rank-card {background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem;}
+.an-topic-head {margin-bottom: 0.75rem;}
+.an-topic-eyebrow {display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim);}
+.an-topic-title {margin: 0.15rem 0 0; font-size: 1.05rem; color: var(--text);}
+.an-topic-sub {margin: 0.3rem 0 0; font-size: 0.8rem; color: var(--text-muted);}
+.an-mode-chartwrap {width: 100%;}
+.an-mode-chartwrap svg {width: 100%; height: auto; display: block;}
+.an-mode-xlabel {fill: var(--text-dim); font-size: 11px; font-family: inherit;}
+.an-mode-note {fill: var(--text-muted); font-size: 13px; font-family: inherit;}
+.an-mode-legend {display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin-top: 0.75rem;}
+.an-mode-leg {display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--text-muted);}
+.an-mode-swatch {width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto;}
+.an-rank-row {display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;}
+.an-rank-bar {display: grid; grid-template-columns: minmax(84px, 36%) 1fr auto; align-items: center; gap: 0.55rem; padding: 0.22rem 0;}
+.an-rank-name {font-size: 0.78rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.an-rank-track {height: 14px; background: var(--surface-2); border-radius: 7px; overflow: hidden;}
+.an-rank-fill {display: block; height: 100%; border-radius: 7px; min-width: 3px;}
+.an-rank-count {font-size: 0.74rem; color: var(--text-muted); font-variant-numeric: tabular-nums; font-weight: 600;}
+.an-rank-empty {font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0;}
+@media (max-width: 680px) {
+  .an-rank-row {grid-template-columns: 1fr;}
+  .an-rank-name {font-size: 0.74rem;}
+}
 .group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
 .video-row {display: grid;
     grid-template-columns: 90px 1fr 80px 110px 75px 90px 130px;
@@ -913,7 +967,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;}
-.video-title {display: flex; align-items: center; gap: 0; min-width: 0; overflow: hidden;}
+.video-title {display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; overflow: hidden;}
+.video-title-main {display: flex; align-items: center; gap: 0; min-width: 0; max-width: 100%; overflow: hidden;}
 .video-title a {color: var(--text); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 0 1 auto;}
 .video-title .ad-badge, .video-title .like-badge, .video-title .renamed-badge {flex: 0 0 auto;}
 .video-title a:hover {color: var(--accent); text-decoration: underline;}
@@ -1506,9 +1561,396 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      visually distinguished with a different accent colour so users can tell
      them apart at a glance. Green accent reads as "money" without being too
      on-the-nose about it. */
+  /* Hidden audio player — iframe needs to exist in DOM for audio, just visually hidden */
+  .audio-player {
+    position: fixed;
+    bottom: -200px;
+    left: -200px;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* Mood control buttons — floating bottom-right */
+  .mood-controls {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 90;
+  }
+  .mood-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  }
+  .mood-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  .mood-btn[aria-pressed="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+  .mood-party[aria-pressed="true"] {
+    animation: moodPartyPulse 0.9s ease-in-out infinite;
+  }
+  .mood-funeral[aria-pressed="true"] {
+    animation: moodFuneralPulse 2s ease-in-out infinite;
+  }
+  @keyframes moodPartyPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(239, 142, 41, 0.5), 0 6px 18px rgba(239, 142, 41, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(239, 142, 41, 0.3), 0 6px 22px rgba(239, 142, 41, 0.5); }
+  }
+  @keyframes moodFuneralPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(120, 120, 130, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(120, 120, 130, 0.25), 0 6px 22px rgba(0, 0, 0, 0.4); }
+  }
+  .mood-icon { font-size: 1rem; line-height: 1; }
+  /* When mood-controls move, animate the transition */
+  .mood-controls { transition: bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (max-width: 540px) {
+    .mood-controls { bottom: 0.6rem; right: 0.6rem; gap: 0.35rem; }
+    .mood-btn { font-size: 0.78rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; }
+    /* On mobile, lift the buttons clear of the mascot area when a mode is active.
+       Both the party mascots and unconscious_jer occupy the bottom-center of the
+       viewport; the buttons normally sit bottom-right where the mascots' wider
+       silhouettes can overlap them. Lift to ~30vh from the bottom while active. */
+    body.party-mode .mood-controls,
+    body.funeral-mode .mood-controls {
+      bottom: 32vh;
+    }
+  }
+
+  /* Party mode — disco lights overlay */
+  .disco-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s;
+    overflow: hidden;
+    mix-blend-mode: screen;
+  }
+  body.party-mode .disco-overlay { opacity: 1; }
+  .disco-light {
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+  .disco-light-1 {
+    background: radial-gradient(circle, rgba(255, 50, 100, 0.9), transparent 70%);
+    animation: discoMove1 7s ease-in-out infinite;
+  }
+  .disco-light-2 {
+    background: radial-gradient(circle, rgba(50, 150, 255, 0.9), transparent 70%);
+    animation: discoMove2 9s ease-in-out infinite;
+  }
+  .disco-light-3 {
+    background: radial-gradient(circle, rgba(120, 255, 100, 0.9), transparent 70%);
+    animation: discoMove3 8s ease-in-out infinite;
+  }
+  .disco-light-4 {
+    background: radial-gradient(circle, rgba(255, 200, 50, 0.9), transparent 70%);
+    animation: discoMove4 11s ease-in-out infinite;
+  }
+  .disco-light-5 {
+    background: radial-gradient(circle, rgba(200, 100, 255, 0.9), transparent 70%);
+    animation: discoMove5 10s ease-in-out infinite;
+  }
+  @keyframes discoMove1 {
+    0%, 100% { top: -10%; left: -10%; }
+    25% { top: 30%; left: 70%; }
+    50% { top: 70%; left: 20%; }
+    75% { top: 10%; left: 50%; }
+  }
+  @keyframes discoMove2 {
+    0%, 100% { top: 60%; left: 70%; }
+    33% { top: 10%; left: 30%; }
+    66% { top: 70%; left: -10%; }
+  }
+  @keyframes discoMove3 {
+    0%, 100% { top: 30%; left: 40%; }
+    50% { top: 70%; left: 60%; }
+  }
+  @keyframes discoMove4 {
+    0%, 100% { top: 80%; left: 20%; }
+    40% { top: 0%; left: 60%; }
+    80% { top: 50%; left: 80%; }
+  }
+  @keyframes discoMove5 {
+    0%, 100% { top: 20%; left: 75%; }
+    50% { top: 60%; left: 15%; }
+  }
+  /* On mobile, the disco lights need bigger size, less blur, and higher opacity
+     to read properly. 80px blur on a 200px-wide light at 50vw dissolves them
+     to near-invisibility on phone screens. */
+  @media (max-width: 540px) {
+    .disco-light {
+      width: 85vw;
+      height: 85vw;
+      max-width: none;
+      max-height: none;
+      filter: blur(45px);
+      opacity: 0.75;
+    }
+  }
+  /* Subtle hue cycling in party mode — applied to .wrap so the mood
+     buttons keep their natural brand colours and stay clearly clickable. */
+  body.party-mode .wrap { animation: partyHue 6s linear infinite; }
+  @keyframes partyHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(15deg); }
+  }
+
+  /* Party mode mascots — slide up from below the viewport */
+  .party-mascots {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* above disco lights (1), below mood-controls (90) and toast (100) */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.25));
+  }
+  body.party-mode .party-mascots {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+    animation: mascotBob 2.4s ease-in-out infinite 0.7s;
+  }
+  @keyframes mascotBob {
+    0%, 100% { transform: translate(-50%, 0%); }
+    50%      { transform: translate(-50%, -6px); }
+  }
+  @media (max-width: 540px) {
+    .party-mascots { width: 70vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.party-mode .party-mascots { animation: none; }
+  }
+
+  /* Funeral mode mascot — slow, mournful slide up from below. No bob. */
+  .funeral-mascot {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* same layer as party-mascots */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 2s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.35));
+  }
+  body.funeral-mode .funeral-mascot {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+  }
+  @media (max-width: 540px) {
+    .funeral-mascot { width: 70vw; }
+  }
+
+  /* ===== FLOATING LOW-FIGURE TEXT ===== */
+
+  /* Funeral mode: dust effect — a single canvas covers the viewport.
+     One-shot text appearance: fades in, holds, crumbles to dust over ~17s. */
+  .floaters-funeral {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s;
+  }
+  body.funeral-mode .floaters-funeral { opacity: 1; }
+  .floaters-funeral canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* Party mode: multiple instances bouncing across the screen,
+     flashing colours via filter hue rotation. */
+  .floaters-party {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  body.party-mode .floaters-party { opacity: 1; }
+  .floater-party {
+    position: absolute;
+    font-weight: 800;
+    white-space: nowrap;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.4);
+    animation:
+      floaterPartyMove var(--move-dur, 8s) cubic-bezier(0.4, 0, 0.6, 1) infinite alternate,
+      floaterPartyHue var(--hue-dur, 2s) linear infinite;
+  }
+  @keyframes floaterPartyMove {
+    0%   { transform: translate(0, 0) rotate(var(--rot-start, -8deg)); }
+    100% { transform: translate(var(--move-x, 60vw), var(--move-y, 40vh)) rotate(var(--rot-end, 12deg)); }
+  }
+  @keyframes floaterPartyHue {
+    0%, 100% { filter: hue-rotate(0deg); color: hsl(340, 90%, 60%); }
+    16%      { color: hsl(30, 95%, 60%); }
+    33%      { color: hsl(55, 95%, 60%); }
+    50%      { color: hsl(140, 80%, 55%); filter: hue-rotate(0deg); }
+    66%      { color: hsl(200, 90%, 60%); }
+    83%      { color: hsl(280, 85%, 65%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .floater-party { animation: none !important; }
+  }
+
+  /* Funeral mode — greyscale + rain.
+     We apply the filter to .wrap rather than body so the mood-controls,
+     toast, and overlays (which are body-level siblings) stay vibrant and
+     remain obviously interactive. */
+  body.funeral-mode .wrap {
+    filter: grayscale(1) brightness(0.92);
+    transition: filter 0.5s;
+  }
+  body:not(.funeral-mode) .wrap { transition: filter 0.5s; }
+
+  .rain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.6s;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(40, 50, 60, 0.18), rgba(20, 25, 30, 0.32));
+    /* Subtle backdrop blur — the "glass" the drops sit on. Kept light so
+       the data on the page stays readable through it. */
+    backdrop-filter: blur(0.6px);
+    -webkit-backdrop-filter: blur(0.6px);
+  }
+  body.funeral-mode .rain-overlay { opacity: 1; }
+  .rain-overlay canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Respect reduced-motion preferences for both modes */
+  @media (prefers-reduced-motion: reduce) {
+    .disco-light, body.party-mode .wrap { animation: none !important; }
+    /* Canvas rain animation is gated by JS — see setupMoodModes */
+  }
+
+/* Overview "fun" card: weekend counter + mood-mode buttons (fills 6th stat cell) */
+.fun-card{gap:0.35rem;justify-content:flex-start}
+.fun-head{font-size:0.66rem;color:var(--label);text-transform:uppercase;letter-spacing:0.05em;font-weight:700}
+.fun-weekend{display:flex;align-items:center;justify-content:center;margin:0.1rem 0}
+.fw-pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;width:100%}
+.fw-side{display:flex;flex-direction:column;align-items:center;gap:0.08rem}
+.fw-num{font-size:1.5rem;font-weight:800;line-height:1;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+.fw-lbl{font-size:0.6rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;font-weight:600}
+.fw-div{width:1px;align-self:stretch;background:var(--border);margin:0.15rem 0.45rem}
+.fw-message{font-size:0.8rem;font-style:italic;color:var(--subtext);text-align:center;line-height:1.3}
+.fun-modes{display:flex;flex-direction:row;gap:0.35rem;margin-top:auto}
+.fun-modes .mood-btn{flex:1 1 0;min-width:0;justify-content:center;padding:0.34rem 0.4rem;font-size:0.72rem;font-weight:700;gap:0.28rem;white-space:nowrap}
+.fun-modes .mood-btn .mood-icon{font-size:0.85rem}
+@media(max-width:680px){.fun-modes{flex-direction:column}.fun-modes .mood-btn{white-space:normal}}
+/* Month quick-jump segmented control (Overview controls row) */
+.month-quick{display:inline-flex;border:1px solid var(--accent);border-radius:8px;overflow:hidden;flex:0 0 auto}
+.mq-btn{appearance:none;border:none;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:flex-start;gap:0.04rem;padding:0.3rem 0.75rem;line-height:1.15;text-align:left}
+.mq-main{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;opacity:0.8}
+.mq-sub{font-size:0.84rem;font-weight:800;letter-spacing:-0.01em}
+.mq-btn+.mq-btn{border-left:1px solid var(--accent)}
+.mq-btn:hover{color:var(--text)}
+.mq-btn.active{background:var(--accent);color:#fff}
+.mq-btn.active .mq-main{opacity:0.9}
+@media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
+/* Top topics panel header + "see this month's videos" link */
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem;margin:0 0 1rem}
+.panel-head h3{margin:0}
+.see-vids-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;white-space:nowrap;flex:0 0 auto}
+.see-vids-link:hover{text-decoration:underline}
+/* Videos summary strip (aggregate stats above the column headers) */
+.vid-summary{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
+.vs-item{display:flex;flex-direction:column;align-items:flex-end;gap:0.12rem;min-width:0}
+.vs-num{font-size:1.05rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;line-height:1}
+.vs-lbl{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:600}
+/* Topics container pills (browse + filter by subject) */
+.topics-body{display:flex;flex-wrap:wrap;gap:0.45rem}
+.topic-pill{display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:999px;padding:0.32rem 0.7rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text);cursor:pointer;transition:border-color .12s,background-color .12s,color .12s}
+.topic-pill:hover{border-color:var(--accent)}
+.topic-pill.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.topic-pill.active .vchip-dot{outline:1.5px solid rgba(255,255,255,0.7)}
+.tp-name{white-space:nowrap}
+.tp-count{font-variant-numeric:tabular-nums;font-weight:800;opacity:0.65;font-size:0.76rem}
+.topic-pill.active .tp-count{opacity:0.95}
+.an-chart-title{margin:0.1rem 0 0.7rem}
+.an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
+.an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
 </style>
 </head>
 <body>
+<!-- Funeral mode rain overlay (CSS-only) -->
+<div class="rain-overlay" id="rainOverlay" aria-hidden="true"></div>
+
+<!-- Party mode disco lights overlay (CSS-only) -->
+<div class="disco-overlay" id="discoOverlay" aria-hidden="true">
+  <div class="disco-light disco-light-1"></div>
+  <div class="disco-light disco-light-2"></div>
+  <div class="disco-light disco-light-3"></div>
+  <div class="disco-light disco-light-4"></div>
+  <div class="disco-light disco-light-5"></div>
+</div>
+
+<!-- Party mode mascots — slide up from below when party mode is active -->
+<img class="party-mascots" id="partyMascots" src="" alt="" aria-hidden="true" />
+
+<!-- Funeral mode mascot — slides up slowly when funeral mode is active -->
+<img class="funeral-mascot" id="funeralMascot" src="" alt="" aria-hidden="true" />
+
+<!-- Floating low-figure text — populated and shown by JS when mood modes activate -->
+<div class="floaters-funeral" id="floatersFuneral" aria-hidden="true"></div>
+<div class="floaters-party" id="floatersParty" aria-hidden="true"></div>
+
+<!-- Hidden YouTube audio player -->
+<div class="audio-player" id="audioPlayer" aria-hidden="true">
+  <div id="ytPlayer"></div>
+</div>
+
+<!-- Mood controls (floating bottom-right) -->
 <div class="wrap">
   <div class="sticky-head" id="stickyHead">
   <div class="util-bar">
@@ -1544,6 +1986,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </nav>
   <div class="sticky-controls" id="stickyControls">
     <div class="bar-controls" data-for="overview" id="ovBarControls">
+      <div class="month-quick" role="group" aria-label="Quick month jump">
+        <button class="mq-btn" id="mqComplete" type="button"><span class="mq-main">Last complete month</span><span class="mq-sub" id="mqCompleteSub"></span></button>
+        <button class="mq-btn" id="mqCurrent" type="button"><span class="mq-main">Month in progress</span><span class="mq-sub" id="mqCurrentSub"></span></button>
+      </div>
       <select id="scopeSel" class="bar-sel" aria-label="Channel"></select>
       <select id="msel" class="bar-sel" aria-label="Month"></select>
     </div>
@@ -1582,17 +2028,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
+        <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Median views</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
-        <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">All videos</button>
+        <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
       </div>
-      <label class="prev-year-control" id="prevYearControl" hidden>
-        <input type="checkbox" id="prevYearCheckbox" checked>
-        <span class="prev-year-control-swatch"></span>
-        <span class="prev-year-control-label">Compare previous year</span>
-      </label>
       </div>
+      <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
+        <label class="prev-year-control" id="prevYearControl" hidden>
+          <input type="checkbox" id="prevYearCheckbox" checked>
+          <span class="prev-year-control-swatch"></span>
+          <span class="prev-year-control-label">Compare previous year</span>
+        </label>
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
@@ -1606,6 +2054,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
     <div class="ad-panel" id="adPanel" hidden></div>
+    <div class="wordcloud-section topics-section" id="topicsSection">
+      <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">What this period covered</span>
+          <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="topicsPanel" hidden>
+        <div class="wordcloud-meta" id="topicsMeta"></div>
+        <div class="topics-body" id="topicsBody"></div>
+      </div>
+    </div>
     <div class="wordcloud-section">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="wordcloud-toggle-text">
@@ -1683,13 +2144,17 @@ async function loadAndCompute(){
   };
   const [data, tagsRaw, topicsRaw] = await Promise.all([
     fetch('data.json'+bust).then(r => r.json()),
-    safeJson('topic-tags.json'+bust, { tags: {} }),
+    safeJson('topic-tags-llm.json'+bust, { tags: {} }),
     safeJson('topics.json'+bust, {})
   ]);
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
+  // Three-axis LLM tagging: subjects (tags), themes, modes, plus per-video summaries.
+  ANALYTICS_TOPIC_THEMES = (tagsRaw && tagsRaw.themes) || {};
+  ANALYTICS_TOPIC_MODES  = (tagsRaw && tagsRaw.modes)  || {};
+  ANALYTICS_SUMMARIES    = (tagsRaw && tagsRaw._summary) || {};
   const tname = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.name) tname[k]=v.name; }
   const tcolor = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.color) tcolor[k]=v.color; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
@@ -1960,7 +2425,7 @@ function mini(label,cur,prev,goodUp){ const d=dcls(cur,prev,goodUp); if(!d) retu
   return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span><span class="mv">'+d.txt+'</span></span>'; }
 
 // scope state
-let scope='ALL';
+let scope='@TheQuartering';
 const SCOPE_LABEL = {'ALL':'All channels'};
 function buildScopeLabels(){ CHANNELS.forEach(c=>SCOPE_LABEL[c]=c); }
 // months available in the current scope, trimmed to where TheQuartering era begins (2017-07)
@@ -2064,8 +2529,7 @@ function render(m){
 
   // cards
   const cards=[];
-  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true});
-  cards.push({num:fmt(d.med),lbl:'Median views',cur:d.med,p:p&&p.med,y:y&&y.med,goodUp:true});
+  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long'});
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null});
@@ -2073,20 +2537,37 @@ function render(m){
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp), my=mini(lblYr,c.cur,c.y,c.goodUp);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
-    return `<div class="stat"><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}</div>${deltas}</div>`;
+    const linkAttrs = c.goto ? ` data-goto-videos="${c.goto}" data-vid-month="${m}" role="button" tabindex="0"` : '';
+    return `<div class="stat${c.goto?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${c.goto?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
+
+  // Overview "fun" card (fills the 6th stat-grid cell): deadpan weekend counter +
+  // the party/funeral mood-mode buttons. Weekend figures computed at render time.
+  const _wd = new Date(), _day = _wd.getDay(), _isWknd = (_day === 0 || _day === 6);
+  const _weekendInner = _isWknd
+    ? `<div class="fw-message">It's the weekend.<br>What are you guys going up to?</div>`
+    : `<div class="fw-pair"><div class="fw-side"><span class="fw-num">${_day}</span><span class="fw-lbl">days since</span></div><div class="fw-div"></div><div class="fw-side"><span class="fw-num">${6 - _day}</span><span class="fw-lbl">days until</span></div></div>`;
+  const funCardHTML = `<div class="stat fun-card${_isWknd ? ' is-weekend' : ''}">
+      <div class="fun-head">The weekend</div>
+      <div class="fun-weekend">${_weekendInner}</div>
+      <div class="fun-modes">
+        <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false"><span class="mood-icon">🎉</span><span class="mood-label">Party mode</span></button>
+        <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false"><span class="mood-icon">⚰️</span><span class="mood-label">Funeral mode</span></button>
+      </div>
+    </div>`;
 
   const hlStats = (s) => {
     const item=(label,val)=>`<div class="hl-stat"><span class="hsv">${val.toLocaleString()}</span><span class="hsl">${label}</span></div>`;
     return `<div class="hl-stats">${item('views',s.views)}${item('comments',s.comments)}${item('likes',s.likes)}</div>`;
   };
   const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
+  const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${ANALYTICS_SUMMARIES[vid]}</div>` : '';
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
         <div class="hl-label">Top video this month</div>
         <a class="hl-title" href="${ytLink(d.topvid.id)}" target="_blank" rel="noopener">${d.topvid.title}${LINK_ICON}</a>
-        <div class="hl-note">The month's most-watched upload.</div>
+        ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
         ${chTag(d.topvid)}
       </div>
       ${hlStats(d.topvid)}
@@ -2096,6 +2577,7 @@ function render(m){
       <div>
         <div class="hl-label">Most contentious</div>
         <a class="hl-title" href="${ytLink(d.debate.id)}" target="_blank" rel="noopener">${d.debate.title}${LINK_ICON}</a>
+        ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
         ${chTag(d.debate)}
       </div>
@@ -2148,6 +2630,7 @@ function render(m){
     </tr>`;
   }).join('');
 
+  try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? ('▼'+Math.abs(_pk.pctFromPeak)+'%') : ''; if (window.__refreshActiveFloaters) window.__refreshActiveFloaters(); } catch(e){}
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
@@ -2158,7 +2641,6 @@ function render(m){
       </div>
     </div>
 
-    <div class="report-topgrid">
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
         <div class="peak-item">
@@ -2174,10 +2656,16 @@ function render(m){
     })()}
     <div class="hero">
       <div class="hero-card">
-        <div class="hero-label">Total views</div>
+        <div class="hero-label">Total views <button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
         <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Median views</div>
+        <div class="hero-num">${fmt(d.med)}</div>
+        <div class="hero-sub">per long-form upload</div>
+        <div class="deltas">${pill(lblMo,d.med,p&&p.med,true)}${pill(lblYr,d.med,y&&y.med,true)}</div>
       </div>
       <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
@@ -2185,12 +2673,11 @@ function render(m){
         <div class="deltas">${pill(lblMo,d.revlo,p&&p.revlo,true)}${pill(lblYr,d.revlo,y&&y.revlo,true)}</div>
       </div>
     </div>
-    </div>
-    <div class="stat-row">${cardHTML}</div>
+    <div class="stat-row">${cardHTML}${funCardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
     <div class="lower">
-      <div class="panel"><h3>Top topics — share of uploads</h3>${topicBars.uploads}</div>
-      <div class="panel"><h3>Top topics — share of views</h3>${topicBars.views}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.uploads}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.views}</div>
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -2214,9 +2701,9 @@ function render(m){
       </div>
     </div>
     <div class="breadth">
-      <div class="shorts-strip">
+      <div class="shorts-strip shorts-link" data-goto-videos="short" data-vid-month="${m}" role="button" tabindex="0">
         <div class="shorts-head">
-          <div class="shorts-label">Shorts activity this month</div>
+          <div class="shorts-label">Shorts activity this month <span class="stat-go" aria-hidden="true">→</span></div>
           <div class="shorts-sub">${isAll ? 'Across all channels' : 'On '+scope}</div>
         </div>
         <div class="shorts-nums">
@@ -2238,16 +2725,6 @@ function render(m){
         </table>
       </div>
     </div>
-    <div class="ov-month-detail" id="ovMonthDetail">
-      <button type="button" class="ov-md-toggle" id="ovMdToggle" aria-expanded="false">
-        <span class="ov-md-caret"></span>
-        <span class="ov-md-label">${monthName(m)} — all ${(d.vlist||[]).length} videos</span>
-        <span class="ov-md-hint">Show ▾</span>
-      </button>
-      <div class="ov-md-body" id="ovMdBody" hidden>
-        ${renderOvMonthVideos(d.vlist || [], m)}
-      </div>
-    </div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
   const ss=document.getElementById('scopeSel');
@@ -2256,6 +2733,18 @@ function render(m){
   const ms=document.getElementById('msel');
   ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
   ms.onchange = (e)=>{ refresh(e.target.value); };
+  // Mood buttons live in the re-rendered fun card — restore their active state.
+  if (window.__syncMoodButtons) window.__syncMoodButtons();
+  // Month quick-jump (Last complete month / Month in progress) — wire + reflect active.
+  (function(){
+    const months2 = availableMonths();
+    const hasInProgress = months2.includes(CURRENT_MONTH_KEY);
+    const lcM = months2.find(mm => mm < CURRENT_MONTH_KEY) || months2[0];
+    const bCur = document.getElementById('mqCurrent'), bLc = document.getElementById('mqComplete');
+    const subCur = document.getElementById('mqCurrentSub'), subLc = document.getElementById('mqCompleteSub');
+    if (bLc)  { bLc.onclick = () => refresh(lcM); bLc.classList.toggle('active', m === lcM); if (subLc) subLc.textContent = monthName(lcM); bLc.title = 'Jump to ' + monthName(lcM) + ' (last complete month)'; bLc.style.display = (lcM === CURRENT_MONTH_KEY) ? 'none' : ''; }
+    if (bCur) { bCur.onclick = () => refresh(CURRENT_MONTH_KEY); bCur.classList.toggle('active', m === CURRENT_MONTH_KEY); if (subCur) subCur.textContent = monthName(CURRENT_MONTH_KEY); bCur.title = 'Jump to ' + monthName(CURRENT_MONTH_KEY) + ' (still in progress)'; bCur.style.display = hasInProgress ? '' : 'none'; }
+  })();
   // Overview month-detail collapse toggle
   // Dying-channel ticker — pick a random excuse, cycle on click/Enter.
   const dyingEl = document.getElementById('dyingExcuse');
@@ -2375,6 +2864,9 @@ let ANALYTICS_DATASET = null;
 let ANALYTICS_CHANNEL = "ALL";
 let ANALYTICS_TOPIC_TAGS = null;
 let ANALYTICS_TOPICS = null;
+let ANALYTICS_TOPIC_THEMES = null;
+let ANALYTICS_TOPIC_MODES = null;
+let ANALYTICS_SUMMARIES = null;
 const AN_RPM = {
   longFormMidRoll: { low: 2.0, high: 3.25 },
   longFormShort: { low: 1.0, high: 2.0 },
@@ -2402,6 +2894,13 @@ function anSummarise(videos) {
     medianDuration = durations.length % 2 ? durations[mid] : (durations[mid - 1] + durations[mid]) / 2;
   }
   const longFormTotalSeconds = durations.reduce((s, d) => s + d, 0);
+  // Median long-form views per upload (drives the "Median views" trend chart).
+  const viewVals = longForm.map(v => v.views || 0).sort((a, b) => a - b);
+  let longViewsMedian = 0;
+  if (viewVals.length) {
+    const vmid = Math.floor(viewVals.length / 2);
+    longViewsMedian = viewVals.length % 2 ? viewVals[vmid] : (viewVals[vmid - 1] + viewVals[vmid]) / 2;
+  }
   const midRollViews = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC).reduce((s, v) => s + v.views, 0);
   const shortLongViews = longViews - midRollViews;
   const revLow = (midRollViews/1000)*AN_RPM.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
@@ -2432,7 +2931,7 @@ function anSummarise(videos) {
     longLikeRate: longViews ? longLikes / longViews : 0,
     shortLikeRate: shortViews ? shortLikes / shortViews : 0,
     longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
-    medianDuration, longFormDurations: durations.length, longFormTotalSeconds,
+    medianDuration, longViewsMedian, longFormDurations: durations.length, longFormTotalSeconds,
     revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
@@ -2563,10 +3062,34 @@ function buildMonthlyData(scope){
    call time (inside rebuild), not at parse time, so load order only requires
    this file to be parsed before the main block runs loadData(). */
 
+// Chart title + one-line description per metric, shown above the chart on every
+// render so each view has a clear headline (the tab labels are deliberately terse).
+function setChartTitle(metric, mode) {
+  const el = document.getElementById('anChartTitle');
+  if (!el) return;
+  const isShort = mode === 'short';
+  const viewsT = isShort ? 'Shorts views by month' : 'Long-form views by month';
+  const viewsS = isShort
+    ? "Total views on each month's Shorts, with year-over-year shading."
+    : "Total views on each month's long-form uploads, with year-over-year shading.";
+  const T = {
+    views: [viewsT, viewsS],
+    views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
+    views_likes: ['Views vs. like rate', 'Monthly views against the like rate — did engagement hold as reach shrank?'],
+    median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
+    engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
+    all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
+    like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.']
+  };
+  const [t, s] = T[metric] || T.views;
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
+}
+
 function renderTrendChart(yoy) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
+  setChartTitle(chartMetric, viewMode);
   if (!monthlyData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
@@ -2587,6 +3110,19 @@ function renderTrendChart(yoy) {
     return;
   }
 
+  // Prev-year toggle visibility — decided here (before the metric dispatch) so the
+  // branched charts get it right too, not just the main views path. Only metrics that
+  // actually draw a previous-year line expose the control: Views and Median views.
+  // The control is absolutely positioned inside the chart, so toggling it never
+  // reflows the surrounding layout.
+  (function(){
+    const ctrl = document.getElementById('prevYearControl');
+    const cb = document.getElementById('prevYearCheckbox');
+    const supports = (chartMetric === 'views' || chartMetric === 'median_views');
+    if (ctrl) ctrl.hidden = !supports;
+    if (cb) cb.checked = showPrevYear;
+  })();
+
   // Single-channel-only modes: when the user picks one of these while the
   // scope is "All channels", the old behaviour silently fell through to the
   // plain views line — the button looked active but nothing changed, reading
@@ -2598,7 +3134,8 @@ function renderTrendChart(yoy) {
     views_length: 'Views + length',
     views_likes: 'Views + likes',
     engagement_variance: 'Engagement variance',
-    all_videos: 'All videos'
+    all_videos: 'Video lengths',
+    median_views: 'Median views'
   };
   if (ANALYTICS_CHANNEL === 'ALL' && SINGLE_CHANNEL_METRICS[chartMetric]) {
     legend.innerHTML = '';
@@ -2629,6 +3166,16 @@ function renderTrendChart(yoy) {
     && ANALYTICS_CHANNEL !== 'ALL';
   if (isLikeRateMode) {
     return renderLikeRateChart(chartData, inProgressMonth);
+  }
+
+  // "Median views" mode: standalone single-line chart of each month's MEDIAN
+  // long-form views per upload. Median (not mean) so one viral video or a dead
+  // month doesn't distort the typical-upload story. Single channel, long-form.
+  const isMedianViewsMode = chartMetric === 'median_views'
+    && viewMode === 'long'
+    && ANALYTICS_CHANNEL !== 'ALL';
+  if (isMedianViewsMode) {
+    return renderMedianViewsChart(chartData, inProgressMonth);
   }
 
   // "Views + like rate" mode: dual-axis chart with views (left axis, count)
@@ -2677,18 +3224,6 @@ function renderTrendChart(yoy) {
   // The view-history alone is the story; duration overlay is the story.
   const effectiveYoy = yoy && !showDuration;
 
-  // "Previous year" is a user-toggleable series in the Views chart. Show the
-  // toggle whenever we're in the views chart (not the duration overlay), so it
-  // can be turned back on after being switched off.
-  const showPrevToggle = !showDuration && chartMetric === 'views';
-  // Show the dedicated "Compare previous year" control only on the Views chart;
-  // keep its checkbox in sync with the current state.
-  (function(){
-    const ctrl = document.getElementById('prevYearControl');
-    const cb = document.getElementById('prevYearCheckbox');
-    if (ctrl) ctrl.hidden = !showPrevToggle;
-    if (cb) cb.checked = showPrevYear;
-  })();
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
     ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
@@ -3292,6 +3827,176 @@ function renderLikeRateChart(chartData, inProgressMonth) {
         <div class="tooltip-row tooltip-detail">${fmt(m.curr.longLikes || 0)} likes / ${fmtCompact(m.curr.longViews || 0)} views</div>
       `;
       // Clamp horizontal position to keep tooltip inside the wrap
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltip.offsetWidth || 200;
+      const margin = 8;
+      const half = tipWidth / 2;
+      const minLeft = half + margin;
+      const maxLeft = wrap.width - half - margin;
+      const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltip.style.left = clamped + 'px';
+      tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+// Standalone single-line chart: the monthly MEDIAN long-form views per upload.
+// Median (not mean) keeps one viral video or a single dead month from distorting
+// the typical-upload story. 0-based Y axis (views are counts) so the decline
+// reads honestly. Single channel, long-form. Mirrors renderLikeRateChart.
+function renderMedianViewsChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  legend.innerHTML = `
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Median long-form views per upload</span>
+    ${showPrevYear ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
+  `;
+
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 64 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+  const n = chartData.length;
+  const nTotal = n + (inProgressMonth ? 1 : 0);
+
+  if (n < 2) { svg.innerHTML = ''; return; }
+
+  const meds = chartData.map(m => ({ key: m.key, med: m.curr.longViewsMedian || 0 }));
+  const ipMed = inProgressMonth ? (inProgressMonth.curr.longViewsMedian || 0) : null;
+  // Previous-year median per month (toggleable comparison line)
+  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && m.yoy.longViewsMedian > 0) ? m.yoy.longViewsMedian : null) : [];
+  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && inProgressMonth.yoy.longViewsMedian > 0) ? inProgressMonth.yoy.longViewsMedian : null;
+
+  const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
+  if (allMeds.length < 2) { svg.innerHTML = ''; return; }
+  const maxMed = Math.max(...allMeds);
+  const axis = tightNiceAxis(maxMed);
+  const yMax = axis.max;
+  const yStep = axis.step;
+  const yMin = 0;
+
+  const xFor = (i) => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
+  const yFor = (v) => P.top + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
+
+  let gridLines = '', yLabels = '';
+  for (let v = yMin; v <= yMax + 0.001; v += yStep) {
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${fmtCompact(v)}</text>`;
+  }
+
+  const years = new Set(chartData.map(m => m.key.slice(0, 4)));
+  const spansMultipleYears = years.size > 1;
+  let xLabels = '';
+  if (spansMultipleYears && n > 24) {
+    const yearFirstIdx = new Map();
+    chartData.forEach((m, i) => { const y = m.key.slice(0, 4); if (!yearFirstIdx.has(y)) yearFirstIdx.set(y, i); });
+    for (const [year, i] of yearFirstIdx.entries()) {
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${year}</text>`;
+    }
+  } else if (spansMultipleYears) {
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
+    const yearsSeen = new Set();
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      const year = chartData[i].key.slice(0, 4);
+      const mon = monthShort(chartData[i].key);
+      const showYear = !yearsSeen.has(year);
+      yearsSeen.add(year);
+      const text = showYear ? `${mon} '${year.slice(2)}` : mon;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${text}</text>`;
+    }
+  } else {
+    const labelStride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6));
+    for (let i = 0; i < n; i++) {
+      if (i % labelStride !== 0 && i !== n - 1) continue;
+      xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${monthShort(chartData[i].key)}</text>`;
+    }
+  }
+
+  let linePath = '';
+  let dots = '';
+  let lastValid = -1;
+  for (let i = 0; i < n; i++) {
+    const v = meds[i].med;
+    if (v <= 0) continue;
+    const x = xFor(i);
+    const y = yFor(v);
+    linePath += `${lastValid < 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    dots += `<circle class="chart-dot curr" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5"/>`;
+    lastValid = i;
+  }
+
+  // Previous-year line + dots (break the line on months with no prior-year data)
+  let prevPath = '', prevDots = '';
+  if (showPrevYear) {
+    let pStarted = false;
+    prevMeds.forEach((v, i) => {
+      if (v == null) { pStarted = false; return; }
+      const x = xFor(i), y = yFor(v);
+      prevPath += `${pStarted ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)} `;
+      prevDots += `<circle class="chart-dot prev" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;
+      pStarted = true;
+    });
+    if (ipPrevMed != null) {
+      const x = xFor(n), y = yFor(ipPrevMed);
+      prevPath += `${pStarted ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)} `;
+      prevDots += `<circle class="chart-dot prev" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;
+    }
+  }
+
+  let hovers = '';
+  const wHover = innerW / Math.max(1, nTotal - 1);
+  for (let i = 0; i < n; i++) {
+    const x = xFor(i);
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="${i}" />`;
+  }
+
+  let ipDot = '', ipConnector = '';
+  if (inProgressMonth && ipMed != null && ipMed > 0 && lastValid >= 0) {
+    const x = xFor(n);
+    const y = yFor(ipMed);
+    const lastX = xFor(lastValid);
+    const lastY = yFor(meds[lastValid].med);
+    ipConnector = `<path class="chart-line-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}"/>`;
+    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/>`;
+    hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
+    <path class="chart-line-curr" d="${linePath}" />
+    ${ipConnector}
+    ${prevDots}
+    ${dots}
+    ${ipDot}
+    ${xLabels}
+    ${yLabels}
+    ${hovers}
+  `;
+
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const idx = rect.getAttribute('data-idx');
+      const m = idx === 'ip' ? inProgressMonth : chartData[Number(idx)];
+      if (!m) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      const med = m.curr.longViewsMedian || 0;
+      const uploads = (m.curr.longForm && m.curr.longForm.length) || 0;
+      tooltip.innerHTML = `
+        <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="tooltip-row"><strong>${fmt(med)}</strong> median views</div>
+        <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
+        ${showPrevYear && m.yoy && m.yoy.longViewsMedian > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(m.yoy.longViewsMedian)}</div>` : ''}
+      `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
       const tipWidth = tooltip.offsetWidth || 200;
       const margin = 8;
@@ -4453,6 +5158,124 @@ function niceDurationAxis(minSec, maxSec) {
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
   };
+
+  // ===== Phase 2: topic analysis — mode-over-time + subject/theme leaderboards =====
+  const MODE_ORDER = ['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
+  function topicColorOf(id, fallback){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].color) || fallback || '#888'; }
+  function topicNameOf(id){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || id; }
+
+  // Channel + period-scoped, long-form, available videos (the tagged universe).
+  function anTopicVideos(){
+    const sdEl = document.getElementById('startDate'), edEl = document.getElementById('endDate');
+    const sd = sdEl && sdEl.value, ed = edEl && edEl.value;
+    let vids = anFilteredVideos().filter(v => !v.isShort && !v.unavailable);
+    if (sd && ed){
+      const start = new Date(sd+'T00:00:00Z'), end = new Date(ed+'T23:59:59Z');
+      vids = vids.filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    }
+    return vids;
+  }
+
+  // Theme ids whose name merely echoes a mode's short label (Woke Culture, Politics,
+  // Gaming, Viral Video Review, Other) — excluded from the themes board so it shows
+  // specific topics (Censorship, Court Cases, DEI, Trans Issues…) not mode restatements.
+  function echoThemeIds(){
+    const norm = s => String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const modeShorts = MODE_ORDER.map(m => norm(shortModeLabel(topicNameOf(m)))).filter(Boolean);
+    const set = new Set();
+    if (!ANALYTICS_TOPICS) return set;
+    for (const id of Object.keys(ANALYTICS_TOPICS)){
+      const def = ANALYTICS_TOPICS[id];
+      if (!def || def.kind !== 'theme') continue;
+      const tn = norm(def.name);
+      if (modeShorts.some(ms => ms && (tn===ms || tn.indexOf(ms)>=0 || ms.indexOf(tn)>=0))) set.add(id);
+    }
+    return set;
+  }
+
+  function renderAnalysisTopics(){
+    const section = document.getElementById('anTopicSection');
+    if (!section) return;
+    const tagged = anTopicVideos().filter(v => ANALYTICS_TOPIC_MODES && ANALYTICS_TOPIC_MODES[v.id]);
+    if (!ANALYTICS_TOPIC_MODES || tagged.length < 8){ section.hidden = true; return; }
+    section.hidden = false;
+    renderModeOverTime(tagged);
+    renderTopRank('anSubjectsBars', tagged, ANALYTICS_TOPIC_TAGS, null, 'subject');
+    renderTopRank('anThemesBars', tagged, ANALYTICS_TOPIC_THEMES, echoThemeIds(), 'theme');
+  }
+
+  // 100%-stacked area: each month's mode mix as a share of that month's long-form uploads.
+  function renderModeOverTime(vids){
+    const svg = document.getElementById('anModeChart');
+    const legend = document.getElementById('anModeLegend');
+    if (!svg) return;
+    const byMonth = new Map();
+    for (const v of vids){
+      const mode = ANALYTICS_TOPIC_MODES[v.id]; if (!mode) continue;
+      const key = String(v.publishedAt).slice(0,7);
+      if (!/^\d{4}-\d{2}$/.test(key)) continue;
+      let rec = byMonth.get(key); if (!rec){ rec = { _total: 0 }; byMonth.set(key, rec); }
+      rec[mode] = (rec[mode]||0) + 1; rec._total++;
+    }
+    const months = [...byMonth.keys()].filter(k => byMonth.get(k)._total >= 3).sort();
+    if (legend){
+      legend.innerHTML = MODE_ORDER.map(m =>
+        `<span class="an-mode-leg"><span class="an-mode-swatch" style="background:${topicColorOf(m)}"></span>${escapeHtml(topicNameOf(m))}</span>`
+      ).join('');
+    }
+    if (months.length < 2){
+      svg.innerHTML = `<text x="360" y="150" text-anchor="middle" class="an-mode-note">Not enough months in this range to show a trend.</text>`;
+      return;
+    }
+    const W=720,H=300, padL=8,padR=8,padT=12,padB=26;
+    const plotW=W-padL-padR, plotH=H-padT-padB, n=months.length;
+    const X = i => padL + (i/(n-1))*plotW;
+    const Y = share => padT + (1-share)*plotH;
+    let grid='';
+    [0.25,0.5,0.75].forEach(s=>{ const yp=Y(s); grid += `<line x1="${padL}" y1="${yp.toFixed(1)}" x2="${(padL+plotW).toFixed(1)}" y2="${yp.toFixed(1)}" stroke="var(--border)" stroke-width="1" opacity="0.35" stroke-dasharray="3 3"/>`; });
+    const cum = months.map(()=>0);
+    let bands='';
+    for (const mode of MODE_ORDER){
+      const lower = months.map((k,i)=>cum[i]);
+      const upper = months.map((k,i)=>{ const rec=byMonth.get(k); const sh = rec._total ? (rec[mode]||0)/rec._total : 0; cum[i]+=sh; return cum[i]; });
+      const pts=[];
+      for (let i=0;i<n;i++) pts.push(`${X(i).toFixed(1)},${Y(upper[i]).toFixed(1)}`);
+      for (let i=n-1;i>=0;i--) pts.push(`${X(i).toFixed(1)},${Y(lower[i]).toFixed(1)}`);
+      bands += `<polygon points="${pts.join(' ')}" fill="${topicColorOf(mode)}" opacity="0.92"><title>${escapeHtml(topicNameOf(mode))}</title></polygon>`;
+    }
+    let xaxis='', lastYear=null;
+    months.forEach((k,i)=>{
+      const yr=k.slice(0,4);
+      if (yr!==lastYear){ lastYear=yr; const xp=X(i);
+        if (i>0) xaxis += `<line x1="${xp.toFixed(1)}" y1="${padT}" x2="${xp.toFixed(1)}" y2="${(padT+plotH).toFixed(1)}" stroke="var(--bg)" stroke-width="1" opacity="0.4"/>`;
+        const anchor = i===0 ? 'start' : (xp > padL+plotW-20 ? 'end' : 'middle');
+        xaxis += `<text x="${xp.toFixed(1)}" y="${H-8}" class="an-mode-xlabel" text-anchor="${anchor}">${yr}</text>`;
+      }
+    });
+    svg.innerHTML = grid + bands + xaxis;
+  }
+
+  // Ranked horizontal bars for a tag dimension (subjects or themes), period-scoped.
+  function renderTopRank(containerId, vids, map, excludeSet, kind){
+    const el = document.getElementById(containerId);
+    if (!el || !map) return;
+    const counts = new Map();
+    for (const v of vids){
+      const id = map[v.id]; if (!id) continue;
+      if (excludeSet && excludeSet.has(id)) continue;
+      counts.set(id, (counts.get(id)||0) + 1);
+    }
+    const ranked=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15);
+    if (!ranked.length){ el.innerHTML = `<div class="an-rank-empty">No ${kind}s tagged in this range.</div>`; return; }
+    const max=ranked[0][1];
+    el.innerHTML = ranked.map(([id,c])=>{
+      const pct=Math.max(3,(c/max)*100);
+      return `<div class="an-rank-bar"><span class="an-rank-name" title="${escapeHtml(topicNameOf(id))}">${escapeHtml(topicNameOf(id))}</span>`+
+        `<span class="an-rank-track"><span class="an-rank-fill" style="width:${pct.toFixed(1)}%;background:${topicColorOf(id)}"></span></span>`+
+        `<span class="an-rank-count">${c}</span></div>`;
+    }).join('');
+  }
+
   // Set #startDate/#endDate to span the currently-filtered monthlyData window,
   // so the revenue panel (which reads those inputs) matches the chart.
   function syncDateInputsToWindow(){
@@ -4470,7 +5293,7 @@ function niceDurationAxis(minSec, maxSec) {
   window.setShowPrevYear = function(v){ showPrevYear = !!v; window.renderAnalysisChart(); };
   window.__getShowPrevYear = function(){ return showPrevYear; };
   // expose metric/viewMode setters for the controls
-  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate']);
+  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views']);
   window.setAnalysisMetric = function(m){
     chartMetric = m;
     // Per-channel-only metrics can't render on "All channels" — rather than show
@@ -5193,7 +6016,8 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
     try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
@@ -5207,7 +6031,10 @@ function renderVideoRows(videos, emptyText) {
   }
   const showChannel = ANALYTICS_CHANNEL === 'ALL';
   const showTopics = isTopicChannel();
-  const topicColClass = showTopics ? '' : ' no-topics';
+  // Subject/theme/mode now render as chips inside the title cell (with the
+  // per-video summary), so the separate topic column is retired — every row
+  // uses the no-topics grid template.
+  const topicColClass = ' no-topics';
   return videos.map(v => {
     const channelName = showChannel
       ? (ANALYTICS_DATASET?.channels?.[v.channelId]?.title || '?')
@@ -5286,12 +6113,11 @@ function renderVideoRows(videos, emptyText) {
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${titleSubtitle}</div>
+        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}</div>${titleSubtitle}${renderVideoSummary(v)}${renderTopicChips(v)}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
         <div class="video-comments hide-mobile">${v.comments != null ? fmt(v.comments) : '—'}</div>
-        ${showTopics ? renderTopicCell(v) : ''}
       </div>
     `;
   }).join('');
@@ -5639,21 +6465,57 @@ function renderAdPanel() {
   });
 }
 
-function renderTopicCell(v) {
-  const tagId = ANALYTICS_TOPIC_TAGS?.[v.id];
-  if (!tagId) {
-    return `<div class="video-topic untagged hide-mobile">—</div>`;
+// Shorten a mode's display name for a compact chip (full name stays in the
+// tooltip). "Woke / culture war" -> "Woke"; "Politics & current events" ->
+// "Politics"; "'[Group] fatigue' rhetoric" -> "Group fatigue".
+function shortModeLabel(name) {
+  let s = String(name || '').replace(/['"\[\]]/g, '').trim();
+  s = s.split(/\s+[/&]\s+/)[0].trim();
+  const w = s.split(/\s+/);
+  if (w.length > 2) s = w.slice(0, 2).join(' ');
+  return s || String(name || '');
+}
+
+// One clickable chip for a given axis (subject | theme | mode). Clicking filters
+// the window list to that value (handled by the delegated #windowList listener).
+function topicChip(kind, id) {
+  const t = ANALYTICS_TOPICS?.[id];
+  if (!t) return '';
+  const full = t.name || id;
+  const label = kind === 'mode' ? shortModeLabel(full) : full;
+  const kindLabel = kind === 'subject' ? 'Subject' : kind === 'theme' ? 'Theme' : 'Mode';
+  const tf = windowListState.topicFilter;
+  const activeCls = (tf && tf.kind === kind && tf.id === id) ? ' vchip-on' : '';
+  return `<button type="button" class="vchip vchip-${kind}${activeCls}" data-tfk="${kind}" data-tfi="${escapeHtml(id)}" title="${escapeHtml(kindLabel + ': ' + full)} — click to filter" aria-label="Filter by ${escapeHtml(kindLabel)}: ${escapeHtml(full)}"><span class="vchip-dot" style="background:${t.color || '#888'}"></span>${escapeHtml(label)}</button>`;
+}
+
+// Per-video human-readable summary (the LLM one-liner) shown under the title.
+function renderVideoSummary(v) {
+  const s = ANALYTICS_SUMMARIES?.[v.id];
+  return s ? `<div class="video-summary">${escapeHtml(s)}</div>` : '';
+}
+
+// Subject · theme · mode chip row. Any axis may be absent for a given video.
+function renderTopicChips(v) {
+  const subj = ANALYTICS_TOPIC_TAGS?.[v.id];
+  const thm = ANALYTICS_TOPIC_THEMES?.[v.id];
+  const mod = ANALYTICS_TOPIC_MODES?.[v.id];
+  // Suppress a theme chip that merely echoes the mode (e.g. theme "Politics"
+  // next to mode "Politics & current events", or "Woke Culture" next to "Woke").
+  // Specific themes (Race & Crime, DEI, Immigration…) are unaffected and still show.
+  let showTheme = !!thm;
+  if (thm && mod) {
+    const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const tn = norm(ANALYTICS_TOPICS?.[thm]?.name);
+    const mShort = norm(shortModeLabel(ANALYTICS_TOPICS?.[mod]?.name || ''));
+    if (tn && mShort && (tn === mShort || tn.includes(mShort) || mShort.includes(tn))) showTheme = false;
   }
-  const topic = ANALYTICS_TOPICS?.[tagId];
-  if (!topic) {
-    return `<div class="video-topic untagged hide-mobile">—</div>`;
-  }
-  return `
-    <div class="video-topic hide-mobile" title="${escapeHtml(topic.name)}">
-      <span class="video-topic-dot" style="background:${topic.color}"></span>
-      <span>${escapeHtml(topic.name)}</span>
-    </div>
-  `;
+  const chips = [
+    subj ? topicChip('subject', subj) : '',
+    showTheme ? topicChip('theme', thm) : '',
+    mod ? topicChip('mode', mod) : ''
+  ].filter(Boolean).join('');
+  return chips ? `<div class="video-chips">${chips}</div>` : '';
 }
 
 function formatWindowTitle(startDate, endDate) {
@@ -5695,6 +6557,14 @@ function renderWindowList(startDate, endDate) {
   if (windowListState.adOnly && adDataAvailable) {
     scopedVideos = scopedVideos.filter(v => adVideoIds.has(v.id));
   }
+  // Apply topic-chip filter (subject / theme / mode), set by clicking a chip.
+  if (windowListState.topicFilter) {
+    const { kind, id } = windowListState.topicFilter;
+    const map = kind === 'subject' ? ANALYTICS_TOPIC_TAGS
+      : kind === 'theme' ? ANALYTICS_TOPIC_THEMES
+      : ANALYTICS_TOPIC_MODES;
+    scopedVideos = scopedVideos.filter(v => map && map[v.id] === id);
+  }
 
   // Filter + sort
   const filtered = filterVideos(scopedVideos, windowListState.query);
@@ -5710,7 +6580,7 @@ function renderWindowList(startDate, endDate) {
   const breakdownHtml = showChannel ? buildChannelBreakdownTable(allWindowVideos) : '';
 
   const colHeader = `
-    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''}${topicColClass}">
+    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''} no-topics">
       <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
       ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
@@ -5718,7 +6588,6 @@ function renderWindowList(startDate, endDate) {
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
       <div class="video-likepct sortable hide-mobile${sortableClass(windowListState, 'likepct')}" data-sort="likepct">Like %${sortArrow(windowListState, 'likepct')}</div>
       <div class="video-comments sortable hide-mobile${sortableClass(windowListState, 'comments')}" data-sort="comments">Comments${sortArrow(windowListState, 'comments')}</div>
-      ${showTopics ? '<div class="video-topic hide-mobile">Topic</div>' : ''}
     </div>
   `;
 
@@ -5759,6 +6628,35 @@ function renderWindowList(startDate, endDate) {
     `;
   }
 
+  // Active topic-chip filter indicator (when a chip has been clicked)
+  let topicFilterBar = '';
+  if (windowListState.topicFilter) {
+    const tf = windowListState.topicFilter;
+    const t = ANALYTICS_TOPICS?.[tf.id];
+    const nm = t?.name || tf.id;
+    const kindLabel = tf.kind === 'subject' ? 'Subject' : tf.kind === 'theme' ? 'Theme' : 'Mode';
+    const shown = tf.kind === 'mode' ? shortModeLabel(nm) : nm;
+    topicFilterBar = `<div class="topic-filter-bar">Filtered to <span class="tf-kind">${kindLabel}</span><span class="tf-name"><span class="vchip-dot" style="background:${t?.color || '#888'}"></span>${escapeHtml(shown)}</span><button type="button" class="tf-clear" id="topicFilterClear" aria-label="Clear topic filter">clear ✕</button></div>`;
+  }
+
+  // Summary strip — aggregate stats for the videos currently shown (respects the
+  // active format/topic/search filters), so people get an at-a-glance read.
+  const shownForStats = sorted.filter(v => !v.unavailable && (windowListState.formatFilter === 'short' ? v.isShort : windowListState.formatFilter === 'long' ? !v.isShort : true));
+  let summaryStrip = '';
+  if (shownForStats.length) {
+    const _tv = shownForStats.reduce((s,v)=>s+(v.views||0),0);
+    const _tc = shownForStats.reduce((s,v)=>s+(v.comments||0),0);
+    const _tl = shownForStats.reduce((s,v)=>s+(v.likes||0),0);
+    const _durs = shownForStats.filter(v=>v.durationSec>0).map(v=>v.durationSec).sort((a,b)=>a-b);
+    const _md = _durs.length ? (_durs.length % 2 ? _durs[(_durs.length-1)/2] : (_durs[_durs.length/2-1] + _durs[_durs.length/2]) / 2) : 0;
+    const _lr = _tv>0 ? (_tl/_tv*100) : 0;
+    summaryStrip = `<div class="vid-summary" aria-label="Summary of shown videos">
+      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Median duration</span></div>
+      <div class="vs-item"><span class="vs-num">${fmt(_tv)}</span><span class="vs-lbl">Total views</span></div>
+      <div class="vs-item"><span class="vs-num">${_lr.toFixed(1)}%</span><span class="vs-lbl">Like rate</span></div>
+      <div class="vs-item"><span class="vs-num">${fmt(_tc)}</span><span class="vs-lbl">Comments</span></div>
+    </div>`;
+  }
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
@@ -5768,13 +6666,21 @@ function renderWindowList(startDate, endDate) {
       </div>
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
     </div>
+    ${topicFilterBar}
     ${breakdownHtml}
+    ${summaryStrip}
     <div class="window-list-rows">
       ${colHeader}
       ${windowListState.formatFilter !== 'short' ? group('Long-form', longSorted, longViewsTotal, 'long') : ''}
       ${windowListState.formatFilter !== 'long' ? group('Shorts', shortSorted, shortViewsTotal, 'short') : ''}
     </div>
   `;
+
+  // Keep the topics container's active highlight + counts in sync when it's open.
+  const _tcT = document.getElementById('topicsToggle');
+  if (_tcT && _tcT.getAttribute('aria-expanded') === 'true' && typeof window.renderTopicsContainer === 'function') {
+    try { window.renderTopicsContainer(); } catch (e) {}
+  }
 }
 
   // Entry: render the Videos tab for the current channel + time window.
@@ -5788,7 +6694,8 @@ function renderWindowList(startDate, endDate) {
     }
     if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){ console.error('ad panel', e); } }
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
-    // Keep the word cloud in sync with the Videos-tab filters when it's open.
+    // Keep the topics container + word cloud in sync with the Videos-tab filters when open.
+    if (typeof window.renderTopicsContainer === 'function') { try { window.renderTopicsContainer(); } catch(e){ console.error('topics', e); } }
     const wcToggle = document.getElementById('wordcloudToggle');
     if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
       try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); }
@@ -5797,6 +6704,61 @@ function renderWindowList(startDate, endDate) {
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
   window.__resetVideoBatches = resetVideoBatches;
+
+  // Topics container (above the list): browse the period's subjects, click to filter.
+  window.renderTopicsContainer = function() {
+    const panel = document.getElementById('topicsPanel');
+    const body = document.getElementById('topicsBody');
+    const meta = document.getElementById('topicsMeta');
+    const hint = document.getElementById('topicsHint');
+    const section = document.getElementById('topicsSection');
+    if (!panel || !body || !section) return;
+    if (!isTopicChannel()) { section.hidden = true; return; }
+    section.hidden = false;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (!startDate || !endDate) { body.innerHTML = ''; return; }
+    const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
+    let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    const fmtF = windowListState.formatFilter;
+    if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
+    else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
+    const counts = new Map();
+    let tagged = 0;
+    for (const v of videos) { const id = ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]; if (!id) continue; tagged++; counts.set(id, (counts.get(id) || 0) + 1); }
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+    if (hint) hint.textContent = ranked.length ? `(${ranked.length} subject${ranked.length === 1 ? '' : 's'})` : '';
+    if (!ranked.length) { body.innerHTML = '<div class="wordcloud-empty">No tagged subjects in this range.</div>'; if (meta) meta.textContent = ''; return; }
+    if (meta) meta.textContent = `Click a subject to filter the list below — ${tagged} of ${videos.length} videos tagged.`;
+    const cur = windowListState.topicFilter;
+    body.innerHTML = ranked.map(([id, c]) => {
+      const active = cur && cur.kind === 'subject' && cur.id === id;
+      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="subject" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
+    }).join('');
+  };
+
+  // Topics container: toggle open/close + click a subject to filter the list.
+  document.addEventListener('click', (e) => {
+    const tt = e.target.closest('#topicsToggle');
+    if (tt) {
+      const exp = tt.getAttribute('aria-expanded') === 'true';
+      tt.setAttribute('aria-expanded', String(!exp));
+      const panel = document.getElementById('topicsPanel');
+      if (panel) panel.hidden = exp;
+      if (!exp) window.renderTopicsContainer();
+      return;
+    }
+    const pill = e.target.closest('.topic-pill[data-tck]');
+    if (pill) {
+      const kind = pill.dataset.tck, id = pill.dataset.tci;
+      const cur = windowListState.topicFilter;
+      windowListState.topicFilter = (cur && cur.kind === kind && cur.id === id) ? null : { kind, id };
+      resetVideoBatches();
+      const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed);
+      return;
+    }
+  });
   document.addEventListener('click', (e) => {
     // Incremental loading: reveal the next batch of rows for a group
     const moreBtn = e.target.closest('[data-show-more]');
@@ -5804,6 +6766,24 @@ function renderWindowList(startDate, endDate) {
       const key = moreBtn.dataset.showMore;
       if (key === 'long') windowListState.longShown += VIDEO_BATCH;
       else windowListState.shortShown += VIDEO_BATCH;
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Topic chip clicked → filter the list to that subject/theme/mode (toggle off if same)
+    const chip = e.target.closest('.vchip[data-tfk]');
+    if (chip && document.getElementById('windowList')?.contains(chip)) {
+      const kind = chip.dataset.tfk, id = chip.dataset.tfi;
+      const cur = windowListState.topicFilter;
+      windowListState.topicFilter = (cur && cur.kind === kind && cur.id === id) ? null : { kind, id };
+      resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Clear the active topic filter
+    const tfClear = e.target.closest('#topicFilterClear');
+    if (tfClear && document.getElementById('windowList')?.contains(tfClear)) {
+      windowListState.topicFilter = null;
+      resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
@@ -5894,6 +6874,21 @@ function renderWindowList(startDate, endDate) {
         const panel = document.getElementById('revenuePanel');
         if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 120);
+      return;
+    }
+    // Overview "Long-form uploads" / "Shorts activity" cards → Videos tab for that
+    // month with the right format filter (skip if the click hit a link inside the card).
+    const gv = e.target.closest('[data-goto-videos]');
+    if (gv && !e.target.closest('a')) {
+      const fmt = gv.dataset.gotoVideos;
+      const month = gv.dataset.vidMonth;
+      if (month) vidTimePreset = month;
+      if (window.__windowListState) window.__windowListState.formatFilter = fmt;
+      show('videos');
+      if (window.__populateVidChannel) window.__populateVidChannel();
+      if (window.__resetVideoBatches) window.__resetVideoBatches();
+      if (window.__syncVidWindow) window.__syncVidWindow();
+      if (window.renderVideosTab) window.renderVideosTab();
       return;
     }
     const link = e.target.closest('[data-goto-analysis]');
@@ -6000,7 +6995,7 @@ function renderWindowList(startDate, endDate) {
     });
   }
   // ---- Videos tab controls ----
-  let vidTimePreset = 'all';
+  let vidTimePreset = CURRENT_MONTH_KEY;
   function vidCutoffMonth(preset){
     const now = new Date(); const y=now.getFullYear(), mo=now.getMonth()+1;
     const k=(yy,mm)=>`${yy}-${String(mm).padStart(2,'0')}`;
@@ -6135,6 +7130,877 @@ function renderWindowList(startDate, endDate) {
       + 'Please refresh.</div>';
     console.error('Monthly report load failed:', err);
   }
+})();
+// --- Mood modes (party / funeral) with hidden YouTube audio ---
+(function setupMoodModes() {
+  // YouTube video IDs for the two modes
+  const VIDEOS = {
+    party: 'Vz60le50JL8',     // Crab Rave
+    funeral: 'cy6oAEn6zxY'    // Copyright-compliant funeral mode video
+  };
+  const DEFAULT_VOLUME = 30;
+
+  let ytPlayer = null;
+  let ytReady = false;
+  let currentMode = null;     // 'party' | 'funeral' | null
+  let mascotsLoaded = false;
+  let funeralMascotLoaded = false;
+
+  // Lazy-load the mascots GIF on first party activation — saves bandwidth
+  // for visitors who never trigger party mode.
+  function ensureMascotsLoaded() {
+    if (mascotsLoaded) return;
+    const img = document.getElementById('partyMascots');
+    if (!img) return;
+    img.src = 'party-mascots.gif';
+    mascotsLoaded = true;
+  }
+
+  // Lazy-load the funeral mascot on first funeral activation
+  function ensureFuneralMascotLoaded() {
+    if (funeralMascotLoaded) return;
+    const img = document.getElementById('funeralMascot');
+    if (!img) return;
+    img.src = 'unconscious_jer.png';
+    funeralMascotLoaded = true;
+  }
+
+  // Read the "Lowest since peak" line from the rendered peak strip and produce a
+  // compact display string like "▼89.3%" — just the figure.
+  // The mood mode itself is the joke; the over-explained version was redundant.
+  function readAllTimeLowText() {
+    return (window.__moodLowText && String(window.__moodLowText).trim()) || '▼ —';
+  }
+
+  // Funeral floater: a one-shot dust effect. The lowest-since-peak figure fades in,
+  // holds briefly, then progressively crumbles to dust over ~15 seconds.
+  // After the dust disperses, no text remains — the rain and mascot carry the mood.
+  //
+  // Implementation: render the text to an offscreen canvas, sample it as a grid
+  // of "particles" (one per text pixel cluster), then animate each particle
+  // independently — drifting downward with gravity, slight horizontal wind,
+  // fading out. The crumble starts from the bottom of the text and progresses
+  // upward, so the top is the last to disappear.
+  const funeralDust = {
+    canvas: null,
+    ctx: null,
+    particles: null,
+    rafId: null,
+    startedAt: 0,
+    dpr: 1
+  };
+
+  // Timing (ms)
+  const DUST_FADE_IN = 3000;     // slower, more deliberate appearance
+  const DUST_HOLD = 4500;        // longer hold so the figure can be read and absorbed
+  const DUST_CRUMBLE = 15000;
+  const DUST_TAIL = 2500;        // a small grace period after crumble for last particles to settle
+  const DUST_TOTAL = DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE + DUST_TAIL;
+
+  function startFuneralFloater() {
+    const container = document.getElementById('floatersFuneral');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    funeralDust.canvas = canvas;
+    funeralDust.ctx = ctx;
+    funeralDust.dpr = dpr;
+    funeralDust.startedAt = performance.now();
+    // Track the dimensions we initialised at so the resize handler can
+    // distinguish "real" resize from mobile address-bar scrolling.
+    funeralLastW = w;
+    funeralLastH = h;
+
+    // For users who prefer reduced motion: skip the particle simulation
+    // and render the figure as a simple fade-in / hold / fade-out instead.
+    funeralDust.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    funeralDust.particles = buildDustParticles(readAllTimeLowText(), w, h);
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function buildDustParticles(text, viewW, viewH) {
+    // Render text to a hidden canvas, then sample pixels into particle objects
+    const fontSize = Math.min(viewW * 0.18, 200);
+    const offscreen = document.createElement('canvas');
+    const octx = offscreen.getContext('2d');
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    const metrics = octx.measureText(text);
+    const textW = Math.ceil(metrics.width);
+    const textH = Math.ceil(fontSize * 1.2);
+    offscreen.width = textW;
+    offscreen.height = textH;
+    // Re-set font after canvas resize (resize clears state)
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    octx.fillStyle = '#dc3232';
+    octx.textBaseline = 'middle';
+    octx.fillText(text, 0, textH / 2);
+
+    const imgData = octx.getImageData(0, 0, textW, textH);
+    const data = imgData.data;
+
+    // Position text centered on viewport
+    const startX = (viewW - textW) / 2;
+    const startY = (viewH - textH) / 2;
+
+    // Sample at intervals to keep particle count manageable
+    const step = 3;
+    // Pick a global wind direction with light variation. Mostly horizontal,
+    // slight downward bias. Each individual particle adds its own jitter.
+    const windAngle = (Math.random() - 0.5) * 0.3 + (Math.random() < 0.5 ? -1 : 1) * 0.15;
+    const windDir = windAngle < 0 ? -1 : 1;  // overall left/right tendency
+    const particles = [];
+    for (let py = 0; py < textH; py += step) {
+      for (let px = 0; px < textW; px += step) {
+        const idx = (py * textW + px) * 4;
+        const alpha = data[idx + 3];
+        if (alpha < 80) continue;
+        // Release time is a position-based bias PLUS heavy randomness, so
+        // particles don't release in clean rows. The bottom of the text is
+        // slightly more likely to release early, but there's significant
+        // overlap — some top particles release first, some bottom particles
+        // hang on. Creates the "wind erosion" look rather than "row crumble".
+        const positionBias = 1 - (py / textH);        // 0 (top) to 1 (bottom)
+        // Each particle gets a release fraction in [0, 1].
+        // Heavy randomisation; position bias is gentle (only 30% weight).
+        const releaseFraction = Math.min(0.95,
+          (positionBias * 0.3) + (Math.random() * 0.7));
+        // Each particle has its own wind speed scaled around the global wind
+        const personalWind = windDir * (0.6 + Math.random() * 1.4);
+        particles.push({
+          x: startX + px,
+          y: startY + py,
+          releaseFraction,
+          // Pre-determined wind for this particle — applied gradually after release
+          wind: personalWind,
+          vx: 0,
+          vy: 0,
+          released: false,
+          life: 0,
+          // Random fade-out length per particle for natural variation
+          maxLife: 100 + Math.random() * 80,
+          // Tiny phase offset for the sinusoidal swirl — gives each particle
+          // its own subtly different drift pattern
+          swirlPhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+    return particles;
+  }
+
+  function funeralDustStep(now) {
+    if (!funeralDust.canvas) return;
+    const elapsed = now - funeralDust.startedAt;
+    const ctx = funeralDust.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    // Compute global opacity envelope: fade-in, hold, then fade with the crumble
+    let globalOpacity = 1;
+    if (elapsed < DUST_FADE_IN) {
+      // Ease-in curve (cubic) so the fade-in feels gentle rather than linear
+      const t = elapsed / DUST_FADE_IN;
+      globalOpacity = t * t * (3 - 2 * t);  // smoothstep
+    } else if (elapsed > DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE) {
+      const tailElapsed = elapsed - (DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE);
+      globalOpacity = Math.max(0, 1 - tailElapsed / DUST_TAIL);
+    }
+
+    const crumbleStart = DUST_FADE_IN + DUST_HOLD;
+    const crumbleProgress = elapsed < crumbleStart
+      ? 0
+      : Math.min(1, (elapsed - crumbleStart) / DUST_CRUMBLE);
+
+    // Reduced-motion path: static text with the same opacity envelope, no particle physics.
+    // We still respect the crumble phase by fading the text out during it.
+    if (funeralDust.reducedMotion) {
+      let opacity = globalOpacity;
+      if (crumbleProgress > 0) {
+        opacity *= Math.max(0, 1 - crumbleProgress);
+      }
+      if (opacity > 0.01) {
+        ctx.fillStyle = `rgba(220, 50, 50, ${opacity * 0.75})`;
+        for (const p of funeralDust.particles) {
+          ctx.fillRect(p.x, p.y, 3.5, 3.5);
+        }
+      }
+      if (elapsed >= DUST_TOTAL) {
+        funeralDust.rafId = null;
+        ctx.clearRect(0, 0, w, h);
+        return;
+      }
+      funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+      return;
+    }
+
+    // Render in opacity buckets to minimise fillStyle changes (2000 setState calls/frame
+    // is wasteful; bucketing brings that down to ~16). Each bucket collects particles
+    // of similar final opacity, drawn in a single fillStyle pass.
+    const BUCKETS = 16;
+    const bucketed = Array.from({ length: BUCKETS }, () => []);
+
+    for (const p of funeralDust.particles) {
+      // Has this particle been released yet?
+      if (!p.released) {
+        if (crumbleProgress >= p.releaseFraction) {
+          p.released = true;
+          p.vx = (Math.random() - 0.5) * 0.6;
+          p.vy = (Math.random() - 0.5) * 0.3;
+        }
+      }
+
+      if (p.released) {
+        const windRamp = Math.min(1, p.life / 60);
+        p.vx += p.wind * 0.03 * windRamp;
+        p.vy += 0.008;
+        p.vx += Math.sin((p.life + p.swirlPhase * 20) * 0.04) * 0.015;
+        p.vx *= 0.992;
+        p.vy *= 0.996;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+      }
+
+      let particleOpacity = 1;
+      if (p.released) {
+        particleOpacity = Math.max(0, 1 - p.life / p.maxLife);
+      }
+      const finalOpacity = globalOpacity * particleOpacity;
+      if (finalOpacity <= 0.01) continue;
+
+      // Quantise to bucket
+      const bucketIdx = Math.min(BUCKETS - 1, Math.floor(finalOpacity * BUCKETS));
+      bucketed[bucketIdx].push(p);
+    }
+
+    // Draw each bucket
+    for (let b = 0; b < BUCKETS; b++) {
+      const bucket = bucketed[b];
+      if (bucket.length === 0) continue;
+      // Slightly lower opacity coefficient because larger particles overlap;
+      // higher value would oversaturate the colour into a flat block.
+      const opacity = ((b + 0.5) / BUCKETS) * 0.75;
+      ctx.fillStyle = `rgba(220, 50, 50, ${opacity})`;
+      for (const p of bucket) {
+        // Larger size so adjacent particles overlap into a solid mass,
+        // rather than reading as a dot-grid. As particles release and drift,
+        // the solid mass naturally fragments.
+        ctx.fillRect(p.x, p.y, 3.5, 3.5);
+      }
+    }
+
+    if (elapsed >= DUST_TOTAL) {
+      funeralDust.rafId = null;
+      ctx.clearRect(0, 0, w, h);
+      return;
+    }
+
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function stopFuneralFloater() {
+    if (funeralDust.rafId) {
+      cancelAnimationFrame(funeralDust.rafId);
+      funeralDust.rafId = null;
+    }
+    funeralDust.canvas = null;
+    funeralDust.ctx = null;
+    funeralDust.particles = null;
+    const container = document.getElementById('floatersFuneral');
+    if (container) container.innerHTML = '';
+  }
+
+  // If the viewport resizes during the dust sequence, restart from scratch
+  // (re-sampling text at the new viewport width gives the correct font size).
+  // Two concerns:
+  //   1. Debounce so a window drag doesn't trigger dozens of restarts.
+  //   2. On mobile, the address bar shows/hides during scroll, changing the
+  //      window height by ~60-100px and firing resize events. We don't want
+  //      those scroll-induced height changes to restart the animation.
+  let funeralResizeTimer = null;
+  let funeralLastW = 0;
+  let funeralLastH = 0;
+  // Threshold above which a height-only change is considered "real" (rotation,
+  // resize) rather than browser-chrome flicker. ~120px clears typical mobile
+  // address bar movements (which are usually 60-90px).
+  const FUNERAL_RESIZE_HEIGHT_THRESHOLD = 120;
+
+  window.addEventListener('resize', () => {
+    if (currentMode !== 'funeral') return;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // If width is unchanged and height delta is small (address bar showing/hiding),
+    // ignore the event — the dust sequence stays running.
+    if (w === funeralLastW && Math.abs(h - funeralLastH) < FUNERAL_RESIZE_HEIGHT_THRESHOLD) {
+      return;
+    }
+    if (funeralResizeTimer) clearTimeout(funeralResizeTimer);
+    funeralResizeTimer = setTimeout(() => {
+      if (currentMode === 'funeral') {
+        funeralLastW = window.innerWidth;
+        funeralLastH = window.innerHeight;
+        stopFuneralFloater();
+        startFuneralFloater();
+      }
+    }, 250);
+  });
+
+  // Party floaters: numbers bounce around the screen with rainbow flashing.
+  // Each one has a random lifespan; when its time is up, it explodes into a
+  // rainbow particle burst and is removed. The screen gradually empties as
+  // numbers expire, leaving just music + lights + mascot. Not a continuous
+  // loop — toggle the mode to replay.
+  const partyState = {
+    canvas: null,        // separate canvas for burst particles
+    ctx: null,
+    bursts: [],          // active particle bursts
+    rafId: null,
+    timers: []           // per-floater burst timers
+  };
+
+  function startPartyFloaters() {
+    stopPartyFloaters();
+    const container = document.getElementById('floatersParty');
+    if (!container) return;
+
+    // Create the burst-particle canvas alongside the DOM floaters
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.style.position = 'absolute';
+    canvas.style.inset = '0';
+    canvas.style.pointerEvents = 'none';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    partyState.canvas = canvas;
+    partyState.ctx = ctx;
+    partyState.bursts = [];
+
+    const text = readAllTimeLowText();
+    const count = 16;
+    // Schedule bursts across ~16 seconds so the screen gradually clears.
+    // Random spacing keeps it from feeling mechanical.
+    const burstSchedule = [];
+    let cumulativeTime = 1500;  // start after a brief enjoy-the-chaos period
+    for (let i = 0; i < count; i++) {
+      burstSchedule.push(cumulativeTime);
+      cumulativeTime += 800 + Math.random() * 700;  // 0.8-1.5s between bursts
+    }
+    // Shuffle the schedule so the visual order of bursts is random, not in spawn order
+    for (let i = burstSchedule.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [burstSchedule[i], burstSchedule[j]] = [burstSchedule[j], burstSchedule[i]];
+    }
+
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'floater-party';
+      el.textContent = text;
+      const startX = Math.random() * 70;
+      const startY = Math.random() * 70 + 5;
+      const moveX = (Math.random() * 60 - 30) + 'vw';
+      const moveY = (Math.random() * 50 - 25) + 'vh';
+      const rotStart = (Math.random() * 30 - 15) + 'deg';
+      const rotEnd = (Math.random() * 30 - 15) + 'deg';
+      const fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+      const moveDur = (5 + Math.random() * 6) + 's';
+      const hueDur = (1.5 + Math.random() * 1.5) + 's';
+      const moveDelay = (-Math.random() * 8) + 's';
+      const hueDelay = (-Math.random() * 3) + 's';
+
+      el.style.left = startX + 'vw';
+      el.style.top = startY + 'vh';
+      el.style.fontSize = fontSize;
+      el.style.setProperty('--move-x', moveX);
+      el.style.setProperty('--move-y', moveY);
+      el.style.setProperty('--rot-start', rotStart);
+      el.style.setProperty('--rot-end', rotEnd);
+      el.style.setProperty('--move-dur', moveDur);
+      el.style.setProperty('--hue-dur', hueDur);
+      el.style.animationDelay = `${moveDelay}, ${hueDelay}`;
+      container.appendChild(el);
+
+      // Schedule this floater's burst at its assigned time
+      const timer = setTimeout(() => burstPartyFloater(el), burstSchedule[i]);
+      partyState.timers.push(timer);
+    }
+
+    // Start the burst-particle animation loop
+    partyState.rafId = requestAnimationFrame(partyStep);
+  }
+
+  function burstPartyFloater(el) {
+    if (!el || !el.isConnected) return;
+    // Capture the element's current screen position (mid-animation) so the
+    // burst happens wherever the number actually is, not where it started.
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    // Spawn particles radiating outward from this point.
+    // Bigger explosions: more particles, faster initial speed, larger size, longer life.
+    const particleCount = 180 + Math.floor(Math.random() * 60);
+    const burst = {
+      particles: [],
+      startedAt: performance.now()
+    };
+    for (let i = 0; i < particleCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 4 + Math.random() * 8;
+      const hue = Math.floor(Math.random() * 360);
+      burst.particles.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        hue,
+        life: 0,
+        maxLife: 80 + Math.random() * 70,
+        size: 3 + Math.random() * 3
+      });
+    }
+    partyState.bursts.push(burst);
+
+    // Remove the DOM element immediately — the burst replaces it visually
+    el.remove();
+  }
+
+  function partyStep() {
+    if (!partyState.ctx) return;
+    const ctx = partyState.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = partyState.bursts.length - 1; i >= 0; i--) {
+      const burst = partyState.bursts[i];
+      let aliveCount = 0;
+      for (const p of burst.particles) {
+        if (p.life > p.maxLife) continue;
+        // Update physics: gravity pulls particles down, drag slows them
+        p.vy += 0.08;
+        p.vx *= 0.985;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+
+        const lifeT = p.life / p.maxLife;
+        const opacity = (1 - lifeT) * 0.9;
+        if (opacity < 0.02) continue;
+        aliveCount++;
+
+        // Particle body: bright HSL with the assigned hue
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * (1 - lifeT * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Remove dead bursts to keep the array small
+      if (aliveCount === 0) {
+        partyState.bursts.splice(i, 1);
+      }
+    }
+
+    partyState.rafId = requestAnimationFrame(partyStep);
+  }
+
+  function stopPartyFloaters() {
+    if (partyState.rafId) {
+      cancelAnimationFrame(partyState.rafId);
+      partyState.rafId = null;
+    }
+    for (const t of partyState.timers) clearTimeout(t);
+    partyState.timers = [];
+    partyState.bursts = [];
+    partyState.canvas = null;
+    partyState.ctx = null;
+    const container = document.getElementById('floatersParty');
+    if (container) container.innerHTML = '';
+  }
+
+  // Re-fetch the lowest-since-peak text and update any active floaters.
+  // Funeral: restart the dust sequence so the new channel's figure gets its own moment.
+  // Party: full rebuild — the chaos hides the reshuffle.
+  function refreshActiveFloaters() {
+    if (currentMode === 'funeral') {
+      stopFuneralFloater();
+      startFuneralFloater();
+    } else if (currentMode === 'party') {
+      startPartyFloaters();
+    }
+  }
+  // Expose so the rebuild flow can call it
+  window.__refreshActiveFloaters = refreshActiveFloaters;
+
+  // --- Canvas-based rain-on-glass simulation ---
+  // Drops are persistent objects with position, radius, and velocity. Static drops
+  // sit on the "glass" surface; when a drop grows past the slide threshold,
+  // gravity overcomes surface tension and it slides down, shedding smaller drops
+  // as a trail. Drops that touch each other merge.
+  const rainState = {
+    canvas: null,
+    ctx: null,
+    drops: [],
+    rafId: null,
+    lastSpawn: 0,
+    running: false,
+    dpr: 1,
+    width: 0,
+    height: 0
+  };
+
+  function rainSizeCanvas() {
+    if (!rainState.canvas) return;
+    const c = rainState.canvas;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    c.style.width = w + 'px';
+    c.style.height = h + 'px';
+    rainState.dpr = dpr;
+    rainState.width = w;
+    rainState.height = h;
+    rainState.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function rainSpawnDrop(x, y, r) {
+    rainState.drops.push({
+      x: x !== undefined ? x : Math.random() * rainState.width,
+      y: y !== undefined ? y : Math.random() * rainState.height,
+      r: r !== undefined ? r : 1.5 + Math.random() * 3,
+      vy: 0,
+      sliding: false,
+      shedTimer: 0
+    });
+  }
+
+  function rainInit() {
+    // Initial scatter of drops across the glass
+    rainState.drops = [];
+    const baseCount = Math.min(140, Math.floor(rainState.width * rainState.height / 9000));
+    for (let i = 0; i < baseCount; i++) {
+      rainSpawnDrop(undefined, undefined, 2 + Math.random() * 6);
+    }
+    // A few larger drops that may slide
+    for (let i = 0; i < 8; i++) {
+      rainSpawnDrop(undefined, Math.random() * rainState.height * 0.6, 7 + Math.random() * 4);
+    }
+  }
+
+  function rainStep(now) {
+    if (!rainState.running) return;
+    const { ctx, drops, width, height } = rainState;
+    ctx.clearRect(0, 0, width, height);
+
+    // Occasionally spawn new small drops on the surface
+    if (now - rainState.lastSpawn > 180) {
+      rainState.lastSpawn = now;
+      const newCount = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < newCount; i++) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height, 1.5 + Math.random() * 2.5);
+      }
+      // Very occasionally, spawn a heavy drop that's likely to start sliding immediately
+      if (Math.random() < 0.15) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height * 0.4, 8 + Math.random() * 5);
+      }
+    }
+
+    const SLIDE_THRESHOLD = 7.5;
+    // Update drops
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+
+      // Drops large enough to slide gain gravity; small static drops stay put
+      if (d.r >= SLIDE_THRESHOLD || d.sliding) {
+        d.sliding = true;
+        // Acceleration scales with size — bigger drops fall faster
+        d.vy += 0.012 * d.r;
+        d.vy = Math.min(d.vy, 8);   // terminal velocity
+        d.y += d.vy;
+        // Tiny horizontal wobble — gives a more natural meandering descent
+        d.x += (Math.random() - 0.5) * 0.3;
+
+        // Shed smaller drops as it slides (the "trail" behind it)
+        d.shedTimer++;
+        if (d.shedTimer > 4 && d.r > 4) {
+          d.shedTimer = 0;
+          // The trail drop is smaller and stays static
+          rainState.drops.push({
+            x: d.x + (Math.random() - 0.5) * d.r * 0.6,
+            y: d.y - d.r - Math.random() * 8,
+            r: 1.2 + Math.random() * (d.r * 0.18),
+            vy: 0,
+            sliding: false,
+            shedTimer: 0
+          });
+          // Sliding drop loses a little mass as it sheds
+          d.r -= 0.05;
+          if (d.r < 4) d.sliding = false;  // small enough that surface tension catches it again
+        }
+
+        // Off-screen — remove
+        if (d.y - d.r > height) {
+          drops.splice(i, 1);
+          continue;
+        }
+      }
+
+      // Merge with nearby drops (only nearest neighbour to keep it cheap)
+      for (let j = i - 1; j >= 0; j--) {
+        const e = drops[j];
+        const dx = d.x - e.x;
+        const dy = d.y - e.y;
+        const distSq = dx * dx + dy * dy;
+        const touchDist = d.r + e.r;
+        if (distSq < touchDist * touchDist * 0.6) {
+          // Merge — conserve area roughly: r_new = sqrt(r1^2 + r2^2)
+          const newR = Math.sqrt(d.r * d.r + e.r * e.r);
+          // Larger drop absorbs smaller; new position weighted by size
+          const total = d.r + e.r;
+          d.x = (d.x * d.r + e.x * e.r) / total;
+          d.y = (d.y * d.r + e.y * e.r) / total;
+          d.r = newR;
+          // Inherit velocity from whichever was already moving more
+          d.vy = Math.max(d.vy, e.vy);
+          if (newR >= SLIDE_THRESHOLD) d.sliding = true;
+          drops.splice(j, 1);
+          i--;  // we removed an earlier index, adjust outer counter
+        }
+      }
+    }
+
+    // Draw — two-pass for the glass effect.
+    // 1) Subtle dark shadow under each drop (gives depth on the glass)
+    // 2) The drop itself: light fill, brighter highlight on upper-left
+    for (const d of drops) {
+      // Shadow pass — very subtle, slightly offset down-right
+      ctx.beginPath();
+      ctx.arc(d.x + 0.6, d.y + 0.8, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      ctx.fill();
+    }
+    for (const d of drops) {
+      // Main drop body — slightly translucent so it looks like water, not paint
+      const grad = ctx.createRadialGradient(
+        d.x - d.r * 0.3, d.y - d.r * 0.3, d.r * 0.1,
+        d.x, d.y, d.r
+      );
+      grad.addColorStop(0, 'rgba(230, 240, 250, 0.65)');
+      grad.addColorStop(0.4, 'rgba(180, 200, 220, 0.40)');
+      grad.addColorStop(1, 'rgba(120, 145, 170, 0.30)');
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Bright pinpoint highlight on upper-left — sells the "wet bead" look
+      if (d.r > 2) {
+        ctx.beginPath();
+        ctx.arc(d.x - d.r * 0.4, d.y - d.r * 0.45, Math.max(0.5, d.r * 0.18), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.fill();
+      }
+    }
+
+    rainState.rafId = requestAnimationFrame(rainStep);
+  }
+
+  function rainStart() {
+    if (rainState.running) return;
+    const overlay = document.getElementById('rainOverlay');
+    if (!overlay) return;
+
+    if (!rainState.canvas) {
+      rainState.canvas = document.createElement('canvas');
+      rainState.ctx = rainState.canvas.getContext('2d');
+      overlay.appendChild(rainState.canvas);
+      window.addEventListener('resize', rainSizeCanvas);
+    }
+    rainSizeCanvas();
+    rainInit();
+    rainState.running = true;
+    rainState.lastSpawn = performance.now();
+    rainState.rafId = requestAnimationFrame(rainStep);
+  }
+
+  function rainStop() {
+    rainState.running = false;
+    if (rainState.rafId) {
+      cancelAnimationFrame(rainState.rafId);
+      rainState.rafId = null;
+    }
+    if (rainState.ctx) {
+      rainState.ctx.clearRect(0, 0, rainState.width, rainState.height);
+    }
+    rainState.drops = [];
+  }
+
+  // Load YouTube IFrame API on demand (lazy — don't load unless user clicks)
+  function loadYouTubeAPI(then) {
+    if (window.YT && window.YT.Player) { then(); return; }
+    if (document.getElementById('ytApiScript')) {
+      // Script already loading — wait for ready callback
+      window.__moodOnYTReady = then;
+      return;
+    }
+    window.onYouTubeIframeAPIReady = function() {
+      if (window.__moodOnYTReady) { window.__moodOnYTReady(); window.__moodOnYTReady = null; }
+      else then();
+    };
+    const script = document.createElement('script');
+    script.id = 'ytApiScript';
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
+  }
+
+  function ensurePlayer(callback) {
+    if (ytPlayer && ytReady) { callback(); return; }
+    loadYouTubeAPI(() => {
+      if (ytPlayer) { callback(); return; }
+      ytPlayer = new YT.Player('ytPlayer', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            ytReady = true;
+            try { ytPlayer.setVolume(DEFAULT_VOLUME); } catch (e) {}
+            callback();
+          },
+          onStateChange: (e) => {
+            // Loop manually when video ends (YT.PlayerState.ENDED = 0)
+            if (e.data === 0 && currentMode) {
+              const id = VIDEOS[currentMode];
+              if (id) ytPlayer.loadVideoById({ videoId: id });
+            }
+          },
+          onError: () => {
+            // If a video errored (removed/blocked), bail out of the mode cleanly
+            setMode(null);
+            showToast('Audio unavailable right now.');
+          }
+        }
+      });
+    });
+  }
+
+  // --- Audio fade: dip the looping track to silence over its final seconds, then
+  // fade it back in on restart — no abrupt cut + volume jump at the loop point.
+  const FADE_OUT_SEC = 5, FADE_IN_SEC = 1.5;
+  let fadeTimer = null;
+  function fadeTick() {
+    if (!ytPlayer || !ytReady || !currentMode) return;
+    let dur, cur;
+    try { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); } catch (e) { return; }
+    if (!dur || dur <= 0 || cur == null) return;
+    const remaining = dur - cur;
+    let vol = DEFAULT_VOLUME;
+    if (remaining <= FADE_OUT_SEC) vol = DEFAULT_VOLUME * Math.max(0, remaining / FADE_OUT_SEC);
+    else if (cur < FADE_IN_SEC) vol = DEFAULT_VOLUME * (cur / FADE_IN_SEC);
+    try { ytPlayer.setVolume(Math.round(vol)); } catch (e) {}
+  }
+  function startFadeWatch() { if (!fadeTimer) fadeTimer = setInterval(fadeTick, 200); }
+  function stopFadeWatch() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+
+  // Sync the mood buttons' pressed state + label to currentMode. The buttons live
+  // in the Overview "fun" card, which re-renders on month/scope change, so this runs
+  // from setMode AND after each report render (via window.__syncMoodButtons).
+  function syncMoodButtons() {
+    const partyBtn = document.getElementById('moodParty');
+    const funeralBtn = document.getElementById('moodFuneral');
+    if (partyBtn) {
+      partyBtn.setAttribute('aria-pressed', currentMode === 'party' ? 'true' : 'false');
+      const l = partyBtn.querySelector('.mood-label'); if (l) l.textContent = currentMode === 'party' ? 'Stop party' : 'Party mode';
+    }
+    if (funeralBtn) {
+      funeralBtn.setAttribute('aria-pressed', currentMode === 'funeral' ? 'true' : 'false');
+      const l = funeralBtn.querySelector('.mood-label'); if (l) l.textContent = currentMode === 'funeral' ? 'Stop funeral' : 'Funeral mode';
+    }
+  }
+  window.__syncMoodButtons = syncMoodButtons;
+
+  function setMode(newMode) {
+    // newMode: 'party' | 'funeral' | null (off)
+    currentMode = newMode;
+    syncMoodButtons();
+
+    // Update body classes for visual overlays
+    document.body.classList.toggle('party-mode', newMode === 'party');
+    document.body.classList.toggle('funeral-mode', newMode === 'funeral');
+
+    // Lazy-load the party mascots GIF on first party activation
+    if (newMode === 'party') ensureMascotsLoaded();
+    // Lazy-load the funeral mascot on first funeral activation
+    if (newMode === 'funeral') ensureFuneralMascotLoaded();
+
+    // Floating low-figure text — populated fresh on each activation
+    // (the current channel selection may have changed since last time)
+    if (newMode === 'party') startPartyFloaters(); else stopPartyFloaters();
+    if (newMode === 'funeral') startFuneralFloater(); else stopFuneralFloater();
+
+    // Start or stop the canvas rain to match funeral state
+    if (newMode === 'funeral') rainStart();
+    else rainStop();
+
+    // Update audio
+    if (!newMode) {
+      stopFadeWatch();
+      if (ytPlayer && ytReady) {
+        try { ytPlayer.stopVideo(); } catch (e) {}
+      }
+      return;
+    }
+    const videoId = VIDEOS[newMode];
+    if (!videoId) return;
+    ensurePlayer(() => {
+      try {
+        ytPlayer.loadVideoById({ videoId });
+        ytPlayer.setVolume(DEFAULT_VOLUME);
+        ytPlayer.playVideo();
+        startFadeWatch();
+      } catch (e) {
+        // Will get retried via ready callback
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#moodParty')) setMode(currentMode === 'party' ? null : 'party');
+    else if (e.target.closest('#moodFuneral')) setMode(currentMode === 'funeral' ? null : 'funeral');
+  });
+
+  // ESC key stops whatever mode is active
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentMode) setMode(null);
+  });
 })();
 
 </script>
