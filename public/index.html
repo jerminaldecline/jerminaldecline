@@ -146,11 +146,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
 @media(prefers-reduced-motion:reduce){.month-in-progress{animation:none}}
-.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.1rem;flex:1 1 auto;max-width:560px;min-width:300px;cursor:pointer;padding:0.5rem 0.85rem;border:1px dashed var(--border);border-radius:8px;transition:border-color .12s}
-.dying-ticker:hover{border-color:var(--accent)}
-.dying-ticker-lead{font-size:0.78rem;font-weight:700;color:var(--text-muted)}
-.dying-ticker-excuse{font-size:0.92rem;font-weight:700;color:var(--shorts,#e8923a);font-style:italic;line-height:1.25}
-.dying-ticker-new{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent);opacity:0.7}
+.dying-ticker{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:0.18rem;flex:1 1 auto;max-width:560px;min-width:280px;cursor:pointer;padding:0;border:none}
+.dying-ticker-lead{font-size:0.8rem;font-weight:600;color:var(--text-muted)}
+.dying-ticker-excuse{font-size:1.08rem;font-weight:800;color:var(--shorts,#e8923a);font-style:italic;line-height:1.3}
+.dying-ticker-new{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);opacity:0.5;transition:opacity .12s}
 .dying-ticker:hover .dying-ticker-new{opacity:1}
 @media(max-width:680px){.dying-ticker{align-items:flex-start;text-align:left;max-width:none;min-width:0;flex:1 1 100%}}
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
@@ -1888,12 +1887,34 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .fun-modes{display:flex;flex-direction:column;gap:0.4rem;margin-top:auto}
 .fun-modes .mood-btn{width:100%;justify-content:center;padding:0.42rem 0.7rem;font-size:0.82rem;font-weight:700}
 /* Month quick-jump segmented control (Overview controls row) */
-.month-quick{display:inline-flex;border:1px solid var(--accent);border-radius:7px;overflow:hidden;flex:0 0 auto}
-.mq-btn{appearance:none;border:none;background:var(--surface);color:var(--subtext);font-family:inherit;font-size:0.8rem;font-weight:700;padding:0.36rem 0.7rem;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease}
+.month-quick{display:inline-flex;border:1px solid var(--accent);border-radius:8px;overflow:hidden;flex:0 0 auto}
+.mq-btn{appearance:none;border:none;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:flex-start;gap:0.04rem;padding:0.3rem 0.75rem;line-height:1.15;text-align:left}
+.mq-main{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;opacity:0.8}
+.mq-sub{font-size:0.84rem;font-weight:800;letter-spacing:-0.01em}
 .mq-btn+.mq-btn{border-left:1px solid var(--accent)}
 .mq-btn:hover{color:var(--text)}
 .mq-btn.active{background:var(--accent);color:#fff}
-@media(max-width:680px){.mq-btn{padding:0.34rem 0.5rem;font-size:0.74rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
+.mq-btn.active .mq-main{opacity:0.9}
+@media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
+/* Top topics panel header + "see this month's videos" link */
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem;margin:0 0 1rem}
+.panel-head h3{margin:0}
+.see-vids-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;white-space:nowrap;flex:0 0 auto}
+.see-vids-link:hover{text-decoration:underline}
+/* Videos summary strip (aggregate stats above the column headers) */
+.vid-summary{display:flex;flex-wrap:wrap;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
+.vs-item{display:flex;flex-direction:column;gap:0.12rem;min-width:0}
+.vs-num{font-size:1.05rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;line-height:1}
+.vs-lbl{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:600}
+/* Topics container pills (browse + filter by subject) */
+.topics-body{display:flex;flex-wrap:wrap;gap:0.45rem}
+.topic-pill{display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:999px;padding:0.32rem 0.7rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text);cursor:pointer;transition:border-color .12s,background-color .12s,color .12s}
+.topic-pill:hover{border-color:var(--accent)}
+.topic-pill.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.topic-pill.active .vchip-dot{outline:1.5px solid rgba(255,255,255,0.7)}
+.tp-name{white-space:nowrap}
+.tp-count{font-variant-numeric:tabular-nums;font-weight:800;opacity:0.65;font-size:0.76rem}
+.topic-pill.active .tp-count{opacity:0.95}
 </style>
 </head>
 <body>
@@ -1961,8 +1982,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   <div class="sticky-controls" id="stickyControls">
     <div class="bar-controls" data-for="overview" id="ovBarControls">
       <div class="month-quick" role="group" aria-label="Quick month jump">
-        <button class="mq-btn" id="mqCurrent" type="button">This month</button>
-        <button class="mq-btn" id="mqComplete" type="button">Latest complete</button>
+        <button class="mq-btn" id="mqComplete" type="button"><span class="mq-main">Last complete month</span><span class="mq-sub" id="mqCompleteSub"></span></button>
+        <button class="mq-btn" id="mqCurrent" type="button"><span class="mq-main">Month in progress</span><span class="mq-sub" id="mqCurrentSub"></span></button>
       </div>
       <select id="scopeSel" class="bar-sel" aria-label="Channel"></select>
       <select id="msel" class="bar-sel" aria-label="Month"></select>
@@ -2026,6 +2047,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
     <div class="ad-panel" id="adPanel" hidden></div>
+    <div class="wordcloud-section topics-section" id="topicsSection">
+      <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">What this period covered</span>
+          <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="topicsPanel" hidden>
+        <div class="wordcloud-meta" id="topicsMeta"></div>
+        <div class="topics-body" id="topicsBody"></div>
+      </div>
+    </div>
     <div class="wordcloud-section">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="wordcloud-toggle-text">
@@ -2615,7 +2649,7 @@ function render(m){
     })()}
     <div class="hero">
       <div class="hero-card">
-        <div class="hero-label">Total views</div>
+        <div class="hero-label">Total views <button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
         <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
@@ -2635,8 +2669,8 @@ function render(m){
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
     <div class="lower">
-      <div class="panel"><h3>Top topics — share of uploads</h3>${topicBars.uploads}</div>
-      <div class="panel"><h3>Top topics — share of views</h3>${topicBars.views}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.uploads}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.views}</div>
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -2694,14 +2728,15 @@ function render(m){
   ms.onchange = (e)=>{ refresh(e.target.value); };
   // Mood buttons live in the re-rendered fun card — restore their active state.
   if (window.__syncMoodButtons) window.__syncMoodButtons();
-  // Month quick-jump (This month / Latest complete) — wire onclick + reflect active.
+  // Month quick-jump (Last complete month / Month in progress) — wire + reflect active.
   (function(){
     const months2 = availableMonths();
-    const curM = months2.includes(CURRENT_MONTH_KEY) ? CURRENT_MONTH_KEY : months2[0];
-    const lcM  = months2.find(mm => mm < CURRENT_MONTH_KEY) || months2[0];
+    const hasInProgress = months2.includes(CURRENT_MONTH_KEY);
+    const lcM = months2.find(mm => mm < CURRENT_MONTH_KEY) || months2[0];
     const bCur = document.getElementById('mqCurrent'), bLc = document.getElementById('mqComplete');
-    if (bCur) { bCur.onclick = () => refresh(curM); bCur.classList.toggle('active', m === curM); bCur.title = 'Jump to ' + monthName(curM) + (curM === CURRENT_MONTH_KEY ? ' (in progress)' : ''); }
-    if (bLc)  { bLc.onclick  = () => refresh(lcM);  bLc.classList.toggle('active', m === lcM);  bLc.title = 'Jump to ' + monthName(lcM) + ' (latest complete month)'; bLc.style.display = (curM === lcM) ? 'none' : ''; }
+    const subCur = document.getElementById('mqCurrentSub'), subLc = document.getElementById('mqCompleteSub');
+    if (bLc)  { bLc.onclick = () => refresh(lcM); bLc.classList.toggle('active', m === lcM); if (subLc) subLc.textContent = monthName(lcM); bLc.title = 'Jump to ' + monthName(lcM) + ' (last complete month)'; bLc.style.display = (lcM === CURRENT_MONTH_KEY) ? 'none' : ''; }
+    if (bCur) { bCur.onclick = () => refresh(CURRENT_MONTH_KEY); bCur.classList.toggle('active', m === CURRENT_MONTH_KEY); if (subCur) subCur.textContent = monthName(CURRENT_MONTH_KEY); bCur.title = 'Jump to ' + monthName(CURRENT_MONTH_KEY) + ' (still in progress)'; bCur.style.display = hasInProgress ? '' : 'none'; }
   })();
   // Overview month-detail collapse toggle
   // Dying-channel ticker — pick a random excuse, cycle on click/Enter.
@@ -6384,6 +6419,24 @@ function renderWindowList(startDate, endDate) {
     topicFilterBar = `<div class="topic-filter-bar">Filtered to <span class="tf-kind">${kindLabel}</span><span class="tf-name"><span class="vchip-dot" style="background:${t?.color || '#888'}"></span>${escapeHtml(shown)}</span><button type="button" class="tf-clear" id="topicFilterClear" aria-label="Clear topic filter">clear ✕</button></div>`;
   }
 
+  // Summary strip — aggregate stats for the videos currently shown (respects the
+  // active format/topic/search filters), so people get an at-a-glance read.
+  const shownForStats = sorted.filter(v => !v.unavailable && (windowListState.formatFilter === 'short' ? v.isShort : windowListState.formatFilter === 'long' ? !v.isShort : true));
+  let summaryStrip = '';
+  if (shownForStats.length) {
+    const _tv = shownForStats.reduce((s,v)=>s+(v.views||0),0);
+    const _tc = shownForStats.reduce((s,v)=>s+(v.comments||0),0);
+    const _tl = shownForStats.reduce((s,v)=>s+(v.likes||0),0);
+    const _durs = shownForStats.filter(v=>v.durationSec>0).map(v=>v.durationSec);
+    const _md = _durs.length ? _durs.reduce((a,b)=>a+b,0)/_durs.length : 0;
+    const _lr = _tv>0 ? (_tl/_tv*100) : 0;
+    summaryStrip = `<div class="vid-summary" aria-label="Summary of shown videos">
+      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Mean duration</span></div>
+      <div class="vs-item"><span class="vs-num">${fmt(_tv)}</span><span class="vs-lbl">Total views</span></div>
+      <div class="vs-item"><span class="vs-num">${_lr.toFixed(1)}%</span><span class="vs-lbl">Like rate</span></div>
+      <div class="vs-item"><span class="vs-num">${fmt(_tc)}</span><span class="vs-lbl">Comments</span></div>
+    </div>`;
+  }
   list.innerHTML = `
     <div class="window-list-search">
       <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
@@ -6395,12 +6448,19 @@ function renderWindowList(startDate, endDate) {
     </div>
     ${topicFilterBar}
     ${breakdownHtml}
+    ${summaryStrip}
     <div class="window-list-rows">
       ${colHeader}
       ${windowListState.formatFilter !== 'short' ? group('Long-form', longSorted, longViewsTotal, 'long') : ''}
       ${windowListState.formatFilter !== 'long' ? group('Shorts', shortSorted, shortViewsTotal, 'short') : ''}
     </div>
   `;
+
+  // Keep the topics container's active highlight + counts in sync when it's open.
+  const _tcT = document.getElementById('topicsToggle');
+  if (_tcT && _tcT.getAttribute('aria-expanded') === 'true' && typeof window.renderTopicsContainer === 'function') {
+    try { window.renderTopicsContainer(); } catch (e) {}
+  }
 }
 
   // Entry: render the Videos tab for the current channel + time window.
@@ -6414,7 +6474,8 @@ function renderWindowList(startDate, endDate) {
     }
     if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){ console.error('ad panel', e); } }
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
-    // Keep the word cloud in sync with the Videos-tab filters when it's open.
+    // Keep the topics container + word cloud in sync with the Videos-tab filters when open.
+    if (typeof window.renderTopicsContainer === 'function') { try { window.renderTopicsContainer(); } catch(e){ console.error('topics', e); } }
     const wcToggle = document.getElementById('wordcloudToggle');
     if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
       try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); }
@@ -6423,6 +6484,61 @@ function renderWindowList(startDate, endDate) {
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
   window.__resetVideoBatches = resetVideoBatches;
+
+  // Topics container (above the list): browse the period's subjects, click to filter.
+  window.renderTopicsContainer = function() {
+    const panel = document.getElementById('topicsPanel');
+    const body = document.getElementById('topicsBody');
+    const meta = document.getElementById('topicsMeta');
+    const hint = document.getElementById('topicsHint');
+    const section = document.getElementById('topicsSection');
+    if (!panel || !body || !section) return;
+    if (!isTopicChannel()) { section.hidden = true; return; }
+    section.hidden = false;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (!startDate || !endDate) { body.innerHTML = ''; return; }
+    const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
+    let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    const fmtF = windowListState.formatFilter;
+    if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
+    else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
+    const counts = new Map();
+    let tagged = 0;
+    for (const v of videos) { const id = ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]; if (!id) continue; tagged++; counts.set(id, (counts.get(id) || 0) + 1); }
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+    if (hint) hint.textContent = ranked.length ? `(${ranked.length} subject${ranked.length === 1 ? '' : 's'})` : '';
+    if (!ranked.length) { body.innerHTML = '<div class="wordcloud-empty">No tagged subjects in this range.</div>'; if (meta) meta.textContent = ''; return; }
+    if (meta) meta.textContent = `Click a subject to filter the list below — ${tagged} of ${videos.length} videos tagged.`;
+    const cur = windowListState.topicFilter;
+    body.innerHTML = ranked.map(([id, c]) => {
+      const active = cur && cur.kind === 'subject' && cur.id === id;
+      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="subject" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
+    }).join('');
+  };
+
+  // Topics container: toggle open/close + click a subject to filter the list.
+  document.addEventListener('click', (e) => {
+    const tt = e.target.closest('#topicsToggle');
+    if (tt) {
+      const exp = tt.getAttribute('aria-expanded') === 'true';
+      tt.setAttribute('aria-expanded', String(!exp));
+      const panel = document.getElementById('topicsPanel');
+      if (panel) panel.hidden = exp;
+      if (!exp) window.renderTopicsContainer();
+      return;
+    }
+    const pill = e.target.closest('.topic-pill[data-tck]');
+    if (pill) {
+      const kind = pill.dataset.tck, id = pill.dataset.tci;
+      const cur = windowListState.topicFilter;
+      windowListState.topicFilter = (cur && cur.kind === kind && cur.id === id) ? null : { kind, id };
+      resetVideoBatches();
+      const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed);
+      return;
+    }
+  });
   document.addEventListener('click', (e) => {
     // Incremental loading: reveal the next batch of rows for a group
     const moreBtn = e.target.closest('[data-show-more]');
@@ -7576,6 +7692,24 @@ function renderWindowList(startDate, endDate) {
     });
   }
 
+  // --- Audio fade: dip the looping track to silence over its final seconds, then
+  // fade it back in on restart — no abrupt cut + volume jump at the loop point.
+  const FADE_OUT_SEC = 5, FADE_IN_SEC = 1.5;
+  let fadeTimer = null;
+  function fadeTick() {
+    if (!ytPlayer || !ytReady || !currentMode) return;
+    let dur, cur;
+    try { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); } catch (e) { return; }
+    if (!dur || dur <= 0 || cur == null) return;
+    const remaining = dur - cur;
+    let vol = DEFAULT_VOLUME;
+    if (remaining <= FADE_OUT_SEC) vol = DEFAULT_VOLUME * Math.max(0, remaining / FADE_OUT_SEC);
+    else if (cur < FADE_IN_SEC) vol = DEFAULT_VOLUME * (cur / FADE_IN_SEC);
+    try { ytPlayer.setVolume(Math.round(vol)); } catch (e) {}
+  }
+  function startFadeWatch() { if (!fadeTimer) fadeTimer = setInterval(fadeTick, 200); }
+  function stopFadeWatch() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+
   // Sync the mood buttons' pressed state + label to currentMode. The buttons live
   // in the Overview "fun" card, which re-renders on month/scope change, so this runs
   // from setMode AND after each report render (via window.__syncMoodButtons).
@@ -7618,6 +7752,7 @@ function renderWindowList(startDate, endDate) {
 
     // Update audio
     if (!newMode) {
+      stopFadeWatch();
       if (ytPlayer && ytReady) {
         try { ytPlayer.stopVideo(); } catch (e) {}
       }
@@ -7630,6 +7765,7 @@ function renderWindowList(startDate, endDate) {
         ytPlayer.loadVideoById({ videoId });
         ytPlayer.setVolume(DEFAULT_VOLUME);
         ytPlayer.playVideo();
+        startFadeWatch();
       } catch (e) {
         // Will get retried via ready callback
       }
