@@ -1562,68 +1562,358 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      visually distinguished with a different accent colour so users can tell
      them apart at a glance. Green accent reads as "money" without being too
      on-the-nose about it. */
-/* === Mood modes (party / funeral) === */
-.mood-controls{position:fixed;right:14px;bottom:14px;z-index:95;display:flex;flex-direction:column;gap:0.5rem}
-.mood-btn{display:flex;align-items:center;gap:0.45rem;padding:0.5rem 0.8rem;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.12);transition:transform .12s ease,border-color .12s ease}
-.mood-btn:hover{transform:translateY(-1px);border-color:var(--accent)}
-.mood-btn .mood-icon{font-size:1.05rem;line-height:1}
-.mood-party[aria-pressed="true"]{border-color:#d946ef;box-shadow:0 0 0 2px rgba(217,70,239,0.45),0 2px 10px rgba(0,0,0,0.2)}
-.mood-funeral[aria-pressed="true"]{border-color:#64748b;box-shadow:0 0 0 2px rgba(100,116,139,0.45),0 2px 10px rgba(0,0,0,0.2)}
-@media(max-width:680px){.mood-controls{right:10px;bottom:10px}.mood-btn .mood-label{display:none}.mood-btn{padding:0.55rem;border-radius:50%}}
-/* Disco overlay (party): coloured lights, screen blend, click-through */
-.disco-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s ease;mix-blend-mode:screen}
-body.party-mode .disco-overlay{opacity:1}
-.disco-light{position:absolute;width:55vw;height:55vw;border-radius:50%;filter:blur(60px);opacity:0.55;animation:discoMove 7s ease-in-out infinite}
-.disco-light-1{background:#ff2d95;top:-10%;left:-8%;animation-delay:0s}
-.disco-light-2{background:#23d5ab;top:-5%;right:-10%;animation-delay:-1.4s}
-.disco-light-3{background:#ffd600;bottom:-12%;left:8%;animation-delay:-2.8s}
-.disco-light-4{background:#2d7dff;bottom:-8%;right:0%;animation-delay:-4.2s}
-.disco-light-5{background:#b14dff;top:30%;left:35%;animation-delay:-5.6s}
-@keyframes discoMove{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(12vw,8vh) scale(1.15)}50%{transform:translate(-8vw,14vh) scale(0.9)}75%{transform:translate(6vw,-6vh) scale(1.1)}}
-/* Rain overlay (funeral): two parallax sheets, click-through; dashboard greyscales */
-.rain-overlay{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;overflow:hidden;transition:opacity .6s ease}
-body.funeral-mode .rain-overlay{opacity:1}
-.rain-overlay::before,.rain-overlay::after{content:'';position:absolute;inset:-50% 0 -50% 0;background-image:linear-gradient(110deg,transparent 0%,transparent 49.7%,rgba(200,215,230,0.42) 49.8%,rgba(200,215,230,0.42) 50.2%,transparent 50.3%,transparent 100%);background-size:9px 100px;animation:rainFall 0.55s linear infinite;opacity:0.8}
-.rain-overlay::after{background-image:linear-gradient(112deg,transparent 0%,transparent 49.7%,rgba(180,195,210,0.30) 49.85%,rgba(180,195,210,0.30) 50.15%,transparent 50.3%,transparent 100%);background-size:13px 140px;animation:rainFall 0.85s linear infinite;opacity:0.55}
-@keyframes rainFall{0%{transform:translate(0,-50px)}100%{transform:translate(-20px,50px)}}
-body.funeral-mode .wrap{filter:grayscale(1);transition:filter .6s ease}
-/* Mascots (slide up from bottom centre) */
-.party-mascots{position:fixed;left:50%;bottom:0;width:min(460px,72vw);height:auto;z-index:80;pointer-events:none;opacity:0;transform:translate(-50%,100%);transition:transform .8s cubic-bezier(.22,.61,.36,1),opacity .6s ease}
-body.party-mode .party-mascots{opacity:1;transform:translate(-50%,0);animation:partyBob 1.1s ease-in-out infinite alternate}
-@keyframes partyBob{from{transform:translate(-50%,0)}to{transform:translate(-50%,-16px)}}
-.funeral-mascot{position:fixed;left:50%;bottom:0;width:min(420px,60vw);height:auto;z-index:80;pointer-events:none;opacity:0;transform:translate(-50%,100%);transition:transform 1.6s cubic-bezier(.22,.61,.36,1),opacity .9s ease;filter:drop-shadow(0 -4px 12px rgba(0,0,0,0.35))}
-body.funeral-mode .funeral-mascot{opacity:1;transform:translate(-50%,0)}
-/* Floating all-time-low figure */
-.mood-floaters{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-.floater{position:absolute;font-weight:800;white-space:nowrap;will-change:transform;text-shadow:0 1px 4px rgba(0,0,0,0.25)}
-.floater-party{animation:floatParty 6s ease-in-out infinite}
-.floater-funeral{color:rgba(220,60,60,0.6);font-size:2.2rem;animation:floatFuneral 26s linear infinite}
-@keyframes floatParty{0%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(0,-32px) rotate(8deg)}100%{transform:translate(0,0) rotate(-8deg)}}
-@keyframes floatFuneral{0%{transform:translate(-25vw,0)}100%{transform:translate(125vw,0)}}
-.audio-player{position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden}
-@media(prefers-reduced-motion:reduce){.disco-light,.party-mascots,.floater,.rain-overlay::before,.rain-overlay::after{animation:none!important}}
+  /* Hidden audio player — iframe needs to exist in DOM for audio, just visually hidden */
+  .audio-player {
+    position: fixed;
+    bottom: -200px;
+    left: -200px;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* Mood control buttons — floating bottom-right */
+  .mood-controls {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 90;
+  }
+  .mood-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+  }
+  .mood-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  .mood-btn[aria-pressed="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+  .mood-party[aria-pressed="true"] {
+    animation: moodPartyPulse 0.9s ease-in-out infinite;
+  }
+  .mood-funeral[aria-pressed="true"] {
+    animation: moodFuneralPulse 2s ease-in-out infinite;
+  }
+  @keyframes moodPartyPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(239, 142, 41, 0.5), 0 6px 18px rgba(239, 142, 41, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(239, 142, 41, 0.3), 0 6px 22px rgba(239, 142, 41, 0.5); }
+  }
+  @keyframes moodFuneralPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(120, 120, 130, 0.4), 0 6px 18px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 0 0 4px rgba(120, 120, 130, 0.25), 0 6px 22px rgba(0, 0, 0, 0.4); }
+  }
+  .mood-icon { font-size: 1rem; line-height: 1; }
+  /* When mood-controls move, animate the transition */
+  .mood-controls { transition: bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (max-width: 540px) {
+    .mood-controls { bottom: 0.6rem; right: 0.6rem; gap: 0.35rem; }
+    .mood-btn { font-size: 0.78rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; }
+    /* On mobile, lift the buttons clear of the mascot area when a mode is active.
+       Both the party mascots and unconscious_jer occupy the bottom-center of the
+       viewport; the buttons normally sit bottom-right where the mascots' wider
+       silhouettes can overlap them. Lift to ~30vh from the bottom while active. */
+    body.party-mode .mood-controls,
+    body.funeral-mode .mood-controls {
+      bottom: 32vh;
+    }
+  }
+
+  /* Party mode — disco lights overlay */
+  .disco-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s;
+    overflow: hidden;
+    mix-blend-mode: screen;
+  }
+  body.party-mode .disco-overlay { opacity: 1; }
+  .disco-light {
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+  .disco-light-1 {
+    background: radial-gradient(circle, rgba(255, 50, 100, 0.9), transparent 70%);
+    animation: discoMove1 7s ease-in-out infinite;
+  }
+  .disco-light-2 {
+    background: radial-gradient(circle, rgba(50, 150, 255, 0.9), transparent 70%);
+    animation: discoMove2 9s ease-in-out infinite;
+  }
+  .disco-light-3 {
+    background: radial-gradient(circle, rgba(120, 255, 100, 0.9), transparent 70%);
+    animation: discoMove3 8s ease-in-out infinite;
+  }
+  .disco-light-4 {
+    background: radial-gradient(circle, rgba(255, 200, 50, 0.9), transparent 70%);
+    animation: discoMove4 11s ease-in-out infinite;
+  }
+  .disco-light-5 {
+    background: radial-gradient(circle, rgba(200, 100, 255, 0.9), transparent 70%);
+    animation: discoMove5 10s ease-in-out infinite;
+  }
+  @keyframes discoMove1 {
+    0%, 100% { top: -10%; left: -10%; }
+    25% { top: 30%; left: 70%; }
+    50% { top: 70%; left: 20%; }
+    75% { top: 10%; left: 50%; }
+  }
+  @keyframes discoMove2 {
+    0%, 100% { top: 60%; left: 70%; }
+    33% { top: 10%; left: 30%; }
+    66% { top: 70%; left: -10%; }
+  }
+  @keyframes discoMove3 {
+    0%, 100% { top: 30%; left: 40%; }
+    50% { top: 70%; left: 60%; }
+  }
+  @keyframes discoMove4 {
+    0%, 100% { top: 80%; left: 20%; }
+    40% { top: 0%; left: 60%; }
+    80% { top: 50%; left: 80%; }
+  }
+  @keyframes discoMove5 {
+    0%, 100% { top: 20%; left: 75%; }
+    50% { top: 60%; left: 15%; }
+  }
+  /* On mobile, the disco lights need bigger size, less blur, and higher opacity
+     to read properly. 80px blur on a 200px-wide light at 50vw dissolves them
+     to near-invisibility on phone screens. */
+  @media (max-width: 540px) {
+    .disco-light {
+      width: 85vw;
+      height: 85vw;
+      max-width: none;
+      max-height: none;
+      filter: blur(45px);
+      opacity: 0.75;
+    }
+  }
+  /* Subtle hue cycling in party mode — applied to .wrap so the mood
+     buttons keep their natural brand colours and stay clearly clickable. */
+  body.party-mode .wrap { animation: partyHue 6s linear infinite; }
+  @keyframes partyHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(15deg); }
+  }
+
+  /* Party mode mascots — slide up from below the viewport */
+  .party-mascots {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* above disco lights (1), below mood-controls (90) and toast (100) */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.25));
+  }
+  body.party-mode .party-mascots {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+    animation: mascotBob 2.4s ease-in-out infinite 0.7s;
+  }
+  @keyframes mascotBob {
+    0%, 100% { transform: translate(-50%, 0%); }
+    50%      { transform: translate(-50%, -6px); }
+  }
+  @media (max-width: 540px) {
+    .party-mascots { width: 70vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.party-mode .party-mascots { animation: none; }
+  }
+
+  /* Funeral mode mascot — slow, mournful slide up from below. No bob. */
+  .funeral-mascot {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    width: min(420px, 60vw);
+    height: auto;
+    z-index: 80;          /* same layer as party-mascots */
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 2s;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.35));
+  }
+  body.funeral-mode .funeral-mascot {
+    opacity: 1;
+    transform: translate(-50%, 0%);
+  }
+  @media (max-width: 540px) {
+    .funeral-mascot { width: 70vw; }
+  }
+
+  /* ===== FLOATING LOW-FIGURE TEXT ===== */
+
+  /* Funeral mode: dust effect — a single canvas covers the viewport.
+     One-shot text appearance: fades in, holds, crumbles to dust over ~17s. */
+  .floaters-funeral {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s;
+  }
+  body.funeral-mode .floaters-funeral { opacity: 1; }
+  .floaters-funeral canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* Party mode: multiple instances bouncing across the screen,
+     flashing colours via filter hue rotation. */
+  .floaters-party {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  body.party-mode .floaters-party { opacity: 1; }
+  .floater-party {
+    position: absolute;
+    font-weight: 800;
+    white-space: nowrap;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.4);
+    animation:
+      floaterPartyMove var(--move-dur, 8s) cubic-bezier(0.4, 0, 0.6, 1) infinite alternate,
+      floaterPartyHue var(--hue-dur, 2s) linear infinite;
+  }
+  @keyframes floaterPartyMove {
+    0%   { transform: translate(0, 0) rotate(var(--rot-start, -8deg)); }
+    100% { transform: translate(var(--move-x, 60vw), var(--move-y, 40vh)) rotate(var(--rot-end, 12deg)); }
+  }
+  @keyframes floaterPartyHue {
+    0%, 100% { filter: hue-rotate(0deg); color: hsl(340, 90%, 60%); }
+    16%      { color: hsl(30, 95%, 60%); }
+    33%      { color: hsl(55, 95%, 60%); }
+    50%      { color: hsl(140, 80%, 55%); filter: hue-rotate(0deg); }
+    66%      { color: hsl(200, 90%, 60%); }
+    83%      { color: hsl(280, 85%, 65%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .floater-party { animation: none !important; }
+  }
+
+  /* Funeral mode — greyscale + rain.
+     We apply the filter to .wrap rather than body so the mood-controls,
+     toast, and overlays (which are body-level siblings) stay vibrant and
+     remain obviously interactive. */
+  body.funeral-mode .wrap {
+    filter: grayscale(1) brightness(0.92);
+    transition: filter 0.5s;
+  }
+  body:not(.funeral-mode) .wrap { transition: filter 0.5s; }
+
+  .rain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.6s;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(40, 50, 60, 0.18), rgba(20, 25, 30, 0.32));
+    /* Subtle backdrop blur — the "glass" the drops sit on. Kept light so
+       the data on the page stays readable through it. */
+    backdrop-filter: blur(0.6px);
+    -webkit-backdrop-filter: blur(0.6px);
+  }
+  body.funeral-mode .rain-overlay { opacity: 1; }
+  .rain-overlay canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Respect reduced-motion preferences for both modes */
+  @media (prefers-reduced-motion: reduce) {
+    .disco-light, body.party-mode .wrap { animation: none !important; }
+    /* Canvas rain animation is gated by JS — see setupMoodModes */
+  }
+
 </style>
 </head>
 <body>
-<!-- Mood modes (party / funeral): overlays, mascots, hidden audio + controls -->
+<!-- Funeral mode rain overlay (CSS-only) -->
 <div class="rain-overlay" id="rainOverlay" aria-hidden="true"></div>
+
+<!-- Party mode disco lights overlay (CSS-only) -->
 <div class="disco-overlay" id="discoOverlay" aria-hidden="true">
-  <span class="disco-light disco-light-1"></span>
-  <span class="disco-light disco-light-2"></span>
-  <span class="disco-light disco-light-3"></span>
-  <span class="disco-light disco-light-4"></span>
-  <span class="disco-light disco-light-5"></span>
+  <div class="disco-light disco-light-1"></div>
+  <div class="disco-light disco-light-2"></div>
+  <div class="disco-light disco-light-3"></div>
+  <div class="disco-light disco-light-4"></div>
+  <div class="disco-light disco-light-5"></div>
 </div>
+
+<!-- Party mode mascots — slide up from below when party mode is active -->
 <img class="party-mascots" id="partyMascots" src="" alt="" aria-hidden="true" />
+
+<!-- Funeral mode mascot — slides up slowly when funeral mode is active -->
 <img class="funeral-mascot" id="funeralMascot" src="" alt="" aria-hidden="true" />
-<div class="mood-floaters" id="moodFloaters" aria-hidden="true"></div>
-<div class="audio-player" id="audioPlayer" aria-hidden="true"><div id="ytPlayer"></div></div>
+
+<!-- Floating low-figure text — populated and shown by JS when mood modes activate -->
+<div class="floaters-funeral" id="floatersFuneral" aria-hidden="true"></div>
+<div class="floaters-party" id="floatersParty" aria-hidden="true"></div>
+
+<!-- Hidden YouTube audio player -->
+<div class="audio-player" id="audioPlayer" aria-hidden="true">
+  <div id="ytPlayer"></div>
+</div>
+
+<!-- Mood controls (floating bottom-right) -->
 <div class="mood-controls" role="group" aria-label="Mood">
   <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false">
-    <span class="mood-icon">🎉</span><span class="mood-label">Party mode</span>
+    <span class="mood-icon">🎉</span>
+    <span class="mood-label">Party mode</span>
   </button>
   <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false">
-    <span class="mood-icon">⚰️</span><span class="mood-label">Funeral mode</span>
+    <span class="mood-icon">⚰️</span>
+    <span class="mood-label">Funeral mode</span>
   </button>
 </div>
 <div class="wrap">
@@ -2271,7 +2561,7 @@ function render(m){
     </tr>`;
   }).join('');
 
-  try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? fmt(_pk.lowViews) : ''; } catch(e){}
+  try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? ('▼'+Math.abs(_pk.pctFromPeak)+'%') : ''; if (window.__refreshActiveFloaters) window.__refreshActiveFloaters(); } catch(e){}
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${monthName(m)} <span class="report-head-sub-inline">Monthly Report</span>${m===CURRENT_MONTH_KEY ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${headSub.toLowerCase()}</span></div></div>
@@ -6466,89 +6756,850 @@ function renderWindowList(startDate, endDate) {
     console.error('Monthly report load failed:', err);
   }
 })();
-// === Mood modes (party / funeral) with hidden YouTube audio ===
-(function setupMoodModes(){
-  const VIDEOS = { party:'Vz60le50JL8', funeral:'xTyLzSUea0U' }; // Crab Rave / RDR2 "That's The Way It Is"
+// --- Mood modes (party / funeral) with hidden YouTube audio ---
+(function setupMoodModes() {
+  // YouTube video IDs for the two modes
+  const VIDEOS = {
+    party: 'Vz60le50JL8',     // Crab Rave
+    funeral: 'cy6oAEn6zxY'    // Copyright-compliant funeral mode video
+  };
   const DEFAULT_VOLUME = 30;
-  const MASCOTS = { party:'party-mascots.gif', funeral:'unconscious_jer.png' };
-  let ytPlayer=null, ytReady=false, currentMode=null, apiRequested=false, queued=null;
 
-  // Lazy-load the YouTube IFrame API on first activation.
-  function ensurePlayer(cb){
-    if (ytReady && ytPlayer){ if(cb) cb(); return; }
-    queued = cb || queued;
-    if (apiRequested) return;
-    apiRequested = true;
-    const prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function(){
-      if (typeof prev === 'function') { try{ prev(); }catch(e){} }
-      ytPlayer = new YT.Player('ytPlayer', {
-        height:'1', width:'1',
-        playerVars:{ autoplay:0, controls:0, disablekb:1, fs:0, playsinline:1 },
-        events:{ onReady:function(){ ytReady=true; if(queued){ const c=queued; queued=null; try{ c(); }catch(e){} } } }
-      });
-    };
-    const tag=document.createElement('script'); tag.src='https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
+  let ytPlayer = null;
+  let ytReady = false;
+  let currentMode = null;     // 'party' | 'funeral' | null
+  let mascotsLoaded = false;
+  let funeralMascotLoaded = false;
+
+  // Lazy-load the mascots GIF on first party activation — saves bandwidth
+  // for visitors who never trigger party mode.
+  function ensureMascotsLoaded() {
+    if (mascotsLoaded) return;
+    const img = document.getElementById('partyMascots');
+    if (!img) return;
+    img.src = 'party-mascots.gif';
+    mascotsLoaded = true;
   }
 
-  // Lazy mascot loader — hides gracefully if the asset isn't deployed.
-  function loadMascot(which){
-    const img = document.getElementById(which==='party'?'partyMascots':'funeralMascot');
-    if (!img || img.dataset.loaded) return;
-    img.onerror = function(){ img.style.display='none'; };
-    img.src = MASCOTS[which];
-    img.dataset.loaded='1';
+  // Lazy-load the funeral mascot on first funeral activation
+  function ensureFuneralMascotLoaded() {
+    if (funeralMascotLoaded) return;
+    const img = document.getElementById('funeralMascot');
+    if (!img) return;
+    img.src = 'unconscious_jer.png';
+    funeralMascotLoaded = true;
   }
 
-  // Floating all-time-low figure: rainbow + bouncing for party, single red drift for funeral.
-  function buildFloaters(mode){
-    const host = document.getElementById('moodFloaters');
-    if (!host) return;
-    host.innerHTML='';
-    const low = (window.__moodLowText||'').trim();
-    if (!low || !mode) return;
-    const label = low + ' views';
-    if (mode==='funeral'){
-      const el=document.createElement('div');
-      el.className='floater floater-funeral';
-      el.textContent=label;
-      el.style.top=(20+Math.random()*50).toFixed(0)+'%';
-      host.appendChild(el);
-    } else if (mode==='party'){
-      for(let i=0;i<8;i++){
-        const el=document.createElement('div');
-        el.className='floater floater-party';
-        el.textContent=label;
-        el.style.top=(8+Math.random()*78).toFixed(0)+'%';
-        el.style.left=(4+Math.random()*82).toFixed(0)+'%';
-        el.style.fontSize=(1.1+Math.random()*1.6).toFixed(2)+'rem';
-        el.style.color='hsl('+Math.floor(Math.random()*360)+',90%,60%)';
-        el.style.animationDelay=(-Math.random()*6).toFixed(2)+'s';
-        host.appendChild(el);
+  // Read the "Lowest since peak" line from the rendered peak strip and produce a
+  // compact display string like "▼89.3%" — just the figure.
+  // The mood mode itself is the joke; the over-explained version was redundant.
+  function readAllTimeLowText() {
+    return (window.__moodLowText && String(window.__moodLowText).trim()) || '▼ —';
+  }
+
+  // Funeral floater: a one-shot dust effect. The lowest-since-peak figure fades in,
+  // holds briefly, then progressively crumbles to dust over ~15 seconds.
+  // After the dust disperses, no text remains — the rain and mascot carry the mood.
+  //
+  // Implementation: render the text to an offscreen canvas, sample it as a grid
+  // of "particles" (one per text pixel cluster), then animate each particle
+  // independently — drifting downward with gravity, slight horizontal wind,
+  // fading out. The crumble starts from the bottom of the text and progresses
+  // upward, so the top is the last to disappear.
+  const funeralDust = {
+    canvas: null,
+    ctx: null,
+    particles: null,
+    rafId: null,
+    startedAt: 0,
+    dpr: 1
+  };
+
+  // Timing (ms)
+  const DUST_FADE_IN = 3000;     // slower, more deliberate appearance
+  const DUST_HOLD = 4500;        // longer hold so the figure can be read and absorbed
+  const DUST_CRUMBLE = 15000;
+  const DUST_TAIL = 2500;        // a small grace period after crumble for last particles to settle
+  const DUST_TOTAL = DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE + DUST_TAIL;
+
+  function startFuneralFloater() {
+    const container = document.getElementById('floatersFuneral');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    funeralDust.canvas = canvas;
+    funeralDust.ctx = ctx;
+    funeralDust.dpr = dpr;
+    funeralDust.startedAt = performance.now();
+    // Track the dimensions we initialised at so the resize handler can
+    // distinguish "real" resize from mobile address-bar scrolling.
+    funeralLastW = w;
+    funeralLastH = h;
+
+    // For users who prefer reduced motion: skip the particle simulation
+    // and render the figure as a simple fade-in / hold / fade-out instead.
+    funeralDust.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    funeralDust.particles = buildDustParticles(readAllTimeLowText(), w, h);
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function buildDustParticles(text, viewW, viewH) {
+    // Render text to a hidden canvas, then sample pixels into particle objects
+    const fontSize = Math.min(viewW * 0.18, 200);
+    const offscreen = document.createElement('canvas');
+    const octx = offscreen.getContext('2d');
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    const metrics = octx.measureText(text);
+    const textW = Math.ceil(metrics.width);
+    const textH = Math.ceil(fontSize * 1.2);
+    offscreen.width = textW;
+    offscreen.height = textH;
+    // Re-set font after canvas resize (resize clears state)
+    octx.font = `700 ${fontSize}px -apple-system, "Segoe UI", Inter, Roboto, sans-serif`;
+    octx.fillStyle = '#dc3232';
+    octx.textBaseline = 'middle';
+    octx.fillText(text, 0, textH / 2);
+
+    const imgData = octx.getImageData(0, 0, textW, textH);
+    const data = imgData.data;
+
+    // Position text centered on viewport
+    const startX = (viewW - textW) / 2;
+    const startY = (viewH - textH) / 2;
+
+    // Sample at intervals to keep particle count manageable
+    const step = 3;
+    // Pick a global wind direction with light variation. Mostly horizontal,
+    // slight downward bias. Each individual particle adds its own jitter.
+    const windAngle = (Math.random() - 0.5) * 0.3 + (Math.random() < 0.5 ? -1 : 1) * 0.15;
+    const windDir = windAngle < 0 ? -1 : 1;  // overall left/right tendency
+    const particles = [];
+    for (let py = 0; py < textH; py += step) {
+      for (let px = 0; px < textW; px += step) {
+        const idx = (py * textW + px) * 4;
+        const alpha = data[idx + 3];
+        if (alpha < 80) continue;
+        // Release time is a position-based bias PLUS heavy randomness, so
+        // particles don't release in clean rows. The bottom of the text is
+        // slightly more likely to release early, but there's significant
+        // overlap — some top particles release first, some bottom particles
+        // hang on. Creates the "wind erosion" look rather than "row crumble".
+        const positionBias = 1 - (py / textH);        // 0 (top) to 1 (bottom)
+        // Each particle gets a release fraction in [0, 1].
+        // Heavy randomisation; position bias is gentle (only 30% weight).
+        const releaseFraction = Math.min(0.95,
+          (positionBias * 0.3) + (Math.random() * 0.7));
+        // Each particle has its own wind speed scaled around the global wind
+        const personalWind = windDir * (0.6 + Math.random() * 1.4);
+        particles.push({
+          x: startX + px,
+          y: startY + py,
+          releaseFraction,
+          // Pre-determined wind for this particle — applied gradually after release
+          wind: personalWind,
+          vx: 0,
+          vy: 0,
+          released: false,
+          life: 0,
+          // Random fade-out length per particle for natural variation
+          maxLife: 100 + Math.random() * 80,
+          // Tiny phase offset for the sinusoidal swirl — gives each particle
+          // its own subtly different drift pattern
+          swirlPhase: Math.random() * Math.PI * 2
+        });
       }
+    }
+    return particles;
+  }
+
+  function funeralDustStep(now) {
+    if (!funeralDust.canvas) return;
+    const elapsed = now - funeralDust.startedAt;
+    const ctx = funeralDust.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    // Compute global opacity envelope: fade-in, hold, then fade with the crumble
+    let globalOpacity = 1;
+    if (elapsed < DUST_FADE_IN) {
+      // Ease-in curve (cubic) so the fade-in feels gentle rather than linear
+      const t = elapsed / DUST_FADE_IN;
+      globalOpacity = t * t * (3 - 2 * t);  // smoothstep
+    } else if (elapsed > DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE) {
+      const tailElapsed = elapsed - (DUST_FADE_IN + DUST_HOLD + DUST_CRUMBLE);
+      globalOpacity = Math.max(0, 1 - tailElapsed / DUST_TAIL);
+    }
+
+    const crumbleStart = DUST_FADE_IN + DUST_HOLD;
+    const crumbleProgress = elapsed < crumbleStart
+      ? 0
+      : Math.min(1, (elapsed - crumbleStart) / DUST_CRUMBLE);
+
+    // Reduced-motion path: static text with the same opacity envelope, no particle physics.
+    // We still respect the crumble phase by fading the text out during it.
+    if (funeralDust.reducedMotion) {
+      let opacity = globalOpacity;
+      if (crumbleProgress > 0) {
+        opacity *= Math.max(0, 1 - crumbleProgress);
+      }
+      if (opacity > 0.01) {
+        ctx.fillStyle = `rgba(220, 50, 50, ${opacity * 0.75})`;
+        for (const p of funeralDust.particles) {
+          ctx.fillRect(p.x, p.y, 3.5, 3.5);
+        }
+      }
+      if (elapsed >= DUST_TOTAL) {
+        funeralDust.rafId = null;
+        ctx.clearRect(0, 0, w, h);
+        return;
+      }
+      funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+      return;
+    }
+
+    // Render in opacity buckets to minimise fillStyle changes (2000 setState calls/frame
+    // is wasteful; bucketing brings that down to ~16). Each bucket collects particles
+    // of similar final opacity, drawn in a single fillStyle pass.
+    const BUCKETS = 16;
+    const bucketed = Array.from({ length: BUCKETS }, () => []);
+
+    for (const p of funeralDust.particles) {
+      // Has this particle been released yet?
+      if (!p.released) {
+        if (crumbleProgress >= p.releaseFraction) {
+          p.released = true;
+          p.vx = (Math.random() - 0.5) * 0.6;
+          p.vy = (Math.random() - 0.5) * 0.3;
+        }
+      }
+
+      if (p.released) {
+        const windRamp = Math.min(1, p.life / 60);
+        p.vx += p.wind * 0.03 * windRamp;
+        p.vy += 0.008;
+        p.vx += Math.sin((p.life + p.swirlPhase * 20) * 0.04) * 0.015;
+        p.vx *= 0.992;
+        p.vy *= 0.996;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+      }
+
+      let particleOpacity = 1;
+      if (p.released) {
+        particleOpacity = Math.max(0, 1 - p.life / p.maxLife);
+      }
+      const finalOpacity = globalOpacity * particleOpacity;
+      if (finalOpacity <= 0.01) continue;
+
+      // Quantise to bucket
+      const bucketIdx = Math.min(BUCKETS - 1, Math.floor(finalOpacity * BUCKETS));
+      bucketed[bucketIdx].push(p);
+    }
+
+    // Draw each bucket
+    for (let b = 0; b < BUCKETS; b++) {
+      const bucket = bucketed[b];
+      if (bucket.length === 0) continue;
+      // Slightly lower opacity coefficient because larger particles overlap;
+      // higher value would oversaturate the colour into a flat block.
+      const opacity = ((b + 0.5) / BUCKETS) * 0.75;
+      ctx.fillStyle = `rgba(220, 50, 50, ${opacity})`;
+      for (const p of bucket) {
+        // Larger size so adjacent particles overlap into a solid mass,
+        // rather than reading as a dot-grid. As particles release and drift,
+        // the solid mass naturally fragments.
+        ctx.fillRect(p.x, p.y, 3.5, 3.5);
+      }
+    }
+
+    if (elapsed >= DUST_TOTAL) {
+      funeralDust.rafId = null;
+      ctx.clearRect(0, 0, w, h);
+      return;
+    }
+
+    funeralDust.rafId = requestAnimationFrame(funeralDustStep);
+  }
+
+  function stopFuneralFloater() {
+    if (funeralDust.rafId) {
+      cancelAnimationFrame(funeralDust.rafId);
+      funeralDust.rafId = null;
+    }
+    funeralDust.canvas = null;
+    funeralDust.ctx = null;
+    funeralDust.particles = null;
+    const container = document.getElementById('floatersFuneral');
+    if (container) container.innerHTML = '';
+  }
+
+  // If the viewport resizes during the dust sequence, restart from scratch
+  // (re-sampling text at the new viewport width gives the correct font size).
+  // Two concerns:
+  //   1. Debounce so a window drag doesn't trigger dozens of restarts.
+  //   2. On mobile, the address bar shows/hides during scroll, changing the
+  //      window height by ~60-100px and firing resize events. We don't want
+  //      those scroll-induced height changes to restart the animation.
+  let funeralResizeTimer = null;
+  let funeralLastW = 0;
+  let funeralLastH = 0;
+  // Threshold above which a height-only change is considered "real" (rotation,
+  // resize) rather than browser-chrome flicker. ~120px clears typical mobile
+  // address bar movements (which are usually 60-90px).
+  const FUNERAL_RESIZE_HEIGHT_THRESHOLD = 120;
+
+  window.addEventListener('resize', () => {
+    if (currentMode !== 'funeral') return;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // If width is unchanged and height delta is small (address bar showing/hiding),
+    // ignore the event — the dust sequence stays running.
+    if (w === funeralLastW && Math.abs(h - funeralLastH) < FUNERAL_RESIZE_HEIGHT_THRESHOLD) {
+      return;
+    }
+    if (funeralResizeTimer) clearTimeout(funeralResizeTimer);
+    funeralResizeTimer = setTimeout(() => {
+      if (currentMode === 'funeral') {
+        funeralLastW = window.innerWidth;
+        funeralLastH = window.innerHeight;
+        stopFuneralFloater();
+        startFuneralFloater();
+      }
+    }, 250);
+  });
+
+  // Party floaters: numbers bounce around the screen with rainbow flashing.
+  // Each one has a random lifespan; when its time is up, it explodes into a
+  // rainbow particle burst and is removed. The screen gradually empties as
+  // numbers expire, leaving just music + lights + mascot. Not a continuous
+  // loop — toggle the mode to replay.
+  const partyState = {
+    canvas: null,        // separate canvas for burst particles
+    ctx: null,
+    bursts: [],          // active particle bursts
+    rafId: null,
+    timers: []           // per-floater burst timers
+  };
+
+  function startPartyFloaters() {
+    stopPartyFloaters();
+    const container = document.getElementById('floatersParty');
+    if (!container) return;
+
+    // Create the burst-particle canvas alongside the DOM floaters
+    const canvas = document.createElement('canvas');
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.style.position = 'absolute';
+    canvas.style.inset = '0';
+    canvas.style.pointerEvents = 'none';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    partyState.canvas = canvas;
+    partyState.ctx = ctx;
+    partyState.bursts = [];
+
+    const text = readAllTimeLowText();
+    const count = 16;
+    // Schedule bursts across ~16 seconds so the screen gradually clears.
+    // Random spacing keeps it from feeling mechanical.
+    const burstSchedule = [];
+    let cumulativeTime = 1500;  // start after a brief enjoy-the-chaos period
+    for (let i = 0; i < count; i++) {
+      burstSchedule.push(cumulativeTime);
+      cumulativeTime += 800 + Math.random() * 700;  // 0.8-1.5s between bursts
+    }
+    // Shuffle the schedule so the visual order of bursts is random, not in spawn order
+    for (let i = burstSchedule.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [burstSchedule[i], burstSchedule[j]] = [burstSchedule[j], burstSchedule[i]];
+    }
+
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'floater-party';
+      el.textContent = text;
+      const startX = Math.random() * 70;
+      const startY = Math.random() * 70 + 5;
+      const moveX = (Math.random() * 60 - 30) + 'vw';
+      const moveY = (Math.random() * 50 - 25) + 'vh';
+      const rotStart = (Math.random() * 30 - 15) + 'deg';
+      const rotEnd = (Math.random() * 30 - 15) + 'deg';
+      const fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+      const moveDur = (5 + Math.random() * 6) + 's';
+      const hueDur = (1.5 + Math.random() * 1.5) + 's';
+      const moveDelay = (-Math.random() * 8) + 's';
+      const hueDelay = (-Math.random() * 3) + 's';
+
+      el.style.left = startX + 'vw';
+      el.style.top = startY + 'vh';
+      el.style.fontSize = fontSize;
+      el.style.setProperty('--move-x', moveX);
+      el.style.setProperty('--move-y', moveY);
+      el.style.setProperty('--rot-start', rotStart);
+      el.style.setProperty('--rot-end', rotEnd);
+      el.style.setProperty('--move-dur', moveDur);
+      el.style.setProperty('--hue-dur', hueDur);
+      el.style.animationDelay = `${moveDelay}, ${hueDelay}`;
+      container.appendChild(el);
+
+      // Schedule this floater's burst at its assigned time
+      const timer = setTimeout(() => burstPartyFloater(el), burstSchedule[i]);
+      partyState.timers.push(timer);
+    }
+
+    // Start the burst-particle animation loop
+    partyState.rafId = requestAnimationFrame(partyStep);
+  }
+
+  function burstPartyFloater(el) {
+    if (!el || !el.isConnected) return;
+    // Capture the element's current screen position (mid-animation) so the
+    // burst happens wherever the number actually is, not where it started.
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    // Spawn particles radiating outward from this point.
+    // Bigger explosions: more particles, faster initial speed, larger size, longer life.
+    const particleCount = 180 + Math.floor(Math.random() * 60);
+    const burst = {
+      particles: [],
+      startedAt: performance.now()
+    };
+    for (let i = 0; i < particleCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 4 + Math.random() * 8;
+      const hue = Math.floor(Math.random() * 360);
+      burst.particles.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        hue,
+        life: 0,
+        maxLife: 80 + Math.random() * 70,
+        size: 3 + Math.random() * 3
+      });
+    }
+    partyState.bursts.push(burst);
+
+    // Remove the DOM element immediately — the burst replaces it visually
+    el.remove();
+  }
+
+  function partyStep() {
+    if (!partyState.ctx) return;
+    const ctx = partyState.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = partyState.bursts.length - 1; i >= 0; i--) {
+      const burst = partyState.bursts[i];
+      let aliveCount = 0;
+      for (const p of burst.particles) {
+        if (p.life > p.maxLife) continue;
+        // Update physics: gravity pulls particles down, drag slows them
+        p.vy += 0.08;
+        p.vx *= 0.985;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
+
+        const lifeT = p.life / p.maxLife;
+        const opacity = (1 - lifeT) * 0.9;
+        if (opacity < 0.02) continue;
+        aliveCount++;
+
+        // Particle body: bright HSL with the assigned hue
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * (1 - lifeT * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Remove dead bursts to keep the array small
+      if (aliveCount === 0) {
+        partyState.bursts.splice(i, 1);
+      }
+    }
+
+    partyState.rafId = requestAnimationFrame(partyStep);
+  }
+
+  function stopPartyFloaters() {
+    if (partyState.rafId) {
+      cancelAnimationFrame(partyState.rafId);
+      partyState.rafId = null;
+    }
+    for (const t of partyState.timers) clearTimeout(t);
+    partyState.timers = [];
+    partyState.bursts = [];
+    partyState.canvas = null;
+    partyState.ctx = null;
+    const container = document.getElementById('floatersParty');
+    if (container) container.innerHTML = '';
+  }
+
+  // Re-fetch the lowest-since-peak text and update any active floaters.
+  // Funeral: restart the dust sequence so the new channel's figure gets its own moment.
+  // Party: full rebuild — the chaos hides the reshuffle.
+  function refreshActiveFloaters() {
+    if (currentMode === 'funeral') {
+      stopFuneralFloater();
+      startFuneralFloater();
+    } else if (currentMode === 'party') {
+      startPartyFloaters();
+    }
+  }
+  // Expose so the rebuild flow can call it
+  window.__refreshActiveFloaters = refreshActiveFloaters;
+
+  // --- Canvas-based rain-on-glass simulation ---
+  // Drops are persistent objects with position, radius, and velocity. Static drops
+  // sit on the "glass" surface; when a drop grows past the slide threshold,
+  // gravity overcomes surface tension and it slides down, shedding smaller drops
+  // as a trail. Drops that touch each other merge.
+  const rainState = {
+    canvas: null,
+    ctx: null,
+    drops: [],
+    rafId: null,
+    lastSpawn: 0,
+    running: false,
+    dpr: 1,
+    width: 0,
+    height: 0
+  };
+
+  function rainSizeCanvas() {
+    if (!rainState.canvas) return;
+    const c = rainState.canvas;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    c.style.width = w + 'px';
+    c.style.height = h + 'px';
+    rainState.dpr = dpr;
+    rainState.width = w;
+    rainState.height = h;
+    rainState.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function rainSpawnDrop(x, y, r) {
+    rainState.drops.push({
+      x: x !== undefined ? x : Math.random() * rainState.width,
+      y: y !== undefined ? y : Math.random() * rainState.height,
+      r: r !== undefined ? r : 1.5 + Math.random() * 3,
+      vy: 0,
+      sliding: false,
+      shedTimer: 0
+    });
+  }
+
+  function rainInit() {
+    // Initial scatter of drops across the glass
+    rainState.drops = [];
+    const baseCount = Math.min(140, Math.floor(rainState.width * rainState.height / 9000));
+    for (let i = 0; i < baseCount; i++) {
+      rainSpawnDrop(undefined, undefined, 2 + Math.random() * 6);
+    }
+    // A few larger drops that may slide
+    for (let i = 0; i < 8; i++) {
+      rainSpawnDrop(undefined, Math.random() * rainState.height * 0.6, 7 + Math.random() * 4);
     }
   }
 
-  function setMode(newMode){
-    currentMode = newMode;
-    const pB=document.getElementById('moodParty'), fB=document.getElementById('moodFuneral');
-    if (pB){ pB.setAttribute('aria-pressed', newMode==='party'?'true':'false'); pB.querySelector('.mood-label').textContent = newMode==='party'?'Stop party':'Party mode'; }
-    if (fB){ fB.setAttribute('aria-pressed', newMode==='funeral'?'true':'false'); fB.querySelector('.mood-label').textContent = newMode==='funeral'?'End service':'Funeral mode'; }
-    document.body.classList.toggle('party-mode', newMode==='party');
-    document.body.classList.toggle('funeral-mode', newMode==='funeral');
-    if (newMode==='party') loadMascot('party');
-    if (newMode==='funeral') loadMascot('funeral');
-    buildFloaters(newMode);
-    if (!newMode){ if (ytPlayer && ytReady){ try{ ytPlayer.stopVideo(); }catch(e){} } return; }
-    const vid = VIDEOS[newMode]; if(!vid) return;
-    ensurePlayer(function(){ try{ ytPlayer.loadVideoById({videoId:vid}); ytPlayer.setVolume(DEFAULT_VOLUME); ytPlayer.playVideo(); }catch(e){} });
+  function rainStep(now) {
+    if (!rainState.running) return;
+    const { ctx, drops, width, height } = rainState;
+    ctx.clearRect(0, 0, width, height);
+
+    // Occasionally spawn new small drops on the surface
+    if (now - rainState.lastSpawn > 180) {
+      rainState.lastSpawn = now;
+      const newCount = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < newCount; i++) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height, 1.5 + Math.random() * 2.5);
+      }
+      // Very occasionally, spawn a heavy drop that's likely to start sliding immediately
+      if (Math.random() < 0.15) {
+        rainSpawnDrop(Math.random() * width, Math.random() * height * 0.4, 8 + Math.random() * 5);
+      }
+    }
+
+    const SLIDE_THRESHOLD = 7.5;
+    // Update drops
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+
+      // Drops large enough to slide gain gravity; small static drops stay put
+      if (d.r >= SLIDE_THRESHOLD || d.sliding) {
+        d.sliding = true;
+        // Acceleration scales with size — bigger drops fall faster
+        d.vy += 0.012 * d.r;
+        d.vy = Math.min(d.vy, 8);   // terminal velocity
+        d.y += d.vy;
+        // Tiny horizontal wobble — gives a more natural meandering descent
+        d.x += (Math.random() - 0.5) * 0.3;
+
+        // Shed smaller drops as it slides (the "trail" behind it)
+        d.shedTimer++;
+        if (d.shedTimer > 4 && d.r > 4) {
+          d.shedTimer = 0;
+          // The trail drop is smaller and stays static
+          rainState.drops.push({
+            x: d.x + (Math.random() - 0.5) * d.r * 0.6,
+            y: d.y - d.r - Math.random() * 8,
+            r: 1.2 + Math.random() * (d.r * 0.18),
+            vy: 0,
+            sliding: false,
+            shedTimer: 0
+          });
+          // Sliding drop loses a little mass as it sheds
+          d.r -= 0.05;
+          if (d.r < 4) d.sliding = false;  // small enough that surface tension catches it again
+        }
+
+        // Off-screen — remove
+        if (d.y - d.r > height) {
+          drops.splice(i, 1);
+          continue;
+        }
+      }
+
+      // Merge with nearby drops (only nearest neighbour to keep it cheap)
+      for (let j = i - 1; j >= 0; j--) {
+        const e = drops[j];
+        const dx = d.x - e.x;
+        const dy = d.y - e.y;
+        const distSq = dx * dx + dy * dy;
+        const touchDist = d.r + e.r;
+        if (distSq < touchDist * touchDist * 0.6) {
+          // Merge — conserve area roughly: r_new = sqrt(r1^2 + r2^2)
+          const newR = Math.sqrt(d.r * d.r + e.r * e.r);
+          // Larger drop absorbs smaller; new position weighted by size
+          const total = d.r + e.r;
+          d.x = (d.x * d.r + e.x * e.r) / total;
+          d.y = (d.y * d.r + e.y * e.r) / total;
+          d.r = newR;
+          // Inherit velocity from whichever was already moving more
+          d.vy = Math.max(d.vy, e.vy);
+          if (newR >= SLIDE_THRESHOLD) d.sliding = true;
+          drops.splice(j, 1);
+          i--;  // we removed an earlier index, adjust outer counter
+        }
+      }
+    }
+
+    // Draw — two-pass for the glass effect.
+    // 1) Subtle dark shadow under each drop (gives depth on the glass)
+    // 2) The drop itself: light fill, brighter highlight on upper-left
+    for (const d of drops) {
+      // Shadow pass — very subtle, slightly offset down-right
+      ctx.beginPath();
+      ctx.arc(d.x + 0.6, d.y + 0.8, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      ctx.fill();
+    }
+    for (const d of drops) {
+      // Main drop body — slightly translucent so it looks like water, not paint
+      const grad = ctx.createRadialGradient(
+        d.x - d.r * 0.3, d.y - d.r * 0.3, d.r * 0.1,
+        d.x, d.y, d.r
+      );
+      grad.addColorStop(0, 'rgba(230, 240, 250, 0.65)');
+      grad.addColorStop(0.4, 'rgba(180, 200, 220, 0.40)');
+      grad.addColorStop(1, 'rgba(120, 145, 170, 0.30)');
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Bright pinpoint highlight on upper-left — sells the "wet bead" look
+      if (d.r > 2) {
+        ctx.beginPath();
+        ctx.arc(d.x - d.r * 0.4, d.y - d.r * 0.45, Math.max(0.5, d.r * 0.18), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.fill();
+      }
+    }
+
+    rainState.rafId = requestAnimationFrame(rainStep);
   }
 
-  const pBtn=document.getElementById('moodParty'), fBtn=document.getElementById('moodFuneral');
-  if (pBtn) pBtn.addEventListener('click', function(){ setMode(currentMode==='party'?null:'party'); });
-  if (fBtn) fBtn.addEventListener('click', function(){ setMode(currentMode==='funeral'?null:'funeral'); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && currentMode) setMode(null); });
+  function rainStart() {
+    if (rainState.running) return;
+    const overlay = document.getElementById('rainOverlay');
+    if (!overlay) return;
+
+    if (!rainState.canvas) {
+      rainState.canvas = document.createElement('canvas');
+      rainState.ctx = rainState.canvas.getContext('2d');
+      overlay.appendChild(rainState.canvas);
+      window.addEventListener('resize', rainSizeCanvas);
+    }
+    rainSizeCanvas();
+    rainInit();
+    rainState.running = true;
+    rainState.lastSpawn = performance.now();
+    rainState.rafId = requestAnimationFrame(rainStep);
+  }
+
+  function rainStop() {
+    rainState.running = false;
+    if (rainState.rafId) {
+      cancelAnimationFrame(rainState.rafId);
+      rainState.rafId = null;
+    }
+    if (rainState.ctx) {
+      rainState.ctx.clearRect(0, 0, rainState.width, rainState.height);
+    }
+    rainState.drops = [];
+  }
+
+  // Load YouTube IFrame API on demand (lazy — don't load unless user clicks)
+  function loadYouTubeAPI(then) {
+    if (window.YT && window.YT.Player) { then(); return; }
+    if (document.getElementById('ytApiScript')) {
+      // Script already loading — wait for ready callback
+      window.__moodOnYTReady = then;
+      return;
+    }
+    window.onYouTubeIframeAPIReady = function() {
+      if (window.__moodOnYTReady) { window.__moodOnYTReady(); window.__moodOnYTReady = null; }
+      else then();
+    };
+    const script = document.createElement('script');
+    script.id = 'ytApiScript';
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
+  }
+
+  function ensurePlayer(callback) {
+    if (ytPlayer && ytReady) { callback(); return; }
+    loadYouTubeAPI(() => {
+      if (ytPlayer) { callback(); return; }
+      ytPlayer = new YT.Player('ytPlayer', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            ytReady = true;
+            try { ytPlayer.setVolume(DEFAULT_VOLUME); } catch (e) {}
+            callback();
+          },
+          onStateChange: (e) => {
+            // Loop manually when video ends (YT.PlayerState.ENDED = 0)
+            if (e.data === 0 && currentMode) {
+              const id = VIDEOS[currentMode];
+              if (id) ytPlayer.loadVideoById({ videoId: id });
+            }
+          },
+          onError: () => {
+            // If a video errored (removed/blocked), bail out of the mode cleanly
+            setMode(null);
+            showToast('Audio unavailable right now.');
+          }
+        }
+      });
+    });
+  }
+
+  function setMode(newMode) {
+    // newMode: 'party' | 'funeral' | null (off)
+    currentMode = newMode;
+
+    // Update button states
+    const partyBtn = document.getElementById('moodParty');
+    const funeralBtn = document.getElementById('moodFuneral');
+    partyBtn.setAttribute('aria-pressed', newMode === 'party' ? 'true' : 'false');
+    funeralBtn.setAttribute('aria-pressed', newMode === 'funeral' ? 'true' : 'false');
+    partyBtn.querySelector('.mood-label').textContent =
+      newMode === 'party' ? 'Stop party' : 'Party mode';
+    funeralBtn.querySelector('.mood-label').textContent =
+      newMode === 'funeral' ? 'Stop funeral' : 'Funeral mode';
+
+    // Update body classes for visual overlays
+    document.body.classList.toggle('party-mode', newMode === 'party');
+    document.body.classList.toggle('funeral-mode', newMode === 'funeral');
+
+    // Lazy-load the party mascots GIF on first party activation
+    if (newMode === 'party') ensureMascotsLoaded();
+    // Lazy-load the funeral mascot on first funeral activation
+    if (newMode === 'funeral') ensureFuneralMascotLoaded();
+
+    // Floating low-figure text — populated fresh on each activation
+    // (the current channel selection may have changed since last time)
+    if (newMode === 'party') startPartyFloaters(); else stopPartyFloaters();
+    if (newMode === 'funeral') startFuneralFloater(); else stopFuneralFloater();
+
+    // Start or stop the canvas rain to match funeral state
+    if (newMode === 'funeral') rainStart();
+    else rainStop();
+
+    // Update audio
+    if (!newMode) {
+      if (ytPlayer && ytReady) {
+        try { ytPlayer.stopVideo(); } catch (e) {}
+      }
+      return;
+    }
+    const videoId = VIDEOS[newMode];
+    if (!videoId) return;
+    ensurePlayer(() => {
+      try {
+        ytPlayer.loadVideoById({ videoId });
+        ytPlayer.setVolume(DEFAULT_VOLUME);
+        ytPlayer.playVideo();
+      } catch (e) {
+        // Will get retried via ready callback
+      }
+    });
+  }
+
+  document.getElementById('moodParty').addEventListener('click', () => {
+    setMode(currentMode === 'party' ? null : 'party');
+  });
+  document.getElementById('moodFuneral').addEventListener('click', () => {
+    setMode(currentMode === 'funeral' ? null : 'funeral');
+  });
+
+  // ESC key stops whatever mode is active
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentMode) setMode(null);
+  });
 })();
 
 </script>
