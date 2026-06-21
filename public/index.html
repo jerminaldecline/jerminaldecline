@@ -178,6 +178,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
 .stat-deltas{display:flex;gap:0.5rem;margin-top:0.6rem}
+.stat-link,.shorts-link{cursor:pointer;transition:border-color .12s ease,transform .12s ease,box-shadow .12s ease}
+.stat-link:hover,.shorts-link:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.stat-link:focus-visible,.shorts-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stat-go{color:var(--accent);font-weight:800;margin-left:0.15rem}
 .mini{font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem}
 .mini .ml{color:var(--subtext)}
 .mini .mv{font-weight:700}
@@ -1652,35 +1656,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
            full-history chart, so these stay empty/unused but must exist) -->
       <input type="hidden" id="startDate"><input type="hidden" id="endDate">
     </div>
-    <section class="an-topic-section" id="anTopicSection" hidden>
-      <div class="an-mode-card">
-        <div class="an-topic-head">
-          <span class="an-topic-eyebrow">Rhetorical register over time</span>
-          <h3 class="an-topic-title">How the framing has shifted</h3>
-          <p class="an-topic-sub">Share of long-form uploads by mode, each month.</p>
-        </div>
-        <div class="an-mode-chartwrap">
-          <svg id="anModeChart" viewBox="0 0 720 300" role="img" aria-label="Mode mix over time"></svg>
-        </div>
-        <div class="an-mode-legend" id="anModeLegend"></div>
-      </div>
-      <div class="an-rank-row">
-        <div class="an-rank-card">
-          <div class="an-topic-head">
-            <span class="an-topic-eyebrow">Who he covers</span>
-            <h3 class="an-topic-title">Top subjects</h3>
-          </div>
-          <div id="anSubjectsBars"></div>
-        </div>
-        <div class="an-rank-card">
-          <div class="an-topic-head">
-            <span class="an-topic-eyebrow">What it's about</span>
-            <h3 class="an-topic-title">Top themes</h3>
-          </div>
-          <div id="anThemesBars"></div>
-        </div>
-      </div>
-    </section>
     <div class="revenue-panel" id="revenuePanel" hidden></div>
     <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
   </section>
@@ -2149,7 +2124,7 @@ function render(m){
 
   // cards
   const cards=[];
-  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true});
+  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long'});
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null});
@@ -2157,7 +2132,8 @@ function render(m){
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp), my=mini(lblYr,c.cur,c.y,c.goodUp);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
-    return `<div class="stat"><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}</div>${deltas}</div>`;
+    const linkAttrs = c.goto ? ` data-goto-videos="${c.goto}" data-vid-month="${m}" role="button" tabindex="0"` : '';
+    return `<div class="stat${c.goto?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${c.goto?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
 
   const hlStats = (s) => {
@@ -2304,9 +2280,9 @@ function render(m){
       </div>
     </div>
     <div class="breadth">
-      <div class="shorts-strip">
+      <div class="shorts-strip shorts-link" data-goto-videos="short" data-vid-month="${m}" role="button" tabindex="0">
         <div class="shorts-head">
-          <div class="shorts-label">Shorts activity this month</div>
+          <div class="shorts-label">Shorts activity this month <span class="stat-go" aria-hidden="true">→</span></div>
           <div class="shorts-sub">${isAll ? 'Across all channels' : 'On '+scope}</div>
         </div>
         <div class="shorts-nums">
@@ -2326,16 +2302,6 @@ function render(m){
           <tr><th class="net-sub">Uploads</th><th class="net-sub">Views</th><th class="net-sub divcol">Uploads</th><th class="net-sub">Views</th></tr>
           ${netRows}
         </table>
-      </div>
-    </div>
-    <div class="ov-month-detail" id="ovMonthDetail">
-      <button type="button" class="ov-md-toggle" id="ovMdToggle" aria-expanded="false">
-        <span class="ov-md-caret"></span>
-        <span class="ov-md-label">${monthName(m)} — all ${(d.vlist||[]).length} videos</span>
-        <span class="ov-md-hint">Show ▾</span>
-      </button>
-      <div class="ov-md-body" id="ovMdBody" hidden>
-        ${renderOvMonthVideos(d.vlist || [], m)}
       </div>
     </div>
   `;
@@ -4545,7 +4511,6 @@ function niceDurationAxis(minSec, maxSec) {
     renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
-    try { renderAnalysisTopics(); } catch(e){ console.error('topic analysis', e); }
   };
 
   // ===== Phase 2: topic analysis — mode-over-time + subject/theme leaderboards =====
@@ -5406,6 +5371,7 @@ function niceDurationAxis(minSec, maxSec) {
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
     try { const r = await fetch('title-history.json?t='+Date.now()); if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } } catch(e){ console.warn('title-history', e); }
@@ -5501,7 +5467,7 @@ function renderVideoRows(videos, emptyText) {
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
         ${channelCell}
-        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}</div>${titleSubtitle}${showTopics ? renderVideoSummary(v) : ''}${showTopics ? renderTopicChips(v) : ''}</div>
+        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}</div>${titleSubtitle}${renderVideoSummary(v)}${renderTopicChips(v)}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -6181,6 +6147,21 @@ function renderWindowList(startDate, endDate) {
         const panel = document.getElementById('revenuePanel');
         if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 120);
+      return;
+    }
+    // Overview "Long-form uploads" / "Shorts activity" cards → Videos tab for that
+    // month with the right format filter (skip if the click hit a link inside the card).
+    const gv = e.target.closest('[data-goto-videos]');
+    if (gv && !e.target.closest('a')) {
+      const fmt = gv.dataset.gotoVideos;
+      const month = gv.dataset.vidMonth;
+      if (month) vidTimePreset = month;
+      if (window.__windowListState) window.__windowListState.formatFilter = fmt;
+      show('videos');
+      if (window.__populateVidChannel) window.__populateVidChannel();
+      if (window.__resetVideoBatches) window.__resetVideoBatches();
+      if (window.__syncVidWindow) window.__syncVidWindow();
+      if (window.renderVideosTab) window.renderVideosTab();
       return;
     }
     const link = e.target.closest('[data-goto-analysis]');
