@@ -362,11 +362,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-.prev-year-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
-.prev-year-control:hover{border-color:var(--accent);color:var(--text)}
-.prev-year-control[hidden]{display:none}
-.prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
-.prev-year-control-swatch{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--text-dim)}
+/* Legend row: chart legend on the left, the Previous-year / Labels toggle
+   buttons on the right. Sits above the chart, so the buttons never overlap the
+   plot or its axis labels regardless of how the SVG scales. */
+.trend-legend-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.3rem}
+.trend-legend-row .trend-legend{margin:0;flex:1 1 auto}
+.chart-controls-overlay{display:flex;align-items:center;gap:0.4rem;flex:0 0 auto}
+.chart-ctrl-btn{appearance:none;font-family:inherit;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.76rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s,background-color .12s}
+.chart-ctrl-btn:hover{border-color:var(--accent);color:var(--text)}
+/* Active = feature ON (accent fill); inactive = muted outline. */
+.chart-ctrl-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chart-ctrl-btn[hidden]{display:none}
+.chart-ctrl-swatch{display:inline-block;width:14px;height:3px;border-radius:2px;background:currentColor;opacity:0.8}
+.chart-wrap.labels-hidden .chart-pt-label{display:none}
 .trend-legend-swatch {display: inline-block;
     width: 18px;
     height: 3px;
@@ -455,6 +463,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-axis-label {fill: var(--text-dim); font-size: 13px; font-family: inherit;}
 .chart-axis-label.x {text-anchor: middle;}
 .chart-axis-label.y {text-anchor: end;}
+/* Per-point value labels (e.g. "4.5M", "68K", "7.2%") sitting just above a data
+   point. Smaller and a touch lighter than axis labels so the line stays the hero;
+   a thin surface-coloured stroke keeps them legible where they cross gridlines. */
+.chart-pt-label {fill: var(--text); font-size: 10px; font-family: inherit; text-anchor: middle;
+  paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; font-weight: 600;}
+.chart-pt-label.prev {fill: var(--text-dim); font-size: 9px; font-weight: 500;}
+.chart-pt-label.dur {fill: var(--accent-2);}
+.chart-pt-label.inprogress {fill: #dc3232; font-weight: 700;}
 /* Axis title (rotated for Y axis). Slightly more emphasis than tick labels
      since this is naming the axis variable, not enumerating its values. */
   .chart-axis-title {fill: var(--text-muted);
@@ -2112,13 +2128,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       </div>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
-      <div class="trend-legend" id="trendLegend"></div>
+      <div class="trend-legend-row">
+        <div class="trend-legend" id="trendLegend"></div>
+        <div class="chart-controls-overlay">
+          <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
+          <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
+        </div>
+      </div>
       <div class="chart-wrap" id="chartWrap">
-        <label class="prev-year-control" id="prevYearControl" hidden>
-          <input type="checkbox" id="prevYearCheckbox" checked>
-          <span class="prev-year-control-swatch"></span>
-          <span class="prev-year-control-label">Compare previous year</span>
-        </label>
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
@@ -3083,6 +3100,103 @@ function buildMonthlyData(scope){
     if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K';
     return Math.round(n).toString();
   }
+
+  // Density-aware point-label stride: how many points to skip between labels so
+  // a dense time-series doesn't turn into an unreadable smear. Few points → label
+  // all; more points → thin out. Anchor points (peak, latest, in-progress) are
+  // always labelled by the caller regardless of this stride.
+  function labelStrideFor(n) {
+    if (n <= 13) return 1;   // 12-month / YTD: label every point
+    if (n <= 30) return 2;   // 24-month: every 2nd (keeps it readable)
+    if (n <= 60) return 3;   // since-peak windows
+    return Math.ceil(n / 18); // all-time: ~18 labels max
+  }
+  // For longer timelines we don't want a fixed stride — we want the *meaningful*
+  // points: notable local peaks and troughs (turning points), plus the latest.
+  // A point qualifies as a local extremum if it's the max/min within a window on
+  // each side; "notable" filters out tiny wobbles by requiring the swing from its
+  // neighbouring opposite-extreme to exceed a fraction of the data's total range.
+  function findKeyPoints(values, opts = {}) {
+    const vals = values.map(v => (v == null ? null : v));
+    const present = vals.filter(v => v != null);
+    if (present.length === 0) return new Set();
+    const n = vals.length;
+    const win = opts.window || Math.max(2, Math.round(n / 12)); // neighbourhood half-width
+    const lo = Math.min(...present), hi = Math.max(...present);
+    const range = (hi - lo) || 1;
+    const minProm = (opts.prominence != null ? opts.prominence : 0.12) * range; // ≥12% of range
+    const keys = new Set();
+    for (let i = 0; i < n; i++) {
+      const v = vals[i];
+      if (v == null) continue;
+      let isMax = true, isMin = true;
+      let neighMax = -Infinity, neighMin = Infinity;
+      for (let j = Math.max(0, i - win); j <= Math.min(n - 1, i + win); j++) {
+        if (j === i || vals[j] == null) continue;
+        if (vals[j] >= v) isMax = false;
+        if (vals[j] <= v) isMin = false;
+        if (vals[j] > neighMax) neighMax = vals[j];
+        if (vals[j] < neighMin) neighMin = vals[j];
+      }
+      // Notable peak: local max that rises meaningfully above its lowest neighbour.
+      if (isMax && neighMin !== Infinity && (v - neighMin) >= minProm) keys.add(i);
+      // Notable low: local min that sits meaningfully below its highest neighbour.
+      if (isMin && neighMax !== -Infinity && (neighMax - v) >= minProm) keys.add(i);
+    }
+    // Always include the global peak and the latest present point.
+    let gMaxI = -1, gMaxV = -Infinity, lastPresent = -1;
+    for (let i = 0; i < n; i++) {
+      if (vals[i] == null) continue;
+      if (vals[i] > gMaxV) { gMaxV = vals[i]; gMaxI = i; }
+      lastPresent = i;
+    }
+    if (gMaxI >= 0) keys.add(gMaxI);
+    if (lastPresent >= 0) keys.add(lastPresent);
+    return keys;
+  }
+  // Build SVG <text> point labels for a series. `values` is the plotted array;
+  // xFor/yFor map index→coords; fmtVal formats the number; opts can force-label
+  // certain indices (anchors) and nudge the label above/below the point.
+  // opts.maxX: if set, labels whose x is within ~22px of it are right-anchored so
+  // they don't spill over a right-hand Y axis; labels past it are pulled in.
+  function buildPointLabels(values, xFor, yFor, fmtVal, opts = {}) {
+    const n = values.length;
+    if (!n) return '';
+    const stride = opts.stride || labelStrideFor(n);
+    const anchors = new Set(opts.anchors || []);
+    const cls = opts.cls || 'chart-pt-label';
+    const dy = opts.dy != null ? opts.dy : -8; // default: sit above the point
+    const maxX = opts.maxX != null ? opts.maxX : null;
+    const skipLast = !!opts.skipLast;
+    const dropPastX = opts.dropPastX != null ? opts.dropPastX : null;
+    const keyOnly = !!opts.keyOnly; // when true, label ONLY the anchor indices
+    let out = '';
+    for (let i = 0; i < n; i++) {
+      const v = values[i];
+      if (v == null) continue;
+      const isAnchor = anchors.has(i);
+      if (keyOnly) {
+        if (!isAnchor) continue;            // key-points mode: anchors only
+      } else {
+        // Label if on the stride grid, the last point (unless skipLast), or an anchor.
+        if (!isAnchor && i % stride !== 0 && !(i === n - 1 && !skipLast)) continue;
+      }
+      // Drop labels whose point sits past a right cutoff — applies to anchors too,
+      // since the in-progress red label already shows the tail value. Hard guard
+      // against anything (key-point/latest anchors included) hitting a right Y axis.
+      if (dropPastX != null && xFor(i) > dropPastX) continue;
+      let x = xFor(i);
+      let anchorAttr = '';
+      if (maxX != null && x > maxX - 40) {
+        // Near the right axis: right-align and pull well inside the plot edge so
+        // the text fully clears the right-hand axis tick labels.
+        anchorAttr = ' text-anchor="end"';
+        x = maxX - 8;
+      }
+      out += `<text class="${cls}"${anchorAttr} x="${x.toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
+    }
+    return out;
+  }
   function formatDuration(secs) {
     secs = Math.round(secs || 0);
     const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
@@ -3202,10 +3316,11 @@ function renderTrendChart(yoy) {
   // reflows the surrounding layout.
   (function(){
     const ctrl = document.getElementById('prevYearControl');
-    const cb = document.getElementById('prevYearCheckbox');
     const supports = (chartMetric === 'views' || chartMetric === 'median_views');
-    if (ctrl) ctrl.hidden = !supports;
-    if (cb) cb.checked = showPrevYear;
+    if (ctrl) {
+      ctrl.hidden = !supports;
+      ctrl.setAttribute('aria-pressed', String(showPrevYear));
+    }
   })();
 
   // Single-channel-only modes: when the user picks one of these while the
@@ -3537,6 +3652,15 @@ function renderTrendChart(yoy) {
   const currDots = currValues.map((v, i) =>
     `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
   ).join('');
+  // Density-aware value labels on the views line. Always anchor the peak and the
+  // latest complete month so those headline numbers are readable without hovering.
+  const peakIdxLbl = currValues.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  // Long timelines (> ~24 months): label only notable peaks/lows + latest, so the
+  // chart isn't a smear. Short timelines: dense (every point at 12mo, strided at 24mo).
+  const _vKeyMode = currValues.length > 30;
+  const _vAnchors = _vKeyMode ? findKeyPoints(currValues) : new Set(inProgressMonth ? [peakIdxLbl] : [peakIdxLbl, currValues.length - 1]);
+  if (inProgressMonth) _vAnchors.delete(currValues.length - 1); // in-progress red label covers the tail
+  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [..._vAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _vKeyMode });
   const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
@@ -3623,6 +3747,7 @@ function renderTrendChart(yoy) {
       ${durInProgressSvg}
       <circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
       <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>
+      <text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>
     `;
     inProgressHits = `
       <rect class="chart-hit"
@@ -3649,6 +3774,7 @@ function renderTrendChart(yoy) {
     ${currDots}
     ${showDuration ? durDots : ''}
     ${inProgressSvg}
+    ${currLabels}
     ${attribution}
     ${hits}
     ${inProgressHits}
@@ -3881,15 +4007,26 @@ function renderLikeRateChart(chartData, inProgressMonth) {
     const lastX = xFor(lastValid);
     const lastY = yFor(rates[lastValid].rate);
     ipConnector = `<path class="chart-line-likerate-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
-    ipDot = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    ipDot = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${y}" r="4" /><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${ipRate.toFixed(1)}%</text>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
+
+  // Density-aware labels (percent). Treat 0 as a gap (null) so empty months
+  // aren't labelled; anchor the peak and latest valid point.
+  const rateVals = rates.map(r => r.rate > 0 ? r.rate : null);
+  let ratePeakIdx = 0, ratePeakV = -1;
+  rateVals.forEach((v, i) => { if (v != null && v > ratePeakV) { ratePeakV = v; ratePeakIdx = i; } });
+  const _rKeyMode = rateVals.length > 30;
+  const _rAnchors = _rKeyMode ? findKeyPoints(rateVals) : new Set(inProgressMonth ? [ratePeakIdx] : [ratePeakIdx, lastValid]);
+  if (inProgressMonth) _rAnchors.delete(lastValid);
+  const rateLabels = buildPointLabels(rateVals, xFor, yFor, v => v.toFixed(1) + "%", { anchors: [..._rAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _rKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
     <path class="chart-line-likerate" d="${linePath}" />
     ${ipConnector}
     ${ipDot}
+    ${rateLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
@@ -4048,9 +4185,17 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     const lastX = xFor(lastValid);
     const lastY = yFor(meds[lastValid].med);
     ipConnector = `<path class="chart-line-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}"/>`;
-    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/>`;
+    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipMed)}</text>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
+
+  // Density-aware value labels — anchor the peak and latest month.
+  const medVals = meds.map(r => r.med);
+  const medPeakIdx = medVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  const _mKeyMode = medVals.length > 30;
+  const _mAnchors = _mKeyMode ? findKeyPoints(medVals) : new Set(inProgressMonth ? [medPeakIdx] : [medPeakIdx, medVals.length - 1]);
+  if (inProgressMonth) _mAnchors.delete(medVals.length - 1);
+  const medLabels = buildPointLabels(medVals, xFor, yFor, fmtCompact, { anchors: [..._mAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _mKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
@@ -4060,6 +4205,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     ${prevDots}
     ${dots}
     ${ipDot}
+    ${medLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
@@ -4121,7 +4267,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   // Layout — both axes need label space, so increase the right padding to
   // accommodate the right-side Y labels.
   const W = 720, H = 280;
-  const P = { top: 20, right: 56, bottom: 48, left: 56 };
+  const P = { top: 20, right: 44, bottom: 48, left: 56 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
   const n = chartData.length;
@@ -4271,23 +4417,39 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   // In-progress month — two dots, two connectors (one per line)
   let ipDotViews = '', ipDotRate = '', ipConnectorViews = '', ipConnectorRate = '';
   if (inProgressMonth) {
-    const x = xFor(n);
+    // Pull the in-progress point a touch left of the plot edge so it (and its
+    // labels) don't crowd the right-hand % axis — this is the dual-axis chart,
+    // so the right edge is busy with axis ticks.
+    const x = xFor(n) - 14;
     const lastIdx = n - 1;
     const lastX = xFor(lastIdx);
     const yV = yForViews(ipViews);
     const lastYV = yForViews(views[lastIdx]);
     ipConnectorViews = `<path class="chart-line-inprogress" d="M ${lastX} ${lastYV} L ${x} ${yV}" />`;
-    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" />`;
+    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" /><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(yV - 9).toFixed(1)}" text-anchor="middle">${fmtCompact(ipViews)}</text>`;
     // Rate dot only renders if there's an in-progress rate AND a prior valid
     // rate point to draw the dashed connector from.
     if (ipRate != null && ipRate > 0 && lastValidRate >= 0) {
       const yR = yForRate(ipRate);
       const lastYR = yForRate(rates[lastValidRate]);
       ipConnectorRate = `<path class="chart-line-likerate-inprogress" d="M ${xFor(lastValidRate)} ${lastYR} L ${x} ${yR}" />`;
-      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" />`;
+      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" /><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(yR + 16).toFixed(1)}" text-anchor="middle">${ipRate.toFixed(1)}%</text>`;
     }
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
+
+  // Dual-line labels: views above their points, like-rate (%) below theirs.
+  // When an in-progress month exists, its own (red) labels are the rightmost
+  // values — so we DON'T force-label the last complete point, which would stack
+  // on top of them at the clamped right edge. maxX pulls near-axis labels inside.
+  const vlStride = labelStrideFor(n);
+  const vlMaxX = P.left + innerW;
+  const vlKeyMode = n > 30;
+  const rateValsVL = rates.map(r => r > 0 ? r : null);
+  const vlViewAnchors = vlKeyMode ? [...findKeyPoints(views)].filter(i => !(inProgressMonth && i === views.length - 1)) : (inProgressMonth ? [] : [views.length - 1]);
+  const vlRateAnchors = vlKeyMode ? [...findKeyPoints(rateValsVL)].filter(i => !(inProgressMonth && i === lastValidRate)) : (inProgressMonth ? [] : [lastValidRate]);
+  const viewsLabels = buildPointLabels(views, xFor, yForViews, fmtCompact, { stride: vlStride, anchors: vlViewAnchors, maxX: vlMaxX, skipLast: !!inProgressMonth, keyOnly: vlKeyMode });
+  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: vlRateAnchors, maxX: vlMaxX, skipLast: !!inProgressMonth, dropPastX: vlMaxX - 40, keyOnly: vlKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
@@ -4299,6 +4461,8 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
     ${ipConnectorRate}
     ${ipDotViews}
     ${ipDotRate}
+    ${viewsLabels}
+    ${rateLabelsVL}
     ${xLabels}
     ${yLabelsLeft}
     ${yLabelsRight}
@@ -4510,9 +4674,10 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
   //   was uneventful for top-tier engagement" rather than reading it as no data.
   //   — we give it a minimum bar height so the user can see "yes, this month
   //   was uneventful for top-tier engagement" rather than reading it as no data.
-  let bars = '', hovers = '', noDataMarks = '';
+  let bars = '', hovers = '', noDataMarks = '', barLabels = '';
   const baseY = P.top + innerH;
   const MIN_VISIBLE_HEIGHT = 2;  // pixels — enough to be visible without dominating
+  const barStride = labelStrideFor(n);
   for (let i = 0; i < n; i++) {
     const d = monthData[i];
     const x = xFor(i);
@@ -4528,6 +4693,10 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
     const yFinal = baseY - height;
     const cls = d.pct >= 10 ? 'chart-bar-variance high' : 'chart-bar-variance low';
     bars += `<rect class="${cls}" x="${x - barWidth / 2}" y="${yFinal}" width="${barWidth}" height="${height}" />`;
+    // Label on the stride grid, the last bar, or any notably high bar (≥25%).
+    if (i % barStride === 0 || i === n - 1 || d.pct >= 25) {
+      barLabels += `<text class="chart-pt-label" x="${x.toFixed(1)}" y="${(yFinal - 4).toFixed(1)}">${Math.round(d.pct)}%</text>`;
+    }
     hovers += `<rect class="chart-hit" x="${x - barSlot / 2}" y="${P.top}" width="${barSlot}" height="${innerH}" data-idx="${i}" />`;
   }
   // In-progress month bar — dashed outline / lower opacity to signal not-complete
@@ -4537,7 +4706,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
     const yTop = yFor(ipMonthData.pct);
     const height = (P.top + innerH) - yTop;
     const cls = ipMonthData.pct >= 10 ? 'chart-bar-variance high in-progress' : 'chart-bar-variance low in-progress';
-    ipBar = `<rect class="${cls}" x="${x - barWidth / 2}" y="${yTop}" width="${barWidth}" height="${height}" />`;
+    ipBar = `<rect class="${cls}" x="${x - barWidth / 2}" y="${yTop}" width="${barWidth}" height="${height}" /><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(yTop - 4).toFixed(1)}" text-anchor="${x > P.left + innerW - 24 ? 'end' : 'middle'}">${Math.round(ipMonthData.pct)}%</text>`;
     hovers += `<rect class="chart-hit" x="${x - barSlot / 2}" y="${P.top}" width="${barSlot}" height="${innerH}" data-idx="ip" />`;
   }
 
@@ -4561,6 +4730,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
     ${noDataMarks}
     ${bars}
     ${ipBar}
+    ${barLabels}
     ${refLine}
     ${xLabels}
     ${yLabels}
@@ -5065,10 +5235,18 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     const lastX = xFor(lastIdx);
     const lastY = yFor(rMid(chartData[lastIdx]));
     ipConnector = `<path class="chart-line-revenue-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
-    ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" /><text class="chart-pt-label inprogress" x="${(P.left + innerW - 8).toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="end">${fmtAxisUSD(rMid(inProgressMonth))}</text>`;
     const wHover = innerW / Math.max(1, nTotal - 1);
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
+
+  // Density-aware labels on the mid-estimate line, formatted as compact USD.
+  const midVals = chartData.map(m => rMid(m));
+  const revPeakIdx = midVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  const _revKeyMode = midVals.length > 30;
+  const _revAnchors = _revKeyMode ? findKeyPoints(midVals) : new Set(inProgressMonth ? [revPeakIdx] : [revPeakIdx, midVals.length - 1]);
+  if (inProgressMonth) _revAnchors.delete(midVals.length - 1);
+  const revLabels = buildPointLabels(midVals, xFor, yFor, v => fmtAxisUSD(v), { anchors: [..._revAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _revKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
@@ -5076,6 +5254,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     <path class="chart-line-revenue" d="${midPath}" />
     ${ipConnector}
     ${ipDot}
+    ${revLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
@@ -7021,11 +7200,25 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
     });
   }
-  // Previous-year series toggle (dedicated checkbox control)
-  const prevYearCb = document.getElementById('prevYearCheckbox');
-  if (prevYearCb) {
-    prevYearCb.addEventListener('change', (e) => {
-      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(e.target.checked);
+  // Hide-labels toggle — adds .labels-hidden to the chart wrap (pure CSS hide,
+  // no re-render). Persists across metric switches since it lives on the wrap.
+  const labelsToggle = document.getElementById('anLabelsToggle');
+  if (labelsToggle) {
+    labelsToggle.addEventListener('click', () => {
+      const wrap = document.getElementById('chartWrap');
+      if (!wrap) return;
+      const hidden = wrap.classList.toggle('labels-hidden');
+      // Active (pressed, accent fill) = labels ON. So pressed = !hidden.
+      labelsToggle.setAttribute('aria-pressed', String(!hidden));
+    });
+  }
+  // Previous-year series toggle (button; aria-pressed reflects on/off)
+  const prevYearBtn = document.getElementById('prevYearControl');
+  if (prevYearBtn) {
+    prevYearBtn.addEventListener('click', () => {
+      const next = prevYearBtn.getAttribute('aria-pressed') !== 'true';
+      prevYearBtn.setAttribute('aria-pressed', String(next));
+      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(next);
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
@@ -7189,11 +7382,10 @@ function renderWindowList(startDate, endDate) {
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }
     const qm=params.get('month');
-    // default to the latest COMPLETE month in scope (skip the in-progress month so
-    // the page opens on settled data); ?month= override still wins.
+    // Default to the most recent month in scope (the in-progress month when it
+    // exists). ?month= override still wins.
     const months = availableMonths();
-    const firstComplete = months.find(mm => mm !== CURRENT_MONTH_KEY) || months[0];
-    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : firstComplete;
+    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : months[0];
     refresh(startMonth);
     // refresh() only paints the Overview tab. On a hard refresh the active tab
     // may be Analysis or Videos (restored from ?tab=), and tabShell's initial
