@@ -2265,9 +2265,16 @@ async function loadAndCompute(){
   const hid = {}; for(const [cid,h] of Object.entries(handle)) hid[h]=cid;
   const vids = data.videos || [];
 
-  function vstats(v){ return {title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:handle[v.channelId]||'?',
-    topic: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
-    topicColor: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
+  function vstats(v){
+    // Label for the highlight cards: prefer the subject; if untagged, fall back to
+    // theme, then mode, so every card still shows a label. tname/tcolor resolve any
+    // of the three id types (they all live in topicsRaw).
+    const themesMap = (tagsRaw && tagsRaw.themes) || {};
+    const modesMap  = (tagsRaw && tagsRaw.modes)  || {};
+    const labelId = tags[v.id] || themesMap[v.id] || modesMap[v.id] || null;
+    return {title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:handle[v.channelId]||'?',
+    topic: labelId ? (tname[labelId]||labelId) : null,
+    topicColor: labelId ? (tcolor[labelId]||'#888') : null,
     publishedAt: v.publishedAt||null }; }
 
   function buildScope(filterFn){
@@ -2687,7 +2694,7 @@ function render(m){
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
-        <div class="hl-label">Top video this month</div>
+        <div class="hl-label">Best performer</div>
         <a class="hl-title" href="${ytLink(d.topvid.id)}" target="_blank" rel="noopener">${d.topvid.title}${LINK_ICON}</a>
         ${topicTag(d.topvid)}
         ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
@@ -2809,7 +2816,7 @@ function render(m){
       </div>
     </div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
-    <div class="highlights">${topHTML}${debHTML}${worstHTML}</div>
+    <div class="highlights">${topHTML}${worstHTML}${debHTML}</div>
     <div class="lower">
       <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.uploads}</div>
       <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.views}</div>
