@@ -187,7 +187,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mini.up .mv{color:var(--up)}.mini.down .mv{color:var(--down)}.mini.flat .mv{color:var(--text-dim)}
 
 .highlights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
-.hl-topic{display:inline-flex;align-items:center;gap:0.35rem;margin:0.3rem 0 0.1rem;font-size:0.74rem;font-weight:600;color:var(--text-muted)}
+.hl-titlerow{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem}
+.hl-titlerow .hl-title{flex:1 1 auto;min-width:0}
+.hl-topic{display:inline-flex;align-items:center;gap:0.35rem;flex:0 0 auto;font-size:0.74rem;font-weight:600;color:var(--text-muted);white-space:nowrap}
 .hl-topic-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:0 0 auto}
 .hl.worst::before{background:var(--text-dim)}
 .hl{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.95rem 1.15rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:0.7rem}
@@ -2095,8 +2097,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <select id="anPeriodSel" class="bar-sel" aria-label="Time period">
         <option value="ytd">YTD</option>
         <option value="12m">Last 12 months</option>
-        <option value="24m" selected>Last 24 months</option>
-        <option value="since-peak">Since peak</option>
+        <option value="24m">Last 24 months</option>
+        <option value="since-peak" selected>Since peak</option>
         <option value="all">All time</option>
       </select>
     </div>
@@ -2272,9 +2274,11 @@ async function loadAndCompute(){
     const themesMap = (tagsRaw && tagsRaw.themes) || {};
     const modesMap  = (tagsRaw && tagsRaw.modes)  || {};
     const labelId = tags[v.id] || themesMap[v.id] || modesMap[v.id] || null;
+    const labelTier = tags[v.id] ? 'subject' : (themesMap[v.id] ? 'theme' : (modesMap[v.id] ? 'mode' : null));
     return {title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:handle[v.channelId]||'?',
     topic: labelId ? (tname[labelId]||labelId) : null,
     topicColor: labelId ? (tcolor[labelId]||'#888') : null,
+    topicTier: labelTier,
     publishedAt: v.publishedAt||null }; }
 
   function buildScope(filterFn){
@@ -2688,15 +2692,21 @@ function render(m){
   const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
   const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${ANALYTICS_SUMMARIES[vid]}</div>` : '';
   // Small topic chip (colour-dot + subject name) shown on each highlight card.
-  const topicTag = s => s && s.topic
-    ? `<div class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${s.topic}</div>`
-    : '';
+  // Topic chip (colour-dot + subject/theme/mode name). `noMode` suppresses the
+  // mode-tier fallback (a bare mode like "group fatigue rhetoric" reads badly).
+  const topicTag = (s, opts) => {
+    if (!s || !s.topic) return '';
+    if (opts && opts.noMode && s.topicTier === 'mode') return '';
+    return `<span class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${s.topic}</span>`;
+  };
+  // Title row: video title on the left, topic chip pushed to the right.
+  const titleRow = (s, link, topicOpts) =>
+    `<div class="hl-titlerow"><a class="hl-title" href="${link}" target="_blank" rel="noopener">${s.title}${LINK_ICON}</a>${topicTag(s, topicOpts)}</div>`;
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
         <div class="hl-label">Best performer</div>
-        <a class="hl-title" href="${ytLink(d.topvid.id)}" target="_blank" rel="noopener">${d.topvid.title}${LINK_ICON}</a>
-        ${topicTag(d.topvid)}
+        ${titleRow(d.topvid, ytLink(d.topvid.id))}
         ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
         ${chTag(d.topvid)}
       </div>
@@ -2706,8 +2716,7 @@ function render(m){
     <div class="hl debate">
       <div>
         <div class="hl-label">Most contentious</div>
-        <a class="hl-title" href="${ytLink(d.debate.id)}" target="_blank" rel="noopener">${d.debate.title}${LINK_ICON}</a>
-        ${topicTag(d.debate)}
+        ${titleRow(d.debate, ytLink(d.debate.id), { noMode: true })}
         ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
         ${chTag(d.debate)}
@@ -2717,10 +2726,9 @@ function render(m){
   const worstHTML = d.worstvid ? `
     <div class="hl worst">
       <div>
-        <div class="hl-label">Worst performer</div>
-        <a class="hl-title" href="${ytLink(d.worstvid.id)}" target="_blank" rel="noopener">${d.worstvid.title}${LINK_ICON}</a>
-        ${topicTag(d.worstvid)}
-        <div class="hl-note">The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.</div>
+        <div class="hl-label">Worst performer <span class="info-icon" tabindex="0" role="button" aria-label="About worst performer" data-popover="The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.">ⓘ</span></div>
+        ${titleRow(d.worstvid, ytLink(d.worstvid.id))}
+        ${sumLine(d.worstvid.id) || `<div class="hl-note">The month's least-watched long-form upload.</div>`}
         ${chTag(d.worstvid)}
       </div>
       ${hlStats(d.worstvid)}
@@ -5425,7 +5433,7 @@ function niceDurationAxis(minSec, maxSec) {
 
   // Analysis time-filter state (Analysis-only). Maps a preset to a cutoff month
   // key; the chart shows months >= cutoff. null cutoff = all time.
-  let anTimePreset = '24m';
+  let anTimePreset = 'since-peak';
   function anCutoffMonth(preset, allKeys){
     const now = new Date();
     const y = now.getFullYear(), mo = now.getMonth()+1;
