@@ -1937,32 +1937,30 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .fun-modes .mood-btn .mood-icon{font-size:0.85rem}
 @media(max-width:680px){.fun-modes{flex-direction:column}.fun-modes .mood-btn{white-space:normal}}
 /* Month quick-jump segmented control (Overview controls row) */
-.month-quick{display:inline-flex;border:1px solid var(--accent);border-radius:8px;overflow:hidden;flex:0 0 auto}
-.mq-btn{appearance:none;border:none;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:flex-start;gap:0.04rem;padding:0.3rem 0.75rem;line-height:1.15;text-align:left}
-.mq-main{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;opacity:0.8}
-.mq-sub{font-size:0.84rem;font-weight:800;letter-spacing:-0.01em}
-.mq-btn+.mq-btn{border-left:1px solid var(--accent)}
+.month-quick{display:inline-flex;gap:0.3rem;flex:0 0 auto}
+.mq-btn{appearance:none;border:1px solid var(--accent);border-radius:7px;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.04rem;padding:0.28rem 0.7rem;line-height:1.12;text-align:center;flex:1 1 0;min-width:0}
+.mq-main{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.02em;opacity:0.8;white-space:nowrap}
+.mq-sub{font-size:0.78rem;font-weight:800;letter-spacing:-0.01em;white-space:nowrap}
 .mq-btn:hover{color:var(--text)}
 .mq-btn.active{background:var(--accent);color:#fff}
 .mq-btn.active .mq-main{opacity:0.9}
 /* Live-data indicator: a red streak orbiting the perimeter of the in-progress
    month button, marking it as a still-changing dataset and drawing the eye. */
-/* Live-data indicator: the whole in-progress month button pulses red — its
-   fill, text and a surrounding halo all breathe together, so it reads as
-   "live" and pulls the eye without being harsh. */
-.mq-btn.is-live{position:relative;animation:mqLivePulse 2.8s ease-in-out infinite}
+/* Live-data indicator: the in-progress month button pulses red — the red
+   washes in, then fades almost all the way back to the normal button surface,
+   so the pulse is clearly visible coming and going. */
+.mq-btn.is-live{position:relative;animation:mqLivePulse 2.6s ease-in-out infinite}
 @keyframes mqLivePulse{
   0%,100%{
-    background:#e2685f;color:#fff;
-    box-shadow:0 0 0 1px rgba(226,104,95,0.85),0 0 0 0 rgba(226,104,95,0.4),0 0 12px 2px rgba(226,104,95,0.35);
+    background:var(--surface);color:var(--subtext);
+    box-shadow:0 0 0 1px rgba(226,104,95,0.25),0 0 0 0 rgba(226,104,95,0),0 0 0 0 rgba(226,104,95,0);
   }
   50%{
-    background:#c9544c;color:#fff;
-    box-shadow:0 0 0 1px rgba(226,104,95,0.85),0 0 0 6px rgba(226,104,95,0),0 0 22px 6px rgba(226,104,95,0.6);
+    background:#e2685f;color:#fff;
+    box-shadow:0 0 0 1px rgba(226,104,95,0.9),0 0 0 6px rgba(226,104,95,0),0 0 22px 7px rgba(226,104,95,0.65);
   }
 }
-/* keep the sub-label readable on the red fill */
-.mq-btn.is-live .mq-sub{color:rgba(255,255,255,0.85)}
+.mq-btn.is-live .mq-sub{color:inherit}
 @media(prefers-reduced-motion:reduce){.mq-btn.is-live{animation:none;background:#e2685f;color:#fff;box-shadow:0 0 0 2px #e2685f,0 0 14px 3px rgba(226,104,95,0.5)}
   .mq-btn.is-live::before{animation:none;background:#ff3b30}}
 @media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
@@ -2738,7 +2736,7 @@ function render(m){
         <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
       </div>
       <div class="hero-card">
-        <div class="hero-label">Average views</div>
+        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it." tabindex="0" role="button" aria-label="About average views">ⓘ</span></div>
         <div class="hero-num">${fmt(d.med)}</div>
         <div class="hero-sub">per long-form upload</div>
         <div class="deltas">${pill(lblMo,d.med,p&&p.med,true)}${pill(lblYr,d.med,y&&y.med,true)}</div>
