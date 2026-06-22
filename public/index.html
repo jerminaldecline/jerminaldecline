@@ -186,7 +186,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mini .mv{font-weight:700}
 .mini.up .mv{color:var(--up)}.mini.down .mv{color:var(--down)}.mini.flat .mv{color:var(--text-dim)}
 
-.highlights{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+.highlights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+.hl-topic{display:inline-flex;align-items:center;gap:0.35rem;margin:0.3rem 0 0.1rem;font-size:0.74rem;font-weight:600;color:var(--text-muted)}
+.hl-topic-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.hl.worst::before{background:var(--text-dim)}
 .hl{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.95rem 1.15rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:0.7rem}
 .hl::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
 .hl.debate::before{background:var(--down)}
@@ -2262,7 +2265,10 @@ async function loadAndCompute(){
   const hid = {}; for(const [cid,h] of Object.entries(handle)) hid[h]=cid;
   const vids = data.videos || [];
 
-  function vstats(v){ return {title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:handle[v.channelId]||'?'}; }
+  function vstats(v){ return {title:v.title, views:v.views||0, comments:v.comments||0, likes:v.likes||0, id:v.id, ch:handle[v.channelId]||'?',
+    topic: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
+    topicColor: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
+    publishedAt: v.publishedAt||null }; }
 
   function buildScope(filterFn){
     const bym={}, shby={};
@@ -2304,9 +2310,20 @@ async function loadAndCompute(){
       // legacy shape kept in case anything still reads [name,count]
       const top=topicsByCount.map(e=>[e.name,e.count]);
       const topvid=vstats([...vs].sort((a,b)=>(b.views||0)-(a.views||0))[0]);
-      const cand=vs.filter(v=>(v.views||0)>=3000 && v.comments).map(v=>[v.comments/v.views,v]).sort((a,b)=>b[0]-a[0]);
+      // "Most contentious" = highest comment-rate, but exclude very fresh uploads:
+      // new videos show an inflated comment-to-view ratio because comments land
+      // before views catch up (view-lag), so anything < 24h old is skipped here.
+      const DAY_MS = 24*60*60*1000;
+      const ageOK = v => { const t = v.publishedAt ? Date.parse(v.publishedAt) : NaN; return isNaN(t) ? true : (Date.now() - t) >= DAY_MS; };
+      const cand=vs.filter(v=>(v.views||0)>=3000 && v.comments && ageOK(v)).map(v=>[v.comments/v.views,v]).sort((a,b)=>b[0]-a[0]);
       let debate=null;
       if(cand.length){ const [r,dv]=cand[0]; debate=vstats(dv); debate.crate=Math.round(r*1000)/10; debate.mult=medCr>0?Math.round(r/medCr*10)/10:null; }
+      // "Worst performer" = the long-form upload with the fewest views this month
+      // (shorts excluded; they live on a different scale). Same 24h freshness guard
+      // so a brand-new video mid-climb isn't unfairly flagged as the worst.
+      const worstCand=[...vs].filter(v=>!v.isShort && (v.views||0)>0 && ageOK(v)).sort((a,b)=>(a.views||0)-(b.views||0));
+      let worstvid=null;
+      if(worstCand.length){ worstvid=vstats(worstCand[0]); const medV=median(views); worstvid.vsmed = medV>0?Math.round(worstvid.views/medV*100):null; }
       out[m]={
         n:vs.length, tot:views.reduce((a,b)=>a+b,0), med:Math.round(median(views)),
         lv: lvs.length?Math.round(median(lvs)*1000)/10:0,
@@ -2315,7 +2332,7 @@ async function loadAndCompute(){
         runtime: durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/3600*10)/10:0,
         revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
         revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
-        top, topvid, debate, shorts, vlist,
+        top, topvid, debate, worstvid, shorts, vlist,
         topicsByCount, topicsByViews, taggedCount, taggedViews
       };
     }
@@ -2663,11 +2680,16 @@ function render(m){
   };
   const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
   const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${ANALYTICS_SUMMARIES[vid]}</div>` : '';
+  // Small topic chip (colour-dot + subject name) shown on each highlight card.
+  const topicTag = s => s && s.topic
+    ? `<div class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${s.topic}</div>`
+    : '';
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
         <div class="hl-label">Top video this month</div>
         <a class="hl-title" href="${ytLink(d.topvid.id)}" target="_blank" rel="noopener">${d.topvid.title}${LINK_ICON}</a>
+        ${topicTag(d.topvid)}
         ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
         ${chTag(d.topvid)}
       </div>
@@ -2678,11 +2700,23 @@ function render(m){
       <div>
         <div class="hl-label">Most contentious</div>
         <a class="hl-title" href="${ytLink(d.debate.id)}" target="_blank" rel="noopener">${d.debate.title}${LINK_ICON}</a>
+        ${topicTag(d.debate)}
         ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
         ${chTag(d.debate)}
       </div>
       ${hlStats(d.debate)}
+    </div>` : '';
+  const worstHTML = d.worstvid ? `
+    <div class="hl worst">
+      <div>
+        <div class="hl-label">Worst performer</div>
+        <a class="hl-title" href="${ytLink(d.worstvid.id)}" target="_blank" rel="noopener">${d.worstvid.title}${LINK_ICON}</a>
+        ${topicTag(d.worstvid)}
+        <div class="hl-note">The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.</div>
+        ${chTag(d.worstvid)}
+      </div>
+      ${hlStats(d.worstvid)}
     </div>` : '';
 
   const topicBars = (()=>{
@@ -2775,7 +2809,7 @@ function render(m){
       </div>
     </div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
-    <div class="highlights">${topHTML}${debHTML}</div>
+    <div class="highlights">${topHTML}${debHTML}${worstHTML}</div>
     <div class="lower">
       <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.uploads}</div>
       <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.views}</div>
