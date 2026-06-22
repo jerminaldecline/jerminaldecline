@@ -187,9 +187,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mini.up .mv{color:var(--up)}.mini.down .mv{color:var(--down)}.mini.flat .mv{color:var(--text-dim)}
 
 .highlights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
-.hl-titlerow{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem}
-.hl-titlerow .hl-title{flex:1 1 auto;min-width:0}
-.hl-topic{display:inline-flex;align-items:center;gap:0.35rem;flex:0 0 auto;font-size:0.74rem;font-weight:600;color:var(--text-muted);white-space:nowrap}
+.hl-labelrow{display:flex;align-items:center;justify-content:space-between;gap:0.6rem}
+.hl-labelrow .hl-label{flex:0 0 auto}
+.hl-topic{display:inline-flex;align-items:center;gap:0.35rem;flex:0 0 auto;font-size:0.74rem;font-weight:600;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
 .hl-topic-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:0 0 auto}
 .hl.worst::before{background:var(--text-dim)}
 .hl{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.95rem 1.15rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:0.7rem}
@@ -2096,9 +2096,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <select id="anChannelSel" class="bar-sel" aria-label="Channel"></select>
       <select id="anPeriodSel" class="bar-sel" aria-label="Time period">
         <option value="ytd">YTD</option>
-        <option value="12m">Last 12 months</option>
+        <option value="12m" selected>Last 12 months</option>
         <option value="24m">Last 24 months</option>
-        <option value="since-peak" selected>Since peak</option>
+        <option value="since-peak">Since peak</option>
         <option value="all">All time</option>
       </select>
     </div>
@@ -2449,7 +2449,7 @@ const MINI_TREND_PERIODS = [
   ['ytd','YTD'], ['12m','12 months'], ['24m','24 months'],
   ['since-peak','Since peak'], ['all','All time']
 ];
-let miniTrendState = { scope: null, period: 'all', yoy: true };
+let miniTrendState = { scope: null, period: 'since-peak', yoy: true };
 function miniTrendCutoff(period, series, peakMonth){
   if (period === 'all') return null;
   const now = new Date();
@@ -2700,12 +2700,15 @@ function render(m){
     return `<span class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${s.topic}</span>`;
   };
   // Title row: video title on the left, topic chip pushed to the right.
-  const titleRow = (s, link, topicOpts) =>
-    `<div class="hl-titlerow"><a class="hl-title" href="${link}" target="_blank" rel="noopener">${s.title}${LINK_ICON}</a>${topicTag(s, topicOpts)}</div>`;
+  const titleRow = (s, link) =>
+    `<a class="hl-title" href="${link}" target="_blank" rel="noopener">${s.title}${LINK_ICON}</a>`;
+  // Card-label row: the card heading on the left, topic chip on the right.
+  const labelRow = (heading, s, topicOpts) =>
+    `<div class="hl-labelrow"><div class="hl-label">${heading}</div>${topicTag(s, topicOpts)}</div>`;
   const topHTML = d.topvid ? `
     <div class="hl">
       <div>
-        <div class="hl-label">Best performer</div>
+        ${labelRow('Best performer', d.topvid)}
         ${titleRow(d.topvid, ytLink(d.topvid.id))}
         ${sumLine(d.topvid.id) || `<div class="hl-note">The month's most-watched upload.</div>`}
         ${chTag(d.topvid)}
@@ -2715,8 +2718,8 @@ function render(m){
   const debHTML = d.debate ? `
     <div class="hl debate">
       <div>
-        <div class="hl-label">Most contentious</div>
-        ${titleRow(d.debate, ytLink(d.debate.id), { noMode: true })}
+        ${labelRow('Most contentious', d.debate, { noMode: true })}
+        ${titleRow(d.debate, ytLink(d.debate.id))}
         ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
         ${chTag(d.debate)}
@@ -2726,7 +2729,7 @@ function render(m){
   const worstHTML = d.worstvid ? `
     <div class="hl worst">
       <div>
-        <div class="hl-label">Worst performer <span class="info-icon" tabindex="0" role="button" aria-label="About worst performer" data-popover="The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.">ⓘ</span></div>
+        ${labelRow(`Worst performer <span class="info-icon" tabindex="0" role="button" aria-label="About worst performer" data-popover="The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.">ⓘ</span>`, d.worstvid)}
         ${titleRow(d.worstvid, ytLink(d.worstvid.id))}
         ${sumLine(d.worstvid.id) || `<div class="hl-note">The month's least-watched long-form upload.</div>`}
         ${chTag(d.worstvid)}
@@ -5433,7 +5436,7 @@ function niceDurationAxis(minSec, maxSec) {
 
   // Analysis time-filter state (Analysis-only). Maps a preset to a cutoff month
   // key; the chart shows months >= cutoff. null cutoff = all time.
-  let anTimePreset = 'since-peak';
+  let anTimePreset = '12m';
   function anCutoffMonth(preset, allKeys){
     const now = new Date();
     const y = now.getFullYear(), mo = now.getMonth()+1;
