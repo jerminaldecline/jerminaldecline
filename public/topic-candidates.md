@@ -1,4 +1,4 @@
-# Topic candidates — 2026-06-21
+# Topic candidates — 2026-06-22
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,15 +6,17 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 133 baseline videos
+Pool: 17 recent videos, 131 baseline videos
 
-### Cluster 1: `surrounding`
+### Cluster 1: `case`
 
 - **Recent saturation:** 8/17 videos (**47%**)
-- **Baseline saturation:** 9/133 videos (7%)
-- **Spike ratio:** 6.6x
-- **Related terms:** `surrounding`, `case`, `controversy`, `allegations`, `fresh`, `public`, `conviction`, `second fresh`
+- **Baseline saturation:** 9/131 videos (7%)
+- **Spike ratio:** 6.5x
+- **Related terms:** `case`, `surrounding`, `controversy`, `allegations`, `fresh`, `conviction`, `second fresh`
 - **Sample recent videos:**
+  - 2026-06-22 — _SHE GOT PUMMELED_  
+    Woman Hospitalized After Alleged Attack Linked To Viral Case
   - 2026-06-19 — _ARREST THEM ALL_  
     Austin Metcalf's Father Alleges School Officials Bowed To Pressure
   - 2026-06-18 — _NEW INSANE BOMBSHELL_  
@@ -23,15 +25,13 @@ Pool: 17 recent videos, 133 baseline videos
     Sarah Fields Escalates Legal Battle Amid Karmelo Anthony Case Fallout
   - 2026-06-17 — _IT JUST GOT WORSE_  
     Karmelo Anthony Appeal Push Faces New Questions And Scrutiny
-  - 2026-06-17 — _THEY PUT A HIT OUT ON HIM_  
-    Karmelo Anthony Fallout Sparks Online Feuds, Threats, And Backlash
 
 ### Cluster 2: `online`
 
-- **Recent saturation:** 7/17 videos (**41%**)
-- **Baseline saturation:** 2/133 videos (2%)
-- **Spike ratio:** 22.1x
-- **Related terms:** `online`, `fallout`, `continues`, `aftermath`, `anthony case`
+- **Recent saturation:** 6/17 videos (**35%**)
+- **Baseline saturation:** 2/131 videos (2%)
+- **Spike ratio:** 18.6x
+- **Related terms:** `online`, `fallout`, `anthony case`
 - **Sample recent videos:**
   - 2026-06-19 — _ARREST THEM ALL_  
     Austin Metcalf's Father Alleges School Officials Bowed To Pressure
@@ -47,8 +47,8 @@ Pool: 17 recent videos, 133 baseline videos
 ### Cluster 3: `social`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/133 videos (1%)
-- **Spike ratio:** 21.0x
+- **Baseline saturation:** 1/131 videos (1%)
+- **Spike ratio:** 20.7x
 - **Related terms:** `social`, `media`, `social media`
 - **Sample recent videos:**
   - 2026-06-16 — _HE'S IN HUGE TROUBLE_  
@@ -63,8 +63,8 @@ Pool: 17 recent videos, 133 baseline videos
 ### Cluster 4: `against`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/133 videos (0%)
-- **Spike ratio:** 47.3x
+- **Baseline saturation:** 0/131 videos (0%)
+- **Spike ratio:** 46.6x
 - **Related terms:** `against`
 - **Sample recent videos:**
   - 2026-06-19 — _SHE'S RAGING_  
@@ -77,7 +77,7 @@ Pool: 17 recent videos, 133 baseline videos
 ### Cluster 5: `following`
 
 - **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 9/133 videos (7%)
+- **Baseline saturation:** 9/131 videos (7%)
 - **Spike ratio:** 4.1x
 - **Related terms:** `following`, `efforts`, `scrutiny`
 - **Sample recent videos:**
@@ -95,10 +95,12 @@ Pool: 17 recent videos, 133 baseline videos
 ### Cluster 6: `our`
 
 - **Recent saturation:** 16/17 videos (**94%**)
-- **Baseline saturation:** 19/133 videos (14%)
-- **Spike ratio:** 6.5x
+- **Baseline saturation:** 20/131 videos (15%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `our`, `coffee`, `second`, `our coffee`, `coffee second`
 - **Sample recent videos:**
+  - 2026-06-22 — _SHE GOT PUMMELED_  
+    Woman Hospitalized After Alleged Attack Linked To Viral Case
   - 2026-06-20 — _ITS SO MUCH WORSE_  
     The Karmelo Bodycam footage has been released and it's bad
   - 2026-06-19 — _SHE'S RAGING_  
@@ -107,18 +109,16 @@ Pool: 17 recent videos, 133 baseline videos
     Austin Metcalf's Father Alleges School Officials Bowed To Pressure
   - 2026-06-18 — _NEW INSANE BOMBSHELL_  
     New Questions Emerge Over Karmelo Anthony Appeal And Fundraising
-  - 2026-06-18 — _RIOTS HAVE BEGUN_  
-    Mississippi Protests Erupt After Police Shooting Kills One-Year-Old
 
 ## @JeremyHambly
 
-Pool: 12 recent videos, 123 baseline videos
+Pool: 11 recent videos, 121 baseline videos
 
 ### Cluster 1: `main`
 
-- **Recent saturation:** 10/12 videos (**83%**)
-- **Baseline saturation:** 13/123 videos (11%)
-- **Spike ratio:** 7.7x
+- **Recent saturation:** 9/11 videos (**82%**)
+- **Baseline saturation:** 14/121 videos (12%)
+- **Spike ratio:** 6.9x
 - **Related terms:** `main`, `our`, `coffee`, `case`, `our coffee`, `coffee main`
 - **Sample recent videos:**
   - 2026-06-19 — _THIS IS INSANE_  
@@ -134,9 +134,9 @@ Pool: 12 recent videos, 123 baseline videos
 
 ### Cluster 2: `growing`
 
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 2/123 videos (2%)
-- **Spike ratio:** 12.4x
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 2/121 videos (2%)
+- **Spike ratio:** 13.3x
 - **Related terms:** `growing`
 - **Sample recent videos:**
   - 2026-06-17 — _THERE IS NO FIXING THIS_  
@@ -148,9 +148,9 @@ Pool: 12 recent videos, 123 baseline videos
 
 ### Cluster 3: `online`
 
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 3/123 videos (2%)
-- **Spike ratio:** 8.9x
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 3/121 videos (2%)
+- **Spike ratio:** 9.5x
 - **Related terms:** `online`
 - **Sample recent videos:**
   - 2026-06-18 — _HE GOT DESTROYED_  

@@ -1,45 +1,42 @@
 {
-  "lastUpdated": "2026-06-21T12:22:13.180Z",
+  "lastUpdated": "2026-06-22T18:53:11.754Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "surrounding",
+      "termId": "case",
       "keywords": [
         "controversy",
         "allegations",
         "fresh",
         "second fresh",
         "surrounding",
-        "public",
         "case",
         "conviction"
       ],
       "detectorMeta": {
         "recentSaturation": 0.4706,
-        "baselineSaturation": 0.0709,
-        "spikeRatio": 6.64,
+        "baselineSaturation": 0.072,
+        "spikeRatio": 6.54,
         "recentVideoCount": 8,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-06-21T12:22:13.180Z"
+        "detectedAt": "2026-06-22T18:53:11.754Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "online",
       "keywords": [
-        "fallout",
         "anthony case",
-        "continues",
         "online",
-        "aftermath"
+        "fallout"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4118,
-        "baselineSaturation": 0.0187,
-        "spikeRatio": 22.07,
-        "recentVideoCount": 7,
+        "recentSaturation": 0.3529,
+        "baselineSaturation": 0.0189,
+        "spikeRatio": 18.64,
+        "recentVideoCount": 6,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-06-21T12:22:13.180Z"
+        "detectedAt": "2026-06-22T18:53:11.754Z"
       }
     },
     {
@@ -54,11 +51,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.9412,
-        "baselineSaturation": 0.1455,
-        "spikeRatio": 6.47,
+        "baselineSaturation": 0.1553,
+        "spikeRatio": 6.06,
         "recentVideoCount": 16,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-06-21T12:22:13.180Z"
+        "baselineVideoCount": 20,
+        "detectedAt": "2026-06-22T18:53:11.754Z"
       }
     },
     {
@@ -73,12 +70,12 @@
         "coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1089,
-        "spikeRatio": 7.65,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-06-21T12:22:13.180Z"
+        "recentSaturation": 0.8182,
+        "baselineSaturation": 0.1189,
+        "spikeRatio": 6.88,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-06-22T18:53:11.754Z"
       }
     },
     {
@@ -100,7 +97,7 @@
         "spikeRatio": 44,
         "recentVideoCount": 5,
         "baselineVideoCount": 1,
-        "detectedAt": "2026-06-21T12:22:13.180Z"
+        "detectedAt": "2026-06-22T18:53:11.754Z"
       }
     }
   ]
