@@ -4265,7 +4265,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   // Layout — both axes need label space, so increase the right padding to
   // accommodate the right-side Y labels.
   const W = 720, H = 280;
-  const P = { top: 20, right: 56, bottom: 48, left: 56 };
+  const P = { top: 20, right: 44, bottom: 48, left: 56 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
   const n = chartData.length;
@@ -7378,11 +7378,10 @@ function renderWindowList(startDate, endDate) {
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }
     const qm=params.get('month');
-    // default to the latest COMPLETE month in scope (skip the in-progress month so
-    // the page opens on settled data); ?month= override still wins.
+    // Default to the most recent month in scope (the in-progress month when it
+    // exists). ?month= override still wins.
     const months = availableMonths();
-    const firstComplete = months.find(mm => mm !== CURRENT_MONTH_KEY) || months[0];
-    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : firstComplete;
+    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : months[0];
     refresh(startMonth);
     // refresh() only paints the Overview tab. On a hard refresh the active tab
     // may be Analysis or Videos (restored from ?tab=), and tabShell's initial
