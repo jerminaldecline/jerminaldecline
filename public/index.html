@@ -462,6 +462,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; font-weight: 600;}
 .chart-pt-label.prev {fill: var(--text-dim); font-size: 9px; font-weight: 500;}
 .chart-pt-label.dur {fill: var(--accent-2);}
+.chart-pt-label.inprogress {fill: #dc3232; font-weight: 700;}
 /* Axis title (rotated for Y axis). Slightly more emphasis than tick labels
      since this is naming the axis variable, not enumerating its values. */
   .chart-axis-title {fill: var(--text-muted);
@@ -3104,6 +3105,8 @@ function buildMonthlyData(scope){
   // Build SVG <text> point labels for a series. `values` is the plotted array;
   // xFor/yFor map index→coords; fmtVal formats the number; opts can force-label
   // certain indices (anchors) and nudge the label above/below the point.
+  // opts.maxX: if set, labels whose x is within ~22px of it are right-anchored so
+  // they don't spill over a right-hand Y axis; labels past it are pulled in.
   function buildPointLabels(values, xFor, yFor, fmtVal, opts = {}) {
     const n = values.length;
     if (!n) return '';
@@ -3111,6 +3114,7 @@ function buildMonthlyData(scope){
     const anchors = new Set(opts.anchors || []);
     const cls = opts.cls || 'chart-pt-label';
     const dy = opts.dy != null ? opts.dy : -8; // default: sit above the point
+    const maxX = opts.maxX != null ? opts.maxX : null;
     let out = '';
     for (let i = 0; i < n; i++) {
       const v = values[i];
@@ -3118,7 +3122,14 @@ function buildMonthlyData(scope){
       const isAnchor = anchors.has(i);
       // Label if it's on the stride grid, the last point, or a forced anchor.
       if (!isAnchor && i % stride !== 0 && i !== n - 1) continue;
-      out += `<text class="${cls}" x="${xFor(i).toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
+      let x = xFor(i);
+      let anchorAttr = '';
+      if (maxX != null && x > maxX - 22) {
+        // Near the right axis: right-align and clamp so the text ends at the axis.
+        anchorAttr = ' text-anchor="end"';
+        x = Math.min(x, maxX);
+      }
+      out += `<text class="${cls}"${anchorAttr} x="${x.toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
     }
     return out;
   }
@@ -3579,7 +3590,7 @@ function renderTrendChart(yoy) {
   // Density-aware value labels on the views line. Always anchor the peak and the
   // latest complete month so those headline numbers are readable without hovering.
   const peakIdxLbl = currValues.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
-  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [peakIdxLbl, currValues.length - 1] });
+  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [peakIdxLbl, currValues.length - 1], maxX: P.left + innerW });
   const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
@@ -3666,6 +3677,7 @@ function renderTrendChart(yoy) {
       ${durInProgressSvg}
       <circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
       <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>
+      <text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>
     `;
     inProgressHits = `
       <rect class="chart-hit"
@@ -3925,7 +3937,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
     const lastX = xFor(lastValid);
     const lastY = yFor(rates[lastValid].rate);
     ipConnector = `<path class="chart-line-likerate-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
-    ipDot = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    ipDot = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${y}" r="4" /><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${ipRate.toFixed(1)}%</text>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
@@ -3934,7 +3946,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
   const rateVals = rates.map(r => r.rate > 0 ? r.rate : null);
   let ratePeakIdx = 0, ratePeakV = -1;
   rateVals.forEach((v, i) => { if (v != null && v > ratePeakV) { ratePeakV = v; ratePeakIdx = i; } });
-  const rateLabels = buildPointLabels(rateVals, xFor, yFor, v => v.toFixed(1) + '%', { anchors: [ratePeakIdx, lastValid] });
+  const rateLabels = buildPointLabels(rateVals, xFor, yFor, v => v.toFixed(1) + "%", { anchors: [ratePeakIdx, lastValid], maxX: P.left + innerW });
 
   svg.innerHTML = `
     ${gridLines}
@@ -4100,14 +4112,14 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     const lastX = xFor(lastValid);
     const lastY = yFor(meds[lastValid].med);
     ipConnector = `<path class="chart-line-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}"/>`;
-    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/>`;
+    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipMed)}</text>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
   // Density-aware value labels — anchor the peak and latest month.
   const medVals = meds.map(r => r.med);
   const medPeakIdx = medVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
-  const medLabels = buildPointLabels(medVals, xFor, yFor, fmtCompact, { anchors: [medPeakIdx, medVals.length - 1] });
+  const medLabels = buildPointLabels(medVals, xFor, yFor, fmtCompact, { anchors: [medPeakIdx, medVals.length - 1], maxX: P.left + innerW });
 
   svg.innerHTML = `
     ${gridLines}
@@ -4335,25 +4347,27 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
     const yV = yForViews(ipViews);
     const lastYV = yForViews(views[lastIdx]);
     ipConnectorViews = `<path class="chart-line-inprogress" d="M ${lastX} ${lastYV} L ${x} ${yV}" />`;
-    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" />`;
+    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" /><text class="chart-pt-label inprogress" x="${Math.min(x, P.left + innerW).toFixed(1)}" y="${(yV - 9).toFixed(1)}" text-anchor="end">${fmtCompact(ipViews)}</text>`;
     // Rate dot only renders if there's an in-progress rate AND a prior valid
     // rate point to draw the dashed connector from.
     if (ipRate != null && ipRate > 0 && lastValidRate >= 0) {
       const yR = yForRate(ipRate);
       const lastYR = yForRate(rates[lastValidRate]);
       ipConnectorRate = `<path class="chart-line-likerate-inprogress" d="M ${xFor(lastValidRate)} ${lastYR} L ${x} ${yR}" />`;
-      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" />`;
+      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" /><text class="chart-pt-label inprogress" x="${Math.min(x, P.left + innerW).toFixed(1)}" y="${(yR + 16).toFixed(1)}" text-anchor="end">${ipRate.toFixed(1)}%</text>`;
     }
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
   // Dual-line labels: views above their points, like-rate (%) below theirs.
   // A sparser stride here than single-line charts since two label rows share
-  // the plot — keeps it readable.
+  // the plot — keeps it readable. maxX = right plot edge so labels near the
+  // right Y axis are right-anchored and don't collide with its % tick labels.
   const vlStride = Math.max(2, labelStrideFor(n));
-  const viewsLabels = buildPointLabels(views, xFor, yForViews, fmtCompact, { stride: vlStride, anchors: [views.length - 1] });
+  const vlMaxX = P.left + innerW;
+  const viewsLabels = buildPointLabels(views, xFor, yForViews, fmtCompact, { stride: vlStride, anchors: [views.length - 1], maxX: vlMaxX });
   const rateValsVL = rates.map(r => r > 0 ? r : null);
-  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: [lastValidRate] });
+  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: [lastValidRate], maxX: vlMaxX });
 
   svg.innerHTML = `
     ${gridLines}
@@ -5139,7 +5153,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     const lastX = xFor(lastIdx);
     const lastY = yFor(rMid(chartData[lastIdx]));
     ipConnector = `<path class="chart-line-revenue-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}" />`;
-    ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" />`;
+    ipDot = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4" /><text class="chart-pt-label inprogress" x="${Math.min(x, P.left + innerW).toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="end">${fmtAxisUSD(rMid(inProgressMonth))}</text>`;
     const wHover = innerW / Math.max(1, nTotal - 1);
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
@@ -5147,7 +5161,7 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   // Density-aware labels on the mid-estimate line, formatted as compact USD.
   const midVals = chartData.map(m => rMid(m));
   const revPeakIdx = midVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
-  const revLabels = buildPointLabels(midVals, xFor, yFor, v => fmtAxisUSD(v), { anchors: [revPeakIdx, midVals.length - 1] });
+  const revLabels = buildPointLabels(midVals, xFor, yFor, v => fmtAxisUSD(v), { anchors: [revPeakIdx, midVals.length - 1], maxX: P.left + innerW });
 
   svg.innerHTML = `
     ${gridLines}
