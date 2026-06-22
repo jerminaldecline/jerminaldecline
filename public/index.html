@@ -362,14 +362,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-/* Hide-labels toggle: sits to the right of the metric tabs. When engaged it adds
-   .labels-hidden to the chart wrap, which hides all per-point value labels. */
-.an-chart-controls{display:flex;flex-wrap:wrap;align-items:center;gap:0.6rem;justify-content:space-between}
-.an-labels-toggle{appearance:none;font-family:inherit;font-size:0.74rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.34rem 0.7rem;cursor:pointer;white-space:nowrap;transition:border-color .12s,color .12s,background-color .12s}
-.an-labels-toggle:hover{border-color:var(--accent);color:var(--text)}
-.an-labels-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Hide-labels control: lives inside the chart wrap (top-right), styled to match
+   the "Compare previous year" pill. Toggling it adds .labels-hidden to the wrap,
+   which hides all per-point value labels (pure CSS, no re-render). */
+.chart-labels-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);font-family:inherit;transition:border-color .12s,color .12s,background-color .12s}
+.chart-labels-control:hover{border-color:var(--accent);color:var(--text)}
+.chart-labels-control[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 .chart-wrap.labels-hidden .chart-pt-label{display:none}
-.prev-year-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
+/* Prev-year control shares the top-right corner; it sits just below the labels
+   control so the two never overlap when both are visible. */
+.prev-year-control{position:absolute;top:2.75rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
 .prev-year-control:hover{border-color:var(--accent);color:var(--text)}
 .prev-year-control[hidden]{display:none}
 .prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
@@ -2125,11 +2127,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
       </div>
-      <button type="button" class="an-labels-toggle" id="anLabelsToggle" aria-pressed="false" title="Show or hide the value labels on data points">Hide labels</button>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
+        <button type="button" class="chart-labels-control" id="anLabelsToggle" aria-pressed="false" title="Show or hide the value labels on data points">Hide labels</button>
         <label class="prev-year-control" id="prevYearControl" hidden>
           <input type="checkbox" id="prevYearCheckbox" checked>
           <span class="prev-year-control-swatch"></span>
