@@ -362,10 +362,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-/* In-chart control overlay: holds the Previous-year and Labels toggles inline in
-   the top-right of the chart. Right offset is generous so the buttons clear the
-   right-hand Y axis tick labels on dual-axis charts. */
-.chart-controls-overlay{position:absolute;top:0.55rem;right:1.4rem;z-index:4;display:flex;align-items:center;gap:0.4rem}
+/* Legend row: chart legend on the left, the Previous-year / Labels toggle
+   buttons on the right. Sits above the chart, so the buttons never overlap the
+   plot or its axis labels regardless of how the SVG scales. */
+.trend-legend-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.3rem}
+.trend-legend-row .trend-legend{margin:0;flex:1 1 auto}
+.chart-controls-overlay{display:flex;align-items:center;gap:0.4rem;flex:0 0 auto}
 .chart-ctrl-btn{appearance:none;font-family:inherit;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.76rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s,background-color .12s}
 .chart-ctrl-btn:hover{border-color:var(--accent);color:var(--text)}
 /* Active = feature ON (accent fill); inactive = muted outline. */
@@ -2126,12 +2128,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       </div>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
-      <div class="trend-legend" id="trendLegend"></div>
-      <div class="chart-wrap" id="chartWrap">
+      <div class="trend-legend-row">
+        <div class="trend-legend" id="trendLegend"></div>
         <div class="chart-controls-overlay">
           <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
+      </div>
+      <div class="chart-wrap" id="chartWrap">
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
