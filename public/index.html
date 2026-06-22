@@ -1948,22 +1948,22 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Live-data indicator: a red streak orbiting the perimeter of the in-progress
    month button, marking it as a still-changing dataset and drawing the eye. */
 /* Live-data indicator: the whole in-progress month button pulses red — its
-   fill, text and a surrounding halo all breathe together on a 1.6s cycle, so
-   it's unmistakably "live" and pulls the eye. */
-.mq-btn.is-live{position:relative;animation:mqLivePulse 1.6s ease-in-out infinite}
+   fill, text and a surrounding halo all breathe together, so it reads as
+   "live" and pulls the eye without being harsh. */
+.mq-btn.is-live{position:relative;animation:mqLivePulse 2.8s ease-in-out infinite}
 @keyframes mqLivePulse{
   0%,100%{
-    background:#ff3b30;color:#fff;
-    box-shadow:0 0 0 1px rgba(255,59,48,0.95),0 0 0 0 rgba(255,59,48,0.5),0 0 12px 2px rgba(255,59,48,0.45);
+    background:#e2685f;color:#fff;
+    box-shadow:0 0 0 1px rgba(226,104,95,0.85),0 0 0 0 rgba(226,104,95,0.4),0 0 12px 2px rgba(226,104,95,0.35);
   }
   50%{
-    background:#b81c14;color:#fff;
-    box-shadow:0 0 0 1px rgba(255,59,48,0.95),0 0 0 7px rgba(255,59,48,0),0 0 26px 8px rgba(255,59,48,0.85);
+    background:#c9544c;color:#fff;
+    box-shadow:0 0 0 1px rgba(226,104,95,0.85),0 0 0 6px rgba(226,104,95,0),0 0 22px 6px rgba(226,104,95,0.6);
   }
 }
 /* keep the sub-label readable on the red fill */
 .mq-btn.is-live .mq-sub{color:rgba(255,255,255,0.85)}
-@media(prefers-reduced-motion:reduce){.mq-btn.is-live{animation:none;background:#ff3b30;color:#fff;box-shadow:0 0 0 2px #ff3b30,0 0 14px 3px rgba(255,59,48,0.6)}
+@media(prefers-reduced-motion:reduce){.mq-btn.is-live{animation:none;background:#e2685f;color:#fff;box-shadow:0 0 0 2px #e2685f,0 0 14px 3px rgba(226,104,95,0.5)}
   .mq-btn.is-live::before{animation:none;background:#ff3b30}}
 @media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
 /* Top topics panel header + "see all [month]'s videos" link */
