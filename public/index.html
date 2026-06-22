@@ -3180,12 +3180,10 @@ function buildMonthlyData(scope){
         // Label if on the stride grid, the last point (unless skipLast), or an anchor.
         if (!isAnchor && i % stride !== 0 && !(i === n - 1 && !skipLast)) continue;
       }
-      // Drop labels whose point sits past a right cutoff (avoids piling onto a
-      // right-hand Y axis), unless they're a forced anchor.
-      if (dropPastX != null && !isAnchor && xFor(i) > dropPastX) continue;
-      // Drop labels whose point sits past a right cutoff (avoids piling onto a
-      // right-hand Y axis), unless they're a forced anchor.
-      if (dropPastX != null && !isAnchor && xFor(i) > dropPastX) continue;
+      // Drop labels whose point sits past a right cutoff — applies to anchors too,
+      // since the in-progress red label already shows the tail value. Hard guard
+      // against anything (key-point/latest anchors included) hitting a right Y axis.
+      if (dropPastX != null && xFor(i) > dropPastX) continue;
       let x = xFor(i);
       let anchorAttr = '';
       if (maxX != null && x > maxX - 40) {
@@ -4267,7 +4265,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   // Layout — both axes need label space, so increase the right padding to
   // accommodate the right-side Y labels.
   const W = 720, H = 280;
-  const P = { top: 20, right: 56, bottom: 48, left: 56 };
+  const P = { top: 20, right: 72, bottom: 48, left: 56 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
   const n = chartData.length;
@@ -4423,14 +4421,14 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
     const yV = yForViews(ipViews);
     const lastYV = yForViews(views[lastIdx]);
     ipConnectorViews = `<path class="chart-line-inprogress" d="M ${lastX} ${lastYV} L ${x} ${yV}" />`;
-    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" /><text class="chart-pt-label inprogress" x="${(P.left + innerW - 8).toFixed(1)}" y="${(yV - 9).toFixed(1)}" text-anchor="end">${fmtCompact(ipViews)}</text>`;
+    ipDotViews = `<circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${yV}" r="4" /><circle class="chart-dot-inprogress" cx="${x}" cy="${yV}" r="4" /><text class="chart-pt-label inprogress" x="${(P.left + innerW - 14).toFixed(1)}" y="${(yV - 9).toFixed(1)}" text-anchor="end">${fmtCompact(ipViews)}</text>`;
     // Rate dot only renders if there's an in-progress rate AND a prior valid
     // rate point to draw the dashed connector from.
     if (ipRate != null && ipRate > 0 && lastValidRate >= 0) {
       const yR = yForRate(ipRate);
       const lastYR = yForRate(rates[lastValidRate]);
       ipConnectorRate = `<path class="chart-line-likerate-inprogress" d="M ${xFor(lastValidRate)} ${lastYR} L ${x} ${yR}" />`;
-      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" /><text class="chart-pt-label inprogress" x="${(P.left + innerW - 8).toFixed(1)}" y="${(yR + 16).toFixed(1)}" text-anchor="end">${ipRate.toFixed(1)}%</text>`;
+      ipDotRate = `<circle class="chart-dot-likerate-inprogress-pulse" cx="${x}" cy="${yR}" r="4" /><circle class="chart-dot-likerate-inprogress" cx="${x}" cy="${yR}" r="4" /><text class="chart-pt-label inprogress" x="${(P.left + innerW - 14).toFixed(1)}" y="${(yR + 16).toFixed(1)}" text-anchor="end">${ipRate.toFixed(1)}%</text>`;
     }
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
@@ -4446,7 +4444,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
   const vlViewAnchors = vlKeyMode ? [...findKeyPoints(views)].filter(i => !(inProgressMonth && i === views.length - 1)) : (inProgressMonth ? [] : [views.length - 1]);
   const vlRateAnchors = vlKeyMode ? [...findKeyPoints(rateValsVL)].filter(i => !(inProgressMonth && i === lastValidRate)) : (inProgressMonth ? [] : [lastValidRate]);
   const viewsLabels = buildPointLabels(views, xFor, yForViews, fmtCompact, { stride: vlStride, anchors: vlViewAnchors, maxX: vlMaxX, skipLast: !!inProgressMonth, keyOnly: vlKeyMode });
-  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: vlRateAnchors, maxX: vlMaxX, skipLast: !!inProgressMonth, dropPastX: vlMaxX - 18, keyOnly: vlKeyMode });
+  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: vlRateAnchors, maxX: vlMaxX, skipLast: !!inProgressMonth, dropPastX: vlMaxX - 40, keyOnly: vlKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
