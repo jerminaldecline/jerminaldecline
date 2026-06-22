@@ -1946,23 +1946,28 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mq-btn.active .mq-main{opacity:0.9}
 /* Live-data indicator: a red streak orbiting the perimeter of the in-progress
    month button, marking it as a still-changing dataset and drawing the eye. */
-/* Live-data indicator: the in-progress month button pulses red — the red
-   washes in, then fades almost all the way back to the normal button surface,
-   so the pulse is clearly visible coming and going. */
-.mq-btn.is-live{position:relative;animation:mqLivePulse 2.6s ease-in-out infinite}
-@keyframes mqLivePulse{
-  0%,100%{
-    background:var(--surface);color:var(--subtext);
-    box-shadow:0 0 0 1px rgba(226,104,95,0.25),0 0 0 0 rgba(226,104,95,0),0 0 0 0 rgba(226,104,95,0);
-  }
-  50%{
-    background:#e2685f;color:#fff;
-    box-shadow:0 0 0 1px rgba(226,104,95,0.9),0 0 0 6px rgba(226,104,95,0),0 0 22px 7px rgba(226,104,95,0.65);
-  }
+/* Live-data indicator: a small red dot inside the button pulses next to the
+   "Month in progress" label (the main signal), while the text and button take
+   on a subtle, slow red tint. Restrained — the dot does the work. */
+.mq-live-dot{display:none}
+.mq-btn.is-live .mq-live-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;background:#e2685f;
+  margin-right:0.4rem;vertical-align:middle;flex:0 0 auto;
+  animation:mqDotPulse 2.4s ease-in-out infinite}
+.mq-btn.is-live .mq-main{display:inline-flex;align-items:center}
+.mq-btn.is-live{animation:mqLiveTint 2.4s ease-in-out infinite}
+@keyframes mqDotPulse{
+  0%,100%{opacity:0.45;box-shadow:0 0 0 0 rgba(226,104,95,0.5)}
+  50%    {opacity:1;box-shadow:0 0 5px 1px rgba(226,104,95,0.8)}
 }
-.mq-btn.is-live .mq-sub{color:inherit}
-@media(prefers-reduced-motion:reduce){.mq-btn.is-live{animation:none;background:#e2685f;color:#fff;box-shadow:0 0 0 2px #e2685f,0 0 14px 3px rgba(226,104,95,0.5)}
-  .mq-btn.is-live::before{animation:none;background:#ff3b30}}
+@keyframes mqLiveTint{
+  0%,100%{border-color:var(--accent);color:var(--subtext)}
+  50%    {border-color:#e2685f;color:#c9544c}
+}
+@media(prefers-reduced-motion:reduce){
+  .mq-btn.is-live{animation:none;border-color:#e2685f}
+  .mq-btn.is-live .mq-live-dot{animation:none;opacity:1}
+}
 @media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
 /* Top topics panel header + "see all [month]'s videos" link */
 .panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem;margin:0 0 1rem}
@@ -2056,7 +2061,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <div class="bar-controls" data-for="overview" id="ovBarControls">
       <div class="month-quick" role="group" aria-label="Quick month jump">
         <button class="mq-btn" id="mqComplete" type="button"><span class="mq-main">Last complete month</span><span class="mq-sub" id="mqCompleteSub"></span></button>
-        <button class="mq-btn" id="mqCurrent" type="button"><span class="mq-main">Month in progress</span><span class="mq-sub" id="mqCurrentSub"></span></button>
+        <button class="mq-btn" id="mqCurrent" type="button"><span class="mq-main"><span class="mq-live-dot" aria-hidden="true"></span>Month in progress</span><span class="mq-sub" id="mqCurrentSub"></span></button>
       </div>
       <select id="scopeSel" class="bar-sel" aria-label="Channel"></select>
       <select id="msel" class="bar-sel" aria-label="Month"></select>
