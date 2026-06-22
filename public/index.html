@@ -455,6 +455,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-axis-label {fill: var(--text-dim); font-size: 13px; font-family: inherit;}
 .chart-axis-label.x {text-anchor: middle;}
 .chart-axis-label.y {text-anchor: end;}
+/* Per-point value labels (e.g. "4.5M", "68K", "7.2%") sitting just above a data
+   point. Smaller and a touch lighter than axis labels so the line stays the hero;
+   a thin surface-coloured stroke keeps them legible where they cross gridlines. */
+.chart-pt-label {fill: var(--text); font-size: 10px; font-family: inherit; text-anchor: middle;
+  paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; font-weight: 600;}
+.chart-pt-label.prev {fill: var(--text-dim); font-size: 9px; font-weight: 500;}
+.chart-pt-label.dur {fill: var(--accent-2);}
 /* Axis title (rotated for Y axis). Slightly more emphasis than tick labels
      since this is naming the axis variable, not enumerating its values. */
   .chart-axis-title {fill: var(--text-muted);
@@ -3083,6 +3090,38 @@ function buildMonthlyData(scope){
     if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K';
     return Math.round(n).toString();
   }
+
+  // Density-aware point-label stride: how many points to skip between labels so
+  // a dense time-series doesn't turn into an unreadable smear. Few points → label
+  // all; more points → thin out. Anchor points (peak, latest, in-progress) are
+  // always labelled by the caller regardless of this stride.
+  function labelStrideFor(n) {
+    if (n <= 14) return 1;   // label every point (≈ up to last-12-months + a bit)
+    if (n <= 30) return 2;   // every 2nd (≈ last-24-months)
+    if (n <= 60) return 4;   // every 4th (≈ since-peak windows)
+    return Math.ceil(n / 14); // all-time: aim for ~14 labels max
+  }
+  // Build SVG <text> point labels for a series. `values` is the plotted array;
+  // xFor/yFor map index→coords; fmtVal formats the number; opts can force-label
+  // certain indices (anchors) and nudge the label above/below the point.
+  function buildPointLabels(values, xFor, yFor, fmtVal, opts = {}) {
+    const n = values.length;
+    if (!n) return '';
+    const stride = opts.stride || labelStrideFor(n);
+    const anchors = new Set(opts.anchors || []);
+    const cls = opts.cls || 'chart-pt-label';
+    const dy = opts.dy != null ? opts.dy : -8; // default: sit above the point
+    let out = '';
+    for (let i = 0; i < n; i++) {
+      const v = values[i];
+      if (v == null) continue;
+      const isAnchor = anchors.has(i);
+      // Label if it's on the stride grid, the last point, or a forced anchor.
+      if (!isAnchor && i % stride !== 0 && i !== n - 1) continue;
+      out += `<text class="${cls}" x="${xFor(i).toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
+    }
+    return out;
+  }
   function formatDuration(secs) {
     secs = Math.round(secs || 0);
     const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
@@ -3537,6 +3576,10 @@ function renderTrendChart(yoy) {
   const currDots = currValues.map((v, i) =>
     `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
   ).join('');
+  // Density-aware value labels on the views line. Always anchor the peak and the
+  // latest complete month so those headline numbers are readable without hovering.
+  const peakIdxLbl = currValues.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [peakIdxLbl, currValues.length - 1] });
   const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
@@ -3649,6 +3692,7 @@ function renderTrendChart(yoy) {
     ${currDots}
     ${showDuration ? durDots : ''}
     ${inProgressSvg}
+    ${currLabels}
     ${attribution}
     ${hits}
     ${inProgressHits}
@@ -3885,11 +3929,19 @@ function renderLikeRateChart(chartData, inProgressMonth) {
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
+  // Density-aware labels (percent). Treat 0 as a gap (null) so empty months
+  // aren't labelled; anchor the peak and latest valid point.
+  const rateVals = rates.map(r => r.rate > 0 ? r.rate : null);
+  let ratePeakIdx = 0, ratePeakV = -1;
+  rateVals.forEach((v, i) => { if (v != null && v > ratePeakV) { ratePeakV = v; ratePeakIdx = i; } });
+  const rateLabels = buildPointLabels(rateVals, xFor, yFor, v => v.toFixed(1) + '%', { anchors: [ratePeakIdx, lastValid] });
+
   svg.innerHTML = `
     ${gridLines}
     <path class="chart-line-likerate" d="${linePath}" />
     ${ipConnector}
     ${ipDot}
+    ${rateLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
@@ -4052,6 +4104,11 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
+  // Density-aware value labels — anchor the peak and latest month.
+  const medVals = meds.map(r => r.med);
+  const medPeakIdx = medVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  const medLabels = buildPointLabels(medVals, xFor, yFor, fmtCompact, { anchors: [medPeakIdx, medVals.length - 1] });
+
   svg.innerHTML = `
     ${gridLines}
     ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
@@ -4060,6 +4117,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     ${prevDots}
     ${dots}
     ${ipDot}
+    ${medLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
@@ -4289,6 +4347,14 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
+  // Dual-line labels: views above their points, like-rate (%) below theirs.
+  // A sparser stride here than single-line charts since two label rows share
+  // the plot — keeps it readable.
+  const vlStride = Math.max(2, labelStrideFor(n));
+  const viewsLabels = buildPointLabels(views, xFor, yForViews, fmtCompact, { stride: vlStride, anchors: [views.length - 1] });
+  const rateValsVL = rates.map(r => r > 0 ? r : null);
+  const rateLabelsVL = buildPointLabels(rateValsVL, xFor, yForRate, v => v.toFixed(1) + '%', { stride: vlStride, dy: 14, cls: 'chart-pt-label prev', anchors: [lastValidRate] });
+
   svg.innerHTML = `
     ${gridLines}
     <path class="chart-line-curr" d="${viewsPath}" />
@@ -4299,6 +4365,8 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
     ${ipConnectorRate}
     ${ipDotViews}
     ${ipDotRate}
+    ${viewsLabels}
+    ${rateLabelsVL}
     ${xLabels}
     ${yLabelsLeft}
     ${yLabelsRight}
@@ -4510,9 +4578,10 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
   //   was uneventful for top-tier engagement" rather than reading it as no data.
   //   — we give it a minimum bar height so the user can see "yes, this month
   //   was uneventful for top-tier engagement" rather than reading it as no data.
-  let bars = '', hovers = '', noDataMarks = '';
+  let bars = '', hovers = '', noDataMarks = '', barLabels = '';
   const baseY = P.top + innerH;
   const MIN_VISIBLE_HEIGHT = 2;  // pixels — enough to be visible without dominating
+  const barStride = labelStrideFor(n);
   for (let i = 0; i < n; i++) {
     const d = monthData[i];
     const x = xFor(i);
@@ -4528,6 +4597,10 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
     const yFinal = baseY - height;
     const cls = d.pct >= 10 ? 'chart-bar-variance high' : 'chart-bar-variance low';
     bars += `<rect class="${cls}" x="${x - barWidth / 2}" y="${yFinal}" width="${barWidth}" height="${height}" />`;
+    // Label on the stride grid, the last bar, or any notably high bar (≥25%).
+    if (i % barStride === 0 || i === n - 1 || d.pct >= 25) {
+      barLabels += `<text class="chart-pt-label" x="${x.toFixed(1)}" y="${(yFinal - 4).toFixed(1)}">${Math.round(d.pct)}%</text>`;
+    }
     hovers += `<rect class="chart-hit" x="${x - barSlot / 2}" y="${P.top}" width="${barSlot}" height="${innerH}" data-idx="${i}" />`;
   }
   // In-progress month bar — dashed outline / lower opacity to signal not-complete
@@ -4561,6 +4634,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
     ${noDataMarks}
     ${bars}
     ${ipBar}
+    ${barLabels}
     ${refLine}
     ${xLabels}
     ${yLabels}
@@ -5070,12 +5144,18 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
+  // Density-aware labels on the mid-estimate line, formatted as compact USD.
+  const midVals = chartData.map(m => rMid(m));
+  const revPeakIdx = midVals.reduce((bi, v, i, a) => v > a[bi] ? i : bi, 0);
+  const revLabels = buildPointLabels(midVals, xFor, yFor, v => fmtAxisUSD(v), { anchors: [revPeakIdx, midVals.length - 1] });
+
   svg.innerHTML = `
     ${gridLines}
     <path class="chart-revenue-band" d="${bandPath}" />
     <path class="chart-line-revenue" d="${midPath}" />
     ${ipConnector}
     ${ipDot}
+    ${revLabels}
     ${xLabels}
     ${yLabels}
     ${hovers}
