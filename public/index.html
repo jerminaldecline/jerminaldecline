@@ -362,20 +362,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .trend-legend-item {display: inline-flex; align-items: center; gap: 0.35rem;}
 .an-chart-controls{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .an-chart-controls .an-metric-toggle{margin-bottom:0}
-/* Hide-labels control: lives inside the chart wrap (top-right), styled to match
-   the "Compare previous year" pill. Toggling it adds .labels-hidden to the wrap,
-   which hides all per-point value labels (pure CSS, no re-render). */
-.chart-labels-control{position:absolute;top:0.55rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);font-family:inherit;transition:border-color .12s,color .12s,background-color .12s}
-.chart-labels-control:hover{border-color:var(--accent);color:var(--text)}
-.chart-labels-control[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+/* In-chart control overlay: holds the Previous-year and Labels toggles inline in
+   the top-right of the chart. Right offset is generous so the buttons clear the
+   right-hand Y axis tick labels on dual-axis charts. */
+.chart-controls-overlay{position:absolute;top:0.55rem;right:1.4rem;z-index:4;display:flex;align-items:center;gap:0.4rem}
+.chart-ctrl-btn{appearance:none;font-family:inherit;display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.76rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s,background-color .12s}
+.chart-ctrl-btn:hover{border-color:var(--accent);color:var(--text)}
+/* Active = feature ON (accent fill); inactive = muted outline. */
+.chart-ctrl-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chart-ctrl-btn[hidden]{display:none}
+.chart-ctrl-swatch{display:inline-block;width:14px;height:3px;border-radius:2px;background:currentColor;opacity:0.8}
 .chart-wrap.labels-hidden .chart-pt-label{display:none}
-/* Prev-year control shares the top-right corner; it sits just below the labels
-   control so the two never overlap when both are visible. */
-.prev-year-control{position:absolute;top:2.75rem;right:0.55rem;z-index:4;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--text-muted);user-select:none;padding:0.28rem 0.55rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);transition:border-color .12s,color .12s}
-.prev-year-control:hover{border-color:var(--accent);color:var(--text)}
-.prev-year-control[hidden]{display:none}
-.prev-year-control input{accent-color:var(--accent);cursor:pointer;margin:0}
-.prev-year-control-swatch{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--text-dim)}
 .trend-legend-swatch {display: inline-block;
     width: 18px;
     height: 3px;
@@ -2131,12 +2128,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend" id="trendLegend"></div>
       <div class="chart-wrap" id="chartWrap">
-        <button type="button" class="chart-labels-control" id="anLabelsToggle" aria-pressed="false" title="Show or hide the value labels on data points">Hide labels</button>
-        <label class="prev-year-control" id="prevYearControl" hidden>
-          <input type="checkbox" id="prevYearCheckbox" checked>
-          <span class="prev-year-control-swatch"></span>
-          <span class="prev-year-control-label">Compare previous year</span>
-        </label>
+        <div class="chart-controls-overlay">
+          <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
+          <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
+        </div>
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
@@ -3317,10 +3312,11 @@ function renderTrendChart(yoy) {
   // reflows the surrounding layout.
   (function(){
     const ctrl = document.getElementById('prevYearControl');
-    const cb = document.getElementById('prevYearCheckbox');
     const supports = (chartMetric === 'views' || chartMetric === 'median_views');
-    if (ctrl) ctrl.hidden = !supports;
-    if (cb) cb.checked = showPrevYear;
+    if (ctrl) {
+      ctrl.hidden = !supports;
+      ctrl.setAttribute('aria-pressed', String(showPrevYear));
+    }
   })();
 
   // Single-channel-only modes: when the user picks one of these while the
@@ -7208,15 +7204,17 @@ function renderWindowList(startDate, endDate) {
       const wrap = document.getElementById('chartWrap');
       if (!wrap) return;
       const hidden = wrap.classList.toggle('labels-hidden');
-      labelsToggle.setAttribute('aria-pressed', String(hidden));
-      labelsToggle.textContent = hidden ? 'Show labels' : 'Hide labels';
+      // Active (pressed, accent fill) = labels ON. So pressed = !hidden.
+      labelsToggle.setAttribute('aria-pressed', String(!hidden));
     });
   }
-  // Previous-year series toggle (dedicated checkbox control)
-  const prevYearCb = document.getElementById('prevYearCheckbox');
-  if (prevYearCb) {
-    prevYearCb.addEventListener('change', (e) => {
-      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(e.target.checked);
+  // Previous-year series toggle (button; aria-pressed reflects on/off)
+  const prevYearBtn = document.getElementById('prevYearControl');
+  if (prevYearBtn) {
+    prevYearBtn.addEventListener('click', () => {
+      const next = prevYearBtn.getAttribute('aria-pressed') !== 'true';
+      prevYearBtn.setAttribute('aria-pressed', String(next));
+      if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(next);
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
