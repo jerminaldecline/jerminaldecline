@@ -1244,10 +1244,36 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .video-row.ovw-row,
   .video-row.ovw-row.with-channel,
   .video-row.ovw-row.no-topics,
-  .video-row.ovw-row.with-channel.no-topics {grid-template-columns: 70px 1fr 90px; padding: 0.5rem 0.7rem;}
+  .video-row.ovw-row.with-channel.no-topics {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 0.35rem; padding: 0.7rem 0.8rem; grid-template-columns: none;}
+  /* Title gets the full width and wraps to as many lines as it needs. */
+  .video-row .video-title {white-space: normal; order: 1; width: 100%;}
+  .video-row .video-title-main {flex-wrap: wrap; white-space: normal;}
+  .video-row .video-title a {white-space: normal; overflow: visible; text-overflow: clip;
+    line-height: 1.3; font-size: 0.92rem; font-weight: 600;}
+  /* Date + metrics collapse into one compact, readable meta line under the title. */
+  .video-row .video-date {order: 2; color: var(--text-dim); font-size: 0.75rem;}
+  .video-row .video-views {order: 3; text-align: left;}
+  .video-row .video-views,
   .video-row .video-duration,
-    .video-row .video-channel,
-    .video-row .hide-mobile {display: none !important;}
+  .video-row .video-likepct,
+  .video-row .video-comments {display: inline-flex; align-items: baseline; gap: 0.3rem;
+    font-size: 0.8rem; text-align: left;}
+  /* Build a tidy meta strip: date, then a dot-separated run of the kept metrics. */
+  .video-row .video-date,
+  .video-row .video-views,
+  .video-row .video-topic {display: inline-flex;}
+  .video-row .video-meta-line {order: 2; display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: 0.15rem 0.7rem; font-size: 0.78rem; color: var(--text-muted);
+    font-variant-numeric: tabular-nums;}
+  .video-row .video-channel {display: block; order: 2; font-size: 0.74rem;
+    color: var(--text-dim); white-space: normal;}
+  /* Keep the bulky numeric columns out on mobile; views stays as the headline metric. */
+  .video-row .video-duration,
+  .video-row .video-likepct,
+  .video-row .video-comments,
+  .video-row .hide-mobile {display: none !important;}
   .video-title {white-space: normal;}
   .video-title-channel-tag {display: block;}
 }
@@ -1348,6 +1374,28 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .wordcloud-hint {color: var(--text-dim);
     font-size: 0.85rem;
     font-weight: 400;}
+
+/* --- Panel restyle: give the two collapsibles more visual interest so they
+   don't read as flat grey bars. Topics = primary accent, word cloud = secondary,
+   each with a soft gradient header, a glyph badge, and a lift on hover/open. --- */
+.wordcloud-toggle{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2) 140%);
+  position:relative;overflow:hidden}
+.wordcloud-toggle::before{content:"";position:absolute;inset:0 0 0 0;
+  background:radial-gradient(120% 140% at 0% 0%, var(--accent-2-bg, rgba(160,120,220,0.10)) 0%, transparent 55%);
+  opacity:0.9;pointer-events:none}
+.topics-section .wordcloud-toggle{border-left-color:var(--accent)}
+.topics-section .wordcloud-toggle::before{background:radial-gradient(120% 140% at 0% 0%, var(--accent-bg, rgba(224,164,88,0.12)) 0%, transparent 55%)}
+.topics-section .wordcloud-toggle[aria-expanded="true"] .wordcloud-caret{border-color:var(--accent)}
+.wordcloud-toggle:hover{box-shadow:0 3px 14px rgba(0,0,0,0.12)}
+.wordcloud-toggle[aria-expanded="true"]{box-shadow:inset 0 -1px 0 var(--border)}
+.wordcloud-eyebrow{font-weight:700}
+.wordcloud-title{font-weight:800;font-size:1rem}
+/* Glyph badge before each title, colour-coded per panel */
+.wordcloud-toggle-text::before{content:"";position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:8px;display:none}
+.wordcloud-panel{background:var(--surface);border:1px solid var(--border);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);margin-top:-1px}
+.wordcloud-word:hover{color:var(--accent-2);cursor:default}
 .wordcloud-panel {margin-top: 0;
     padding: 1.1rem 1.2rem 1.4rem;
     background: var(--surface-2);
@@ -1897,17 +1945,30 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mq-btn:hover{color:var(--text)}
 .mq-btn.active{background:var(--accent);color:#fff}
 .mq-btn.active .mq-main{opacity:0.9}
+/* Live-data indicator: a red streak orbiting the perimeter of the in-progress
+   month button, marking it as a still-changing dataset and drawing the eye. */
+.mq-btn.is-live{position:relative;z-index:0}
+.mq-btn.is-live::before{content:"";position:absolute;z-index:-1;inset:-2px;border-radius:9px;
+  background:conic-gradient(from 0deg,transparent 0deg,transparent 300deg,#ff3b30 340deg,#ff7a70 355deg,transparent 360deg);
+  animation:mqOrbit 2.4s linear infinite}
+.mq-btn.is-live::after{content:"";position:absolute;z-index:-1;inset:1px;border-radius:7px;background:var(--surface)}
+.mq-btn.is-live.active::after{background:var(--accent)}
+@keyframes mqOrbit{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.mq-btn.is-live::before{animation:none;
+  background:linear-gradient(90deg,transparent,#ff3b30,transparent)}}
 @media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
-/* Top topics panel header + "see this month's videos" link */
+/* Top topics panel header + "see all [month]'s videos" link */
 .panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem;margin:0 0 1rem}
 .panel-head h3{margin:0}
 .see-vids-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;white-space:nowrap;flex:0 0 auto}
 .see-vids-link:hover{text-decoration:underline}
 /* Videos summary strip (aggregate stats above the column headers) */
-.vid-summary{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
+.vid-summary{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0.5rem 2rem;padding:0.7rem 0.95rem;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:10px}
 .vs-item{display:flex;flex-direction:column;align-items:flex-end;gap:0.12rem;min-width:0}
 .vs-num{font-size:1.05rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;line-height:1}
 .vs-lbl{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:600}
+.vs-info{display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;line-height:1;color:var(--subtext);cursor:help;margin-left:0.15rem;opacity:0.7;text-transform:none}
+.vs-info:hover,.vs-info:focus{opacity:1;color:var(--accent)}
 /* Topics container pills (browse + filter by subject) */
 .topics-body{display:flex;flex-wrap:wrap;gap:0.45rem}
 .topic-pill{display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:999px;padding:0.32rem 0.7rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text);cursor:pointer;transition:border-color .12s,background-color .12s,color .12s}
@@ -2028,7 +2089,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
-        <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Median views</button>
+        <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Average views</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
       </div>
@@ -2054,19 +2115,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
     <div class="ad-panel" id="adPanel" hidden></div>
-    <div class="wordcloud-section topics-section" id="topicsSection">
-      <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
-        <span class="wordcloud-toggle-text">
-          <span class="wordcloud-eyebrow">What this period covered</span>
-          <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
-        </span>
-        <span class="wordcloud-caret" aria-hidden="true"></span>
-      </button>
-      <div class="wordcloud-panel" id="topicsPanel" hidden>
-        <div class="wordcloud-meta" id="topicsMeta"></div>
-        <div class="topics-body" id="topicsBody"></div>
-      </div>
-    </div>
     <div class="wordcloud-section">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="wordcloud-toggle-text">
@@ -2078,6 +2126,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="wordcloud-panel" id="wordcloudPanel" hidden>
         <div class="wordcloud-meta" id="wordcloudMeta"></div>
         <div class="wordcloud-body" id="wordcloudBody"></div>
+      </div>
+    </div>
+    <div class="wordcloud-section topics-section" id="topicsSection">
+      <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">What this period covered</span>
+          <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="topicsPanel" hidden>
+        <div class="wordcloud-meta" id="topicsMeta"></div>
+        <div class="topics-body" id="topicsBody"></div>
       </div>
     </div>
     <div class="window-list-card">
@@ -2539,7 +2600,7 @@ function render(m){
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null});
-  cards.push({num:d.avglen+' min',lbl:'Median video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null});
+  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp), my=mini(lblYr,c.cur,c.y,c.goodUp);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
@@ -2554,7 +2615,7 @@ function render(m){
     ? `<div class="fw-message">It's the weekend.<br>What are you guys going up to?</div>`
     : `<div class="fw-pair"><div class="fw-side"><span class="fw-num">${_day}</span><span class="fw-lbl">days since</span></div><div class="fw-div"></div><div class="fw-side"><span class="fw-num">${6 - _day}</span><span class="fw-lbl">days until</span></div></div>`;
   const funCardHTML = `<div class="stat fun-card${_isWknd ? ' is-weekend' : ''}">
-      <div class="fun-head">The weekend</div>
+      <div class="fun-head">Weekend status</div>
       <div class="fun-weekend">${_weekendInner}</div>
       <div class="fun-modes">
         <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false"><span class="mood-icon">🎉</span><span class="mood-label">Party mode</span></button>
@@ -2662,13 +2723,13 @@ function render(m){
     })()}
     <div class="hero">
       <div class="hero-card">
-        <div class="hero-label">Total views <button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>
+        <div class="hero-label">Total views <button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
         <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
       </div>
       <div class="hero-card">
-        <div class="hero-label">Median views</div>
+        <div class="hero-label">Average views</div>
         <div class="hero-num">${fmt(d.med)}</div>
         <div class="hero-sub">per long-form upload</div>
         <div class="deltas">${pill(lblMo,d.med,p&&p.med,true)}${pill(lblYr,d.med,y&&y.med,true)}</div>
@@ -2682,14 +2743,14 @@ function render(m){
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
     <div class="highlights">${topHTML}${debHTML}</div>
     <div class="lower">
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.uploads}</div>
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see this month's videos →</button></div>${topicBars.views}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.uploads}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3><button type="button" class="see-vids-link" data-goto-videos="long" data-vid-month="${m}">see all ${MONTHS[m.split('-')[1]-1]}'s videos →</button></div>${topicBars.views}</div>
       <div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
           <tr><th></th><th class="now">${monthShort(m)}</th><th>${monthShort(pm)}</th><th>${monthShort(yo)}</th></tr>
           <tr><td>Total views</td><td class="now">${fmt(d.tot)}</td><td>${p?fmt(p.tot):'—'}</td><td>${y?fmt(y.tot):'—'}</td></tr>
-          <tr><td>Median views</td><td class="now">${fmt(d.med)}</td><td>${p?fmt(p.med):'—'}</td><td>${y?fmt(y.med):'—'}</td></tr>
+          <tr><td>Average views</td><td class="now">${fmt(d.med)}</td><td>${p?fmt(p.med):'—'}</td><td>${y?fmt(y.med):'—'}</td></tr>
           <tr><td>Uploads</td><td class="now">${d.n}</td><td>${p?p.n:'—'}</td><td>${y?y.n:'—'}</td></tr>
           <tr><td>Like rate</td><td class="now">${d.lv}%</td><td>${p?p.lv+'%':'—'}</td><td>${y?y.lv+'%':'—'}</td></tr>
           <tr><td>Comments</td><td class="now">${fmt(d.comments)}</td><td>${p?fmt(p.comments):'—'}</td><td>${y?fmt(y.comments):'—'}</td></tr>
@@ -2749,7 +2810,7 @@ function render(m){
     const bCur = document.getElementById('mqCurrent'), bLc = document.getElementById('mqComplete');
     const subCur = document.getElementById('mqCurrentSub'), subLc = document.getElementById('mqCompleteSub');
     if (bLc)  { bLc.onclick = () => refresh(lcM); bLc.classList.toggle('active', m === lcM); if (subLc) subLc.textContent = monthName(lcM); bLc.title = 'Jump to ' + monthName(lcM) + ' (last complete month)'; bLc.style.display = (lcM === CURRENT_MONTH_KEY) ? 'none' : ''; }
-    if (bCur) { bCur.onclick = () => refresh(CURRENT_MONTH_KEY); bCur.classList.toggle('active', m === CURRENT_MONTH_KEY); if (subCur) subCur.textContent = monthName(CURRENT_MONTH_KEY); bCur.title = 'Jump to ' + monthName(CURRENT_MONTH_KEY) + ' (still in progress)'; bCur.style.display = hasInProgress ? '' : 'none'; }
+    if (bCur) { bCur.onclick = () => refresh(CURRENT_MONTH_KEY); bCur.classList.toggle('active', m === CURRENT_MONTH_KEY); bCur.classList.add('is-live'); if (subCur) subCur.textContent = monthName(CURRENT_MONTH_KEY); bCur.title = 'Jump to ' + monthName(CURRENT_MONTH_KEY) + ' (still in progress — live data)'; bCur.style.display = hasInProgress ? '' : 'none'; }
   })();
   // Overview month-detail collapse toggle
   // Dying-channel ticker — pick a random excuse, cycle on click/Enter.
@@ -3142,7 +3203,7 @@ function renderTrendChart(yoy) {
     views_likes: 'Views + likes',
     engagement_variance: 'Engagement variance',
     all_videos: 'Video lengths',
-    median_views: 'Median views'
+    median_views: 'Average views'
   };
   if (ANALYTICS_CHANNEL === 'ALL' && SINGLE_CHANNEL_METRICS[chartMetric]) {
     legend.innerHTML = '';
@@ -3234,7 +3295,7 @@ function renderTrendChart(yoy) {
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
     ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
-    ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Median length</span>' : ''}
+    ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Average length</span>' : ''}
   `;
 
   // Layout — taller to accommodate annotation, more left padding for Y labels.
@@ -3859,7 +3920,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   if (tooltip) tooltip.style.display = 'none';
 
   legend.innerHTML = `
-    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Median long-form views per upload</span>
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Average long-form views per upload</span>
     ${showPrevYear ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
   `;
 
@@ -4000,7 +4061,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
       const uploads = (m.curr.longForm && m.curr.longForm.length) || 0;
       tooltip.innerHTML = `
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
-        <div class="tooltip-row"><strong>${fmt(med)}</strong> median views</div>
+        <div class="tooltip-row"><strong>${fmt(med)}</strong> average views</div>
         <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
         ${showPrevYear && m.yoy && m.yoy.longViewsMedian > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(m.yoy.longViewsMedian)}</div>` : ''}
       `;
@@ -6410,9 +6471,9 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Month average', 'median', 'col-num hide-mobile')}
               ${sortHeader('Performance', 'perf', 'col-num')}
-              ${sortHeader('Excess over median', 'excess', 'col-num hide-mobile')}
+              ${sortHeader('Excess over average', 'excess', 'col-num hide-mobile')}
             </tr>
           </thead>
           <tbody id="adPerfTableBody">
@@ -6421,7 +6482,7 @@ function renderAdPanel() {
         </table>
       </div>
       <div class="ad-panel-footnote">
-        <strong>Reading this table:</strong> each video's views compared to the median views of long-form videos uploaded the same month.
+        <strong>Reading this table:</strong> each video's views compared to the average views of long-form videos uploaded the same month.
         A video at 2× median earned twice as many views as the typical upload that month. "Excess over median" is the views above the typical baseline —
         a rough proxy for the impact of paid promotion, though some excess may reflect organic virality.
         Individual videos are also flagged with an <span class="ad-badge">ad</span> badge in the lists below.
@@ -6624,12 +6685,10 @@ function renderWindowList(startDate, endDate) {
     const moreBtn = remaining > 0
       ? `<button type="button" class="window-list-more" data-show-more="${key}">Show ${Math.min(VIDEO_BATCH, remaining)} more <span class="wlm-rem">(${fmt(remaining)} remaining)</span></button>`
       : '';
+    const bothFormats = (windowListState.formatFilter !== 'long' && windowListState.formatFilter !== 'short');
     return `
       <div class="window-list-group">
-        <div class="window-list-group-header">
-          <span class="window-list-group-label">${label}</span>
-          <span class="window-list-group-meta">${videos.length} video${videos.length === 1 ? '' : 's'} · ${fmt(totalViews)} views</span>
-        </div>
+        ${bothFormats ? `<div class="window-list-group-header"><span class="window-list-group-label">${label}</span></div>` : ''}
         ${renderVideoRows(visible, windowListState.query ? `No ${label.toLowerCase()} match your search` : `No ${label.toLowerCase()} in this range`)}
         ${moreBtn}
       </div>
@@ -6659,7 +6718,8 @@ function renderWindowList(startDate, endDate) {
     const _md = _durs.length ? (_durs.length % 2 ? _durs[(_durs.length-1)/2] : (_durs[_durs.length/2-1] + _durs[_durs.length/2]) / 2) : 0;
     const _lr = _tv>0 ? (_tl/_tv*100) : 0;
     summaryStrip = `<div class="vid-summary" aria-label="Summary of shown videos">
-      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Median duration</span></div>
+      <div class="vs-item"><span class="vs-num">${fmt(shownForStats.length)}</span><span class="vs-lbl">Videos</span></div>
+      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Average duration <span class="vs-info" tabindex="0" role="img" aria-label="Median — the typical video, so one outlier can't skew it" title="Median — the typical video, so one outlier can't skew it">ⓘ</span></span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tv)}</span><span class="vs-lbl">Total views</span></div>
       <div class="vs-item"><span class="vs-num">${_lr.toFixed(1)}%</span><span class="vs-lbl">Like rate</span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tc)}</span><span class="vs-lbl">Comments</span></div>
@@ -7112,9 +7172,11 @@ function renderWindowList(startDate, endDate) {
     const params=new URLSearchParams(location.search);
     const qv=params.get('view'); if(qv && (qv==='ALL'||CHANNELS.includes(qv))){ scope=qv; }
     const qm=params.get('month');
-    // default to the latest available month in scope (not a hardcoded date)
+    // default to the latest COMPLETE month in scope (skip the in-progress month so
+    // the page opens on settled data); ?month= override still wins.
     const months = availableMonths();
-    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : months[0];
+    const firstComplete = months.find(mm => mm !== CURRENT_MONTH_KEY) || months[0];
+    const startMonth = (qm && SCOPES[scope][qm] && !SCOPES[scope][qm].shortsOnly) ? qm : firstComplete;
     refresh(startMonth);
     // refresh() only paints the Overview tab. On a hard refresh the active tab
     // may be Analysis or Videos (restored from ?tab=), and tabShell's initial
