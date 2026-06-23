@@ -829,6 +829,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     cursor: pointer; white-space: nowrap; transition: background .12s, color .12s, border-color .12s;}
 .ad-only-btn:hover {color: var(--text); border-color: var(--accent);}
 .ad-only-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
+.clear-filters-btn {flex: none; appearance: none; background: transparent;
+    border: 1px solid var(--border); border-radius: 7px; color: var(--text-dim);
+    font-family: inherit; font-size: 0.78rem; font-weight: 600; padding: 0.36rem 0.65rem;
+    cursor: pointer; white-space: nowrap; transition: background .12s, color .12s, border-color .12s;}
+.clear-filters-btn:hover {color: var(--text); border-color: var(--accent); background: var(--surface);}
 .window-list .window-list-search input:focus {outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-soft);}
@@ -6403,7 +6408,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -6944,6 +6949,14 @@ function renderWindowList(startDate, endDate) {
   if (windowListState.adOnly && adDataAvailable) {
     scopedVideos = scopedVideos.filter(v => adVideoIds.has(v.id));
   }
+  // Apply renamed-only filter — videos whose title has changed at least once.
+  const renamedDataAvailable = !!(titleHistoryData && Object.keys(titleHistoryData).length);
+  if (windowListState.renamedOnly && renamedDataAvailable) {
+    scopedVideos = scopedVideos.filter(v => {
+      const th = titleHistoryData[v.id];
+      return th && th.changes && th.changes.length > 0;
+    });
+  }
   // Apply topic-chip filter (subject / theme / mode), set by clicking a chip.
   if (windowListState.topicFilter) {
     const { kind, id } = windowListState.topicFilter;
@@ -7072,6 +7085,8 @@ function renderWindowList(startDate, endDate) {
         <button type="button" class="wf-btn${windowListState.formatFilter==='short'?' active':''}" data-format="short">Shorts</button>
       </div>
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
+      ${renamedDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
+      ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
     </div>
     ${topicFilterBar}
     ${breakdownHtml}
@@ -7416,6 +7431,30 @@ function renderWindowList(startDate, endDate) {
       resetVideoBatches();
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Renamed-only filter — videos whose title has changed at least once.
+    const renBtn = e.target.closest('#renamedOnlyBtn');
+    if (renBtn && document.getElementById('windowList')?.contains(renBtn)) {
+      windowListState.renamedOnly = !windowListState.renamedOnly;
+      resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Clear all tag/topic/filter state in one click.
+    const clearBtn = e.target.closest('#clearFiltersBtn');
+    if (clearBtn && document.getElementById('windowList')?.contains(clearBtn)) {
+      windowListState.topicFilter = null;
+      windowListState.creatorTagFilter = null;
+      windowListState.creatorBlockFilter = null;
+      windowListState.adOnly = false;
+      windowListState.renamedOnly = false;
+      windowListState.query = '';
+      resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed);
+      // Keep the creator-tags explorer in sync (its active highlights clear too).
+      if (typeof window.renderCreatorTagsContainer === 'function') { try { window.renderCreatorTagsContainer(); } catch(e){} }
+      return;
     }
     // Format filter: Long-form / Shorts / All
     const wf = e.target.closest('#windowFormatToggle .wf-btn');
