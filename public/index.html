@@ -971,6 +971,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 @media (max-width: 680px) {
   .an-rank-row {grid-template-columns: 1fr;}
   .an-rank-name {font-size: 0.74rem;}
+  /* The 5-item summary strip wraps badly with flex+space-between on mobile
+     (items get pushed to opposite edges leaving a hole in the middle). Use a
+     fixed 3-column grid so they align in tidy left-aligned columns instead. */
+  .vid-summary {display: grid; grid-template-columns: repeat(3, 1fr);
+    justify-content: stretch; gap: 0.8rem 0.6rem; text-align: left;}
+  .vid-summary .vs-item {align-items: flex-start;}
+  .ctag-collapse-btn{display:block;}
 }
 .group-empty {padding: 0.9rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;}
 .video-row {display: grid;
@@ -2040,6 +2047,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ctag-pill.ctag-default{border-style:dashed;opacity:0.7;font-style:italic}
 .ctag-pill.ctag-default .ctag-name::after{content:" · auto";font-size:0.68rem;opacity:0.6;font-style:normal}
 .creatortags-empty{color:var(--text-dim);font-size:0.88rem}
+/* Bottom "Collapse" button — only useful on mobile, where the expanded panel is
+   long and scrolling back up to the header toggle is tedious. Hidden on desktop. */
+.ctag-collapse-btn{display:none;width:100%;margin-top:1rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:8px;padding:0.6rem;font-family:inherit;font-size:0.85rem;font-weight:700;color:var(--text);cursor:pointer}
+.ctag-collapse-btn:hover{border-color:var(--accent)}
 /* Make the Video tags explanatory line more readable than the default muted meta. */
 #creatorTagsMeta{font-size:0.9rem;color:var(--text);font-weight:600}
 /* View tabs (All tags / Recurring blocks) inside the Video tags panel. */
@@ -2228,6 +2239,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <input type="text" class="creatortags-search" id="creatorTagsSearch" placeholder="Search tags…" autocomplete="off" spellcheck="false" />
         <div class="creatortags-body" id="creatorTagsBody"></div>
         <div class="creatorblocks-body" id="creatorBlocksBody" hidden></div>
+        <button type="button" class="ctag-collapse-btn" id="creatorTagsCollapse" aria-label="Collapse video tags">↑ Collapse</button>
       </div>
     </div>
     <div class="wordcloud-section topics-section" id="topicsSection">
@@ -7327,6 +7339,18 @@ function renderWindowList(startDate, endDate) {
       const panel = document.getElementById('creatorTagsPanel');
       if (panel) panel.hidden = exp;
       if (!exp) window.renderCreatorTagsContainer();
+      return;
+    }
+    // Bottom "Collapse" button (mobile): close the section and bring its header
+    // back into view so the user isn't left scrolled into empty space.
+    const ccol = e.target.closest('#creatorTagsCollapse');
+    if (ccol) {
+      const tog = document.getElementById('creatorTagsToggle');
+      const panel = document.getElementById('creatorTagsPanel');
+      if (tog) tog.setAttribute('aria-expanded', 'false');
+      if (panel) panel.hidden = true;
+      const section = document.getElementById('creatorTagsSection');
+      if (section && section.scrollIntoView) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
     const cpill = e.target.closest('.ctag-pill[data-ctag]');
