@@ -6401,7 +6401,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 120, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -7158,6 +7158,7 @@ function renderWindowList(startDate, endDate) {
   // mobile flows) is flagged so the explorer is honest about deliberate tagging
   // vs leftover artifacts.
   const CTAG_DEFAULT_SET = new Set(['video','free','upload','sharing','camera phone','video phone']);
+  const CTAG_BATCH = 120; // tags revealed per "Show more" click
   let creatorTagSearch = '';
   // Canonical key for a tag-set: unique + sorted + joined by a separator that
   // can't appear in a tag. Used to group videos sharing an EXACT tag set.
@@ -7222,8 +7223,11 @@ function renderWindowList(startDate, endDate) {
     }
     if (meta) meta.textContent = `Click a tag to filter the list below — ${tagged} of ${videos.length} videos have creator tags.`;
     const cur = windowListState.creatorTagFilter;
-    const CAP = 300;
-    const shown = ranked.slice(0, CAP);
+    // When searching, show all matches (the search already narrows the set).
+    // Otherwise reveal incrementally via a "Show more" button.
+    const searching = !!creatorTagSearch;
+    const shownN = searching ? ranked.length : Math.min(windowListState.creatorTagsShown, ranked.length);
+    const shown = ranked.slice(0, shownN);
     body.innerHTML = shown.map(([t, c]) => {
       const active = cur === t;
       const isDefault = CTAG_DEFAULT_SET.has(t);
@@ -7233,8 +7237,10 @@ function renderWindowList(startDate, endDate) {
         : `${t} — ${c} video${c === 1 ? '' : 's'}`;
       return `<button type="button" class="${cls}" data-ctag="${escapeHtml(t)}" title="${escapeHtml(titleAttr)}"><span class="ctag-name">${escapeHtml(t)}</span><span class="ctag-count">${c}</span></button>`;
     }).join('');
-    if (ranked.length > CAP) {
-      body.innerHTML += `<div class="creatortags-empty" style="width:100%">Showing top ${CAP} of ${ranked.length} — search to find more.</div>`;
+    const remaining = ranked.length - shownN;
+    if (!searching && remaining > 0) {
+      const next = Math.min(CTAG_BATCH, remaining);
+      body.innerHTML += `<button type="button" class="window-list-more" data-ctag-more="1">Show ${next} more <span class="wlm-rem">(${remaining} remaining)</span></button>`;
     }
   }
 
@@ -7334,12 +7340,20 @@ function renderWindowList(startDate, endDate) {
       if (sd && ed) renderWindowList(sd, ed);
       return;
     }
+    // "Show more" tags → reveal the next batch in the All tags view.
+    const ctagMore = e.target.closest('[data-ctag-more]');
+    if (ctagMore) {
+      windowListState.creatorTagsShown += CTAG_BATCH;
+      renderCreatorTagsView();
+      return;
+    }
   });
   // Creator tags: live search filtering of the pill list.
   document.addEventListener('input', (e) => {
     const inp = e.target.closest('#creatorTagsSearch');
     if (!inp) return;
     creatorTagSearch = inp.value.trim();
+    windowListState.creatorTagsShown = CTAG_BATCH; // reset paging on new search
     window.renderCreatorTagsContainer();
   });
 
