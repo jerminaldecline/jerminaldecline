@@ -1,6 +1,46 @@
 {
-  "lastUpdated": "2026-06-22T18:53:11.754Z",
+  "lastUpdated": "2026-06-23T14:00:51.810Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "online",
+      "keywords": [
+        "political",
+        "online",
+        "candace",
+        "owens",
+        "sparks",
+        "viral",
+        "candace owens"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5833,
+        "baselineSaturation": 0.0779,
+        "spikeRatio": 7.49,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-06-23T14:00:51.810Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "our coffee",
+      "keywords": [
+        "our coffee",
+        "our",
+        "coffee",
+        "main",
+        "coffee main"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.1352,
+        "spikeRatio": 6.16,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-06-23T14:00:51.810Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "case",
@@ -14,12 +54,12 @@
         "conviction"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4706,
-        "baselineSaturation": 0.072,
-        "spikeRatio": 6.54,
-        "recentVideoCount": 8,
+        "recentSaturation": 0.5294,
+        "baselineSaturation": 0.0725,
+        "spikeRatio": 7.3,
+        "recentVideoCount": 9,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-06-22T18:53:11.754Z"
+        "detectedAt": "2026-06-23T14:00:51.810Z"
       }
     },
     {
@@ -31,12 +71,12 @@
         "fallout"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3529,
-        "baselineSaturation": 0.0189,
-        "spikeRatio": 18.64,
-        "recentVideoCount": 6,
+        "recentSaturation": 0.4118,
+        "baselineSaturation": 0.0191,
+        "spikeRatio": 21.58,
+        "recentVideoCount": 7,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-06-22T18:53:11.754Z"
+        "detectedAt": "2026-06-23T14:00:51.810Z"
       }
     },
     {
@@ -51,31 +91,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.9412,
-        "baselineSaturation": 0.1553,
-        "spikeRatio": 6.06,
+        "baselineSaturation": 0.1718,
+        "spikeRatio": 5.48,
         "recentVideoCount": 16,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-06-22T18:53:11.754Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "main",
-      "keywords": [
-        "case",
-        "main",
-        "our coffee",
-        "coffee main",
-        "our",
-        "coffee"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8182,
-        "baselineSaturation": 0.1189,
-        "spikeRatio": 6.88,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-06-22T18:53:11.754Z"
+        "baselineVideoCount": 22,
+        "detectedAt": "2026-06-23T14:00:51.810Z"
       }
     },
     {
@@ -95,9 +115,9 @@
         "recentSaturation": 1,
         "baselineSaturation": 0.0227,
         "spikeRatio": 44,
-        "recentVideoCount": 5,
+        "recentVideoCount": 6,
         "baselineVideoCount": 1,
-        "detectedAt": "2026-06-22T18:53:11.754Z"
+        "detectedAt": "2026-06-23T14:00:51.810Z"
       }
     }
   ]
