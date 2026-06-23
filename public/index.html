@@ -2016,6 +2016,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tp-name{white-space:nowrap}
 .tp-count{font-variant-numeric:tabular-nums;font-weight:800;opacity:0.65;font-size:0.76rem}
 .topic-pill.active .tp-count{opacity:0.95}
+/* Creator-tags explorer — reuses topic-pill look, adds a search box and a
+   distinct style for the YouTube platform-default tag block (auto-added on
+   upload, not deliberately chosen). */
+.creatortags-search{width:100%;box-sizing:border-box;margin-bottom:0.9rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.75rem;font-family:inherit;font-size:0.85rem;color:var(--text)}
+.creatortags-search::placeholder{color:var(--text-dim)}
+.creatortags-search:focus{outline:none;border-color:var(--accent)}
+.creatortags-body{display:flex;flex-wrap:wrap;gap:0.45rem}
+.ctag-pill{display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface-2,var(--surface));border:1px solid var(--border);border-radius:999px;padding:0.32rem 0.7rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text);cursor:pointer;transition:border-color .12s,background-color .12s,color .12s}
+.ctag-pill:hover{border-color:var(--accent)}
+.ctag-pill.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.ctag-name{white-space:nowrap}
+.ctag-count{font-variant-numeric:tabular-nums;font-weight:800;opacity:0.65;font-size:0.76rem}
+.ctag-pill.active .ctag-count{opacity:0.95}
+/* Platform-default tags (camera phone / upload / sharing / etc.) rendered muted
+   + dashed to signal "YouTube auto-added these, not a deliberate choice". */
+.ctag-pill.ctag-default{border-style:dashed;opacity:0.7;font-style:italic}
+.ctag-pill.ctag-default .ctag-name::after{content:" · auto";font-size:0.68rem;opacity:0.6;font-style:normal}
+.creatortags-empty{color:var(--text-dim);font-size:0.88rem}
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
@@ -2167,6 +2185,20 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="wordcloud-body" id="wordcloudBody"></div>
       </div>
     </div>
+    <div class="wordcloud-section creatortags-section" id="creatorTagsSection">
+      <button type="button" class="wordcloud-toggle" id="creatorTagsToggle" aria-expanded="false" aria-controls="creatorTagsPanel">
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">Tags he applies himself</span>
+          <span class="wordcloud-title">Creator tags <span class="wordcloud-hint" id="creatorTagsHint"></span></span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="creatorTagsPanel" hidden>
+        <div class="wordcloud-meta" id="creatorTagsMeta"></div>
+        <input type="text" class="creatortags-search" id="creatorTagsSearch" placeholder="Search tags…" autocomplete="off" spellcheck="false" />
+        <div class="creatortags-body" id="creatorTagsBody"></div>
+      </div>
+    </div>
     <div class="wordcloud-section topics-section" id="topicsSection">
       <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
         <span class="wordcloud-toggle-text">
@@ -2242,15 +2274,26 @@ async function loadAndCompute(){
     try { const r = await fetch(url); if (!r.ok) return fallback; return await r.json(); }
     catch(e){ console.warn('optional fetch failed:', url, e); return fallback; }
   };
-  const [data, tagsRaw, topicsRaw] = await Promise.all([
+  const [data, tagsRaw, topicsRaw, creatorTagsRaw] = await Promise.all([
     fetch('data.json'+bust).then(r => r.json()),
     safeJson('topic-tags-llm.json'+bust, { tags: {} }),
-    safeJson('topics.json'+bust, {})
+    safeJson('topics.json'+bust, {}),
+    safeJson('creator-tags.json'+bust, {})
   ]);
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
+  // Creator tags: the YouTube keyword metadata the channel owner applied to each
+  // video (scraped separately). Shape: { videoId: { tags:[...], fetchedAt } }.
+  // Flatten to { videoId: [lowercased tags] } for fast lookup in the explorer.
+  ANALYTICS_CREATOR_TAGS = {};
+  if (creatorTagsRaw && typeof creatorTagsRaw === 'object') {
+    for (const [vid, rec] of Object.entries(creatorTagsRaw)) {
+      const arr = (rec && Array.isArray(rec.tags)) ? rec.tags : (Array.isArray(rec) ? rec : []);
+      ANALYTICS_CREATOR_TAGS[vid] = arr.map(t => String(t).toLowerCase().trim()).filter(Boolean);
+    }
+  }
   // Three-axis LLM tagging: subjects (tags), themes, modes, plus per-video summaries.
   ANALYTICS_TOPIC_THEMES = (tagsRaw && tagsRaw.themes) || {};
   ANALYTICS_TOPIC_MODES  = (tagsRaw && tagsRaw.modes)  || {};
@@ -3020,6 +3063,7 @@ let ANALYTICS_TOPICS = null;
 let ANALYTICS_TOPIC_THEMES = null;
 let ANALYTICS_TOPIC_MODES = null;
 let ANALYTICS_SUMMARIES = null;
+let ANALYTICS_CREATOR_TAGS = null;
 let ANALYTICS_PROMOTED_SUBJECTS = null;
 const AN_RPM = {
   longFormMidRoll: { low: 2.0, high: 3.25 },
@@ -6333,7 +6377,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -6882,6 +6926,15 @@ function renderWindowList(startDate, endDate) {
       : ANALYTICS_TOPIC_MODES;
     scopedVideos = scopedVideos.filter(v => map && map[v.id] === id);
   }
+  // Apply creator-tag filter — set by clicking a tag in the Creator tags explorer.
+  // Matches videos whose scraped creator tag list contains the chosen tag.
+  if (windowListState.creatorTagFilter && ANALYTICS_CREATOR_TAGS) {
+    const want = windowListState.creatorTagFilter;
+    scopedVideos = scopedVideos.filter(v => {
+      const arr = ANALYTICS_CREATOR_TAGS[v.id];
+      return arr && arr.includes(want);
+    });
+  }
 
   // Filter + sort
   const filtered = filterVideos(scopedVideos, windowListState.query);
@@ -6997,6 +7050,11 @@ function renderWindowList(startDate, endDate) {
   if (_tcT && _tcT.getAttribute('aria-expanded') === 'true' && typeof window.renderTopicsContainer === 'function') {
     try { window.renderTopicsContainer(); } catch (e) {}
   }
+  // Same for the creator-tags explorer.
+  const _ctT = document.getElementById('creatorTagsToggle');
+  if (_ctT && _ctT.getAttribute('aria-expanded') === 'true' && typeof window.renderCreatorTagsContainer === 'function') {
+    try { window.renderCreatorTagsContainer(); } catch (e) {}
+  }
 }
 
   // Entry: render the Videos tab for the current channel + time window.
@@ -7012,6 +7070,7 @@ function renderWindowList(startDate, endDate) {
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     // Keep the topics container + word cloud in sync with the Videos-tab filters when open.
     if (typeof window.renderTopicsContainer === 'function') { try { window.renderTopicsContainer(); } catch(e){ console.error('topics', e); } }
+    if (typeof window.renderCreatorTagsContainer === 'function') { try { window.renderCreatorTagsContainer(); } catch(e){ console.error('creator tags', e); } }
     const wcToggle = document.getElementById('wordcloudToggle');
     if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
       try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); }
@@ -7052,6 +7111,104 @@ function renderWindowList(startDate, endDate) {
       return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="subject" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
     }).join('');
   };
+
+  // ---- Creator tags explorer ----------------------------------------------
+  // The YouTube keyword tags the channel owner applied to each video. Ranked by
+  // frequency within the current date window + format filter, so the recurring
+  // boilerplate blocks surface at the top and the long tail of one-off tags is
+  // searchable. Clicking a tag filters the video list below.
+  //
+  // The platform-default block (YouTube auto-added these on upload from older
+  // mobile flows) is flagged so the explorer is honest about deliberate tagging
+  // vs leftover artifacts.
+  const CTAG_DEFAULT_SET = new Set(['video','free','upload','sharing','camera phone','video phone']);
+  let creatorTagSearch = '';
+  window.renderCreatorTagsContainer = function() {
+    const panel = document.getElementById('creatorTagsPanel');
+    const body = document.getElementById('creatorTagsBody');
+    const meta = document.getElementById('creatorTagsMeta');
+    const hint = document.getElementById('creatorTagsHint');
+    const section = document.getElementById('creatorTagsSection');
+    if (!panel || !body || !section) return;
+    // Hide entirely if no creator-tag data loaded.
+    if (!ANALYTICS_CREATOR_TAGS || !Object.keys(ANALYTICS_CREATOR_TAGS).length) { section.hidden = true; return; }
+    section.hidden = false;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if (!startDate || !endDate) { body.innerHTML = ''; return; }
+    const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
+    let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    const fmtF = windowListState.formatFilter;
+    if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
+    else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
+    const counts = new Map();
+    let tagged = 0;
+    for (const v of videos) {
+      const arr = ANALYTICS_CREATOR_TAGS[v.id];
+      if (!arr || !arr.length) continue;
+      tagged++;
+      for (const t of arr) counts.set(t, (counts.get(t) || 0) + 1);
+    }
+    let ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    const totalDistinct = ranked.length;
+    if (creatorTagSearch) {
+      const q = creatorTagSearch.toLowerCase();
+      ranked = ranked.filter(([t]) => t.includes(q));
+    }
+    if (hint) hint.textContent = totalDistinct ? `(${totalDistinct} tag${totalDistinct === 1 ? '' : 's'})` : '';
+    if (!ranked.length) {
+      body.innerHTML = `<div class="creatortags-empty">${creatorTagSearch ? 'No tags match your search.' : 'No creator tags in this range.'}</div>`;
+      if (meta) meta.textContent = '';
+      return;
+    }
+    if (meta) meta.textContent = `Click a tag to filter the list below — ${tagged} of ${videos.length} videos have creator tags.`;
+    const cur = windowListState.creatorTagFilter;
+    // Cap initial render to keep the DOM light; search narrows the long tail.
+    const CAP = 300;
+    const shown = ranked.slice(0, CAP);
+    body.innerHTML = shown.map(([t, c]) => {
+      const active = cur === t;
+      const isDefault = CTAG_DEFAULT_SET.has(t);
+      const cls = `ctag-pill${active ? ' active' : ''}${isDefault ? ' ctag-default' : ''}`;
+      const titleAttr = isDefault
+        ? `${t} — ${c} video${c === 1 ? '' : 's'} · YouTube auto-added this tag on upload`
+        : `${t} — ${c} video${c === 1 ? '' : 's'}`;
+      return `<button type="button" class="${cls}" data-ctag="${escapeHtml(t)}" title="${escapeHtml(titleAttr)}"><span class="ctag-name">${escapeHtml(t)}</span><span class="ctag-count">${c}</span></button>`;
+    }).join('');
+    if (ranked.length > CAP) {
+      body.innerHTML += `<div class="creatortags-empty" style="width:100%">Showing top ${CAP} of ${ranked.length} — search to find more.</div>`;
+    }
+  };
+
+  // Creator tags: toggle open/close.
+  document.addEventListener('click', (e) => {
+    const tt = e.target.closest('#creatorTagsToggle');
+    if (tt) {
+      const exp = tt.getAttribute('aria-expanded') === 'true';
+      tt.setAttribute('aria-expanded', String(!exp));
+      const panel = document.getElementById('creatorTagsPanel');
+      if (panel) panel.hidden = exp;
+      if (!exp) window.renderCreatorTagsContainer();
+      return;
+    }
+    const cpill = e.target.closest('.ctag-pill[data-ctag]');
+    if (cpill) {
+      const t = cpill.dataset.ctag;
+      windowListState.creatorTagFilter = (windowListState.creatorTagFilter === t) ? null : t;
+      resetVideoBatches();
+      window.renderCreatorTagsContainer();
+      const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed);
+      return;
+    }
+  });
+  // Creator tags: live search filtering of the pill list.
+  document.addEventListener('input', (e) => {
+    const inp = e.target.closest('#creatorTagsSearch');
+    if (!inp) return;
+    creatorTagSearch = inp.value.trim();
+    window.renderCreatorTagsContainer();
+  });
 
   // Topics container: toggle open/close + click a subject to filter the list.
   document.addEventListener('click', (e) => {
