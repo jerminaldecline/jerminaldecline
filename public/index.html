@@ -6401,7 +6401,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 120, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -7158,7 +7158,7 @@ function renderWindowList(startDate, endDate) {
   // mobile flows) is flagged so the explorer is honest about deliberate tagging
   // vs leftover artifacts.
   const CTAG_DEFAULT_SET = new Set(['video','free','upload','sharing','camera phone','video phone']);
-  const CTAG_BATCH = 120; // tags revealed per "Show more" click
+  const CTAG_BATCH = 500; // tags revealed per "Show more" click
   let creatorTagSearch = '';
   // Canonical key for a tag-set: unique + sorted + joined by a separator that
   // can't appear in a tag. Used to group videos sharing an EXACT tag set.
