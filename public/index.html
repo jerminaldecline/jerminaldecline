@@ -2035,6 +2035,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ctag-pill.ctag-default{border-style:dashed;opacity:0.7;font-style:italic}
 .ctag-pill.ctag-default .ctag-name::after{content:" · auto";font-size:0.68rem;opacity:0.6;font-style:normal}
 .creatortags-empty{color:var(--text-dim);font-size:0.88rem}
+/* Make the Video tags explanatory line more readable than the default muted meta. */
+#creatorTagsMeta{font-size:0.9rem;color:var(--text);font-weight:600}
 /* View tabs (All tags / Recurring blocks) inside the Video tags panel. */
 .ctag-viewtabs{display:flex;gap:0.4rem;margin-bottom:0.9rem}
 .ctag-viewtab{background:transparent;border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.8rem;font-family:inherit;font-size:0.8rem;font-weight:700;color:var(--text-dim);cursor:pointer;transition:border-color .12s,color .12s,background-color .12s}
@@ -7278,7 +7280,7 @@ function renderWindowList(startDate, endDate) {
       if (meta) meta.textContent = '';
       return;
     }
-    if (meta) meta.textContent = `Each block is an exact tag set reused across multiple videos. Click one to see those videos.`;
+    if (meta) meta.textContent = `Each block is a set of tags applied identically across multiple videos`;
     const cur = windowListState.creatorBlockFilter;
     const CAP = 60;
     const shown = blocks.slice(0, CAP);
