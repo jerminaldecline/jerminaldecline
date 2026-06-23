@@ -2034,6 +2034,23 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ctag-pill.ctag-default{border-style:dashed;opacity:0.7;font-style:italic}
 .ctag-pill.ctag-default .ctag-name::after{content:" · auto";font-size:0.68rem;opacity:0.6;font-style:normal}
 .creatortags-empty{color:var(--text-dim);font-size:0.88rem}
+/* View tabs (All tags / Recurring blocks) inside the Video tags panel. */
+.ctag-viewtabs{display:flex;gap:0.4rem;margin-bottom:0.9rem}
+.ctag-viewtab{background:transparent;border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.8rem;font-family:inherit;font-size:0.8rem;font-weight:700;color:var(--text-dim);cursor:pointer;transition:border-color .12s,color .12s,background-color .12s}
+.ctag-viewtab:hover{color:var(--text);border-color:var(--accent)}
+.ctag-viewtab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Recurring block cards — each is one exact tag-set reused across N videos. */
+.creatorblocks-body{display:flex;flex-direction:column;gap:0.6rem}
+.cblock{border:1px solid var(--border);border-radius:10px;background:var(--surface-2,var(--surface));padding:0.7rem 0.85rem;cursor:pointer;transition:border-color .12s,background-color .12s}
+.cblock:hover{border-color:var(--accent)}
+.cblock.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cblock-head{display:flex;justify-content:space-between;align-items:baseline;gap:0.6rem;margin-bottom:0.5rem}
+.cblock-count{font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cblock-count .cblock-count-sub{color:var(--text-dim);font-weight:600;font-size:0.78rem}
+.cblock-size{font-size:0.76rem;color:var(--text-dim);font-weight:600}
+.cblock-tags{display:flex;flex-wrap:wrap;gap:0.3rem}
+.cblock-tag{display:inline-flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:0.2rem 0.55rem;font-size:0.78rem;color:var(--text)}
+.cblock-tag.cblock-tag-default{border-style:dashed;opacity:0.7;font-style:italic}
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
@@ -2188,15 +2205,20 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <div class="wordcloud-section creatortags-section" id="creatorTagsSection">
       <button type="button" class="wordcloud-toggle" id="creatorTagsToggle" aria-expanded="false" aria-controls="creatorTagsPanel">
         <span class="wordcloud-toggle-text">
-          <span class="wordcloud-eyebrow">Tags he applies himself</span>
-          <span class="wordcloud-title">Creator tags <span class="wordcloud-hint" id="creatorTagsHint"></span></span>
+          <span class="wordcloud-eyebrow">Creator applied tags</span>
+          <span class="wordcloud-title">Video tags <span class="wordcloud-hint" id="creatorTagsHint"></span></span>
         </span>
         <span class="wordcloud-caret" aria-hidden="true"></span>
       </button>
       <div class="wordcloud-panel" id="creatorTagsPanel" hidden>
+        <div class="ctag-viewtabs" role="tablist">
+          <button type="button" class="ctag-viewtab active" data-ctagview="tags" role="tab" aria-selected="true">All tags</button>
+          <button type="button" class="ctag-viewtab" data-ctagview="blocks" role="tab" aria-selected="false">Recurring blocks</button>
+        </div>
         <div class="wordcloud-meta" id="creatorTagsMeta"></div>
         <input type="text" class="creatortags-search" id="creatorTagsSearch" placeholder="Search tags…" autocomplete="off" spellcheck="false" />
         <div class="creatortags-body" id="creatorTagsBody"></div>
+        <div class="creatorblocks-body" id="creatorBlocksBody" hidden></div>
       </div>
     </div>
     <div class="wordcloud-section topics-section" id="topicsSection">
@@ -6377,7 +6399,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', formatFilter: 'long', adOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -6935,6 +6957,18 @@ function renderWindowList(startDate, endDate) {
       return arr && arr.includes(want);
     });
   }
+  // Apply recurring-block filter — set by clicking a block. Strict: the video's
+  // creator tag set must EXACTLY equal the block (same tags, same size), so this
+  // shows only the videos that reuse that precise block verbatim.
+  if (windowListState.creatorBlockFilter && ANALYTICS_CREATOR_TAGS) {
+    const want = windowListState.creatorBlockFilter; // canonical key: sorted tags joined by \u0001
+    scopedVideos = scopedVideos.filter(v => {
+      const arr = ANALYTICS_CREATOR_TAGS[v.id];
+      if (!arr || !arr.length) return false;
+      const key = [...new Set(arr)].sort().join('\u0001');
+      return key === want;
+    });
+  }
 
   // Filter + sort
   const filtered = filterVideos(scopedVideos, windowListState.query);
@@ -7123,24 +7157,47 @@ function renderWindowList(startDate, endDate) {
   // vs leftover artifacts.
   const CTAG_DEFAULT_SET = new Set(['video','free','upload','sharing','camera phone','video phone']);
   let creatorTagSearch = '';
-  window.renderCreatorTagsContainer = function() {
-    const panel = document.getElementById('creatorTagsPanel');
-    const body = document.getElementById('creatorTagsBody');
-    const meta = document.getElementById('creatorTagsMeta');
-    const hint = document.getElementById('creatorTagsHint');
-    const section = document.getElementById('creatorTagsSection');
-    if (!panel || !body || !section) return;
-    // Hide entirely if no creator-tag data loaded.
-    if (!ANALYTICS_CREATOR_TAGS || !Object.keys(ANALYTICS_CREATOR_TAGS).length) { section.hidden = true; return; }
-    section.hidden = false;
+  // Canonical key for a tag-set: unique + sorted + joined by a separator that
+  // can't appear in a tag. Used to group videos sharing an EXACT tag set.
+  function ctagBlockKey(arr) { return [...new Set(arr)].sort().join('\u0001'); }
+  // Gather the videos in the current window + format filter, with their tags.
+  function ctagScopedVideos() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-    if (!startDate || !endDate) { body.innerHTML = ''; return; }
+    if (!startDate || !endDate) return [];
     const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
     let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
     const fmtF = windowListState.formatFilter;
     if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
     else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
+    return videos;
+  }
+  window.renderCreatorTagsContainer = function() {
+    const panel = document.getElementById('creatorTagsPanel');
+    const section = document.getElementById('creatorTagsSection');
+    if (!panel || !section) return;
+    if (!ANALYTICS_CREATOR_TAGS || !Object.keys(ANALYTICS_CREATOR_TAGS).length) { section.hidden = true; return; }
+    section.hidden = false;
+    // Sync the view-tab active states.
+    document.querySelectorAll('.ctag-viewtab').forEach(b => {
+      const on = b.dataset.ctagview === windowListState.creatorTagView;
+      b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on));
+    });
+    if (windowListState.creatorTagView === 'blocks') { renderCreatorBlocksView(); }
+    else { renderCreatorTagsView(); }
+  };
+
+  function renderCreatorTagsView() {
+    const body = document.getElementById('creatorTagsBody');
+    const blocksBody = document.getElementById('creatorBlocksBody');
+    const meta = document.getElementById('creatorTagsMeta');
+    const hint = document.getElementById('creatorTagsHint');
+    const search = document.getElementById('creatorTagsSearch');
+    if (body) body.hidden = false;
+    if (blocksBody) blocksBody.hidden = true;
+    if (search) search.hidden = false;
+    const videos = ctagScopedVideos();
+    if (!videos.length) { if (body) body.innerHTML = ''; return; }
     const counts = new Map();
     let tagged = 0;
     for (const v of videos) {
@@ -7163,7 +7220,6 @@ function renderWindowList(startDate, endDate) {
     }
     if (meta) meta.textContent = `Click a tag to filter the list below — ${tagged} of ${videos.length} videos have creator tags.`;
     const cur = windowListState.creatorTagFilter;
-    // Cap initial render to keep the DOM light; search narrows the long tail.
     const CAP = 300;
     const shown = ranked.slice(0, CAP);
     body.innerHTML = shown.map(([t, c]) => {
@@ -7178,7 +7234,64 @@ function renderWindowList(startDate, endDate) {
     if (ranked.length > CAP) {
       body.innerHTML += `<div class="creatortags-empty" style="width:100%">Showing top ${CAP} of ${ranked.length} — search to find more.</div>`;
     }
-  };
+  }
+
+  // Recurring blocks: exact tag-sets reused across multiple videos. Strict —
+  // a video belongs to a block only if its tag set EXACTLY matches. Minimum 3
+  // videos to count as "recurring"; blocks must have 2+ tags.
+  function renderCreatorBlocksView() {
+    const body = document.getElementById('creatorTagsBody');
+    const blocksBody = document.getElementById('creatorBlocksBody');
+    const meta = document.getElementById('creatorTagsMeta');
+    const hint = document.getElementById('creatorTagsHint');
+    const search = document.getElementById('creatorTagsSearch');
+    if (body) body.hidden = true;
+    if (blocksBody) blocksBody.hidden = false;
+    if (search) search.hidden = true;
+    const videos = ctagScopedVideos();
+    // Group videos by exact tag-set key.
+    const groups = new Map(); // key -> { tags:[], count }
+    for (const v of videos) {
+      const arr = ANALYTICS_CREATOR_TAGS[v.id];
+      if (!arr || arr.length < 2) continue; // need 2+ tags to be a block
+      const uniq = [...new Set(arr)];
+      if (uniq.length < 2) continue;
+      const key = uniq.slice().sort().join('\u0001');
+      const g = groups.get(key);
+      if (g) g.count++;
+      else groups.set(key, { tags: uniq, count: 1, key });
+    }
+    const MIN = 3; // recurring = used on 3+ videos
+    let blocks = [...groups.values()].filter(g => g.count >= MIN)
+      .sort((a, b) => b.count - a.count || b.tags.length - a.tags.length);
+    if (hint) hint.textContent = blocks.length ? `(${blocks.length} block${blocks.length === 1 ? '' : 's'})` : '';
+    if (!blocks.length) {
+      blocksBody.innerHTML = `<div class="creatortags-empty">No tag set is reused across ${MIN}+ videos in this range.</div>`;
+      if (meta) meta.textContent = '';
+      return;
+    }
+    if (meta) meta.textContent = `Each block is an exact tag set reused across multiple videos. Click one to see those videos.`;
+    const cur = windowListState.creatorBlockFilter;
+    const CAP = 60;
+    const shown = blocks.slice(0, CAP);
+    blocksBody.innerHTML = shown.map(g => {
+      const active = cur === g.key;
+      const tagsHtml = g.tags.slice().sort().map(t => {
+        const isDefault = CTAG_DEFAULT_SET.has(t);
+        return `<span class="cblock-tag${isDefault ? ' cblock-tag-default' : ''}">${escapeHtml(t)}</span>`;
+      }).join('');
+      return `<div class="cblock${active ? ' active' : ''}" data-cblock="${escapeHtml(g.key)}" role="button" tabindex="0">
+        <div class="cblock-head">
+          <span class="cblock-size">${g.tags.length} tags</span>
+          <span class="cblock-count">${g.count}<span class="cblock-count-sub"> videos</span></span>
+        </div>
+        <div class="cblock-tags">${tagsHtml}</div>
+      </div>`;
+    }).join('');
+    if (blocks.length > CAP) {
+      blocksBody.innerHTML += `<div class="creatortags-empty">Showing top ${CAP} of ${blocks.length} recurring blocks.</div>`;
+    }
+  }
 
   // Creator tags: toggle open/close.
   document.addEventListener('click', (e) => {
@@ -7195,6 +7308,24 @@ function renderWindowList(startDate, endDate) {
     if (cpill) {
       const t = cpill.dataset.ctag;
       windowListState.creatorTagFilter = (windowListState.creatorTagFilter === t) ? null : t;
+      resetVideoBatches();
+      window.renderCreatorTagsContainer();
+      const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed);
+      return;
+    }
+    // Switch between "All tags" and "Recurring blocks" views.
+    const vtab = e.target.closest('.ctag-viewtab[data-ctagview]');
+    if (vtab) {
+      windowListState.creatorTagView = vtab.dataset.ctagview;
+      window.renderCreatorTagsContainer();
+      return;
+    }
+    // Click a recurring block → filter the list to videos with that EXACT set.
+    const cblock = e.target.closest('.cblock[data-cblock]');
+    if (cblock) {
+      const key = cblock.dataset.cblock;
+      windowListState.creatorBlockFilter = (windowListState.creatorBlockFilter === key) ? null : key;
       resetVideoBatches();
       window.renderCreatorTagsContainer();
       const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
