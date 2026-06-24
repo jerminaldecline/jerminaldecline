@@ -297,6 +297,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+.tagblock-key{margin-top:1.1rem;border-top:1px solid var(--border);padding-top:1rem;display:flex;flex-direction:column;gap:0.7rem}
+.tagblock-key-item{display:flex;gap:0.6rem;align-items:flex-start}
+.tagblock-key-swatch{flex:0 0 auto;width:14px;height:14px;border-radius:3px;margin-top:0.15rem}
+.tagblock-key-text{font-size:0.82rem;line-height:1.4}
+.tagblock-key-name{font-weight:700;color:var(--text)}
+.tagblock-key-tags{color:var(--subtext);font-family:var(--mono,monospace);font-size:0.78rem}
 .an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
 .an-metric-toggle::before{content:"Chart:";align-self:center;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:0.15rem}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
@@ -2207,6 +2213,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Average views</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
+        <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
       </div>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
@@ -2221,6 +2228,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Channel trend chart"></svg>
         <div class="chart-tooltip" id="chartTooltip" hidden></div>
       </div>
+      <div class="tagblock-key" id="tagBlockKey" hidden></div>
       <!-- hidden date inputs charts.js reads for range labelling (Overview is monthly;
            full-history chart, so these stay empty/unused but must exist) -->
       <input type="hidden" id="startDate"><input type="hidden" id="endDate">
@@ -3443,7 +3451,8 @@ function setChartTitle(metric, mode) {
     median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
-    like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.']
+    like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
+    tag_blocks: ['Creator tag blocks over time', "Each boilerplate tag block's share of monthly uploads - the channel's tagging eras, one replacing the last."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
@@ -3454,6 +3463,10 @@ function renderTrendChart(yoy) {
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
   setChartTitle(chartMetric, viewMode);
+  // The tag-blocks key is specific to that chart; hide it for every other metric.
+  // renderTagBlocksChart re-shows it when that chart is active.
+  const _tbKey = document.getElementById('tagBlockKey');
+  if (_tbKey) _tbKey.hidden = true;
   if (!monthlyData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
@@ -3500,7 +3513,8 @@ function renderTrendChart(yoy) {
     views_likes: 'Views + likes',
     engagement_variance: 'Engagement variance',
     all_videos: 'Video lengths',
-    median_views: 'Average views'
+    median_views: 'Average views',
+    tag_blocks: 'Tag blocks'
   };
   if (ANALYTICS_CHANNEL === 'ALL' && SINGLE_CHANNEL_METRICS[chartMetric]) {
     legend.innerHTML = '';
@@ -3517,6 +3531,17 @@ function renderTrendChart(yoy) {
     && channelQualifiesForLengthChart(ANALYTICS_CHANNEL);
   if (isAllVideosMode) {
     return renderAllVideosChart(chartData, inProgressMonth);
+  }
+
+  // "Tag blocks" mode: stacked-area chart of the three recurring boilerplate
+  // creator-tag blocks' share of monthly uploads over time. Shows the channel's
+  // tagging "eras" - each block replacing the last in a sharp handover. Single
+  // channel only, and only where creator-tag data exists for that channel.
+  const isTagBlocksMode = chartMetric === 'tag_blocks'
+    && ANALYTICS_CHANNEL !== 'ALL'
+    && ANALYTICS_CREATOR_TAGS && Object.keys(ANALYTICS_CREATOR_TAGS).length > 0;
+  if (isTagBlocksMode) {
+    return renderTagBlocksChart(chartData, inProgressMonth);
   }
 
   // "Like rate" mode: standalone single-line chart showing monthly long-form
@@ -4685,6 +4710,211 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
 // - Months with no qualifying videos at all render as a small dim tick at
 //   the baseline so the user can distinguish "no measurable data" from
 //   "measured but quiet".
+// "Tag blocks" stacked-area chart. Shows the three recurring boilerplate
+// creator-tag blocks as a share of each month's uploads, revealing the
+// channel's tagging "eras". Each video is assigned to at most one block by
+// priority (creator > entertainment > generic) so the bands never double-count.
+function renderTagBlocksChart(chartData, inProgressMonth) {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  const W = 720, H = 280;
+  const P = { top: 20, right: 24, bottom: 48, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+
+  // The three blocks, defined as tag-sets. A video belongs to a block if its
+  // creator tags contain ALL of the block's tags. Colors match the house ramp
+  // (blue / teal / coral) used elsewhere.
+  const BLOCKS = [
+    { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+    { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+    { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+  ];
+  // Assignment priority (most specific / recent first) so overlapping tags like
+  // "movies"/"gaming" don't get a video counted in more than one block.
+  const PRIORITY = ['creator', 'entertainment', 'generic'];
+  // Display list for the tooltip + key: the original "unique tagging" era first,
+  // then the three boilerplate eras.
+  const KEYITEMS = [
+    { key: 'unique', label: 'Unique', color: '#888780', tags: ['unique / specific per-video tags'] },
+    ...[
+      { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+      { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+      { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+    ]
+  ];
+
+  function classify(tagArr) {
+    if (!tagArr || !tagArr.length) return null;
+    const set = new Set(tagArr);
+    for (const key of PRIORITY) {
+      const b = BLOCKS.find(x => x.key === key);
+      if (b.tags.every(t => set.has(t))) return key;
+    }
+    return null;
+  }
+
+  // Per-month share for each block, within the current channel + format scope.
+  function computeMonth(m) {
+    const lf = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
+    const sh = (m.curr && m.curr.shorts) ? m.curr.shorts : [];
+    const vids = lf.concat(sh);
+    let total = 0; const c = { generic: 0, entertainment: 0, creator: 0, unique: 0 };
+    for (const v of vids) {
+      const tags = ANALYTICS_CREATOR_TAGS[v.id];
+      if (!tags) continue;
+      total++;
+      const k = classify(tags);
+      if (k) c[k]++;
+      else c.unique++; // tagged, but not with any recurring block = specific/unique tagging
+    }
+    const pct = (n) => total > 0 ? (n / total) * 100 : 0;
+    return { key: m.key, total, generic: pct(c.generic), entertainment: pct(c.entertainment), creator: pct(c.creator), unique: pct(c.unique) };
+  }
+
+  const monthData = chartData.map(computeMonth);
+  const ipMonthData = inProgressMonth ? computeMonth(inProgressMonth) : null;
+  const allMonths = ipMonthData ? [...monthData, ipMonthData] : monthData;
+  const withData = allMonths.filter(m => m.total > 0);
+
+  if (withData.length < 2) {
+    svg.innerHTML = '';
+    legend.innerHTML = '<span class="trend-legend-item" style="color: var(--text-dim);">No creator-tag data for this channel.</span>';
+    return;
+  }
+
+  // No top legend for this chart — the detailed key below the chart serves that
+  // role (swatch + block name + full tag list).
+  legend.innerHTML = '';
+
+  const n = allMonths.length;
+  const slot = innerW / Math.max(1, n - 1);
+  const xFor = (i) => P.left + slot * i;
+  const yFor = (v) => P.top + innerH - (v / 100) * innerH;
+
+  // Y grid + labels — 0..100% in 20% steps
+  let gridLines = '', yLabels = '';
+  for (let v = 0; v <= 100; v += 20) {
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${v}%</text>`;
+  }
+
+  // Vertical delineation + x labels, adapted to the timeline length.
+  //  - Month lines: drawn at every month as a clear short tick (all ranges).
+  //  - Quarter lines: faint full-height dashed line at Jan/Apr/Jul/Oct.
+  //  - Year lines: solid full-height line at each January, always labelled.
+  //  - LABELS adapt: <=24 months -> label each month (abbrev); longer -> label
+  //    years only (quarter lines stay as visual guides but get NO text, which
+  //    was crowding the axis on long ranges).
+  const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const shortRange = n <= 24;
+  let vLines = '', xLabels = '';
+  const topY = P.top, botY = P.top + innerH;
+  const yearsLabelled = new Set();
+  allMonths.forEach((m, i) => {
+    if (!m.key) return;
+    const x = xFor(i);
+    const mon = parseInt(m.key.slice(5, 7), 10);
+    const yr = m.key.slice(0, 4);
+    const isYear = mon === 1;
+    const isQuarter = (mon === 1 || mon === 4 || mon === 7 || mon === 10);
+    if (isYear) {
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1.25" stroke-opacity="0.9" />`;
+    } else if (isQuarter) {
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 3" />`;
+    } else {
+      // month tick - short baseline mark, now more visible
+      vLines += `<line x1="${x}" y1="${botY - 6}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.85" />`;
+    }
+    if (shortRange) {
+      // Label every month. Show the year once, on January (or the first month shown).
+      const showYear = isYear || !yearsLabelled.has(yr);
+      yearsLabelled.add(yr);
+      const label = showYear ? `${MONTH_ABBR[mon-1]} '${yr.slice(2)}` : MONTH_ABBR[mon-1];
+      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 18}" text-anchor="middle" style="font-size:0.66rem">${label}</text>`;
+    } else if (isYear) {
+      // Long range: year labels only.
+      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 20}" text-anchor="middle" style="font-weight:700">${yr}</text>`;
+    }
+  });
+
+  // Build stacked areas. Stack order bottom->top: generic, entertainment, creator.
+  // For each month compute cumulative tops; each band is the ribbon between its
+  // lower and upper cumulative line.
+  const order = ['unique', 'generic', 'entertainment', 'creator'];
+  const colorOf = { unique: '#888780', generic: '#378ADD', entertainment: '#1D9E75', creator: '#D85A30' };
+  let areas = '';
+  // running base per month index
+  const base = new Array(n).fill(0);
+  for (const key of order) {
+    let topPts = [], botPts = [];
+    for (let i = 0; i < n; i++) {
+      const lower = base[i];
+      const upper = base[i] + (allMonths[i][key] || 0);
+      topPts.push(`${xFor(i).toFixed(1)},${yFor(upper).toFixed(1)}`);
+      botPts.push(`${xFor(i).toFixed(1)},${yFor(lower).toFixed(1)}`);
+      base[i] = upper;
+    }
+    const poly = topPts.concat(botPts.reverse()).join(' ');
+    areas += `<polygon points="${poly}" fill="${colorOf[key]}" fill-opacity="0.65" stroke="${colorOf[key]}" stroke-width="1" stroke-opacity="0.9" />`;
+  }
+
+  // Invisible hover columns for tooltip
+  let hoverCols = '';
+  allMonths.forEach((m, i) => {
+    const x = xFor(i) - slot / 2;
+    hoverCols += `<rect class="tagblock-hovercol" x="${x.toFixed(1)}" y="${P.top}" width="${slot.toFixed(1)}" height="${innerH}" fill="transparent" data-i="${i}" />`;
+  });
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${areas}
+    ${vLines}
+    ${yLabels}
+    ${xLabels}
+    ${hoverCols}
+  `;
+
+  // Tooltip wiring
+  if (tooltip) {
+    svg.querySelectorAll('.tagblock-hovercol').forEach(col => {
+      col.addEventListener('mouseenter', (e) => {
+        const i = +col.dataset.i;
+        const m = allMonths[i];
+        const rows = KEYITEMS.map(b => `<div style="display:flex;justify-content:space-between;gap:12px;"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${b.color};margin-right:5px;"></span>${b.label}</span><span>${Math.round(m[b.key])}%</span></div>`).join('');
+        tooltip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">${m.key}</div>${rows}<div style="margin-top:4px;color:var(--text-dim);">${m.total} videos</div>`;
+        tooltip.style.display = 'block';
+      });
+      col.addEventListener('mousemove', (e) => {
+        const wrap = document.getElementById('chartWrap');
+        const r = wrap.getBoundingClientRect();
+        tooltip.style.left = (e.clientX - r.left + 12) + 'px';
+        tooltip.style.top = (e.clientY - r.top + 12) + 'px';
+      });
+      col.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    });
+  }
+
+  // Populate the key beneath the chart with the full tag list of each block.
+  const keyEl = document.getElementById('tagBlockKey');
+  if (keyEl) {
+    keyEl.innerHTML = KEYITEMS.map(b =>
+      `<div class="tagblock-key-item">
+        <span class="tagblock-key-swatch" style="background:${b.color}"></span>
+        <span class="tagblock-key-text">
+          <span class="tagblock-key-name">${b.label}</span>
+          <span class="tagblock-key-tags"> &mdash; ${b.tags.join(', ')}</span>
+        </span>
+      </div>`
+    ).join('');
+    keyEl.hidden = false;
+  }
+}
+
 function renderEngagementVarianceChart(chartData, inProgressMonth) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
@@ -5723,7 +5953,7 @@ function niceDurationAxis(minSec, maxSec) {
   window.setShowPrevYear = function(v){ showPrevYear = !!v; window.renderAnalysisChart(); };
   window.__getShowPrevYear = function(){ return showPrevYear; };
   // expose metric/viewMode setters for the controls
-  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views']);
+  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views','tag_blocks']);
   window.setAnalysisMetric = function(m){
     chartMetric = m;
     // Per-channel-only metrics can't render on "All channels" — rather than show
