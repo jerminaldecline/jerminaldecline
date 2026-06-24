@@ -312,6 +312,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-metric-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .an-metric-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 1px 6px rgba(106,163,255,0.35)}
 @media (prefers-color-scheme: light){.an-metric-btn.active{color:#fff;box-shadow:0 1px 6px rgba(27,77,159,0.28)}}
+/* Mobile: instead of wrapping 8 chart buttons into 3-4 tall rows, lay them out
+   as one horizontal swipe strip. Keeps the controls to a single line and frees
+   vertical space above the chart. The "Chart:" label stays pinned at the start. */
+@media(max-width:680px){
+  .an-metric-toggle{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    gap:0.35rem;margin-bottom:0.9rem;padding-bottom:0.3rem;scrollbar-width:none}
+  .an-metric-toggle::-webkit-scrollbar{display:none}
+  .an-metric-toggle::before{position:sticky;left:0;flex:0 0 auto;background:var(--bg);
+    padding-right:0.3rem;z-index:1}
+  .an-metric-btn{flex:0 0 auto;white-space:nowrap;font-size:0.82rem;padding:0.45rem 0.8rem}
+}
 .chart-wrap{position:relative;width:100%}
 #trendChart{width:100%;height:auto;display:block}
 
@@ -475,6 +486,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-axis-label {fill: var(--text-dim); font-size: 13px; font-family: inherit;}
 .chart-axis-label.x {text-anchor: middle;}
 .chart-axis-label.y {text-anchor: end;}
+/* On phones the 720-unit chart viewBox is scaled to ~345px (~0.48x), which would
+   render 13px axis text at ~6px - illegible. Bump the in-viewBox font size so the
+   on-screen result lands back around 11px. Affects all SVG charts that share this
+   class. (Inline font-size on a label still wins where set, e.g. year labels.) */
+@media(max-width:680px){
+  .chart-axis-label {font-size: 22px;}
+  .chart-axis-label.y {font-size: 20px;}
+}
 /* Per-point value labels (e.g. "4.5M", "68K", "7.2%") sitting just above a data
    point. Smaller and a touch lighter than axis labels so the line stays the hero;
    a thin surface-coloured stroke keeps them legible where they cross gridlines. */
@@ -1300,30 +1319,26 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .video-row.ovw-row.with-channel,
   .video-row.ovw-row.no-topics,
   .video-row.ovw-row.with-channel.no-topics {
-    display: flex; flex-direction: column; align-items: stretch;
-    gap: 0.35rem; padding: 0.7rem 0.8rem; grid-template-columns: none;}
+    display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline;
+    gap: 0.1rem 0.55rem; padding: 0.7rem 0.8rem; grid-template-columns: none;}
   /* Title gets the full width and wraps to as many lines as it needs. */
-  .video-row .video-title {white-space: normal; order: 1; width: 100%;}
+  .video-row .video-title {white-space: normal; order: 1; flex: 1 1 100%; width: 100%;}
   .video-row .video-title-main {flex-wrap: wrap; white-space: normal;}
   .video-row .video-title a {white-space: normal; overflow: visible; text-overflow: clip;
     line-height: 1.3; font-size: 0.92rem; font-weight: 600;}
-  /* Date + metrics collapse into one compact, readable meta line under the title. */
-  .video-row .video-date {order: 2; color: var(--text-dim); font-size: 0.75rem;}
-  .video-row .video-views {order: 3; text-align: left;}
-  .video-row .video-views,
-  .video-row .video-duration,
-  .video-row .video-likepct,
-  .video-row .video-comments {display: inline-flex; align-items: baseline; gap: 0.3rem;
-    font-size: 0.8rem; text-align: left;}
-  /* Build a tidy meta strip: date, then a dot-separated run of the kept metrics. */
-  .video-row .video-date,
-  .video-row .video-views,
-  .video-row .video-topic {display: inline-flex;}
-  .video-row .video-meta-line {order: 2; display: flex; flex-wrap: wrap; align-items: baseline;
-    gap: 0.15rem 0.7rem; font-size: 0.78rem; color: var(--text-muted);
+  /* Channel (when shown) sits on its own line directly under the title. */
+  .video-row .video-channel {order: 2; flex: 1 1 100%; display: block; font-size: 0.74rem;
+    color: var(--text-dim); white-space: normal; margin-top: 0.1rem;}
+  /* Date + views form one tidy meta strip below the title: "12 Jun 2026 · 95,000 views".
+     They are separate sibling divs, so a separator dot after the date and a "views"
+     suffix after the number turn them into a single readable line. */
+  .video-row .video-date {order: 3; flex: 0 0 auto; color: var(--text-dim);
+    font-size: 0.78rem; font-variant-numeric: tabular-nums;}
+  .video-row .video-date::after {content: "\00b7"; margin-left: 0.55rem; color: var(--text-dim);}
+  .video-row .video-views {order: 4; flex: 0 0 auto; text-align: left;
+    font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
     font-variant-numeric: tabular-nums;}
-  .video-row .video-channel {display: block; order: 2; font-size: 0.74rem;
-    color: var(--text-dim); white-space: normal;}
+  .video-row .video-views::after {content: " views"; font-weight: 400; color: var(--text-dim);}
   /* Keep the bulky numeric columns out on mobile; views stays as the headline metric. */
   .video-row .video-duration,
   .video-row .video-likepct,
@@ -2104,6 +2119,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
+@media(max-width:680px){
+  .an-chart-title-main{font-size:0.98rem}
+  .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
+  .an-chart-title{margin:0.1rem 0 0.55rem}
+}
 </style>
 </head>
 <body>
@@ -3642,7 +3662,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tag blocks over time', "Each boilerplate tag block's share of monthly long-form uploads - the channel's tagging eras, one replacing the last."]
+    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video. Instead of tagging videos individually, this channel reuses the same fixed blocks of tags across most uploads \\u2014 and swaps them out over time. Each band shows one block's share of monthly long-form uploads, charting the channel's tagging eras as one replaces the last."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
@@ -4915,6 +4935,10 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
+  // On phones the chart is scaled down hard; thin out month ticks and size the
+  // month labels up so the x-axis stays legible rather than a smeared blur.
+  const narrow = (typeof window !== 'undefined') && window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+
   // The three blocks, defined as tag-sets. A video belongs to a block if its
   // creator tags contain ALL of the block's tags. Colors match the house ramp
   // (blue / teal / coral) used elsewhere.
@@ -5017,16 +5041,20 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1.25" stroke-opacity="0.9" />`;
     } else if (isQuarter) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 3" />`;
-    } else {
-      // month tick - short baseline mark, now more visible
+    } else if (!narrow) {
+      // month tick - short baseline mark. Suppressed on phones, where ticks at
+      // every month collapse into an unreadable smear after downscaling.
       vLines += `<line x1="${x}" y1="${botY - 6}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.85" />`;
     }
     if (shortRange) {
-      // Label every month. Show the year once, on January (or the first month shown).
+      // Label every month (or every other month on phones to avoid crowding).
+      // Show the year once, on January (or the first month shown).
       const showYear = isYear || !yearsLabelled.has(yr);
       yearsLabelled.add(yr);
+      if (narrow && !isQuarter && !isYear) return; // phones: keep quarter/year labels only
       const label = showYear ? `${MONTH_ABBR[mon-1]} '${yr.slice(2)}` : MONTH_ABBR[mon-1];
-      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 18}" text-anchor="middle" style="font-size:0.66rem">${label}</text>`;
+      const fs = narrow ? '' : ' style="font-size:0.66rem"';
+      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 18}" text-anchor="middle"${fs}>${label}</text>`;
     } else if (isYear) {
       // Long range: year labels only.
       xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 20}" text-anchor="middle" style="font-weight:700">${yr}</text>`;
@@ -6008,6 +6036,21 @@ function niceDurationAxis(minSec, maxSec) {
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
   };
+
+  // The tag-blocks chart draws a different x-axis on phones (fewer ticks, larger
+  // labels). That choice is made at render time, so re-render it if the viewport
+  // crosses the mobile breakpoint (e.g. rotating a phone). Scoped to that chart
+  // only, debounced, and a no-op unless the narrow-state actually flipped.
+  let _wasNarrow = (typeof window !== 'undefined') && window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+  let _tbResizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (chartMetric !== 'tag_blocks') return;
+    const isNarrow = window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+    if (isNarrow === _wasNarrow) return;
+    _wasNarrow = isNarrow;
+    if (_tbResizeTimer) clearTimeout(_tbResizeTimer);
+    _tbResizeTimer = setTimeout(() => { try { renderTrendChart(showPrevYear); } catch(e){ console.error('tagblocks resize', e); } }, 200);
+  });
 
   // ===== Phase 2: topic analysis — mode-over-time + subject/theme leaderboards =====
   const MODE_ORDER = ['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
