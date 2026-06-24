@@ -2780,7 +2780,7 @@ function render(m){
   const SD=d.shorts||{n:0,v:0,best:null};
   const pm = isAgg ? null : prevMonth(m), yo = isAgg ? null : yoyMonth(m);
   const p = isAgg ? null : D[pm], y = isAgg ? null : D[yo];
-  const lblMo=moAbbr(pm), lblYr=moAbbrYr(yo);
+  const lblMo = pm ? moAbbr(pm) : '', lblYr = yo ? moAbbrYr(yo) : '';
   const revStr = money(d.revlo)+' – '+money(d.revhi);
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
