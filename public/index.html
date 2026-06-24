@@ -303,7 +303,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tagblock-key-text{font-size:0.82rem;line-height:1.4}
 .tagblock-key-name{font-weight:700;color:var(--text)}
 .tagblock-key-tags{color:var(--subtext);font-family:var(--mono,monospace);font-size:0.78rem}
-.tagblock-key-note{font-size:0.76rem;color:var(--text-dim);margin-top:0.2rem}
 .an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
 .an-metric-toggle::before{content:"Chart:";align-self:center;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:0.15rem}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
@@ -4760,9 +4759,9 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     return;
   }
 
-  legend.innerHTML = BLOCKS.map(b =>
-    `<span class="trend-legend-item"><span class="trend-legend-swatch" style="background:${b.color};opacity:0.75"></span> ${b.label}</span>`
-  ).join('');
+  // No top legend for this chart — the detailed key below the chart serves that
+  // role (swatch + block name + full tag list).
+  legend.innerHTML = '';
 
   const n = allMonths.length;
   const slot = innerW / Math.max(1, n - 1);
@@ -4876,18 +4875,12 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // Populate the key beneath the chart with the full tag list of each block.
   const keyEl = document.getElementById('tagBlockKey');
   if (keyEl) {
-    const noteOf = {
-      generic: 'Generic news set - applied to nearly every upload 2020-2023 regardless of topic.',
-      entertainment: 'Broad entertainment set - the dominant block from late 2023 to mid 2025.',
-      creator: 'Names of other, bigger creators - SEO piggybacking, the current block from mid 2025.'
-    };
     keyEl.innerHTML = BLOCKS.map(b =>
       `<div class="tagblock-key-item">
         <span class="tagblock-key-swatch" style="background:${b.color}"></span>
         <span class="tagblock-key-text">
           <span class="tagblock-key-name">${b.label}</span>
           <span class="tagblock-key-tags"> &mdash; ${b.tags.join(', ')}</span>
-          <div class="tagblock-key-note">${noteOf[b.key] || ''}</div>
         </span>
       </div>`
     ).join('');
