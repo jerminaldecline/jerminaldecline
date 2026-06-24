@@ -3452,7 +3452,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tag blocks over time', "Each boilerplate tag block's share of monthly uploads - the channel's tagging eras, one replacing the last."]
+    tag_blocks: ['Creator tag blocks over time', "Each boilerplate tag block's share of monthly long-form uploads - the channel's tagging eras, one replacing the last."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
@@ -4759,9 +4759,10 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
 
   // Per-month share for each block, within the current channel + format scope.
   function computeMonth(m) {
-    const lf = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
-    const sh = (m.curr && m.curr.shorts) ? m.curr.shorts : [];
-    const vids = lf.concat(sh);
+    // Long-form only. Shorts are ~100% boilerplate (the SEO block pasted on
+    // everything), which swamps the picture; long-form is where tagging
+    // behaviour actually varies, so the chart tracks that.
+    const vids = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
     let total = 0; const c = { generic: 0, entertainment: 0, creator: 0, unique: 0 };
     for (const v of vids) {
       const tags = ANALYTICS_CREATOR_TAGS[v.id];
