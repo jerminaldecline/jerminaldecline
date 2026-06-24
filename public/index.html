@@ -2288,7 +2288,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="ctag-viewtabs" role="tablist">
           <button type="button" class="ctag-viewtab active" data-topicview="subject" role="tab" aria-selected="true">Subjects</button>
           <button type="button" class="ctag-viewtab" data-topicview="theme" role="tab" aria-selected="false">Themes</button>
-          <button type="button" class="ctag-viewtab" data-topicview="mode" role="tab" aria-selected="false">Modes</button>
+          <button type="button" class="ctag-viewtab" data-topicview="mode" role="tab" aria-selected="false">Formats</button>
         </div>
         <div class="wordcloud-meta" id="topicsMeta"></div>
         <div class="topics-body" id="topicsBody"></div>
@@ -3026,14 +3026,14 @@ function render(m){
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
           <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
           <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
-          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Modes</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.uploads}</div>
       <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3>${seeVidsLink('long')}</div>
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
           <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
           <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
-          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Modes</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.views}</div>
       ${isAgg ? '' : `<div class="panel">
