@@ -240,6 +240,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .toplist li:first-child .row span:first-child{font-weight:700}
 .toplist .empty{color:var(--text-dim);font-size:0.82rem}
 /* Topic horizontal bars (share of uploads / share of views) */
+.ov-topic-tabs{margin:0.1rem 0 0.9rem}
 .tsb{display:flex;flex-direction:column;gap:0.85rem}
 .tsb-bar{display:flex;width:100%;height:18px;border-radius:6px;overflow:hidden;background:var(--surface-2)}
 .tsb-seg{height:100%;min-width:2px;transition:opacity .12s}
@@ -2363,6 +2364,8 @@ async function loadAndCompute(){
   ]);
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
+  const themesMap = (tagsRaw && tagsRaw.themes) || {};
+  const modesMap  = (tagsRaw && tagsRaw.modes)  || {};
   // Expose for the analytics/videos engine (isTopicChannel, renderTopicCell)
   ANALYTICS_TOPIC_TAGS = tags; ANALYTICS_TOPICS = topicsRaw;
   // Creator tags: the YouTube keyword metadata the channel owner applied to each
@@ -2427,6 +2430,10 @@ async function loadAndCompute(){
       const medCr=median(crs);
       const durs=vs.filter(v=>v.durationSec).map(v=>v.durationSec);
       const tc={}; for(const v of vs){ const t=tags[v.id]; if(t){ if(!tc[t]) tc[t]={n:0,v:0}; tc[t].n++; tc[t].v+=(v.views||0); } }
+      // Parallel tallies for themes and modes (same shape as subjects) so the
+      // Overview topic cards can offer Subjects/Themes/Modes views.
+      const thc={}; for(const v of vs){ const t=themesMap[v.id]; if(t){ if(!thc[t]) thc[t]={n:0,v:0}; thc[t].n++; thc[t].v+=(v.views||0); } }
+      const mdc={}; for(const v of vs){ const t=modesMap[v.id]; if(t){ if(!mdc[t]) mdc[t]={n:0,v:0}; mdc[t].n++; mdc[t].v+=(v.views||0); } }
       const leanVid = v => ({
         id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
         d:v.durationSec||0, s:!!v.isShort, dt:(v.publishedAt||'').slice(0,10),
@@ -2442,6 +2449,17 @@ async function loadAndCompute(){
       const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
       const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,6);
       const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      // Theme + mode entry arrays (full, sorted; sliced at render time).
+      const mkEntries = (counts) => Object.entries(counts).map(([t,o])=>({ id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v }));
+      const themeEntries = mkEntries(thc), modeEntries = mkEntries(mdc);
+      const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
+      const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const themesTaggedCount = themeEntries.reduce((s,e)=>s+e.count,0);
+      const themesTaggedViews = themeEntries.reduce((s,e)=>s+e.views,0);
+      const modesByCount = [...modeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
+      const modesByViews = [...modeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const modesTaggedCount = modeEntries.reduce((s,e)=>s+e.count,0);
+      const modesTaggedViews = modeEntries.reduce((s,e)=>s+e.views,0);
       const top=topicsByCount.map(e=>[e.name,e.count]);
       const topvid=vstats([...vs].sort((a,b)=>(b.views||0)-(a.views||0))[0]);
       const DAY_MS = 24*60*60*1000;
@@ -2461,7 +2479,9 @@ async function loadAndCompute(){
         revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
         revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
         top, topvid, debate, worstvid, shorts, vlist,
-        topicsByCount, topicsByViews, taggedCount, taggedViews
+        topicsByCount, topicsByViews, taggedCount, taggedViews,
+        themesByCount, themesByViews, themesTaggedCount, themesTaggedViews,
+        modesByCount, modesByViews, modesTaggedCount, modesTaggedViews
       };
     }
     // Keep the raw per-month video arrays so a period aggregate can pool them.
@@ -2694,6 +2714,12 @@ let ovMonthShown = { long: OV_BATCH, short: OV_BATCH };
 // Sort state for the Overview month-detail list (shared across both groups).
 let ovSort = { by: 'date', dir: 'desc' };
 let ovFormat = 'long';
+// Overview topic-card view: 'subject' | 'theme' | 'mode'. Shared by both topic
+// cards (share of uploads / share of views) so they switch together.
+let ovTopicView = 'subject';
+// Remembers what render() last drew (a month-key string or an aggregate object)
+// so view toggles (topic axis) can re-render the same report.
+let ovCurrent = null;
 function ovSortVideos(arr){
   const { by, dir } = ovSort;
   const sign = dir === 'asc' ? 1 : -1;
@@ -2770,6 +2796,7 @@ function renderOvMonthVideos(vlist, monthKey){
 }
 
 function render(m){
+  ovCurrent = m;
   const D=SCOPES[scope];
   // m may be a month-key string (single month) or an aggregate object (period).
   const isAgg = (m && typeof m === 'object');
@@ -2890,11 +2917,25 @@ function render(m){
     </div>` : '';
 
   const topicBars = (()=>{
-    const byCount = d.topicsByCount || [];
-    const byViews = d.topicsByViews || [];
-    if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads this month.</div>', views: '<div class="empty">No tagged uploads this month.</div>' };
-    const totCount = d.n || d.taggedCount || byCount.reduce((s,t)=>s+t.count,0) || 1;
-    const totViews = d.tot || d.taggedViews || byViews.reduce((s,t)=>s+t.views,0) || 1;
+    // Pick the breakdown arrays + totals for the active topic view.
+    const view = ovTopicView || 'subject';
+    let byCount, byViews, tCount, tViews;
+    if (view === 'theme') {
+      byCount = d.themesByCount || []; byViews = d.themesByViews || [];
+      tCount = d.themesTaggedCount || 0; tViews = d.themesTaggedViews || 0;
+    } else if (view === 'mode') {
+      byCount = d.modesByCount || []; byViews = d.modesByViews || [];
+      tCount = d.modesTaggedCount || 0; tViews = d.modesTaggedViews || 0;
+    } else {
+      byCount = d.topicsByCount || []; byViews = d.topicsByViews || [];
+      tCount = d.taggedCount || 0; tViews = d.taggedViews || 0;
+    }
+    if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads in this period.</div>', views: '<div class="empty">No tagged uploads in this period.</div>' };
+    // For subjects, the denominator is the full upload/view count (so "Other"
+    // captures untagged output). For themes/modes, use the tagged totals as the
+    // denominator so the bar reflects share among videos that carry that axis.
+    const totCount = (view === 'subject') ? (d.n || tCount || byCount.reduce((s,t)=>s+t.count,0) || 1) : (tCount || byCount.reduce((s,t)=>s+t.count,0) || 1);
+    const totViews = (view === 'subject') ? (d.tot || tViews || byViews.reduce((s,t)=>s+t.views,0) || 1) : (tViews || byViews.reduce((s,t)=>s+t.views,0) || 1);
     const OTHER_COLOR = 'var(--text-dim)';
     // Build a single stacked bar + legend from the top-6 topics. Anything beyond
     // the top 6 (and untagged output) is folded into a muted "Other" segment so
@@ -2981,8 +3022,20 @@ function render(m){
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
     <div class="highlights">${topHTML}${worstHTML}${debHTML}</div>
     <div class="lower">
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>${topicBars.uploads}</div>
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3>${seeVidsLink('long')}</div>${topicBars.views}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>
+        <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
+          <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Modes</button>
+        </div>
+        ${topicBars.uploads}</div>
+      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3>${seeVidsLink('long')}</div>
+        <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
+          <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
+          <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Modes</button>
+        </div>
+        ${topicBars.views}</div>
       ${isAgg ? '' : `<div class="panel">
         <h3>Month &amp; year comparison</h3>
         <table class="cmp-table">
@@ -3239,6 +3292,14 @@ document.addEventListener('click', (e) => {
       if (d) body.innerHTML = renderOvMonthVideos(d.vlist || [], ms.value);
     }
   };
+  // Overview topic-axis toggle (Topics / Themes / Modes) - switches both topic
+  // cards and re-renders the current report (month or aggregate).
+  const ovtv = e.target.closest('.ov-topic-tabs [data-ovtopicview]');
+  if (ovtv) {
+    ovTopicView = ovtv.dataset.ovtopicview;
+    if (ovCurrent != null && typeof render === 'function') render(ovCurrent);
+    return;
+  }
   // Overview format toggle (Long-form / Shorts)
   const fb = e.target.closest('#ovFormatToggle [data-ov-format]');
   if (fb) {
