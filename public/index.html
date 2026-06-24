@@ -312,16 +312,30 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-metric-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .an-metric-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 1px 6px rgba(106,163,255,0.35)}
 @media (prefers-color-scheme: light){.an-metric-btn.active{color:#fff;box-shadow:0 1px 6px rgba(27,77,159,0.28)}}
-/* Mobile: instead of wrapping 8 chart buttons into 3-4 tall rows, lay them out
-   as one horizontal swipe strip. Keeps the controls to a single line and frees
-   vertical space above the chart. The "Chart:" label stays pinned at the start. */
+/* Chart-metric control: button row on desktop, a single dropdown on mobile.
+   The button row ran off-screen on phones; the select keeps it to one tidy line. */
+.an-metric-select-wrap{display:none}
 @media(max-width:680px){
-  .an-metric-toggle{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-    gap:0.35rem;margin-bottom:0.9rem;padding-bottom:0.3rem;scrollbar-width:none}
-  .an-metric-toggle::-webkit-scrollbar{display:none}
-  .an-metric-toggle::before{position:sticky;left:0;flex:0 0 auto;background:var(--bg);
-    padding-right:0.3rem;z-index:1}
-  .an-metric-btn{flex:0 0 auto;white-space:nowrap;font-size:0.82rem;padding:0.45rem 0.8rem}
+  .an-metric-toggle{display:none}
+  .an-metric-select-wrap{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.9rem;width:100%}
+  .an-metric-select-lbl{flex:0 0 auto;color:var(--text-muted);font-size:0.74rem;font-weight:700;
+    letter-spacing:0.04em;text-transform:uppercase}
+}
+/* Shared styling for the mobile control selects (chart metric + video sort). */
+.an-mobile-sel{flex:1 1 auto;min-width:0;appearance:none;-webkit-appearance:none;
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+  font-family:inherit;font-size:0.88rem;font-weight:700;border-radius:8px;
+  padding:0.55rem 2rem 0.55rem 0.75rem;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236aa3ff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.7rem center}
+.an-mobile-sel:focus{outline:none;border-color:var(--accent)}
+/* Video-list sort: the sortable column header is hidden on mobile, so this
+   dropdown is the mobile sort affordance. Desktop keeps the header sort. */
+.window-sort-wrap{display:none}
+@media(max-width:680px){
+  .window-sort-wrap{display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:0.1rem}
+  .window-sort-lbl{flex:0 0 auto;color:var(--text-muted);font-size:0.74rem;font-weight:700;
+    letter-spacing:0.04em;text-transform:uppercase}
 }
 .chart-wrap{position:relative;width:100%}
 #trendChart{width:100%;height:auto;display:block}
@@ -2242,6 +2256,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
         <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
       </div>
+      <label class="an-metric-select-wrap" for="anMetricSelect"><span class="an-metric-select-lbl">Chart</span>
+        <select id="anMetricSelect" class="an-mobile-sel" aria-label="Chart metric">
+          <option value="views">Views</option>
+          <option value="views_length">Views + length</option>
+          <option value="views_likes">Views + likes</option>
+          <option value="median_views">Average views</option>
+          <option value="engagement_variance">Engagement variance</option>
+          <option value="all_videos">Video lengths</option>
+          <option value="tag_blocks">Tag blocks</option>
+        </select>
+      </label>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend-row">
@@ -6206,6 +6231,12 @@ function niceDurationAxis(minSec, maxSec) {
         if (sel) sel.value = '@TheQuartering';
       }
     }
+    // Keep both controls (desktop button row + mobile dropdown) reflecting the
+    // active metric, whichever one triggered the change.
+    const _bt = document.getElementById('anMetricToggle');
+    if (_bt) _bt.querySelectorAll('.an-metric-btn').forEach(b => b.classList.toggle('active', b.dataset.metric === m));
+    const _ms = document.getElementById('anMetricSelect');
+    if (_ms && _ms.value !== m) _ms.value = m;
     window.renderAnalysisChart();
   };
   window.setAnalysisViewMode = function(v){ viewMode = v; window.renderAnalysisChart(); };
@@ -7640,6 +7671,16 @@ function renderWindowList(startDate, endDate) {
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
       ${renamedDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
       ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
+      <label class="window-sort-wrap" for="windowSortSelect"><span class="window-sort-lbl">Sort</span>
+        <select id="windowSortSelect" class="an-mobile-sel" aria-label="Sort videos">
+          <option value="date|desc"${windowListState.sortBy==='date'&&windowListState.sortDir==='desc'?' selected':''}>Newest first</option>
+          <option value="date|asc"${windowListState.sortBy==='date'&&windowListState.sortDir==='asc'?' selected':''}>Oldest first</option>
+          <option value="views|desc"${windowListState.sortBy==='views'&&windowListState.sortDir==='desc'?' selected':''}>Most views</option>
+          <option value="views|asc"${windowListState.sortBy==='views'&&windowListState.sortDir==='asc'?' selected':''}>Fewest views</option>
+          <option value="likepct|desc"${windowListState.sortBy==='likepct'&&windowListState.sortDir==='desc'?' selected':''}>Highest like %</option>
+          <option value="comments|desc"${windowListState.sortBy==='comments'&&windowListState.sortDir==='desc'?' selected':''}>Most comments</option>
+        </select>
+      </label>
     </div>
     ${topicFilterBar}
     ${breakdownHtml}
@@ -8073,6 +8114,16 @@ function renderWindowList(startDate, endDate) {
     const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
     if (sd && ed) renderWindowList(sd, ed);
   });
+  // Mobile sort dropdown (the column-header sort is hidden on phones).
+  document.addEventListener('change', (e) => {
+    if (e.target.id !== 'windowSortSelect') return;
+    const [col, dir] = e.target.value.split('|');
+    windowListState.sortBy = col;
+    windowListState.sortDir = (dir === 'asc') ? 'asc' : 'desc';
+    resetVideoBatches();
+    const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+    if (sd && ed) renderWindowList(sd, ed);
+  });
   document.addEventListener('input', (e) => {
     if (e.target.id !== 'windowListSearch') return;
     windowListState.query = e.target.value;
@@ -8190,6 +8241,13 @@ function renderWindowList(startDate, endDate) {
       if (!btn) return;
       metricToggle.querySelectorAll('.an-metric-btn').forEach(b => b.classList.toggle('active', b === btn));
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
+    });
+  }
+  // Mobile equivalent of the metric button row.
+  const metricSelect = document.getElementById('anMetricSelect');
+  if (metricSelect) {
+    metricSelect.addEventListener('change', (e) => {
+      if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(e.target.value);
     });
   }
   // Hide-labels toggle — adds .labels-hidden to the chart wrap (pure CSS hide,
