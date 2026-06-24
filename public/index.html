@@ -1331,14 +1331,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     color: var(--text-dim); white-space: normal; margin-top: 0.1rem;}
   /* Date + views form one tidy meta strip below the title: "12 Jun 2026 · 95,000 views".
      They are separate sibling divs, so a separator dot after the date and a "views"
-     suffix after the number turn them into a single readable line. */
+     suffix after the number turn them into a single readable line. Scoped to data
+     rows with :not(.video-row-header) so the suffix/dot never hit the header. */
   .video-row .video-date {order: 3; flex: 0 0 auto; color: var(--text-dim);
     font-size: 0.78rem; font-variant-numeric: tabular-nums;}
-  .video-row .video-date::after {content: "\00b7"; margin-left: 0.55rem; color: var(--text-dim);}
+  .video-row:not(.video-row-header) .video-date::after {content: "\00b7"; margin-left: 0.55rem; color: var(--text-dim);}
   .video-row .video-views {order: 4; flex: 0 0 auto; text-align: left;
     font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
     font-variant-numeric: tabular-nums;}
-  .video-row .video-views::after {content: " views"; font-weight: 400; color: var(--text-dim);}
+  .video-row:not(.video-row-header) .video-views::after {content: " views"; font-weight: 400; color: var(--text-dim);}
+  /* The column header row is meaningless on mobile (there are no columns - each
+     row is a self-describing card), and its sort buttons reflow into clutter.
+     Hide it; sorting is still available via the desktop layout. */
+  .video-row-header {display: none !important;}
   /* Keep the bulky numeric columns out on mobile; views stays as the headline metric. */
   .video-row .video-duration,
   .video-row .video-likepct,
@@ -3662,7 +3667,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video. Instead of tagging videos individually, this channel reuses the same fixed blocks of tags across most uploads \\u2014 and swaps them out over time. Each band shows one block's share of monthly long-form uploads, charting the channel's tagging eras as one replaces the last."]
+    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video to help it surface in search. Rather than tagging each video for what it's about, this channel mostly pastes the same fixed block of tags onto everything \u2014 and the block it uses changes over time. Each coloured band is one of those recurring blocks; the grey band is genuine per-video tagging. Together they show how the channel's tagging habits shifted month to month."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
