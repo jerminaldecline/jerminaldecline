@@ -1358,6 +1358,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .wordcloud-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;font-family:inherit;text-align:left}
 .wordcloud-eyebrow{display:block;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:700}
 .wordcloud-title{font-size:1rem;font-weight:800;color:var(--text)}
+.wordcloud-context{display:block;font-size:0.75rem;color:var(--subtext);font-weight:600;margin-top:0.15rem}
 .wordcloud-hint{font-weight:400;color:var(--subtext);font-size:0.85rem;margin-left:0.4rem}
 .wordcloud-panel{padding:0 1.4rem 1.4rem}
 .wordcloud-meta{font-size:0.8rem;color:var(--subtext);margin-bottom:1rem}
@@ -2244,6 +2245,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">Most-used words</span>
           <span class="wordcloud-title">Title word cloud <span class="wordcloud-hint" id="wordcloudHint"></span></span>
+          <span class="wordcloud-context" id="wordcloudContext"></span>
         </span>
         <span class="wordcloud-caret" aria-hidden="true"></span>
       </button>
@@ -2257,6 +2259,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">Creator applied tags</span>
           <span class="wordcloud-title">Video tags <span class="wordcloud-hint" id="creatorTagsHint"></span></span>
+          <span class="wordcloud-context" id="creatorTagsContext"></span>
         </span>
         <span class="wordcloud-caret" aria-hidden="true"></span>
       </button>
@@ -2276,6 +2279,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">What this period covered</span>
           <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
+          <span class="wordcloud-context" id="topicsContext"></span>
         </span>
         <span class="wordcloud-caret" aria-hidden="true"></span>
       </button>
@@ -7188,6 +7192,37 @@ function renderTopicChips(v) {
   return chips ? `<div class="video-chips">${chips}</div>` : '';
 }
 
+// Shared helper: a compact "Channel - period" string for the Videos-tab section
+// headers (word cloud, video tags, topics), so each says what it's scoped to.
+function sectionContextLabel() {
+  let channel = 'Quartering universe';
+  if (typeof ANALYTICS_CHANNEL !== 'undefined' && ANALYTICS_CHANNEL !== 'ALL') {
+    channel = (ANALYTICS_DATASET && ANALYTICS_DATASET.channels && ANALYTICS_DATASET.channels[ANALYTICS_CHANNEL] && ANALYTICS_DATASET.channels[ANALYTICS_CHANNEL].title) || 'Channel';
+  }
+  const sd = document.getElementById('startDate') ? document.getElementById('startDate').value : '';
+  const ed = document.getElementById('endDate') ? document.getElementById('endDate').value : '';
+  let period = '';
+  if (sd && ed) {
+    const fmt = (d, opts) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { ...opts, timeZone: 'UTC' });
+    if (sd === ed) {
+      period = fmt(sd, { day: 'numeric', month: 'short', year: 'numeric' });
+    } else {
+      const a = new Date(sd + 'T00:00:00Z'), b = new Date(ed + 'T00:00:00Z');
+      const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
+      const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
+      // Whole calendar month -> "June 2026"; otherwise a compact range.
+      const isMonthStart = a.getUTCDate() === 1;
+      const isMonthEnd = b.getUTCDate() === new Date(Date.UTC(b.getUTCFullYear(), b.getUTCMonth() + 1, 0)).getUTCDate();
+      if (sameMonth && isMonthStart && isMonthEnd) {
+        period = fmt(sd, { month: 'long', year: 'numeric' });
+      } else {
+        period = fmt(sd, { day: 'numeric', month: 'short', year: sameYear ? undefined : 'numeric' }) + ' \u2013 ' + fmt(ed, { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    }
+  }
+  return period ? `${channel} \u00b7 ${period}` : channel;
+}
+
 function formatWindowTitle(startDate, endDate) {
   // Single day vs multi-day window
   const sameDay = startDate === endDate;
@@ -7201,6 +7236,12 @@ function formatWindowTitle(startDate, endDate) {
 
 function renderWindowList(startDate, endDate) {
   document.getElementById('windowTitle').textContent = formatWindowTitle(startDate, endDate);
+  // Keep the Videos-tab section headers (word cloud, video tags, topics) showing
+  // the active channel + period, since all three are scoped to the same filters.
+  const _ctx = sectionContextLabel();
+  ['wordcloudContext','creatorTagsContext','topicsContext'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.textContent = _ctx;
+  });
 
   const start = new Date(startDate + 'T00:00:00Z');
   const end = new Date(endDate + 'T23:59:59Z');
