@@ -302,8 +302,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tagblock-key-item{display:flex;gap:0.6rem;align-items:flex-start}
 .tagblock-key-swatch{flex:0 0 auto;width:14px;height:14px;border-radius:3px;margin-top:0.15rem}
 .tagblock-key-text{font-size:0.82rem;line-height:1.4}
-.tagblock-key-name{font-weight:700;color:var(--text)}
-.tagblock-key-tags{color:var(--subtext);font-family:var(--mono,monospace);font-size:0.78rem}
+.tagblock-key-name{font-weight:700;color:var(--text);display:block}
+.tagblock-key-note{display:block;color:var(--text-muted);font-size:0.78rem;margin:0.05rem 0 0.15rem}
+.tagblock-key-tags{display:block;color:var(--subtext);font-family:var(--mono,monospace);font-size:0.78rem}
 .an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
 .an-metric-toggle::before{content:"Chart:";align-self:center;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:0.15rem}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
@@ -3706,7 +3707,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video to help it surface in search. Rather than tagging each video for what it's about, this channel mostly pastes the same fixed block of tags onto everything \u2014 and the block it uses changes over time. Each coloured band is one of those recurring blocks; the grey band is genuine per-video tagging. Together they show how the channel's tagging habits shifted month to month."]
+    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video to help it surface in search. This chart breaks down each month's long-form uploads by the kind of tags they carry: fixed blocks the creator reused across many videos, tags YouTube added automatically on upload, and genuine per-video tags. The mix shows how deliberately - or not - the channel tagged its videos over time."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
@@ -4983,55 +4984,188 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // month labels up so the x-axis stays legible rather than a smeared blur.
   const narrow = (typeof window !== 'undefined') && window.matchMedia && window.matchMedia('(max-width:680px)').matches;
 
-  // The three blocks, defined as tag-sets. A video belongs to a block if its
-  // creator tags contain ALL of the block's tags. Colors match the house ramp
-  // (blue / teal / coral) used elsewhere.
-  const BLOCKS = [
-    { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
-    { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
-    { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
-  ];
-  // Assignment priority (most specific / recent first) so overlapping tags like
-  // "movies"/"gaming" don't get a video counted in more than one block.
-  const PRIORITY = ['creator', 'entertainment', 'generic'];
-  // Display list for the tooltip + key: the original "unique tagging" era first,
-  // then the three boilerplate eras.
-  const KEYITEMS = [
-    { key: 'unique', label: 'Unique', color: '#888780', tags: ['unique / specific per-video tags'] },
-    ...[
-      { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
-      { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
-      { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
-    ]
-  ];
+  // ---- Per-channel block discovery ----------------------------------------
+  // Rather than hardcode one channel's tag-sets, discover THIS channel's actual
+  // recurring tagging behaviour the same way the Videos-tab "Recurring blocks"
+  // view does: pool the channel's long-form tagged videos, group by exact
+  // tag-set, and surface the most-reused sets. Three special cases get their own
+  // treatment so the chart reads honestly on every channel:
+  //   * Auto-default  - the 6 tags YouTube adds automatically on a phone upload
+  //                     (camera phone / free / sharing / upload / video / video
+  //                     phone). These are NOT a deliberate choice, so they get a
+  //                     dedicated, clearly-labelled band rather than masquerading
+  //                     as an editorial "block".
+  //   * Block 1..3    - the channel's top recurring DELIBERATE tag-sets.
+  //   * Unique        - tagged, but not matching any of the above = genuine
+  //                     per-video tagging.
+  const YT_DEFAULT_TAGS = ['camera phone','free','sharing','upload','video','video phone'];
+  const YT_DEFAULT_KEY = YT_DEFAULT_TAGS.slice().sort().join('\u0001');
+  const setKey = (arr) => [...new Set(arr)].sort().join('\u0001');
 
-  function classify(tagArr) {
-    if (!tagArr || !tagArr.length) return null;
-    const set = new Set(tagArr);
-    for (const key of PRIORITY) {
-      const b = BLOCKS.find(x => x.key === key);
-      if (b.tags.every(t => set.has(t))) return key;
+  // Gather long-form videos in scope (chartData + in-progress) and tally tag-sets.
+  const _discMonths = inProgressMonth ? [...chartData, inProgressMonth] : chartData;
+  const _setCounts = new Map(); // key -> { tags, count }
+  for (const m of _discMonths) {
+    const vids = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
+    for (const v of vids) {
+      const tags = ANALYTICS_CREATOR_TAGS[v.id];
+      if (!tags || tags.length < 2) continue;
+      const uniq = [...new Set(tags)];
+      if (uniq.length < 2) continue;
+      const k = uniq.slice().sort().join('\u0001');
+      if (k === YT_DEFAULT_KEY) continue; // the auto-default set is handled separately
+      const g = _setCounts.get(k);
+      if (g) g.count++;
+      else _setCounts.set(k, { tags: uniq, count: 1 });
     }
-    return null;
+  }
+  // Top recurring DELIBERATE blocks, most-used first, capped at 3 so the chart
+  // stays legible. The minimum-usage floor scales with the channel's tagged
+  // output (>=3 videos, or 0.5% of tagged long-form, whichever is larger) so a
+  // tiny near-duplicate set doesn't render as an invisible sliver + key clutter
+  // on a high-volume channel, while small channels keep a sensible low floor.
+  const _taggedLF = _discMonths.reduce((s, m) => {
+    const vids = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
+    return s + vids.filter(v => ANALYTICS_CREATOR_TAGS[v.id]).length;
+  }, 0);
+  const _blockFloor = Math.max(3, Math.round(_taggedLF * 0.005));
+  const _topSets = [..._setCounts.values()]
+    .filter(g => g.count >= _blockFloor)
+    .sort((a, b) => b.count - a.count || b.tags.length - a.tags.length)
+    .slice(0, 3);
+  // Stable, content-derived identity for each block. Two goals:
+  //  1. Name: derived from the block's most DISTINCTIVE tags (tags in this set
+  //     but not in the others), so each block reads as a recognisable thing
+  //     ("Tim Pool, Timcast Irl") rather than a bare positional "Block 2" that
+  //     silently means different sets in different views/periods.
+  //  2. Colour: hashed from the set's canonical key, so the SAME tag-set always
+  //     gets the SAME colour regardless of its rank in the current window. A
+  //     newly-emerging set therefore gets its own colour instead of inheriting
+  //     the colour a now-lower-ranked set used to hold.
+  const titleCaseTag = (s) => s.replace(/\b\w/g, c => c.toUpperCase());
+  function blockName(tagsArr, allSets) {
+    const others = new Set();
+    for (const o of allSets) { if (o !== tagsArr) for (const t of o) others.add(t); }
+    const distinctive = tagsArr.filter(t => !others.has(t));
+    const pool = distinctive.length >= 2 ? distinctive : tagsArr;
+    // Prefer multi-word (more specific) tags, then shorter, then alphabetical -
+    // deterministic so the name is stable across renders.
+    const pick = [...pool].sort((a, b) =>
+      (b.includes(' ') - a.includes(' ')) || a.length - b.length || a.localeCompare(b)
+    ).slice(0, 2);
+    return pick.map(titleCaseTag).join(', ');
+  }
+  // Distinct, well-separated palette for deliberate blocks. Auto-default owns the
+  // cool-blue hue (below), so it is intentionally excluded here; Unique has its
+  // own reserved grey. These are the colours deliberate blocks draw from.
+  const BLOCK_PALETTE = ['#1D9E75', '#D85A30', '#9a6dd8', '#e0a458', '#c2407c', '#2bb1c4'];
+  function colorForKey(key) {
+    // Simple deterministic string hash -> palette index. Stable per tag-set.
+    let h = 0;
+    for (let i = 0; i < key.length; i++) { h = (h * 31 + key.charCodeAt(i)) | 0; }
+    return BLOCK_PALETTE[Math.abs(h) % BLOCK_PALETTE.length];
+  }
+  const _topTagArrays = _topSets.map(g => g.tags.slice().sort());
+  const BLOCKS = _topSets.map((g, i) => {
+    const tagsSorted = _topTagArrays[i];
+    const mk = setKey(g.tags);
+    return {
+      key: 'block' + i,
+      // Content-derived name = stable identity that can't collide across views.
+      label: blockName(tagsSorted, _topTagArrays),
+      color: colorForKey(mk),
+      tags: tagsSorted,
+      matchKey: mk
+    };
+  });
+  // Guarantee no two visible blocks share a colour even if their keys happen to
+  // hash to the same palette slot (rare, but would be confusing). Nudge later
+  // duplicates to the next free palette entry.
+  (function dedupeColors(){
+    const used = new Set();
+    const auto = '#3f6fb0', uniq = '#8a8578'; // reserved (see below) - avoid clashing
+    used.add(auto); used.add(uniq);
+    for (const b of BLOCKS) {
+      if (used.has(b.color)) {
+        const free = BLOCK_PALETTE.find(c => !used.has(c));
+        if (free) b.color = free;
+      }
+      used.add(b.color);
+    }
+  })();
+  const blockByMatchKey = new Map(BLOCKS.map(b => [b.matchKey, b.key]));
+
+  // Does this channel actually use the YouTube auto-default set at all?
+  let _autoDefaultUsed = false;
+  for (const m of _discMonths) {
+    const vids = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
+    for (const v of vids) {
+      const tags = ANALYTICS_CREATOR_TAGS[v.id];
+      if (tags && setKey(tags) === YT_DEFAULT_KEY) { _autoDefaultUsed = true; break; }
+    }
+    if (_autoDefaultUsed) break;
   }
 
-  // Per-month share for each block, within the current channel + format scope.
+  // Classify a video's tag-set into exactly one band key (or 'unique').
+  function classify(tagArr) {
+    if (!tagArr || !tagArr.length) return 'unique';
+    const k = setKey(tagArr);
+    if (k === YT_DEFAULT_KEY) return 'autodefault';
+    const bk = blockByMatchKey.get(k);
+    return bk || 'unique';
+  }
+
+  // Display/stack order bottom->top, plus colours. Only include the auto-default
+  // band if the channel actually uses it. "Unique" sits at the bottom (the base
+  // of deliberate-but-varied tagging); blocks stack above; auto-default on top.
+  // Auto-default and Unique get reserved colours that are deliberately far apart
+  // so the two never read as the same band. Auto-default = a cool desaturated
+  // blue ("not a real choice"); Unique = a warm grey (genuine, but plain).
+  const AUTO_COLOR = '#3f6fb0';   // cool slate-blue - distinct from the warm grey below
+  const UNIQUE_COLOR = '#8a8578'; // warm grey - genuine per-video tagging
+  const order = ['unique', ...BLOCKS.map(b => b.key), ...(_autoDefaultUsed ? ['autodefault'] : [])];
+  const colorOf = { unique: UNIQUE_COLOR, autodefault: AUTO_COLOR };
+  for (const b of BLOCKS) colorOf[b.key] = b.color;
+
+  // KEYITEMS: what the key + tooltip explain, with plain-language context so a
+  // viewer understands what each band means (critical on channels that are
+  // almost entirely auto-default or almost entirely unique).
+  const KEYITEMS = [];
+  if (_autoDefaultUsed) KEYITEMS.push({
+    key: 'autodefault', label: 'YouTube auto-tags', color: AUTO_COLOR,
+    note: "Added automatically by YouTube on upload - not chosen by the creator.",
+    tags: YT_DEFAULT_TAGS
+  });
+  for (const b of BLOCKS) KEYITEMS.push({
+    key: b.key, label: b.label, color: b.color,
+    note: 'A fixed tag-set the creator reused across many uploads.',
+    tags: b.tags
+  });
+  KEYITEMS.push({
+    key: 'unique', label: 'Unique', color: UNIQUE_COLOR,
+    note: 'Genuine per-video tags - different on each upload.',
+    tags: ['unique / specific per-video tags']
+  });
+
+  // Per-month share for each band, within the current channel + format scope.
   function computeMonth(m) {
     // Long-form only. Shorts are ~100% boilerplate (the SEO block pasted on
     // everything), which swamps the picture; long-form is where tagging
     // behaviour actually varies, so the chart tracks that.
     const vids = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
-    let total = 0; const c = { generic: 0, entertainment: 0, creator: 0, unique: 0 };
+    let total = 0;
+    const c = { unique: 0, autodefault: 0 };
+    for (const b of BLOCKS) c[b.key] = 0;
     for (const v of vids) {
       const tags = ANALYTICS_CREATOR_TAGS[v.id];
       if (!tags) continue;
       total++;
-      const k = classify(tags);
-      if (k) c[k]++;
-      else c.unique++; // tagged, but not with any recurring block = specific/unique tagging
+      c[classify(tags)]++;
     }
-    const pct = (n) => total > 0 ? (n / total) * 100 : 0;
-    return { key: m.key, total, generic: pct(c.generic), entertainment: pct(c.entertainment), creator: pct(c.creator), unique: pct(c.unique) };
+    const pct = (x) => total > 0 ? (x / total) * 100 : 0;
+    const out = { key: m.key, total };
+    for (const k of order) out[k] = pct(c[k] || 0);
+    return out;
   }
 
   const monthData = chartData.map(computeMonth);
@@ -5084,11 +5218,15 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     if (isYear) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1.25" stroke-opacity="0.9" />`;
     } else if (isQuarter) {
-      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 3" />`;
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="2 3" />`;
     } else if (!narrow) {
-      // month tick - short baseline mark. Suppressed on phones, where ticks at
-      // every month collapse into an unreadable smear after downscaling.
-      vLines += `<line x1="${x}" y1="${botY - 6}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.85" />`;
+      // Month break - a faint FULL-HEIGHT divider so each month reads as its own
+      // segment, not just a baseline tick. Kept subtle (and fainter as the range
+      // grows dense) so it sits behind the data and preserves the year > quarter
+      // > month hierarchy rather than turning the plot into a hard grid.
+      // Suppressed on phones, where a line per month collapses into a smear.
+      const monthOpacity = n > 48 ? 0.2 : (n > 24 ? 0.28 : 0.38);
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="${monthOpacity}" />`;
     }
     if (shortRange) {
       // Label every month (or every other month on phones to avoid crowding).
@@ -5105,11 +5243,9 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     }
   });
 
-  // Build stacked areas. Stack order bottom->top: generic, entertainment, creator.
+  // Build stacked areas using the dynamic `order` + `colorOf` computed above.
   // For each month compute cumulative tops; each band is the ribbon between its
   // lower and upper cumulative line.
-  const order = ['unique', 'generic', 'entertainment', 'creator'];
-  const colorOf = { unique: '#888780', generic: '#378ADD', entertainment: '#1D9E75', creator: '#D85A30' };
   let areas = '';
   // running base per month index
   const base = new Array(n).fill(0);
@@ -5162,7 +5298,8 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     });
   }
 
-  // Populate the key beneath the chart with the full tag list of each block.
+  // Populate the key beneath the chart with each band's plain-language meaning
+  // and (for blocks/auto-default) the actual tags involved.
   const keyEl = document.getElementById('tagBlockKey');
   if (keyEl) {
     keyEl.innerHTML = KEYITEMS.map(b =>
@@ -5170,7 +5307,8 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
         <span class="tagblock-key-swatch" style="background:${b.color}"></span>
         <span class="tagblock-key-text">
           <span class="tagblock-key-name">${b.label}</span>
-          <span class="tagblock-key-tags"> &mdash; ${b.tags.join(', ')}</span>
+          ${b.note ? `<span class="tagblock-key-note">${b.note}</span>` : ''}
+          <span class="tagblock-key-tags">${b.tags.join(', ')}</span>
         </span>
       </div>`
     ).join('');
