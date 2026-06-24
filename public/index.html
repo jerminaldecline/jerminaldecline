@@ -312,6 +312,31 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-metric-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .an-metric-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 1px 6px rgba(106,163,255,0.35)}
 @media (prefers-color-scheme: light){.an-metric-btn.active{color:#fff;box-shadow:0 1px 6px rgba(27,77,159,0.28)}}
+/* Chart-metric control: button row on desktop, a single dropdown on mobile.
+   The button row ran off-screen on phones; the select keeps it to one tidy line. */
+.an-metric-select-wrap{display:none}
+@media(max-width:680px){
+  .an-metric-toggle{display:none}
+  .an-metric-select-wrap{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.9rem;width:100%}
+  .an-metric-select-lbl{flex:0 0 auto;color:var(--text-muted);font-size:0.74rem;font-weight:700;
+    letter-spacing:0.04em;text-transform:uppercase}
+}
+/* Shared styling for the mobile control selects (chart metric + video sort). */
+.an-mobile-sel{flex:1 1 auto;min-width:0;appearance:none;-webkit-appearance:none;
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+  font-family:inherit;font-size:0.88rem;font-weight:700;border-radius:8px;
+  padding:0.55rem 2rem 0.55rem 0.75rem;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236aa3ff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.7rem center}
+.an-mobile-sel:focus{outline:none;border-color:var(--accent)}
+/* Video-list sort: the sortable column header is hidden on mobile, so this
+   dropdown is the mobile sort affordance. Desktop keeps the header sort. */
+.window-sort-wrap{display:none}
+@media(max-width:680px){
+  .window-sort-wrap{display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:0.1rem}
+  .window-sort-lbl{flex:0 0 auto;color:var(--text-muted);font-size:0.74rem;font-weight:700;
+    letter-spacing:0.04em;text-transform:uppercase}
+}
 .chart-wrap{position:relative;width:100%}
 #trendChart{width:100%;height:auto;display:block}
 
@@ -387,6 +412,20 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-ctrl-btn[hidden]{display:none}
 .chart-ctrl-swatch{display:inline-block;width:14px;height:3px;border-radius:2px;background:currentColor;opacity:0.8}
 .chart-wrap.labels-hidden .chart-pt-label{display:none}
+/* Mobile: the legend grows when Previous year is toggled on (it adds the
+   prev-year line + YoY deficit/surplus keys). When legend and buttons shared one
+   wrapping flex row, that growth changed the row height and shoved the chart down
+   on toggle. Fix: put the control buttons on their own row, give the legend its
+   own full-width line below them, and reserve a stable min-height for the legend
+   so adding/removing keys never moves the chart. Buttons are also shrunk here. */
+@media(max-width:680px){
+  .trend-legend-row{flex-direction:column;align-items:stretch;gap:0.45rem;margin-bottom:0.4rem}
+  .trend-legend-row .chart-controls-overlay{order:1;justify-content:flex-end;gap:0.35rem}
+  .trend-legend-row .trend-legend{order:2;flex:1 1 100%;min-height:3em;align-content:flex-start;
+    font-size:0.72rem;gap:0.3rem 0.7rem}
+  .chart-ctrl-btn{font-size:0.7rem;padding:0.22rem 0.45rem;gap:0.28rem;border-radius:6px}
+  .chart-ctrl-swatch{width:11px;height:2px}
+}
 .trend-legend-swatch {display: inline-block;
     width: 18px;
     height: 3px;
@@ -475,6 +514,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-axis-label {fill: var(--text-dim); font-size: 13px; font-family: inherit;}
 .chart-axis-label.x {text-anchor: middle;}
 .chart-axis-label.y {text-anchor: end;}
+/* On phones the 720-unit chart viewBox is scaled to ~345px (~0.48x), which would
+   render 13px axis text at ~6px - illegible. Bump the in-viewBox font size so the
+   on-screen result lands back around 11px. Affects all SVG charts that share this
+   class. (Inline font-size on a label still wins where set, e.g. year labels.) */
+@media(max-width:680px){
+  .chart-axis-label {font-size: 22px;}
+  .chart-axis-label.y {font-size: 20px;}
+}
 /* Per-point value labels (e.g. "4.5M", "68K", "7.2%") sitting just above a data
    point. Smaller and a touch lighter than axis labels so the line stays the hero;
    a thin surface-coloured stroke keeps them legible where they cross gridlines. */
@@ -1300,30 +1347,31 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .video-row.ovw-row.with-channel,
   .video-row.ovw-row.no-topics,
   .video-row.ovw-row.with-channel.no-topics {
-    display: flex; flex-direction: column; align-items: stretch;
-    gap: 0.35rem; padding: 0.7rem 0.8rem; grid-template-columns: none;}
+    display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline;
+    gap: 0.1rem 0.55rem; padding: 0.7rem 0.8rem; grid-template-columns: none;}
   /* Title gets the full width and wraps to as many lines as it needs. */
-  .video-row .video-title {white-space: normal; order: 1; width: 100%;}
+  .video-row .video-title {white-space: normal; order: 1; flex: 1 1 100%; width: 100%;}
   .video-row .video-title-main {flex-wrap: wrap; white-space: normal;}
   .video-row .video-title a {white-space: normal; overflow: visible; text-overflow: clip;
     line-height: 1.3; font-size: 0.92rem; font-weight: 600;}
-  /* Date + metrics collapse into one compact, readable meta line under the title. */
-  .video-row .video-date {order: 2; color: var(--text-dim); font-size: 0.75rem;}
-  .video-row .video-views {order: 3; text-align: left;}
-  .video-row .video-views,
-  .video-row .video-duration,
-  .video-row .video-likepct,
-  .video-row .video-comments {display: inline-flex; align-items: baseline; gap: 0.3rem;
-    font-size: 0.8rem; text-align: left;}
-  /* Build a tidy meta strip: date, then a dot-separated run of the kept metrics. */
-  .video-row .video-date,
-  .video-row .video-views,
-  .video-row .video-topic {display: inline-flex;}
-  .video-row .video-meta-line {order: 2; display: flex; flex-wrap: wrap; align-items: baseline;
-    gap: 0.15rem 0.7rem; font-size: 0.78rem; color: var(--text-muted);
+  /* Channel (when shown) sits on its own line directly under the title. */
+  .video-row .video-channel {order: 2; flex: 1 1 100%; display: block; font-size: 0.74rem;
+    color: var(--text-dim); white-space: normal; margin-top: 0.1rem;}
+  /* Date + views form one tidy meta strip below the title: "12 Jun 2026 · 95,000 views".
+     They are separate sibling divs, so a separator dot after the date and a "views"
+     suffix after the number turn them into a single readable line. Scoped to data
+     rows with :not(.video-row-header) so the suffix/dot never hit the header. */
+  .video-row .video-date {order: 3; flex: 0 0 auto; color: var(--text-dim);
+    font-size: 0.78rem; font-variant-numeric: tabular-nums;}
+  .video-row:not(.video-row-header) .video-date::after {content: "\00b7"; margin-left: 0.55rem; color: var(--text-dim);}
+  .video-row .video-views {order: 4; flex: 0 0 auto; text-align: left;
+    font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
     font-variant-numeric: tabular-nums;}
-  .video-row .video-channel {display: block; order: 2; font-size: 0.74rem;
-    color: var(--text-dim); white-space: normal;}
+  .video-row:not(.video-row-header) .video-views::after {content: " views"; font-weight: 400; color: var(--text-dim);}
+  /* The column header row is meaningless on mobile (there are no columns - each
+     row is a self-describing card), and its sort buttons reflow into clutter.
+     Hide it; sorting is still available via the desktop layout. */
+  .video-row-header {display: none !important;}
   /* Keep the bulky numeric columns out on mobile; views stays as the headline metric. */
   .video-row .video-duration,
   .video-row .video-likepct,
@@ -2104,6 +2152,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
+@media(max-width:680px){
+  .an-chart-title-main{font-size:0.98rem}
+  .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
+  .an-chart-title{margin:0.1rem 0 0.55rem}
+}
 </style>
 </head>
 <body>
@@ -2217,6 +2270,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
         <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
       </div>
+      <label class="an-metric-select-wrap" for="anMetricSelect"><span class="an-metric-select-lbl">Chart</span>
+        <select id="anMetricSelect" class="an-mobile-sel" aria-label="Chart metric">
+          <option value="views">Views</option>
+          <option value="views_length">Views + length</option>
+          <option value="views_likes">Views + likes</option>
+          <option value="median_views">Average views</option>
+          <option value="engagement_variance">Engagement variance</option>
+          <option value="all_videos">Video lengths</option>
+          <option value="tag_blocks">Tag blocks</option>
+        </select>
+      </label>
       </div>
       <div class="an-chart-title" id="anChartTitle"></div>
       <div class="trend-legend-row">
@@ -3642,7 +3706,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tag blocks over time', "Each boilerplate tag block's share of monthly long-form uploads - the channel's tagging eras, one replacing the last."]
+    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video to help it surface in search. Rather than tagging each video for what it's about, this channel mostly pastes the same fixed block of tags onto everything \u2014 and the block it uses changes over time. Each coloured band is one of those recurring blocks; the grey band is genuine per-video tagging. Together they show how the channel's tagging habits shifted month to month."]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
@@ -4915,6 +4979,10 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
+  // On phones the chart is scaled down hard; thin out month ticks and size the
+  // month labels up so the x-axis stays legible rather than a smeared blur.
+  const narrow = (typeof window !== 'undefined') && window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+
   // The three blocks, defined as tag-sets. A video belongs to a block if its
   // creator tags contain ALL of the block's tags. Colors match the house ramp
   // (blue / teal / coral) used elsewhere.
@@ -5017,16 +5085,20 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1.25" stroke-opacity="0.9" />`;
     } else if (isQuarter) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 3" />`;
-    } else {
-      // month tick - short baseline mark, now more visible
+    } else if (!narrow) {
+      // month tick - short baseline mark. Suppressed on phones, where ticks at
+      // every month collapse into an unreadable smear after downscaling.
       vLines += `<line x1="${x}" y1="${botY - 6}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.85" />`;
     }
     if (shortRange) {
-      // Label every month. Show the year once, on January (or the first month shown).
+      // Label every month (or every other month on phones to avoid crowding).
+      // Show the year once, on January (or the first month shown).
       const showYear = isYear || !yearsLabelled.has(yr);
       yearsLabelled.add(yr);
+      if (narrow && !isQuarter && !isYear) return; // phones: keep quarter/year labels only
       const label = showYear ? `${MONTH_ABBR[mon-1]} '${yr.slice(2)}` : MONTH_ABBR[mon-1];
-      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 18}" text-anchor="middle" style="font-size:0.66rem">${label}</text>`;
+      const fs = narrow ? '' : ' style="font-size:0.66rem"';
+      xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 18}" text-anchor="middle"${fs}>${label}</text>`;
     } else if (isYear) {
       // Long range: year labels only.
       xLabels += `<text class="chart-axis-label x" x="${x}" y="${H - P.bottom + 20}" text-anchor="middle" style="font-weight:700">${yr}</text>`;
@@ -6009,6 +6081,21 @@ function niceDurationAxis(minSec, maxSec) {
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
   };
 
+  // The tag-blocks chart draws a different x-axis on phones (fewer ticks, larger
+  // labels). That choice is made at render time, so re-render it if the viewport
+  // crosses the mobile breakpoint (e.g. rotating a phone). Scoped to that chart
+  // only, debounced, and a no-op unless the narrow-state actually flipped.
+  let _wasNarrow = (typeof window !== 'undefined') && window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+  let _tbResizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (chartMetric !== 'tag_blocks') return;
+    const isNarrow = window.matchMedia && window.matchMedia('(max-width:680px)').matches;
+    if (isNarrow === _wasNarrow) return;
+    _wasNarrow = isNarrow;
+    if (_tbResizeTimer) clearTimeout(_tbResizeTimer);
+    _tbResizeTimer = setTimeout(() => { try { renderTrendChart(showPrevYear); } catch(e){ console.error('tagblocks resize', e); } }, 200);
+  });
+
   // ===== Phase 2: topic analysis — mode-over-time + subject/theme leaderboards =====
   const MODE_ORDER = ['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
   function topicColorOf(id, fallback){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].color) || fallback || '#888'; }
@@ -6158,6 +6245,12 @@ function niceDurationAxis(minSec, maxSec) {
         if (sel) sel.value = '@TheQuartering';
       }
     }
+    // Keep both controls (desktop button row + mobile dropdown) reflecting the
+    // active metric, whichever one triggered the change.
+    const _bt = document.getElementById('anMetricToggle');
+    if (_bt) _bt.querySelectorAll('.an-metric-btn').forEach(b => b.classList.toggle('active', b.dataset.metric === m));
+    const _ms = document.getElementById('anMetricSelect');
+    if (_ms && _ms.value !== m) _ms.value = m;
     window.renderAnalysisChart();
   };
   window.setAnalysisViewMode = function(v){ viewMode = v; window.renderAnalysisChart(); };
@@ -7592,6 +7685,16 @@ function renderWindowList(startDate, endDate) {
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
       ${renamedDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
       ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
+      <label class="window-sort-wrap" for="windowSortSelect"><span class="window-sort-lbl">Sort</span>
+        <select id="windowSortSelect" class="an-mobile-sel" aria-label="Sort videos">
+          <option value="date|desc"${windowListState.sortBy==='date'&&windowListState.sortDir==='desc'?' selected':''}>Newest first</option>
+          <option value="date|asc"${windowListState.sortBy==='date'&&windowListState.sortDir==='asc'?' selected':''}>Oldest first</option>
+          <option value="views|desc"${windowListState.sortBy==='views'&&windowListState.sortDir==='desc'?' selected':''}>Most views</option>
+          <option value="views|asc"${windowListState.sortBy==='views'&&windowListState.sortDir==='asc'?' selected':''}>Fewest views</option>
+          <option value="likepct|desc"${windowListState.sortBy==='likepct'&&windowListState.sortDir==='desc'?' selected':''}>Highest like %</option>
+          <option value="comments|desc"${windowListState.sortBy==='comments'&&windowListState.sortDir==='desc'?' selected':''}>Most comments</option>
+        </select>
+      </label>
     </div>
     ${topicFilterBar}
     ${breakdownHtml}
@@ -8025,6 +8128,16 @@ function renderWindowList(startDate, endDate) {
     const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
     if (sd && ed) renderWindowList(sd, ed);
   });
+  // Mobile sort dropdown (the column-header sort is hidden on phones).
+  document.addEventListener('change', (e) => {
+    if (e.target.id !== 'windowSortSelect') return;
+    const [col, dir] = e.target.value.split('|');
+    windowListState.sortBy = col;
+    windowListState.sortDir = (dir === 'asc') ? 'asc' : 'desc';
+    resetVideoBatches();
+    const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+    if (sd && ed) renderWindowList(sd, ed);
+  });
   document.addEventListener('input', (e) => {
     if (e.target.id !== 'windowListSearch') return;
     windowListState.query = e.target.value;
@@ -8142,6 +8255,13 @@ function renderWindowList(startDate, endDate) {
       if (!btn) return;
       metricToggle.querySelectorAll('.an-metric-btn').forEach(b => b.classList.toggle('active', b === btn));
       if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(btn.dataset.metric);
+    });
+  }
+  // Mobile equivalent of the metric button row.
+  const metricSelect = document.getElementById('anMetricSelect');
+  if (metricSelect) {
+    metricSelect.addEventListener('change', (e) => {
+      if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric(e.target.value);
     });
   }
   // Hide-labels toggle — adds .labels-hidden to the chart wrap (pure CSS hide,
