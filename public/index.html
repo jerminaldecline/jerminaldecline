@@ -2256,6 +2256,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="wordcloud-caret" aria-hidden="true"></span>
       </button>
       <div class="wordcloud-panel" id="topicsPanel" hidden>
+        <div class="ctag-viewtabs" role="tablist">
+          <button type="button" class="ctag-viewtab active" data-topicview="subject" role="tab" aria-selected="true">Subjects</button>
+          <button type="button" class="ctag-viewtab" data-topicview="theme" role="tab" aria-selected="false">Themes</button>
+          <button type="button" class="ctag-viewtab" data-topicview="mode" role="tab" aria-selected="false">Modes</button>
+        </div>
         <div class="wordcloud-meta" id="topicsMeta"></div>
         <div class="topics-body" id="topicsBody"></div>
       </div>
@@ -6425,7 +6430,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -7160,6 +7165,12 @@ function renderWindowList(startDate, endDate) {
     if (!panel || !body || !section) return;
     if (!isTopicChannel()) { section.hidden = true; return; }
     section.hidden = false;
+    // Sync view-tab active states.
+    const view = windowListState.topicView || 'subject';
+    document.querySelectorAll('.ctag-viewtab[data-topicview]').forEach(b => {
+      const on = b.dataset.topicview === view;
+      b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on));
+    });
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     if (!startDate || !endDate) { body.innerHTML = ''; return; }
@@ -7168,17 +7179,30 @@ function renderWindowList(startDate, endDate) {
     const fmtF = windowListState.formatFilter;
     if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
     else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
+    // Pick the map + (for subjects only) the promoted-set filter for this view.
+    const map = view === 'theme' ? ANALYTICS_TOPIC_THEMES
+      : view === 'mode' ? ANALYTICS_TOPIC_MODES
+      : ANALYTICS_TOPIC_TAGS;
     const counts = new Map();
     let tagged = 0;
-    for (const v of videos) { const id = ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]; if (!id) continue; tagged++; if (ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue; counts.set(id, (counts.get(id) || 0) + 1); }
+    for (const v of videos) {
+      const id = map && map[v.id];
+      if (!id) continue;
+      tagged++;
+      // Subjects are filtered to the promoted set (thousands of raw one-offs);
+      // themes and modes are a fixed curated set, so show all of them.
+      if (view === 'subject' && ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue;
+      counts.set(id, (counts.get(id) || 0) + 1);
+    }
     const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
-    if (hint) hint.textContent = ranked.length ? `(${ranked.length} subject${ranked.length === 1 ? '' : 's'})` : '';
-    if (!ranked.length) { body.innerHTML = '<div class="wordcloud-empty">No tagged subjects in this range.</div>'; if (meta) meta.textContent = ''; return; }
-    if (meta) meta.textContent = `Click a subject to filter the list below — ${tagged} of ${videos.length} videos tagged.`;
+    const noun = view === 'theme' ? 'theme' : view === 'mode' ? 'mode' : 'subject';
+    if (hint) hint.textContent = ranked.length ? `(${ranked.length} ${noun}${ranked.length === 1 ? '' : 's'})` : '';
+    if (!ranked.length) { body.innerHTML = `<div class="wordcloud-empty">No tagged ${noun}s in this range.</div>`; if (meta) meta.textContent = ''; return; }
+    if (meta) meta.textContent = `Click a ${noun} to filter the list below — ${tagged} of ${videos.length} videos tagged.`;
     const cur = windowListState.topicFilter;
     body.innerHTML = ranked.map(([id, c]) => {
-      const active = cur && cur.kind === 'subject' && cur.id === id;
-      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="subject" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
+      const active = cur && cur.kind === view && cur.id === id;
+      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="${view}" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
     }).join('');
   };
 
@@ -7426,6 +7450,13 @@ function renderWindowList(startDate, endDate) {
       resetVideoBatches();
       const sd = document.getElementById('startDate').value, ed = document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed);
+      return;
+    }
+    // Switch topics sub-view: Subjects / Themes / Modes.
+    const tview = e.target.closest('.ctag-viewtab[data-topicview]');
+    if (tview) {
+      windowListState.topicView = tview.dataset.topicview;
+      window.renderTopicsContainer();
       return;
     }
   });
