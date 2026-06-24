@@ -4713,13 +4713,23 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // creator tags contain ALL of the block's tags. Colors match the house ramp
   // (blue / teal / coral) used elsewhere.
   const BLOCKS = [
-    { key: 'generic', label: 'Generic news', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
-    { key: 'entertainment', label: 'Entertainment', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
-    { key: 'creator', label: 'Creator-SEO', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+    { key: 'generic', label: 'Era 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+    { key: 'entertainment', label: 'Era 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+    { key: 'creator', label: 'Era 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
   ];
   // Assignment priority (most specific / recent first) so overlapping tags like
   // "movies"/"gaming" don't get a video counted in more than one block.
   const PRIORITY = ['creator', 'entertainment', 'generic'];
+  // Display list for the tooltip + key: the original "unique tagging" era first,
+  // then the three boilerplate eras.
+  const KEYITEMS = [
+    { key: 'unique', label: 'Era 0', color: '#888780', tags: ['unique / specific per-video tags'] },
+    ...[
+      { key: 'generic', label: 'Era 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+      { key: 'entertainment', label: 'Era 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+      { key: 'creator', label: 'Era 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+    ]
+  ];
 
   function classify(tagArr) {
     if (!tagArr || !tagArr.length) return null;
@@ -4736,16 +4746,17 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     const lf = (m.curr && m.curr.longForm) ? m.curr.longForm : [];
     const sh = (m.curr && m.curr.shorts) ? m.curr.shorts : [];
     const vids = lf.concat(sh);
-    let total = 0; const c = { generic: 0, entertainment: 0, creator: 0 };
+    let total = 0; const c = { generic: 0, entertainment: 0, creator: 0, unique: 0 };
     for (const v of vids) {
       const tags = ANALYTICS_CREATOR_TAGS[v.id];
       if (!tags) continue;
       total++;
       const k = classify(tags);
       if (k) c[k]++;
+      else c.unique++; // tagged, but not with any recurring block = specific/unique tagging
     }
     const pct = (n) => total > 0 ? (n / total) * 100 : 0;
-    return { key: m.key, total, generic: pct(c.generic), entertainment: pct(c.entertainment), creator: pct(c.creator) };
+    return { key: m.key, total, generic: pct(c.generic), entertainment: pct(c.entertainment), creator: pct(c.creator), unique: pct(c.unique) };
   }
 
   const monthData = chartData.map(computeMonth);
@@ -4818,8 +4829,8 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // Build stacked areas. Stack order bottom->top: generic, entertainment, creator.
   // For each month compute cumulative tops; each band is the ribbon between its
   // lower and upper cumulative line.
-  const order = ['generic', 'entertainment', 'creator'];
-  const colorOf = { generic: '#378ADD', entertainment: '#1D9E75', creator: '#D85A30' };
+  const order = ['unique', 'generic', 'entertainment', 'creator'];
+  const colorOf = { unique: '#888780', generic: '#378ADD', entertainment: '#1D9E75', creator: '#D85A30' };
   let areas = '';
   // running base per month index
   const base = new Array(n).fill(0);
@@ -4858,7 +4869,7 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
       col.addEventListener('mouseenter', (e) => {
         const i = +col.dataset.i;
         const m = allMonths[i];
-        const rows = BLOCKS.map(b => `<div style="display:flex;justify-content:space-between;gap:12px;"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${b.color};margin-right:5px;"></span>${b.label}</span><span>${Math.round(m[b.key])}%</span></div>`).join('');
+        const rows = KEYITEMS.map(b => `<div style="display:flex;justify-content:space-between;gap:12px;"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${b.color};margin-right:5px;"></span>${b.label}</span><span>${Math.round(m[b.key])}%</span></div>`).join('');
         tooltip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">${m.key}</div>${rows}<div style="margin-top:4px;color:var(--text-dim);">${m.total} videos</div>`;
         tooltip.style.display = 'block';
       });
@@ -4875,7 +4886,7 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // Populate the key beneath the chart with the full tag list of each block.
   const keyEl = document.getElementById('tagBlockKey');
   if (keyEl) {
-    keyEl.innerHTML = BLOCKS.map(b =>
+    keyEl.innerHTML = KEYITEMS.map(b =>
       `<div class="tagblock-key-item">
         <span class="tagblock-key-swatch" style="background:${b.color}"></span>
         <span class="tagblock-key-text">
