@@ -6537,6 +6537,15 @@ function niceDurationAxis(minSec, maxSec) {
   // that would otherwise dominate the table.
   longDescThreshold: 90
 };
+
+  // Optional per-channel "info point" callouts shown above the description-
+  // patterns table (keyed by channel handle -> array of {label, text}). This is
+  // an editorial hook: leave a channel out (or empty) to show no callouts. It is
+  // referenced unconditionally below, so it must always exist - an undefined
+  // lookup here previously threw a ReferenceError that aborted the whole
+  // Analysis chart render. Populate as desired, e.g.:
+  //   '@TheQuartering': [{ label: 'Note', text: 'Descriptions rarely match the video.' }]
+  const DESC_PATTERN_INFO_POINTS = {};
   function loadDescriptions() {
   if (descriptionsCache) return Promise.resolve(descriptionsCache);
   if (descriptionsLoadPromise) return descriptionsLoadPromise;
