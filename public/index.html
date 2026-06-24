@@ -5218,11 +5218,15 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     if (isYear) {
       vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1.25" stroke-opacity="0.9" />`;
     } else if (isQuarter) {
-      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 3" />`;
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="2 3" />`;
     } else if (!narrow) {
-      // month tick - short baseline mark. Suppressed on phones, where ticks at
-      // every month collapse into an unreadable smear after downscaling.
-      vLines += `<line x1="${x}" y1="${botY - 6}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="0.85" />`;
+      // Month break - a faint FULL-HEIGHT divider so each month reads as its own
+      // segment, not just a baseline tick. Kept subtle (and fainter as the range
+      // grows dense) so it sits behind the data and preserves the year > quarter
+      // > month hierarchy rather than turning the plot into a hard grid.
+      // Suppressed on phones, where a line per month collapses into a smear.
+      const monthOpacity = n > 48 ? 0.2 : (n > 24 ? 0.28 : 0.38);
+      vLines += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${botY}" stroke="var(--border)" stroke-width="1" stroke-opacity="${monthOpacity}" />`;
     }
     if (shortRange) {
       // Label every month (or every other month on phones to avoid crowding).
