@@ -5029,20 +5029,70 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
     return s + vids.filter(v => ANALYTICS_CREATOR_TAGS[v.id]).length;
   }, 0);
   const _blockFloor = Math.max(3, Math.round(_taggedLF * 0.005));
-  const BLOCK_COLORS = ['#378ADD', '#1D9E75', '#D85A30'];
   const _topSets = [..._setCounts.values()]
     .filter(g => g.count >= _blockFloor)
     .sort((a, b) => b.count - a.count || b.tags.length - a.tags.length)
     .slice(0, 3);
-  // BLOCKS: dynamic. `tags` is the exact set; a video matches a block if its
-  // tag-set is EXACTLY that set (deliberate reuse), matched by canonical key.
-  const BLOCKS = _topSets.map((g, i) => ({
-    key: 'block' + i,
-    label: 'Block ' + (i + 1),
-    color: BLOCK_COLORS[i] || '#9a6dd8',
-    tags: g.tags.slice().sort(),
-    matchKey: setKey(g.tags)
-  }));
+  // Stable, content-derived identity for each block. Two goals:
+  //  1. Name: derived from the block's most DISTINCTIVE tags (tags in this set
+  //     but not in the others), so each block reads as a recognisable thing
+  //     ("Tim Pool, Timcast Irl") rather than a bare positional "Block 2" that
+  //     silently means different sets in different views/periods.
+  //  2. Colour: hashed from the set's canonical key, so the SAME tag-set always
+  //     gets the SAME colour regardless of its rank in the current window. A
+  //     newly-emerging set therefore gets its own colour instead of inheriting
+  //     the colour a now-lower-ranked set used to hold.
+  const titleCaseTag = (s) => s.replace(/\b\w/g, c => c.toUpperCase());
+  function blockName(tagsArr, allSets) {
+    const others = new Set();
+    for (const o of allSets) { if (o !== tagsArr) for (const t of o) others.add(t); }
+    const distinctive = tagsArr.filter(t => !others.has(t));
+    const pool = distinctive.length >= 2 ? distinctive : tagsArr;
+    // Prefer multi-word (more specific) tags, then shorter, then alphabetical -
+    // deterministic so the name is stable across renders.
+    const pick = [...pool].sort((a, b) =>
+      (b.includes(' ') - a.includes(' ')) || a.length - b.length || a.localeCompare(b)
+    ).slice(0, 2);
+    return pick.map(titleCaseTag).join(', ');
+  }
+  // Distinct, well-separated palette for deliberate blocks. Auto-default owns the
+  // cool-blue hue (below), so it is intentionally excluded here; Unique has its
+  // own reserved grey. These are the colours deliberate blocks draw from.
+  const BLOCK_PALETTE = ['#1D9E75', '#D85A30', '#9a6dd8', '#e0a458', '#c2407c', '#2bb1c4'];
+  function colorForKey(key) {
+    // Simple deterministic string hash -> palette index. Stable per tag-set.
+    let h = 0;
+    for (let i = 0; i < key.length; i++) { h = (h * 31 + key.charCodeAt(i)) | 0; }
+    return BLOCK_PALETTE[Math.abs(h) % BLOCK_PALETTE.length];
+  }
+  const _topTagArrays = _topSets.map(g => g.tags.slice().sort());
+  const BLOCKS = _topSets.map((g, i) => {
+    const tagsSorted = _topTagArrays[i];
+    const mk = setKey(g.tags);
+    return {
+      key: 'block' + i,
+      // Content-derived name = stable identity that can't collide across views.
+      label: blockName(tagsSorted, _topTagArrays),
+      color: colorForKey(mk),
+      tags: tagsSorted,
+      matchKey: mk
+    };
+  });
+  // Guarantee no two visible blocks share a colour even if their keys happen to
+  // hash to the same palette slot (rare, but would be confusing). Nudge later
+  // duplicates to the next free palette entry.
+  (function dedupeColors(){
+    const used = new Set();
+    const auto = '#3f6fb0', uniq = '#8a8578'; // reserved (see below) - avoid clashing
+    used.add(auto); used.add(uniq);
+    for (const b of BLOCKS) {
+      if (used.has(b.color)) {
+        const free = BLOCK_PALETTE.find(c => !used.has(c));
+        if (free) b.color = free;
+      }
+      used.add(b.color);
+    }
+  })();
   const blockByMatchKey = new Map(BLOCKS.map(b => [b.matchKey, b.key]));
 
   // Does this channel actually use the YouTube auto-default set at all?
@@ -5068,8 +5118,11 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // Display/stack order bottom->top, plus colours. Only include the auto-default
   // band if the channel actually uses it. "Unique" sits at the bottom (the base
   // of deliberate-but-varied tagging); blocks stack above; auto-default on top.
-  const AUTO_COLOR = '#5b6b8c';   // muted slate - reads as "not a real choice"
-  const UNIQUE_COLOR = '#888780'; // warm grey - genuine per-video tagging
+  // Auto-default and Unique get reserved colours that are deliberately far apart
+  // so the two never read as the same band. Auto-default = a cool desaturated
+  // blue ("not a real choice"); Unique = a warm grey (genuine, but plain).
+  const AUTO_COLOR = '#3f6fb0';   // cool slate-blue - distinct from the warm grey below
+  const UNIQUE_COLOR = '#8a8578'; // warm grey - genuine per-video tagging
   const order = ['unique', ...BLOCKS.map(b => b.key), ...(_autoDefaultUsed ? ['autodefault'] : [])];
   const colorOf = { unique: UNIQUE_COLOR, autodefault: AUTO_COLOR };
   for (const b of BLOCKS) colorOf[b.key] = b.color;
