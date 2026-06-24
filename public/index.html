@@ -4713,9 +4713,9 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // creator tags contain ALL of the block's tags. Colors match the house ramp
   // (blue / teal / coral) used elsewhere.
   const BLOCKS = [
-    { key: 'generic', label: 'Era 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
-    { key: 'entertainment', label: 'Era 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
-    { key: 'creator', label: 'Era 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+    { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+    { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+    { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
   ];
   // Assignment priority (most specific / recent first) so overlapping tags like
   // "movies"/"gaming" don't get a video counted in more than one block.
@@ -4723,11 +4723,11 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
   // Display list for the tooltip + key: the original "unique tagging" era first,
   // then the three boilerplate eras.
   const KEYITEMS = [
-    { key: 'unique', label: 'Era 0', color: '#888780', tags: ['unique / specific per-video tags'] },
+    { key: 'unique', label: 'Unique', color: '#888780', tags: ['unique / specific per-video tags'] },
     ...[
-      { key: 'generic', label: 'Era 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
-      { key: 'entertainment', label: 'Era 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
-      { key: 'creator', label: 'Era 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
+      { key: 'generic', label: 'Block 1', color: '#378ADD', tags: ['gaming news','tech news','movie news','movies'] },
+      { key: 'entertainment', label: 'Block 2', color: '#1D9E75', tags: ['movies','gaming','entertainment','hollywood','streaming','netflix','hbo'] },
+      { key: 'creator', label: 'Block 3', color: '#D85A30', tags: ['timcast','tim pool','benny johnson','asmongold'] }
     ]
   ];
 
