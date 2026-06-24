@@ -3008,8 +3008,48 @@ function render(m){
   ss.innerHTML = ['ALL',...CHANNELS].map(s=>'<option value="'+s+'"'+(s===scope?' selected':'')+'>'+SCOPE_LABEL[s]+'</option>').join('');
   ss.onchange = (e)=>{ scope=e.target.value; const months=availableMonths(); refresh(months.includes(m)?m:months[0]); };
   const ms=document.getElementById('msel');
-  ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
-  ms.onchange = (e)=>{ refresh(e.target.value); };
+  // Populate with the same period presets as the other tabs (YTD, Last 12/24
+  // months, Since peak, All time) followed by the month list. On Overview these
+  // presets resolve to the appropriate single month and jump there, since the
+  // report is month-at-a-time (mirroring the quick-jump buttons' behaviour).
+  if (typeof window.__populatePeriodDropdowns === 'function') {
+    // build presets + months into #msel, current selection = active month
+    (function(){
+      const presets = [['ytd','YTD'],['12m','Last 12 months'],['24m','Last 24 months'],['since-peak','Since peak'],['all','All time']];
+      const months = availableMonths();
+      const presetOpts = presets.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+      const sep = months.length ? `<option disabled>\u2500\u2500\u2500\u2500\u2500\u2500</option>` : '';
+      const monthOpts = months.map(mm => `<option value="${mm}"${mm===m?' selected':''}>${monthName(mm)}</option>`).join('');
+      ms.innerHTML = presetOpts + sep + monthOpts;
+    })();
+  } else {
+    ms.innerHTML = availableMonths().map(mm=>'<option value="'+mm+'"'+(mm===m?' selected':'')+'>'+monthName(mm)+'</option>').join('');
+  }
+  // Resolve a preset value to the month it should jump to. Plain YYYY-MM values
+  // pass through unchanged.
+  function ovResolveMonth(val){
+    const months = availableMonths(); // newest-first
+    if (months.includes(val)) return val; // already a month
+    const now = new Date(); const y = now.getFullYear(), mo = now.getMonth()+1;
+    const k = (yy,mm)=>`${yy}-${String(mm).padStart(2,'0')}`;
+    const pickClosest = (target) => {
+      // nearest available month at or before target, else earliest
+      const atOrBefore = months.filter(mm => mm <= target);
+      return atOrBefore.length ? atOrBefore[0] : months[months.length-1];
+    };
+    if (val === 'ytd') return pickClosest(k(y,1));
+    if (val === '12m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-12); return pickClosest(k(d.getFullYear(),d.getMonth()+1)); }
+    if (val === '24m'){ const d=new Date(y,mo-1); d.setMonth(d.getMonth()-24); return pickClosest(k(d.getFullYear(),d.getMonth()+1)); }
+    if (val === 'all') return months[months.length-1]; // earliest month
+    if (val === 'since-peak'){
+      const cid = scope==='ALL' ? 'ALL' : (HANDLE_TO_ID[scope]||'ALL');
+      const md = buildMonthlyData(cid);
+      let pk=null, pv=-1; for(const mm of md){ if(mm.curr.longViews>pv){ pv=mm.curr.longViews; pk=mm.key; } }
+      return pk && months.includes(pk) ? pk : months[0];
+    }
+    return months[0];
+  }
+  ms.onchange = (e)=>{ refresh(ovResolveMonth(e.target.value)); };
   // Mood buttons live in the re-rendered fun card — restore their active state.
   if (window.__syncMoodButtons) window.__syncMoodButtons();
   // Month quick-jump (Last complete month / Month in progress) — wire + reflect active.
