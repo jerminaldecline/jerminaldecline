@@ -6546,6 +6546,31 @@ function niceDurationAxis(minSec, maxSec) {
   // Analysis chart render. Populate as desired, e.g.:
   //   '@TheQuartering': [{ label: 'Note', text: 'Descriptions rarely match the video.' }]
   const DESC_PATTERN_INFO_POINTS = {};
+
+  // Common-misspelling reference for the title spelling-scan below: a fixed map
+  // of misspelling(lowercase) -> correct spelling. The scan counts how often each
+  // appears across the channel's long-form titles, so it self-updates as new
+  // uploads land - no per-channel data needed. Referenced unconditionally below,
+  // so it must always exist (an undefined lookup here threw a ReferenceError that
+  // aborted the Analysis chart render). Entries are general English misspellings
+  // plus a few seen in this network's titles; harmless if a given one never hits.
+  const SPELLING_DICTIONARY = {
+    'alot': 'a lot', 'embarass': 'embarrass', 'embarassing': 'embarrassing',
+    'publically': 'publicly', 'rediculous': 'ridiculous', 'maintainance': 'maintenance',
+    'definately': 'definitely', 'seperate': 'separate', 'occured': 'occurred',
+    'recieve': 'receive', 'wierd': 'weird', 'untill': 'until', 'tommorow': 'tomorrow',
+    'goverment': 'government', 'neccessary': 'necessary', 'accross': 'across',
+    'begining': 'beginning', 'beleive': 'believe', 'calender': 'calendar',
+    'concious': 'conscious', 'enviroment': 'environment', 'existance': 'existence',
+    'foriegn': 'foreign', 'harrass': 'harass', 'independant': 'independent',
+    'occassion': 'occasion', 'persistant': 'persistent', 'supercede': 'supersede',
+    'tyrany': 'tyranny', 'vaccum': 'vacuum', 'wether': 'whether', 'writting': 'writing',
+    'wich': 'which', 'thier': 'their', 'freind': 'friend', 'greatful': 'grateful',
+    'hipocrite': 'hypocrite', 'millenium': 'millennium', 'noticable': 'noticeable',
+    'occurance': 'occurrence', 'priviledge': 'privilege', 'refered': 'referred',
+    'relevent': 'relevant', 'religous': 'religious', 'remeber': 'remember',
+    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely'
+  };
   function loadDescriptions() {
   if (descriptionsCache) return Promise.resolve(descriptionsCache);
   if (descriptionsLoadPromise) return descriptionsLoadPromise;
@@ -6578,7 +6603,9 @@ function niceDurationAxis(minSec, maxSec) {
 
   // Descriptions are loaded lazily; reuse the story tracker's cache.
   if (!descriptionsCache) {
-    loadDescriptions().then(() => window.renderDescPatterns());
+    loadDescriptions()
+      .then(() => { try { window.renderDescPatterns(); } catch (e) { console.error('desc patterns (async)', e); } })
+      .catch(err => console.error('desc patterns load', err));
     return;
   }
 
