@@ -1,162 +1,18 @@
-# Topic candidates — 2026-06-23
+# Topic candidates — 2026-06-24
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @JeremyHambly
-
-Pool: 12 recent videos, 121 baseline videos
-
-### Cluster 1: `online`
-
-- **Recent saturation:** 7/12 videos (**58%**)
-- **Baseline saturation:** 9/121 videos (7%)
-- **Spike ratio:** 7.5x
-- **Related terms:** `online`, `political`, `candace`, `owens`, `sparks`, `viral`, `candace owens`
-- **Sample recent videos:**
-  - 2026-06-22 — _INSANE HOAX_  
-    Candace Owens Death Hoax Sparks Confusion Across Social Media
-  - 2026-06-22 — _I CAN'T BELIEVE IT_  
-    Viral Video Sparks Debate Over Charlie Kirk Political Division
-  - 2026-06-22 — _THIS IS GHOULISH_  
-    Candace Owens Shares Alleged Charlie Kirk Texts Amid Authenticity Dispute
-  - 2026-06-18 — _HE GOT DESTROYED_  
-    Viral Walmart Arrest Ends Content Creator's Defiant Store Standoff
-  - 2026-06-17 — _THERE IS NO FIXING THIS_  
-    Hasan Criticized By Destiny, Asmongold And Tim Pool
-
-### Cluster 2: `major`
-
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 3/121 videos (2%)
-- **Spike ratio:** 8.7x
-- **Related terms:** `major`
-- **Sample recent videos:**
-  - 2026-06-22 — _I CAN'T BELIEVE IT_  
-    Viral Video Sparks Debate Over Charlie Kirk Political Division
-  - 2026-06-17 — _THERE IS NO FIXING THIS_  
-    Hasan Criticized By Destiny, Asmongold And Tim Pool
-  - 2026-06-16 — _ICE AGENT ATTACKED_  
-    ICE Agent Struck By Fleeing Suspect As Manhunt Intensifies
-
-### Cluster 3: `our coffee`
-
-- **Recent saturation:** 10/12 videos (**83%**)
-- **Baseline saturation:** 16/121 videos (13%)
-- **Spike ratio:** 6.2x
-- **Related terms:** `our`, `coffee`, `main`, `our coffee`, `coffee main`
-- **Sample recent videos:**
-  - 2026-06-22 — _INSANE HOAX_  
-    Candace Owens Death Hoax Sparks Confusion Across Social Media
-  - 2026-06-22 — _I CAN'T BELIEVE IT_  
-    Viral Video Sparks Debate Over Charlie Kirk Political Division
-  - 2026-06-22 — _THIS IS GHOULISH_  
-    Candace Owens Shares Alleged Charlie Kirk Texts Amid Authenticity Dispute
-  - 2026-06-19 — _THIS IS INSANE_  
-    Court Revokes Bond After New Footage Emerges In Shooting Case
-  - 2026-06-19 — _THIS PROVES EVERYTHING_  
-    Tulsi Gabbard Releases New Documents Targeting Fauci And Wuhan
-
-### Cluster 4: `debate`
-
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 4/121 videos (3%)
-- **Spike ratio:** 6.8x
-- **Related terms:** `debate`
-- **Sample recent videos:**
-  - 2026-06-22 — _I CAN'T BELIEVE IT_  
-    Viral Video Sparks Debate Over Charlie Kirk Political Division
-  - 2026-06-18 — _HE GOT DESTROYED_  
-    Viral Walmart Arrest Ends Content Creator's Defiant Store Standoff
-  - 2026-06-17 — _WE HAVE WON_  
-    Gaming DEI Debate Reignites After Rockstar And CDPR Controversies
-
-## @TheQuartering
-
-Pool: 17 recent videos, 130 baseline videos
-
-### Cluster 1: `case`
-
-- **Recent saturation:** 9/17 videos (**53%**)
-- **Baseline saturation:** 9/130 videos (7%)
-- **Spike ratio:** 7.3x
-- **Related terms:** `case`, `surrounding`, `controversy`, `allegations`, `fresh`, `conviction`, `second fresh`
-- **Sample recent videos:**
-  - 2026-06-22 — _THIS IS HORRIBLE_  
-    Courtroom Notes Describe Emotional Bodycam Footage In Fatal Case
-  - 2026-06-22 — _THEY'RE ANIMALS_  
-    Woman Hospitalized After Alleged Attack Linked To Viral Case
-  - 2026-06-19 — _ARREST THEM ALL_  
-    Austin Metcalf's Father Alleges School Officials Bowed To Pressure
-  - 2026-06-18 — _NEW INSANE BOMBSHELL_  
-    New Questions Emerge Over Karmelo Anthony Appeal And Fundraising
-  - 2026-06-18 — _HE'S DONE FOR_  
-    Sarah Fields Escalates Legal Battle Amid Karmelo Anthony Case Fallout
-
-### Cluster 2: `online`
-
-- **Recent saturation:** 7/17 videos (**41%**)
-- **Baseline saturation:** 2/130 videos (2%)
-- **Spike ratio:** 21.6x
-- **Related terms:** `online`, `fallout`, `anthony case`
-- **Sample recent videos:**
-  - 2026-06-22 — _THIS IS HORRIBLE_  
-    Courtroom Notes Describe Emotional Bodycam Footage In Fatal Case
-  - 2026-06-19 — _ARREST THEM ALL_  
-    Austin Metcalf's Father Alleges School Officials Bowed To Pressure
-  - 2026-06-18 — _NEW INSANE BOMBSHELL_  
-    New Questions Emerge Over Karmelo Anthony Appeal And Fundraising
-  - 2026-06-18 — _HE'S DONE FOR_  
-    Sarah Fields Escalates Legal Battle Amid Karmelo Anthony Case Fallout
-  - 2026-06-17 — _THEY PUT A HIT OUT ON HIM_  
-    Karmelo Anthony Fallout Sparks Online Feuds, Threats, And Backlash
-
-### Cluster 3: `following`
-
-- **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 8/130 videos (6%)
-- **Spike ratio:** 4.5x
-- **Related terms:** `following`, `questions`
-- **Sample recent videos:**
-  - 2026-06-22 — _SHE'S PANICKING_  
-    Ilhan Omar Financial Disclosure Raises Questions About Family Income
-  - 2026-06-18 — _NEW INSANE BOMBSHELL_  
-    New Questions Emerge Over Karmelo Anthony Appeal And Fundraising
-  - 2026-06-18 — _RIOTS HAVE BEGUN_  
-    Mississippi Protests Erupt After Police Shooting Kills One-Year-Old
-  - 2026-06-17 — _IT JUST GOT WORSE_  
-    Karmelo Anthony Appeal Push Faces New Questions And Scrutiny
-  - 2026-06-16 — _HE'S IN HUGE TROUBLE_  
-    New Allegations And Drama Reignite Karmelo Anthony Controversy
-
-### Cluster 4: `our`
-
-- **Recent saturation:** 16/17 videos (**94%**)
-- **Baseline saturation:** 22/130 videos (17%)
-- **Spike ratio:** 5.5x
-- **Related terms:** `our`, `coffee`, `second`, `our coffee`, `coffee second`
-- **Sample recent videos:**
-  - 2026-06-22 — _THIS IS HORRIBLE_  
-    Courtroom Notes Describe Emotional Bodycam Footage In Fatal Case
-  - 2026-06-22 — _SHE'S PANICKING_  
-    Ilhan Omar Financial Disclosure Raises Questions About Family Income
-  - 2026-06-22 — _THEY'RE ANIMALS_  
-    Woman Hospitalized After Alleged Attack Linked To Viral Case
-  - 2026-06-20 — _ITS SO MUCH WORSE_  
-    The Karmelo Bodycam footage has been released and it's bad
-  - 2026-06-19 — _SHE'S RAGING_  
-    Ilhan Omar Defends Activists Facing Federal Antifa Conspiracy Charges
-
 ## @QuarteringLive
 
-Pool: 6 recent videos, 65 baseline videos
+Pool: 8 recent videos, 65 baseline videos
 
 ### Cluster 1: `est`
 
-- **Recent saturation:** 6/6 videos (**100%**)
+- **Recent saturation:** 6/8 videos (**75%**)
 - **Baseline saturation:** 1/65 videos (2%)
-- **Spike ratio:** 44.0x
+- **Spike ratio:** 33.0x
 - **Related terms:** `est`, `tue`, `thursday`, `pmest`, `online`, `est tue`, `tue thursday`, `thursday pmest`
 - **Sample recent videos:**
   - 2026-06-22 — _MUSLIMS ARE TERRIFIED_  
@@ -169,6 +25,160 @@ Pool: 6 recent videos, 65 baseline videos
     TikTok Dance Trend Sparks Outrage Amid Karmelo Anthony Case
   - 2026-06-17 — _HERO MLB PLAYER_  
     MLB Warns Giants Pitchers Over Bible Verses on Pride Caps
+
+### Cluster 2: `controversial`
+
+- **Recent saturation:** 4/8 videos (**50%**)
+- **Baseline saturation:** 2/65 videos (3%)
+- **Spike ratio:** 13.2x
+- **Related terms:** `controversial`, `sparks`, `debate`, `viral`
+- **Sample recent videos:**
+  - 2026-06-24 — _MOST BASED MOVIE EVER_  
+    Controversial Film Sparks Debate Over Censorship And Free Expression
+  - 2026-06-23 — _BRAVEST VIDEO EVER_  
+    Controversial Film Sparks Debate Over Censorship And Free Expression
+  - 2026-06-17 — _THESE PEOPLE ARE VILE_  
+    TikTok Dance Trend Sparks Outrage Amid Karmelo Anthony Case
+  - 2026-06-17 — _THIS DAD IS A HERO_  
+    Father Confronted After Taking Daughters Into Empty Women's Restroom
+
+## @TheQuartering
+
+Pool: 16 recent videos, 133 baseline videos
+
+### Cluster 1: `surrounding`
+
+- **Recent saturation:** 7/16 videos (**44%**)
+- **Baseline saturation:** 13/133 videos (10%)
+- **Spike ratio:** 4.3x
+- **Related terms:** `surrounding`, `following`, `questions`, `appeal`, `conviction`
+- **Sample recent videos:**
+  - 2026-06-23 — _NEW INSANE GRIFT_  
+    Karmelo Anthony Hires New Legal Team For Appeal Effort
+  - 2026-06-23 — _HE WENT BERSERK_  
+    Austin Metcalf Case Continues To Drive National Debate
+  - 2026-06-22 — _SHE'S PANICKING_  
+    Ilhan Omar Financial Disclosure Raises Questions About Family Income
+  - 2026-06-19 — _ARREST THEM ALL_  
+    Austin Metcalf's Father Alleges School Officials Bowed To Pressure
+  - 2026-06-18 — _NEW INSANE BOMBSHELL_  
+    New Questions Emerge Over Karmelo Anthony Appeal And Fundraising
+
+### Cluster 2: `debate`
+
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 1/133 videos (1%)
+- **Spike ratio:** 16.8x
+- **Related terms:** `debate`
+- **Sample recent videos:**
+  - 2026-06-23 — _WALMART FATIGUE GOES NUCLEAR_  
+    Walmart Confrontations Spark Debate Over Public Behavior
+  - 2026-06-23 — _HE WENT BERSERK_  
+    Austin Metcalf Case Continues To Drive National Debate
+  - 2026-06-17 — _THE RAPE CRISIS_  
+    UK Grooming Gang Report Sparks Outrage Over Institutional Failures
+
+### Cluster 3: `our`
+
+- **Recent saturation:** 15/16 videos (**94%**)
+- **Baseline saturation:** 29/133 videos (22%)
+- **Spike ratio:** 4.3x
+- **Related terms:** `our`, `coffee`, `second`, `online`, `case`, `our coffee`, `coffee second`
+- **Sample recent videos:**
+  - 2026-06-23 — _NEW INSANE GRIFT_  
+    Karmelo Anthony Hires New Legal Team For Appeal Effort
+  - 2026-06-23 — _WALMART FATIGUE GOES NUCLEAR_  
+    Walmart Confrontations Spark Debate Over Public Behavior
+  - 2026-06-23 — _HE WENT BERSERK_  
+    Austin Metcalf Case Continues To Drive National Debate
+  - 2026-06-22 — _THIS IS HORRIBLE_  
+    Courtroom Notes Describe Emotional Bodycam Footage In Fatal Case
+  - 2026-06-22 — _SHE'S PANICKING_  
+    Ilhan Omar Financial Disclosure Raises Questions About Family Income
+
+## @JeremyHambly
+
+Pool: 12 recent videos, 122 baseline videos
+
+### Cluster 1: `second`
+
+- **Recent saturation:** 4/12 videos (**33%**)
+- **Baseline saturation:** 0/122 videos (0%)
+- **Spike ratio:** 82.0x
+- **Related terms:** `second`, `former`, `coffee second`
+- **Sample recent videos:**
+  - 2026-06-23 — _PEOPLE ARE SICK_  
+    Arby's Manager Accused Of Contaminating Customer's Food
+  - 2026-06-23 — _THIS WONT BE GOOD_  
+    Judge Denies Request For Key Witness To Testify In Person
+  - 2026-06-22 — _SHE GOT BUSTED_  
+    Candace Owens Death Hoax Sparks Confusion Across Social Media
+  - 2026-06-19 — _THIS PROVES EVERYTHING_  
+    Tulsi Gabbard Releases New Documents Targeting Fauci And Wuhan
+
+### Cluster 2: `charlie`
+
+- **Recent saturation:** 3/12 videos (**25%**)
+- **Baseline saturation:** 2/122 videos (2%)
+- **Spike ratio:** 12.3x
+- **Related terms:** `charlie`, `kirk`, `charlie kirk`
+- **Sample recent videos:**
+  - 2026-06-23 — _THIS WONT BE GOOD_  
+    Judge Denies Request For Key Witness To Testify In Person
+  - 2026-06-22 — _I CAN'T BELIEVE IT_  
+    Viral Video Sparks Debate Over Charlie Kirk Political Division
+  - 2026-06-22 — _THIS IS GHOULISH_  
+    Candace Owens Shares Alleged Charlie Kirk Texts Amid Authenticity Dispute
+
+### Cluster 3: `our coffee`
+
+- **Recent saturation:** 10/12 videos (**83%**)
+- **Baseline saturation:** 20/122 videos (16%)
+- **Spike ratio:** 5.0x
+- **Related terms:** `our`, `coffee`, `main`, `sparks`, `viral`, `our coffee`, `coffee main`
+- **Sample recent videos:**
+  - 2026-06-23 — _THEY BANNED THIS_  
+    Controversial Film Sparks Debate Over Censorship And Free Expression
+  - 2026-06-23 — _PEOPLE ARE SICK_  
+    Arby's Manager Accused Of Contaminating Customer's Food
+  - 2026-06-23 — _THIS WONT BE GOOD_  
+    Judge Denies Request For Key Witness To Testify In Person
+  - 2026-06-22 — _SHE GOT BUSTED_  
+    Candace Owens Death Hoax Sparks Confusion Across Social Media
+  - 2026-06-22 — _I CAN'T BELIEVE IT_  
+    Viral Video Sparks Debate Over Charlie Kirk Political Division
+
+### Cluster 4: `debate`
+
+- **Recent saturation:** 4/12 videos (**33%**)
+- **Baseline saturation:** 4/122 videos (3%)
+- **Spike ratio:** 9.1x
+- **Related terms:** `debate`
+- **Sample recent videos:**
+  - 2026-06-23 — _THEY BANNED THIS_  
+    Controversial Film Sparks Debate Over Censorship And Free Expression
+  - 2026-06-22 — _I CAN'T BELIEVE IT_  
+    Viral Video Sparks Debate Over Charlie Kirk Political Division
+  - 2026-06-18 — _HE GOT DESTROYED_  
+    Viral Walmart Arrest Ends Content Creator's Defiant Store Standoff
+  - 2026-06-17 — _WE HAVE WON_  
+    Gaming DEI Debate Reignites After Rockstar And CDPR Controversies
+
+### Cluster 5: `online`
+
+- **Recent saturation:** 4/12 videos (**33%**)
+- **Baseline saturation:** 4/122 videos (3%)
+- **Spike ratio:** 9.1x
+- **Related terms:** `online`
+- **Sample recent videos:**
+  - 2026-06-22 — _SHE GOT BUSTED_  
+    Candace Owens Death Hoax Sparks Confusion Across Social Media
+  - 2026-06-22 — _I CAN'T BELIEVE IT_  
+    Viral Video Sparks Debate Over Charlie Kirk Political Division
+  - 2026-06-18 — _HE GOT DESTROYED_  
+    Viral Walmart Arrest Ends Content Creator's Defiant Store Standoff
+  - 2026-06-17 — _THERE IS NO FIXING THIS_  
+    Hasan Criticized By Destiny, Asmongold And Tim Pool
 
 ---
 
