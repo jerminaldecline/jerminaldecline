@@ -1,6 +1,136 @@
 {
-  "lastUpdated": "2026-06-24T12:31:25.517Z",
+  "lastUpdated": "2026-06-25T12:37:52.991Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "appeal",
+      "keywords": [
+        "legal",
+        "appeal"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0182,
+        "spikeRatio": 17.13,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "case",
+      "keywords": [
+        "metcalf case",
+        "debate",
+        "surrounding",
+        "case",
+        "metcalf",
+        "austin metcalf"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5625,
+        "baselineSaturation": 0.1277,
+        "spikeRatio": 4.4,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "coffee second",
+      "keywords": [
+        "online",
+        "coffee second",
+        "second"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8125,
+        "baselineSaturation": 0.1934,
+        "spikeRatio": 4.2,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "our",
+      "keywords": [
+        "our",
+        "our coffee",
+        "coffee"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.9375,
+        "baselineSaturation": 0.208,
+        "spikeRatio": 4.51,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 28,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "our coffee",
+      "keywords": [
+        "former",
+        "second",
+        "coffee second",
+        "our coffee",
+        "our",
+        "coffee"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1667,
+        "spikeRatio": 6,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 20,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "main",
+      "keywords": [
+        "viral",
+        "sparks",
+        "debate",
+        "online",
+        "main",
+        "coffee main"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.7273,
+        "baselineSaturation": 0.1992,
+        "spikeRatio": 3.65,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 24,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "film",
+      "keywords": [
+        "film",
+        "main",
+        "coffee main",
+        "our",
+        "coffee",
+        "our coffee"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.1232,
+        "spikeRatio": 4.06,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
+      }
+    },
     {
       "channelHandle": "@QuarteringLive",
       "termId": "est",
@@ -11,142 +141,15 @@
         "pmest",
         "est tue",
         "tue thursday",
-        "thursday pmest",
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.75,
-        "baselineSaturation": 0.0227,
-        "spikeRatio": 33,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "controversial",
-      "keywords": [
-        "controversial",
-        "sparks",
-        "debate",
-        "viral"
+        "thursday pmest"
       ],
       "detectorMeta": {
         "recentSaturation": 0.5,
-        "baselineSaturation": 0.0379,
-        "spikeRatio": 13.2,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "surrounding",
-      "keywords": [
-        "questions",
-        "appeal",
-        "surrounding",
-        "conviction",
-        "following"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4375,
-        "baselineSaturation": 0.1007,
-        "spikeRatio": 4.34,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "our",
-      "keywords": [
-        "online",
-        "case",
-        "coffee second",
-        "second",
-        "our",
-        "our coffee",
-        "coffee"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.9375,
-        "baselineSaturation": 0.2201,
-        "spikeRatio": 4.26,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 29,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "second",
-      "keywords": [
-        "second",
-        "former",
-        "coffee second"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0041,
-        "spikeRatio": 82,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "our coffee",
-      "keywords": [
-        "sparks",
-        "viral",
-        "our coffee",
-        "our",
-        "coffee",
-        "main",
-        "coffee main"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1667,
-        "spikeRatio": 5,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "debate",
-      "keywords": [
-        "debate"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0366,
-        "spikeRatio": 9.11,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "online",
-      "keywords": [
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0366,
-        "spikeRatio": 9.11,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-06-24T12:31:25.517Z"
+        "baselineSaturation": 0.0507,
+        "spikeRatio": 9.86,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-06-25T12:37:52.991Z"
       }
     }
   ]
