@@ -2618,7 +2618,10 @@ async function loadAndCompute(){
 
 let SCOPES, NET, CHANNELS, PEAKS;
 let HANDLE_TO_ID = {}; // handle (e.g. '@TheQuartering') -> channelId; for Analysis channel sync
-const fmt = n => n>=1000000 ? (n/1000000).toFixed(1)+'M' : n>=1000 ? (n/1000).toFixed(0)+'K' : ''+n;
+// Compact number formatter. K/M with one decimal, trailing ".0" stripped — so
+// round values stay clean (244K, 2M) while small thousands keep precision
+// (1426 → 1.4K, not 1K).
+const fmt = n => { const u=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? u(n/1000000,'M') : n>=1000 ? u(n/1000,'K') : ''+n; };
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -2904,9 +2907,9 @@ function render(m){
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
   const headSub = isAll ? 'Long-form across all channels' : 'Long-form performance';
-  // The in-progress month is only partially complete, so month-over-month and
-  // year-over-year deltas (partial vs full months) would read as a false drop —
-  // suppress them and show a banner instead (see report HTML below).
+  // The in-progress month is only partially complete, so its month-over-month /
+  // year-over-year comparisons may not be meaningful yet. The deltas are still
+  // shown, but a banner flags the caveat (see report HTML below).
   const isPartial = (!isAgg && m===CURRENT_MONTH_KEY);
 
   // cards
@@ -2921,14 +2924,14 @@ function render(m){
   cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
-    const deltas=(!isPartial && (mm||my))?`<div class="stat-deltas">${mm}${my}</div>`:'';
+    const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
     return `<div class="stat${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv)=>{ if(isPartial) return ''; const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
+  const heroDeltas=(cur,pv,yv)=>{ const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -3089,7 +3092,7 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> Month-over-month and year-over-year comparisons are hidden until it completes — pitting a partial month against full ones would read as a false drop.</div>` : ''}
+    ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
