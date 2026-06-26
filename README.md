@@ -1,101 +1,102 @@
-# TheQuartering channel analytics
+# Jerminal Decline
 
-A small, public-facing dashboard tracking long-form vs Shorts performance for [TheQuartering](https://www.youtube.com/@TheQuartering). Data refreshes nightly.
+A satirical analytics dashboard tracking the long-term decline of [TheQuartering](https://www.youtube.com/@TheQuartering)'s YouTube network — views, Shorts-vs-long-form performance, revenue estimates, re-titles, topics and more across **five channels**. Live at [jerminaldecline.com](https://jerminaldecline.com).
+
+There is no backend. Every number on the site is baked into JSON files in `public/` by scheduled jobs and served as static assets, so it costs essentially nothing to run and makes zero API calls per visitor.
 
 ## How it works
 
-- A GitHub Action runs nightly at 03:00 UTC
-- It calls the YouTube Data API, fetches recent uploads + view stats
-- It merges fresh data into `public/data.json` and commits the result
-- Cloudflare Pages (or wherever you host) auto-redeploys from the new commit
-- Visitors load `index.html` which reads from `data.json` — zero YouTube API calls per visit
+- Scheduled **GitHub Actions** call the YouTube Data API and regenerate the data files in `public/`, committing the results.
+- **Cloudflare** serves the `public/` directory as a static site (config in `wrangler.jsonc`). Each new commit triggers a redeploy within a minute or two.
+- The browser loads `public/index.html` — a single self-contained file with all CSS and JS inlined — which `fetch()`es the JSON and renders everything.
 
-API quota cost: ~30-40 units on first run, ~2-3 units per nightly run. The daily free quota is 10,000 units, so this uses well under 0.1% of it.
+YouTube API quota cost is a tiny fraction of the daily free allowance.
+
+## What it tracks
+
+Five channels: **@TheQuartering, @JeremyHambly, @UnSleevedMedia, @rcnightmare, @QuarteringLive**.
+
+- Long-form vs Shorts view/like/comment performance, per channel and network-wide
+- Monthly trends, all-time peaks, and "lowest since peak" markers
+- Topic tagging (keyword + LLM) and auto-detected **story trackers** for whatever the network is fixated on this week
+- A ledger of video **re-titles**
+- Catalogued Google Ads campaigns
 
 ## Project structure
 
 ```
 .
-├── .github/workflows/
-│   └── update-data.yml      # nightly job config
-├── public/
-│   ├── index.html           # the static site
-│   └── data.json            # the dataset (auto-updated)
-├── scripts/
-│   └── fetch-data.js        # the fetcher
-└── README.md
+├── .github/workflows/      # scheduled jobs (data, audit, topic detection, transcripts)
+├── public/                 # the site + all data files (served as-is by Cloudflare)
+│   ├── index.html          # the entire dashboard (HTML + CSS + JS in one file)
+│   ├── data.json           # master dataset — every video + stats (auto)
+│   ├── descriptions.json   # full video descriptions (auto)
+│   ├── topic-*.json / .md   # topic taxonomy, tags, trackers, candidates
+│   └── ...                 # creator tags, ad campaigns, images, etc.
+├── scripts/                # the generators (fetch, tag, detect)
+├── wrangler.jsonc          # Cloudflare static-site config
+├── serve.ps1               # local dev server
+├── MAINTENANCE.md          # operational runbook (what's automated / what's manual)
+└── FILES.md                # file-by-file reference
 ```
 
-## Deploying — first time setup
+> For a description of **every file** — what it is, who writes it, who reads it — see **[FILES.md](FILES.md)**.
+> For **how to operate** the pipeline (weekly/monthly tasks, token reminders), see **[MAINTENANCE.md](MAINTENANCE.md)**.
 
-### 1. Push to GitHub
+## The data pipeline
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin git@github.com:YOUR_USERNAME/yt-tracker.git
-git push -u origin main
+**Automated (GitHub Actions):**
+
+| Job | Schedule | Updates |
+|---|---|---|
+| Update channel data | 4×/day | `data.json`, `descriptions.json`, `title-history.json` (+ a twice-daily snapshot archive) |
+| Daily audit | 02:00 UTC | re-checks older videos for deletions / re-titles |
+| Detect topic candidates | 04:30 UTC | `topic-candidates.md`, `topic-trackers.json` |
+
+**Manual / local** — transcript fetching runs locally because YouTube blocks GitHub's IP ranges, and the LLM tagging runs locally too:
+
+- Weekly topic refresh — fetches new transcripts, then re-tags videos
+- LLM subject tagging and creator-tag extraction
+- Occasional taxonomy / label / ad-campaign edits
+
+The exact commands live in [MAINTENANCE.md](MAINTENANCE.md).
+
+## Deploying (first-time setup)
+
+1. **Push to GitHub.** Public or private both work.
+2. **Add secrets** under Settings → Secrets and variables → Actions:
+   - `YOUTUBE_API_KEY` — required, for the data fetcher
+   - `SNAPSHOTS_REPO_TOKEN` — optional, to write the twice-daily snapshot archive
+   - `TRANSCRIPTS_REPO_TOKEN` — optional, for transcript fetching
+3. **Run the data job once** from the Actions tab ("Update channel data" → Run workflow) to populate `data.json`.
+4. **Connect Cloudflare** to the repo. Build command: *none*. Output directory: `public`. Settings are pinned in `wrangler.jsonc`, so production and preview branches build identically.
+
+Every scheduled commit triggers a Cloudflare redeploy automatically.
+
+## Running locally
+
+Preview the site — it must be *served*, not opened from `file://`, because it fetches JSON:
+
+```powershell
+./serve.ps1            # serves public/ at http://localhost:8000
 ```
 
-The repo can be public or private. Public is simpler if you also want free GitHub Actions minutes.
+Regenerate the data (needs a YouTube API key in your environment):
 
-### 2. Add your YouTube API key as a secret
-
-In your GitHub repo:
-1. Settings → Secrets and variables → Actions
-2. Click **New repository secret**
-3. Name: `YOUTUBE_API_KEY`
-4. Value: your YouTube Data API key (the one you've been using)
-5. Save
-
-This stores the key encrypted; it's only available to the GitHub Action, never exposed publicly.
-
-### 3. Run the fetcher manually for the first time
-
-The nightly cron starts running automatically, but to populate data immediately:
-
-1. Go to the **Actions** tab in your GitHub repo
-2. Click **Update channel data** in the left sidebar
-3. Click **Run workflow** → **Run workflow** (button on the right)
-4. Wait ~30 seconds; it'll commit `public/data.json` to your repo
-
-### 4. Set up Cloudflare Pages
-
-1. Sign up at [pages.cloudflare.com](https://pages.cloudflare.com/) (free, no card needed)
-2. Click **Create a project** → **Connect to Git** → authorise GitHub → pick this repo
-3. Build settings:
-   - **Build command:** leave empty
-   - **Build output directory:** `public`
-4. Click **Save and Deploy**
-
-Cloudflare gives you a URL like `yt-tracker.pages.dev`. You can add a custom domain later under the Pages project settings.
-
-Every time the nightly job commits new data, Cloudflare rebuilds and re-publishes within a minute or two.
-
-## Running the fetcher locally
-
-For testing or debugging:
-
-```bash
-export YOUTUBE_API_KEY="AIza..."
+```powershell
+$env:YOUTUBE_API_KEY = "AIza..."
 node scripts/fetch-data.js
 ```
 
-It'll write to `public/data.json` and you can open `public/index.html` in a browser to preview.
-
 ## Customising
 
-- **Change the channel:** edit `CHANNEL_HANDLE` at the top of `scripts/fetch-data.js`
-- **Change the Shorts cutoff:** edit `SHORTS_CUTOFF_SEC` (currently 180s = 3 min)
-- **Change the schedule:** edit the cron expression in `.github/workflows/update-data.yml`
-- **Change how far back is fetched on first run:** edit `HISTORY_YEARS`
+All in `scripts/fetch-data.js`:
+
+- **Channels:** edit the `CHANNELS` array
+- **Shorts cutoff:** `SHORTS_CUTOFF_SEC` (default 180s = 3 min)
+- **History depth on first run / backfill:** `HISTORY_YEARS`
+- **Schedule:** the cron expressions in `.github/workflows/update-data.yml`
 
 ## Cost
 
-- GitHub: free (Actions for public repos are free; 2000 min/month for private)
-- Cloudflare Pages: free
-- YouTube API: free (well within quota)
-- Domain (optional): ~£10/year if you want a custom one
-
-Total: £0–10/year.
+GitHub Actions, Cloudflare Pages/Workers, and the YouTube API are all free at this scale. The only optional cost is a custom domain (~£10/year).

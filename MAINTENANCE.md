@@ -182,7 +182,7 @@ Set calendar reminders with 2-week warnings — token expiry causes silent CI fa
 
 Daily archive of data.json. Auto-populated. No manual maintenance.
 
-### Local workspace (`Transcripts\transcript-runner`)
+### Local runner workspace
 
 | File | What it is |
 |---|---|
