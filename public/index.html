@@ -7176,7 +7176,7 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoData = null;
   let titleHistoryData = null;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
-  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
+  const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, density: 'detailed', longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
   async function loadVideosExtraData(){
     try { const r = await fetch('ad-videos.json?t='+Date.now()); if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } } } catch(e){ console.warn('ad-videos', e); }
@@ -7185,6 +7185,14 @@ function niceDurationAxis(minSec, maxSec) {
   window.__loadVideosExtraData = loadVideosExtraData;
   let adPanelExpanded = false;
   let adPanelSort = { col: 'views', dir: 'desc' };
+// Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
+// site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
+// doesn't drift for videos published near midnight.
+function fmtRowDate(iso){
+  const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const p = iso.slice(0, 10).split('-');
+  return `${+p[2]} ${M[+p[1]-1]} '${p[0].slice(2)}`;
+}
 function renderVideoRows(videos, emptyText) {
   if (videos.length === 0) {
     return `<div class="group-empty">${emptyText}</div>`;
@@ -7195,6 +7203,9 @@ function renderVideoRows(videos, emptyText) {
   // per-video summary), so the separate topic column is retired — every row
   // uses the no-topics grid template.
   const topicColClass = ' no-topics';
+  // Compact mode hides the per-video AI summary + topic chips, so the list reads
+  // as a scannable table rather than a stack of detail cards.
+  const compact = windowListState.density === 'compact';
   return videos.map(v => {
     const channelName = showChannel
       ? (ANALYTICS_DATASET?.channels?.[v.channelId]?.title || '?')
@@ -7280,9 +7291,9 @@ function renderVideoRows(videos, emptyText) {
     }
     return `
       <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
-        <div class="video-date">${v.publishedAt.slice(0, 10)}</div>
+        <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
         ${channelCell}
-        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${renderVideoSummary(v)}${renderTopicChips(v)}</div>
+        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -7295,7 +7306,21 @@ function renderVideoRows(videos, emptyText) {
 function filterVideos(list, query) {
   if (!query) return list;
   const q = query.toLowerCase();
-  return list.filter(v => v.title.toLowerCase().includes(q));
+  // Search across title, the creator's own YouTube tags, the topic/theme/format
+  // names, and the AI summary — so a query like "disney" or "censorship" finds
+  // videos even when the word isn't in the (often vague, clickbait) title.
+  const topicName = id => ((ANALYTICS_TOPICS && id && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || '').toLowerCase();
+  return list.filter(v => {
+    if (v.title.toLowerCase().includes(q)) return true;
+    const ct = ANALYTICS_CREATOR_TAGS && ANALYTICS_CREATOR_TAGS[v.id];
+    if (ct && ct.some(t => t.toLowerCase().includes(q))) return true;
+    if (topicName(ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]).includes(q)) return true;
+    if (topicName(ANALYTICS_TOPIC_THEMES && ANALYTICS_TOPIC_THEMES[v.id]).includes(q)) return true;
+    if (topicName(ANALYTICS_TOPIC_MODES && ANALYTICS_TOPIC_MODES[v.id]).includes(q)) return true;
+    const sm = ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[v.id];
+    if (sm && sm.toLowerCase().includes(q)) return true;
+    return false;
+  });
 }
 
 function sortVideos(list, sortBy, sortDir) {
@@ -7893,11 +7918,12 @@ function renderWindowList(startDate, endDate) {
   }
   list.innerHTML = `
     <div class="window-list-search">
-      <input type="text" id="windowListSearch" placeholder="Search titles…" value="${escapeHtml(windowListState.query)}">
+      <input type="text" id="windowListSearch" placeholder="Search titles, tags, topics…" value="${escapeHtml(windowListState.query)}">
       <div class="window-format-toggle" id="windowFormatToggle" role="group" aria-label="Video format">
         <button type="button" class="wf-btn${windowListState.formatFilter==='long'?' active':''}" data-format="long">Long-form</button>
         <button type="button" class="wf-btn${windowListState.formatFilter==='short'?' active':''}" data-format="short">Shorts</button>
       </div>
+      <button type="button" class="ad-only-btn${windowListState.density==='compact'?' active':''}" id="densityBtn" aria-pressed="${windowListState.density==='compact'}" title="Compact rows — hide the AI summary and topic chips">≡ Compact</button>
       ${adDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.adOnly?' active':''}" id="adOnlyBtn" aria-pressed="${windowListState.adOnly}">📣 Ads only</button>` : ''}
       ${renamedDataAvailable ? `<button type="button" class="ad-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
       ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
@@ -7909,6 +7935,8 @@ function renderWindowList(startDate, endDate) {
           <option value="views|asc"${windowListState.sortBy==='views'&&windowListState.sortDir==='asc'?' selected':''}>Fewest views</option>
           <option value="likepct|desc"${windowListState.sortBy==='likepct'&&windowListState.sortDir==='desc'?' selected':''}>Highest like %</option>
           <option value="comments|desc"${windowListState.sortBy==='comments'&&windowListState.sortDir==='desc'?' selected':''}>Most comments</option>
+          <option value="duration|desc"${windowListState.sortBy==='duration'&&windowListState.sortDir==='desc'?' selected':''}>Longest first</option>
+          <option value="duration|asc"${windowListState.sortBy==='duration'&&windowListState.sortDir==='asc'?' selected':''}>Shortest first</option>
         </select>
       </label>
     </div>
@@ -8303,6 +8331,14 @@ function renderWindowList(startDate, endDate) {
     if (renBtn && document.getElementById('windowList')?.contains(renBtn)) {
       windowListState.renamedOnly = !windowListState.renamedOnly;
       resetVideoBatches();
+      const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
+      if (sd && ed) renderWindowList(sd, ed); return;
+    }
+    // Density toggle — compact hides the per-video summary + topic chips. No batch
+    // reset needed: it changes how rows render, not which videos are shown.
+    const densBtn = e.target.closest('#densityBtn');
+    if (densBtn && document.getElementById('windowList')?.contains(densBtn)) {
+      windowListState.density = windowListState.density === 'compact' ? 'detailed' : 'compact';
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
