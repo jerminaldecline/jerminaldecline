@@ -185,6 +185,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mini .ml{color:var(--subtext)}
 .mini .mv{font-weight:700}
 .mini.up .mv{color:var(--up)}.mini.down .mv{color:var(--down)}.mini.flat .mv{color:var(--text-dim)}
+/* Absolute-delta variant: the whole-number change is the headline (inherits the
+   up/down colour), the % is demoted to a quiet muted suffix. */
+.mini .mv-pct{color:var(--text-dim);font-weight:600;font-size:0.92em;margin-left:0.28rem}
 
 .highlights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;align-items:stretch}
 .hl-labelrow{display:flex;align-items:center;justify-content:space-between;gap:0.6rem}
@@ -2754,14 +2757,27 @@ const LINK_ICON = `<svg class="link-icon" viewBox="0 0 24 24" width="14" height=
 
 
 function dcls(cur,prev,goodUp){ if(prev==null||prev===0||cur==null) return null; const d=Math.round((cur-prev)/prev*100);
-  if(d===0) return {cls:'flat',txt:'▬ 0%'}; const pos=d>0; const arrow=(pos?'▲':'▼')+' '+Math.abs(d)+'%';
-  if(goodUp===null) return {cls:'flat',txt:arrow}; const good=goodUp?pos:!pos;
-  return {cls:good?'up':'down',txt:arrow}; }
+  // Expose the arrow + raw % separately so callers can build an "absolute + %"
+  // variant; `txt` stays the combined "▲ 12%" string for existing callers.
+  const arrow=d>0?'▲':d<0?'▼':'▬'; const pct=Math.abs(d); const txt=arrow+' '+pct+'%';
+  let cls; if(d===0||goodUp===null) cls='flat'; else cls=(goodUp?d>0:d<0)?'up':'down';
+  return {cls,arrow,pct,txt}; }
 function pill(label,cur,prev,goodUp){ const d=dcls(cur,prev,goodUp);
   if(!d) return '<span class="pill flat"><span class="pl">'+label+'</span><span class="pv">—</span></span>';
   return '<span class="pill '+d.cls+'"><span class="pl">'+label+'</span><span class="pv">'+d.txt+'</span></span>'; }
-function mini(label,cur,prev,goodUp){ const d=dcls(cur,prev,goodUp); if(!d) return '';
-  return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span><span class="mv">'+d.txt+'</span></span>'; }
+function mini(label,cur,prev,goodUp,abs){ const d=dcls(cur,prev,goodUp); if(!d) return '';
+  // When `abs` is supplied ({unit,dec}), lead with the whole-number change
+  // (e.g. "▼ 6") and demote the % to a muted suffix. For unit-quantity cards
+  // (uploads, runtime hours, length minutes) the absolute delta reads clearer
+  // than the % alone. Falls back to the plain "▲ 12%" when no abs config or
+  // when the rounded absolute change is 0.
+  let mv=d.txt;
+  if(abs && prev!=null && cur!=null){
+    const a=Math.abs(cur-prev);
+    const n=abs.dec>0 ? a.toFixed(abs.dec).replace(/\.0$/,'') : String(Math.round(a));
+    if(n!=='0') mv='<span class="mv-abs">'+d.arrow+' '+n+(abs.unit||'')+'</span><span class="mv-pct">· '+d.pct+'%</span>';
+  }
+  return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span><span class="mv">'+mv+'</span></span>'; }
 
 // scope state
 let scope='@TheQuartering';
@@ -2881,13 +2897,13 @@ function render(m){
 
   // cards
   const cards=[];
-  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long'});
+  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long',abs:{unit:'',dec:0}});
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
-  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null});
-  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null});
+  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1}});
+  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1}});
   const cardHTML=cards.map(c=>{
-    const mm=mini(lblMo,c.cur,c.p,c.goodUp), my=mini(lblYr,c.cur,c.y,c.goodUp);
+    const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
     return `<div class="stat${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
