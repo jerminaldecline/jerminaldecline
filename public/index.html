@@ -166,11 +166,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-label .hero-chart-link{margin-left:auto;text-transform:none;letter-spacing:0}
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
-.deltas{display:flex;gap:0.6rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
-.pill{display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.65rem;border-radius:8px;font-size:0.82rem;background:var(--surface-2)}
-.pill .pl{color:var(--subtext);font-size:0.78rem}
-.pill .pv{font-weight:700}
-.pill.up .pv{color:var(--up)}.pill.down .pv{color:var(--down)}.pill.flat .pv{color:var(--text-dim)}
+.deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
 .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
@@ -264,6 +260,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .cmp-table td:first-child{text-align:left;color:var(--label)}
 .cmp-table tr:last-child td{border-bottom:none}
 .cmp-table .now{color:var(--text);font-weight:700}
+/* Tabular figures across the Overview's numbers — aligns the comparison/network
+   table columns and stops digit jitter on the live in-progress month (matches the
+   tabular-nums already used elsewhere on the site). */
+.hero-num,.hero-sub,.peak-num,.peak-delta,.stat-num,.ss-num,.hsv,.cmp-table,.net-table{font-variant-numeric:tabular-nums}
 
 .section-divider{display:flex;align-items:center;gap:0.9rem;margin:1.6rem 0 1rem;color:var(--label);font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
 .section-divider::before,.section-divider::after{content:"";height:1px;background:var(--border);flex:1}
@@ -2764,9 +2764,6 @@ function dcls(cur,prev,goodUp){ if(prev==null||prev===0||cur==null) return null;
   const arrow=d>0?'▲':d<0?'▼':'▬'; const pct=Math.abs(d); const txt=arrow+' '+pct+'%';
   let cls; if(d===0||goodUp===null) cls='flat'; else cls=(goodUp?d>0:d<0)?'up':'down';
   return {cls,arrow,pct,txt}; }
-function pill(label,cur,prev,goodUp){ const d=dcls(cur,prev,goodUp);
-  if(!d) return '<span class="pill flat"><span class="pl">'+label+'</span><span class="pv">—</span></span>';
-  return '<span class="pill '+d.cls+'"><span class="pl">'+label+'</span><span class="pv">'+d.txt+'</span></span>'; }
 function mini(label,cur,prev,goodUp,abs){ const d=dcls(cur,prev,goodUp); if(!d) return '';
   // When `abs` is supplied ({unit,dec}), lead with the whole-number change
   // (e.g. "▼ 6") and demote the % to a muted suffix. For unit-quantity cards
@@ -2919,6 +2916,10 @@ function render(m){
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
     return `<div class="stat${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
+  // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
+  // wrapped conditionally so the bordered row disappears when there's no comparator
+  // (e.g. the earliest month), matching the stat cards.
+  const heroDeltas=(cur,pv,yv)=>{ const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -3098,18 +3099,18 @@ function render(m){
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
-        <div class="deltas">${pill(lblMo,d.tot,p&&p.tot,true)}${pill(lblYr,d.tot,y&&y.tot,true)}</div>
+        ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it." tabindex="0" role="button" aria-label="About average views">ⓘ</span></div>
         <div class="hero-num">${fmt(d.med)}</div>
         <div class="hero-sub">per long-form upload</div>
-        <div class="deltas">${pill(lblMo,d.med,p&&p.med,true)}${pill(lblYr,d.med,y&&y.med,true)}</div>
+        ${heroDeltas(d.med,p&&p.med,y&&y.med)}
       </div>
       <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
         <div class="hero-num" style="font-size:2.05rem">${revStr}</div>
-        <div class="deltas">${pill(lblMo,d.revlo,p&&p.revlo,true)}${pill(lblYr,d.revlo,y&&y.revlo,true)}</div>
+        ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
       </div>
     </div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
