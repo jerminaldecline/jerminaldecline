@@ -2777,7 +2777,13 @@ function mini(label,cur,prev,goodUp,abs){ const d=dcls(cur,prev,goodUp); if(!d) 
   if(abs && prev!=null && cur!=null){
     const a=Math.abs(cur-prev);
     const n=abs.dec>0 ? a.toFixed(abs.dec).replace(/\.0$/,'') : String(Math.round(a));
-    if(n!=='0') mv='<span class="mv-abs">'+d.arrow+' '+n+(abs.unit||'')+'</span><span class="mv-pct">('+d.pct+'%)</span>';
+    if(n!=='0'){
+      mv='<span class="mv-abs">'+d.arrow+' '+n+(abs.unit||'')+'</span>';
+      // pct:false drops the parenthetical %, leaving just the absolute change —
+      // used where the % is redundant (runtime/length) or wrong (like rate, which
+      // is itself a %, so its change is shown in percentage points instead).
+      if(abs.pct!==false) mv+='<span class="mv-pct">('+d.pct+'%)</span>';
+    }
   }
   return '<span class="mini '+d.cls+'"><span class="ml">'+label+'</span><span class="mv">'+mv+'</span></span>'; }
 
@@ -2900,10 +2906,13 @@ function render(m){
   // cards
   const cards=[];
   cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long',abs:{unit:'',dec:0}});
-  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true});
+  // Like rate is itself a %, so show its change in percentage POINTS (cur-prev),
+  // not a relative % of a % (which would be ambiguous). e.g. 8.4% → 7.9% = ▼ 0.5 pts.
+  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
-  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1}});
-  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1}});
+  // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
+  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
+  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
