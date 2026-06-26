@@ -59,7 +59,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .wrap{max-width:1060px;margin:0 auto}
 .sticky-head{position:sticky;top:0;z-index:50;background:var(--bg);padding-top:0.6rem;margin-bottom:1.5rem;box-shadow:0 6px 16px -12px rgba(0,0,0,0.5)}
 .util-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:0.9rem;flex-wrap:wrap}
-.util-updated{font-size:0.78rem;color:var(--text-dim);font-weight:600;display:flex;align-items:center;gap:0.4rem}
+.util-updated{font-size:0.78rem;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:0.4rem}
 .util-brand{display:flex;align-items:center;gap:0.6rem}
 .util-brand .brand-logo{width:34px;height:34px;flex:0 0 34px;border-radius:8px;object-fit:cover}
 .util-brand-tagline{font-size:0.78rem;font-weight:600;color:var(--down,#ff6b66);line-height:1.2;margin-top:0.05rem}
@@ -141,7 +141,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .jd-popover.visible{opacity:1}
 .hero-stat-info,.ad-badge-info,.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;font-size:0.7rem;font-weight:700;color:var(--text-dim);border:1px solid var(--border);cursor:help;line-height:1}
 .hero-stat-info:hover,.ad-badge-info:hover,.info-icon:hover{color:var(--accent);border-color:var(--accent)}
-.report-head-sub-inline{font-size:0.82rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em}
+.report-head-sub-inline{font-size:0.82rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em}
+/* Partial-month banner: shown for the in-progress month, where MoM/YoY deltas
+   (partial vs full months) would mislead — so they're hidden and this says why. */
+.partial-banner{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;margin-bottom:1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
+.partial-banner strong{color:var(--text)}
 .report-head-main{min-width:0}
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
@@ -155,7 +159,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-item .peak-val{font-size:0.92rem;color:var(--subtext)}
 .peak-item .peak-num{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;color:var(--text);margin-right:0.3rem}
 .peak-item .peak-delta{color:var(--down);font-weight:700;font-size:0.85rem;margin-left:0.3rem;white-space:nowrap}
-.peak-item .peak-sub{font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;font-weight:600}
+.peak-item .peak-sub{font-size:0.82rem;color:var(--text-muted);margin-top:0.2rem;font-weight:600}
 @media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
 .hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
 .report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
@@ -165,6 +169,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-label{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.5rem;display:flex;align-items:baseline;gap:0.5rem}
 .hero-label .hero-chart-link{margin-left:auto;text-transform:none;letter-spacing:0}
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
+.hero-num.rev{font-size:2.05rem}  /* revenue is a range string, so a touch smaller to fit */
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
 .deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
@@ -201,7 +206,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hl-title:hover{color:var(--accent);text-decoration:underline}
 .link-icon{display:inline-block;vertical-align:-1px;margin-left:0.3rem;color:var(--accent)}
 .hl-note{font-size:0.78rem;color:var(--subtext);line-height:1.4}
-.hl-ch{font-size:0.72rem;color:var(--text-dim);margin-top:0.15rem}
+.hl-ch{font-size:0.72rem;color:var(--text-muted);margin-top:0.15rem}
 .hl-stats{display:flex;gap:1.75rem;flex-wrap:wrap;padding-top:0.8rem;border-top:1px solid var(--border)}
 .hl-stat{display:flex;flex-direction:column;gap:0.1rem}
 .hl-stat .hsv{font-size:1.05rem;font-weight:800;color:var(--text);line-height:1.1}
@@ -2899,6 +2904,10 @@ function render(m){
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
   const headSub = isAll ? 'Long-form across all channels' : 'Long-form performance';
+  // The in-progress month is only partially complete, so month-over-month and
+  // year-over-year deltas (partial vs full months) would read as a false drop —
+  // suppress them and show a banner instead (see report HTML below).
+  const isPartial = (!isAgg && m===CURRENT_MONTH_KEY);
 
   // cards
   const cards=[];
@@ -2912,14 +2921,14 @@ function render(m){
   cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
-    const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
+    const deltas=(!isPartial && (mm||my))?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
     return `<div class="stat${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv)=>{ const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
+  const heroDeltas=(cur,pv,yv)=>{ if(isPartial) return ''; const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -2959,7 +2968,7 @@ function render(m){
     </div>`;
 
   const hlStats = (s) => {
-    const item=(label,val)=>`<div class="hl-stat"><span class="hsv">${val.toLocaleString()}</span><span class="hsl">${label}</span></div>`;
+    const item=(label,val)=>`<div class="hl-stat"${val!=null?` title="${val.toLocaleString()} ${label}"`:''}><span class="hsv">${val!=null?fmt(val):'—'}</span><span class="hsl">${label}</span></div>`;
     return `<div class="hl-stats">${item('views',s.views)}${item('comments',s.comments)}${item('likes',s.likes)}</div>`;
   };
   const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
@@ -3080,6 +3089,7 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
+    ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> Month-over-month and year-over-year comparisons are hidden until it completes — pitting a partial month against full ones would read as a false drop.</div>` : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
@@ -3109,7 +3119,7 @@ function render(m){
       </div>
       <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
-        <div class="hero-num" style="font-size:2.05rem">${revStr}</div>
+        <div class="hero-num rev">${revStr}</div>
         ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
       </div>
     </div>
