@@ -1,57 +1,24 @@
 {
-  "lastUpdated": "2026-06-25T12:37:52.991Z",
+  "lastUpdated": "2026-06-26T12:28:43.302Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "appeal",
-      "keywords": [
-        "legal",
-        "appeal"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0182,
-        "spikeRatio": 17.13,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
-      }
-    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "case",
       "keywords": [
         "metcalf case",
         "debate",
-        "surrounding",
         "case",
+        "surrounding",
         "metcalf",
         "austin metcalf"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5625,
-        "baselineSaturation": 0.1277,
-        "spikeRatio": 4.4,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "coffee second",
-      "keywords": [
-        "online",
-        "coffee second",
-        "second"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8125,
-        "baselineSaturation": 0.1934,
-        "spikeRatio": 4.2,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.1403,
+        "spikeRatio": 3.56,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     },
     {
@@ -60,15 +27,17 @@
       "keywords": [
         "our",
         "our coffee",
-        "coffee"
+        "coffee",
+        "second",
+        "coffee second"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9375,
-        "baselineSaturation": 0.208,
-        "spikeRatio": 4.51,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 28,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "recentSaturation": 0.875,
+        "baselineSaturation": 0.2266,
+        "spikeRatio": 3.86,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 31,
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     },
     {
@@ -84,31 +53,44 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1667,
-        "spikeRatio": 6,
+        "baselineSaturation": 0.1748,
+        "spikeRatio": 5.72,
         "recentVideoCount": 11,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "baselineVideoCount": 21,
+        "detectedAt": "2026-06-26T12:28:43.302Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "sparks",
+      "keywords": [
+        "sparks",
+        "viral",
+        "debate"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3636,
+        "baselineSaturation": 0.0772,
+        "spikeRatio": 4.71,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "main",
       "keywords": [
-        "viral",
-        "sparks",
-        "debate",
-        "online",
         "main",
         "coffee main"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7273,
-        "baselineSaturation": 0.1992,
-        "spikeRatio": 3.65,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 24,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "recentSaturation": 0.6364,
+        "baselineSaturation": 0.1585,
+        "spikeRatio": 4.01,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     },
     {
@@ -128,7 +110,7 @@
         "spikeRatio": 4.06,
         "recentVideoCount": 3,
         "baselineVideoCount": 8,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     },
     {
@@ -149,7 +131,7 @@
         "spikeRatio": 9.86,
         "recentVideoCount": 3,
         "baselineVideoCount": 3,
-        "detectedAt": "2026-06-25T12:37:52.991Z"
+        "detectedAt": "2026-06-26T12:28:43.302Z"
       }
     }
   ]
