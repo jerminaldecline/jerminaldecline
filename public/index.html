@@ -3749,7 +3749,7 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
-    tag_blocks: ['Creator tags over time', "YouTube lets creators attach hidden keyword tags to each video to help it surface in search. This chart breaks down each month's long-form uploads by the kind of tags they carry: fixed blocks the creator reused across many videos, tags YouTube added automatically on upload, and genuine per-video tags. The mix shows how deliberately - or not - the channel tagged its videos over time."]
+    tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
