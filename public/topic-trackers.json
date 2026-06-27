@@ -1,30 +1,27 @@
 {
-  "lastUpdated": "2026-06-26T12:28:43.302Z",
+  "lastUpdated": "2026-06-27T11:08:01.166Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "case",
       "keywords": [
-        "metcalf case",
-        "debate",
-        "case",
-        "surrounding",
-        "metcalf",
-        "austin metcalf"
+        "case our",
+        "case"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5,
-        "baselineSaturation": 0.1403,
-        "spikeRatio": 3.56,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0755,
+        "spikeRatio": 4.73,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "our",
       "keywords": [
+        "debate",
         "our",
         "our coffee",
         "coffee",
@@ -32,32 +29,62 @@
         "coffee second"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.875,
-        "baselineSaturation": 0.2266,
-        "spikeRatio": 3.86,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 31,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "recentSaturation": 0.9286,
+        "baselineSaturation": 0.241,
+        "spikeRatio": 3.85,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 33,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "appeal",
+      "keywords": [
+        "appeal",
+        "surrounding"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0612,
+        "spikeRatio": 5.84,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "our coffee",
+      "termId": "second",
       "keywords": [
-        "former",
         "second",
         "coffee second",
-        "our coffee",
-        "our",
-        "coffee"
+        "former"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1748,
-        "spikeRatio": 5.72,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 21,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "recentSaturation": 0.4444,
+        "baselineSaturation": 0.0123,
+        "spikeRatio": 36.15,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "charlie",
+      "keywords": [
+        "charlie",
+        "kirk",
+        "charlie kirk"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0123,
+        "spikeRatio": 27.11,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     },
     {
@@ -69,28 +96,31 @@
         "debate"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.0772,
-        "spikeRatio": 4.71,
+        "recentSaturation": 0.4444,
+        "baselineSaturation": 0.0779,
+        "spikeRatio": 5.71,
         "recentVideoCount": 4,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "main",
+      "termId": "our coffee",
       "keywords": [
+        "our coffee",
+        "our",
+        "coffee",
         "main",
         "coffee main"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.6364,
-        "baselineSaturation": 0.1585,
-        "spikeRatio": 4.01,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1926,
+        "spikeRatio": 5.19,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 23,
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     },
     {
@@ -105,33 +135,12 @@
         "our coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5,
-        "baselineSaturation": 0.1232,
-        "spikeRatio": 4.06,
+        "recentSaturation": 0.75,
+        "baselineSaturation": 0.1197,
+        "spikeRatio": 6.26,
         "recentVideoCount": 3,
         "baselineVideoCount": 8,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "est",
-      "keywords": [
-        "est",
-        "tue",
-        "thursday",
-        "pmest",
-        "est tue",
-        "tue thursday",
-        "thursday pmest"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5,
-        "baselineSaturation": 0.0507,
-        "spikeRatio": 9.86,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-06-26T12:28:43.302Z"
+        "detectedAt": "2026-06-27T11:08:01.166Z"
       }
     }
   ]
