@@ -6611,7 +6611,13 @@ function niceDurationAxis(minSec, maxSec) {
     'hipocrite': 'hypocrite', 'millenium': 'millennium', 'noticable': 'noticeable',
     'occurance': 'occurrence', 'priviledge': 'privilege', 'refered': 'referred',
     'relevent': 'relevant', 'religous': 'religious', 'remeber': 'remember',
-    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely'
+    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely',
+    // Recurring misspellings observed in this network's long-form titles, verified
+    // against the live dataset — 'accidently' (~35×) and 'bizzare' (~19×) are by
+    // far his most frequent, and were previously slipping through uncounted.
+    'bizzare': 'bizarre', 'tomatos': 'tomatoes', 'humilation': 'humiliation',
+    'humilating': 'humiliating', 'accidently': 'accidentally', 'destoryed': 'destroyed',
+    'hilarous': 'hilarious'
   };
   function loadDescriptions() {
   if (descriptionsCache) return Promise.resolve(descriptionsCache);
@@ -6821,7 +6827,7 @@ function niceDurationAxis(minSec, maxSec) {
 
   const typosHTML = spellingList.length === 0 ? '' : `
     <div class="desc-pattern-typos">
-      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'}</span></div>
+      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'} · all-time</span></div>
       <ul class="desc-pattern-typos-list">
         ${spellingList.map(t => `
           <li>
