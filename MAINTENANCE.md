@@ -81,6 +81,22 @@ Runtime: 3-5 minutes typical.
 
 **Frequency:** Monthly-ish. New campaigns appear gradually.
 
+**Measuring an ad's view impact:** Once a campaign is running on a video that's
+past its organic burst (>~48h old, so velocity is flat), you can estimate how
+many views the ad drove:
+
+```powershell
+node scripts/ad-impact.js <videoId>          # auto-detects the latest run
+node scripts/ad-impact.js <videoId> --from 2026-06-28 --quiet
+```
+
+It reads the twice-daily archive in the sibling `jerminaldecline-snapshots`
+repo, establishes the flat organic baseline from the quiet period before the
+spike, and reports `AD-DRIVEN VIEWS = observed gain − expected organic` across
+the run window. Re-run as new snapshots land to watch the running total until
+the campaign tapers back to baseline. (Only clean for older videos — a freshly
+published video's organic and ad views are entangled.)
+
 ### 3. Monthly-ish: review story tracker candidates
 
 **What:** Glance at `public/topic-candidates.md` (auto-generated nightly) to see if any new story arcs deserve curated labels.
