@@ -1,4 +1,4 @@
-# Topic candidates — 2026-06-27
+# Topic candidates — 2026-06-28
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 138 baseline videos
+Pool: 13 recent videos, 136 baseline videos
 
 ### Cluster 1: `film`
 
-- **Recent saturation:** 4/14 videos (**29%**)
-- **Baseline saturation:** 0/138 videos (0%)
-- **Spike ratio:** 79.4x
+- **Recent saturation:** 4/13 videos (**31%**)
+- **Baseline saturation:** 0/136 videos (0%)
+- **Spike ratio:** 84.3x
 - **Related terms:** `film`, `debate our`
 - **Sample recent videos:**
   - 2026-06-26 — _TOTAL DISASTER_  
@@ -26,10 +26,10 @@ Pool: 14 recent videos, 138 baseline videos
 
 ### Cluster 2: `case`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 10/138 videos (7%)
-- **Spike ratio:** 4.7x
-- **Related terms:** `case`, `case our`
+- **Recent saturation:** 5/13 videos (**38%**)
+- **Baseline saturation:** 17/136 videos (13%)
+- **Spike ratio:** 3.0x
+- **Related terms:** `case`, `metcalf`, `case our`, `austin metcalf`
 - **Sample recent videos:**
   - 2026-06-25 — _HE'S HAVING FUN!_  
     Karmelo Anthony Appeal Draws New Claims And Prison Scrutiny
@@ -44,9 +44,9 @@ Pool: 14 recent videos, 138 baseline videos
 
 ### Cluster 3: `our`
 
-- **Recent saturation:** 13/14 videos (**93%**)
-- **Baseline saturation:** 33/138 videos (24%)
-- **Spike ratio:** 3.9x
+- **Recent saturation:** 12/13 videos (**92%**)
+- **Baseline saturation:** 34/136 videos (25%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `our`, `coffee`, `second`, `debate`, `our coffee`, `coffee second`
 - **Sample recent videos:**
   - 2026-06-26 — _TOTAL DISASTER_  
@@ -62,9 +62,9 @@ Pool: 14 recent videos, 138 baseline videos
 
 ### Cluster 4: `widespread`
 
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 1/138 videos (1%)
-- **Spike ratio:** 19.9x
+- **Recent saturation:** 3/13 videos (**23%**)
+- **Baseline saturation:** 1/136 videos (1%)
+- **Spike ratio:** 21.1x
 - **Related terms:** `widespread`
 - **Sample recent videos:**
   - 2026-06-26 — _TOTAL DISASTER_  
@@ -76,9 +76,9 @@ Pool: 14 recent videos, 138 baseline videos
 
 ### Cluster 5: `appeal`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 8/138 videos (6%)
-- **Spike ratio:** 5.8x
+- **Recent saturation:** 5/13 videos (**38%**)
+- **Baseline saturation:** 8/136 videos (6%)
+- **Spike ratio:** 6.2x
 - **Related terms:** `appeal`, `surrounding`
 - **Sample recent videos:**
   - 2026-06-25 — _HE'S HAVING FUN!_  
@@ -94,13 +94,13 @@ Pool: 14 recent videos, 138 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 121 baseline videos
+Pool: 9 recent videos, 118 baseline videos
 
 ### Cluster 1: `second`
 
 - **Recent saturation:** 4/9 videos (**44%**)
-- **Baseline saturation:** 1/121 videos (1%)
-- **Spike ratio:** 36.1x
+- **Baseline saturation:** 1/118 videos (1%)
+- **Spike ratio:** 35.3x
 - **Related terms:** `second`, `former`, `coffee second`
 - **Sample recent videos:**
   - 2026-06-24 — _THIS IS PATHETIC_  
@@ -115,8 +115,8 @@ Pool: 9 recent videos, 121 baseline videos
 ### Cluster 2: `charlie`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 1/121 videos (1%)
-- **Spike ratio:** 27.1x
+- **Baseline saturation:** 1/118 videos (1%)
+- **Spike ratio:** 26.4x
 - **Related terms:** `charlie`, `kirk`, `charlie kirk`
 - **Sample recent videos:**
   - 2026-06-23 — _THIS WONT BE GOOD_  
@@ -129,8 +129,8 @@ Pool: 9 recent videos, 121 baseline videos
 ### Cluster 3: `sparks`
 
 - **Recent saturation:** 4/9 videos (**44%**)
-- **Baseline saturation:** 9/121 videos (7%)
-- **Spike ratio:** 5.7x
+- **Baseline saturation:** 9/118 videos (8%)
+- **Spike ratio:** 5.6x
 - **Related terms:** `sparks`, `viral`, `debate`
 - **Sample recent videos:**
   - 2026-06-25 — _ENOUGH IS ENOUGH_  
@@ -145,8 +145,8 @@ Pool: 9 recent videos, 121 baseline videos
 ### Cluster 4: `our coffee`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 23/121 videos (19%)
-- **Spike ratio:** 5.2x
+- **Baseline saturation:** 23/118 videos (19%)
+- **Spike ratio:** 5.1x
 - **Related terms:** `our`, `coffee`, `main`, `our coffee`, `coffee main`
 - **Sample recent videos:**
   - 2026-06-25 — _ENOUGH IS ENOUGH_  
