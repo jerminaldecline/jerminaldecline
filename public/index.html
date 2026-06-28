@@ -942,6 +942,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .channel-breakdown-table {width: 100%; border-collapse: collapse; font-size: 0.82rem; font-variant-numeric: tabular-nums;}
 .channel-breakdown-table th {font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border);}
 .channel-breakdown-table th.cbt-ch {text-align: left;}
+.channel-breakdown-table th.cbt-grp {text-align: center;}
+.channel-breakdown-table th.cbt-grp-s {border-left: 1px solid var(--border);}
+.channel-breakdown-table th.cbt-sub {font-size: 0.62rem; padding-top: 0.15rem;}
+.channel-breakdown-table th.cbt-divcol, .channel-breakdown-table td.cbt-divcol {border-left: 1px solid var(--border);}
 .channel-breakdown-table td {padding: 0.34rem 0.5rem; border-bottom: 1px solid var(--border);}
 .channel-breakdown-table td.cbt-ch {text-align: left; color: var(--text); font-weight: 600;}
 .channel-breakdown-table td.cbt-num {text-align: right; color: var(--text-muted);}
@@ -6611,7 +6615,13 @@ function niceDurationAxis(minSec, maxSec) {
     'hipocrite': 'hypocrite', 'millenium': 'millennium', 'noticable': 'noticeable',
     'occurance': 'occurrence', 'priviledge': 'privilege', 'refered': 'referred',
     'relevent': 'relevant', 'religous': 'religious', 'remeber': 'remember',
-    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely'
+    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely',
+    // Recurring misspellings observed in this network's long-form titles, verified
+    // against the live dataset — 'accidently' (~35×) and 'bizzare' (~19×) are by
+    // far his most frequent, and were previously slipping through uncounted.
+    'bizzare': 'bizarre', 'tomatos': 'tomatoes', 'humilation': 'humiliation',
+    'humilating': 'humiliating', 'accidently': 'accidentally', 'destoryed': 'destroyed',
+    'hilarous': 'hilarious'
   };
   function loadDescriptions() {
   if (descriptionsCache) return Promise.resolve(descriptionsCache);
@@ -6821,7 +6831,7 @@ function niceDurationAxis(minSec, maxSec) {
 
   const typosHTML = spellingList.length === 0 ? '' : `
     <div class="desc-pattern-typos">
-      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'}</span></div>
+      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'} · all-time</span></div>
       <ul class="desc-pattern-typos-list">
         ${spellingList.map(t => `
           <li>
@@ -7384,32 +7394,36 @@ function classifyLikeRate(v) {
 function buildChannelBreakdownTable(videos) {
   if (!ANALYTICS_DATASET?.channels) return '';
   const perChannel = new Map();
-  for (const id of Object.keys(ANALYTICS_DATASET.channels)) perChannel.set(id, { longCount:0, shortCount:0, views:0 });
+  for (const id of Object.keys(ANALYTICS_DATASET.channels)) perChannel.set(id, { longCount:0, shortCount:0, longViews:0, shortViews:0 });
   for (const v of videos) {
     const s = perChannel.get(v.channelId);
     if (!s || v.unavailable) continue;
-    if (v.isShort) s.shortCount++; else s.longCount++;
-    s.views += v.views || 0;
+    if (v.isShort) { s.shortCount++; s.shortViews += v.views || 0; }
+    else { s.longCount++; s.longViews += v.views || 0; }
   }
   const orderedIds = orderChannelIds(Object.keys(ANALYTICS_DATASET.channels));
-  let tL=0, tS=0, tV=0;
+  let tL=0, tS=0, tLV=0, tSV=0;
   const rows = orderedIds.map(id => {
     const ch = ANALYTICS_DATASET.channels[id];
-    const s = perChannel.get(id) || { longCount:0, shortCount:0, views:0 };
-    tL += s.longCount; tS += s.shortCount; tV += s.views;
+    const s = perChannel.get(id) || { longCount:0, shortCount:0, longViews:0, shortViews:0 };
+    tL += s.longCount; tS += s.shortCount; tLV += s.longViews; tSV += s.shortViews;
     const empty = (s.longCount + s.shortCount) === 0;
     return `<tr class="${empty?'cbt-empty':''}">
       <td class="cbt-ch">${escapeHtml(ch.title)}</td>
       <td class="cbt-num">${fmt(s.longCount)}</td>
-      <td class="cbt-num">${fmt(s.shortCount)}</td>
-      <td class="cbt-num cbt-views">${fmtCompact(s.views)}</td>
+      <td class="cbt-num cbt-views">${fmtCompact(s.longViews)}</td>
+      <td class="cbt-num cbt-divcol">${fmt(s.shortCount)}</td>
+      <td class="cbt-num cbt-views">${fmtCompact(s.shortViews)}</td>
     </tr>`;
   }).join('');
   return `<div class="channel-breakdown-table-wrap">
     <table class="channel-breakdown-table">
-      <thead><tr><th class="cbt-ch">Channel</th><th class="cbt-num">Long-form</th><th class="cbt-num">Shorts</th><th class="cbt-num">Views</th></tr></thead>
+      <thead>
+        <tr><th rowspan="2" class="cbt-ch">Channel</th><th colspan="2" class="cbt-grp">Long-form</th><th colspan="2" class="cbt-grp cbt-grp-s">Shorts</th></tr>
+        <tr><th class="cbt-num cbt-sub">Videos</th><th class="cbt-num cbt-sub">Views</th><th class="cbt-num cbt-sub cbt-divcol">Videos</th><th class="cbt-num cbt-sub">Views</th></tr>
+      </thead>
       <tbody>${rows}</tbody>
-      <tfoot><tr><td class="cbt-ch">All channels</td><td class="cbt-num">${fmt(tL)}</td><td class="cbt-num">${fmt(tS)}</td><td class="cbt-num cbt-views">${fmtCompact(tV)}</td></tr></tfoot>
+      <tfoot><tr><td class="cbt-ch">All channels</td><td class="cbt-num">${fmt(tL)}</td><td class="cbt-num cbt-views">${fmtCompact(tLV)}</td><td class="cbt-num cbt-divcol">${fmt(tS)}</td><td class="cbt-num cbt-views">${fmtCompact(tSV)}</td></tr></tfoot>
     </table>
   </div>`;
 }
