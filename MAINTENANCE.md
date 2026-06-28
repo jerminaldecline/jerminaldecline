@@ -97,6 +97,14 @@ the run window. Re-run as new snapshots land to watch the running total until
 the campaign tapers back to baseline. (Only clean for older videos — a freshly
 published video's organic and ad views are entangled.)
 
+**Detecting *unflagged* promotion:** `node scripts/detect-spikes.js` sweeps every
+aged long-form video NOT in `ad-videos.json` for the same flat-then-spike
+pattern and writes `public/view-spikes.json`. A hit is an *anomaly* (possible
+undisclosed ad, off-platform promotion, or a news/viral resurface), not a
+confirmed paid ad — output is labelled accordingly and carries a `newsLikely`
+hint. Research-only for now: nothing on the site reads `view-spikes.json` yet
+(a UI panel would be a separate, staging-reviewed change).
+
 ### 3. Monthly-ish: review story tracker candidates
 
 **What:** Glance at `public/topic-candidates.md` (auto-generated nightly) to see if any new story arcs deserve curated labels.
