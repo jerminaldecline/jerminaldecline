@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-06-28T17:20:36.974Z",
+  "_generated": "2026-06-28T21:05:03.386Z",
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
@@ -15,159 +15,17 @@
   },
   "knownAdSpikes": [
     {
+      "id": "TYPV_Ej1ND4",
+      "title": "Never EAT McDonalds Again!",
+      "estPromotedViews": 2505,
+      "spikeStartDate": "2026-06-27-PM"
+    },
+    {
       "id": "7Mg87BPII_4",
       "title": "WALMART ACTUALLY DID IT",
       "estPromotedViews": 805,
       "spikeStartDate": "2026-06-27-PM"
     }
   ],
-  "spikes": [
-    {
-      "id": "TYPV_Ej1ND4",
-      "title": "Never EAT McDonalds Again!",
-      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
-      "channel": "TheQuartering",
-      "publishedAt": "2026-05-15T16:18:03.000Z",
-      "ageDaysAtSpike": 43.5,
-      "baselinePerDay": 0,
-      "peakPerDay": 5010,
-      "ratio": 5010,
-      "spikeStartDate": "2026-06-27-PM",
-      "elevatedSnapshots": 1,
-      "status": "emerging",
-      "estPromotedViews": 2505,
-      "topic": "fast-food-dining",
-      "newsLikely": false,
-      "series": [
-        [
-          "2026-06-11-PM",
-          58955
-        ],
-        [
-          "2026-06-12-AM",
-          58953
-        ],
-        [
-          "2026-06-12-PM",
-          58953
-        ],
-        [
-          "2026-06-13-AM",
-          58954
-        ],
-        [
-          "2026-06-13-PM",
-          58957
-        ],
-        [
-          "2026-06-14-AM",
-          58964
-        ],
-        [
-          "2026-06-14-PM",
-          58965
-        ],
-        [
-          "2026-06-15-PM",
-          58968
-        ],
-        [
-          "2026-06-16-PM",
-          58968
-        ],
-        [
-          "2026-06-17-AM",
-          58968
-        ],
-        [
-          "2026-06-17-PM",
-          58968
-        ],
-        [
-          "2026-06-18-AM",
-          58968
-        ],
-        [
-          "2026-06-18-PM",
-          58968
-        ],
-        [
-          "2026-06-19-AM",
-          58969
-        ],
-        [
-          "2026-06-19-PM",
-          58969
-        ],
-        [
-          "2026-06-20-AM",
-          58970
-        ],
-        [
-          "2026-06-20-PM",
-          58971
-        ],
-        [
-          "2026-06-21-AM",
-          58972
-        ],
-        [
-          "2026-06-21-PM",
-          58972
-        ],
-        [
-          "2026-06-22-AM",
-          58972
-        ],
-        [
-          "2026-06-22-PM",
-          58974
-        ],
-        [
-          "2026-06-23-AM",
-          58975
-        ],
-        [
-          "2026-06-23-PM",
-          58975
-        ],
-        [
-          "2026-06-24-AM",
-          58976
-        ],
-        [
-          "2026-06-24-PM",
-          58976
-        ],
-        [
-          "2026-06-25-AM",
-          58977
-        ],
-        [
-          "2026-06-25-PM",
-          58977
-        ],
-        [
-          "2026-06-26-AM",
-          58977
-        ],
-        [
-          "2026-06-26-PM",
-          58980
-        ],
-        [
-          "2026-06-27-AM",
-          58980
-        ],
-        [
-          "2026-06-27-PM",
-          58980
-        ],
-        [
-          "2026-06-28-AM",
-          61485
-        ]
-      ]
-    }
-  ]
+  "spikes": []
 }
