@@ -1,10 +1,10 @@
 {
-  "_generated": "2026-06-28T21:05:03.386Z",
+  "_generated": "2026-06-29T09:20:03.374Z",
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-06-28-AM",
-    "snapshots": 32
+    "to": "2026-06-28-PM",
+    "snapshots": 33
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -23,7 +23,7 @@
     {
       "id": "7Mg87BPII_4",
       "title": "WALMART ACTUALLY DID IT",
-      "estPromotedViews": 805,
+      "estPromotedViews": 1552,
       "spikeStartDate": "2026-06-27-PM"
     }
   ],
