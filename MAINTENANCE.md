@@ -52,34 +52,37 @@ Runtime: 3-5 minutes typical.
 
 **Requirements:** `$env:TRANSCRIPTS_REPO_TOKEN` and `$env:TRANSCRIPTS_REPO` must be set as user environment variables.
 
-### 2. Monthly: ad data review
+### 2. Ad data review — now automated
 
 **What:** Catalogue new Google Ads campaigns from the Marketing Sheriff advertiser entity.
 
-**Why manual:** No automation yet (TODO: `scripts/match-ads.js`).
+**Automated:** `scripts/scrape-ads.py` drives headless Chromium (Playwright) to the
+advertiser page, scrolls to load every ad, and harvests advertised YouTube video
+IDs from the `i.ytimg.com/vi/<ID>/` thumbnail requests (the page is a JS SPA, so a
+plain fetch won't work). It diffs against `ad-videos.json`, adds any missing ids to
+the right channel, and (with `--commit`) pushes. A **Windows Scheduled Task
+`JerminalDecline-AdScrape`** runs the `run-scrape-ads.cmd` wrapper **weekly
+(Sundays 09:00 local)**; log at `%LOCALAPPDATA%\jerminaldecline\scrape-ads.log`.
 
-**How:**
+```powershell
+# manual run — report only (no writes):
+python scripts/scrape-ads.py
+# apply + commit + push:
+python scripts/scrape-ads.py --apply --commit
+# run the scheduled task now:
+Start-ScheduledTask -TaskName JerminalDecline-AdScrape
+# disable / remove:
+Disable-ScheduledTask -TaskName JerminalDecline-AdScrape
+Unregister-ScheduledTask -TaskName JerminalDecline-AdScrape -Confirm:$false
+```
 
-1. Visit https://adstransparency.google.com/advertiser/AR13693796838614761473
-2. For each new ad pointing to a YouTube video on one of the tracked channels (@TheQuartering, @JeremyHambly, @UnSleevedMedia, @rcnightmare, @QuarteringLive), grab the video ID
-3. Add a new entry to `videos[]` in `public/ad-videos.json`:
-   ```json
-   {
-     "id": "abc123XYZ",
-     "channelHandle": "@TheQuartering",
-     "title": "video title at time of cataloguing"
-   }
-   ```
-4. Update `meta.lastUpdated` to today's date
-5. Commit and push:
-   ```powershell
-   cd "<repo>"
-   git add public/ad-videos.json
-   git commit -m "Ad data: add N new campaigns"
-   git push
-   ```
+Notes: it only **adds** ids (never removes the "stale" ones — ads that stopped and
+aged off the page are kept as history). It aborts without writing if fewer than
+`--min-ads` (50) are harvested, guarding against a bot-block/empty load. The file
+schema is `channels{handle:{channelId, videoIds[]}}` (the old `videos[]` shape in
+earlier docs is obsolete).
 
-**Frequency:** Monthly-ish. New campaigns appear gradually.
+**Frequency:** Weekly via the task; new campaigns appear gradually so that's ample.
 
 **Measuring an ad's view impact:** Once a campaign is running on a video that's
 past its organic burst (>~48h old, so velocity is flat), you can estimate how
