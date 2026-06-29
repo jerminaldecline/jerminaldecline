@@ -30,7 +30,6 @@ URL = f"https://adstransparency.google.com/advertiser/{ADVERTISER}?region=anywhe
 ROOT = Path(__file__).resolve().parent.parent
 ADS_FILE = ROOT / "public" / "ad-videos.json"
 DATA_FILE = ROOT / "public" / "data.json"
-DATES_FILE = ROOT / "public" / "ad-dates.json"
 
 APPLY   = "--apply" in sys.argv
 COMMIT  = "--commit" in sys.argv
@@ -76,31 +75,6 @@ def scrape_ids():
         b.close()
     return ids
 
-def update_ad_dates(scraped):
-    """Presence tracking: record first/last date each video was seen advertised.
-    This is the reliable 'last ad run' signal (weekly precision) — the
-    Transparency Center doesn't expose a date->video mapping we can trust, so we
-    use the fact that the weekly scrape already lists every currently-running ad.
-    lastSeen freezes when a video drops out of the scrape (~ campaign ended).
-    Forward-looking: the clock starts when a video is first observed."""
-    today = datetime.date.today().isoformat()
-    obj = json.loads(DATES_FILE.read_text(encoding="utf-8")) if DATES_FILE.exists() else {
-        "_note": "Per-video advertising presence from the weekly scrape. lastSeen = most "
-                 "recent scrape the video was still advertised (~ last ad run, weekly "
-                 "precision). Forward-looking: clock starts when first observed.", "videos": {}}
-    vids = obj.setdefault("videos", {})
-    changed = False
-    for i in scraped:
-        rec = vids.get(i)
-        if not rec:
-            vids[i] = {"firstSeen": today, "lastSeen": today, "seen": 1}; changed = True
-        elif rec.get("lastSeen") != today:
-            rec["lastSeen"] = today; rec["seen"] = rec.get("seen", 1) + 1; changed = True
-    if changed:
-        DATES_FILE.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return changed
-
-
 def main():
     ads = json.loads(ADS_FILE.read_text(encoding="utf-8"))
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
@@ -128,34 +102,27 @@ def main():
     for i in missing: log(f"  + {i}  {title(i)}")
 
     added = {}
-    dates_changed = False
-    if APPLY:
-        if missing:
-            for i in missing:
-                v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
-                if not h:
-                    log(f"  !! cannot place {i} (unknown channel) — skipped"); continue
-                ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
-            for c in ads["channels"].values():
-                c["videoIds"] = sorted(set(c["videoIds"]))
-            ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
-            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-            log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
-            subprocess.run(["node", str(ROOT/"scripts"/"detect-spikes.js"), "--quiet"], cwd=ROOT)
-        # presence tracking runs EVERY scrape — lastSeen updates weekly even with no new ads
-        dates_changed = update_ad_dates(scraped)
-        if dates_changed: log("Updated ad-dates.json (advertising-presence tracking).")
-        if COMMIT and (missing or dates_changed):
-            files = ["public/ad-dates.json"]
-            if missing: files += ["public/ad-videos.json", "public/view-spikes.json"]
+    if APPLY and missing:
+        for i in missing:
+            v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
+            if not h:
+                log(f"  !! cannot place {i} (unknown channel) — skipped"); continue
+            ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
+        for c in ads["channels"].values():
+            c["videoIds"] = sorted(set(c["videoIds"]))
+        ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
+        ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
+        # keep the spike artifact in sync
+        subprocess.run(["node", str(ROOT/"scripts"/"detect-spikes.js"), "--quiet"], cwd=ROOT)
+        if COMMIT:
             n = sum(added.values())
-            msg = (f"Ad data: auto-reconcile (+{n} campaigns) + presence update" if missing
-                   else "Ad data: weekly advertising-presence update")
-            subprocess.run(["git", "add", *files], cwd=ROOT, check=True)
-            subprocess.run(["git", "commit", "-m", msg], cwd=ROOT, check=True)
-            subprocess.run(["git", "pull", "--rebase", "origin", "main", "-q"], cwd=ROOT)
-            subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True)
-            log("Committed and pushed.")
+            subprocess.run(["git","add","public/ad-videos.json","public/view-spikes.json"], cwd=ROOT, check=True)
+            subprocess.run(["git","commit","-m",
+                f"Ad data: auto-reconcile vs Transparency Center (+{n} campaigns)"], cwd=ROOT, check=True)
+            subprocess.run(["git","pull","--rebase","origin","main","-q"], cwd=ROOT)
+            subprocess.run(["git","push","origin","main"], cwd=ROOT, check=True)
+            log(f"Committed and pushed (+{n}).")
 
     if ASJSON:
         print(json.dumps({"ok": True, "scraped": len(scraped), "catalogued": len(flagged),

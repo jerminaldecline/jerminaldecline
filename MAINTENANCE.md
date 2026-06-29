@@ -84,12 +84,11 @@ aged off the page are kept as history). It aborts without writing if fewer than
 schema is `channels{handle:{channelId, videoIds[]}}` (the old `videos[]` shape in
 earlier docs is obsolete).
 
-Each run also updates **`public/ad-dates.json`** — per-video `firstSeen`/`lastSeen`
-advertising-presence dates. `lastSeen` is the most recent weekly scrape a video
-was still being advertised, i.e. a reliable "last ad run" to weekly precision
-(the Transparency Center doesn't expose a date→video mapping we can trust). It's
-forward-looking: the clock starts when a video is first observed, so historical
-campaigns that ended before tracking began won't have dates.
+Note: the Transparency Center is a permanent record (ads stay listed long after
+their run ends, and there's no "first shown" date), so it can't tell us when a
+run started or reliably ended per video. Ad-run *timing* comes instead from the
+snapshot **view-velocity** signal (`scripts/ad-impact.js`) — a dead video's view
+bump IS the ad run.
 
 **Frequency:** Weekly via the task; new campaigns appear gradually so that's ample.
 
