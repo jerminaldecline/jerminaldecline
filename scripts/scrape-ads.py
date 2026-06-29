@@ -22,7 +22,7 @@ Modes:
 Requires Playwright + Chromium (installed locally). Run from anywhere; paths are
 resolved relative to this file.
 """
-import re, sys, json, time, subprocess, datetime
+import re, sys, json, time, os, subprocess, datetime
 from pathlib import Path
 
 ADVERTISER = "AR13693796838614761473"
@@ -102,27 +102,41 @@ def main():
     for i in missing: log(f"  + {i}  {title(i)}")
 
     added = {}
-    if APPLY and missing:
-        for i in missing:
-            v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
-            if not h:
-                log(f"  !! cannot place {i} (unknown channel) — skipped"); continue
-            ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
-        for c in ads["channels"].values():
-            c["videoIds"] = sorted(set(c["videoIds"]))
-        ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
-        ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
-        # keep the spike artifact in sync
+    if APPLY:
+        if missing:
+            for i in missing:
+                v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
+                if not h:
+                    log(f"  !! cannot place {i} (unknown channel) — skipped"); continue
+                ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
+            for c in ads["channels"].values():
+                c["videoIds"] = sorted(set(c["videoIds"]))
+            ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
+            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
+
+        # Refresh the spike detector against the LATEST snapshots every run — so a
+        # fresh velocity bump on an already-catalogued video is caught even in a
+        # week with no new ads. Pull the snapshots sibling repo first so it's current.
+        snap_dir = os.environ.get("SNAPSHOTS_DIR")
+        snap_repo = Path(snap_dir).parent if snap_dir else (ROOT.parent / "jerminaldecline-snapshots")
+        if snap_repo.exists():
+            subprocess.run(["git", "pull", "--ff-only", "-q"], cwd=snap_repo)
         subprocess.run(["node", str(ROOT/"scripts"/"detect-spikes.js"), "--quiet"], cwd=ROOT)
+
         if COMMIT:
-            n = sum(added.values())
-            subprocess.run(["git","add","public/ad-videos.json","public/view-spikes.json"], cwd=ROOT, check=True)
-            subprocess.run(["git","commit","-m",
-                f"Ad data: auto-reconcile vs Transparency Center (+{n} campaigns)"], cwd=ROOT, check=True)
-            subprocess.run(["git","pull","--rebase","origin","main","-q"], cwd=ROOT)
-            subprocess.run(["git","push","origin","main"], cwd=ROOT, check=True)
-            log(f"Committed and pushed (+{n}).")
+            subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json"], cwd=ROOT, check=True)
+            staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
+            if staged.returncode != 0:           # something actually changed
+                n = sum(added.values())
+                msg = (f"Ad data: auto-reconcile (+{n} campaigns) + refresh spike detector"
+                       if missing else "Ad data: refresh view-spikes (new bumps on existing ads)")
+                subprocess.run(["git", "commit", "-m", msg], cwd=ROOT, check=True)
+                subprocess.run(["git", "pull", "--rebase", "origin", "main", "-q"], cwd=ROOT)
+                subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True)
+                log(f"Committed and pushed{f' (+{n} new ads)' if missing else ''}.")
+            else:
+                log("No changes to commit.")
 
     if ASJSON:
         print(json.dumps({"ok": True, "scraped": len(scraped), "catalogued": len(flagged),
