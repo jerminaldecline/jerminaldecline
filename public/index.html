@@ -1291,6 +1291,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;}
 .ad-perf-table th.col-vid, .ad-perf-table td.col-vid {text-align: left; width: auto;}
 .ad-perf-table th.col-num, .ad-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
+.ad-perf-table th.col-date, .ad-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted);}
 .ad-perf-table td.col-vid a {color: var(--text); text-decoration: none; font-weight: 600; display: block;}
 .ad-perf-table td.col-vid a:hover {color: var(--accent); text-decoration: underline;}
 .ad-perf-date {display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 0.15rem; font-variant-numeric: tabular-nums;}
@@ -7544,8 +7545,9 @@ function renderAdPanel() {
       <tr>
         <td class="col-vid">
           <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-          <span class="ad-perf-date">${r.v.publishedAt.slice(0, 10)}${isAll ? ' · ' + escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '') : ''}</span>
+          ${isAll ? `<span class="ad-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
         </td>
+        <td class="col-date">${r.v.publishedAt.slice(0, 10)}</td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
         <td class="col-num">${fmtMult(r.multiplier)}</td>
@@ -7609,6 +7611,7 @@ function renderAdPanel() {
           <thead>
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
+              ${sortHeader('Date', 'date', 'col-date')}
               ${sortHeader('Views', 'views', 'col-num')}
               ${sortHeader('Month average', 'median', 'col-num hide-mobile')}
               ${sortHeader('Performance', 'perf', 'col-num')}
