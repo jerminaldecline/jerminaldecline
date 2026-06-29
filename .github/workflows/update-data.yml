@@ -2,13 +2,16 @@ name: Update channel data
 
 on:
   schedule:
-    # Four cron runs across the day: two in the AM half (00:00-11:59 UTC)
-    # and two in the PM half (12:00-23:59 UTC). The snapshot step is
-    # idempotent on AM/PM, so the first successful run in each half
-    # creates that half's snapshot; later runs in the same half no-op.
+    # Five cron runs across the day: two in the AM half (00:00-11:59 UTC) and
+    # two in the PM half (12:00-23:59 UTC), plus a midday gap-filler to cover
+    # the long 03:17->13:37 hole (keeps the site < ~7h stale). The snapshot
+    # step is idempotent on AM/PM, so the first successful run in each half
+    # creates that half's snapshot; later runs in the same half no-op — the
+    # gap-filler refreshes data.json/views but adds no extra snapshot.
     # Two attempts per half guards against GitHub's flaky scheduler.
     - cron: '7 0 * * *'    # 00:07 UTC — AM primary
     - cron: '17 3 * * *'   # 03:17 UTC — AM backup
+    - cron: '27 9 * * *'   # 09:27 UTC — midday gap-filler
     - cron: '37 13 * * *'  # 13:37 UTC — PM primary
     - cron: '47 19 * * *'  # 19:47 UTC — PM backup
   workflow_dispatch:  # allows manual runs from the Actions tab
