@@ -193,7 +193,9 @@ for (const id of flagged) {
 knownAdSpikes.sort((x, y) => y.estPromotedViews - x.estPromotedViews);
 
 const out = {
-  _generated: new Date().toISOString(),
+  // No _generated timestamp on purpose: it would make this file differ on every
+  // run and produce empty "refresh" commits. window.to (latest snapshot) is the
+  // freshness indicator, and git history records when it actually changed.
   _note: 'Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.',
   window: { from: windowFrom.tag, to: windowTo.tag, snapshots: snaps.length },
   params: P,
