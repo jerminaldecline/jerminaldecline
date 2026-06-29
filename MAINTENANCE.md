@@ -62,7 +62,9 @@ IDs from the `i.ytimg.com/vi/<ID>/` thumbnail requests (the page is a JS SPA, so
 plain fetch won't work). It diffs against `ad-videos.json`, adds any missing ids to
 the right channel, and (with `--commit`) pushes. A **Windows Scheduled Task
 `JerminalDecline-AdScrape`** runs the `run-scrape-ads.cmd` wrapper **weekly
-(Sundays 09:00 local)**; log at `%LOCALAPPDATA%\jerminaldecline\scrape-ads.log`.
+(Sundays 11:00 local)**; log at `%LOCALAPPDATA%\jerminaldecline\scrape-ads.log`.
+(11:00 avoids the 09:00 cluster — `jerminaldecline refresh` and `stocktracker` —
+which would otherwise race on the same repo push.)
 
 ```powershell
 # manual run — report only (no writes):
@@ -81,6 +83,13 @@ aged off the page are kept as history). It aborts without writing if fewer than
 `--min-ads` (50) are harvested, guarding against a bot-block/empty load. The file
 schema is `channels{handle:{channelId, videoIds[]}}` (the old `videos[]` shape in
 earlier docs is obsolete).
+
+Each run also updates **`public/ad-dates.json`** — per-video `firstSeen`/`lastSeen`
+advertising-presence dates. `lastSeen` is the most recent weekly scrape a video
+was still being advertised, i.e. a reliable "last ad run" to weekly precision
+(the Transparency Center doesn't expose a date→video mapping we can trust). It's
+forward-looking: the clock starts when a video is first observed, so historical
+campaigns that ended before tracking began won't have dates.
 
 **Frequency:** Weekly via the task; new campaigns appear gradually so that's ample.
 
