@@ -1,6 +1,27 @@
 {
-  "lastUpdated": "2026-06-29T16:46:21.422Z",
+  "lastUpdated": "2026-06-30T08:05:47.243Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "out quartering",
+      "keywords": [
+        "out quartering",
+        "check",
+        "quartering",
+        "check out",
+        "faces",
+        "continues",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4286,
+        "baselineSaturation": 0.0858,
+        "spikeRatio": 4.99,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "film",
@@ -9,132 +30,94 @@
         "debate our"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3077,
+        "recentSaturation": 0.3571,
         "baselineSaturation": 0.0037,
-        "spikeRatio": 82.46,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "case",
-      "keywords": [
-        "case our",
-        "case"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.0784,
-        "spikeRatio": 4.91,
+        "spikeRatio": 95.71,
         "recentVideoCount": 5,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "our",
+      "termId": "widespread",
       "keywords": [
-        "debate",
-        "second",
-        "coffee second",
-        "our",
-        "our coffee",
-        "coffee"
+        "widespread",
+        "sparked"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9231,
-        "baselineSaturation": 0.2575,
-        "spikeRatio": 3.59,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 34,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0112,
+        "spikeRatio": 31.9,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "debate",
+      "keywords": [
+        "debate"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0187,
+        "spikeRatio": 19.14,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "appeal",
       "keywords": [
+        "legal",
         "appeal",
-        "surrounding"
+        "conviction",
+        "case"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.0634,
-        "spikeRatio": 6.06,
+        "recentSaturation": 0.4286,
+        "baselineSaturation": 0.1381,
+        "spikeRatio": 3.1,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 18,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "following",
+      "keywords": [
+        "following"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0933,
+        "spikeRatio": 3.83,
         "recentVideoCount": 5,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "second",
-      "keywords": [
-        "second",
-        "coffee second",
-        "former"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4444,
-        "baselineSaturation": 0.0129,
-        "spikeRatio": 34.37,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "charlie",
-      "keywords": [
-        "charlie",
-        "kirk",
-        "charlie kirk"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0129,
-        "spikeRatio": 25.78,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "sparks",
-      "keywords": [
-        "sparks",
-        "viral",
-        "debate"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4444,
-        "baselineSaturation": 0.0819,
-        "spikeRatio": 5.43,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "our coffee",
       "keywords": [
+        "former",
         "our coffee",
         "our",
         "coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.2026,
-        "spikeRatio": 4.94,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 23,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
+        "recentSaturation": 0.8571,
+        "baselineSaturation": 0.2284,
+        "spikeRatio": 3.75,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-06-30T08:05:47.243Z"
       }
     },
     {
@@ -150,11 +133,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.75,
-        "baselineSaturation": 0.1197,
-        "spikeRatio": 6.26,
+        "baselineSaturation": 0.1181,
+        "spikeRatio": 6.35,
         "recentVideoCount": 3,
         "baselineVideoCount": 8,
-        "detectedAt": "2026-06-29T16:46:21.422Z"
+        "detectedAt": "2026-06-30T08:05:47.243Z"
       }
     }
   ]
