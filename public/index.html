@@ -2174,6 +2174,27 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
   .an-chart-title{margin:0.1rem 0 0.55rem}
 }
+/* === Videos-tab panels — Option A (calm, unified). Flatten the three metadata
+   disclosures + the ad panel into one component: no glow/gradient, a single
+   accent stripe + colour-coded icon, quiet hover. Supersedes the older
+   "Panel restyle" glow block. === */
+.ad-panel{--ac:var(--accent-2);margin:1.25rem 0 0.7rem;box-shadow:none}
+.wordcloud-section{--ac:var(--accent);margin:0 0 0.7rem;box-shadow:none}
+.creatortags-section{--ac:#4dd0a0}
+.topics-section{--ac:#b892ff}
+.ad-panel-toggle,.wordcloud-toggle{display:flex;align-items:center;gap:0.8rem;width:100%;
+  background:var(--surface);border-left:3px solid var(--ac);
+  padding:0.8rem 1rem 0.8rem 0.85rem;transition:background .14s}
+.ad-panel-toggle::before,.wordcloud-toggle::before{display:none!important}
+.ad-panel-toggle:hover,.wordcloud-toggle:hover{background:var(--surface-2);box-shadow:none}
+.ad-panel-toggle[aria-expanded="true"],.wordcloud-toggle[aria-expanded="true"]{background:var(--surface-2);box-shadow:none}
+.panel-ic{width:30px;height:30px;border-radius:8px;flex:0 0 auto;display:grid;place-items:center;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent)}
+.panel-ic svg{display:block}
+.ad-panel-header{flex:1 1 auto;min-width:0}
+.wordcloud-toggle-text{flex:1 1 auto;min-width:0}
+.wordcloud-toggle-text::before{display:none!important}
+.wordcloud-panel{border-left-color:var(--ac)!important}
 </style>
 </head>
 <body>
@@ -2324,6 +2345,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <div class="ad-panel" id="adPanel" hidden></div>
     <div class="wordcloud-section">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
+        <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg></span>
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">Most-used words</span>
           <span class="wordcloud-title">Title word cloud <span class="wordcloud-hint" id="wordcloudHint"></span></span>
@@ -2338,6 +2360,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
     <div class="wordcloud-section creatortags-section" id="creatorTagsSection">
       <button type="button" class="wordcloud-toggle" id="creatorTagsToggle" aria-expanded="false" aria-controls="creatorTagsPanel">
+        <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-7-7A2 2 0 013 12V5a2 2 0 012-2h7a2 2 0 011.4.6l7.2 7.2a2 2 0 010 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></span>
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">Creator applied tags</span>
           <span class="wordcloud-title">Video tags <span class="wordcloud-hint" id="creatorTagsHint"></span></span>
@@ -2358,6 +2381,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
     <div class="wordcloud-section topics-section" id="topicsSection">
       <button type="button" class="wordcloud-toggle" id="topicsToggle" aria-expanded="false" aria-controls="topicsPanel">
+        <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
         <span class="wordcloud-toggle-text">
           <span class="wordcloud-eyebrow">What this period covered</span>
           <span class="wordcloud-title">Topics <span class="wordcloud-hint" id="topicsHint"></span></span>
@@ -6456,7 +6480,13 @@ function niceDurationAxis(minSec, maxSec) {
   'shouldnt','wouldnt','couldnt','its','im','ive','youre','youve','theyre','weve','well',
   // Generic verbs that show up a lot but mean nothing alone
   'gets','got','goes','went','going','make','makes','made','take','takes','took','says',
-  'said','saw','seen','tell','told','call','calls','called'
+  'said','saw','seen','tell','told','call','calls','called',
+  // Pronoun/contraction leftovers + bare function words (belt-and-suspenders
+  // alongside the suffix-stripping in extractWords)
+  'here','them','these','those','aint','gonna','wanna','gotta','yall','whos',
+  'youll','theyll','youve','theyve','hes','shes','thats','whats','heres','theres','lets',
+  // stray HTML-entity remnants, just in case
+  'amp','quot','nbsp'
 ]);
   function extractWords(videos) {
   const counts = new Map();
@@ -6465,12 +6495,17 @@ function niceDurationAxis(minSec, maxSec) {
     // Find tokens: words (possibly with apostrophes) and hashtags
     const tokens = v.title.match(/#[\w]+|[A-Za-z][A-Za-z']*/g) || [];
     for (let tok of tokens) {
-      // Normalise: lowercase, strip apostrophes from words (but keep hashtags as-is in case)
+      // Normalise. For words: strip a trailing possessive/contraction suffix
+      // ('s 're 've 'll 'd 'm) down to the BASE word — so "he's"→"he", "she's"→
+      // "she", "Walmart's"→"walmart" (which then merges with the bare noun and
+      // is counted once). Then drop any remaining apostrophes (n't → "nt", e.g.
+      // "don't"→"dont", caught by STOPWORDS). This kills "hes"/"shes"/"thats"
+      // filler at the root rather than blocklisting each one. Hashtags kept as-is.
       let key;
       if (tok.startsWith('#')) {
         key = tok.toLowerCase();
       } else {
-        key = tok.toLowerCase().replace(/'/g, '');
+        key = tok.toLowerCase().replace(/'(s|re|ve|ll|d|m)$/, '').replace(/'/g, '');
       }
       if (key.length < 3) continue;
       if (STOPWORDS.has(key)) continue;
@@ -7576,6 +7611,7 @@ function renderAdPanel() {
   // revenue panel, but consistent UX wins by preserving state here too.
   panel.innerHTML = `
     <button type="button" class="ad-panel-toggle" aria-expanded="${adPanelExpanded}" id="adPanelToggle">
+      <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 7a4 4 0 010 8"/></svg></span>
       <div class="ad-panel-header">
         <div class="ad-panel-header-left">
           <span class="ad-panel-eyebrow">Confirmed paid promotion</span>
