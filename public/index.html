@@ -6480,7 +6480,13 @@ function niceDurationAxis(minSec, maxSec) {
   'shouldnt','wouldnt','couldnt','its','im','ive','youre','youve','theyre','weve','well',
   // Generic verbs that show up a lot but mean nothing alone
   'gets','got','goes','went','going','make','makes','made','take','takes','took','says',
-  'said','saw','seen','tell','told','call','calls','called'
+  'said','saw','seen','tell','told','call','calls','called',
+  // Pronoun/contraction leftovers + bare function words (belt-and-suspenders
+  // alongside the suffix-stripping in extractWords)
+  'here','them','these','those','aint','gonna','wanna','gotta','yall','whos',
+  'youll','theyll','youve','theyve','hes','shes','thats','whats','heres','theres','lets',
+  // stray HTML-entity remnants, just in case
+  'amp','quot','nbsp'
 ]);
   function extractWords(videos) {
   const counts = new Map();
@@ -6489,12 +6495,17 @@ function niceDurationAxis(minSec, maxSec) {
     // Find tokens: words (possibly with apostrophes) and hashtags
     const tokens = v.title.match(/#[\w]+|[A-Za-z][A-Za-z']*/g) || [];
     for (let tok of tokens) {
-      // Normalise: lowercase, strip apostrophes from words (but keep hashtags as-is in case)
+      // Normalise. For words: strip a trailing possessive/contraction suffix
+      // ('s 're 've 'll 'd 'm) down to the BASE word — so "he's"→"he", "she's"→
+      // "she", "Walmart's"→"walmart" (which then merges with the bare noun and
+      // is counted once). Then drop any remaining apostrophes (n't → "nt", e.g.
+      // "don't"→"dont", caught by STOPWORDS). This kills "hes"/"shes"/"thats"
+      // filler at the root rather than blocklisting each one. Hashtags kept as-is.
       let key;
       if (tok.startsWith('#')) {
         key = tok.toLowerCase();
       } else {
-        key = tok.toLowerCase().replace(/'/g, '');
+        key = tok.toLowerCase().replace(/'(s|re|ve|ll|d|m)$/, '').replace(/'/g, '');
       }
       if (key.length < 3) continue;
       if (STOPWORDS.has(key)) continue;
