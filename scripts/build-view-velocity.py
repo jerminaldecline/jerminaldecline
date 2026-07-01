@@ -27,9 +27,11 @@ TQ = "UCfwE_ODI1YTbdjkzuSi1Nag"
 CUTOFF = datetime.date(2026, 6, 11)     # snapshots begin here => launch curves valid from here
 MAXAGE = 13.0
 BENCH_DAYS = 35                         # rolling window for the "typical" benchmark
-# movers detection
-R = 8                                   # recent-movement window (~4 days of half-day snaps)
-FLAT, MOVE, SPIKE = 200, 600, 3         # dormant<=FLAT, jump>=MOVE and >=SPIKE x baseline
+# movers detection. Movement = ACTUAL views gained between consecutive checks
+# (~twice daily), NOT a per-day rate — so the figures reconcile with "views this
+# week" and the chart (a single 12h burst reads as its real size, not doubled).
+R = 8                                   # recent-movement window (~4 days of twice-daily snaps)
+FLAT, MOVE, SPIKE = 100, 300, 3         # dormant<=FLAT, jump>=MOVE and >=SPIKE x baseline (per check)
 
 def snaptime(tag):
     d = datetime.datetime.fromisoformat(tag[:10])
@@ -118,7 +120,7 @@ MOVERS = []
 for vid, v in meta.items():
     if v.get("channelId") != TQ or v.get("isShort") or v.get("unavailable"): continue
     vser = [s.get(vid) for _, _, s in snaps]
-    vv = [((vser[i] - vser[i-1]) * 2) for i in range(1, len(vser))
+    vv = [(vser[i] - vser[i-1]) for i in range(1, len(vser))
           if vser[i] is not None and vser[i-1] is not None]
     if len(vv) < 12: continue
     before = vv[:-R]

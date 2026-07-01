@@ -9825,7 +9825,7 @@ function renderWindowList(startDate, endDate) {
 
   /* ---------- Suspicious movement (flat-then-spike) ---------- */
   const MW=760,MH=250,MP={top:20,right:20,bottom:44,left:66};
-  function paceStr(m){return (m.base<=40?"was dormant":"was ~"+fmt(m.base)+"/day")+", peaked ~"+fmt(m.peak)+"/day";}
+  function paceStr(m){return (m.base<=25?"was dormant":"was ~"+fmt(m.base)+"/check")+", biggest jump +"+fmt(m.peak);}
   function buildMovers(){
     const mv=DATA.movers.videos, start=niceDate(DATA.trackingStart);
     feat().innerHTML=
@@ -9848,7 +9848,7 @@ function renderWindowList(startDate, endDate) {
   function renderMchart(){
     const m=DATA.movers.videos.find(x=>x.id===M.sel);if(!m)return;
     const s=m.series,dates=DATA.movers.dates,n=s.length;
-    const vel=[];for(let i=1;i<n;i++){vel.push((s[i]==null||s[i-1]==null)?null:(s[i]-s[i-1])*2);}
+    const vel=[];for(let i=1;i<n;i++){vel.push((s[i]==null||s[i-1]==null)?null:(s[i]-s[i-1]));}
     const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
     let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
@@ -9857,7 +9857,7 @@ function renderWindowList(startDate, endDate) {
     const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
     const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
     let ptl="";pts.forEach(p=>{if(p[2]>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${p[0].toFixed(1)}" y="${(p[1]-9).toFixed(1)}">${fmt(p[2])}</text>`;});
-    document.getElementById("vvMcharth").textContent="Views gained per day since we started tracking ("+niceDate(DATA.trackingStart)+") — a flat line that suddenly jumps is the sign to notice.";
+    document.getElementById("vvMcharth").textContent="Views gained between checks (we snapshot ~twice a day) since tracking began ("+niceDate(DATA.trackingStart)+") — a flat line that suddenly jumps is the sign to notice.";
     document.getElementById("vvMchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}${ptl}</svg>`;
     document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
   }
