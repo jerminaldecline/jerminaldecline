@@ -36,6 +36,11 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Run fetcher
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
@@ -112,4 +117,38 @@ jobs:
             git pull --rebase
           done
           echo "Snapshot push failed after 3 attempts."
+          exit 1
+
+      - name: Rebuild view-velocity.json
+        # Regenerates the "View Velocity" feature data from the full snapshot
+        # archive (launch curves + flat-then-spike movers). Best-effort: the
+        # main data update has already committed, so a hiccup here mustn't fail
+        # the run. Runs after the snapshot step so it includes today's capture.
+        continue-on-error: true
+        env:
+          SNAPSHOTS_TOKEN: ${{ secrets.SNAPSHOTS_REPO_TOKEN }}
+          SNAPSHOTS_REPO: jerminaldecline/jerminaldecline-snapshots
+        run: |
+          set -e
+          if [ ! -d /tmp/vv-snapshots/snapshots ]; then
+            git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/vv-snapshots
+          fi
+          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-view-velocity.py
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/view-velocity.json
+          if git diff --staged --quiet; then
+            echo "view-velocity.json unchanged."
+            exit 0
+          fi
+          git commit -m "chore: rebuild view-velocity.json ($(date -u '+%Y-%m-%d %H:%M UTC'))"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "view-velocity push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed on attempt $attempt. Rebasing on latest main and retrying..."
+            git pull --rebase origin main
+          done
+          echo "view-velocity push failed after 3 attempts."
           exit 1
