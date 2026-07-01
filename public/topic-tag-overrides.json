@@ -1,9 +1,10 @@
 {
-  "_doc": "Per-video topic overrides applied AFTER keyword scoring. Add video IDs here to force a specific topic when the keyword scorer can't catch it. Value must be a topic ID from topics.json. Use null to force-untag a video the tagger over-claimed.",
-  "_lastUpdated": "2026-06-17",
+  "_doc": "Per-video topic overrides applied by the LLM tagger AFTER scoring. Value must be a valid id from topics.json: a mode id sets the mode, a subject id sets the subject/tag, a theme id (theme-*) sets the theme. Use null to force-untag. Unknown ids are skipped.",
+  "_lastUpdated": "2026-07-01",
   "overrides": {
     "LP94fw5JtYk": "black-fatigue",
     "7ONRyLrfAAs": "henry-nowak",
-    "eq6C-OgPxks": "youtube-platform"
+    "eq6C-OgPxks": "youtube-platform",
+    "NNWeJ_SS4Yc": "theme-grooming-gangs"
   }
 }
