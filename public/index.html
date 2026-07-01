@@ -8209,8 +8209,10 @@ function renderWindowList(startDate, endDate) {
     if (!panel || !section) return;
     if (!ANALYTICS_CREATOR_TAGS || !Object.keys(ANALYTICS_CREATOR_TAGS).length) { section.hidden = true; return; }
     section.hidden = false;
-    // Sync the view-tab active states.
-    document.querySelectorAll('.ctag-viewtab').forEach(b => {
+    // Sync the view-tab active states. Scope to this panel's own tabs
+    // (data-ctagview) so it doesn't strip active from other panels' tabs that
+    // share the .ctag-viewtab class (e.g. the View Velocity launch/movers tabs).
+    document.querySelectorAll('#creatorTagsPanel .ctag-viewtab[data-ctagview]').forEach(b => {
       const on = b.dataset.ctagview === windowListState.creatorTagView;
       b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on));
     });
@@ -9860,7 +9862,8 @@ function renderWindowList(startDate, endDate) {
     document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
   }
 
-  function renderView(){ if(view==="launch")buildLaunch(); else buildMovers(); }
+  function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});}
+  function renderView(){ syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
 
   document.addEventListener("mousedown",(e)=>{
     const clr=e.target.closest("#vvClear");
@@ -9875,7 +9878,7 @@ function renderWindowList(startDate, endDate) {
     if(tog){const exp=tog.getAttribute("aria-expanded")==="true";tog.setAttribute("aria-expanded",String(!exp));const p=document.getElementById("velocityPanel");if(p)p.hidden=exp;if(!exp)ensureLoaded();return;}
     const panel=document.getElementById("velocityPanel");
     const vt=e.target.closest(".ctag-viewtab[data-vvview]");
-    if(vt&&panel&&panel.contains(vt)){view=vt.dataset.vvview;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x===vt;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});if(DATA)renderView();return;}
+    if(vt&&panel&&panel.contains(vt)){view=vt.dataset.vvview;if(DATA)renderView();else syncVvTabs();return;}
     const pr=e.target.closest("#vvPreset button");
     if(pr){const p=pr.dataset.p;const v=presetVideo(p);
       if(v){L.sel=v.id;L.preset=p;setSearch(v.title);const l=document.getElementById("vvList");if(l)l.hidden=true;clearPreset();pr.classList.add("active");renderLaunch();}return;}
