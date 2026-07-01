@@ -19,7 +19,9 @@ import json, gzip, glob, os, datetime, statistics
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 PUBLIC = os.path.join(REPO, "public")
-SNAP = os.path.join(os.path.dirname(REPO), "jerminaldecline-snapshots", "snapshots")
+# Snapshots live in the sibling repo locally; CI (update-data.yml) clones them
+# elsewhere and points here via SNAPSHOTS_DIR.
+SNAP = os.environ.get("SNAPSHOTS_DIR") or os.path.join(os.path.dirname(REPO), "jerminaldecline-snapshots", "snapshots")
 
 TQ = "UCfwE_ODI1YTbdjkzuSi1Nag"
 CUTOFF = datetime.date(2026, 6, 11)     # snapshots begin here => launch curves valid from here
