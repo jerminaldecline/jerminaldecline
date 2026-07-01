@@ -9805,12 +9805,11 @@ function renderWindowList(startDate, endDate) {
   function ratioFor(v){const age=Math.min(v.age,S.launch.maxage);const s=cum(v.pts,age),t=cum(S.launch.typical,age);return t>0?s/t:1;}
   function clearPreset(){document.querySelectorAll("#vvPreset button").forEach(b=>b.classList.remove("active"));}
   function presetVideo(p){const arr=S.launch.videos.slice();const MINAGE=1.2;
-    if(p==="views"){arr.sort((a,c)=>c.views-a.views);return arr[0];}
-    let aged=arr.filter(x=>x.age>=MINAGE);if(!aged.length)aged=arr;
-    if(p==="best")aged.sort((a,c)=>ratioFor(c)-ratioFor(a));
-    else if(p==="worst")aged.sort((a,c)=>ratioFor(a)-ratioFor(c));
-    else aged.sort((a,c)=>Math.abs(ratioFor(a)-1)-Math.abs(ratioFor(c)-1));
-    return aged[0];}
+    if(p==="views"){arr.sort((a,c)=>c.views-a.views);return arr[0];}   // most viewed (any age)
+    const aged=arr.filter(x=>x.age>=MINAGE), pool=aged.length?aged:arr; // ignore <1.2d for the rest
+    if(p==="least"){pool.sort((a,c)=>a.views-c.views);return pool[0];}  // least viewed (settled)
+    pool.sort((a,c)=>Math.abs(ratioFor(a)-1)-Math.abs(ratioFor(c)-1));  // most typical for its age
+    return pool[0];}
   function updateClear(){const s=document.getElementById("vvSearch"),c=document.getElementById("vvClear");if(s&&c)c.hidden=!s.value;}
   function setSearch(val){const s=document.getElementById("vvSearch");if(s)s.value=val;updateClear();}
   function buildLaunch(){
@@ -9819,7 +9818,7 @@ function renderWindowList(startDate, endDate) {
     const legTyp=S.key==="ALL"?"video across the network":esc(S.label)+" video";
     feat().innerHTML=
       `<div class="vv-sub" id="vvLsub"></div>`+
-      `<div class="vv-row"><span class="vv-lbl">Show me</span><div class="vv-seg" id="vvPreset"><button data-p="best">Best for its age</button><button data-p="worst">Worst for its age</button><button data-p="typical">Most typical</button><button data-p="views">Most views</button></div></div>`+
+      `<div class="vv-row"><span class="vv-lbl">Show me</span><div class="vv-seg" id="vvPreset"><button data-p="views">Most viewed</button><button data-p="least">Least viewed</button><button data-p="typical">Most typical</button></div></div>`+
       `<div class="vv-row"><span class="vv-lbl">Video</span><div class="vv-combo"><input id="vvSearch" class="vv-search" type="text" placeholder="Search videos by title…" autocomplete="off"><button type="button" class="vv-clear" id="vvClear" aria-label="Clear search" hidden>×</button><div class="vv-list" id="vvList" hidden></div></div><span class="vv-lbl">Show</span><div class="vv-seg" id="vvMetric"><button data-m="vel" class="active">Views per day</button><button data-m="cum">Total so far</button></div></div>`+
       `<div class="vv-row"><span class="vv-lbl">Zoom</span><div class="vv-seg" id="vvRng"><button data-r="full" class="active">All time</button><button data-r="first7">First week</button><button data-r="last7">Latest week</button></div></div>`+
       `<div class="vv-verdict" id="vvVerdict"></div>`+
