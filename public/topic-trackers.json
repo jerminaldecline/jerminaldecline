@@ -1,25 +1,25 @@
 {
-  "lastUpdated": "2026-06-30T08:05:47.243Z",
+  "lastUpdated": "2026-07-01T08:35:43.193Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "out quartering",
+      "termId": "following",
       "keywords": [
         "out quartering",
         "check",
         "quartering",
         "check out",
         "faces",
-        "continues",
-        "out"
+        "out",
+        "following"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4286,
-        "baselineSaturation": 0.0858,
-        "spikeRatio": 4.99,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
+        "recentSaturation": 0.7143,
+        "baselineSaturation": 0.1434,
+        "spikeRatio": 4.98,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-07-01T08:35:43.193Z"
       }
     },
     {
@@ -27,117 +27,69 @@
       "termId": "film",
       "keywords": [
         "film",
-        "debate our"
+        "release"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3571,
         "baselineSaturation": 0.0037,
-        "spikeRatio": 95.71,
+        "spikeRatio": 97.14,
         "recentVideoCount": 5,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
+        "detectedAt": "2026-07-01T08:35:43.193Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "widespread",
+      "termId": "sparked",
       "keywords": [
-        "widespread",
-        "sparked"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0112,
-        "spikeRatio": 31.9,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "debate",
-      "keywords": [
+        "sparked",
+        "controversial",
         "debate"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0187,
-        "spikeRatio": 19.14,
+        "baselineSaturation": 0.0478,
+        "spikeRatio": 7.47,
         "recentVideoCount": 5,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-07-01T08:35:43.193Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "appeal",
       "keywords": [
-        "legal",
+        "surrounding karmelo",
         "appeal",
-        "conviction",
-        "case"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4286,
-        "baselineSaturation": 0.1381,
-        "spikeRatio": 3.1,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "following",
-      "keywords": [
-        "following"
+        "surrounding",
+        "conviction"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0933,
-        "spikeRatio": 3.83,
+        "baselineSaturation": 0.0993,
+        "spikeRatio": 3.6,
         "recentVideoCount": 5,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-07-01T08:35:43.193Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "our coffee",
+      "termId": "main",
       "keywords": [
-        "former",
+        "main",
+        "coffee main",
         "our coffee",
         "our",
         "coffee"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8571,
-        "baselineSaturation": 0.2284,
-        "spikeRatio": 3.75,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "film",
-      "keywords": [
-        "film",
-        "main",
-        "coffee main",
-        "our",
-        "coffee",
-        "our coffee"
-      ],
-      "detectorMeta": {
         "recentSaturation": 0.75,
-        "baselineSaturation": 0.1181,
-        "spikeRatio": 6.35,
+        "baselineSaturation": 0.25,
+        "spikeRatio": 3,
         "recentVideoCount": 3,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-06-30T08:05:47.243Z"
+        "baselineVideoCount": 29,
+        "detectedAt": "2026-07-01T08:35:43.193Z"
       }
     }
   ]
