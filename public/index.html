@@ -2399,6 +2399,88 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="topics-body" id="topicsBody"></div>
       </div>
     </div>
+    <style id="vvStyle">
+    #velocityPanel .vv-feat{font-size:0.9rem}
+    #velocityPanel .vv-sub{font-size:0.82rem;color:var(--subtext);margin:0.2rem 0 0.9rem;line-height:1.5}
+    #velocityPanel .vv-row{display:flex;flex-wrap:wrap;gap:0.5rem 0.9rem;align-items:center;margin-bottom:0.7rem}
+    #velocityPanel .vv-lbl{font-size:0.68rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
+    #velocityPanel .vv-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.15rem;gap:0.1rem;flex-wrap:wrap}
+    #velocityPanel .vv-seg button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:0.78rem;font-weight:700;padding:0.3rem 0.6rem;border-radius:6px;cursor:pointer}
+    #velocityPanel .vv-seg button.active{background:var(--accent);color:#fff}
+    #velocityPanel .vv-combo{position:relative;flex:1 1 220px;min-width:180px}
+    #velocityPanel .vv-search{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.82rem;padding:0.4rem 0.6rem}
+    #velocityPanel .vv-search:focus{outline:none;border-color:var(--accent)}
+    #velocityPanel .vv-list{position:absolute;z-index:20;top:calc(100% + 4px);left:0;right:0;max-height:260px;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+    #velocityPanel .vv-opt{padding:0.4rem 0.6rem;cursor:pointer;border-top:1px solid var(--border)}
+    #velocityPanel .vv-opt:first-child{border-top:none}
+    #velocityPanel .vv-opt:hover{background:var(--surface-2)}
+    #velocityPanel .vv-opt b{display:block;font-size:0.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #velocityPanel .vv-opt span{font-size:0.7rem;color:var(--text-dim)}
+    #velocityPanel .vv-empty{padding:0.7rem;color:var(--text-dim);font-size:0.82rem}
+    #velocityPanel .vv-verdict{display:flex;flex-wrap:wrap;gap:0.4rem 0.8rem;margin:0.3rem 0 0.2rem}
+    #velocityPanel .vv-v{font-size:0.8rem;color:var(--subtext)}
+    #velocityPanel .vv-v b{color:var(--text);font-weight:800;margin-right:0.3rem}
+    #velocityPanel .vv-v b.up{color:var(--up)}
+    #velocityPanel .vv-v b.down{color:var(--down)}
+    #velocityPanel .vv-chart{position:relative;width:100%;padding:0.5rem 0.2rem;margin-top:0.4rem}
+    #velocityPanel .vv-chart svg{width:100%;height:auto;display:block;overflow:visible}
+    #velocityPanel .vv-gl{stroke:var(--border);stroke-width:1;stroke-dasharray:2 3}
+    #velocityPanel .vv-ax{fill:var(--text-dim);font-size:13px}
+    #velocityPanel .vv-ax.x{text-anchor:middle}
+    #velocityPanel .vv-ax.y{text-anchor:end}
+    #velocityPanel .vv-ptl{font-size:11px;text-anchor:middle;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;font-weight:700}
+    #velocityPanel .vv-legend{display:flex;flex-wrap:wrap;gap:0.4rem 1.2rem;font-size:0.76rem;color:var(--text-muted);margin-top:0.3rem}
+    #velocityPanel .vv-legend .sw{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:0.35rem}
+    #velocityPanel .vv-charth{font-size:0.8rem;font-weight:700;color:var(--text);margin:0.5rem 0 0}
+    #velocityPanel .vv-mlist{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    #velocityPanel .vv-mrow{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.6rem;border-top:1px solid var(--border);cursor:pointer}
+    #velocityPanel .vv-mrow:first-child{border-top:none}
+    #velocityPanel .vv-mrow:hover{background:var(--surface-2)}
+    #velocityPanel .vv-mrow.sel{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--accent)}
+    #velocityPanel .vv-mrank{width:1.3rem;text-align:right;color:var(--text-dim);font-weight:800;font-size:0.82rem;flex:0 0 auto}
+    #velocityPanel .vv-mthumb{width:60px;height:34px;border-radius:5px;object-fit:cover;flex:0 0 auto;background:var(--surface-2);border:1px solid var(--border)}
+    #velocityPanel .vv-mtitle{flex:1 1 auto;min-width:0}
+    #velocityPanel .vv-mtitle b{display:block;font-size:0.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #velocityPanel .vv-mtitle span{font-size:0.7rem;color:var(--text-dim)}
+    #velocityPanel .vv-mgain{flex:0 0 auto;text-align:right;font-variant-numeric:tabular-nums}
+    #velocityPanel .vv-mgain b{color:var(--up);font-size:0.9rem;font-weight:800}
+    #velocityPanel .vv-mgain span{display:block;font-size:0.66rem;color:var(--text-dim)}
+    #velocityPanel .vv-mtag{flex:0 0 auto;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;padding:0.14rem 0.4rem;border-radius:999px}
+    #velocityPanel .vv-mtag.ad{color:var(--accent-2);border:1px solid var(--accent-2);background:var(--accent-2-bg)}
+    #velocityPanel .vv-mtag.un{color:var(--down);border:1px solid var(--down)}
+    #velocityPanel .vv-detail{display:flex;gap:1rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid var(--border)}
+    #velocityPanel .vv-detail .vv-thumb{width:128px;height:72px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:var(--surface-2);border:1px solid var(--border)}
+    #velocityPanel .vv-detail-body{min-width:0;flex:1 1 auto}
+    #velocityPanel .vv-detail-title{font-size:0.92rem;font-weight:800;color:var(--text);text-decoration:none}
+    #velocityPanel .vv-detail-title:hover{color:var(--accent)}
+    #velocityPanel .vv-detail-meta{font-size:0.75rem;color:var(--subtext);margin:0.25rem 0 0.45rem;font-variant-numeric:tabular-nums}
+    #velocityPanel .vv-chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.5rem}
+    #velocityPanel .vv-chip{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.72rem;font-weight:700;color:var(--text);padding:0.16rem 0.5rem;border-radius:999px;border:1px solid var(--border);background:var(--surface-2)}
+    #velocityPanel .vv-chip .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+    #velocityPanel .vv-chip .k{color:var(--text-dim);font-weight:600;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.03em}
+    #velocityPanel .vv-detail-desc{font-size:0.79rem;color:var(--text-muted);line-height:1.45}
+    #velocityPanel .vv-foot{font-size:0.73rem;color:var(--text-dim);margin-top:0.8rem;line-height:1.45;border-top:1px solid var(--border);padding-top:0.6rem}
+    #velocityPanel .vv-loading{padding:1.4rem;color:var(--text-dim);text-align:center}
+    @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
+    </style>
+    <div class="wordcloud-section velocity-section" id="velocitySection">
+      <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
+        <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
+        <span class="wordcloud-toggle-text">
+          <span class="wordcloud-eyebrow">How videos gain views over time</span>
+          <span class="wordcloud-title">View Velocity <span class="wordcloud-hint" id="velocityHint"></span></span>
+          <span class="wordcloud-context">Launch curves vs a typical video its age, plus dormant videos that suddenly moved</span>
+        </span>
+        <span class="wordcloud-caret" aria-hidden="true"></span>
+      </button>
+      <div class="wordcloud-panel" id="velocityPanel" hidden>
+        <div class="ctag-viewtabs" role="tablist">
+          <button type="button" class="ctag-viewtab active" data-vvview="launch" role="tab" aria-selected="true">Launch performance</button>
+          <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">Suspicious movement</button>
+        </div>
+        <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
+      </div>
+    </div>
     <div class="window-list-card">
       <h3 class="window-title" id="windowTitle"></h3>
       <div id="windowList"></div>
@@ -9650,6 +9732,158 @@ function renderWindowList(startDate, endDate) {
   });
 })();
 
+</script>
+<script>
+/* ---------- View Velocity feature (Videos tab, under Topics) ---------- */
+(function vvFeature(){
+  const fmt=n=>{n=Math.round(n);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
+  const esc=s=>String(s).replace(/</g,"&lt;");
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const niceDate=iso=>{const p=String(iso).split("-").map(Number);return MON[(p[1]||1)-1]+" "+(p[2]||1);};
+  function fmtDur(s){s=Math.round(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return (h?h+":"+String(m).padStart(2,"0"):m)+":"+String(ss).padStart(2,"0");}
+  function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const f=v/p;const n=f<=1?1:f<=1.5?1.5:f<=2?2:f<=3?3:f<=4?4:f<=5?5:f<=8?8:10;return n*p;}
+  const feat=()=>document.getElementById("vvFeat");
+  let DATA=null, view="launch", loaded=false;
+  let L={metric:"vel",rng:"full",sel:null};
+  let M={sel:null};
+
+  function detailHtml(v,extra){
+    const link="https://www.youtube.com/watch?v="+v.id, thumb="https://i.ytimg.com/vi/"+v.id+"/mqdefault.jpg";
+    const chips=(v.topics||[]).map(t=>`<span class="vv-chip"><span class="dot" style="background:${t.color}"></span><span class="k">${t.kind}</span>${esc(t.name)}</span>`).join("");
+    return `<a href="${link}" target="_blank" rel="noopener"><img class="vv-thumb" src="${thumb}" alt="" loading="lazy"></a>`+
+      `<div class="vv-detail-body"><a class="vv-detail-title" href="${link}" target="_blank" rel="noopener">${esc(v.title)} ↗</a>`+
+      `<div class="vv-detail-meta">${extra}</div>`+
+      (chips?`<div class="vv-chips">${chips}</div>`:"")+
+      (v.desc?`<div class="vv-detail-desc">${esc(v.desc)}</div>`:"")+`</div>`;
+  }
+
+  /* ---------- Launch performance (age-velocity) ---------- */
+  const W=760,H=320,P={top:22,right:22,bottom:46,left:70};
+  function cum(series,upto){let c=0;for(let i=1;i<series.length;i++){const a0=series[i-1][0],a1=series[i][0];if(a0>=upto)break;const aa=Math.min(a1,upto);c+=(series[i-1][1]+series[i][1])/2*(aa-a0);}return c;}
+  function toCum(series){const o=[];let c=0;for(let i=0;i<series.length;i++){if(i>0)c+=(series[i-1][1]+series[i][1])/2*(series[i][0]-series[i-1][0]);o.push([series[i][0],c]);}return o;}
+  function ratioFor(v){const age=Math.min(v.age,DATA.launch.maxage);const s=cum(v.pts,age),t=cum(DATA.launch.typical,age);return t>0?s/t:1;}
+  function clearPreset(){document.querySelectorAll("#vvPreset button").forEach(b=>b.classList.remove("active"));}
+  function buildLaunch(){
+    const start=niceDate(DATA.trackingStart);
+    feat().innerHTML=
+      `<div class="vv-sub" id="vvLsub"></div>`+
+      `<div class="vv-row"><span class="vv-lbl">Show me</span><div class="vv-seg" id="vvPreset"><button data-p="best">Best for its age</button><button data-p="worst">Worst for its age</button><button data-p="typical">Most typical</button><button data-p="views">Most views</button></div></div>`+
+      `<div class="vv-row"><span class="vv-lbl">Video</span><div class="vv-combo"><input id="vvSearch" class="vv-search" type="text" placeholder="Search videos by title…" autocomplete="off"><div class="vv-list" id="vvList" hidden></div></div><span class="vv-lbl">Show</span><div class="vv-seg" id="vvMetric"><button data-m="vel" class="active">Views per day</button><button data-m="cum">Total so far</button></div></div>`+
+      `<div class="vv-row"><span class="vv-lbl">Zoom</span><div class="vv-seg" id="vvRng"><button data-r="full" class="active">All time</button><button data-r="first7">First week</button><button data-r="last7">Latest week</button></div></div>`+
+      `<div class="vv-verdict" id="vvVerdict"></div>`+
+      `<div class="vv-chart" id="vvChart"></div>`+
+      `<div class="vv-legend"><span><span class="sw" style="background:var(--accent)"></span><span id="vvLegName">this video</span></span><span><span class="sw" style="background:var(--text-dim)"></span>A typical recent TheQuartering video (same age)</span></div>`+
+      `<div class="vv-detail" id="vvDetail"></div>`+
+      `<div class="vv-foot">Each line shows how many views a video gained per day since it was posted (day 0). The grey line is his typical recent video at the same age — built from his launches over about the last month, so it moves with his current form. We check view counts twice a day. Only videos posted since ${start} are included — that's when tracking started.</div>`;
+    document.getElementById("vvLsub").textContent="Search for a video, or use the buttons. The blue line shows how many views it gained each day since it went up — next to the grey line for a typical one of his recent videos at the same age. Above it = doing better than usual; below = worse.";
+    if(!L.sel||!DATA.launch.videos.find(x=>x.id===L.sel)){const v0=DATA.launch.videos[0];L.sel=v0?v0.id:null;}
+    const cur=DATA.launch.videos.find(x=>x.id===L.sel);const sBox=document.getElementById("vvSearch");if(cur&&sBox)sBox.value=cur.title;
+    renderLaunch();
+  }
+  function renderLaunch(){
+    const v=DATA.launch.videos.find(x=>x.id===L.sel)||DATA.launch.videos[0]; if(!v)return; L.sel=v.id;
+    const typ=DATA.launch.typical, maxage=DATA.launch.maxage;
+    let selLine=v.pts, typLine=typ;
+    if(L.metric==="cum"){selLine=toCum(v.pts);typLine=toCum(typ);}
+    const va=Math.min(v.age,maxage);
+    let xMin=0,xMax=maxage;
+    if(L.rng==="first7")xMax=7; else if(L.rng==="last7"){xMin=Math.max(0,va-7);xMax=va;}
+    xMax=Math.min(xMax,maxage);if(xMax-xMin<0.5)xMax=xMin+0.5;
+    const xFor=a=>P.left+(Math.max(xMin,Math.min(a,xMax))-xMin)/(xMax-xMin)*(W-P.left-P.right);
+    const inWin=q=>q[0]>=xMin-0.01&&q[0]<=xMax+0.01;
+    let dmax=0;selLine.concat(typLine).forEach(p=>{if(inWin(p)&&p[1]>dmax)dmax=p[1];});
+    const yMax=niceMax(dmax*1.08); const yFor=val=>P.top+(1-val/yMax)*(H-P.top-P.bottom);
+    let grid="",xlab="";for(let t=0;t<=5;t++){const val=yMax*t/5,y=yFor(val);grid+=`<line class="vv-gl" x1="${P.left}" y1="${y.toFixed(1)}" x2="${W-P.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${P.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
+    for(let d=Math.ceil(xMin-0.001);d<=Math.floor(xMax+0.001);d++){const x=xFor(d);xlab+=`<text class="vv-ax x" x="${x.toFixed(1)}" y="${H-P.bottom+20}">${d}</text>`;}
+    function path(line,col,w,dash){const p=line.filter(inWin).map((q,i)=>(i?"L":"M")+xFor(q[0]).toFixed(1)+" "+yFor(q[1]).toFixed(1)).join(" ");return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"${dash?' stroke-dasharray="5 4"':''}/>`;}
+    let dots="",ptl="";selLine.filter(inWin).forEach((q,i,arr)=>{const x=xFor(q[0]),y=yFor(q[1]);dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)"/>`;if(i===arr.length-1||i%2===0)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}">${fmt(q[1])}</text>`;});
+    document.getElementById("vvChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${grid}${xlab}<text class="vv-ax x" x="${((P.left+W-P.right)/2).toFixed(1)}" y="${H-6}" style="font-weight:700">days since it went up</text>${path(typLine,"var(--text-dim)",2,true)}${path(selLine,"var(--accent)",2.6,false)}${dots}${ptl}</svg>`;
+    const age=Math.min(v.age,xMax);const selC=cum(v.pts,age),typC=cum(typ,age);const ratio=typC>0?selC/typC:null;const pct=ratio?Math.round((ratio-1)*100):null;
+    document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than his recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
+    document.getElementById("vvLegName").textContent=v.title.slice(0,46);
+    document.getElementById("vvDetail").innerHTML=detailHtml(v,`Posted ${v.pub} · ${fmtDur(v.dur)} long · ${fmt(v.views)} views · ${fmt(v.likes)} likes · ${fmt(v.comments)} comments · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}`);
+  }
+  function showList(){const s=document.getElementById("vvSearch"),l=document.getElementById("vvList");if(!s||!l)return;const q=(s.value||"").toLowerCase().trim();const m=DATA.launch.videos.filter(v=>!q||v.title.toLowerCase().includes(q)).slice(0,40);l.innerHTML=m.length?m.map(v=>`<div class="vv-opt" data-id="${v.id}"><b>${esc(v.title)}</b><span>${v.pub} · ${v.age}d · ${fmt(v.views)} views</span></div>`).join(""):`<div class="vv-empty">No matches</div>`;l.hidden=false;}
+
+  /* ---------- Suspicious movement (flat-then-spike) ---------- */
+  const MW=760,MH=250,MP={top:20,right:20,bottom:44,left:66};
+  function paceStr(m){return (m.base<=40?"was dormant":"was ~"+fmt(m.base)+"/day")+", peaked ~"+fmt(m.peak)+"/day";}
+  function buildMovers(){
+    const mv=DATA.movers.videos, start=niceDate(DATA.trackingStart);
+    feat().innerHTML=
+      `<div class="vv-sub">Long-form videos that had gone quiet — barely gaining views — and then suddenly started climbing again. That combination almost always means an ad campaign (we tag the ones we already know) or a news moment. A video still in its first busy weeks won't show up here: to qualify, it has to have flat-lined first, then jumped.</div>`+
+      `<div class="vv-mlist" id="vvMlist"></div>`+
+      `<div class="vv-charth" id="vvMcharth"></div>`+
+      `<div class="vv-chart" id="vvMchart"></div>`+
+      `<div class="vv-detail" id="vvMdetail"></div>`+
+      `<div class="vv-foot">How it's picked: we look at how fast each video was gaining views while it was quiet, then check whether it recently jumped well above that. Only videos that were genuinely flat and then spiked make the list — so anything here is old by definition, and a fresh upload's launch never counts. If a jump isn't a known ad, it's worth checking the Transparency Centre — that's how we catch campaigns before they're public. Long-form only; view counts checked twice a day since ${start}.</div>`;
+    if(!mv.length){document.getElementById("vvMlist").innerHTML=`<div class="vv-empty">Nothing suspicious right now — no dormant videos have suddenly jumped.</div>`;return;}
+    if(!M.sel||!mv.find(m=>m.id===M.sel))M.sel=mv[0].id;
+    renderMlist(); renderMchart();
+  }
+  function renderMlist(){
+    document.getElementById("vvMlist").innerHTML=DATA.movers.videos.map((m,i)=>{
+      const tag=m.isAd?`<span class="vv-mtag ad">Known ad</span>`:`<span class="vv-mtag un">Unexplained</span>`;
+      return `<div class="vv-mrow${m.id===M.sel?' sel':''}" data-mid="${m.id}"><span class="vv-mrank">${i+1}</span><img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy"><span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.age} days old · ${paceStr(m)}</span></span><span class="vv-mgain"><b>+${fmt(m.gain7)}</b><span>views this week</span></span>${tag}</div>`;
+    }).join("");
+  }
+  function renderMchart(){
+    const m=DATA.movers.videos.find(x=>x.id===M.sel);if(!m)return;
+    const s=m.series,dates=DATA.movers.dates,n=s.length;
+    const vel=[];for(let i=1;i<n;i++){vel.push((s[i]==null||s[i-1]==null)?null:(s[i]-s[i-1])*2);}
+    const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
+    let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
+    let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
+    let xlab="",stride=Math.ceil(vel.length/8);
+    for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
+    const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
+    const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
+    let ptl="";pts.forEach(p=>{if(p[2]>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${p[0].toFixed(1)}" y="${(p[1]-9).toFixed(1)}">${fmt(p[2])}</text>`;});
+    document.getElementById("vvMcharth").textContent="Views gained per day since we started tracking ("+niceDate(DATA.trackingStart)+") — a flat line that suddenly jumps is the sign to notice.";
+    document.getElementById("vvMchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}${ptl}</svg>`;
+    document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
+  }
+
+  function renderView(){ if(view==="launch")buildLaunch(); else buildMovers(); }
+
+  document.addEventListener("mousedown",(e)=>{const opt=e.target.closest("#vvList .vv-opt");if(opt){e.preventDefault();L.sel=opt.dataset.id;const v=DATA.launch.videos.find(x=>x.id===L.sel);const s=document.getElementById("vvSearch");if(s&&v)s.value=v.title;const l=document.getElementById("vvList");if(l)l.hidden=true;clearPreset();renderLaunch();}});
+  document.addEventListener("input",(e)=>{if(e.target.closest("#vvSearch")){clearPreset();showList();}});
+  document.addEventListener("focusin",(e)=>{if(e.target.closest("#vvSearch"))showList();});
+  document.addEventListener("focusout",(e)=>{if(e.target.closest("#vvSearch")){const l=document.getElementById("vvList");setTimeout(()=>{if(l)l.hidden=true;},160);}});
+  document.addEventListener("click",(e)=>{
+    const tog=e.target.closest("#velocityToggle");
+    if(tog){const exp=tog.getAttribute("aria-expanded")==="true";tog.setAttribute("aria-expanded",String(!exp));const p=document.getElementById("velocityPanel");if(p)p.hidden=exp;if(!exp)ensureLoaded();return;}
+    const panel=document.getElementById("velocityPanel");
+    const vt=e.target.closest(".ctag-viewtab[data-vvview]");
+    if(vt&&panel&&panel.contains(vt)){view=vt.dataset.vvview;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x===vt;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});if(DATA)renderView();return;}
+    const pr=e.target.closest("#vvPreset button");
+    if(pr){const p=pr.dataset.p;let arr=DATA.launch.videos.slice(),v;const MINAGE=1.2;
+      if(p==="views"){arr.sort((a,c)=>c.views-a.views);v=arr[0];}
+      else{let aged=arr.filter(x=>x.age>=MINAGE);if(!aged.length)aged=arr;
+        if(p==="best")aged.sort((a,c)=>ratioFor(c)-ratioFor(a));
+        else if(p==="worst")aged.sort((a,c)=>ratioFor(a)-ratioFor(c));
+        else aged.sort((a,c)=>Math.abs(ratioFor(a)-1)-Math.abs(ratioFor(c)-1));
+        v=aged[0];}
+      if(v){L.sel=v.id;const s=document.getElementById("vvSearch");if(s)s.value=v.title;const l=document.getElementById("vvList");if(l)l.hidden=true;clearPreset();pr.classList.add("active");renderLaunch();}return;}
+    const mb=e.target.closest("#vvMetric button");
+    if(mb){L.metric=mb.dataset.m;document.querySelectorAll("#vvMetric button").forEach(x=>x.classList.toggle("active",x===mb));renderLaunch();return;}
+    const rb=e.target.closest("#vvRng button");
+    if(rb){L.rng=rb.dataset.r;document.querySelectorAll("#vvRng button").forEach(x=>x.classList.toggle("active",x===rb));renderLaunch();return;}
+    const mr=e.target.closest("#vvMlist .vv-mrow");
+    if(mr){M.sel=mr.dataset.mid;renderMlist();renderMchart();return;}
+  });
+
+  function ensureLoaded(){
+    if(loaded)return; loaded=true;
+    fetch("view-velocity.json?t="+Date.now()).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{
+      DATA=j;
+      const v0=DATA.launch.videos[0]; if(v0)L.sel=v0.id;
+      const hint=document.getElementById("velocityHint");
+      if(hint)hint.textContent=DATA.launch.videos.length+" tracked · "+DATA.movers.videos.length+" flagged";
+      renderView();
+    }).catch(err=>{loaded=false;const f=feat();if(f)f.innerHTML=`<div class="vv-loading">Couldn't load view-velocity data.</div>`;console.warn("view-velocity",err);});
+  }
+})();
 </script>
 <button type="button" id="creatorTagsFloatCollapse" class="ctag-float-collapse" hidden aria-label="Collapse video tags">↑ Collapse tags</button>
 </body></html>
