@@ -27,6 +27,9 @@ SNAP = os.environ.get("SNAPSHOTS_DIR") or os.path.join(os.path.dirname(REPO), "j
 
 CUTOFF = datetime.date(2026, 6, 11)     # snapshots begin here => launch curves valid from here
 MAXAGE = 13.0
+MIN_AGE = 0.25                          # ignore snapshots < ~6h after publish as launch anchors:
+                                        # a capture minutes after upload divides a big view count by
+                                        # a tiny age and fabricates a huge day-0 "velocity" spike.
 BENCH_DAYS = 35                         # rolling window for the "typical" benchmark
 # movers detection. Movement = ACTUAL views gained between consecutive checks
 # (~twice daily), NOT a per-day rate — so the figures reconcile with "views this
@@ -88,7 +91,7 @@ def series(vid):
     for _, dt, vm in snaps:
         if vid in vm:
             age = (dt - pub).total_seconds() / 86400.0
-            if age >= 0: pts.append((age, vm[vid]))
+            if age >= MIN_AGE: pts.append((age, vm[vid]))
     pts = sorted(set(pts))
     if len(pts) < 2: return None, None
     out = []
