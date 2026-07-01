@@ -2342,8 +2342,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
+    <div class="insights" id="vInsights">
+      <div class="vtabs" id="vtabs" role="tablist">
+        <button type="button" class="vtab" data-t="velocity" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>View Velocity</button>
+        <button type="button" class="vtab" data-t="topics" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Topics</button>
+        <button type="button" class="vtab" data-t="tags" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-7-7A2 2 0 013 12V5a2 2 0 012-2h7a2 2 0 011.4.6l7.2 7.2a2 2 0 010 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>Video tags</button>
+        <button type="button" class="vtab" data-t="words" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg>Word cloud</button>
+        <button type="button" class="vtab" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promotions</button>
+      </div>
+      <div class="vbody" id="vBody" hidden>
+        <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
     <div class="ad-panel" id="adPanel" hidden></div>
-    <div class="wordcloud-section">
+    <div class="wordcloud-section" id="wordcloudSection">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg></span>
         <span class="wordcloud-toggle-text">
@@ -2468,6 +2478,23 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #velocityPanel .ctag-viewtab:hover:not(.active){color:var(--text);background:var(--surface)}
     #velocityPanel .ctag-viewtab.active{background:var(--accent);border-color:var(--accent);color:#fff}
     @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
+    /* ---- Videos tab: tabbed insights strip ---- */
+    #panelVideos .insights{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
+    #panelVideos .vtabs{display:flex;gap:0.1rem;padding:0 0.5rem;border-bottom:1px solid var(--border);overflow-x:auto}
+    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font:inherit;font-size:0.9rem;font-weight:700;padding:0.8rem 0.9rem;cursor:pointer;margin-bottom:-1px;transition:color .12s,border-color .12s}
+    #panelVideos .vtab:hover{color:var(--text)}
+    #panelVideos .vtab.active{color:var(--text);border-bottom-color:var(--accent)}
+    #panelVideos .vtab .ic{width:16px;height:16px;flex:0 0 auto;opacity:.85}
+    #panelVideos .vtab.active .ic{opacity:1;color:var(--accent)}
+    #panelVideos .vbody{padding:1.1rem 1.2rem}
+    #panelVideos .vbody[hidden]{display:none}
+    #panelVideos .vempty{color:var(--text-dim);padding:0.4rem 0.1rem;font-size:0.88rem}
+    #panelVideos .wordcloud-toggle{display:none!important}
+    #panelVideos .wordcloud-section{display:none;margin:0;border:none;border-radius:0;background:transparent;box-shadow:none}
+    #panelVideos .wordcloud-section.vt-active{display:block}
+    #panelVideos .wordcloud-panel{border:none!important;border-radius:0!important;background:transparent!important;padding:0!important;margin:0!important}
+    #panelVideos #adPanel{display:none;margin:0!important;border:none!important;border-radius:0!important;background:transparent!important}
+    #panelVideos #adPanel.vt-active{display:block}
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
       <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
@@ -2485,6 +2512,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">Suspicious movement</button>
         </div>
         <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
+      </div>
+    </div>
       </div>
     </div>
     <div class="window-list-card">
@@ -9946,6 +9975,42 @@ function renderWindowList(startDate, endDate) {
       renderView();
     }).catch(err=>{loaded=false;const f=feat();if(f)f.innerHTML=`<div class="vv-loading">Couldn't load view-velocity data.</div>`;console.warn("view-velocity",err);});
   }
+})();
+</script>
+<script>
+/* ---------- Videos tab: tabbed insights strip controller ---------- */
+(function vInsightTabs(){
+  const tabs=document.getElementById("vtabs"), body=document.getElementById("vBody");
+  if(!tabs||!body)return;
+  const SECID={velocity:"velocitySection",topics:"topicsSection",tags:"creatorTagsSection",words:"wordcloudSection"};
+  const TOGID={velocity:"velocityToggle",topics:"topicsToggle",tags:"creatorTagsToggle",words:"wordcloudToggle"};
+  const byId=id=>document.getElementById(id);
+  let active=null;
+  function closeCurrent(){
+    if(!active)return;
+    if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
+    else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
+    const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb)tb.classList.remove("active");
+    active=null;
+  }
+  function open(t){
+    const tb=tabs.querySelector('.vtab[data-t="'+t+'"]');if(tb)tb.classList.add("active");
+    if(t==="promos"){
+      const ap=byId("adPanel"), pe=byId("promosEmpty");
+      if(ap && !ap.hidden){ap.classList.add("vt-active");const at=byId("adPanelToggle");if(at&&at.getAttribute("aria-expanded")!=="true")at.click();}
+      else if(pe){pe.hidden=false;}
+    }else{
+      const s=byId(SECID[t]);if(s)s.classList.add("vt-active");
+      const tog=byId(TOGID[t]);if(tog&&tog.getAttribute("aria-expanded")!=="true")tog.click();
+    }
+    active=t;
+  }
+  tabs.addEventListener("click",e=>{
+    const b=e.target.closest(".vtab");if(!b)return;
+    const t=b.dataset.t;
+    if(active===t){closeCurrent();body.hidden=true;return;}
+    closeCurrent(); body.hidden=false; open(t);
+  });
 })();
 </script>
 <button type="button" id="creatorTagsFloatCollapse" class="ctag-float-collapse" hidden aria-label="Collapse video tags">↑ Collapse tags</button>
