@@ -9751,9 +9751,36 @@ function renderWindowList(startDate, endDate) {
   function fmtDur(s){s=Math.round(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return (h?h+":"+String(m).padStart(2,"0"):m)+":"+String(ss).padStart(2,"0");}
   function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const f=v/p;const n=f<=1?1:f<=1.5?1.5:f<=2?2:f<=3?3:f<=4?4:f<=5?5:f<=8?8:10;return n*p;}
   const feat=()=>document.getElementById("vvFeat");
-  let DATA=null, view="launch", loaded=false;
+  let DATA=null, view="launch", loaded=false, S=null;
   let L={metric:"vel",rng:"full",sel:null,preset:"typical"};
   let M={sel:null};
+
+  // Which channel the Videos-tab scope filter is on ('ALL' or a channelId).
+  function currentChannelId(){
+    if(typeof ANALYTICS_CHANNEL!=="undefined" && ANALYTICS_CHANNEL) return ANALYTICS_CHANNEL;
+    const sel=document.getElementById("anChannelSel"); const val=sel?sel.value:"ALL";
+    if(!val||val==="ALL") return "ALL";
+    const chans=(DATA&&DATA.channels)||{}; for(const k in chans){ if(chans[k].handle===val) return k; }
+    return "ALL";
+  }
+  // Resolve the current scope to a {launch, movers, label, poss} bundle. A single
+  // channel uses its own data; 'ALL' aggregates every channel + the pooled typical.
+  function scopeData(){
+    const chans=(DATA&&DATA.channels)||{}, ch=currentChannelId();
+    if(ch!=="ALL" && chans[ch]){
+      const c=chans[ch], nm=c.title||c.handle||"this channel";
+      return {key:ch, label:nm, poss:nm+"'s",
+              launch:{maxage:DATA.maxage, typical:c.launch.typical||[], videos:c.launch.videos||[]},
+              movers:{dates:DATA.dates, videos:c.movers.videos||[]}};
+    }
+    const lv=[],mv=[];
+    for(const k in chans){ (chans[k].launch.videos||[]).forEach(v=>lv.push(v)); (chans[k].movers.videos||[]).forEach(m=>mv.push(m)); }
+    mv.sort((a,b)=>b.gain7-a.gain7);
+    return {key:"ALL", label:"the network", poss:"the network's",
+            launch:{maxage:DATA.maxage, typical:DATA.allTypical||[], videos:lv},
+            movers:{dates:DATA.dates, videos:mv}};
+  }
+  function updateHint(){const sd=S||scopeData();const h=document.getElementById("velocityHint");if(h)h.textContent=sd.launch.videos.length+" tracked · "+sd.movers.videos.length+" flagged";}
 
   function detailHtml(v,extra){
     const link="https://www.youtube.com/watch?v="+v.id, thumb="https://i.ytimg.com/vi/"+v.id+"/mqdefault.jpg";
@@ -9769,9 +9796,9 @@ function renderWindowList(startDate, endDate) {
   const W=760,H=320,P={top:22,right:22,bottom:46,left:70};
   function cum(series,upto){let c=0;for(let i=1;i<series.length;i++){const a0=series[i-1][0],a1=series[i][0];if(a0>=upto)break;const aa=Math.min(a1,upto);c+=(series[i-1][1]+series[i][1])/2*(aa-a0);}return c;}
   function toCum(series){const o=[];let c=0;for(let i=0;i<series.length;i++){if(i>0)c+=(series[i-1][1]+series[i][1])/2*(series[i][0]-series[i-1][0]);o.push([series[i][0],c]);}return o;}
-  function ratioFor(v){const age=Math.min(v.age,DATA.launch.maxage);const s=cum(v.pts,age),t=cum(DATA.launch.typical,age);return t>0?s/t:1;}
+  function ratioFor(v){const age=Math.min(v.age,S.launch.maxage);const s=cum(v.pts,age),t=cum(S.launch.typical,age);return t>0?s/t:1;}
   function clearPreset(){document.querySelectorAll("#vvPreset button").forEach(b=>b.classList.remove("active"));}
-  function presetVideo(p){const arr=DATA.launch.videos.slice();const MINAGE=1.2;
+  function presetVideo(p){const arr=S.launch.videos.slice();const MINAGE=1.2;
     if(p==="views"){arr.sort((a,c)=>c.views-a.views);return arr[0];}
     let aged=arr.filter(x=>x.age>=MINAGE);if(!aged.length)aged=arr;
     if(p==="best")aged.sort((a,c)=>ratioFor(c)-ratioFor(a));
@@ -9782,6 +9809,8 @@ function renderWindowList(startDate, endDate) {
   function setSearch(val){const s=document.getElementById("vvSearch");if(s)s.value=val;updateClear();}
   function buildLaunch(){
     const start=niceDate(DATA.trackingStart);
+    if(!S.launch.videos.length){feat().innerHTML=`<div class="vv-empty" style="padding:1.3rem">No recent launches tracked${S.key!=="ALL"?" for "+esc(S.label):""} yet — only videos posted since ${start} are covered (that's when tracking began). Switch the channel filter, or check the Suspicious movement tab.</div>`;return;}
+    const legTyp=S.key==="ALL"?"video across the network":esc(S.label)+" video";
     feat().innerHTML=
       `<div class="vv-sub" id="vvLsub"></div>`+
       `<div class="vv-row"><span class="vv-lbl">Show me</span><div class="vv-seg" id="vvPreset"><button data-p="best">Best for its age</button><button data-p="worst">Worst for its age</button><button data-p="typical">Most typical</button><button data-p="views">Most views</button></div></div>`+
@@ -9789,18 +9818,18 @@ function renderWindowList(startDate, endDate) {
       `<div class="vv-row"><span class="vv-lbl">Zoom</span><div class="vv-seg" id="vvRng"><button data-r="full" class="active">All time</button><button data-r="first7">First week</button><button data-r="last7">Latest week</button></div></div>`+
       `<div class="vv-verdict" id="vvVerdict"></div>`+
       `<div class="vv-chart" id="vvChart"></div>`+
-      `<div class="vv-legend"><span><span class="sw" style="background:var(--accent)"></span><span id="vvLegName">this video</span></span><span><span class="sw" style="background:var(--text-dim)"></span>A typical recent TheQuartering video (same age)</span></div>`+
+      `<div class="vv-legend"><span><span class="sw" style="background:var(--accent)"></span><span id="vvLegName">this video</span></span><span><span class="sw" style="background:var(--text-dim)"></span>A typical recent ${legTyp} (same age)</span></div>`+
       `<div class="vv-detail" id="vvDetail"></div>`+
-      `<div class="vv-foot">Each line shows how many views a video gained per day since it was posted (day 0). The grey line is his typical recent video at the same age — built from his launches over about the last month, so it moves with his current form. We check view counts twice a day. Only videos posted since ${start} are included — that's when tracking started.</div>`;
-    document.getElementById("vvLsub").textContent="Search for a video, or use the buttons. The blue line shows how many views it gained each day since it went up — next to the grey line for a typical one of his recent videos at the same age. Above it = doing better than usual; below = worse.";
-    if(!L.sel||!DATA.launch.videos.find(x=>x.id===L.sel)){const dv=presetVideo(L.preset||"typical")||DATA.launch.videos[0];L.sel=dv?dv.id:null;}
-    const cur=DATA.launch.videos.find(x=>x.id===L.sel);setSearch(cur?cur.title:"");
+      `<div class="vv-foot">Each line shows how many views a video gained per day since it was posted (day 0). The grey line is ${S.poss} typical recent video at the same age — built from ${S.poss} launches over about the last month, so it tracks current form. We check view counts twice a day. Only videos posted since ${start} are included — that's when tracking started.</div>`;
+    document.getElementById("vvLsub").textContent="Search for a video, or use the buttons. The blue line shows how many views it gained each day since it went up — next to the grey line for a typical one of "+S.poss+" recent videos at the same age. Above it = doing better than usual; below = worse.";
+    if(!L.sel||!S.launch.videos.find(x=>x.id===L.sel)){const dv=presetVideo(L.preset||"typical")||S.launch.videos[0];L.sel=dv?dv.id:null;}
+    const cur=S.launch.videos.find(x=>x.id===L.sel);setSearch(cur?cur.title:"");
     if(L.preset){const pb=document.querySelector('#vvPreset button[data-p="'+L.preset+'"]');if(pb)pb.classList.add("active");}
     renderLaunch();
   }
   function renderLaunch(){
-    const v=DATA.launch.videos.find(x=>x.id===L.sel)||DATA.launch.videos[0]; if(!v)return; L.sel=v.id;
-    const typ=DATA.launch.typical, maxage=DATA.launch.maxage;
+    const v=S.launch.videos.find(x=>x.id===L.sel)||S.launch.videos[0]; if(!v)return; L.sel=v.id;
+    const typ=S.launch.typical, maxage=S.launch.maxage;
     let selLine=v.pts, typLine=typ;
     if(L.metric==="cum"){selLine=toCum(v.pts);typLine=toCum(typ);}
     const va=Math.min(v.age,maxage);
@@ -9817,17 +9846,17 @@ function renderWindowList(startDate, endDate) {
     let dots="",ptl="";selLine.filter(inWin).forEach((q,i,arr)=>{const x=xFor(q[0]),y=yFor(q[1]);dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)"/>`;if(i===arr.length-1||i%2===0)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}">${fmt(q[1])}</text>`;});
     document.getElementById("vvChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${grid}${xlab}<text class="vv-ax x" x="${((P.left+W-P.right)/2).toFixed(1)}" y="${H-6}" style="font-weight:700">days since it went up</text>${path(typLine,"var(--text-dim)",2,true)}${path(selLine,"var(--accent)",2.6,false)}${dots}${ptl}</svg>`;
     const age=Math.min(v.age,xMax);const selC=cum(v.pts,age),typC=cum(typ,age);const ratio=typC>0?selC/typC:null;const pct=ratio?Math.round((ratio-1)*100):null;
-    document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than his recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
+    document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than ${S.poss} recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
     document.getElementById("vvLegName").textContent=v.title.slice(0,46);
     document.getElementById("vvDetail").innerHTML=detailHtml(v,`Posted ${v.pub} · ${fmtDur(v.dur)} long · ${fmt(v.views)} views · ${fmt(v.likes)} likes · ${fmt(v.comments)} comments · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}`);
   }
-  function showList(){const s=document.getElementById("vvSearch"),l=document.getElementById("vvList");if(!s||!l)return;const q=(s.value||"").toLowerCase().trim();const m=DATA.launch.videos.filter(v=>!q||v.title.toLowerCase().includes(q)).slice(0,40);l.innerHTML=m.length?m.map(v=>`<div class="vv-opt" data-id="${v.id}"><b>${esc(v.title)}</b><span>${v.pub} · ${v.age}d · ${fmt(v.views)} views</span></div>`).join(""):`<div class="vv-empty">No matches</div>`;l.hidden=false;updateClear();}
+  function showList(){const s=document.getElementById("vvSearch"),l=document.getElementById("vvList");if(!s||!l)return;const q=(s.value||"").toLowerCase().trim();const m=S.launch.videos.filter(v=>!q||v.title.toLowerCase().includes(q)).slice(0,40);l.innerHTML=m.length?m.map(v=>`<div class="vv-opt" data-id="${v.id}"><b>${esc(v.title)}</b><span>${v.pub} · ${v.age}d · ${fmt(v.views)} views</span></div>`).join(""):`<div class="vv-empty">No matches</div>`;l.hidden=false;updateClear();}
 
   /* ---------- Suspicious movement (flat-then-spike) ---------- */
   const MW=760,MH=250,MP={top:20,right:20,bottom:44,left:66};
   function paceStr(m){return (m.base<=25?"was dormant":"was ~"+fmt(m.base)+"/check")+", biggest jump +"+fmt(m.peak);}
   function buildMovers(){
-    const mv=DATA.movers.videos, start=niceDate(DATA.trackingStart);
+    const mv=S.movers.videos, start=niceDate(DATA.trackingStart);
     feat().innerHTML=
       `<div class="vv-sub">Long-form videos that had gone quiet — barely gaining views — and then suddenly started climbing again. That combination almost always means an ad campaign (we tag the ones we already know) or a news moment. A video still in its first busy weeks won't show up here: to qualify, it has to have flat-lined first, then jumped.</div>`+
       `<div class="vv-mlist" id="vvMlist"></div>`+
@@ -9835,19 +9864,19 @@ function renderWindowList(startDate, endDate) {
       `<div class="vv-chart" id="vvMchart"></div>`+
       `<div class="vv-detail" id="vvMdetail"></div>`+
       `<div class="vv-foot">How it's picked: we look at how fast each video was gaining views while it was quiet, then check whether it recently jumped well above that. Only videos that were genuinely flat and then spiked make the list — so anything here is old by definition, and a fresh upload's launch never counts. If a jump isn't a known ad, it's worth checking the Transparency Centre — that's how we catch campaigns before they're public. Long-form only; view counts checked twice a day since ${start}.</div>`;
-    if(!mv.length){document.getElementById("vvMlist").innerHTML=`<div class="vv-empty">Nothing suspicious right now — no dormant videos have suddenly jumped.</div>`;return;}
+    if(!mv.length){document.getElementById("vvMlist").innerHTML=`<div class="vv-empty">Nothing suspicious right now${S.key!=="ALL"?" for "+esc(S.label):""} — no dormant videos have suddenly jumped.</div>`;return;}
     if(!M.sel||!mv.find(m=>m.id===M.sel))M.sel=mv[0].id;
     renderMlist(); renderMchart();
   }
   function renderMlist(){
-    document.getElementById("vvMlist").innerHTML=DATA.movers.videos.map((m,i)=>{
+    document.getElementById("vvMlist").innerHTML=S.movers.videos.map((m,i)=>{
       const tag=m.isAd?`<span class="vv-mtag ad">Known ad</span>`:`<span class="vv-mtag un">Unexplained</span>`;
       return `<div class="vv-mrow${m.id===M.sel?' sel':''}" data-mid="${m.id}"><span class="vv-mrank">${i+1}</span><img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy"><span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.age} days old · ${paceStr(m)}</span></span><span class="vv-mgain"><b>+${fmt(m.gain7)}</b><span>views this week</span></span>${tag}</div>`;
     }).join("");
   }
   function renderMchart(){
-    const m=DATA.movers.videos.find(x=>x.id===M.sel);if(!m)return;
-    const s=m.series,dates=DATA.movers.dates,n=s.length;
+    const m=S.movers.videos.find(x=>x.id===M.sel);if(!m)return;
+    const s=m.series,dates=S.movers.dates,n=s.length;
     const vel=[];for(let i=1;i<n;i++){vel.push((s[i]==null||s[i-1]==null)?null:(s[i]-s[i-1]));}
     const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
     let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
@@ -9863,19 +9892,19 @@ function renderWindowList(startDate, endDate) {
   }
 
   function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});}
-  function renderView(){ syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
+  function renderView(){ S=scopeData(); syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
 
   document.addEventListener("mousedown",(e)=>{
     const clr=e.target.closest("#vvClear");
     if(clr){e.preventDefault();L.preset=null;clearPreset();setSearch("");showList();const s=document.getElementById("vvSearch");if(s)s.focus();return;}
     const opt=e.target.closest("#vvList .vv-opt");
-    if(opt){e.preventDefault();L.sel=opt.dataset.id;L.preset=null;const v=DATA.launch.videos.find(x=>x.id===L.sel);setSearch(v?v.title:"");const l=document.getElementById("vvList");if(l)l.hidden=true;clearPreset();renderLaunch();}});
+    if(opt){e.preventDefault();L.sel=opt.dataset.id;L.preset=null;const v=S.launch.videos.find(x=>x.id===L.sel);setSearch(v?v.title:"");const l=document.getElementById("vvList");if(l)l.hidden=true;clearPreset();renderLaunch();}});
   document.addEventListener("input",(e)=>{if(e.target.closest("#vvSearch")){L.preset=null;clearPreset();showList();}});
   document.addEventListener("focusin",(e)=>{if(e.target.closest("#vvSearch"))showList();});
   document.addEventListener("focusout",(e)=>{if(e.target.closest("#vvSearch")){const l=document.getElementById("vvList");setTimeout(()=>{if(l)l.hidden=true;},160);}});
   document.addEventListener("click",(e)=>{
     const tog=e.target.closest("#velocityToggle");
-    if(tog){const exp=tog.getAttribute("aria-expanded")==="true";tog.setAttribute("aria-expanded",String(!exp));const p=document.getElementById("velocityPanel");if(p)p.hidden=exp;if(!exp)ensureLoaded();return;}
+    if(tog){const exp=tog.getAttribute("aria-expanded")==="true";tog.setAttribute("aria-expanded",String(!exp));const p=document.getElementById("velocityPanel");if(p)p.hidden=exp;if(!exp){if(loaded)renderView();else ensureLoaded();}return;}
     const panel=document.getElementById("velocityPanel");
     const vt=e.target.closest(".ctag-viewtab[data-vvview]");
     if(vt&&panel&&panel.contains(vt)){view=vt.dataset.vvview;if(DATA)renderView();else syncVvTabs();return;}
@@ -9890,13 +9919,23 @@ function renderWindowList(startDate, endDate) {
     if(mr){M.sel=mr.dataset.mid;renderMlist();renderMchart();return;}
   });
 
+  // Sync with the Videos-tab channel filter: when it changes, re-scope + re-render.
+  document.addEventListener("change",(e)=>{
+    if(!e.target||e.target.id!=="anChannelSel"||!loaded)return;
+    setTimeout(()=>{                       // let the site's handler settle ANALYTICS_CHANNEL first
+      L.sel=null; M.sel=null; L.preset="typical";
+      S=scopeData(); updateHint();
+      const p=document.getElementById("velocityPanel");
+      if(p&&!p.hidden)renderView();
+    },0);
+  });
+
   function ensureLoaded(){
     if(loaded)return; loaded=true;
     fetch("view-velocity.json?t="+Date.now()).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{
-      DATA=j;
-      L.preset="typical"; const dv=presetVideo("typical")||DATA.launch.videos[0]; if(dv)L.sel=dv.id;
-      const hint=document.getElementById("velocityHint");
-      if(hint)hint.textContent=DATA.launch.videos.length+" tracked · "+DATA.movers.videos.length+" flagged";
+      DATA=j; S=scopeData();
+      L.preset="typical"; const dv=presetVideo("typical"); L.sel=dv?dv.id:null;
+      updateHint();
       renderView();
     }).catch(err=>{loaded=false;const f=feat();if(f)f.innerHTML=`<div class="vv-loading">Couldn't load view-velocity data.</div>`;console.warn("view-velocity",err);});
   }
