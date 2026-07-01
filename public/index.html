@@ -9756,11 +9756,17 @@ function renderWindowList(startDate, endDate) {
   let M={sel:null};
 
   // Which channel the Videos-tab scope filter is on ('ALL' or a channelId).
+  // The Videos tab's own dropdown is #vidChannelSel; its value is 'ALL' or a
+  // scope handle (e.g. '@TheQuartering'). Read it from the DOM (robust to how
+  // the site stores channel state), then normalise to a channelId.
   function currentChannelId(){
-    if(typeof ANALYTICS_CHANNEL!=="undefined" && ANALYTICS_CHANNEL) return ANALYTICS_CHANNEL;
-    const sel=document.getElementById("anChannelSel"); const val=sel?sel.value:"ALL";
+    const sel=document.getElementById("vidChannelSel")||document.getElementById("anChannelSel");
+    let val=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"");
     if(!val||val==="ALL") return "ALL";
-    const chans=(DATA&&DATA.channels)||{}; for(const k in chans){ if(chans[k].handle===val) return k; }
+    const chans=(DATA&&DATA.channels)||{};
+    if(chans[val]) return val;                       // already a channelId
+    const norm=s=>String(s).replace(/^@/,"").toLowerCase();
+    for(const k in chans){ if(norm(chans[k].handle)===norm(val)) return k; }
     return "ALL";
   }
   // Resolve the current scope to a {launch, movers, label, poss} bundle. A single
@@ -9919,15 +9925,17 @@ function renderWindowList(startDate, endDate) {
     if(mr){M.sel=mr.dataset.mid;renderMlist();renderMchart();return;}
   });
 
-  // Sync with the Videos-tab channel filter: when it changes, re-scope + re-render.
-  document.addEventListener("change",(e)=>{
-    if(!e.target||e.target.id!=="anChannelSel"||!loaded)return;
-    setTimeout(()=>{                       // let the site's handler settle ANALYTICS_CHANNEL first
-      L.sel=null; M.sel=null; L.preset="typical";
-      S=scopeData(); updateHint();
-      const p=document.getElementById("velocityPanel");
-      if(p&&!p.hidden)renderView();
-    },0);
+  // Sync with the channel filter: any change that alters the current channel
+  // re-scopes + re-renders. Fires for whichever selector the tab uses (the
+  // dropdown's value is already updated by the time this bubbles to document).
+  document.addEventListener("change",()=>{
+    if(!loaded)return;
+    const ch=currentChannelId();
+    if(S&&ch===S.key)return;               // channel unchanged — ignore
+    L.sel=null; M.sel=null; L.preset="typical";
+    S=scopeData(); updateHint();
+    const p=document.getElementById("velocityPanel");
+    if(p&&!p.hidden)renderView();
   });
 
   function ensureLoaded(){
