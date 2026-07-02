@@ -2524,6 +2524,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-row .rt{min-width:0;flex:1 1 auto}
     #panelVideos .removed-row .rt b{display:block;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     #panelVideos .removed-row .rt span{font-size:0.74rem;color:var(--text-muted)}
+    #panelVideos .removed-fmt{display:inline-block;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;padding:0.1rem 0.4rem;border-radius:999px;border:1px solid var(--border);color:var(--text-muted);background:var(--surface-2);margin-right:0.45rem;vertical-align:middle}
+    #panelVideos .removed-fmt.short{color:var(--accent-2);border-color:var(--accent-2);background:var(--accent-2-bg)}
     #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
@@ -10063,7 +10065,7 @@ function renderWindowList(startDate, endDate) {
       const meta=[fmt(v.views)+" last-known views",(ch==="ALL"?chName(v.channelId):null),"posted "+nice(v.publishedAt)].filter(Boolean).join(" · ");
       return '<a class="removed-row" href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'+
         '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')">'+
-        '<span class="rt"><b>'+esc(v.title)+'</b><span>'+esc(meta)+'</span></span>'+
+        '<span class="rt"><b>'+esc(v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
         '<span class="removed-when">'+esc(when)+'</span></a>';
     }).join("");
   }
