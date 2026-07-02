@@ -2527,6 +2527,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-fmt{display:inline-block;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;padding:0.1rem 0.4rem;border-radius:999px;border:1px solid var(--border);color:var(--text-muted);background:var(--surface-2);margin-right:0.45rem;vertical-align:middle}
     #panelVideos .removed-fmt.short{color:var(--accent-2);border-color:var(--accent-2);background:var(--accent-2-bg)}
     #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
+    #panelVideos .removed-when.unl{color:var(--accent-2)}
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
       <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
@@ -10058,20 +10059,21 @@ function renderWindowList(startDate, endDate) {
     if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();for(const k in chans){if(norm(chans[k].handle)===norm(ch)){ch=k;break;}}}
     const fmt=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
     const esc=s=>String(s==null?"":s).replace(/</g,"&lt;");
-    let vids=ds.videos.filter(v=>v.unavailable);
+    let vids=ds.videos.filter(v=>v.unavailable||v.unlisted);
     if(ch&&ch!=="ALL")vids=vids.filter(v=>v.channelId===ch);
-    vids.sort((a,b)=>String(b.unavailableSince||"").localeCompare(String(a.unavailableSince||"")));
-    if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted or made private appears here automatically with its last-known stats.</div>';return;}
+    const since=v=>String(v.unavailableSince||v.unlistedSince||"");
+    vids.sort((a,b)=>since(b).localeCompare(since(a)));
+    if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted, made private, or quietly unlisted appears here automatically.</div>';return;}
     const chName=id=>((chans[id]&&(chans[id].title||chans[id].handle))||"");
     box.innerHTML=vids.map(v=>{
       const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" \u2019"+String(q[0]).slice(2);};
-      const when=v.unavailableSince?("Removed "+nice(v.unavailableSince)):"Removed";
-      const meta=[fmt(v.views)+" last-known views",(ch==="ALL"?chName(v.channelId):null),"posted "+nice(v.publishedAt)].filter(Boolean).join(" · ");
+      const when=v.unavailable?(v.unavailableSince?"Removed "+nice(v.unavailableSince):"Removed"):("Unlisted"+(v.unlistedSince?" "+nice(v.unlistedSince):""));
+      const meta=[fmt(v.views)+(v.unavailable?" last-known views":" views · still watchable via direct link"),(ch==="ALL"?chName(v.channelId):null),"posted "+nice(v.publishedAt)].filter(Boolean).join(" · ");
       return '<a class="removed-row" href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'+
         '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')">'+
         '<span class="rt"><b>'+esc(v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
-        '<span class="removed-when">'+esc(when)+'</span></a>';
+        '<span class="removed-when'+(v.unavailable?'':' unl')+'">'+esc(when)+'</span></a>';
     }).join("");
   }
   function closeCurrent(){
@@ -10113,7 +10115,7 @@ function renderWindowList(startDate, endDate) {
       let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"&&ANALYTICS_CHANNEL)||"ALL";
       if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
       if(ds&&ds.videos){
-        set("removed", ds.videos.filter(v=>v.unavailable&&(ch==="ALL"||v.channelId===ch)).length);
+        set("removed", ds.videos.filter(v=>(v.unavailable||v.unlisted)&&(ch==="ALL"||v.channelId===ch)).length);
         const ads=window.__adIdSet;
         if(ads&&ads.size)set("promos", ds.videos.filter(v=>ads.has(v.id)&&(ch==="ALL"||v.channelId===ch)).length);
       }
