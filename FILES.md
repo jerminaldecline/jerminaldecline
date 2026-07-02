@@ -19,7 +19,7 @@ So the repo is really three things:
                           YouTube Data API
                                  │
                     ┌────────────┴─────────────┐
-                    │     scripts/fetch-data.js │  (4×/day, automated)
+                    │     scripts/fetch-data.js │  (5×/day, automated)
                     └────────────┬─────────────┘
                                  ▼
         public/data.json  ·  descriptions.json  ·  title-history.json
@@ -71,9 +71,9 @@ There are also **two sister repos** (separate from this one): `jerminaldecline-t
 
 | File | Written by | Read by | Cadence | What it is |
 |------|-----------|---------|---------|------------|
-| **public/data.json** | `fetch-data.js` | the site + every script | 4×/day (auto) | The master dataset. Every video across all 5 channels with `views`, `likes`, `comments`, `durationSec`, `isShort`, `publishedAt`. Also per-channel `snapshots[]` (daily total channel views + sub count) and `meta` counts. **~5 MB.** |
-| **public/descriptions.json** | `fetch-data.js` | site + taggers + detector | 4×/day (auto) | Full text of every video description, kept in its own file so `data.json` stays lean. Shape: `{ lastUpdated, descriptions: { videoId: "..." } }`. **~4.5 MB.** |
-| **public/title-history.json** | `fetch-data.js` | the site | 4×/day (auto) | A ledger of every video title change we've observed: `{ first, current, changes:[{from,to,at,via}] }`. This is how the site shows TheQuartering's habit of re-titling videos. Currently ~25 re-titles tracked. |
+| **public/data.json** | `fetch-data.js` | the site + every script | 5×/day (auto) | The master dataset. Every video across all 5 channels with `views`, `likes`, `comments`, `durationSec`, `isShort`, `publishedAt`. Also per-channel `snapshots[]` (daily total channel views + sub count) and `meta` counts. **~5 MB.** |
+| **public/descriptions.json** | `fetch-data.js` | site + taggers + detector | 5×/day (auto) | Full text of every video description, kept in its own file so `data.json` stays lean. Shape: `{ lastUpdated, descriptions: { videoId: "..." } }`. **~4.5 MB.** |
+| **public/title-history.json** | `fetch-data.js` | the site | 5×/day (auto) | A ledger of every video title change we've observed: `{ first, current, changes:[{from,to,at,via}] }`. This is how the site shows TheQuartering's habit of re-titling videos. Currently ~25 re-titles tracked. |
 
 ---
 
@@ -91,10 +91,10 @@ There are **three independent "tagging" systems**, which is the usual source of 
 
 | File | Written by | Read by | Cadence | What it is |
 |------|-----------|---------|---------|------------|
-| **public/topics.json** | local (LLM taxonomy build) + hand edits | `tag-topics.js`, the site | manual | The topic **taxonomy**: every subject/theme/format with a display `name`, `color`, `kind`, and (for keyword-taggable ones) a `keywords` list. The shared vocabulary both taggers map videos into. |
-| **public/topic-tags.json** | `tag-topics.js` (local, weekly) | the site | weekly (manual) | Keyword tagger output: `{ tags: { videoId: topicId }, _stats }`. One primary topic per video. |
+| **public/topics.json** | the LLM tagger (merged each run; legacy ids preserved) + hand edits | the site | per tagger run | The topic **taxonomy**: every subject/theme/format with a display `name`, `color`, `kind`, and (for keyword-taggable ones) a `keywords` list. The shared vocabulary both taggers map videos into. |
+| **public/topic-tags.json** | `tag-topics.js` (legacy, manual-only) | nothing on the site (superseded by `topic-tags-llm.json`) | stale — last refresh 2026-06-20 | Keyword tagger output: `{ tags: { videoId: topicId }, _stats }`. One primary topic per video. |
 | **public/topic-tags-llm.json** | local LLM tagger | the site | as run (local) | LLM tagger output: per-video subject/theme/format + `_confidence`, `_subjectRaw`, `_summary` (AI one-liner), and `_promoted*` lists of subjects/themes big enough to surface. Model + taxonomy hash recorded in the header. |
-| **public/topic-tag-overrides.json** | hand-edited | `tag-topics.js` | as needed | Manual escape hatch: pin a video to a specific topic, or `null` to force-untag a false positive. Applied *after* keyword scoring. Used when TQ's euphemisms dodge the keyword scorer. |
+| **public/topic-tag-overrides.json** | hand-edited | the LLM tagger (`tag-topics-llm.js` in the runner) | as needed | Manual escape hatch: pin a video to a specific topic, or `null` to force-untag a false positive. Applied *after* keyword scoring. Used when TQ's euphemisms dodge the keyword scorer. |
 | **public/creator-tags.json** | local (metadata extractor) | the site | as run (local) | The creator's own YouTube tags per video: `{ videoId: { tags:[...], fetchedAt } }`. Powers the "Video tags" explorer. |
 
 ### Story trackers (the "what's TQ obsessed with this week" feature)
@@ -102,8 +102,10 @@ There are **three independent "tagging" systems**, which is the usual source of 
 | File | Written by | Read by | Cadence | What it is |
 |------|-----------|---------|---------|------------|
 | **public/topic-candidates.md** | `detect-topic-candidates.js` | **a human** | nightly (auto) | A readable report of term clusters that *spiked* in the last 7 days vs the 60-day baseline. You skim it monthly to decide if a new story arc deserves a curated label. |
-| **public/topic-trackers.json** | `detect-topic-candidates.js` | the site | nightly (auto) | The machine-readable companion: clusters hot enough (>30% saturation) to show as live "story trackers" on the site. No code change needed when a new story spikes. |
-| **public/topic-labels.json** | hand-edited | the site | as needed | Friendly-name + keyword overrides for the auto-detected trackers (e.g. force the detector's `"trial"` cluster to display as `"Karmelo Anthony"`). |
+| **public/topic-trackers.json** | `detect-topic-candidates.js` | nothing on the site yet (candidate feature; also read by `detect-spikes.js`) | nightly (auto) | The machine-readable companion: clusters hot enough (>30% saturation) to show as live "story trackers" on the site. No code change needed when a new story spikes. |
+| **public/topic-labels.json** | hand-edited | `detect-topic-candidates.js` | as needed |
+| **public/view-velocity.json** | `build-view-velocity.py` (in `update-data.yml`) | the site (Videos › View Velocity) | 5×/day (auto) | Per-channel launch curves (views/day by age vs a typical recent video) + flat-then-spike “suspicious movement” list, built from the snapshots archive. |
+| **public/view-spikes.json** | `detect-spikes.js` (weekly, via the ad scrape) | nothing on the site (research-only) | weekly (auto) | Aged long-form videos NOT in `ad-videos.json` showing the flat-then-spike pattern. | Friendly-name + keyword overrides for the auto-detected trackers (e.g. force the detector's `"trial"` cluster to display as `"Karmelo Anthony"`). |
 
 ---
 
@@ -111,7 +113,7 @@ There are **three independent "tagging" systems**, which is the usual source of 
 
 | File | Written by | Cadence | What it is |
 |------|-----------|---------|------------|
-| **public/ad-videos.json** | hand-edited | monthly-ish | Catalogue of confirmed Google Ads campaigns pointing at tracked videos (from the Marketing Sheriff advertiser page). Powers the "promoted videos" callout. `{ meta, channels }`. |
+| **public/ad-videos.json** | `scrape-ads.py` (scheduled Sundays) + hand edits | weekly (auto) | Catalogue of confirmed Google Ads campaigns pointing at tracked videos (from the Marketing Sheriff advertiser page). Powers the "promoted videos" callout. `{ meta, channels }`. |
 
 ---
 
@@ -119,9 +121,9 @@ There are **three independent "tagging" systems**, which is the usual source of 
 
 | File | Run by | What it does |
 |------|--------|--------------|
-| **fetch-data.js** | `update-data.yml` (4×/day) & `daily-audit.yml` | The fetcher. Calls the YouTube API, pulls recent uploads + view stats for all 5 channels, merges into `data.json`, and writes `descriptions.json` + `title-history.json`. Modes: default (last 60 days), `--backfill` (whole history), `--audit` (re-check old videos for deletions/re-titles). |
+| **fetch-data.js** | `update-data.yml` (5×/day) & `daily-audit.yml` | The fetcher. Calls the YouTube API, pulls recent uploads + view stats for all 5 channels, merges into `data.json`, and writes `descriptions.json` + `title-history.json`. Modes: default (last 60 days), `--backfill` (whole history), `--audit` (re-check old videos for deletions/re-titles). |
 | **fetch-transcripts.js** | local / dormant workflows | Pulls YouTube auto-caption transcripts and stores them in the **transcripts sister repo** (one JSON per video + an `index.json` of fetched/failed status). Modes: `--backfill`, `--incremental`, `--retry-failures`. Run locally because YouTube blocks GitHub's IPs. Commits in batches of 100 so it's resumable. |
-| **tag-topics.js** | `refresh-topics.ps1` (local, weekly) | The **keyword topic tagger**. Scores each long-form video's title (×3) + description (×1.5) + transcript (×1) against `topics.json` keywords; assigns the best-scoring topic if it clears a threshold. Writes `topic-tags.json`. |
+| **tag-topics.js** | legacy — manual only (superseded by the runner’s LLM tagger, every 2 days) | The **keyword topic tagger**. Scores each long-form video's title (×3) + description (×1.5) + transcript (×1) against `topics.json` keywords; assigns the best-scoring topic if it clears a threshold. Writes `topic-tags.json`. |
 | **detect-topic-candidates.js** | `detect-topic-candidates.yml` (nightly) | The **story detector**. Finds terms spiking in recent descriptions, clusters them by which videos they co-occur in, and writes the human report (`topic-candidates.md`) + the live trackers (`topic-trackers.json`). |
 
 > Two taggers are **not** in this repo: the LLM subject tagger (writes `topic-tags-llm.json`) and the creator-tag extractor (writes `creator-tags.json`). They run locally and just commit their output here.
@@ -132,7 +134,7 @@ There are **three independent "tagging" systems**, which is the usual source of 
 
 | Workflow | Schedule | What it runs |
 |----------|----------|--------------|
-| **update-data.yml** | 4×/day (00:07, 03:17, 13:37, 19:47 UTC) | `fetch-data.js`, commits data. Also gzips `data.json` into the **snapshots sister repo** once per AM and once per PM half. |
+| **update-data.yml** | 5×/day (00:07, 03:17, 09:27, 13:37, 19:47 UTC) | `fetch-data.js`, commits data. Also gzips `data.json` into the **snapshots sister repo** once per AM/PM half, then rebuilds `view-velocity.json` from the archive. The incremental run also re-verifies recently-missing videos and flags deletions (`unavailable`/`unavailableSince`, preserving last-known stats). |
 | **daily-audit.yml** | 02:00 UTC daily | `fetch-data.js --audit` — re-checks older videos for deletions and re-titles outside the 60-day window. |
 | **detect-topic-candidates.yml** | 04:30 UTC daily | `detect-topic-candidates.js`, commits the candidate report + trackers. |
 | **fetch-transcripts.yml** | **dormant** (cron commented out) | Incremental transcript fetch. Disabled because YouTube blocks GitHub IPs — run locally instead. Kept for if that ever changes. |
@@ -151,8 +153,8 @@ There are **three independent "tagging" systems**, which is the usual source of 
 
 ## Quick "who writes this file?" lookup
 
-- **Automated, 4×/day:** `data.json`, `descriptions.json`, `title-history.json` (+ snapshots repo)
+- **Automated, 5×/day:** `data.json`, `descriptions.json`, `title-history.json`, `view-velocity.json` (+ snapshots repo)
 - **Automated, nightly:** `topic-candidates.md`, `topic-trackers.json`
-- **Local, weekly:** `topic-tags.json` (via `refresh-topics.ps1`, which also fetches transcripts)
+- **Local, every 2 days:** `topic-tags-llm.json` + `topics.json` + `creator-tags.json` (the runner’s `refresh-topics-llm.ps1`; `topic-tags.json` is legacy and no longer refreshed)
 - **Local, as run:** `topic-tags-llm.json`, `creator-tags.json`
 - **Hand-edited, as needed:** `topics.json`, `topic-labels.json`, `topic-tag-overrides.json`, `ad-videos.json`, `index.html`

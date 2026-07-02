@@ -196,13 +196,13 @@ Set calendar reminders with 2-week warnings — token expiry causes silent CI fa
 | File | What it is | Maintenance |
 |---|---|---|
 | `public/data.json` | Video metadata + stats | Auto (4× daily) |
-| `public/descriptions.json` | Full video descriptions | Auto (4× daily) |
+| `public/descriptions.json` | Full video descriptions | Auto (5× daily) |
 | `public/topic-candidates.md` | Detected story candidates | Auto (nightly) |
-| `public/topic-trackers.json` | Story tracker data for site | Auto (nightly) |
+| `public/topic-trackers.json` | Story tracker data (not yet rendered on the site) | Auto (nightly) |
 | `public/topic-labels.json` | Story tracker label overrides | Manual, as needed |
 | `public/topics.json` | Timeline topic taxonomy | Manual, as needed |
-| `public/topic-tags.json` | Per-video topic tags | Manual via `refresh-topics.ps1`, weekly |
-| `public/ad-videos.json` | Confirmed Google Ads campaigns | Manual, monthly |
+| `public/topic-tags.json` | Per-video topic tags (LEGACY — site reads `topic-tags-llm.json`) | No longer refreshed |
+| `public/ad-videos.json` | Confirmed Google Ads campaigns | Auto (Sundays, `scrape-ads.py`) + manual |
 | `public/index.html` | The site itself | Manual edits |
 | `public/*.png`, `*.ico`, `*.gif` | Static assets | Rarely edited |
 

@@ -28,8 +28,9 @@ const path = require('path');
 const DATA_FILE = path.join(__dirname, '..', 'public', 'data.json');
 const DESCRIPTIONS_FILE = path.join(__dirname, '..', 'public', 'descriptions.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'public', 'topic-candidates.md');
-// Machine-readable companion to topic-candidates.md. The site reads this
-// to render live story trackers without manual edits to index.html.
+// Machine-readable companion to topic-candidates.md. NOTE: nothing on the
+// site renders these trackers yet (candidate feature); the only code reader
+// today is detect-spikes.js's newsLikely hint.
 // Only clusters with recent-window saturation above the display threshold
 // make it into this file — i.e. the editorially actionable ones.
 const TRACKERS_FILE = path.join(__dirname, '..', 'public', 'topic-trackers.json');
@@ -59,6 +60,9 @@ const STOPWORDS = new Set([
   'whom', 'whose', 'which', 'than', 'then', 'thus', 'also', 'even', 'just',
   'only', 'some', 'such', 'each', 'every', 'either', 'both', 'one', 'two',
   'not', 'nor', 'but', 'yet', 'all', 'any', 'too', 'too', 'very',
+  // generic gerunds/participles/adverbs that cluster as junk trackers
+  // ('following' hit 64% saturation once — pure description boilerplate)
+  'following', 'widespread', 'according', 'regarding', 'involving', 'ongoing',
   // verbs that don't carry topic info
   'said', 'says', 'gets', 'got', 'getting', 'goes', 'went', 'going', 'come',
   'comes', 'came', 'make', 'makes', 'made', 'making', 'take', 'takes', 'took',
