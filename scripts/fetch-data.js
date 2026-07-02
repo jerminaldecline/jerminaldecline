@@ -186,6 +186,24 @@ function parseEngagement(statsObj, key) {
   return Number.isFinite(n) ? n : null;
 }
 
+// Track unlisted state from videos.list part=status. The API returns unlisted
+// videos normally (so they look "live" to every other check) — privacyStatus
+// is the only per-video signal that a video was quietly delisted from public
+// browsing. Private/deleted videos are never returned at all (unavailable path).
+function applyPrivacy(v, det, newlyUnlisted) {
+  const ps = det.status && det.status.privacyStatus;
+  if (ps === 'unlisted') {
+    if (!v.unlisted) {
+      v.unlistedSince = new Date().toISOString();
+      if (newlyUnlisted) newlyUnlisted.push({ id: v.id, title: v.title, channelId: v.channelId });
+    }
+    v.unlisted = true;
+  } else if (ps === 'public' && v.unlisted) {
+    delete v.unlisted;
+    delete v.unlistedSince;
+  }
+}
+
 async function enrichVideos(videos, descriptions) {
   console.log(`  Fetching duration + view stats for ${videos.length} videos...`);
   for (let i = 0; i < videos.length; i += 50) {
@@ -193,7 +211,7 @@ async function enrichVideos(videos, descriptions) {
     const ids = batch.map(v => v.id).join(',');
     // snippet added for description capture. Cost: 2 quota units/call instead
     // of 1 — still well within daily quota (we run at ~13% utilisation).
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet&id=${ids}&key=${API_KEY}`;
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,status&id=${ids}&key=${API_KEY}`;
     const data = await get(url);
     const byId = new Map(data.items.map(it => [it.id, it]));
     for (const v of batch) {
@@ -209,6 +227,7 @@ async function enrichVideos(videos, descriptions) {
         if (descriptions && det.snippet && det.snippet.description !== undefined) {
           descriptions[v.id] = det.snippet.description;
         }
+        applyPrivacy(v, det);
         // If a video was previously flagged as unavailable but is now live, clear the flag.
         if (v.unavailable) {
           delete v.unavailable;
@@ -247,6 +266,7 @@ async function auditEnrich(videos, descriptions, titleHistory) {
   console.log(`  AUDIT: Re-checking ${videos.length} videos for availability...`);
   const newlyUnavailable = [];
   const restoredToLive = [];
+  const newlyUnlisted = [];
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
     const ids = batch.map(v => v.id).join(',');
@@ -254,7 +274,7 @@ async function auditEnrich(videos, descriptions, titleHistory) {
     // detecting retroactive edits on older videos (e.g. removing sponsor
     // mentions after a deal sours). Audit runs once daily so this is a
     // small quota cost (~280 units vs ~140 previously).
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet&id=${ids}&key=${API_KEY}`;
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,status&id=${ids}&key=${API_KEY}`;
     const data = await get(url);
     const byId = new Map(data.items.map(it => [it.id, it]));
     for (const v of batch) {
@@ -280,6 +300,7 @@ async function auditEnrich(videos, descriptions, titleHistory) {
           }
           v.title = det.snippet.title;
         }
+        applyPrivacy(v, det, newlyUnlisted);
         if (wasUnavailable) {
           delete v.unavailable;
           delete v.unavailableSince;
@@ -303,7 +324,7 @@ async function auditEnrich(videos, descriptions, titleHistory) {
     }
     console.log(`    Audited ${Math.min(i + 50, videos.length)} / ${videos.length}`);
   }
-  return { newlyUnavailable, restoredToLive };
+  return { newlyUnavailable, restoredToLive, newlyUnlisted };
 }
 
 // Descriptions live in their own file (see DESCRIPTIONS_FILE) and persist
@@ -467,6 +488,7 @@ function buildOutput(allVideos, channelMeta, existing) {
       longFormCount: chVids.filter(v => !v.isShort && !v.unavailable).length,
       shortsCount: chVids.filter(v => v.isShort && !v.unavailable).length,
       unavailableCount: chVids.filter(v => v.unavailable).length,
+      unlistedCount: chVids.filter(v => v.unlisted && !v.unavailable).length,
       oldestVideoDate: chVids.length ? chVids[chVids.length - 1].publishedAt : null,
       newestVideoDate: chVids.length ? chVids[0].publishedAt : null
     };
@@ -479,10 +501,13 @@ function buildOutput(allVideos, channelMeta, existing) {
     //                checks can't see) and hasn't been flagged yet.
     const ytCount = channelMeta[id].videoCount;
     if (ytCount > 0) {
-      const ourLive = chVids.length - channelsOut[id].meta.unavailableCount;
+      // YT's counter is PUBLIC videos only, so compare against our live count
+      // minus the videos we already know are unlisted — any remaining shortfall
+      // is an unflagged removal/delisting.
+      const ourPublic = chVids.length - channelsOut[id].meta.unavailableCount - channelsOut[id].meta.unlistedCount;
       channelsOut[id].meta.ytVideoCount = ytCount;
-      if (ytCount < ourLive) {
-        console.log(`  ⚠ RECONCILE ${channelMeta[id].handle}: YouTube reports ${ytCount} public videos but we count ${ourLive} live — ${ourLive - ytCount} likely deleted/privated/unlisted and not yet flagged`);
+      if (ytCount < ourPublic) {
+        console.log(`  ⚠ RECONCILE ${channelMeta[id].handle}: YouTube reports ${ytCount} public videos but we count ${ourPublic} public — ${ourPublic - ytCount} likely deleted/privated/unlisted and not yet flagged`);
       }
     }
   }
@@ -614,7 +639,7 @@ async function runIncremental(startTime) {
         !freshIds.has(v.id) && new Date(v.publishedAt) >= sinceDate);
       if (recentMissing.length) {
         console.log(`\nRecent-deletion check: ${recentMissing.length} in-window video(s) missing from the live listing — re-verifying via API...`);
-        const { newlyUnavailable, restoredToLive } = await auditEnrich(recentMissing, descriptions, titleHistory);
+        const { newlyUnavailable, restoredToLive, newlyUnlisted } = await auditEnrich(recentMissing, descriptions, titleHistory);
         if (newlyUnavailable.length) {
           console.log(`  ⚑ ${newlyUnavailable.length} newly unavailable (deleted/private):`);
           for (const v of newlyUnavailable.slice(0, 25)) console.log(`    - ${v.title} (${v.channelId}, ${v.publishedAt.slice(0, 10)})`);
@@ -622,6 +647,7 @@ async function runIncremental(startTime) {
           console.log(`  All ${recentMissing.length} still live via API — a listing gap, not deletions.`);
         }
         if (restoredToLive.length) console.log(`  ↺ ${restoredToLive.length} restored to live.`);
+        if (newlyUnlisted.length) console.log(`  ⚑ ${newlyUnlisted.length} newly UNLISTED (delisted from public browsing): ` + newlyUnlisted.map(v => v.title).join(' | '));
       }
     } catch (e) {
       console.warn('  Recent-deletion check failed (non-fatal):', e.message);
@@ -697,7 +723,7 @@ async function runAudit(startTime) {
   }
 
   // Run audit enrichment, capturing deletions and restorations
-  const { newlyUnavailable, restoredToLive } = await auditEnrich(auditTargets, descriptions, titleHistory);
+  const { newlyUnavailable, restoredToLive, newlyUnlisted } = await auditEnrich(auditTargets, descriptions, titleHistory);
 
   // Merge audited records back into the full dataset (audit changed objects in-place
   // since they're the same references, but be defensive)
@@ -713,6 +739,8 @@ async function runAudit(startTime) {
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n✓ AUDIT done in ${elapsed}s`);
+  console.log(`  Newly UNLISTED: ${newlyUnlisted.length}`);
+  for (const v of newlyUnlisted.slice(0, 25)) console.log(`    - ${v.title} (${v.channelId})`);
   console.log(`  Newly unavailable: ${newlyUnavailable.length}`);
   if (newlyUnavailable.length > 0) {
     for (const v of newlyUnavailable.slice(0, 25)) {
