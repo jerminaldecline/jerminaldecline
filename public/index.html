@@ -2342,8 +2342,20 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
+    <div class="insights" id="vInsights">
+      <div class="vtabs" id="vtabs" role="tablist">
+        <button type="button" class="vtab" data-t="velocity" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>View Velocity</button>
+        <button type="button" class="vtab" data-t="topics" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Topics</button>
+        <button type="button" class="vtab" data-t="tags" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-7-7A2 2 0 013 12V5a2 2 0 012-2h7a2 2 0 011.4.6l7.2 7.2a2 2 0 010 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>Video tags</button>
+        <button type="button" class="vtab" data-t="words" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg>Word cloud</button>
+        <button type="button" class="vtab" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promotions</button>
+        <button type="button" class="vtab" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed</button>
+      </div>
+      <div class="vbody" id="vBody" hidden>
+        <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
+        <div class="removed-section" id="removedSection"><div class="removed-body" id="removedBody"></div></div>
     <div class="ad-panel" id="adPanel" hidden></div>
-    <div class="wordcloud-section">
+    <div class="wordcloud-section" id="wordcloudSection">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
         <span class="panel-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg></span>
         <span class="wordcloud-toggle-text">
@@ -2468,6 +2480,41 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #velocityPanel .ctag-viewtab:hover:not(.active){color:var(--text);background:var(--surface)}
     #velocityPanel .ctag-viewtab.active{background:var(--accent);border-color:var(--accent);color:#fff}
     @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
+    /* ---- Videos tab: tabbed insights strip ---- */
+    #panelVideos .insights{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
+    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.45rem;padding:0.75rem 0.8rem;border-bottom:1px solid var(--border)}
+    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.88rem;font-weight:700;padding:0.5rem 0.85rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
+    #panelVideos .vtab .ic{width:16px;height:16px;flex:0 0 auto;color:var(--accent)}
+    #panelVideos .vtab:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
+    #panelVideos .vtab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    #panelVideos .vtab.active .ic{color:#fff}
+    /* video-list thumbnails */
+    #windowList .video-title{flex-direction:row;align-items:flex-start;gap:0.8rem}
+    #windowList .video-title-col{display:flex;flex-direction:column;min-width:0;flex:1 1 auto;overflow:hidden}
+    #windowList .vrow-thumb{flex:0 0 auto;display:block;width:128px;border-radius:7px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);line-height:0}
+    #windowList .vrow-thumb img{width:128px;height:72px;object-fit:cover;display:block}
+    #windowList .video-title-channel-tag{display:block;font-size:0.72rem;color:var(--text-dim);font-weight:600;margin-top:0.15rem}
+    #windowList .video-row.no-topics{grid-template-columns:82px 1fr 72px 92px 62px 78px}
+    @media(max-width:640px){#windowList .vrow-thumb{width:104px}#windowList .vrow-thumb img{width:104px;height:59px}}
+    #panelVideos .vbody{padding:1.1rem 1.2rem}
+    #panelVideos .vbody[hidden]{display:none}
+    #panelVideos .vempty{color:var(--text-dim);padding:0.4rem 0.1rem;font-size:0.88rem}
+    #panelVideos .wordcloud-toggle{display:none!important}
+    #panelVideos .wordcloud-section{display:none;margin:0;border:none;border-radius:0;background:transparent;box-shadow:none}
+    #panelVideos .wordcloud-section.vt-active{display:block}
+    #panelVideos .wordcloud-panel{border:none!important;border-radius:0!important;background:transparent!important;padding:0!important;margin:0!important}
+    #panelVideos #adPanel{display:none;margin:0!important;border:none!important;border-radius:0!important;background:transparent!important}
+    #panelVideos #adPanel.vt-active{display:block}
+    #panelVideos .removed-section{display:none}
+    #panelVideos .removed-section.vt-active{display:block}
+    #panelVideos .removed-row{display:flex;align-items:center;gap:0.7rem;padding:0.55rem 0.1rem;border-top:1px solid var(--border);text-decoration:none;color:inherit}
+    #panelVideos .removed-row:first-child{border-top:none}
+    #panelVideos .removed-row:hover{background:var(--surface-2)}
+    #panelVideos .removed-thumb{width:74px;height:42px;border-radius:5px;object-fit:cover;background:var(--surface-2);border:1px solid var(--border);flex:0 0 auto;filter:grayscale(1);opacity:0.7}
+    #panelVideos .removed-row .rt{min-width:0;flex:1 1 auto}
+    #panelVideos .removed-row .rt b{display:block;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #panelVideos .removed-row .rt span{font-size:0.74rem;color:var(--text-dim)}
+    #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
       <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
@@ -2485,6 +2532,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">Suspicious movement</button>
         </div>
         <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
+      </div>
+    </div>
       </div>
     </div>
     <div class="window-list-card">
@@ -7424,10 +7473,9 @@ function renderVideoRows(videos, emptyText) {
       creatorTagsBadge = `<span class="creator-tags-badge" tabindex="0" role="button" aria-label="${escapeHtml(tagPop)}" data-popover="${escapeHtml(tagPop)}">${tagIcon}</span>`;
     }
     return `
-      <div class="video-row${showChannel ? ' with-channel' : ''}${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
+      <div class="video-row${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
-        ${channelCell}
-        <div class="video-title"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div>
+        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -7980,9 +8028,8 @@ function renderWindowList(startDate, endDate) {
   const breakdownHtml = showChannel ? buildChannelBreakdownTable(allWindowVideos) : '';
 
   const colHeader = `
-    <div class="video-row video-row-header${showChannel ? ' with-channel' : ''} no-topics">
+    <div class="video-row video-row-header no-topics">
       <div class="video-date sortable${sortableClass(windowListState, 'date')}" data-sort="date">Date${sortArrow(windowListState, 'date')}</div>
-      ${showChannel ? '<div class="video-channel">Channel</div>' : ''}
       <div class="video-title">Title</div>
       <div class="video-duration sortable hide-mobile${sortableClass(windowListState, 'duration')}" data-sort="duration">Duration${sortArrow(windowListState, 'duration')}</div>
       <div class="video-views sortable${sortableClass(windowListState, 'views')}" data-sort="views">Views${sortArrow(windowListState, 'views')}</div>
@@ -9946,6 +9993,73 @@ function renderWindowList(startDate, endDate) {
       renderView();
     }).catch(err=>{loaded=false;const f=feat();if(f)f.innerHTML=`<div class="vv-loading">Couldn't load view-velocity data.</div>`;console.warn("view-velocity",err);});
   }
+})();
+</script>
+<script>
+/* ---------- Videos tab: tabbed insights strip controller ---------- */
+(function vInsightTabs(){
+  const tabs=document.getElementById("vtabs"), body=document.getElementById("vBody");
+  if(!tabs||!body)return;
+  const SECID={velocity:"velocitySection",topics:"topicsSection",tags:"creatorTagsSection",words:"wordcloudSection"};
+  const TOGID={velocity:"velocityToggle",topics:"topicsToggle",tags:"creatorTagsToggle",words:"wordcloudToggle"};
+  const byId=id=>document.getElementById(id);
+  let active=null;
+  // Removed tab: surfaces videos the daily deletion check flagged unavailable
+  // (with unavailableSince), scoped to the current channel filter.
+  function renderRemoved(){
+    const box=byId("removedBody"); if(!box)return;
+    const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
+    if(!ds||!ds.videos){box.innerHTML='<div class="vempty">No data loaded.</div>';return;}
+    const chans=ds.channels||{};
+    const sel=byId("vidChannelSel")||byId("anChannelSel");
+    let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+    if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();for(const k in chans){if(norm(chans[k].handle)===norm(ch)){ch=k;break;}}}
+    const fmt=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
+    const esc=s=>String(s==null?"":s).replace(/</g,"&lt;");
+    let vids=ds.videos.filter(v=>v.unavailable);
+    if(ch&&ch!=="ALL")vids=vids.filter(v=>v.channelId===ch);
+    vids.sort((a,b)=>String(b.unavailableSince||"").localeCompare(String(a.unavailableSince||"")));
+    if(!vids.length){box.innerHTML='<div class="vempty">No videos have been removed'+(ch&&ch!=="ALL"?" from this channel":"")+' since tracking began. This lights up automatically when the daily deletion check finds one.</div>';return;}
+    const chName=id=>((chans[id]&&(chans[id].title||chans[id].handle))||"");
+    box.innerHTML=vids.map(v=>{
+      const when=v.unavailableSince?("Removed "+String(v.unavailableSince).slice(0,10)):"Removed";
+      const meta=[fmt(v.views)+" last-known views",(ch==="ALL"?chName(v.channelId):null),"posted "+String(v.publishedAt).slice(0,10)].filter(Boolean).join(" · ");
+      return '<a class="removed-row" href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'+
+        '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy">'+
+        '<span class="rt"><b>'+esc(v.title)+'</b><span>'+esc(meta)+'</span></span>'+
+        '<span class="removed-when">'+esc(when)+'</span></a>';
+    }).join("");
+  }
+  function closeCurrent(){
+    if(!active)return;
+    if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
+    else if(active==="removed"){const s=byId("removedSection");if(s)s.classList.remove("vt-active");}
+    else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
+    const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb)tb.classList.remove("active");
+    active=null;
+  }
+  function open(t){
+    const tb=tabs.querySelector('.vtab[data-t="'+t+'"]');if(tb)tb.classList.add("active");
+    if(t==="promos"){
+      const ap=byId("adPanel"), pe=byId("promosEmpty");
+      if(ap && !ap.hidden){ap.classList.add("vt-active");const at=byId("adPanelToggle");if(at&&at.getAttribute("aria-expanded")!=="true")at.click();}
+      else if(pe){pe.hidden=false;}
+    }else if(t==="removed"){
+      const s=byId("removedSection");if(s)s.classList.add("vt-active");renderRemoved();
+    }else{
+      const s=byId(SECID[t]);if(s)s.classList.add("vt-active");
+      const tog=byId(TOGID[t]);if(tog&&tog.getAttribute("aria-expanded")!=="true")tog.click();
+    }
+    active=t;
+  }
+  tabs.addEventListener("click",e=>{
+    const b=e.target.closest(".vtab");if(!b)return;
+    const t=b.dataset.t;
+    if(active===t){closeCurrent();body.hidden=true;return;}
+    closeCurrent(); body.hidden=false; open(t);
+  });
+  // Re-render the Removed list when the channel filter changes (it's scope-aware).
+  document.addEventListener("change",()=>{ if(active==="removed")renderRemoved(); });
 })();
 </script>
 <button type="button" id="creatorTagsFloatCollapse" class="ctag-float-collapse" hidden aria-label="Collapse video tags">↑ Collapse tags</button>
