@@ -9,5 +9,8 @@ if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 >> "%LOGDIR%\scrape-ads.log" echo.
 >> "%LOGDIR%\scrape-ads.log" echo ===== run %DATE% %TIME% =====
 "%PY%" "%~dp0scrape-ads.py" --apply --commit >> "%LOGDIR%\scrape-ads.log" 2>&1
->> "%LOGDIR%\scrape-ads.log" echo exit code: %ERRORLEVEL%
-endlocal
+set "RC=%ERRORLEVEL%"
+>> "%LOGDIR%\scrape-ads.log" echo exit code: %RC%
+REM Propagate the real result to Task Scheduler (LastTaskResult) — previously the
+REM trailing echo reset it to 0, hiding aborts (bot-block floor, push failure).
+endlocal & exit /b %RC%

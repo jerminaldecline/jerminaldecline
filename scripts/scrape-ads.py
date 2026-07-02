@@ -125,6 +125,16 @@ def main():
         subprocess.run(["node", str(ROOT/"scripts"/"detect-spikes.js"), "--quiet"], cwd=ROOT)
 
         if COMMIT:
+            # SAFETY GUARDS: this runs unattended (scheduled task, Sundays) inside the
+            # active dev checkout, which is sometimes on `staging` for UI work. Without
+            # the branch check the commit would strand on staging while `push origin
+            # main` reports success ("Everything up-to-date"). And an unchecked rebase
+            # conflict would leave the repo mid-rebase for every future run.
+            branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT,
+                                    capture_output=True, text=True).stdout.strip()
+            if branch != "main":
+                log(f"ABORT commit: repo is on '{branch}', not main. Ad data written locally but NOT committed.")
+                sys.exit(3)
             subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json"], cwd=ROOT, check=True)
             staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
             if staged.returncode != 0:           # something actually changed
@@ -132,8 +142,19 @@ def main():
                 msg = (f"Ad data: auto-reconcile (+{n} campaigns) + refresh spike detector"
                        if missing else "Ad data: refresh view-spikes (new bumps on existing ads)")
                 subprocess.run(["git", "commit", "-m", msg], cwd=ROOT, check=True)
-                subprocess.run(["git", "pull", "--rebase", "origin", "main", "-q"], cwd=ROOT)
-                subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True)
+                pushed = False
+                for attempt in range(3):        # bots push to main 5x/day; retry the race
+                    rb = subprocess.run(["git", "pull", "--rebase", "origin", "main", "-q"], cwd=ROOT)
+                    if rb.returncode != 0:
+                        subprocess.run(["git", "rebase", "--abort"], cwd=ROOT)
+                        log("ABORT push: rebase conflict on pull; commit left local, repo restored.")
+                        sys.exit(3)
+                    if subprocess.run(["git", "push", "origin", "main"], cwd=ROOT).returncode == 0:
+                        pushed = True
+                        break
+                if not pushed:
+                    log("Push failed after 3 attempts; commit left local.")
+                    sys.exit(3)
                 log(f"Committed and pushed{f' (+{n} new ads)' if missing else ''}.")
             else:
                 log("No changes to commit.")
