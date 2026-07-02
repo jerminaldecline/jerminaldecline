@@ -2949,6 +2949,7 @@ const moAbbrYr = mm => {const [y,mo]=mm.split('-');return "vs "+MONTHS[mo-1].sli
 const prevMonth = m => {const [y,mo]=m.split('-').map(Number);const d=new Date(y,mo-2);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
 const yoyMonth = m => {const [y,mo]=m.split('-');return (y-1)+'-'+mo;};
 const ytLink = id => 'https://www.youtube.com/watch?v='+id;
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 const LINK_ICON = `<svg class="link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>`;
 
 
@@ -3046,13 +3047,13 @@ function renderOvMonthVideos(vlist, monthKey){
     </div>`;
   const row = v => `<div class="video-row ${rowCls}">
       <div class="video-date">${v.dt || '—'}</div>
-      ${isAll?`<div class="video-channel">${v.ch}</div>`:''}
+      ${isAll?`<div class="video-channel">${escapeHtml(v.ch)}</div>`:''}
       <div class="video-title"><a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${(v.t||'').replace(/</g,'&lt;')}</a></div>
       <div class="video-duration hide-mobile">${fmtDurOv(v.d)}</div>
       <div class="video-views">${fmt(v.v)}</div>
       <div class="video-likepct hide-mobile">${(v.v>0 && v.l!=null)?((v.l/v.v)*100).toFixed(1)+'%':'—'}</div>
       <div class="video-comments hide-mobile">${v.c!=null?fmt(v.c):'—'}</div>
-      ${showTopics?`<div class="video-topic hide-mobile">${v.tp?`<span class="video-topic-dot" style="background:${v.tpc||'#888'}"></span>${v.tp}`:''}</div>`:''}
+      ${showTopics?`<div class="video-topic hide-mobile">${v.tp?`<span class="video-topic-dot" style="background:${v.tpc||'#888'}"></span>${escapeHtml(v.tp)}`:''}</div>`:''}
     </div>`;
   const group = (label, arr, key) => {
     if (!arr.length) return '';
@@ -3160,19 +3161,19 @@ function render(m){
     const item=(label,val)=>`<div class="hl-stat"${val!=null?` title="${val.toLocaleString()} ${label}"`:''}><span class="hsv">${val!=null?fmt(val):'—'}</span><span class="hsl">${label}</span></div>`;
     return `<div class="hl-stats">${item('views',s.views)}${item('comments',s.comments)}${item('likes',s.likes)}</div>`;
   };
-  const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${s.ch}</div>` : '';
-  const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${ANALYTICS_SUMMARIES[vid]}</div>` : '';
+  const chTag = s => (isAll && s.ch) ? `<div class="hl-ch">on ${escapeHtml(s.ch)}</div>` : '';
+  const sumLine = (vid) => (ANALYTICS_SUMMARIES && ANALYTICS_SUMMARIES[vid]) ? `<div class="hl-note">${escapeHtml(ANALYTICS_SUMMARIES[vid])}</div>` : '';
   // Small topic chip (colour-dot + subject name) shown on each highlight card.
   // Topic chip (colour-dot + subject/theme/mode name). `noMode` suppresses the
   // mode-tier fallback (a bare mode like "group fatigue rhetoric" reads badly).
   const topicTag = (s, opts) => {
     if (!s || !s.topic) return '';
     if (opts && opts.noMode && s.topicTier === 'mode') return '';
-    return `<span class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${s.topic}</span>`;
+    return `<span class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${escapeHtml(s.topic)}</span>`;
   };
   // Title row: video title on the left, topic chip pushed to the right.
   const titleRow = (s, link) =>
-    `<a class="hl-title" href="${link}" target="_blank" rel="noopener">${s.title}${LINK_ICON}</a>`;
+    `<a class="hl-title" href="${link}" target="_blank" rel="noopener">${escapeHtml(s.title)}${LINK_ICON}</a>`;
   // Card-label row: the card heading on the left, topic chip on the right.
   const labelRow = (heading, s, topicOpts) =>
     `<div class="hl-labelrow"><div class="hl-label">${heading}</div>${topicTag(s, topicOpts)}</div>`;
@@ -3240,12 +3241,12 @@ function render(m){
       if (otherVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:otherVal, isOther:true });
       const pct = v => (v/total*100);
       const barSegs = segs.map(s =>
-        `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${s.name}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
+        `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${escapeHtml(s.name)}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
       ).join('');
       const legend = segs.map(s =>
         `<li class="tsb-leg-item${s.isOther?' tsb-leg-other':''}">
           <span class="tsb-leg-dot" style="background:${s.color}"></span>
-          <span class="tsb-leg-name">${s.name}</span>
+          <span class="tsb-leg-name">${escapeHtml(s.name)}</span>
           <span class="tsb-leg-val">${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%</span>
         </li>`
       ).join('');
@@ -3262,7 +3263,7 @@ function render(m){
     const active = (!isAll && r.h===scope);
     const dim = (r.ln+r.sn)===0;
     return `<tr class="${active?'active':''}">
-      <td class="net-ch ${dim?'dim':''}">${r.h}${active?' ◂':''}</td>
+      <td class="net-ch ${dim?'dim':''}">${escapeHtml(r.h)}${active?' ◂':''}</td>
       <td>${r.ln}</td><td>${fmt(r.lv)}</td>
       <td class="divcol">${r.sn}</td><td>${fmt(r.sv)}</td>
     </tr>`;
@@ -3363,8 +3364,8 @@ function render(m){
         </div>
         ${SD.best ? `<div class="best-short">
           <div class="bs-label">Best short this month</div>
-          <a class="bs-title" href="${ytLink(SD.best.id)}" target="_blank" rel="noopener">${SD.best.title}${LINK_ICON}</a>
-          <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+SD.best.ch : ''}</div>
+          <a class="bs-title" href="${ytLink(SD.best.id)}" target="_blank" rel="noopener">${escapeHtml(SD.best.title)}${LINK_ICON}</a>
+          <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+escapeHtml(SD.best.ch) : ''}</div>
         </div>` : ''}
       </div>
       ${isAgg ? '' : `<div class="panel net-panel">
@@ -5512,7 +5513,7 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
       col.addEventListener('mouseenter', (e) => {
         const i = +col.dataset.i;
         const m = allMonths[i];
-        const rows = KEYITEMS.map(b => `<div style="display:flex;justify-content:space-between;gap:12px;"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${b.color};margin-right:5px;"></span>${b.label}</span><span>${Math.round(m[b.key])}%</span></div>`).join('');
+        const rows = KEYITEMS.map(b => `<div style="display:flex;justify-content:space-between;gap:12px;"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${b.color};margin-right:5px;"></span>${escapeHtml(b.label)}</span><span>${Math.round(m[b.key])}%</span></div>`).join('');
         tooltip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">${m.key}</div>${rows}<div style="margin-top:4px;color:var(--text-dim);">${m.total} videos</div>`;
         tooltip.style.display = 'block';
       });
@@ -5534,9 +5535,9 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
       `<div class="tagblock-key-item">
         <span class="tagblock-key-swatch" style="background:${b.color}"></span>
         <span class="tagblock-key-text">
-          <span class="tagblock-key-name">${b.label}</span>
+          <span class="tagblock-key-name">${escapeHtml(b.label)}</span>
           ${b.note ? `<span class="tagblock-key-note">${b.note}</span>` : ''}
-          <span class="tagblock-key-tags">${b.tags.join(', ')}</span>
+          <span class="tagblock-key-tags">${escapeHtml(b.tags.join(', '))}</span>
         </span>
       </div>`
     ).join('');
