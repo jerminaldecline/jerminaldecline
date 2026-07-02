@@ -2498,6 +2498,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
        channel) and the tab display override was resurrecting their stale content */
     #panelVideos .wordcloud-section[hidden],#panelVideos #adPanel[hidden]{display:none!important}
     #velocityPanel .ctag-viewtab.active,#velocityPanel .vv-seg button.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent))}
+    #velocityPanel .ctag-viewtab[hidden]{display:none}
+    #velocityPanel .ctag-viewtab.vv-alarm{color:var(--down);border:1px solid var(--down);animation:vvSiren 1.5s ease-in-out infinite}
+    #velocityPanel .ctag-viewtab.vv-alarm.active{background:var(--down);border-color:var(--down);color:#fff}
+    @keyframes vvSiren{0%,100%{box-shadow:0 0 0 0 rgba(255,107,102,0.5)}50%{box-shadow:0 0 0 7px rgba(255,107,102,0)}}
+    @media (prefers-reduced-motion: reduce){#velocityPanel .ctag-viewtab.vv-alarm{animation:none}}
     /* video-list thumbnails */
     #windowList .video-title{flex-direction:row;align-items:flex-start;gap:0.8rem}
     #windowList .video-title-col{display:flex;flex-direction:column;min-width:0;flex:1 1 auto;overflow:hidden}
@@ -2543,7 +2548,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="wordcloud-panel" id="velocityPanel" hidden>
         <div class="ctag-viewtabs" role="tablist">
           <button type="button" class="ctag-viewtab active" data-vvview="launch" role="tab" aria-selected="true">Launch performance</button>
-          <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">Suspicious movement</button>
+          <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">🚨 Suspicious movement 🚨</button>
         </div>
         <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
       </div>
@@ -9984,8 +9989,11 @@ function renderWindowList(startDate, endDate) {
     document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
   }
 
-  function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});}
-  function renderView(){ S=scopeData(); syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
+  function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});
+    // The alarm tab only exists when there is something to be alarmed about.
+    const mt=panel.querySelector('.ctag-viewtab[data-vvview="movers"]');
+    if(mt&&S){const n=S.movers.videos.length;mt.hidden=(n===0);mt.classList.toggle("vv-alarm",n>0);}}
+  function renderView(){ S=scopeData(); if(view==="movers"&&!S.movers.videos.length)view="launch"; syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
 
   document.addEventListener("mousedown",(e)=>{
     const clr=e.target.closest("#vvClear");
