@@ -571,6 +571,37 @@ async function runIncremental(startTime) {
   }
   if (titleChanges > 0) console.log(`\n⚑ ${titleChanges} title change(s) detected this run.`);
 
+  // --- Recent-deletion sweep (incremental only) --------------------------
+  // The daily audit only re-checks videos OLDER than the window, and the
+  // incremental listing only returns currently-live uploads — so a video
+  // deleted/privated while still inside the recent window would silently drop
+  // out of the listing and never get flagged (caught only ~60 days later when
+  // it ages into the audit). Close that gap: any stored in-window video missing
+  // from this run's live listing is re-verified by id (auditEnrich confirms via
+  // the API, so a playlist-listing fluke won't false-positive) and flagged
+  // unavailable with an accurate unavailableSince if it's genuinely gone.
+  // Wrapped so a hiccup here can never break the core data refresh.
+  if (!isFirstRun && !IS_BACKFILL && existing && existing.videos) {
+    try {
+      const freshIds = new Set(freshVideos.map(v => v.id));
+      const recentMissing = existing.videos.filter(v =>
+        !freshIds.has(v.id) && new Date(v.publishedAt) >= sinceDate);
+      if (recentMissing.length) {
+        console.log(`\nRecent-deletion check: ${recentMissing.length} in-window video(s) missing from the live listing — re-verifying via API...`);
+        const { newlyUnavailable, restoredToLive } = await auditEnrich(recentMissing, descriptions, titleHistory);
+        if (newlyUnavailable.length) {
+          console.log(`  ⚑ ${newlyUnavailable.length} newly unavailable (deleted/private):`);
+          for (const v of newlyUnavailable.slice(0, 25)) console.log(`    - ${v.title} (${v.channelId}, ${v.publishedAt.slice(0, 10)})`);
+        } else {
+          console.log(`  All ${recentMissing.length} still live via API — a listing gap, not deletions.`);
+        }
+        if (restoredToLive.length) console.log(`  ↺ ${restoredToLive.length} restored to live.`);
+      }
+    } catch (e) {
+      console.warn('  Recent-deletion check failed (non-fatal):', e.message);
+    }
+  }
+
   const allVideos = isFirstRun
     ? freshVideos
     : mergeVideos(existing.videos, freshVideos);

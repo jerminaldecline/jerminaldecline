@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-01T08:35:43.193Z",
+  "lastUpdated": "2026-07-02T07:50:01.826Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -14,82 +14,28 @@
         "following"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7143,
-        "baselineSaturation": 0.1434,
-        "spikeRatio": 4.98,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-07-01T08:35:43.193Z"
+        "recentSaturation": 0.6429,
+        "baselineSaturation": 0.1486,
+        "spikeRatio": 4.33,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 20,
+        "detectedAt": "2026-07-02T07:50:01.826Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "film",
+      "termId": "widespread",
       "keywords": [
-        "film",
-        "release"
+        "widespread",
+        "sparked"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0037,
-        "spikeRatio": 97.14,
+        "baselineSaturation": 0.0181,
+        "spikeRatio": 19.71,
         "recentVideoCount": 5,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-07-01T08:35:43.193Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "sparked",
-      "keywords": [
-        "sparked",
-        "controversial",
-        "debate"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0478,
-        "spikeRatio": 7.47,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-07-01T08:35:43.193Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "appeal",
-      "keywords": [
-        "surrounding karmelo",
-        "appeal",
-        "surrounding",
-        "conviction"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0993,
-        "spikeRatio": 3.6,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-07-01T08:35:43.193Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "main",
-      "keywords": [
-        "main",
-        "coffee main",
-        "our coffee",
-        "our",
-        "coffee"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.75,
-        "baselineSaturation": 0.25,
-        "spikeRatio": 3,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 29,
-        "detectedAt": "2026-07-01T08:35:43.193Z"
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-07-02T07:50:01.826Z"
       }
     }
   ]

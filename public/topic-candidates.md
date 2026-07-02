@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-01
+# Topic candidates — 2026-07-02
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 135 baseline videos
+Pool: 14 recent videos, 137 baseline videos
 
 ### Cluster 1: `following`
 
-- **Recent saturation:** 10/14 videos (**71%**)
-- **Baseline saturation:** 19/135 videos (14%)
-- **Spike ratio:** 5.0x
+- **Recent saturation:** 9/14 videos (**64%**)
+- **Baseline saturation:** 20/137 videos (15%)
+- **Spike ratio:** 4.3x
 - **Related terms:** `following`, `check`, `quartering`, `out`, `faces`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-06-30 — _IT'S BACKFIRING WORSE_  
@@ -26,49 +26,29 @@ Pool: 14 recent videos, 135 baseline videos
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
 
-### Cluster 2: `film`
+### Cluster 2: `post`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 0/135 videos (0%)
-- **Spike ratio:** 97.1x
-- **Related terms:** `film`, `release`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/137 videos (0%)
+- **Spike ratio:** 59.1x
+- **Related terms:** `post`
 - **Sample recent videos:**
-  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
-    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
-  - 2026-06-29 — _IT WENT NUCLEAR_  
-    Citizen Vigilante Tops Amazon Charts Following Elon Musk Promotion
-  - 2026-06-26 — _TOTAL DISASTER_  
-    Angry Joe Blasts Superman Movie, Ignites Fan Debate
-  - 2026-06-24 — _IT JUST GOT WORSE_  
-    Supergirl Star Discusses Modern Representation Ahead Of Film Release
-  - 2026-06-24 — _EVERYONE MUST WATCH_  
-    Controversial Uwe Boll Film Banned Amid Immigration Debate
-
-### Cluster 3: `sparked`
-
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 6/135 videos (4%)
-- **Spike ratio:** 7.5x
-- **Related terms:** `sparked`, `controversial`, `debate`
-- **Sample recent videos:**
-  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
-    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
+  - 2026-07-01 — _THEY GOT HER_  
+    FBI Fraud Arrest Scrutiny Over Ilhan Omar's Alleged Connections
+  - 2026-06-30 — _BAN THIS NOW!_  
+    Walmart Faces Boycott Calls Following Viral Video Sparking Outrage
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
-  - 2026-06-26 — _TOTAL DISASTER_  
-    Angry Joe Blasts Superman Movie, Ignites Fan Debate
-  - 2026-06-24 — _EVERYONE MUST WATCH_  
-    Controversial Uwe Boll Film Banned Amid Immigration Debate
-  - 2026-06-24 — _HIS CHANCES COLLAPSE_  
-    Appeal Strategy Faces Scrutiny After Sentencing In Austin Metcalf Case
 
-### Cluster 4: `widespread`
+### Cluster 3: `widespread`
 
-- **Recent saturation:** 4/14 videos (**29%**)
-- **Baseline saturation:** 1/135 videos (1%)
-- **Spike ratio:** 25.9x
-- **Related terms:** `widespread`
+- **Recent saturation:** 5/14 videos (**36%**)
+- **Baseline saturation:** 2/137 videos (1%)
+- **Spike ratio:** 19.7x
+- **Related terms:** `widespread`, `sparked`
 - **Sample recent videos:**
+  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
+    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
   - 2026-06-26 — _TOTAL DISASTER_  
@@ -78,12 +58,26 @@ Pool: 14 recent videos, 135 baseline videos
   - 2026-06-25 — _MASSIVE TRAGEDY_  
     Deadly Earthquakes Devastate Venezuela As Rescue Efforts Continue
 
-### Cluster 5: `appeal`
+### Cluster 4: `film`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 13/135 videos (10%)
-- **Spike ratio:** 3.6x
-- **Related terms:** `appeal`, `surrounding`, `conviction`, `surrounding karmelo`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 2/137 videos (1%)
+- **Spike ratio:** 11.8x
+- **Related terms:** `film`
+- **Sample recent videos:**
+  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
+    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
+  - 2026-06-29 — _IT WENT NUCLEAR_  
+    Citizen Vigilante Tops Amazon Charts Following Elon Musk Promotion
+  - 2026-06-26 — _TOTAL DISASTER_  
+    Angry Joe Blasts Superman Movie, Ignites Fan Debate
+
+### Cluster 5: `conviction`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 8/137 videos (6%)
+- **Spike ratio:** 3.5x
+- **Related terms:** `conviction`
 - **Sample recent videos:**
   - 2026-06-30 — _THIS IS BRUTAL_  
     Dr Phil Challenges Narrative Surrounding Karmelo Anthony Murder Case Following Conviction
@@ -91,28 +85,6 @@ Pool: 14 recent videos, 135 baseline videos
     Karmelo Anthony Appeal Faces New Legal Challenges As Family Controversy Intensifies
   - 2026-06-25 — _HE'S HAVING FUN!_  
     Karmelo Anthony Appeal Draws New Claims And Prison Scrutiny
-  - 2026-06-24 — _IT JUST GOT WORSE_  
-    Supergirl Star Discusses Modern Representation Ahead Of Film Release
-  - 2026-06-24 — _HIS CHANCES COLLAPSE_  
-    Appeal Strategy Faces Scrutiny After Sentencing In Austin Metcalf Case
-
-## @JeremyHambly
-
-Pool: 4 recent videos, 117 baseline videos
-
-### Cluster 1: `main`
-
-- **Recent saturation:** 3/4 videos (**75%**)
-- **Baseline saturation:** 29/117 videos (25%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `main`, `our`, `coffee`, `coffee main`, `our coffee`
-- **Sample recent videos:**
-  - 2026-06-25 — _ENOUGH IS ENOUGH_  
-    Caitlin Clark Controversy Fuels Debate Over WNBA And Player Safety
-  - 2026-06-24 — _IS THIS THE END?_  
-    Daily Wire Explores Major Investment Deal And Potential IPO
-  - 2026-06-24 — _THIS IS PATHETIC_  
-    Former Olympian Arrested After Reflecting Pool Vandalism Dispute
 
 ---
 
