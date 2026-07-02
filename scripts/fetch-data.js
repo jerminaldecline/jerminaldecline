@@ -211,13 +211,16 @@ async function enrichVideos(videos, descriptions) {
           delete v.unavailableSince;
         }
       } else {
-        // Video may have been deleted or made private — keep stub
-        v.durationSec = 0;
-        v.views = 0;
-        v.likes = null;
-        v.comments = null;
-        v.isShort = false;
+        // Video may have been deleted or made private — keep stub, PRESERVING
+        // any last-known stats (the Removed tab renders "last-known views";
+        // zeroing here destroys exactly the figure that tab exists to show).
+        v.durationSec = v.durationSec || 0;
+        v.views = v.views || 0;
+        v.likes = v.likes ?? null;
+        v.comments = v.comments ?? null;
+        v.isShort = !!v.isShort;
         v.unavailable = true;
+        v.unavailableSince = v.unavailableSince || new Date().toISOString();
       }
     }
     console.log(`    Enriched ${Math.min(i + 50, videos.length)} / ${videos.length}`);
@@ -279,11 +282,14 @@ async function auditEnrich(videos, descriptions, titleHistory) {
           restoredToLive.push({ id: v.id, title: v.title });
         }
       } else {
+        // Deleted/private — freeze the record as-is. The last-known stats ARE
+        // the data (Removed tab shows "last-known views"; isShort must survive
+        // so removed Shorts stay Shorts). Only the flag + timestamp change.
         v.durationSec = v.durationSec || 0;
-        v.views = 0;
-        v.likes = null;
-        v.comments = null;
-        v.isShort = false;
+        v.views = v.views || 0;
+        v.likes = v.likes ?? null;
+        v.comments = v.comments ?? null;
+        v.isShort = !!v.isShort;
         v.unavailable = true;
         if (!wasUnavailable) {
           v.unavailableSince = new Date().toISOString();

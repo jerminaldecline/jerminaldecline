@@ -24,6 +24,14 @@ on:
 permissions:
   contents: write
 
+# Serialize with every other workflow that commits to main (daily-audit,
+# detect-topic-candidates share this group). GitHub's scheduler bunches delayed
+# runs together, and two jobs rewriting data.json concurrently always conflict
+# on meta.lastUpdated — a rebase the retry loop cannot resolve.
+concurrency:
+  group: main-data-push
+  cancel-in-progress: false
+
 jobs:
   fetch:
     runs-on: ubuntu-latest

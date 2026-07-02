@@ -11,6 +11,12 @@ on:
 permissions:
   contents: write
 
+# Shared with update-data.yml / daily-audit.yml so main-committing jobs never
+# run concurrently (delayed crons bunch together and race the push).
+concurrency:
+  group: main-data-push
+  cancel-in-progress: false
+
 jobs:
   detect:
     runs-on: ubuntu-latest

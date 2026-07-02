@@ -37,8 +37,17 @@ BENCH_DAYS = 35                         # rolling window for the "typical" bench
 R = 8                                   # recent-movement window (~4 days of twice-daily snaps)
 FLAT, MOVE, SPIKE = 100, 300, 3         # dormant<=FLAT, jump>=MOVE and >=SPIKE x baseline (per check)
 
-def snaptime(tag):
-    d = datetime.datetime.fromisoformat(tag[:10])
+def snaptime(tag, snapdata=None):
+    # Real capture time from the snapshot's own meta.lastUpdated — actual
+    # captures range 00:00-11:46 (AM) / 12:02-18:03 (PM) because the workflow's
+    # crons fire late, so a nominal fixed hour distorts views/day several-fold.
+    ts = ((snapdata or {}).get("meta") or {}).get("lastUpdated")
+    if ts:
+        try:
+            return datetime.datetime.fromisoformat(ts.replace("Z", "+00:00")).replace(tzinfo=None)
+        except ValueError:
+            pass
+    d = datetime.datetime.fromisoformat(tag[:10])   # nominal fallback
     return d + datetime.timedelta(hours=10 if tag.endswith("AM") else 18)
 def lab(tag):
     return datetime.date.fromisoformat(tag[:10]).strftime("%b%d") + " " + tag[11:]
@@ -52,7 +61,7 @@ snaps, meta = [], {}
 for f in files:
     tag = os.path.basename(f).replace(".json.gz", "")
     d = json.load(gzip.open(f))
-    snaps.append((tag, snaptime(tag), {v["id"]: v.get("views", 0) for v in d["videos"]}))
+    snaps.append((tag, snaptime(tag, d), {v["id"]: v.get("views", 0) for v in d["videos"]}))
     for v in d["videos"]:
         meta[v["id"]] = v
 dates = [lab(t) for t, _, _ in snaps]
@@ -149,7 +158,14 @@ def movers_for(cid):
     return MOVERS
 
 # ---- per channel ----
-CHANS = _load("data.json", {"channels": {}}).get("channels", {})
+_live = _load("data.json", {"channels": {}, "videos": []})
+CHANS = _live.get("channels", {})
+# Availability truth comes from LIVE data.json — snapshot records lag it by up
+# to half a day, so a video deleted since the last capture would otherwise stay
+# in the launch/movers lists (dead link) until the next snapshot lands.
+for _v in _live.get("videos", []):
+    if _v.get("unavailable") and _v["id"] in meta:
+        meta[_v["id"]]["unavailable"] = True
 channels_out, pooled = {}, []
 for cid, info in CHANS.items():
     VIDS, allpts, nbench = launch_for(cid)

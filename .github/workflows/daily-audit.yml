@@ -8,6 +8,13 @@ on:
 permissions:
   contents: write
 
+# Shared with update-data.yml / detect-topic-candidates.yml so main-committing
+# jobs never run concurrently (both this and update-data rewrite data.json —
+# a concurrent pair always conflicts on meta.lastUpdated).
+concurrency:
+  group: main-data-push
+  cancel-in-progress: false
+
 jobs:
   audit:
     runs-on: ubuntu-latest
