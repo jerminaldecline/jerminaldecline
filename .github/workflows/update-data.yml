@@ -142,14 +142,15 @@ jobs:
             git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/vv-snapshots
           fi
           SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-view-velocity.py
+          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-ad-ledger.py
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/view-velocity.json
+          git add public/view-velocity.json public/ad-ledger.json
           if git diff --staged --quiet; then
-            echo "view-velocity.json unchanged."
+            echo "view-velocity/ad-ledger unchanged."
             exit 0
           fi
-          git commit -m "chore: rebuild view-velocity.json ($(date -u '+%Y-%m-%d %H:%M UTC'))"
+          git commit -m "chore: rebuild view-velocity + ad-ledger ($(date -u '+%Y-%m-%d %H:%M UTC'))"
           for attempt in 1 2 3; do
             if git push; then
               echo "view-velocity push succeeded on attempt $attempt."
