@@ -2634,7 +2634,12 @@ async function loadAndCompute(){
   const tcolor = {}; for(const [k,v] of Object.entries(topicsRaw)){ if(!k.startsWith('_') && v && v.color) tcolor[k]=v.color; }
   const handle = {}; for(const [cid,c] of Object.entries(data.channels||{})) handle[cid]=c.handle||cid;
   const hid = {}; for(const [cid,h] of Object.entries(handle)) hid[h]=cid;
-  const vids = data.videos || [];
+  // Exclude removed/private videos from every Overview scope and the network
+  // breakdown — a deleted video would otherwise sit in its month as a stale
+  // data point, dragging medians down with a non-organic value. (The Videos
+  // and Analysis engines already filter !v.unavailable; the Removed tab is
+  // the one deliberate surface for these.)
+  const vids = (data.videos || []).filter(v => !v.unavailable);
 
   function vstats(v){
     // Label for the highlight cards: prefer the subject; if untagged, fall back to
