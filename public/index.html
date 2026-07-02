@@ -2548,6 +2548,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="wordcloud-panel" id="velocityPanel" hidden>
         <div class="ctag-viewtabs" role="tablist">
           <button type="button" class="ctag-viewtab active" data-vvview="launch" role="tab" aria-selected="true">Launch performance</button>
+          <button type="button" class="ctag-viewtab" data-vvview="ads" role="tab" aria-selected="false">Ad campaigns</button>
           <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">🚨 Suspicious movement 🚨</button>
         </div>
         <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
@@ -9845,6 +9846,7 @@ function renderWindowList(startDate, endDate) {
   function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const f=v/p;const n=f<=1?1:f<=1.5?1.5:f<=2?2:f<=3?3:f<=4?4:f<=5?5:f<=8?8:10;return n*p;}
   const feat=()=>document.getElementById("vvFeat");
   let DATA=null, view="launch", loaded=false, S=null;
+  let ADATA=null, A={sel:null};
   let L={metric:"vel",rng:"full",sel:null,preset:"typical"};
   let M={sel:null};
 
@@ -9989,11 +9991,72 @@ function renderWindowList(startDate, endDate) {
     document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
   }
 
+  /* ---------- Ad campaigns: the permanent ledger, with paid runs shaded ---------- */
+  function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
+  function buildAds(){
+    feat().innerHTML=
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart.</div>`+
+      `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
+      `<div class="vv-charth" id="vvAcharth"></div>`+
+      `<div class="vv-chart" id="vvAchart"></div>`+
+      `<div class="vv-detail" id="vvAdetail"></div>`+
+      `<div class="vv-foot">Ad-driven views = views gained above the video's dormant baseline during a burst that began at least 14 days after upload (an aged, flat video only moves when pushed). Amber marks launch-window promotion — paid and organic traffic can't be separated there, so those views are never claimed as ad-driven. Only campaigns since ${niceDate(DATA.trackingStart)} are visible — that's when tracking began.</div>`;
+    if(ADATA){renderAds();return;}
+    fetch("ad-ledger.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{ADATA=j;renderAds();})
+      .catch(err=>{const l=document.getElementById("vvAlist");if(l)l.innerHTML='<div class="vv-empty">Could not load the ad ledger.</div>';console.warn("ad-ledger",err);});
+  }
+  function renderAds(){
+    const rows=adRows(), l=document.getElementById("vvAlist"); if(!l)return;
+    if(!rows.length){
+      l.innerHTML='<div class="vv-empty">No confirmed ad campaigns'+(S.key!=="ALL"?" for "+esc(S.label):"")+' since tracking began.</div>';
+      ["vvAcharth","vvAchart","vvAdetail"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
+      return;
+    }
+    if(!A.sel||!rows.find(v=>v.id===A.sel))A.sel=rows[0].id;
+    l.innerHTML=rows.map((m,i)=>{
+      const confirmed=m.adViews>0;
+      const win=confirmed?(m.firstBurst===m.lastBurst?niceDate(m.firstBurst):niceDate(m.firstBurst)+" \u2192 "+niceDate(m.lastBurst)):"launch window only";
+      const tag=confirmed?'<span class="vv-mtag ad">Confirmed ads</span>':'<span class="vv-mtag ad">Launch ads</span>';
+      return `<div class="vv-mrow${m.id===A.sel?' sel':''}" data-aid="${m.id}"><span class="vv-mrank">${i+1}</span>`+
+        `<img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async">`+
+        `<span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.bursts.length} paid run${m.bursts.length===1?"":"s"} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
+        `<span class="vv-mgain"><b>${confirmed?"+"+fmt(m.adViews):fmt(m.entangledViews)}</b><span>${confirmed?"ad-driven views":"entangled views"}</span></span>${tag}</div>`;
+    }).join("");
+    renderAchart();
+  }
+  function renderAchart(){
+    const m=adRows().find(x=>x.id===A.sel);if(!m)return;
+    const s=m.series,dates=ADATA.dates;
+    const vel=[];for(let i=1;i<s.length;i++){vel.push((s[i]==null||s[i-1]==null)?null:Math.max(0,s[i]-s[i-1]));}
+    const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
+    let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
+    let bands="";
+    (m.bursts||[]).forEach(b=>{
+      const x0=xFor(Math.max(0,b.iv0))-3, x1=xFor(Math.min(vel.length-1,b.iv1))+3;
+      const col=b.entangled?"var(--accent-2)":"var(--down)";
+      bands+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${col}" opacity="0.13"/>`;
+      bands+=`<text class="vv-ptl" fill="${col}" x="${((x0+x1)/2).toFixed(1)}" y="${MP.top+12}">${b.entangled?"launch ads":"ad run"} +${fmt(b.views)}</text>`;
+    });
+    let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
+    let xlab="",stride=Math.ceil(vel.length/8);
+    for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
+    const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
+    const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
+    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven).";
+    document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}</svg>`;
+    const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
+    const burstsTxt=(m.bursts||[]).map(b=>`${niceDate(b.from)}\u2013${niceDate(b.to)}: +${fmt(b.views)}${b.entangled?" (entangled)":""}`).join(" \u00b7 ");
+    document.getElementById("vvAdetail").innerHTML=
+      `<a href="${link}" target="_blank" rel="noopener"><img class="vv-thumb" src="${thumb}" alt="" loading="lazy" decoding="async"></a>`+
+      `<div class="vv-detail-body"><a class="vv-detail-title" href="${link}" target="_blank" rel="noopener">${esc(m.title)} \u2197</a>`+
+      `<div class="vv-detail-meta">Posted ${niceDate(m.publishedAt)} \u00b7 ${fmt(m.totalViews)} total views \u00b7 <b style="color:var(--down)">+${fmt(m.adViews)} confirmed ad-driven</b>${m.entangledViews?` \u00b7 ${fmt(m.entangledViews)} entangled (launch)`:``} \u00b7 dormant pace ~${m.baselinePerDay}/day</div>`+
+      `<div class="vv-detail-desc">Paid runs: ${burstsTxt}</div></div>`;
+  }
   function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});
     // The alarm tab only exists when there is something to be alarmed about.
     const mt=panel.querySelector('.ctag-viewtab[data-vvview="movers"]');
     if(mt&&S){const n=S.movers.videos.length;mt.hidden=(n===0);mt.classList.toggle("vv-alarm",n>0);}}
-  function renderView(){ S=scopeData(); if(view==="movers"&&!S.movers.videos.length)view="launch"; syncVvTabs(); if(view==="launch")buildLaunch(); else buildMovers(); }
+  function renderView(){ S=scopeData(); if(view==="movers"&&!S.movers.videos.length)view="launch"; syncVvTabs(); if(view==="launch")buildLaunch(); else if(view==="ads")buildAds(); else buildMovers(); }
 
   document.addEventListener("mousedown",(e)=>{
     const clr=e.target.closest("#vvClear");
@@ -10018,6 +10081,8 @@ function renderWindowList(startDate, endDate) {
     if(rb){L.rng=rb.dataset.r;document.querySelectorAll("#vvRng button").forEach(x=>x.classList.toggle("active",x===rb));renderLaunch();return;}
     const mr=e.target.closest("#vvMlist .vv-mrow");
     if(mr){M.sel=mr.dataset.mid;renderMlist();renderMchart();return;}
+    const ar=e.target.closest("#vvAlist .vv-mrow");
+    if(ar){A.sel=ar.dataset.aid;renderAds();return;}
   });
 
   // Sync with the channel filter: any change that alters the current channel
