@@ -133,7 +133,11 @@ async function resolveChannel(handle) {
     // Channel-level statistics — captured on every run so we can build
     // a month-over-month delta of total channel views and subscriber count.
     channelViews: parseInt(stats.viewCount || '0', 10),
-    subscriberCount: parseInt(stats.subscriberCount || '0', 10)
+    subscriberCount: parseInt(stats.subscriberCount || '0', 10),
+    // YouTube's OWN public-video counter — reconciled against our catalogue
+    // every run as a deletion tripwire (see buildOutput). If their count drops
+    // below our live count, something vanished that we haven't flagged.
+    videoCount: parseInt(stats.videoCount || '0', 10)
   };
 }
 
@@ -437,7 +441,7 @@ function buildOutput(allVideos, channelMeta, existing) {
   // Strip internal-only fields from output channel data
   const channelsOut = {};
   for (const id of Object.keys(channelMeta)) {
-    const { uploadsPlaylistId, channelViews, subscriberCount, ...publicFields } = channelMeta[id];
+    const { uploadsPlaylistId, channelViews, subscriberCount, videoCount, ...publicFields } = channelMeta[id];
     channelsOut[id] = publicFields;
 
     // Append today's snapshot if we don't already have one for today.
@@ -447,9 +451,9 @@ function buildOutput(allVideos, channelMeta, existing) {
     const todayAlreadyCaptured = existingSnapshots.some(s => s.date === today);
     const updatedSnapshots = todayAlreadyCaptured
       ? existingSnapshots.map(s => s.date === today
-          ? { date: today, channelViews, subscriberCount }
+          ? { date: today, channelViews, subscriberCount, videoCount }
           : s)
-      : [...existingSnapshots, { date: today, channelViews, subscriberCount }];
+      : [...existingSnapshots, { date: today, channelViews, subscriberCount, videoCount }];
     // Keep snapshots sorted ascending by date
     updatedSnapshots.sort((a, b) => a.date.localeCompare(b.date));
     channelsOut[id].snapshots = updatedSnapshots;
@@ -466,6 +470,21 @@ function buildOutput(allVideos, channelMeta, existing) {
       oldestVideoDate: chVids.length ? chVids[chVids.length - 1].publishedAt : null,
       newestVideoDate: chVids.length ? chVids[0].publishedAt : null
     };
+    // Deletion tripwire: reconcile YouTube's OWN public-video counter against
+    // our catalogued live count. Their counter excludes unlisted/private, so:
+    //   yt > ours  → benign (uploads we haven't fetched yet, or history deeper
+    //                than our backfill window)
+    //   yt < ours  → something we still count as live is no longer public
+    //                (deleted, privated, or UNLISTED — the case the per-video
+    //                checks can't see) and hasn't been flagged yet.
+    const ytCount = channelMeta[id].videoCount;
+    if (ytCount > 0) {
+      const ourLive = chVids.length - channelsOut[id].meta.unavailableCount;
+      channelsOut[id].meta.ytVideoCount = ytCount;
+      if (ytCount < ourLive) {
+        console.log(`  ⚠ RECONCILE ${channelMeta[id].handle}: YouTube reports ${ytCount} public videos but we count ${ourLive} live — ${ourLive - ytCount} likely deleted/privated/unlisted and not yet flagged`);
+      }
+    }
   }
 
   return {
@@ -536,7 +555,8 @@ async function runIncremental(startTime) {
       url: ch.url,
       uploadsPlaylistId: ch.uploadsPlaylistId,
       channelViews: ch.channelViews,
-      subscriberCount: ch.subscriberCount
+      subscriberCount: ch.subscriberCount,
+      videoCount: ch.videoCount
     };
     console.log(`  → ${ch.title} (${ch.id}) · ${ch.channelViews.toLocaleString()} views · ${ch.subscriberCount.toLocaleString()} subs`);
   }
@@ -658,7 +678,8 @@ async function runAudit(startTime) {
       url: ch.url,
       uploadsPlaylistId: ch.uploadsPlaylistId,
       channelViews: ch.channelViews,
-      subscriberCount: ch.subscriberCount
+      subscriberCount: ch.subscriberCount,
+      videoCount: ch.videoCount
     };
   }
 
