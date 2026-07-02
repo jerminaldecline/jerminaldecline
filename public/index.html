@@ -10076,7 +10076,7 @@ function renderWindowList(startDate, endDate) {
         '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')">'+
         '<span class="rt"><b>'+esc(v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
         '<span class="removed-when'+(v.unavailable?'':' unl')+'">'+esc(when)+'</span></a>';
-    }).join("")+'<div class="removed-foot">“Detected” is when our checks first caught the change — availability is re-checked several times a day, so it usually trails the actual change by hours. Exception: unlisted-detection began 2 Jul ’26, so unlisted entries with that date may have been hidden any time before it.</div>';
+    }).join("")+'<div class="removed-foot">“Detected” is when our checks first caught the change, not when it happened. Recent videos are re-checked several times a day and the full back catalogue once a day, so detection trails the actual change by a few hours — at most about a day. Exception: unlisted-detection began 2 Jul ’26, so unlisted entries with that date may have been hidden any time before it.</div>';
   }
   function closeCurrent(){
     if(!active)return;
