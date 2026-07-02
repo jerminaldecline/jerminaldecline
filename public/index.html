@@ -7475,7 +7475,7 @@ function renderVideoRows(videos, emptyText) {
     return `
       <div class="video-row${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
         <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
-        <div class="video-title"><a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy"></a><div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
+        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
