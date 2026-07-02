@@ -40,6 +40,9 @@ def snaptime(tag, snapdata=None):
     d = datetime.datetime.fromisoformat(tag[:10])
     return d + datetime.timedelta(hours=10 if tag.endswith("AM") else 18)
 
+def lab(tag):
+    return datetime.date.fromisoformat(tag[:10]).strftime("%b%d") + " " + tag[11:]
+
 def pub_dt(v):
     return datetime.datetime.fromisoformat(v["publishedAt"].replace("Z", "+00:00")).replace(tzinfo=None)
 
@@ -53,6 +56,7 @@ for f in files:
     snaps.append((tag, snaptime(tag, d), {v["id"]: v.get("views", 0) for v in d["videos"]}))
     for v in d["videos"]:
         meta[v["id"]] = v
+dates = [lab(t) for t, _, _ in snaps]
 
 def _load(name, fb):
     try: return json.load(open(os.path.join(PUBLIC, name), encoding="utf-8"))
@@ -69,17 +73,20 @@ for handle, entry in adcat.get("channels", {}).items():
         if not v or v.get("isShort"):
             continue
         pub = pub_dt(v)
-        pts = [(t, s[vid]) for _, t, s in [(tag, t, s) for tag, t, s in snaps] if vid in s]
-        if len(pts) < 3:
+        if sum(1 for _, _, s in snaps if vid in s) < 3:
             continue
         # per-interval gains at real timestamps; clamp corrections to zero
+        # series aligned to the FULL snapshot list (chart x-axis); interval k sits
+        # between snaps[k] and snaps[k+1] — bursts carry those indices for shading
+        series = [s.get(vid) for _, _, s in snaps]
         ivals = []
-        for i in range(1, len(pts)):
-            t0, w0 = pts[i - 1]; t1, w1 = pts[i]
+        for i in range(1, len(series)):
+            if series[i] is None or series[i - 1] is None: continue
+            t0 = snaps[i - 1][1]; t1 = snaps[i][1]
             dt = (t1 - t0).total_seconds() / 86400.0
             if dt <= 0: continue
-            gain = max(0, w1 - w0)
-            ivals.append({"t0": t0, "t1": t1, "dt": dt, "gain": gain, "rate": gain / dt})
+            gain = max(0, series[i] - series[i - 1])
+            ivals.append({"iv": i - 1, "t0": t0, "t1": t1, "dt": dt, "gain": gain, "rate": gain / dt})
         if not ivals:
             continue
         base_rate = statistics.median(iv["rate"] for iv in ivals)
@@ -91,10 +98,10 @@ for handle, entry in adcat.get("channels", {}).items():
                         and excess > 0)
             if is_burst:
                 if cur and iv["t0"] <= cur["_end"]:
-                    cur["views"] += round(excess); cur["_end"] = iv["t1"]
+                    cur["views"] += round(excess); cur["_end"] = iv["t1"]; cur["iv1"] = iv["iv"]
                 else:
                     if cur: bursts.append(cur)
-                    cur = {"from": iv["t0"].date().isoformat(), "views": round(excess), "_end": iv["t1"]}
+                    cur = {"from": iv["t0"].date().isoformat(), "views": round(excess), "_end": iv["t1"], "iv0": iv["iv"], "iv1": iv["iv"]}
             elif cur:
                 bursts.append(cur); cur = None
         if cur: bursts.append(cur)
@@ -108,10 +115,11 @@ for handle, entry in adcat.get("channels", {}).items():
         LEDGER.append({
             "id": vid, "title": v["title"], "channelId": v["channelId"],
             "channel": chan_title.get(v["channelId"], handle),
-            "publishedAt": v["publishedAt"][:10], "totalViews": pts[-1][1],
+            "publishedAt": v["publishedAt"][:10], "totalViews": next((x for x in reversed(series) if x is not None), 0),
+            "series": series,
             "adViews": ad_views, "entangledViews": ent_views,
             "baselinePerDay": round(base_rate, 1),
-            "bursts": [{k: b[k] for k in ("from", "to", "views", "entangled")} for b in bursts],
+            "bursts": [{k: b[k] for k in ("from", "to", "views", "entangled", "iv0", "iv1")} for b in bursts],
             "firstBurst": bursts[0]["from"], "lastBurst": bursts[-1]["to"],
         })
 
@@ -124,6 +132,7 @@ OUT = {
              "inseparable; NOT claimed as ad-driven). Only campaigns since trackingStart are visible."),
     "trackingStart": "2026-06-11",
     "asOf": snaps[-1][0][:10],
+    "dates": dates,
     "totals": {
         "adViews": sum(r["adViews"] for r in LEDGER),
         "entangledViews": sum(r["entangledViews"] for r in LEDGER),
