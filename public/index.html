@@ -8191,6 +8191,10 @@ function renderWindowList(startDate, endDate) {
     if (wcToggle && wcToggle.getAttribute('aria-expanded') === 'true' && typeof window.renderWordCloud === 'function') {
       try { window.renderWordCloud(); } catch(e){ console.error('wordcloud', e); }
     }
+    // Keep the insight-chip count badges in step with whatever scope this
+    // render used — covers tab activation with a pre-set channel filter,
+    // where no change event fires but the badges were computed under ALL.
+    if (window.__updateVtabBadges) window.__updateVtabBadges();
   };
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
@@ -10030,7 +10034,7 @@ function renderWindowList(startDate, endDate) {
   }
   // Exposed for the insights-strip count badges (movers count for the current scope).
   window.__vvEnsureData = ensureLoaded;
-  window.__vvMovers = () => { if(!loaded||!DATA) return null; S = S || scopeData(); return S.movers.videos.length; };
+  window.__vvMovers = () => { if(!loaded||!DATA) return null; return scopeData().movers.videos.length; };  // fresh scope read — the cached S can lag the dropdown
 })();
 </script>
 <script>
@@ -10100,7 +10104,14 @@ function renderWindowList(startDate, endDate) {
     try{
       const set=(k,n)=>{const el=tabs.querySelector('.vtab-cnt[data-cnt="'+k+'"]');if(el){const on=(typeof n==="number"&&n>0);el.hidden=!on;if(on)el.textContent=n;}};
       const ds=(typeof ANALYTICS_DATASET!=="undefined")&&ANALYTICS_DATASET;
-      const ch=(typeof ANALYTICS_CHANNEL!=="undefined"&&ANALYTICS_CHANNEL)?ANALYTICS_CHANNEL:"ALL";
+      // Derive the scope the same way renderRemoved does — dropdown first
+      // (handle -> channelId) — because ANALYTICS_CHANNEL lags the dropdown
+      // until a Videos/Analysis render syncs it (badge said 2 while the tab
+      // showed 0 for a channel with no removals).
+      const chans=(ds&&ds.channels)||{};
+      const sel=byId("vidChannelSel")||byId("anChannelSel");
+      let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"&&ANALYTICS_CHANNEL)||"ALL";
+      if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
       if(ds&&ds.videos){
         set("removed", ds.videos.filter(v=>v.unavailable&&(ch==="ALL"||v.channelId===ch)).length);
         const ads=window.__adIdSet;
