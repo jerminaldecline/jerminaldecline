@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-02
+# Topic candidates — 2026-07-03
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,17 +6,15 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 137 baseline videos
+Pool: 13 recent videos, 140 baseline videos
 
-### Cluster 1: `following`
+### Cluster 1: `out quartering`
 
-- **Recent saturation:** 9/14 videos (**64%**)
-- **Baseline saturation:** 20/137 videos (15%)
-- **Spike ratio:** 4.3x
-- **Related terms:** `following`, `check`, `quartering`, `out`, `faces`, `out quartering`, `check out`
+- **Recent saturation:** 6/13 videos (**46%**)
+- **Baseline saturation:** 9/140 videos (6%)
+- **Spike ratio:** 6.9x
+- **Related terms:** `check`, `quartering`, `out`, `faces`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
-    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
   - 2026-06-30 — _BAN THIS NOW!_  
     Walmart Faces Boycott Calls Following Viral Video Sparking Outrage
   - 2026-06-30 — _THIS IS BRUTAL_  
@@ -25,14 +23,20 @@ Pool: 14 recent videos, 137 baseline videos
     Supergirl Suffers Weak Box Office Debut Superhero Fatigue Continues
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
+  - 2026-06-29 — _IT WENT NUCLEAR_  
+    Citizen Vigilante Tops Amazon Charts Following Elon Musk Promotion
 
 ### Cluster 2: `post`
 
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 0/137 videos (0%)
-- **Spike ratio:** 59.1x
-- **Related terms:** `post`
+- **Recent saturation:** 5/13 videos (**38%**)
+- **Baseline saturation:** 7/140 videos (5%)
+- **Spike ratio:** 7.2x
+- **Related terms:** `post`, `alleged`, `social`, `media`, `media post`, `social media`
 - **Sample recent videos:**
+  - 2026-07-02 — _SHE WAS 13_  
+    Minnesota Sting Operation Leads To Arrest In Alleged Child Predator Case
+  - 2026-07-02 — _THIS IS VERY BAD_  
+    Trans Suspect Arrested After Alleged Las Vegas Mass Shooting Terror Plot
   - 2026-07-01 — _THEY GOT HER_  
     FBI Fraud Arrest Scrutiny Over Ilhan Omar's Alleged Connections
   - 2026-06-30 — _BAN THIS NOW!_  
@@ -40,51 +44,21 @@ Pool: 14 recent videos, 137 baseline videos
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
 
-### Cluster 3: `widespread`
+### Cluster 3: `film`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 2/137 videos (1%)
-- **Spike ratio:** 19.7x
-- **Related terms:** `widespread`, `sparked`
+- **Recent saturation:** 4/13 videos (**31%**)
+- **Baseline saturation:** 4/140 videos (3%)
+- **Spike ratio:** 9.6x
+- **Related terms:** `film`, `sparked`
 - **Sample recent videos:**
   - 2026-06-30 — _IT'S BACKFIRING WORSE_  
     Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
-  - 2026-06-26 — _TOTAL DISASTER_  
-    Angry Joe Blasts Superman Movie, Ignites Fan Debate
-  - 2026-06-25 — _HE'S HAVING FUN!_  
-    Karmelo Anthony Appeal Draws New Claims And Prison Scrutiny
-  - 2026-06-25 — _MASSIVE TRAGEDY_  
-    Deadly Earthquakes Devastate Venezuela As Rescue Efforts Continue
-
-### Cluster 4: `film`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 2/137 videos (1%)
-- **Spike ratio:** 11.8x
-- **Related terms:** `film`
-- **Sample recent videos:**
-  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
-    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
   - 2026-06-29 — _IT WENT NUCLEAR_  
     Citizen Vigilante Tops Amazon Charts Following Elon Musk Promotion
   - 2026-06-26 — _TOTAL DISASTER_  
     Angry Joe Blasts Superman Movie, Ignites Fan Debate
-
-### Cluster 5: `conviction`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 8/137 videos (6%)
-- **Spike ratio:** 3.5x
-- **Related terms:** `conviction`
-- **Sample recent videos:**
-  - 2026-06-30 — _THIS IS BRUTAL_  
-    Dr Phil Challenges Narrative Surrounding Karmelo Anthony Murder Case Following Conviction
-  - 2026-06-29 — _THEY'RE FREAKING OUT_  
-    Karmelo Anthony Appeal Faces New Legal Challenges As Family Controversy Intensifies
-  - 2026-06-25 — _HE'S HAVING FUN!_  
-    Karmelo Anthony Appeal Draws New Claims And Prison Scrutiny
 
 ---
 

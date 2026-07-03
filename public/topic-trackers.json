@@ -1,41 +1,60 @@
 {
-  "lastUpdated": "2026-07-02T07:50:01.826Z",
+  "lastUpdated": "2026-07-03T07:45:34.728Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "following",
+      "termId": "out quartering",
       "keywords": [
         "out quartering",
         "check",
         "quartering",
         "check out",
         "faces",
-        "out",
-        "following"
+        "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.6429,
-        "baselineSaturation": 0.1486,
-        "spikeRatio": 4.33,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-07-02T07:50:01.826Z"
+        "recentSaturation": 0.4615,
+        "baselineSaturation": 0.0674,
+        "spikeRatio": 6.85,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-07-03T07:45:34.728Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "widespread",
+      "termId": "post",
       "keywords": [
-        "widespread",
+        "post",
+        "media post",
+        "alleged",
+        "social",
+        "social media",
+        "media"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3846,
+        "baselineSaturation": 0.0532,
+        "spikeRatio": 7.23,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-07-03T07:45:34.728Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "film",
+      "keywords": [
+        "film",
         "sparked"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0181,
-        "spikeRatio": 19.71,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-07-02T07:50:01.826Z"
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0319,
+        "spikeRatio": 9.64,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-07-03T07:45:34.728Z"
       }
     }
   ]
