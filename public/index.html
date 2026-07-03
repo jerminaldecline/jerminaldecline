@@ -2350,7 +2350,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="topics" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Topics</button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="tags" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-7-7A2 2 0 013 12V5a2 2 0 012-2h7a2 2 0 011.4.6l7.2 7.2a2 2 0 010 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>Video tags</button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="words" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg>Word cloud</button>
-        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promotions <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promoted videos <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
       </div>
       <div class="vbody" id="vBody" hidden>
@@ -2551,7 +2551,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="wordcloud-panel" id="velocityPanel" hidden>
         <div class="ctag-viewtabs" role="tablist">
           <button type="button" class="ctag-viewtab active" data-vvview="launch" role="tab" aria-selected="true">Launch performance</button>
-          <button type="button" class="ctag-viewtab" data-vvview="ads" role="tab" aria-selected="false">Ad campaigns</button>
+          <button type="button" class="ctag-viewtab" data-vvview="ads" role="tab" aria-selected="false">Bought views</button>
           <button type="button" class="ctag-viewtab" data-vvview="movers" role="tab" aria-selected="false">🚨 Suspicious movement 🚨</button>
         </div>
         <div class="vv-feat" id="vvFeat"><div class="vv-loading">Loading…</div></div>
@@ -9999,6 +9999,7 @@ function renderWindowList(startDate, endDate) {
   function buildAds(){
     feat().innerHTML=
       `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart.</div>`+
+      `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
       `<div class="vv-chart" id="vvAchart"></div>`+
@@ -10010,6 +10011,13 @@ function renderWindowList(startDate, endDate) {
   }
   function renderAds(){
     const rows=adRows(), l=document.getElementById("vvAlist"); if(!l)return;
+    const tot=document.getElementById("vvAtotals");
+    if(tot&&rows.length){
+      const ad=rows.reduce((s,v)=>s+(v.adViews||0),0), ent=rows.reduce((s,v)=>s+(v.entangledViews||0),0), n=rows.filter(v=>v.adViews>0).length;
+      tot.innerHTML=`<span class="vv-v"><b style="color:var(--down)">+${fmt(ad)}</b>confirmed ad-driven views since ${niceDate(ADATA.trackingStart)}</span>`+
+        `<span class="vv-v"><b>${n}</b>video${n===1?"":"s"} with confirmed paid runs</span>`+
+        (ent?`<span class="vv-v"><b style="color:var(--accent-2)">${fmt(ent)}</b>entangled launch views (not claimed)</span>`:"");
+    }else if(tot){tot.innerHTML="";}
     if(!rows.length){
       l.innerHTML='<div class="vv-empty">No confirmed ad campaigns'+(S.key!=="ALL"?" for "+esc(S.label):"")+' since tracking began.</div>';
       ["vvAcharth","vvAchart","vvAdetail"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
