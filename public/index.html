@@ -9917,15 +9917,15 @@ function renderWindowList(startDate, endDate) {
     feat().innerHTML=
       `<div class="vv-sub" id="vvLsub"></div>`+
       `<div class="vv-row"><span class="vv-lbl">Show me</span><div class="vv-seg" id="vvPreset"><button data-p="views">Most viewed</button><button data-p="least">Least viewed</button><button data-p="typical">Most typical</button></div></div>`+
-      `<div class="vv-row"><span class="vv-lbl">Video</span><div class="vv-combo"><input id="vvSearch" class="vv-search" type="text" placeholder="Search videos by title…" autocomplete="off"><button type="button" class="vv-clear" id="vvClear" aria-label="Clear search" hidden>×</button><div class="vv-list" id="vvList" hidden></div></div><span class="vv-lbl">Show</span><div class="vv-seg" id="vvMetric"><button data-m="vel" class="active">Views per day</button><button data-m="cum">Total so far</button></div></div>`+
+      `<div class="vv-row"><span class="vv-lbl">Video</span><div class="vv-combo"><input id="vvSearch" class="vv-search" type="text" placeholder="Search videos by title…" autocomplete="off"><button type="button" class="vv-clear" id="vvClear" aria-label="Clear search" hidden>×</button><div class="vv-list" id="vvList" hidden></div></div><span class="vv-lbl">Show</span><div class="vv-seg" id="vvMetric"><button data-m="vel" class="active">Views gained</button><button data-m="cum">Total so far</button></div></div>`+
       `<div class="vv-row"><span class="vv-lbl">Zoom</span><div class="vv-seg" id="vvRng"><button data-r="full" class="active">All time</button><button data-r="first7">First week</button><button data-r="last7">Latest week</button></div></div>`+
       `<div class="vv-verdict" id="vvVerdict"></div>`+
       `<div class="vv-charth" id="vvLcharth"></div>`+
       `<div class="vv-chart" id="vvChart"></div>`+
       `<div class="vv-legend"><span><span class="sw" style="background:var(--accent)"></span><span id="vvLegName">this video</span></span><span><span class="sw" style="background:var(--text-dim)"></span>A typical recent ${legTyp} (same age)</span></div>`+
       `<div class="vv-detail" id="vvDetail"></div>`+
-      `<div class="vv-foot">Each line shows how many views a video gained per day since it was posted (day 0). The grey line is ${S.poss} typical recent video at the same age — built from ${S.poss} launches over about the last month, so it tracks current form. We check view counts twice a day. Only videos posted since ${start} are included — that's when tracking started.</div>`;
-    document.getElementById("vvLsub").textContent="Search for a video, or use the buttons. The blue line shows how many views it gained each day since it went up — next to the grey line for a typical one of "+S.poss+" recent videos at the same age. Above it = doing better than usual; below = worse.";
+      `<div class="vv-foot">Each line shows how many views a video gained at each check (about twice a day) from the moment it was posted (day 0). The grey line is ${S.poss} typical recent video at the same age — built from ${S.poss} launches over about the last month, so it tracks current form. We check view counts twice a day. Only videos posted since ${start} are included — that's when tracking started.</div>`;
+    document.getElementById("vvLsub").textContent="Search for a video, or use the buttons. The blue line shows how many views it gained at each check since it went up — next to the grey line for a typical one of "+S.poss+" recent videos at the same age. Above it = doing better than usual; below = worse.";
     if(!L.sel||!S.launch.videos.find(x=>x.id===L.sel)){const dv=presetVideo(L.preset||"typical")||S.launch.videos[0];L.sel=dv?dv.id:null;}
     const cur=S.launch.videos.find(x=>x.id===L.sel);setSearch(cur?cur.title:"");
     if(L.preset){const pb=document.querySelector('#vvPreset button[data-p="'+L.preset+'"]');if(pb)pb.classList.add("active");}
@@ -9934,8 +9934,30 @@ function renderWindowList(startDate, endDate) {
   function renderLaunch(){
     const v=S.launch.videos.find(x=>x.id===L.sel)||S.launch.videos[0]; if(!v)return; L.sel=v.id;
     const typ=S.launch.typical, maxage=S.launch.maxage;
-    let selLine=v.pts, typLine=typ;
+    let selLine, typLine;
     if(L.metric==="cum"){selLine=toCum(v.pts);typLine=toCum(typ);}
+    else{
+      // Actual views gained in each slice (pts store [age-midpoint, rate];
+      // slice boundaries reconstruct exactly from the midpoints). The typical
+      // line becomes "what a typical video gains over the SAME window", so the
+      // two lines share units and uneven slice lengths stay fair.
+      selLine=[];typLine=[];
+      let a0=0;
+      for(const q of v.pts){
+        const a1=2*q[0]-a0, dt=a1-a0;
+        if(dt>0){
+          selLine.push([q[0], q[1]*dt]);
+          if(typ.length)typLine.push([q[0], Math.max(0, cum(typ,a1)-cum(typ,a0))]);
+        }
+        a0=a1;
+      }
+      // continue the typical line past the video's age at the normal half-day cadence
+      while(typ.length && a0 < maxage-1e-6){
+        const a1=Math.min(a0+0.5, maxage);
+        typLine.push([(a0+a1)/2, Math.max(0, cum(typ,a1)-cum(typ,a0))]);
+        a0=a1;
+      }
+    }
     const va=Math.min(v.age,maxage);
     let xMin=0,xMax=maxage;
     if(L.rng==="first7")xMax=7; else if(L.rng==="last7"){xMin=Math.max(0,va-7);xMax=va;}
@@ -9949,9 +9971,7 @@ function renderWindowList(startDate, endDate) {
     function path(line,col,w,dash){const p=line.filter(inWin).map((q,i)=>(i?"L":"M")+xFor(q[0]).toFixed(1)+" "+yFor(q[1]).toFixed(1)).join(" ");return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"${dash?' stroke-dasharray="5 4"':''}/>`;}
     let dots="",ptl="";selLine.filter(inWin).forEach((q,i,arr)=>{const x=xFor(q[0]),y=yFor(q[1]);dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)"/>`;if(i===arr.length-1||i%2===0)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}">${fmt(q[1])}</text>`;});
     const lch=document.getElementById("vvLcharth");
-    if(lch)lch.textContent=(L.metric==="cum")
-      ?"Total views accumulated by each age — the line ends at the video's current total."
-      :"Views gained PER DAY at each age — a pace, not a running total (a launch-day pace can far exceed the total; switch to “Total so far” for the cumulative line). The first point averages the hours between upload and our first check, a window that varies video to video — read it as “how hot the opening was” rather than an exact figure.";
+    if(lch)lch.textContent=(L.metric==="cum")?"Running total of views, by age.":"Views the video actually gained at each check (about twice a day).";
     document.getElementById("vvChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${grid}${xlab}<text class="vv-ax x" x="${((P.left+W-P.right)/2).toFixed(1)}" y="${H-6}" style="font-weight:700">days since it went up</text>${path(typLine,"var(--text-dim)",2,true)}${path(selLine,"var(--accent)",2.6,false)}${dots}${ptl}</svg>`;
     const age=Math.min(v.age,xMax);const selC=cum(v.pts,age),typC=cum(typ,age);const ratio=typC>0?selC/typC:null;const pct=ratio?Math.round((ratio-1)*100):null;
     document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than ${S.poss} recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
