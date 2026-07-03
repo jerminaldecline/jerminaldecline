@@ -2531,6 +2531,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-row .rt span{font-size:0.74rem;color:var(--text-muted)}
     #panelVideos .removed-fmt{display:inline-block;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;padding:0.1rem 0.4rem;border-radius:999px;border:1px solid var(--border);color:var(--text-muted);background:var(--surface-2);margin-right:0.45rem;vertical-align:middle}
     #panelVideos .removed-fmt.short{color:var(--accent-2);border-color:var(--accent-2);background:var(--accent-2-bg)}
+    #velocityPanel .vv-runs{display:flex;flex-wrap:wrap;gap:0.35rem 1.1rem;margin:0.3rem 0.2rem 0;font-size:0.78rem;color:var(--text-muted);font-variant-numeric:tabular-nums}
+    #velocityPanel .vv-run{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap}
+    #velocityPanel .vv-run-n{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;color:#fff;font-size:0.64rem;font-weight:800;flex:0 0 auto}
     #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
     #panelVideos .removed-when.unl{color:var(--accent-2)}
     #panelVideos .removed-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
@@ -10030,37 +10033,31 @@ function renderWindowList(startDate, endDate) {
     const vel=[];for(let i=1;i<s.length;i++){vel.push((s[i]==null||s[i-1]==null)?null:Math.max(0,s[i]-s[i-1]));}
     const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
     let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
-    let bands="";
-    // Band labels stagger onto extra rows when they would overlap (back-to-back
-    // runs sit pixels apart, so same-line labels collided unreadably).
-    const lbls=[], rowRight=[];
-    (m.bursts||[]).forEach(b=>{
+    // Bands carry only a small numbered dot (collision-proof); the run details
+    // live in a wrapping caption row under the chart, keyed by the numbers.
+    let bands="", runsCap="";
+    (m.bursts||[]).forEach((b,bi)=>{
       const x0=xFor(Math.max(0,b.iv0))-3, x1=xFor(Math.min(vel.length-1,b.iv1))+3;
       const col=b.entangled?"var(--accent-2)":"var(--down)";
+      const cx=Math.max(MP.left+9,Math.min(MW-MP.right-9,(x0+x1)/2));
       bands+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${col}" opacity="0.13"/>`;
-      const txt=(b.entangled?"launch ads":"ad run")+" +"+fmt(b.views);
-      const w=txt.length*6.4;
-      let cx=(x0+x1)/2;
-      cx=Math.max(MP.left+w/2, Math.min(MW-MP.right-w/2, cx));
-      let r=0; while(rowRight[r]!==undefined && cx-w/2 < rowRight[r]) r++;
-      rowRight[r]=cx+w/2+8;
-      lbls.push({cx, y:MP.top+12+r*14, txt, col});
+      bands+=`<circle cx="${cx.toFixed(1)}" cy="${MP.top+10}" r="7.5" fill="${col}"/><text x="${cx.toFixed(1)}" y="${MP.top+13.5}" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">${bi+1}</text>`;
+      const range=b.from===b.to?niceDate(b.from):niceDate(b.from)+"\u2013"+niceDate(b.to);
+      runsCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${col}">${bi+1}</span>${range} \u00b7 +${fmt(b.views)}${b.entangled?" (launch \u2014 not claimed)":""}</span>`;
     });
-    lbls.forEach(L=>{bands+=`<text class="vv-ptl" fill="${L.col}" x="${L.cx.toFixed(1)}" y="${L.y}">${L.txt}</text>`;});
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
     for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
     const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
     const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
     document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven).";
-    document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}</svg>`;
+    document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}</svg>`+(runsCap?`<div class="vv-runs">${runsCap}</div>`:"");
     const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
-    const burstsTxt=(m.bursts||[]).map(b=>`${niceDate(b.from)}\u2013${niceDate(b.to)}: +${fmt(b.views)}${b.entangled?" (entangled)":""}`).join(" \u00b7 ");
     document.getElementById("vvAdetail").innerHTML=
       `<a href="${link}" target="_blank" rel="noopener"><img class="vv-thumb" src="${thumb}" alt="" loading="lazy" decoding="async"></a>`+
       `<div class="vv-detail-body"><a class="vv-detail-title" href="${link}" target="_blank" rel="noopener">${esc(m.title)} \u2197</a>`+
       `<div class="vv-detail-meta">Posted ${niceDate(m.publishedAt)} \u00b7 ${fmt(m.totalViews)} total views \u00b7 <b style="color:var(--down)">+${fmt(m.adViews)} confirmed ad-driven</b>${m.entangledViews?` \u00b7 ${fmt(m.entangledViews)} entangled (launch)`:``} \u00b7 dormant pace ~${m.baselinePerDay}/day</div>`+
-      `<div class="vv-detail-desc">Paid runs: ${burstsTxt}</div></div>`;
+      `</div>`;
   }
   function syncVvTabs(){const panel=document.getElementById("velocityPanel");if(!panel)return;panel.querySelectorAll(".ctag-viewtab[data-vvview]").forEach(x=>{const on=x.dataset.vvview===view;x.classList.toggle("active",on);x.setAttribute("aria-selected",String(on));});
     // The alarm tab only exists when there is something to be alarmed about.
