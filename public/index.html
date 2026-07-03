@@ -2624,12 +2624,15 @@ async function loadAndCompute(){
     try { const r = await fetch(url); if (!r.ok) return fallback; return await r.json(); }
     catch(e){ console.warn('optional fetch failed:', url, e); return fallback; }
   };
-  const [data, tagsRaw, topicsRaw, creatorTagsRaw] = await Promise.all([
+  const [data, tagsRaw, topicsRaw, creatorTagsRaw, historicRaw] = await Promise.all([
     fetch('data.json'+bust).then(r => r.json()),
     safeJson('topic-tags-llm.json'+bust, { tags: {} }),
     safeJson('topics.json'+bust, {}),
-    safeJson('creator-tags.json'+bust, {})
+    safeJson('creator-tags.json'+bust, {}),
+    safeJson('historic-views.json'+bust, { months: {} })
   ]);
+  // Back-catalogue monthly contribution (small file; Overview "+historic views")
+  window.__HISTORIC_VIEWS = (historicRaw && historicRaw.months) || {};
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
   const themesMap = (tagsRaw && tagsRaw.themes) || {};
@@ -3281,6 +3284,19 @@ function render(m){
   }).join('');
 
   try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? ('▼'+Math.abs(_pk.pctFromPeak)+'%') : ''; if (window.__refreshActiveFloaters) window.__refreshActiveFloaters(); } catch(e){}
+  // "+historic views": what long-form videos from EARLIER months gained during
+  // this month. Only shown for months fully covered by the snapshot archive
+  // (July 2026 onward — June was partial), and only for single-month views.
+  let histLine = '';
+  try {
+    const hv = (typeof m === 'string') && (window.__HISTORIC_VIEWS || {})[m];
+    if (hv && !hv.partial) {
+      const hn = isAll ? (hv.long || 0) : (((hv.channels || {})[HANDLE_TO_ID[scope]] || {}).long || 0);
+      if (hn > 0) {
+        histLine = `<div class="hero-sub" style="color:var(--accent);font-weight:600">+${fmt(hn)} historic views <span class="info-icon" data-popover="Views gained during ${monthName(m)} by long-form videos published in EARLIER months — the back catalogue's contribution, not included in the total above. Measured from our twice-daily view captures.${hv.inProgress ? ' Month still in progress.' : ''}" tabindex="0" role="button" aria-label="About historic views">\u24d8</span></div>`;
+      }
+    }
+  } catch (e) {}
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${mLabel} <span class="report-head-sub-inline">${reportKind}</span>${(!isAgg && m===CURRENT_MONTH_KEY) ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${isAgg ? monthShortNow : headSub.toLowerCase()}</span></div></div>
@@ -3310,6 +3326,7 @@ function render(m){
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
+        ${histLine}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
