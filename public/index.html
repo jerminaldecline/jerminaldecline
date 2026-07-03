@@ -9920,6 +9920,7 @@ function renderWindowList(startDate, endDate) {
       `<div class="vv-row"><span class="vv-lbl">Video</span><div class="vv-combo"><input id="vvSearch" class="vv-search" type="text" placeholder="Search videos by title…" autocomplete="off"><button type="button" class="vv-clear" id="vvClear" aria-label="Clear search" hidden>×</button><div class="vv-list" id="vvList" hidden></div></div><span class="vv-lbl">Show</span><div class="vv-seg" id="vvMetric"><button data-m="vel" class="active">Views per day</button><button data-m="cum">Total so far</button></div></div>`+
       `<div class="vv-row"><span class="vv-lbl">Zoom</span><div class="vv-seg" id="vvRng"><button data-r="full" class="active">All time</button><button data-r="first7">First week</button><button data-r="last7">Latest week</button></div></div>`+
       `<div class="vv-verdict" id="vvVerdict"></div>`+
+      `<div class="vv-charth" id="vvLcharth"></div>`+
       `<div class="vv-chart" id="vvChart"></div>`+
       `<div class="vv-legend"><span><span class="sw" style="background:var(--accent)"></span><span id="vvLegName">this video</span></span><span><span class="sw" style="background:var(--text-dim)"></span>A typical recent ${legTyp} (same age)</span></div>`+
       `<div class="vv-detail" id="vvDetail"></div>`+
@@ -9947,6 +9948,10 @@ function renderWindowList(startDate, endDate) {
     for(let d=Math.ceil(xMin-0.001);d<=Math.floor(xMax+0.001);d++){const x=xFor(d);xlab+=`<text class="vv-ax x" x="${x.toFixed(1)}" y="${H-P.bottom+20}">${d}</text>`;}
     function path(line,col,w,dash){const p=line.filter(inWin).map((q,i)=>(i?"L":"M")+xFor(q[0]).toFixed(1)+" "+yFor(q[1]).toFixed(1)).join(" ");return `<path d="${p}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"${dash?' stroke-dasharray="5 4"':''}/>`;}
     let dots="",ptl="";selLine.filter(inWin).forEach((q,i,arr)=>{const x=xFor(q[0]),y=yFor(q[1]);dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)"/>`;if(i===arr.length-1||i%2===0)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}">${fmt(q[1])}</text>`;});
+    const lch=document.getElementById("vvLcharth");
+    if(lch)lch.textContent=(L.metric==="cum")
+      ?"Total views accumulated by each age — the line ends at the video's current total."
+      :"Views gained PER DAY at each age — a pace, not a running total (its launch-day pace can far exceed its total views; switch to “Total so far” for the cumulative line).";
     document.getElementById("vvChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${grid}${xlab}<text class="vv-ax x" x="${((P.left+W-P.right)/2).toFixed(1)}" y="${H-6}" style="font-weight:700">days since it went up</text>${path(typLine,"var(--text-dim)",2,true)}${path(selLine,"var(--accent)",2.6,false)}${dots}${ptl}</svg>`;
     const age=Math.min(v.age,xMax);const selC=cum(v.pts,age),typC=cum(typ,age);const ratio=typC>0?selC/typC:null;const pct=ratio?Math.round((ratio-1)*100):null;
     document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than ${S.poss} recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
