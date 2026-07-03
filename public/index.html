@@ -9951,7 +9951,7 @@ function renderWindowList(startDate, endDate) {
     const lch=document.getElementById("vvLcharth");
     if(lch)lch.textContent=(L.metric==="cum")
       ?"Total views accumulated by each age — the line ends at the video's current total."
-      :"Views gained PER DAY at each age — a pace, not a running total (its launch-day pace can far exceed its total views; switch to “Total so far” for the cumulative line).";
+      :"Views gained PER DAY at each age — a pace, not a running total (a launch-day pace can far exceed the total; switch to “Total so far” for the cumulative line). The first point averages the hours between upload and our first check, a window that varies video to video — read it as “how hot the opening was” rather than an exact figure.";
     document.getElementById("vvChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${grid}${xlab}<text class="vv-ax x" x="${((P.left+W-P.right)/2).toFixed(1)}" y="${H-6}" style="font-weight:700">days since it went up</text>${path(typLine,"var(--text-dim)",2,true)}${path(selLine,"var(--accent)",2.6,false)}${dots}${ptl}</svg>`;
     const age=Math.min(v.age,xMax);const selC=cum(v.pts,age),typC=cum(typ,age);const ratio=typC>0?selC/typC:null;const pct=ratio?Math.round((ratio-1)*100):null;
     document.getElementById("vvVerdict").innerHTML=`<span class="vv-v"><b>${fmt(v.views)}</b>views · ${v.age<1?"under a day old":Math.round(v.age)+" days old"}</span>`+(ratio?`<span class="vv-v"><b class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct}%</b>${pct>=0?'more':'fewer'} views than ${S.poss} recent videos at the same age</span><span class="vv-v"><b>${ratio.toFixed(1)}×</b>a typical recent video the same age</span>`:"");
