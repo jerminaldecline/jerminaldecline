@@ -10031,12 +10031,22 @@ function renderWindowList(startDate, endDate) {
     const xFor=i=>MP.left+i/(vel.length-1)*(MW-MP.left-MP.right);
     let dmax=0;vel.forEach(x=>{if(x!=null&&x>dmax)dmax=x;});const yMax=niceMax(dmax*1.1);const yFor=v=>MP.top+(1-v/yMax)*(MH-MP.top-MP.bottom);
     let bands="";
+    // Band labels stagger onto extra rows when they would overlap (back-to-back
+    // runs sit pixels apart, so same-line labels collided unreadably).
+    const lbls=[], rowRight=[];
     (m.bursts||[]).forEach(b=>{
       const x0=xFor(Math.max(0,b.iv0))-3, x1=xFor(Math.min(vel.length-1,b.iv1))+3;
       const col=b.entangled?"var(--accent-2)":"var(--down)";
       bands+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${col}" opacity="0.13"/>`;
-      bands+=`<text class="vv-ptl" fill="${col}" x="${((x0+x1)/2).toFixed(1)}" y="${MP.top+12}">${b.entangled?"launch ads":"ad run"} +${fmt(b.views)}</text>`;
+      const txt=(b.entangled?"launch ads":"ad run")+" +"+fmt(b.views);
+      const w=txt.length*6.4;
+      let cx=(x0+x1)/2;
+      cx=Math.max(MP.left+w/2, Math.min(MW-MP.right-w/2, cx));
+      let r=0; while(rowRight[r]!==undefined && cx-w/2 < rowRight[r]) r++;
+      rowRight[r]=cx+w/2+8;
+      lbls.push({cx, y:MP.top+12+r*14, txt, col});
     });
+    lbls.forEach(L=>{bands+=`<text class="vv-ptl" fill="${L.col}" x="${L.cx.toFixed(1)}" y="${L.y}">${L.txt}</text>`;});
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
     for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
