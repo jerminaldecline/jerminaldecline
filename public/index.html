@@ -8206,6 +8206,7 @@ function renderWindowList(startDate, endDate) {
     // render used — covers tab activation with a pre-set channel filter,
     // where no change event fires but the badges were computed under ALL.
     if (window.__updateVtabBadges) window.__updateVtabBadges();
+    if (window.__vvSyncScope) window.__vvSyncScope();
   };
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
@@ -9869,18 +9870,31 @@ function renderWindowList(startDate, endDate) {
   }
   // Resolve the current scope to a {launch, movers, label, poss} bundle. A single
   // channel uses its own data; 'ALL' aggregates every channel + the pooled typical.
+  // The Videos tab's active date window (period preset or a specific month).
+  // Launch performance follows it; the alarm and the ledger deliberately don't
+  // (an active ad campaign on an old video must not vanish behind a filter).
+  function vidWin(){
+    const sd=document.getElementById("startDate"), ed=document.getElementById("endDate");
+    return ((sd&&sd.value)||"") + "|" + ((ed&&ed.value)||"");
+  }
+  function inWin(pub, win){
+    const parts=win.split("|");
+    if(parts[0] && pub<parts[0]) return false;
+    if(parts[1] && pub>parts[1]) return false;
+    return true;
+  }
   function scopeData(){
-    const chans=(DATA&&DATA.channels)||{}, ch=currentChannelId();
+    const chans=(DATA&&DATA.channels)||{}, ch=currentChannelId(), win=vidWin();
     if(ch!=="ALL" && chans[ch]){
       const c=chans[ch], nm=c.title||c.handle||"this channel";
-      return {key:ch, label:nm, poss:nm+"'s",
-              launch:{maxage:DATA.maxage, typical:c.launch.typical||[], videos:c.launch.videos||[]},
+      return {key:ch, win, label:nm, poss:nm+"'s",
+              launch:{maxage:DATA.maxage, typical:c.launch.typical||[], videos:(c.launch.videos||[]).filter(v=>inWin(v.pub,win))},
               movers:{dates:DATA.dates, videos:c.movers.videos||[]}};
     }
     const lv=[],mv=[];
-    for(const k in chans){ (chans[k].launch.videos||[]).forEach(v=>lv.push(v)); (chans[k].movers.videos||[]).forEach(m=>mv.push(m)); }
+    for(const k in chans){ (chans[k].launch.videos||[]).forEach(v=>{if(inWin(v.pub,win))lv.push(v);}); (chans[k].movers.videos||[]).forEach(m=>mv.push(m)); }
     mv.sort((a,b)=>b.gain7-a.gain7);
-    return {key:"ALL", label:"the network", poss:"the network's",
+    return {key:"ALL", win, label:"the network", poss:"the network's",
             launch:{maxage:DATA.maxage, typical:DATA.allTypical||[], videos:lv},
             movers:{dates:DATA.dates, videos:mv}};
   }
@@ -9912,7 +9926,7 @@ function renderWindowList(startDate, endDate) {
   function setSearch(val){const s=document.getElementById("vvSearch");if(s)s.value=val;updateClear();}
   function buildLaunch(){
     const start=niceDate(DATA.trackingStart);
-    if(!S.launch.videos.length){feat().innerHTML=`<div class="vv-empty" style="padding:1.3rem">No recent launches tracked${S.key!=="ALL"?" for "+esc(S.label):""} yet — only videos posted since ${start} are covered (that's when tracking began). Switch the channel filter, or check the Suspicious movement tab.</div>`;return;}
+    if(!S.launch.videos.length){feat().innerHTML=`<div class="vv-empty" style="padding:1.3rem">View Velocity only exists for videos posted on or after ${start} — that's when twice-daily view tracking began. Nothing in this channel and time window qualifies; widen the period or pick a more recent month.</div>`;return;}
     const legTyp=S.key==="ALL"?"video across the network":esc(S.label)+" video";
     feat().innerHTML=
       `<div class="vv-sub" id="vvLsub"></div>`+
@@ -9986,7 +10000,7 @@ function renderWindowList(startDate, endDate) {
   function buildMovers(){
     const mv=S.movers.videos, start=niceDate(DATA.trackingStart);
     feat().innerHTML=
-      `<div class="vv-sub">Long-form videos that had gone quiet — barely gaining views — and then suddenly started climbing again. That combination almost always means an ad campaign (we tag the ones we already know) or a news moment. A video still in its first busy weeks won't show up here: to qualify, it has to have flat-lined first, then jumped.</div>`+
+      `<div class="vv-sub">Long-form videos that had gone quiet — barely gaining views — and then suddenly started climbing again. That combination almost always means an ad campaign (we tag the ones we already know) or a news moment. A video still in its first busy weeks won't show up here: to qualify, it has to have flat-lined first, then jumped. This alarm always watches every video, whatever the time filter is set to.</div>`+
       `<div class="vv-mlist" id="vvMlist"></div>`+
       `<div class="vv-charth" id="vvMcharth"></div>`+
       `<div class="vv-chart" id="vvMchart"></div>`+
@@ -10023,7 +10037,7 @@ function renderWindowList(startDate, endDate) {
   function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
   function buildAds(){
     feat().innerHTML=
-      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart.</div>`+
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to.</div>`+
       `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
@@ -10128,15 +10142,19 @@ function renderWindowList(startDate, endDate) {
   // Sync with the channel filter: any change that alters the current channel
   // re-scopes + re-renders. Fires for whichever selector the tab uses (the
   // dropdown's value is already updated by the time this bubbles to document).
-  document.addEventListener("change",()=>{
+  // Re-scope whenever the channel or date window differs from what's shown.
+  // Exposed so renderVideosTab can invoke it too — month-window jumps arrive
+  // via link clicks, which fire no change event.
+  window.__vvSyncScope=function(){
     if(!loaded)return;
     const ch=currentChannelId();
-    if(S&&ch===S.key)return;               // channel unchanged — ignore
+    if(S&&ch===S.key&&vidWin()===S.win)return;
     L.sel=null; M.sel=null; L.preset="typical";
     S=scopeData(); updateHint();
     const p=document.getElementById("velocityPanel");
     if(p&&!p.hidden)renderView();
-  });
+  };
+  document.addEventListener("change",()=>{ window.__vvSyncScope(); });
 
   function ensureLoaded(){
     if(loaded)return; loaded=true;
