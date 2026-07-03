@@ -8206,6 +8206,7 @@ function renderWindowList(startDate, endDate) {
     // render used — covers tab activation with a pre-set channel filter,
     // where no change event fires but the badges were computed under ALL.
     if (window.__updateVtabBadges) window.__updateVtabBadges();
+    if (window.__vvSyncScope) window.__vvSyncScope();
   };
   // Window-list interactions (delegated; scoped to #windowList)
   function resetVideoBatches(){ windowListState.longShown = VIDEO_BATCH; windowListState.shortShown = VIDEO_BATCH; }
@@ -9925,7 +9926,7 @@ function renderWindowList(startDate, endDate) {
   function setSearch(val){const s=document.getElementById("vvSearch");if(s)s.value=val;updateClear();}
   function buildLaunch(){
     const start=niceDate(DATA.trackingStart);
-    if(!S.launch.videos.length){feat().innerHTML=`<div class="vv-empty" style="padding:1.3rem">No tracked launches match this channel and time filter — velocity tracking only covers videos posted since ${start}. Widen the time period or switch channel.</div>`;return;}
+    if(!S.launch.videos.length){feat().innerHTML=`<div class="vv-empty" style="padding:1.3rem">View Velocity only exists for videos posted on or after ${start} — that's when twice-daily view tracking began. Nothing in this channel and time window qualifies; widen the period or pick a more recent month.</div>`;return;}
     const legTyp=S.key==="ALL"?"video across the network":esc(S.label)+" video";
     feat().innerHTML=
       `<div class="vv-sub" id="vvLsub"></div>`+
@@ -10141,15 +10142,19 @@ function renderWindowList(startDate, endDate) {
   // Sync with the channel filter: any change that alters the current channel
   // re-scopes + re-renders. Fires for whichever selector the tab uses (the
   // dropdown's value is already updated by the time this bubbles to document).
-  document.addEventListener("change",()=>{
+  // Re-scope whenever the channel or date window differs from what's shown.
+  // Exposed so renderVideosTab can invoke it too — month-window jumps arrive
+  // via link clicks, which fire no change event.
+  window.__vvSyncScope=function(){
     if(!loaded)return;
     const ch=currentChannelId();
-    if(S&&ch===S.key&&vidWin()===S.win)return;   // channel & window unchanged — ignore
+    if(S&&ch===S.key&&vidWin()===S.win)return;
     L.sel=null; M.sel=null; L.preset="typical";
     S=scopeData(); updateHint();
     const p=document.getElementById("velocityPanel");
     if(p&&!p.hidden)renderView();
-  });
+  };
+  document.addEventListener("change",()=>{ window.__vvSyncScope(); });
 
   function ensureLoaded(){
     if(loaded)return; loaded=true;
