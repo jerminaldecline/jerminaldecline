@@ -3293,7 +3293,16 @@ function render(m){
     if (hv && !hv.partial) {
       const hn = isAll ? (hv.long || 0) : (((hv.channels || {})[HANDLE_TO_ID[scope]] || {}).long || 0);
       if (hn > 0) {
-        histLine = `<div class="hero-sub" style="color:var(--accent);font-weight:600">+${fmt(hn)} historic views <span class="info-icon" data-popover="Views gained during ${monthName(m)} by long-form videos published in EARLIER months — the back catalogue's contribution, not included in the total above. Measured from our twice-daily view captures.${hv.inProgress ? ' Month still in progress.' : ''}" tabindex="0" role="button" aria-label="About historic views">\u24d8</span></div>`;
+        // Broad source split: last month's uploads winding down / paid ads / the older catalogue.
+        const rec = isAll ? hv : (((hv.channels || {})[HANDLE_TO_ID[scope]]) || {});
+        const prevV = rec.prevMonth || 0, paidV = rec.paid || 0, olderV = Math.max(0, hn - prevV - paidV);
+        const pmName = (() => { const mo = +m.slice(5, 7); return MONTHS[(mo === 1 ? 12 : mo - 1) - 1]; })();
+        const segs = [];
+        if (prevV > 0) segs.push(Math.round(prevV / hn * 100) + "% " + pmName + "\u2019s uploads");
+        if (paidV > 0) segs.push(Math.round(paidV / hn * 100) + "% paid ads");
+        if (olderV > 0) segs.push(Math.round(olderV / hn * 100) + "% older videos");
+        histLine = `<div class="hero-sub" style="color:var(--accent);font-weight:600">+${fmt(hn)} historic views <span class="info-icon" data-popover="Views gained during ${monthName(m)} by long-form videos published in EARLIER months — the back catalogue's contribution, not included in the total above. \u2018Paid ads\u2019 = views landing on videos in the confirmed ad catalogue. Measured from our twice-daily view captures.${hv.inProgress ? ' Month still in progress.' : ''}" tabindex="0" role="button" aria-label="About historic views">\u24d8</span></div>`
+          + (segs.length ? `<div class="hero-sub" style="font-size:0.72rem">${segs.join(" \u00b7 ")}</div>` : "");
       }
     }
   } catch (e) {}
