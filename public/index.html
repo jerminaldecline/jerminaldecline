@@ -2624,15 +2624,12 @@ async function loadAndCompute(){
     try { const r = await fetch(url); if (!r.ok) return fallback; return await r.json(); }
     catch(e){ console.warn('optional fetch failed:', url, e); return fallback; }
   };
-  const [data, tagsRaw, topicsRaw, creatorTagsRaw, historicRaw] = await Promise.all([
+  const [data, tagsRaw, topicsRaw, creatorTagsRaw] = await Promise.all([
     fetch('data.json'+bust).then(r => r.json()),
     safeJson('topic-tags-llm.json'+bust, { tags: {} }),
     safeJson('topics.json'+bust, {}),
-    safeJson('creator-tags.json'+bust, {}),
-    safeJson('historic-views.json'+bust, { months: {} })
+    safeJson('creator-tags.json'+bust, {})
   ]);
-  // Back-catalogue monthly contribution (small file; Overview "+historic views")
-  window.__HISTORIC_VIEWS = (historicRaw && historicRaw.months) || {};
   ANALYTICS_DATASET = data; // shared with the analytics engine (Analysis/Videos tabs)
   const tags = (tagsRaw && tagsRaw.tags) || {};
   const themesMap = (tagsRaw && tagsRaw.themes) || {};
@@ -3284,28 +3281,6 @@ function render(m){
   }).join('');
 
   try { const _pk = PEAKS && PEAKS[scope]; window.__moodLowText = _pk ? ('▼'+Math.abs(_pk.pctFromPeak)+'%') : ''; if (window.__refreshActiveFloaters) window.__refreshActiveFloaters(); } catch(e){}
-  // "+historic views": what long-form videos from EARLIER months gained during
-  // this month. Only shown for months fully covered by the snapshot archive
-  // (July 2026 onward — June was partial), and only for single-month views.
-  let histLine = '';
-  try {
-    const hv = (typeof m === 'string') && (window.__HISTORIC_VIEWS || {})[m];
-    if (hv && !hv.partial) {
-      const hn = isAll ? (hv.long || 0) : (((hv.channels || {})[HANDLE_TO_ID[scope]] || {}).long || 0);
-      if (hn > 0) {
-        // Broad source split: last month's uploads winding down / paid ads / the older catalogue.
-        const rec = isAll ? hv : (((hv.channels || {})[HANDLE_TO_ID[scope]]) || {});
-        const prevV = rec.lastWeek || 0, paidV = rec.paid || 0, olderV = Math.max(0, hn - prevV - paidV);
-        const pmName = (() => { const mo = +m.slice(5, 7); return MONTHS[(mo === 1 ? 12 : mo - 1) - 1]; })();
-        const segs = [];
-        if (prevV > 0) segs.push(Math.round(prevV / hn * 100) + "% late-" + pmName + " uploads");
-        if (paidV > 0) segs.push(Math.round(paidV / hn * 100) + "% paid ads");
-        if (olderV > 0) segs.push(Math.round(olderV / hn * 100) + "% older videos");
-        histLine = `<div class="hero-sub" style="color:var(--accent);font-weight:600">+${fmt(hn)} historic views <span class="info-icon" data-popover="Views gained during ${monthName(m)} by long-form videos published in EARLIER months — the back catalogue's contribution, not included in the total above. They are not extra views: each month's total shows its own uploads at lifetime view counts, so these same views also sit inside the months their videos were posted — this line shows WHEN the watching happened. \u2018Late-\u2019 uploads = videos from the final week of the previous month, still winding down from launch. \u2018Paid ads\u2019 = views landing on videos in the confirmed ad catalogue. Measured from our twice-daily view captures.${hv.inProgress ? ' Month still in progress.' : ''}" tabindex="0" role="button" aria-label="About historic views">\u24d8</span></div>`
-          + (segs.length ? `<div class="hero-sub" style="font-size:0.72rem">${segs.join(" \u00b7 ")}</div>` : "");
-      }
-    }
-  } catch (e) {}
   document.getElementById('report').innerHTML = `
     <div class="report-head">
       <div class="report-head-main"><h2>${mLabel} <span class="report-head-sub-inline">${reportKind}</span>${(!isAgg && m===CURRENT_MONTH_KEY) ? '<span class="month-in-progress" title="This month is still in progress — figures will keep changing until month end">● In progress</span>' : ''}</h2><div class="rsub-row"><span class="report-scope-pill">${isAll ? 'All channels' : scope}</span><span class="rsub">${isAgg ? monthShortNow : headSub.toLowerCase()}</span></div></div>
@@ -3335,7 +3310,6 @@ function render(m){
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
         <div class="hero-num">${fmt(d.tot)}</div>
         <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
-        ${histLine}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
