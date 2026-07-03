@@ -34,6 +34,16 @@ for f in files:
 live = json.load(open(os.path.join(PUBLIC, "data.json"), encoding="utf-8"))
 is_short = {v["id"]: bool(v.get("isShort")) for v in live["videos"]}
 chan_of = {v["id"]: v["channelId"] for v in live["videos"]}
+# confirmed-ad catalogue: gains on these aged/dormant videos are paid traffic
+try:
+    _adcat = json.load(open(os.path.join(PUBLIC, "ad-videos.json"), encoding="utf-8"))
+    AD_IDS = {i for c in _adcat.get("channels", {}).values() for i in c.get("videoIds", [])}
+except Exception:
+    AD_IDS = set()
+
+def prev_month(month):
+    y, m = int(month[:4]), int(month[5:7])
+    return "%04d-%02d" % (y - 1, 12) if m == 1 else "%04d-%02d" % (y, m - 1)
 
 latest_month = max(by_month)
 months_out = {}
@@ -46,7 +56,10 @@ for month in sorted(by_month):
     b = json.load(gzip.open(last))
     amap = {v["id"]: v.get("views", 0) for v in a["videos"]}
     month_start = month + "-01"
-    per = defaultdict(lambda: [0, 0])  # channelId -> [longGain, shortsGain]
+    pm = prev_month(month)
+    # per channel: [longGain, shortsGain, prevMonthLong, paidLong]
+    # (exclusive long-form buckets: paid > previous-month > older)
+    per = defaultdict(lambda: [0, 0, 0, 0])
     for v in b["videos"]:
         if v["publishedAt"] >= month_start:
             continue                  # published this month or later — not historic
@@ -60,12 +73,18 @@ for month in sorted(by_month):
             per[cid][1] += d
         else:
             per[cid][0] += d
+            if v["id"] in AD_IDS:
+                per[cid][3] += d
+            elif v["publishedAt"][:7] == pm:
+                per[cid][2] += d
     tag0 = os.path.basename(first).replace(".json.gz", "")
     tag1 = os.path.basename(last).replace(".json.gz", "")
     months_out[month] = {
-        "channels": {cid: {"long": g[0], "shorts": g[1]} for cid, g in per.items()},
+        "channels": {cid: {"long": g[0], "shorts": g[1], "prevMonth": g[2], "paid": g[3]} for cid, g in per.items()},
         "long": sum(g[0] for g in per.values()),
         "shorts": sum(g[1] for g in per.values()),
+        "prevMonth": sum(g[2] for g in per.values()),
+        "paid": sum(g[3] for g in per.values()),
         "windowFrom": tag0, "windowTo": tag1,
         # partial when the archive doesn't cover the month from its 1st
         "partial": not tag0.startswith(month + "-01"),
@@ -86,6 +105,7 @@ with open(dst, "w", encoding="utf-8") as fh:
     json.dump(OUT, fh, separators=(",", ":"), ensure_ascii=False)
 print("wrote", dst, "|", os.path.getsize(dst), "bytes")
 for m, r in months_out.items():
-    print("  %s  long %+10s  shorts %+13s  %s%s" % (
-        m, f"{r['long']:,}", f"{r['shorts']:,}",
+    print("  %s  long %+10s (prev-month %s, paid %s, older %s)  shorts %+13s  %s%s" % (
+        m, f"{r['long']:,}", f"{r['prevMonth']:,}", f"{r['paid']:,}",
+        f"{r['long']-r['prevMonth']-r['paid']:,}", f"{r['shorts']:,}",
         "partial " if r["partial"] else "", "in-progress" if r["inProgress"] else ""))
