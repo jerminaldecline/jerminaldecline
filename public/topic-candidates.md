@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-03
+# Topic candidates — 2026-07-04
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 13 recent videos, 140 baseline videos
+Pool: 14 recent videos, 138 baseline videos
 
 ### Cluster 1: `out quartering`
 
-- **Recent saturation:** 6/13 videos (**46%**)
-- **Baseline saturation:** 9/140 videos (6%)
-- **Spike ratio:** 6.9x
+- **Recent saturation:** 6/14 videos (**43%**)
+- **Baseline saturation:** 9/138 videos (7%)
+- **Spike ratio:** 6.3x
 - **Related terms:** `check`, `quartering`, `out`, `faces`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-06-30 — _BAN THIS NOW!_  
@@ -28,9 +28,9 @@ Pool: 13 recent videos, 140 baseline videos
 
 ### Cluster 2: `post`
 
-- **Recent saturation:** 5/13 videos (**38%**)
-- **Baseline saturation:** 7/140 videos (5%)
-- **Spike ratio:** 7.2x
+- **Recent saturation:** 5/14 videos (**36%**)
+- **Baseline saturation:** 7/138 videos (5%)
+- **Spike ratio:** 6.6x
 - **Related terms:** `post`, `alleged`, `social`, `media`, `media post`, `social media`
 - **Sample recent videos:**
   - 2026-07-02 — _SHE WAS 13_  
@@ -44,21 +44,19 @@ Pool: 13 recent videos, 140 baseline videos
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
 
-### Cluster 3: `film`
+### Cluster 3: `online`
 
-- **Recent saturation:** 4/13 videos (**31%**)
-- **Baseline saturation:** 4/140 videos (3%)
-- **Spike ratio:** 9.6x
-- **Related terms:** `film`, `sparked`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 9/138 videos (7%)
+- **Spike ratio:** 3.1x
+- **Related terms:** `online`
 - **Sample recent videos:**
-  - 2026-06-30 — _IT'S BACKFIRING WORSE_  
-    Uwe Boll Announces Citizen Vigilante 2 Following Controversial Success
+  - 2026-07-03 — _THIS IS CRAZY_  
+    Self-Proclaimed Time Traveler Predicts World War Three, AI Domination, Secret Technologies
+  - 2026-07-03 — _SHE'S GUILTY_  
+    Army Veteran Fatally Shot Following Florida Parking Dispute
   - 2026-06-29 — _PUT HER IN PRISON_  
     Mother Faces Backlash After Controversial Memorial 
-  - 2026-06-29 — _IT WENT NUCLEAR_  
-    Citizen Vigilante Tops Amazon Charts Following Elon Musk Promotion
-  - 2026-06-26 — _TOTAL DISASTER_  
-    Angry Joe Blasts Superman Movie, Ignites Fan Debate
 
 ---
 
