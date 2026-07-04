@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-06-28-PM",
-    "snapshots": 33
+    "to": "2026-07-04-AM",
+    "snapshots": 43
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -14,15 +14,39 @@
   },
   "knownAdSpikes": [
     {
-      "id": "TYPV_Ej1ND4",
-      "title": "Never EAT McDonalds Again!",
-      "estPromotedViews": 2505,
+      "id": "7Mg87BPII_4",
+      "title": "WALMART ACTUALLY DID IT",
+      "estPromotedViews": 9635,
       "spikeStartDate": "2026-06-27-PM"
     },
     {
-      "id": "7Mg87BPII_4",
-      "title": "WALMART ACTUALLY DID IT",
-      "estPromotedViews": 1552,
+      "id": "3O6sdSffHzs",
+      "title": "Walmart Will Be DESTROYED By This",
+      "estPromotedViews": 3593,
+      "spikeStartDate": "2026-07-02-AM"
+    },
+    {
+      "id": "n-I7Cp9iTTw",
+      "title": "WALMART FATIGUE GOES NUCLEAR",
+      "estPromotedViews": 3035,
+      "spikeStartDate": "2026-07-01-PM"
+    },
+    {
+      "id": "Sr0WmHdxJvs",
+      "title": "Movie Theatre Black Fatigue Backfire!",
+      "estPromotedViews": 2866,
+      "spikeStartDate": "2026-07-02-AM"
+    },
+    {
+      "id": "FiLs5ovIfts",
+      "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+      "estPromotedViews": 2846,
+      "spikeStartDate": "2026-07-02-AM"
+    },
+    {
+      "id": "TYPV_Ej1ND4",
+      "title": "Never EAT McDonalds Again!",
+      "estPromotedViews": 2505,
       "spikeStartDate": "2026-06-27-PM"
     }
   ],
