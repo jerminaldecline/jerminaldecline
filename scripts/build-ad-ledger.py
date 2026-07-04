@@ -29,6 +29,10 @@ ENTANGLE_DAYS = 14        # bursts starting within this of publish: launch/paid 
 MIN_BURST_VIEWS = 200     # an interval must gain at least this ...
 MIN_BURST_RATE = 300.0    # ... at at least this views/day pace ...
 BASE_MULT = 3.0           # ... and at least this multiple of the dormant baseline rate
+GAP_TOL = 2               # quiet intervals a run may bridge (~1 day): ad delivery pulses
+                          # with the audience's waking hours, and at 2 checks/day those
+                          # overnight lulls would otherwise split one campaign into
+                          # several fake "runs" (only multi-day silence ends a run)
 
 def snaptime(tag, snapdata=None):
     ts = ((snapdata or {}).get("meta") or {}).get("lastUpdated")
@@ -91,19 +95,21 @@ for handle, entry in adcat.get("channels", {}).items():
             continue
         base_rate = statistics.median(iv["rate"] for iv in ivals)
         # burst = interval well above the dormant pace
-        bursts, cur = [], None
+        bursts, cur, gap = [], None, 0
         for iv in ivals:
             excess = iv["gain"] - base_rate * iv["dt"]
             is_burst = (iv["gain"] >= MIN_BURST_VIEWS and iv["rate"] >= max(MIN_BURST_RATE, BASE_MULT * base_rate)
                         and excess > 0)
             if is_burst:
-                if cur and iv["t0"] <= cur["_end"]:
+                if cur:
                     cur["views"] += round(excess); cur["_end"] = iv["t1"]; cur["iv1"] = iv["iv"]
                 else:
-                    if cur: bursts.append(cur)
                     cur = {"from": iv["t0"].date().isoformat(), "views": round(excess), "_end": iv["t1"], "iv0": iv["iv"], "iv1": iv["iv"]}
+                gap = 0
             elif cur:
-                bursts.append(cur); cur = None
+                gap += 1
+                if gap > GAP_TOL:
+                    bursts.append(cur); cur = None; gap = 0
         if cur: bursts.append(cur)
         for b in bursts:
             b["to"] = b.pop("_end").date().isoformat()
