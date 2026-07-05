@@ -9168,6 +9168,15 @@ function renderWindowList(startDate, endDate) {
     SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
     SUBS_GAINED = PAYLOAD.subsGained || {};
     SUBS_TOTAL = PAYLOAD.subsTotal || {};
+    // The Subscribers chart needs enough months to read as a trend — remove
+    // its metric entries until the rollup spans at least 3 months. Tracking
+    // began June 2026, so the chart self-reveals in August with no deploy.
+    if (Object.keys(SUBS_GAINED.ALL || {}).length < 3) {
+      const _sb = document.querySelector('.an-metric-btn[data-metric="subs"]');
+      if (_sb) _sb.remove();
+      const _so = document.querySelector('#anMetricSelect option[value="subs"]');
+      if (_so) _so.remove();
+    }
     HANDLE_TO_ID = PAYLOAD.handleToId || {};
     // Last-updated indicator (relative time, from data.json meta.lastUpdated)
     if (PAYLOAD.meta && PAYLOAD.meta.lastUpdated) {
