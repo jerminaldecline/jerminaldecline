@@ -175,7 +175,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
 .deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+.stat-row{display:grid;grid-template-columns:repeat(12,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
+.stat-row>.stat{grid-column:span 4}
+.stat-row>.stat.stat-sm{grid-column:span 3}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
@@ -306,7 +308,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.stat-row>.stat,.stat-row>.stat.stat-sm{grid-column:auto}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -2611,6 +2613,7 @@ function ym(v){ return v.publishedAt.slice(0,7); }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
 
 let PAYLOAD = null; // {scopes, net, channels}
+let SUBS_GAINED = null; // {scope: {month: net subscriber change}} — snapshot-derived
 
 async function loadAndCompute(){
   // No cache-buster: Cloudflare serves these with max-age=0/must-revalidate +
@@ -2808,7 +2811,28 @@ async function loadAndCompute(){
       series: ms.map(m=>({ m, v: S[m].tot||0 })) };
   }
 
-  return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid, meta: data.meta || null };
+  // Net subscriber change per scope-month, from the daily channel snapshot
+  // rows in data.json (tracked since 2026-06-01). Baseline for each month is
+  // the previous month's last snapshot; for a channel's first tracked month,
+  // its first snapshot inside that month. ALL sums the per-channel figures.
+  const subsGained = { ALL: {} };
+  for (const ch of Object.values(data.channels||{})){
+    const h = ch.handle; if (!h || !CHAN_ORDER.includes(h)) continue;
+    const snaps = (ch.snapshots||[]).filter(r=>r && r.subscriberCount!=null).slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+    if (!snaps.length) continue;
+    const lastBy = new Map();
+    for (const r of snaps) lastBy.set(r.date.slice(0,7), r.subscriberCount);
+    const ms = [...lastBy.keys()].sort();
+    subsGained[h] = subsGained[h] || {};
+    for (let i=0;i<ms.length;i++){
+      const base = i>0 ? lastBy.get(ms[i-1]) : snaps.find(r=>r.date.slice(0,7)===ms[i]).subscriberCount;
+      const g = lastBy.get(ms[i]) - base;
+      subsGained[h][ms[i]] = g;
+      subsGained.ALL[ms[i]] = (subsGained.ALL[ms[i]]||0) + g;
+    }
+  }
+
+  return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid, subsGained, meta: data.meta || null };
 }
 
 /* ---------- render (ported from prototype, reads PAYLOAD) ---------- */
@@ -3118,13 +3142,28 @@ function render(m){
   cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
-  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
-  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
+  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false},cls:'stat-sm'});
+  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false},cls:'stat-sm'});
+  // Subscribers gained: net change in the (rounded) YouTube subscriber counter
+  // over the selected period, from the daily channel snapshots. Only months
+  // since June 2026 have data — older months show an em dash. No MoM/YoY minis:
+  // the comparator can legitimately be 0 or negative, which dcls() can't rank.
+  const subsG = (() => {
+    const S = SUBS_GAINED && SUBS_GAINED[scope]; if (!S) return null;
+    if (isAgg) {
+      const a = d._agg || {}; let sum = null;
+      for (const k of Object.keys(S)) if ((!a.first || k >= a.first) && (!a.last || k <= a.last)) sum = (sum == null ? 0 : sum) + S[k];
+      return sum;
+    }
+    return (m in S) ? S[m] : null;
+  })();
+  const subsNum = subsG == null ? '\u2014' : subsG > 0 ? '+' + fmt(subsG) : subsG < 0 ? '\u2212' + fmt(-subsG) : '\u00b10';
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s subscriber counter over this period for the selected scope. YouTube reports rounded counts, so small moves show as \u00b10. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm'});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
-    return `<div class="stat${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
+    return `<div class="stat${c.cls?' '+c.cls:''}${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
   }).join('');
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
@@ -3159,7 +3198,7 @@ function render(m){
   const _weekendInner = _isWknd
     ? `<div class="fw-message">It's the weekend.<br>What are you guys going up to?</div>`
     : `<div class="fw-pair"><div class="fw-side"><span class="fw-num">${_day}</span><span class="fw-lbl">days since</span></div><div class="fw-div"></div><div class="fw-side"><span class="fw-num">${6 - _day}</span><span class="fw-lbl">days until</span></div></div>`;
-  const funCardHTML = `<div class="stat fun-card${_isWknd ? ' is-weekend' : ''}">
+  const funCardHTML = `<div class="stat stat-sm fun-card${_isWknd ? ' is-weekend' : ''}">
       <div class="fun-head">Weekend status</div>
       <div class="fun-weekend">${_weekendInner}</div>
       <div class="fun-modes">
@@ -8905,6 +8944,7 @@ function renderWindowList(startDate, endDate) {
   try {
     PAYLOAD = await loadAndCompute();
     SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
+    SUBS_GAINED = PAYLOAD.subsGained || {};
     HANDLE_TO_ID = PAYLOAD.handleToId || {};
     // Last-updated indicator (relative time, from data.json meta.lastUpdated)
     if (PAYLOAD.meta && PAYLOAD.meta.lastUpdated) {
