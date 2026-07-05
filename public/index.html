@@ -2605,7 +2605,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* ---------- data layer: fetch live JSON, compute per-scope/per-month ---------- */
 const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60] };
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
-const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@rcnightmare','@UnSleevedMedia'];
+const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
 function ym(v){ return v.publishedAt.slice(0,7); }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
@@ -7380,7 +7380,7 @@ function niceDurationAxis(minSec, maxSec) {
 
 
   // ---- Videos tab (ported) ----
-  const CHANNEL_DISPLAY_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@rcnightmare','@UnSleevedMedia'];
+  const CHANNEL_DISPLAY_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
   function orderChannelIds(ids){
     const ordered=[];
     for (const handle of CHANNEL_DISPLAY_ORDER){ const id=ids.find(i=>ANALYTICS_DATASET?.channels?.[i]?.handle===handle); if(id) ordered.push(id); }
@@ -7576,7 +7576,7 @@ function isTopicChannel() {
   if (!ANALYTICS_TOPICS || !ANALYTICS_TOPIC_TAGS) return false;
   if (ANALYTICS_CHANNEL === 'ALL') return false;
   const channelObj = ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL];
-  const TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'];
+  const TAGGED_HANDLES = ['@TheQuartering', '@JeremyHambly', '@QuarteringLive', '@QuarteringVlogs'];
   return TAGGED_HANDLES.includes(channelObj?.handle);
 }
 
@@ -10037,7 +10037,7 @@ function renderWindowList(startDate, endDate) {
   function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
   function buildAds(){
     feat().innerHTML=
-      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to.</div>`+
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours — the line dipping inside a shaded run is overnight, not the campaign stopping.</div>`+
       `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
