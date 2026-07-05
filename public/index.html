@@ -577,6 +577,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     stroke-width: 1.5;
     stroke-dasharray: 3 3;}
 .chart-bar-variance:hover {opacity: 0.85;}
+.chart-bar-subs {transition: opacity 0.12s;}
+.chart-bar-subs.pos {fill: var(--up);}
+.chart-bar-subs.neg {fill: var(--down);}
+.chart-bar-subs.in-progress {opacity: 0.55;}
+.chart-bar-subs:hover {opacity: 0.85;}
 /* Reference line on the variance chart — drawn over the bars to keep it
      visible regardless of how tall the bars are. Higher contrast than a
      normal gridline. */
@@ -2309,6 +2314,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
         <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Average views</button>
+        <button type="button" class="an-metric-btn" data-metric="subs" role="tab">Subscribers</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
         <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
@@ -2319,6 +2325,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <option value="views_length">Views + length</option>
           <option value="views_likes">Views + likes</option>
           <option value="median_views">Average views</option>
+          <option value="subs">Subscribers</option>
           <option value="engagement_variance">Engagement variance</option>
           <option value="all_videos">Video lengths</option>
           <option value="tag_blocks">Tag blocks</option>
@@ -4003,6 +4010,7 @@ function setChartTitle(metric, mode) {
     views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
     views_likes: ['Views vs. like rate', 'Monthly views against the like rate — did engagement hold as reach shrank?'],
     median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
+    subs: ['Subscriber gain', 'Net change in the subscriber counter each month — pick a single month from the period selector for a day-by-day view. Tracked since June 2026.'],
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
@@ -4035,6 +4043,15 @@ function renderTrendChart(yoy) {
   const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
   const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
   const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
+  // "Subscribers" mode: dispatched before the empty-chartData early-return —
+  // a single-month window is often the in-progress month (the daily view),
+  // which would otherwise blank the chart. The prev-year control is normally
+  // hidden further down; do it here since we return early.
+  if (chartMetric === 'subs') {
+    const pyc = document.getElementById('prevYearControl');
+    if (pyc) pyc.hidden = true;
+    return renderSubsChart();
+  }
   if (!chartData.length) {
     svg.innerHTML = '';
     legend.innerHTML = '';
@@ -5855,6 +5872,193 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
       const minLeft = half + margin;
       const maxLeft = wrap.width - half - margin;
       const clamped = Math.max(minLeft, Math.min(maxLeft, desired));
+      tooltip.style.left = clamped + 'px';
+      tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+// Subscriber gain chart — net change in the (rounded) public subscriber
+// counter, summed across the active scope's channels. Monthly bars across the
+// selected window; a single-month window (period dropdown set to a specific
+// month) switches to daily bars from the per-day channel snapshots. Data
+// exists from 2026-06-01; windows before that get an explicit empty state.
+// Reads monthlyData directly rather than taking chartData args because it is
+// dispatched before renderTrendChart's current-month exclusion (see dispatch).
+function renderSubsChart() {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
+  const W = 720, H = 280;
+  const P = { top: 26, right: 24, bottom: 48, left: 56 };
+  const innerW = W - P.left - P.right;
+  const innerH = H - P.top - P.bottom;
+
+  const sc = (typeof scope !== 'undefined') ? scope : 'ALL';
+  const daily = /^\d{4}-\d{2}$/.test(anTimePreset);
+  const now = new Date();
+  const curKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+
+  let points;
+  if (daily) {
+    // Per-day deltas inside the selected month. Baseline for each snapshot is
+    // the channel's previous snapshot — for the 1st that reaches into the
+    // prior month, so day-one gains aren't silently dropped.
+    const chans = Object.values((ANALYTICS_DATASET && ANALYTICS_DATASET.channels) || {})
+      .filter(c => sc === 'ALL' ? true : c.handle === sc);
+    const byDate = new Map();
+    for (const c of chans) {
+      const snaps = (c.snapshots || []).filter(r => r && r.subscriberCount != null)
+        .slice().sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+      for (let i = 1; i < snaps.length; i++) {
+        if (snaps[i].date.slice(0, 7) !== anTimePreset) continue;
+        byDate.set(snaps[i].date, (byDate.get(snaps[i].date) || 0) + (snaps[i].subscriberCount - snaps[i - 1].subscriberCount));
+      }
+    }
+    points = [...byDate.keys()].sort().map(k => ({
+      key: k, label: String(parseInt(k.slice(8), 10)), gain: byDate.get(k), inProgress: false
+    }));
+  } else {
+    const S = (typeof SUBS_GAINED !== 'undefined' && SUBS_GAINED && SUBS_GAINED[sc]) || {};
+    const keys = monthlyData.map(m => m.key).filter(k => k in S);
+    const multiYear = new Set(keys.map(k => k.slice(0, 4))).size > 1;
+    points = keys.map(k => ({
+      key: k,
+      label: multiYear ? monthShort(k) + " '" + k.slice(2, 4) : monthShort(k),
+      gain: S[k],
+      inProgress: k === curKey
+    }));
+  }
+
+  if (!points.length) {
+    legend.innerHTML = '';
+    svg.innerHTML = `
+      <text x="360" y="128" text-anchor="middle" class="chart-empty-title">No subscriber data in this window</text>
+      <text x="360" y="156" text-anchor="middle" class="chart-empty-sub">Subscriber tracking began 1 June 2026 — pick a window that includes it.</text>`;
+    return;
+  }
+
+  legend.innerHTML = `
+    <span class="trend-legend-item">
+      <span class="trend-legend-swatch" style="height: 10px; background: var(--up);"></span>
+      subscribers gained
+    </span>
+    <span class="trend-legend-item">
+      <span class="trend-legend-swatch" style="height: 10px; background: var(--down);"></span>
+      lost
+      <span class="hero-stat-info" style="margin-left: 0.2rem;" tabindex="0" role="button"
+            aria-label="About subscriber counts"
+            data-popover="Net change in YouTube's public subscriber counter ${daily ? 'each day' : 'each month'}. YouTube reports rounded counts, so small real movements show as 0 until the counter steps to its next increment. Tracked since 1 June 2026.">ⓘ</span>
+    </span>
+  `;
+
+  // Y scale spans zero; nice round step so gridline labels stay clean.
+  const gains = points.map(p => p.gain);
+  let hi = Math.max(0, ...gains), lo = Math.min(0, ...gains);
+  if (hi === 0 && lo === 0) hi = 1000; // all-zero window still gets a sane axis
+  const niceStep = (range) => {
+    const rough = range / 4;
+    const pow = Math.pow(10, Math.floor(Math.log10(rough)));
+    for (const m of [1, 2, 2.5, 5, 10]) { if (rough <= m * pow) return m * pow; }
+    return 10 * pow;
+  };
+  const step = niceStep((hi - lo) || 1);
+  hi = Math.ceil(hi / step) * step;
+  lo = Math.floor(lo / step) * step;
+  const yFor = (v) => P.top + ((hi - v) / (hi - lo)) * innerH;
+
+  const n = points.length;
+  const barSlot = innerW / Math.max(1, n);
+  const barWidth = Math.max(3, Math.min(28, barSlot * 0.7));
+  const xFor = (i) => P.left + barSlot * i + barSlot / 2;
+  const sgn = (v) => v > 0 ? '+' + fmtCompact(v) : v < 0 ? '−' + fmtCompact(-v) : '0';
+
+  let gridLines = '', yLabels = '';
+  for (let v = lo; v <= hi + 1e-9; v += step) {
+    const y = yFor(v);
+    gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${sgn(v)}</text>`;
+  }
+  const zeroY = yFor(0);
+  const zeroLine = `<line class="chart-bar-ref-line" x1="${P.left}" y1="${zeroY}" x2="${W - P.right}" y2="${zeroY}" />`;
+
+  // X labels: every month (or stride on long windows); every 5th day + last.
+  let xLabels = '';
+  const xStride = daily ? (n > 12 ? 5 : 1) : (n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6)));
+  for (let i = 0; i < n; i++) {
+    if (i % xStride !== 0 && i !== n - 1) continue;
+    xLabels += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${points[i].label}</text>`;
+  }
+
+  // Bars. A zero-gain period gets a small dim tick on the zero line so
+  // "counter didn't move" reads as measured, not missing.
+  let bars = '', barLabels = '', hovers = '';
+  let biggest = 0;
+  for (const p of points) biggest = Math.max(biggest, Math.abs(p.gain));
+  const lblStride = daily ? (n > 12 ? 5 : 1) : 1;
+  for (let i = 0; i < n; i++) {
+    const p = points[i];
+    const x = xFor(i);
+    if (p.gain === 0) {
+      bars += `<line class="chart-bar-nodata" x1="${x - barWidth / 2}" y1="${zeroY}" x2="${x + barWidth / 2}" y2="${zeroY}" />`;
+    } else {
+      const yv = yFor(p.gain);
+      const yTop = Math.min(yv, zeroY);
+      const height = Math.max(2, Math.abs(zeroY - yv));
+      const cls = 'chart-bar-subs ' + (p.gain > 0 ? 'pos' : 'neg') + (p.inProgress ? ' in-progress' : '');
+      bars += `<rect class="${cls}" x="${(x - barWidth / 2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(1)}" />`;
+      // Label the stride grid, the last bar, and the window's biggest move.
+      if (i % lblStride === 0 || i === n - 1 || Math.abs(p.gain) === biggest) {
+        const ly = p.gain > 0 ? yTop - 5 : yTop + height + 12;
+        barLabels += `<text class="chart-pt-label${p.inProgress ? ' inprogress' : ''}" x="${x.toFixed(1)}" y="${ly.toFixed(1)}">${sgn(p.gain)}</text>`;
+      }
+    }
+    hovers += `<rect class="chart-hit" x="${(x - barSlot / 2).toFixed(1)}" y="${P.top}" width="${barSlot.toFixed(1)}" height="${innerH}" data-idx="${i}" />`;
+  }
+
+  // Site attribution — same pattern as the other charts.
+  const channelName = activeDisplayName();
+  const startEl = document.getElementById('startDate');
+  const endEl = document.getElementById('endDate');
+  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const isNarrow = window.matchMedia('(max-width: 540px)').matches;
+  const attributionText = isNarrow
+    ? `${channelName} · jerminaldecline.com`
+    : `${channelName} · ${dateRange} · jerminaldecline.com`;
+  const attribution = `<text class="chart-attribution" x="${P.left + innerW}" y="${H - 8}" text-anchor="end">${escapeHtml(attributionText)}</text>`;
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${zeroLine}
+    ${bars}
+    ${barLabels}
+    ${xLabels}
+    ${yLabels}
+    ${attribution}
+    ${hovers}
+  `;
+
+  // Tooltip — same wiring as the other bar charts.
+  const wrapEl = document.getElementById('chartWrap');
+  const dayLabel = (k) => new Date(k + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  svg.querySelectorAll('.chart-hit').forEach(rect => {
+    rect.addEventListener('mouseenter', () => {
+      const p = points[Number(rect.getAttribute('data-idx'))];
+      if (!p) return;
+      const bbox = rect.getBoundingClientRect();
+      const wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `
+        <div class="tooltip-month">${daily ? dayLabel(p.key) : monthLabel(p.key)}${p.inProgress ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
+        <div class="chart-tooltip-row"><strong>${p.gain === 0 ? 'No counter movement' : (p.gain > 0 ? '+' : '−') + Math.abs(p.gain).toLocaleString() + ' subscribers'}</strong></div>
+      `;
+      const desired = bbox.left - wrap.left + bbox.width / 2;
+      const tipWidth = tooltip.offsetWidth || 200;
+      const margin = 8, half = tipWidth / 2;
+      const clamped = Math.max(half + margin, Math.min(wrap.width - half - margin, desired));
       tooltip.style.left = clamped + 'px';
       tooltip.style.top = (bbox.top - wrap.top - 8) + 'px';
     });
