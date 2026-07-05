@@ -3203,6 +3203,14 @@ function render(m){
     return days > 0 ? subsG / days : null;
   })();
   const rateStr = subsRate != null ? (() => { const v = Math.round(Math.abs(subsRate)); return ' · ≈' + (subsRate < 0 ? '−' : '') + (v === 0 ? '<1' : fmt(v)) + '/day'; })() : '';
+  // Typical-upload reach: the Average views hero's median as a share of the
+  // subscriber base at the period's end. Only shown when subs data exists
+  // and the period actually has long-form uploads (d.med can be null).
+  const medSubsStr = (subsTot && d.med != null) ? (() => {
+    const pc = d.med / subsTot * 100;
+    const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
+    return ` · ≈${t}% of the sub base`;
+  })() : '';
   const subsFoot = (subsTot && d.tot != null) ? `<div class="stat-sub">${fmt(subsTot)} total \u00b7 ${fmtRatio(d.tot / subsTot)} long-form views per sub${rateStr}</div>` : '';
   cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s subscriber counter over this period for the selected scope. YouTube reports rounded counts, so small moves show as \u00b10. Views per sub compares the period\'s long-form views with the subscriber count at its end; the ≈/day figure is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
   const cardHTML=cards.map(c=>{
@@ -3398,9 +3406,9 @@ function render(m){
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
-        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it." tabindex="0" role="button" aria-label="About average views">ⓘ</span></div>
+        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it. The % shows what share of the subscriber base that typical upload reaches (where subs are tracked — June 2026 on)." tabindex="0" role="button" aria-label="About average views">ⓘ</span></div>
         <div class="hero-num">${fmt(d.med)}</div>
-        <div class="hero-sub">per long-form upload</div>
+        <div class="hero-sub">per long-form upload${medSubsStr}</div>
         ${heroDeltas(d.med,p&&p.med,y&&y.med)}
       </div>
       <div class="hero-card">
