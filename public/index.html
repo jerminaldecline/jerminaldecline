@@ -173,6 +173,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
 .hero-num.rev{font-size:2.05rem}  /* revenue is a range string, so a touch smaller to fit */
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
+.nowrap{white-space:nowrap}
 .deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
 .stat-row{display:grid;grid-template-columns:repeat(12,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
@@ -3206,17 +3207,17 @@ function render(m){
   // Views-per-sub companion for the Total views hero: the period's long-form
   // views divided by the subscriber count at its end (subs tracked June 2026
   // on, so older months just omit the segment).
-  const totSubsStr = (subsTot && d.tot != null) ? ` · ≈${fmtRatio(d.tot / subsTot)} views per sub` : '';
+  const totSubsStr = (subsTot && d.tot != null) ? ` · <span class="nowrap">≈${fmtRatio(d.tot / subsTot)} views per subscriber</span>` : '';
   // Typical-upload reach: the Average views hero's median as a share of the
   // subscriber base at the period's end. Only shown when subs data exists
   // and the period actually has long-form uploads (d.med can be null).
   const medSubsStr = (subsTot && d.med != null) ? (() => {
     const pc = d.med / subsTot * 100;
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
-    return ` · ≈${t}% of the sub base`;
+    return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
   const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
-  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-sub jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
