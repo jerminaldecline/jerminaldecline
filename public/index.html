@@ -178,6 +178,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .stat-row{display:grid;grid-template-columns:repeat(12,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
 .stat-row>.stat{grid-column:span 4}
 .stat-row>.stat.stat-sm{grid-column:span 3}
+.stat-sub{font-size:0.72rem;color:var(--subtext);line-height:1.4;margin-top:0.2rem}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
@@ -2614,6 +2615,7 @@ function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b
 
 let PAYLOAD = null; // {scopes, net, channels}
 let SUBS_GAINED = null; // {scope: {month: net subscriber change}} — snapshot-derived
+let SUBS_TOTAL = null; // {scope: {month: subscriber count at month end}}
 
 async function loadAndCompute(){
   // No cache-buster: Cloudflare serves these with max-age=0/must-revalidate +
@@ -2816,6 +2818,7 @@ async function loadAndCompute(){
   // the previous month's last snapshot; for a channel's first tracked month,
   // its first snapshot inside that month. ALL sums the per-channel figures.
   const subsGained = { ALL: {} };
+  const subsTotal = { ALL: {} };
   for (const ch of Object.values(data.channels||{})){
     const h = ch.handle; if (!h || !CHAN_ORDER.includes(h)) continue;
     const snaps = (ch.snapshots||[]).filter(r=>r && r.subscriberCount!=null).slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
@@ -2824,15 +2827,18 @@ async function loadAndCompute(){
     for (const r of snaps) lastBy.set(r.date.slice(0,7), r.subscriberCount);
     const ms = [...lastBy.keys()].sort();
     subsGained[h] = subsGained[h] || {};
+    subsTotal[h] = subsTotal[h] || {};
     for (let i=0;i<ms.length;i++){
       const base = i>0 ? lastBy.get(ms[i-1]) : snaps.find(r=>r.date.slice(0,7)===ms[i]).subscriberCount;
       const g = lastBy.get(ms[i]) - base;
       subsGained[h][ms[i]] = g;
       subsGained.ALL[ms[i]] = (subsGained.ALL[ms[i]]||0) + g;
+      subsTotal[h][ms[i]] = lastBy.get(ms[i]);
+      subsTotal.ALL[ms[i]] = (subsTotal.ALL[ms[i]]||0) + lastBy.get(ms[i]);
     }
   }
 
-  return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid, subsGained, meta: data.meta || null };
+  return { scopes, net, channels: CHAN_ORDER, peaks, handleToId: hid, subsGained, subsTotal, meta: data.meta || null };
 }
 
 /* ---------- render (ported from prototype, reads PAYLOAD) ---------- */
@@ -3158,12 +3164,26 @@ function render(m){
     return (m in S) ? S[m] : null;
   })();
   const subsNum = subsG == null ? '\u2014' : subsG > 0 ? '+' + fmt(subsG) : subsG < 0 ? '\u2212' + fmt(-subsG) : '\u00b10';
-  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s subscriber counter over this period for the selected scope. YouTube reports rounded counts, so small moves show as \u00b10. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm'});
+  // Footer: subscriber count at the period's end plus the period's long-form
+  // views divided by it — the "how much of the sub base actually shows up"
+  // ratio. Only rendered when both sides are known.
+  const subsTot = (() => {
+    const T = SUBS_TOTAL && SUBS_TOTAL[scope]; if (!T) return null;
+    if (isAgg) {
+      const a = d._agg || {};
+      const ks = Object.keys(T).filter(k => (!a.first || k >= a.first) && (!a.last || k <= a.last)).sort();
+      return ks.length ? T[ks[ks.length - 1]] : null;
+    }
+    return (m in T) ? T[m] : null;
+  })();
+  const fmtRatio = r => r >= 100 ? fmt(Math.round(r)) : r >= 10 ? r.toFixed(0) : r >= 1 ? r.toFixed(1) : r.toFixed(2);
+  const subsFoot = (subsTot && d.tot != null) ? `<div class="stat-sub">${fmt(subsTot)} total \u00b7 ${fmtRatio(d.tot / subsTot)} long-form views per sub</div>` : '';
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s subscriber counter over this period for the selected scope. YouTube reports rounded counts, so small moves show as \u00b10. Views per sub compares the period\'s long-form views with the subscriber count at its end. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
-    return `<div class="stat${c.cls?' '+c.cls:''}${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}</div>`;
+    return `<div class="stat${c.cls?' '+c.cls:''}${(c.goto&&monthKey)?' stat-link':''}"${linkAttrs}><div class="stat-num">${c.num}</div><div class="stat-lbl">${c.lbl}${(c.goto&&monthKey)?' <span class="stat-go" aria-hidden="true">→</span>':''}</div>${deltas}${c.foot||''}</div>`;
   }).join('');
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
@@ -8945,6 +8965,7 @@ function renderWindowList(startDate, endDate) {
     PAYLOAD = await loadAndCompute();
     SCOPES = PAYLOAD.scopes; NET = PAYLOAD.net; CHANNELS = PAYLOAD.channels; PEAKS = PAYLOAD.peaks;
     SUBS_GAINED = PAYLOAD.subsGained || {};
+    SUBS_TOTAL = PAYLOAD.subsTotal || {};
     HANDLE_TO_ID = PAYLOAD.handleToId || {};
     // Last-updated indicator (relative time, from data.json meta.lastUpdated)
     if (PAYLOAD.meta && PAYLOAD.meta.lastUpdated) {
