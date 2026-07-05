@@ -43,7 +43,8 @@ const CHANNELS = [
   '@JeremyHambly',
   '@UnSleevedMedia',
   '@rcnightmare',
-  '@QuarteringLive'
+  '@QuarteringLive',
+  '@QuarteringVlogs'
 ];
 const SHORTS_CUTOFF_SEC = 180; // 3 minutes
 // Earliest date on which we believe a sub-3-minute upload could meaningfully
