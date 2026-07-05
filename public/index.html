@@ -2338,6 +2338,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="trend-legend" id="trendLegend"></div>
         <div class="chart-controls-overlay">
           <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
+          <button type="button" class="chart-ctrl-btn" id="includeShortsToggle" aria-pressed="false" hidden title="Add Shorts views to the chart (off = long-form only)">Include Shorts</button>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
       </div>
@@ -3851,6 +3852,11 @@ function buildMonthlyData(scope){
   }
   function metricsFor(summary) {
     if (!summary) return null;
+    // "Include Shorts" applies only to the plain Views metric — every other
+    // consumer of this helper keeps its long-form framing.
+    if (chartMetric === 'views' && includeShorts) {
+      return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+    }
     if (viewMode === 'long') {
       return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
     }
@@ -3985,6 +3991,7 @@ function buildMonthlyData(scope){
   let chartMetric = 'views';
   let showPrevYear = true;
   let viewMode = 'long';
+  let includeShorts = false; // Views metric only: fold Shorts into the series
   let monthlyData = [];
   // selectedChannel + dataset come from the outer scope (shared globals)
 
@@ -4033,10 +4040,13 @@ function setChartTitle(metric, mode) {
   const el = document.getElementById('anChartTitle');
   if (!el) return;
   const isShort = mode === 'short';
-  const viewsT = isShort ? 'Shorts views by month' : 'Long-form views by month';
+  const isAllMode = mode === 'all';
+  const viewsT = isShort ? 'Shorts views by month' : isAllMode ? 'Views by month (Shorts included)' : 'Long-form views by month';
   const viewsS = isShort
     ? "Total views on each month's Shorts, with year-over-year shading."
-    : "Total views on each month's long-form uploads, with year-over-year shading.";
+    : isAllMode
+      ? "Total views on each month's uploads — long-form and Shorts — with year-over-year shading."
+      : "Total views on each month's long-form uploads, with year-over-year shading.";
   const T = {
     views: [viewsT, viewsS],
     views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
@@ -4056,7 +4066,7 @@ function renderTrendChart(yoy) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
-  setChartTitle(chartMetric, viewMode);
+  setChartTitle(chartMetric, (chartMetric === 'views' && includeShorts) ? 'all' : viewMode);
   // The tag-blocks key is specific to that chart; hide it for every other metric.
   // renderTagBlocksChart re-shows it when that chart is active.
   const _tbKey = document.getElementById('tagBlockKey');
@@ -4082,6 +4092,8 @@ function renderTrendChart(yoy) {
   if (chartMetric === 'subs') {
     const pyc = document.getElementById('prevYearControl');
     if (pyc) pyc.hidden = true;
+    const isc = document.getElementById('includeShortsToggle');
+    if (isc) isc.hidden = true;
     return renderSubsChart();
   }
   if (!chartData.length) {
@@ -4101,6 +4113,11 @@ function renderTrendChart(yoy) {
     if (ctrl) {
       ctrl.hidden = !supports;
       ctrl.setAttribute('aria-pressed', String(showPrevYear));
+    }
+    const shortsCtrl = document.getElementById('includeShortsToggle');
+    if (shortsCtrl) {
+      shortsCtrl.hidden = chartMetric !== 'views';
+      shortsCtrl.setAttribute('aria-pressed', String(includeShorts));
     }
   })();
 
@@ -6873,6 +6890,7 @@ function niceDurationAxis(minSec, maxSec) {
   window.setAnalysisTimePreset = function(p){ anTimePreset = p; window.renderAnalysisChart(); };
   window.__getAnalysisPreset = function(){ return anTimePreset; };
   window.setShowPrevYear = function(v){ showPrevYear = !!v; window.renderAnalysisChart(); };
+  window.setIncludeShorts = function(v){ includeShorts = !!v; window.renderAnalysisChart(); };
   window.__getShowPrevYear = function(){ return showPrevYear; };
   // expose metric/viewMode setters for the controls
   const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views','tag_blocks']);
@@ -9030,6 +9048,15 @@ function renderWindowList(startDate, endDate) {
       const next = prevYearBtn.getAttribute('aria-pressed') !== 'true';
       prevYearBtn.setAttribute('aria-pressed', String(next));
       if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(next);
+    });
+  }
+  // Include-Shorts toggle (Views metric only; off = long-form, the default)
+  const shortsBtn = document.getElementById('includeShortsToggle');
+  if (shortsBtn) {
+    shortsBtn.addEventListener('click', () => {
+      const next = shortsBtn.getAttribute('aria-pressed') !== 'true';
+      shortsBtn.setAttribute('aria-pressed', String(next));
+      if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(next);
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
