@@ -592,7 +592,20 @@ async function runIncremental(startTime) {
   for (const channelId of Object.keys(channelMeta)) {
     const ch = channelMeta[channelId];
     console.log(`\n[${ch.title}] Listing videos...`);
-    const v = await listVideosFromPlaylist(ch.uploadsPlaylistId, sinceDate, channelId);
+    let v;
+    try {
+      v = await listVideosFromPlaylist(ch.uploadsPlaylistId, sinceDate, channelId);
+    } catch (e) {
+      // A brand-new channel with zero PUBLIC uploads 404s its uploads playlist
+      // even though the channel itself resolves (QuarteringVlogs, 2026-07-05).
+      // That's "nothing to list", not a pipeline failure — any other error
+      // still crashes the run as designed.
+      if (String(e.message).includes('404')) {
+        console.log(`  Uploads playlist 404 for ${ch.title} — no public uploads yet. Skipping.`);
+        continue;
+      }
+      throw e;
+    }
     if (v.length === 0) {
       console.log(`  No videos in window for ${ch.title}.`);
       continue;
