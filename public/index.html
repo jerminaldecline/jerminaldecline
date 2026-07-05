@@ -3203,6 +3203,10 @@ function render(m){
     return days > 0 ? subsG / days : null;
   })();
   const rateStr = subsRate != null ? (() => { const v = Math.round(Math.abs(subsRate)); return ' · ≈' + (subsRate < 0 ? '−' : '') + (v === 0 ? '<1' : fmt(v)) + '/day'; })() : '';
+  // Views-per-sub companion for the Total views hero: the period's long-form
+  // views divided by the subscriber count at its end (subs tracked June 2026
+  // on, so older months just omit the segment).
+  const totSubsStr = (subsTot && d.tot != null) ? ` · ≈${fmtRatio(d.tot / subsTot)} views per sub` : '';
   // Typical-upload reach: the Average views hero's median as a share of the
   // subscriber base at the period's end. Only shown when subs data exists
   // and the period actually has long-form uploads (d.med can be null).
@@ -3211,8 +3215,8 @@ function render(m){
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · ≈${t}% of the sub base`;
   })() : '';
-  const subsFoot = (subsTot && d.tot != null) ? `<div class="stat-sub">${fmt(subsTot)} total \u00b7 ${fmtRatio(d.tot / subsTot)} long-form views per sub${rateStr}</div>` : '';
-  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s subscriber counter over this period for the selected scope. YouTube reports rounded counts, so small moves show as \u00b10. Views per sub compares the period\'s long-form views with the subscriber count at its end; the ≈/day figure is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
+  const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-sub jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
@@ -3402,7 +3406,7 @@ function render(m){
       <div class="hero-card">
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
         <div class="hero-num">${fmt(d.tot)}</div>
-        <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads</div>
+        <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads${totSubsStr}</div>
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
