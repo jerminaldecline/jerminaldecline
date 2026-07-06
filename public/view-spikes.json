@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-07-05-AM",
-    "snapshots": 45
+    "to": "2026-07-06-AM",
+    "snapshots": 47
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -16,7 +16,7 @@
     {
       "id": "7Mg87BPII_4",
       "title": "WALMART ACTUALLY DID IT",
-      "estPromotedViews": 9631,
+      "estPromotedViews": 9635,
       "spikeStartDate": "2026-06-27-PM"
     },
     {
@@ -24,12 +24,6 @@
       "title": "Walmart Will Be DESTROYED By This",
       "estPromotedViews": 3593,
       "spikeStartDate": "2026-07-02-AM"
-    },
-    {
-      "id": "n-I7Cp9iTTw",
-      "title": "WALMART FATIGUE GOES NUCLEAR",
-      "estPromotedViews": 3320,
-      "spikeStartDate": "2026-07-01-PM"
     },
     {
       "id": "Sr0WmHdxJvs",
