@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-05
+# Topic candidates — 2026-07-06
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 135 baseline videos
+Pool: 14 recent videos, 133 baseline videos
 
 ### Cluster 1: `out quartering`
 
 - **Recent saturation:** 6/14 videos (**43%**)
-- **Baseline saturation:** 9/135 videos (7%)
-- **Spike ratio:** 6.1x
+- **Baseline saturation:** 9/133 videos (7%)
+- **Spike ratio:** 6.0x
 - **Related terms:** `check`, `quartering`, `out`, `faces`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-06-30 — _BAN THIS NOW!_  
@@ -29,8 +29,8 @@ Pool: 14 recent videos, 135 baseline videos
 ### Cluster 2: `post`
 
 - **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 7/135 videos (5%)
-- **Spike ratio:** 6.5x
+- **Baseline saturation:** 7/133 videos (5%)
+- **Spike ratio:** 6.4x
 - **Related terms:** `post`, `alleged`, `social`, `media`, `media post`, `social media`
 - **Sample recent videos:**
   - 2026-07-02 — _SHE WAS 13_  
@@ -47,8 +47,8 @@ Pool: 14 recent videos, 135 baseline videos
 ### Cluster 3: `online`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 9/135 videos (7%)
-- **Spike ratio:** 3.1x
+- **Baseline saturation:** 9/133 videos (7%)
+- **Spike ratio:** 3.0x
 - **Related terms:** `online`
 - **Sample recent videos:**
   - 2026-07-03 — _THIS IS CRAZY_  
