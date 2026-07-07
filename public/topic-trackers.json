@@ -1,24 +1,66 @@
 {
-  "lastUpdated": "2026-07-06T08:46:25.451Z",
+  "lastUpdated": "2026-07-07T07:57:47.246Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "quartering",
+        "out quartering",
+        "political",
+        "check",
+        "check out",
+        "charlie",
+        "kirk",
+        "charlie kirk",
+        "out",
+        "sparks"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.75,
+        "baselineSaturation": 0.1667,
+        "spikeRatio": 4.5,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 18,
+        "detectedAt": "2026-07-07T07:57:47.246Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "backlash",
+      "keywords": [
+        "backlash"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.375,
+        "baselineSaturation": 0.0676,
+        "spikeRatio": 5.55,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-07-07T07:57:47.246Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "out quartering",
       "keywords": [
+        "vlogs",
+        "quartering vlogs",
         "out quartering",
         "check",
         "quartering",
         "check out",
-        "faces",
         "out"
       ],
       "detectorMeta": {
         "recentSaturation": 0.4286,
-        "baselineSaturation": 0.0709,
-        "spikeRatio": 6.05,
+        "baselineSaturation": 0.0846,
+        "spikeRatio": 5.07,
         "recentVideoCount": 6,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-07-06T08:46:25.451Z"
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-07-07T07:57:47.246Z"
       }
     },
     {
@@ -26,19 +68,18 @@
       "termId": "post",
       "keywords": [
         "post",
-        "media post",
         "alleged",
         "social",
-        "social media",
-        "media"
+        "media",
+        "social media"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3571,
-        "baselineSaturation": 0.056,
-        "spikeRatio": 6.38,
+        "baselineSaturation": 0.0551,
+        "spikeRatio": 6.48,
         "recentVideoCount": 5,
         "baselineVideoCount": 7,
-        "detectedAt": "2026-07-06T08:46:25.451Z"
+        "detectedAt": "2026-07-07T07:57:47.246Z"
       }
     }
   ]
