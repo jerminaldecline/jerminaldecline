@@ -195,18 +195,18 @@
           "date": "2026-07-07",
           "channelViews": 1978608001,
           "subscriberCount": 2090000,
-          "videoCount": 11033
+          "videoCount": 11034
         }
       ],
       "meta": {
-        "videoCount": 11029,
-        "longFormCount": 9519,
+        "videoCount": 11030,
+        "longFormCount": 9520,
         "shortsCount": 1510,
         "unavailableCount": 0,
         "unlistedCount": 1,
         "oldestVideoDate": "2017-07-14T02:23:12.000Z",
-        "newestVideoDate": "2026-07-07T20:17:17.000Z",
-        "ytVideoCount": 11033
+        "newestVideoDate": "2026-07-07T22:45:52.000Z",
+        "ytVideoCount": 11034
       }
     },
     "UCEOtZuVe8emWLKRzJIkzVow": {
@@ -404,18 +404,18 @@
           "date": "2026-07-07",
           "channelViews": 124031141,
           "subscriberCount": 329000,
-          "videoCount": 1698
+          "videoCount": 1700
         }
       ],
       "meta": {
-        "videoCount": 1699,
-        "longFormCount": 1166,
+        "videoCount": 1701,
+        "longFormCount": 1168,
         "shortsCount": 532,
         "unavailableCount": 1,
         "unlistedCount": 1,
         "oldestVideoDate": "2024-04-02T17:00:09.000Z",
-        "newestVideoDate": "2026-07-07T14:03:16.000Z",
-        "ytVideoCount": 1698
+        "newestVideoDate": "2026-07-07T23:00:33.000Z",
+        "ytVideoCount": 1700
       }
     },
     "UCIIeZClsD9f0KlRsT1CBpDw": {
@@ -1005,7 +1005,7 @@
         {
           "date": "2026-07-07",
           "channelViews": 46923128,
-          "subscriberCount": 65500,
+          "subscriberCount": 65600,
           "videoCount": 718
         }
       ],
@@ -1041,41 +1041,86 @@
         {
           "date": "2026-07-07",
           "channelViews": 0,
-          "subscriberCount": 1180,
-          "videoCount": 0
+          "subscriberCount": 1210,
+          "videoCount": 1
         }
       ],
       "meta": {
-        "videoCount": 0,
-        "longFormCount": 0,
+        "videoCount": 1,
+        "longFormCount": 1,
         "shortsCount": 0,
         "unavailableCount": 0,
         "unlistedCount": 0,
-        "oldestVideoDate": null,
-        "newestVideoDate": null
+        "oldestVideoDate": "2026-07-07T22:40:04.000Z",
+        "newestVideoDate": "2026-07-07T22:40:04.000Z",
+        "ytVideoCount": 1
       }
     }
   },
   "meta": {
-    "lastUpdated": "2026-07-07T21:10:31.602Z",
-    "videoCount": 15484,
-    "longFormCount": 13036,
+    "lastUpdated": "2026-07-07T23:07:06.295Z",
+    "videoCount": 15488,
+    "longFormCount": 13040,
     "shortsCount": 2446,
     "unavailableCount": 2,
     "oldestVideoDate": "2010-08-27T21:12:09.000Z",
-    "newestVideoDate": "2026-07-07T20:17:17.000Z",
+    "newestVideoDate": "2026-07-07T23:00:33.000Z",
     "shortsCutoffSec": 180
   },
   "videos": [
+    {
+      "id": "82nklij7rO4",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "title": "NEW PRINTS DISCOVERED!",
+      "publishedAt": "2026-07-07T23:00:33.000Z",
+      "durationSec": 729,
+      "views": 228,
+      "likes": 53,
+      "comments": 4,
+      "isShort": false
+    },
+    {
+      "id": "Pn8nalh7768",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "title": "BRATS FOUND OUT",
+      "publishedAt": "2026-07-07T22:45:52.000Z",
+      "durationSec": 991,
+      "views": 2555,
+      "likes": 458,
+      "comments": 56,
+      "isShort": false
+    },
+    {
+      "id": "8xJ7bhIUcDU",
+      "channelId": "UCd9lxVsVlQ9cvY8gi6bphUA",
+      "title": "I WENT TO THE ER!",
+      "publishedAt": "2026-07-07T22:40:04.000Z",
+      "durationSec": 1438,
+      "views": 144,
+      "likes": 36,
+      "comments": 27,
+      "isShort": false
+    },
+    {
+      "id": "5aCRQJ9r2tw",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "title": "TIME FOR WAR",
+      "publishedAt": "2026-07-07T21:39:38.000Z",
+      "durationSec": 1124,
+      "views": 1797,
+      "likes": 560,
+      "comments": 87,
+      "isShort": false
+    },
     {
       "id": "1byfcs9unOU",
       "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
       "title": "NO COMING BACK NOW",
       "publishedAt": "2026-07-07T20:17:17.000Z",
       "durationSec": 1252,
-      "views": 7461,
-      "likes": 1108,
-      "comments": 203,
+      "views": 15474,
+      "likes": 2498,
+      "comments": 464,
       "isShort": false
     },
     {
@@ -1084,9 +1129,9 @@
       "title": "THIS IS VERY BAD",
       "publishedAt": "2026-07-07T17:19:26.000Z",
       "durationSec": 848,
-      "views": 17455,
-      "likes": 2619,
-      "comments": 299,
+      "views": 24823,
+      "likes": 2924,
+      "comments": 323,
       "isShort": false
     },
     {
@@ -1095,9 +1140,9 @@
       "title": "Why Are These People Like This!  #gender #cringe #debate #viral",
       "publishedAt": "2026-07-07T14:30:38.000Z",
       "durationSec": 92,
-      "views": 745,
-      "likes": 158,
-      "comments": 5,
+      "views": 1099,
+      "likes": 203,
+      "comments": 7,
       "isShort": true
     },
     {
@@ -1106,9 +1151,9 @@
       "title": "This Kid Is So Based #women #sports #viral #cringe",
       "publishedAt": "2026-07-07T14:30:13.000Z",
       "durationSec": 52,
-      "views": 20163,
-      "likes": 3407,
-      "comments": 177,
+      "views": 29124,
+      "likes": 4636,
+      "comments": 222,
       "isShort": true
     },
     {
@@ -1117,9 +1162,9 @@
       "title": "Why Are These People Even Here!  #viral #canada #cringe #immigration",
       "publishedAt": "2026-07-07T14:03:16.000Z",
       "durationSec": 177,
-      "views": 24732,
-      "likes": 4618,
-      "comments": 224,
+      "views": 36503,
+      "likes": 5464,
+      "comments": 249,
       "isShort": true
     },
     {
@@ -1128,8 +1173,8 @@
       "title": "TRUMP KEEPS WINNING, TYLER ROBINSON TRIAL STARTS, CANDACE OWENS  MELTDOWN AND MORE",
       "publishedAt": "2026-07-07T07:49:20.000Z",
       "durationSec": 9591,
-      "views": 1106,
-      "likes": 133,
+      "views": 1115,
+      "likes": 134,
       "comments": 6,
       "isShort": false
     },
@@ -1139,9 +1184,9 @@
       "title": "Could You Remain Calm!  #women #football #soccer #cringe",
       "publishedAt": "2026-07-07T02:30:34.000Z",
       "durationSec": 109,
-      "views": 325009,
-      "likes": 15064,
-      "comments": 1223,
+      "views": 379484,
+      "likes": 16599,
+      "comments": 1278,
       "isShort": true
     },
     {
@@ -1150,9 +1195,9 @@
       "title": "Delivery Driver Gets Confronted #viral #cringe #funny #confrontation",
       "publishedAt": "2026-07-07T02:00:28.000Z",
       "durationSec": 177,
-      "views": 62370,
-      "likes": 3720,
-      "comments": 77,
+      "views": 84067,
+      "likes": 4430,
+      "comments": 85,
       "isShort": true
     },
     {
@@ -1161,9 +1206,9 @@
       "title": "Incredible Funny CCTV Moments #hilarious #funny #viral #meme",
       "publishedAt": "2026-07-07T02:00:06.000Z",
       "durationSec": 178,
-      "views": 56478,
-      "likes": 2812,
-      "comments": 44,
+      "views": 62924,
+      "likes": 3023,
+      "comments": 48,
       "isShort": true
     },
     {
@@ -1172,9 +1217,9 @@
       "title": "Careful With Vacuum Packed Mattresses #funny #cringe #meme #viral",
       "publishedAt": "2026-07-07T00:30:29.000Z",
       "durationSec": 67,
-      "views": 24893,
-      "likes": 1567,
-      "comments": 97,
+      "views": 32304,
+      "likes": 2170,
+      "comments": 129,
       "isShort": true
     },
     {
@@ -1183,9 +1228,9 @@
       "title": "Leftists Really Are Pathetic #leftism #leftists #liberals #cringe",
       "publishedAt": "2026-07-07T00:30:29.000Z",
       "durationSec": 95,
-      "views": 55027,
-      "likes": 5863,
-      "comments": 148,
+      "views": 65904,
+      "likes": 6208,
+      "comments": 156,
       "isShort": true
     },
     {
@@ -1194,9 +1239,9 @@
       "title": "Have You Seen A Driverless Truck Yet!  #trucking #viral #funny #meme",
       "publishedAt": "2026-07-07T00:30:25.000Z",
       "durationSec": 47,
-      "views": 8153,
-      "likes": 417,
-      "comments": 35,
+      "views": 10570,
+      "likes": 517,
+      "comments": 46,
       "isShort": true
     },
     {
@@ -1205,8 +1250,8 @@
       "title": "HE ROASTED EM",
       "publishedAt": "2026-07-06T23:33:31.000Z",
       "durationSec": 798,
-      "views": 6275,
-      "likes": 866,
+      "views": 6424,
+      "likes": 878,
       "comments": 77,
       "isShort": false
     },
@@ -1216,9 +1261,9 @@
       "title": "THIS IS BAD",
       "publishedAt": "2026-07-06T23:23:25.000Z",
       "durationSec": 1006,
-      "views": 40567,
-      "likes": 3539,
-      "comments": 449,
+      "views": 41796,
+      "likes": 3588,
+      "comments": 454,
       "isShort": false
     },
     {
@@ -1227,8 +1272,8 @@
       "title": "MOST HATED MAN EVER",
       "publishedAt": "2026-07-06T22:52:08.000Z",
       "durationSec": 918,
-      "views": 5828,
-      "likes": 850,
+      "views": 6026,
+      "likes": 859,
       "comments": 89,
       "isShort": false
     },
@@ -1238,9 +1283,9 @@
       "title": "WOKE NURSE INSTANT KARMA",
       "publishedAt": "2026-07-06T21:48:12.000Z",
       "durationSec": 1107,
-      "views": 51170,
-      "likes": 4797,
-      "comments": 514,
+      "views": 52412,
+      "likes": 4905,
+      "comments": 521,
       "isShort": false
     },
     {
@@ -1249,9 +1294,9 @@
       "title": "HE'S COOKED",
       "publishedAt": "2026-07-06T21:13:06.000Z",
       "durationSec": 769,
-      "views": 8701,
-      "likes": 1173,
-      "comments": 107,
+      "views": 8910,
+      "likes": 1179,
+      "comments": 109,
       "isShort": false
     },
     {
@@ -1260,9 +1305,9 @@
       "title": "THEY'RE ANIMALS!",
       "publishedAt": "2026-07-06T20:12:40.000Z",
       "durationSec": 988,
-      "views": 39737,
-      "likes": 4319,
-      "comments": 1105,
+      "views": 40251,
+      "likes": 4364,
+      "comments": 1114,
       "isShort": false
     },
     {
@@ -1271,9 +1316,9 @@
       "title": "ALL OUT WAR",
       "publishedAt": "2026-07-06T19:29:36.000Z",
       "durationSec": 1028,
-      "views": 11774,
-      "likes": 1554,
-      "comments": 167,
+      "views": 12233,
+      "likes": 1578,
+      "comments": 168,
       "isShort": false
     },
     {
@@ -1282,9 +1327,9 @@
       "title": "HE WON!",
       "publishedAt": "2026-07-06T17:41:03.000Z",
       "durationSec": 1064,
-      "views": 44357,
-      "likes": 5597,
-      "comments": 441,
+      "views": 44885,
+      "likes": 5635,
+      "comments": 443,
       "isShort": false
     },
     {
@@ -1293,8 +1338,8 @@
       "title": "THIS IS A JOKE",
       "publishedAt": "2026-07-06T16:14:13.000Z",
       "durationSec": 620,
-      "views": 1222,
-      "likes": 161,
+      "views": 1240,
+      "likes": 162,
       "comments": 13,
       "isShort": false
     },
@@ -1304,7 +1349,7 @@
       "title": "MUSLIM SUPREMACY, PSYCHO NURSE FINDS OUT, BULLY GIRLS RUIN THEIR LIVES & MORE",
       "publishedAt": "2026-07-06T08:48:43.000Z",
       "durationSec": 5319,
-      "views": 1565,
+      "views": 1567,
       "likes": 222,
       "comments": 25,
       "isShort": false
@@ -1315,8 +1360,8 @@
       "title": "This Little Fella Just Wanted To Be With Friends #animals #penguins #nature #cute",
       "publishedAt": "2026-07-06T02:00:35.000Z",
       "durationSec": 42,
-      "views": 37830,
-      "likes": 2290,
+      "views": 38032,
+      "likes": 2297,
       "comments": 29,
       "isShort": true
     },
@@ -1326,9 +1371,9 @@
       "title": "This Lady Seems Really Shocked #sister #family #viral #cringe",
       "publishedAt": "2026-07-06T02:00:10.000Z",
       "durationSec": 142,
-      "views": 169996,
-      "likes": 10359,
-      "comments": 164,
+      "views": 188372,
+      "likes": 11096,
+      "comments": 173,
       "isShort": true
     },
     {
@@ -1337,8 +1382,8 @@
       "title": "Don't Believe Everything You Read #usa #europe #media #viral",
       "publishedAt": "2026-07-06T00:00:24.000Z",
       "durationSec": 156,
-      "views": 13422,
-      "likes": 1840,
+      "views": 13449,
+      "likes": 1842,
       "comments": 63,
       "isShort": true
     },
@@ -1348,9 +1393,9 @@
       "title": "This Man Is A True Hero #hero #viral #heartwarming #men",
       "publishedAt": "2026-07-06T00:00:11.000Z",
       "durationSec": 36,
-      "views": 71796,
-      "likes": 2209,
-      "comments": 65,
+      "views": 79147,
+      "likes": 2330,
+      "comments": 68,
       "isShort": true
     },
     {
@@ -1359,9 +1404,9 @@
       "title": "Kids Are The Funniest #kids #prank #viral #comedy",
       "publishedAt": "2026-07-05T02:30:32.000Z",
       "durationSec": 67,
-      "views": 28431,
-      "likes": 1483,
-      "comments": 56,
+      "views": 28668,
+      "likes": 1499,
+      "comments": 57,
       "isShort": true
     },
     {
@@ -1370,9 +1415,9 @@
       "title": "This Is A Real Talent #music #firearms #viral #funny",
       "publishedAt": "2026-07-05T02:00:18.000Z",
       "durationSec": 59,
-      "views": 270536,
-      "likes": 25108,
-      "comments": 330,
+      "views": 270658,
+      "likes": 25121,
+      "comments": 332,
       "isShort": true
     },
     {
@@ -1381,8 +1426,8 @@
       "title": "Janitor Takes Out Unruly Thugs With Mop #hero #shopping #viral #cringe",
       "publishedAt": "2026-07-05T00:00:28.000Z",
       "durationSec": 27,
-      "views": 126535,
-      "likes": 3985,
+      "views": 126887,
+      "likes": 3997,
       "comments": 452,
       "isShort": true
     },
@@ -1392,8 +1437,8 @@
       "title": "Everyone Needs One Of These Ready For The 4th #independenceday #4thjuly #viral #amazing",
       "publishedAt": "2026-07-05T00:00:03.000Z",
       "durationSec": 62,
-      "views": 151560,
-      "likes": 10010,
+      "views": 152243,
+      "likes": 10040,
       "comments": 285,
       "isShort": true
     },
@@ -1403,8 +1448,8 @@
       "title": "This Prank Call Is Absolutely Hilarious #prank #funny #meme #viral",
       "publishedAt": "2026-07-04T12:00:36.000Z",
       "durationSec": 175,
-      "views": 13828,
-      "likes": 905,
+      "views": 13883,
+      "likes": 906,
       "comments": 21,
       "isShort": true
     },
@@ -1440,9 +1485,9 @@
       "title": "Young Karen Meets Instant Karma #karma #karen #cringe #viral",
       "publishedAt": "2026-07-04T02:00:33.000Z",
       "durationSec": 176,
-      "views": 208938,
-      "likes": 12734,
-      "comments": 792,
+      "views": 216554,
+      "likes": 12979,
+      "comments": 809,
       "isShort": true
     },
     {
@@ -1451,8 +1496,8 @@
       "title": "This Lady Seems Really Shocked #sister #family #viral #cringe",
       "publishedAt": "2026-07-04T02:00:25.000Z",
       "durationSec": 143,
-      "views": 8063,
-      "likes": 834,
+      "views": 8208,
+      "likes": 837,
       "comments": 61,
       "isShort": true
     },
@@ -1462,9 +1507,9 @@
       "title": "Karen FAFO At Transit Station #bodycam #police #viral #cringe",
       "publishedAt": "2026-07-04T00:30:13.000Z",
       "durationSec": 142,
-      "views": 37096,
-      "likes": 2401,
-      "comments": 236,
+      "views": 38552,
+      "likes": 2491,
+      "comments": 249,
       "isShort": true
     },
     {
@@ -1473,8 +1518,8 @@
       "title": "Does Your Wife Do DIY  #viral #funny #cringe #home",
       "publishedAt": "2026-07-04T00:00:34.000Z",
       "durationSec": 81,
-      "views": 34224,
-      "likes": 1438,
+      "views": 34389,
+      "likes": 1442,
       "comments": 40,
       "isShort": true
     },
@@ -1484,9 +1529,9 @@
       "title": "A Little Kindness Goes A Long Way #viral #paintjob #heartwarming #kindness",
       "publishedAt": "2026-07-04T00:00:01.000Z",
       "durationSec": 179,
-      "views": 139663,
-      "likes": 12496,
-      "comments": 234,
+      "views": 142014,
+      "likes": 12691,
+      "comments": 235,
       "isShort": true
     },
     {
@@ -1495,9 +1540,9 @@
       "title": "THIS IS CRAZY",
       "publishedAt": "2026-07-03T22:06:31.000Z",
       "durationSec": 967,
-      "views": 67893,
-      "likes": 4893,
-      "comments": 1619,
+      "views": 68026,
+      "likes": 4899,
+      "comments": 1620,
       "isShort": false
     },
     {
@@ -1506,9 +1551,9 @@
       "title": "SHE'S GUILTY",
       "publishedAt": "2026-07-03T19:22:57.000Z",
       "durationSec": 943,
-      "views": 73611,
-      "likes": 6085,
-      "comments": 2546,
+      "views": 73677,
+      "likes": 6087,
+      "comments": 2550,
       "isShort": false
     },
     {
@@ -1517,7 +1562,7 @@
       "title": "Who Is In The Wrong Here  #amazon #delivery #viral #cringe",
       "publishedAt": "2026-07-03T12:00:06.000Z",
       "durationSec": 65,
-      "views": 52230,
+      "views": 52265,
       "likes": 2775,
       "comments": 388,
       "isShort": true
@@ -1528,9 +1573,9 @@
       "title": "The Good Old Bush Trick #prank #funny #viral #meme",
       "publishedAt": "2026-07-03T02:00:38.000Z",
       "durationSec": 70,
-      "views": 609422,
-      "likes": 16332,
-      "comments": 507,
+      "views": 633131,
+      "likes": 16610,
+      "comments": 511,
       "isShort": true
     },
     {
@@ -1539,8 +1584,8 @@
       "title": "Who Was Your Favorite Teacher  #teachers #school #funny #meme",
       "publishedAt": "2026-07-03T02:00:23.000Z",
       "durationSec": 120,
-      "views": 9057,
-      "likes": 528,
+      "views": 9165,
+      "likes": 531,
       "comments": 8,
       "isShort": true
     },
@@ -1550,9 +1595,9 @@
       "title": "Which Side Are You On!  #viral #cringe #drama",
       "publishedAt": "2026-07-03T02:00:19.000Z",
       "durationSec": 90,
-      "views": 478820,
-      "likes": 18578,
-      "comments": 971,
+      "views": 480481,
+      "likes": 18627,
+      "comments": 974,
       "isShort": true
     },
     {
@@ -1561,8 +1606,8 @@
       "title": "What Do You Think Of Pranksters?  #pranks #meme #funny #viral",
       "publishedAt": "2026-07-03T00:00:16.000Z",
       "durationSec": 66,
-      "views": 3731,
-      "likes": 185,
+      "views": 3762,
+      "likes": 187,
       "comments": 2,
       "isShort": true
     },
@@ -1572,8 +1617,8 @@
       "title": "This Is Some Good Parenting Right Here #family #ring #heartwarming #mothers",
       "publishedAt": "2026-07-03T00:00:12.000Z",
       "durationSec": 60,
-      "views": 31111,
-      "likes": 1562,
+      "views": 31121,
+      "likes": 1561,
       "comments": 41,
       "isShort": true
     },
@@ -1583,7 +1628,7 @@
       "title": "SHE WAS 13",
       "publishedAt": "2026-07-02T22:00:42.000Z",
       "durationSec": 975,
-      "views": 21835,
+      "views": 21836,
       "likes": 2662,
       "comments": 477,
       "isShort": false
@@ -1605,8 +1650,8 @@
       "title": "THIS IS VERY BAD",
       "publishedAt": "2026-07-02T19:24:31.000Z",
       "durationSec": 972,
-      "views": 112322,
-      "likes": 10264,
+      "views": 112350,
+      "likes": 10265,
       "comments": 2422,
       "isShort": false
     },
@@ -1616,8 +1661,8 @@
       "title": "THIS WAS BRUTAL",
       "publishedAt": "2026-07-02T18:17:07.000Z",
       "durationSec": 721,
-      "views": 13103,
-      "likes": 1496,
+      "views": 13117,
+      "likes": 1497,
       "comments": 275,
       "isShort": false
     },
@@ -1627,9 +1672,9 @@
       "title": "Kid Goes Crazy Over Mobile Phone #viral #cringe #family #bodycam",
       "publishedAt": "2026-07-02T12:00:35.000Z",
       "durationSec": 99,
-      "views": 210719,
-      "likes": 9802,
-      "comments": 2412,
+      "views": 210985,
+      "likes": 9812,
+      "comments": 2415,
       "isShort": true
     },
     {
@@ -1638,8 +1683,8 @@
       "title": "This Lady Went Full Demon Mode #doordash #drama #viral #cringe",
       "publishedAt": "2026-07-02T12:00:26.000Z",
       "durationSec": 56,
-      "views": 5675,
-      "likes": 291,
+      "views": 5703,
+      "likes": 292,
       "comments": 33,
       "isShort": true
     },
@@ -1649,9 +1694,9 @@
       "title": "Karen Completely Loses It #karen #cringe #police #neighbors",
       "publishedAt": "2026-07-02T12:00:11.000Z",
       "durationSec": 120,
-      "views": 334163,
-      "likes": 19949,
-      "comments": 416,
+      "views": 334775,
+      "likes": 19978,
+      "comments": 417,
       "isShort": true
     },
     {
@@ -1660,9 +1705,9 @@
       "title": "Would Your Kid Do This!  #fatigue #cringe #viral #walmart",
       "publishedAt": "2026-07-02T02:30:30.000Z",
       "durationSec": 77,
-      "views": 181433,
-      "likes": 11252,
-      "comments": 2012,
+      "views": 181571,
+      "likes": 11255,
+      "comments": 2013,
       "isShort": true
     },
     {
@@ -1671,7 +1716,7 @@
       "title": "Dogs Are The Best Things Ever #dogs #funny #comedy #meme",
       "publishedAt": "2026-07-02T02:00:22.000Z",
       "durationSec": 125,
-      "views": 7067,
+      "views": 7078,
       "likes": 514,
       "comments": 16,
       "isShort": true
@@ -1682,8 +1727,8 @@
       "title": "This Is Absolutely Hilarious #funny #cringe #meme #viral",
       "publishedAt": "2026-07-02T02:00:00.000Z",
       "durationSec": 74,
-      "views": 17518,
-      "likes": 718,
+      "views": 17557,
+      "likes": 719,
       "comments": 12,
       "isShort": true
     },
@@ -1693,9 +1738,9 @@
       "title": "This Is A Living Nightmare #fairground #waterslide #themepark #scary",
       "publishedAt": "2026-07-02T00:30:26.000Z",
       "durationSec": 111,
-      "views": 508922,
-      "likes": 15632,
-      "comments": 1183,
+      "views": 518266,
+      "likes": 15796,
+      "comments": 1193,
       "isShort": true
     },
     {
@@ -1715,8 +1760,8 @@
       "title": "What A Horrible Man #drama #viral #cringe #shopping",
       "publishedAt": "2026-07-02T00:00:32.000Z",
       "durationSec": 55,
-      "views": 9858,
-      "likes": 402,
+      "views": 9872,
+      "likes": 403,
       "comments": 31,
       "isShort": true
     },
@@ -1726,8 +1771,8 @@
       "title": "Aunties Get All The Fun #kids #family #funny #meme",
       "publishedAt": "2026-07-02T00:00:31.000Z",
       "durationSec": 115,
-      "views": 20171,
-      "likes": 1815,
+      "views": 20361,
+      "likes": 1824,
       "comments": 69,
       "isShort": true
     },
@@ -1737,9 +1782,9 @@
       "title": "HARD TO WATCH THIS",
       "publishedAt": "2026-07-01T22:30:04.000Z",
       "durationSec": 1211,
-      "views": 11719,
-      "likes": 1267,
-      "comments": 380,
+      "views": 11722,
+      "likes": 1268,
+      "comments": 381,
       "isShort": false
     },
     {
@@ -1748,8 +1793,8 @@
       "title": "THEY GOT HER",
       "publishedAt": "2026-07-01T21:54:51.000Z",
       "durationSec": 950,
-      "views": 55247,
-      "likes": 5665,
+      "views": 55260,
+      "likes": 5668,
       "comments": 794,
       "isShort": false
     },
@@ -1759,9 +1804,9 @@
       "title": "HE DESTROYED HIS CAREER",
       "publishedAt": "2026-07-01T19:17:10.000Z",
       "durationSec": 1201,
-      "views": 29053,
-      "likes": 3817,
-      "comments": 1067,
+      "views": 29187,
+      "likes": 3831,
+      "comments": 1068,
       "isShort": false
     },
     {
@@ -1770,8 +1815,8 @@
       "title": "PAYBACK BEGINS",
       "publishedAt": "2026-07-01T19:05:05.000Z",
       "durationSec": 1109,
-      "views": 89802,
-      "likes": 7950,
+      "views": 89908,
+      "likes": 7955,
       "comments": 733,
       "isShort": false
     },
@@ -1781,8 +1826,8 @@
       "title": "Years Later, Joe Biden Is Exactly The Same #cringe #viral #funny #joebiden",
       "publishedAt": "2026-07-01T00:30:36.000Z",
       "durationSec": 45,
-      "views": 17635,
-      "likes": 975,
+      "views": 17693,
+      "likes": 976,
       "comments": 63,
       "isShort": true
     },
@@ -1792,8 +1837,8 @@
       "title": "IT'S BACKFIRING WORSE",
       "publishedAt": "2026-06-30T23:58:28.000Z",
       "durationSec": 917,
-      "views": 43346,
-      "likes": 3867,
+      "views": 43377,
+      "likes": 3869,
       "comments": 431,
       "isShort": false
     },
@@ -1803,8 +1848,8 @@
       "title": "BAN THIS NOW!",
       "publishedAt": "2026-06-30T22:18:22.000Z",
       "durationSec": 913,
-      "views": 167824,
-      "likes": 20628,
+      "views": 168111,
+      "likes": 20652,
       "comments": 2840,
       "isShort": false
     },
@@ -1827,8 +1872,8 @@
       "title": "THIS IS BRUTAL",
       "publishedAt": "2026-06-30T18:55:27.000Z",
       "durationSec": 897,
-      "views": 80080,
-      "likes": 6316,
+      "views": 80109,
+      "likes": 6319,
       "comments": 770,
       "isShort": false
     },
@@ -1838,8 +1883,8 @@
       "title": "Woman Arrested For FAFO Post #trump #donaldtrump #bodycam #police",
       "publishedAt": "2026-06-30T14:30:12.000Z",
       "durationSec": 132,
-      "views": 126949,
-      "likes": 11187,
+      "views": 127010,
+      "likes": 11190,
       "comments": 2092,
       "isShort": true
     },
@@ -1849,9 +1894,9 @@
       "title": "Why Are They Always Like This  #fatigue #viral #cringe #weird",
       "publishedAt": "2026-06-30T02:30:28.000Z",
       "durationSec": 136,
-      "views": 1235836,
-      "likes": 74749,
-      "comments": 37863,
+      "views": 1240023,
+      "likes": 74944,
+      "comments": 37944,
       "isShort": true
     },
     {
@@ -1871,9 +1916,9 @@
       "title": "Well, This Really Escalated Quickly #crime #bodycam #fatigue #police",
       "publishedAt": "2026-06-30T00:30:17.000Z",
       "durationSec": 77,
-      "views": 192335,
-      "likes": 12875,
-      "comments": 1412,
+      "views": 196203,
+      "likes": 12978,
+      "comments": 1421,
       "isShort": true
     },
     {
@@ -1882,7 +1927,7 @@
       "title": "Why Are People Like This  #viral #drama #bodycam #police",
       "publishedAt": "2026-06-30T00:00:17.000Z",
       "durationSec": 173,
-      "views": 19310,
+      "views": 19325,
       "likes": 2428,
       "comments": 128,
       "isShort": true
@@ -1893,7 +1938,7 @@
       "title": "Never Work With Kids Or Animals #viral #funny #kids #animals",
       "publishedAt": "2026-06-30T00:00:15.000Z",
       "durationSec": 85,
-      "views": 22555,
+      "views": 22570,
       "likes": 1890,
       "comments": 67,
       "isShort": true
@@ -1904,7 +1949,7 @@
       "title": "THIS WAS BRUTAL",
       "publishedAt": "2026-06-29T23:45:33.000Z",
       "durationSec": 801,
-      "views": 16052,
+      "views": 16054,
       "likes": 1664,
       "comments": 170,
       "isShort": false
@@ -1915,7 +1960,7 @@
       "title": "PUT HER IN PRISON",
       "publishedAt": "2026-06-29T22:29:21.000Z",
       "durationSec": 918,
-      "views": 55540,
+      "views": 55548,
       "likes": 5125,
       "comments": 1207,
       "isShort": false
@@ -1937,7 +1982,7 @@
       "title": "SHE GOT HUMILIATED",
       "publishedAt": "2026-06-29T18:52:26.000Z",
       "durationSec": 742,
-      "views": 15096,
+      "views": 15098,
       "likes": 1847,
       "comments": 141,
       "isShort": false
@@ -1948,7 +1993,7 @@
       "title": "THEY'RE FREAKING OUT",
       "publishedAt": "2026-06-29T18:27:12.000Z",
       "durationSec": 977,
-      "views": 87290,
+      "views": 87296,
       "likes": 8248,
       "comments": 1581,
       "isShort": false
@@ -1959,8 +2004,8 @@
       "title": "Uber Driver Throws Coffee On Woman #uber #cringe #viral #drama",
       "publishedAt": "2026-06-29T02:30:02.000Z",
       "durationSec": 144,
-      "views": 23476,
-      "likes": 2121,
+      "views": 23500,
+      "likes": 2122,
       "comments": 367,
       "isShort": true
     },
@@ -1970,7 +2015,7 @@
       "title": "Why Do They Always Freak Out  #bodycam #crime #viral #police",
       "publishedAt": "2026-06-29T02:00:34.000Z",
       "durationSec": 178,
-      "views": 16527,
+      "views": 16531,
       "likes": 2088,
       "comments": 330,
       "isShort": true
@@ -1981,7 +2026,7 @@
       "title": "Who Is In The Right Here  #cops #bodycam #police #viral",
       "publishedAt": "2026-06-29T02:00:24.000Z",
       "durationSec": 75,
-      "views": 40090,
+      "views": 40105,
       "likes": 2848,
       "comments": 246,
       "isShort": true
@@ -1992,9 +2037,9 @@
       "title": "This Lady Is A Debate Master #debate #guns #firearms #viral",
       "publishedAt": "2026-06-29T00:30:21.000Z",
       "durationSec": 119,
-      "views": 888045,
-      "likes": 71164,
-      "comments": 1788,
+      "views": 889504,
+      "likes": 71362,
+      "comments": 1792,
       "isShort": true
     },
     {
@@ -2003,8 +2048,8 @@
       "title": "When A Karen Tries To Get You Fired #cringe #viral #karen #fafo",
       "publishedAt": "2026-06-29T00:00:24.000Z",
       "durationSec": 86,
-      "views": 541243,
-      "likes": 19474,
+      "views": 541801,
+      "likes": 19478,
       "comments": 150,
       "isShort": true
     },
@@ -2014,8 +2059,8 @@
       "title": "We've All Tried This At One Point #funny #prank #viral #women",
       "publishedAt": "2026-06-29T00:00:02.000Z",
       "durationSec": 86,
-      "views": 114917,
-      "likes": 3183,
+      "views": 115053,
+      "likes": 3188,
       "comments": 76,
       "isShort": true
     },
@@ -2025,8 +2070,8 @@
       "title": "This Is Legit Hilarious #prank #viral #comedy #funny",
       "publishedAt": "2026-06-28T02:30:19.000Z",
       "durationSec": 119,
-      "views": 46896,
-      "likes": 2477,
+      "views": 46935,
+      "likes": 2479,
       "comments": 70,
       "isShort": true
     },
@@ -2036,8 +2081,8 @@
       "title": "Well, I Didn't See That Coming #viral #amazing #ocean #dolphins",
       "publishedAt": "2026-06-28T02:00:27.000Z",
       "durationSec": 77,
-      "views": 609177,
-      "likes": 25739,
+      "views": 617375,
+      "likes": 25977,
       "comments": 214,
       "isShort": true
     },
@@ -2047,8 +2092,8 @@
       "title": "This Lady Is Completely Gone #karen #weird #viral #funny",
       "publishedAt": "2026-06-28T02:00:08.000Z",
       "durationSec": 176,
-      "views": 290034,
-      "likes": 14372,
+      "views": 290170,
+      "likes": 14380,
       "comments": 317,
       "isShort": true
     },
@@ -2058,8 +2103,8 @@
       "title": "This Dude Is Absolutely Amazing #gym #viral #prank #weights",
       "publishedAt": "2026-06-28T00:30:06.000Z",
       "durationSec": 178,
-      "views": 26774,
-      "likes": 2166,
+      "views": 26826,
+      "likes": 2169,
       "comments": 96,
       "isShort": true
     },
@@ -2069,8 +2114,8 @@
       "title": "We Don't Have To Live Like This #crime #fatigue #viral #cringe",
       "publishedAt": "2026-06-28T00:00:35.000Z",
       "durationSec": 84,
-      "views": 148005,
-      "likes": 8804,
+      "views": 148011,
+      "likes": 8805,
       "comments": 434,
       "isShort": true
     },
@@ -2080,8 +2125,8 @@
       "title": "This Karen Really Needs To Get A Life #karen #viral #funny #shopping",
       "publishedAt": "2026-06-28T00:00:03.000Z",
       "durationSec": 47,
-      "views": 57550,
-      "likes": 2930,
+      "views": 57587,
+      "likes": 2931,
       "comments": 58,
       "isShort": true
     },
@@ -2091,9 +2136,9 @@
       "title": "These Cops Are Absolutely Useless #bodycam #viral #drone #cringe",
       "publishedAt": "2026-06-27T14:30:20.000Z",
       "durationSec": 113,
-      "views": 376561,
-      "likes": 22484,
-      "comments": 2181,
+      "views": 386790,
+      "likes": 22862,
+      "comments": 2210,
       "isShort": true
     },
     {
@@ -2102,7 +2147,7 @@
       "title": "We All Need A Bruce In Our Lives #dogs #viral #heartwarming #animals",
       "publishedAt": "2026-06-27T14:00:32.000Z",
       "durationSec": 52,
-      "views": 16642,
+      "views": 16690,
       "likes": 980,
       "comments": 20,
       "isShort": true
@@ -2113,8 +2158,8 @@
       "title": "This Is So Wholesome, It Hurts #wholesome #family #meme #funny",
       "publishedAt": "2026-06-27T14:00:06.000Z",
       "durationSec": 72,
-      "views": 45220,
-      "likes": 3288,
+      "views": 45248,
+      "likes": 3291,
       "comments": 37,
       "isShort": true
     },
@@ -2124,9 +2169,9 @@
       "title": "The Fatigue Is Strong With This One #viral #travel #planes #fatigue",
       "publishedAt": "2026-06-27T02:30:29.000Z",
       "durationSec": 73,
-      "views": 1325753,
-      "likes": 62366,
-      "comments": 5265,
+      "views": 1330842,
+      "likes": 62566,
+      "comments": 5275,
       "isShort": true
     },
     {
@@ -2135,8 +2180,8 @@
       "title": "This Might Be The Funniest Prank Of All Time #prank #funny #viral #hilarious",
       "publishedAt": "2026-06-27T02:00:36.000Z",
       "durationSec": 137,
-      "views": 617616,
-      "likes": 20858,
+      "views": 617724,
+      "likes": 20860,
       "comments": 188,
       "isShort": true
     },
@@ -2146,8 +2191,8 @@
       "title": "This Is Absolutely Hilarious #funny #meme #viral #hilarious",
       "publishedAt": "2026-06-27T02:00:36.000Z",
       "durationSec": 83,
-      "views": 57892,
-      "likes": 2644,
+      "views": 57991,
+      "likes": 2646,
       "comments": 41,
       "isShort": true
     },
@@ -2157,8 +2202,8 @@
       "title": "Sometimes All You Need Is A Break #kindness #heartwarming #viral #towtruck",
       "publishedAt": "2026-06-27T00:30:28.000Z",
       "durationSec": 178,
-      "views": 25500,
-      "likes": 2249,
+      "views": 25532,
+      "likes": 2251,
       "comments": 62,
       "isShort": true
     },
@@ -2179,8 +2224,8 @@
       "title": "These Guys Should Hire Professionals #funny #viral #comedy #home",
       "publishedAt": "2026-06-27T00:00:18.000Z",
       "durationSec": 125,
-      "views": 158852,
-      "likes": 4368,
+      "views": 158859,
+      "likes": 4369,
       "comments": 13,
       "isShort": true
     },
@@ -2190,7 +2235,7 @@
       "title": "TOTAL DISASTER",
       "publishedAt": "2026-06-26T17:40:53.000Z",
       "durationSec": 1090,
-      "views": 42480,
+      "views": 42484,
       "likes": 3064,
       "comments": 407,
       "isShort": false
@@ -2201,8 +2246,8 @@
       "title": "Some People Will Always Find A Way #grandprix #lasvegas #cringe #viral",
       "publishedAt": "2026-06-26T14:30:17.000Z",
       "durationSec": 65,
-      "views": 22237,
-      "likes": 1383,
+      "views": 22267,
+      "likes": 1384,
       "comments": 117,
       "isShort": true
     },
@@ -2212,7 +2257,7 @@
       "title": "Sometimes Life Just Doesn't Go Your Way #baseball #funny #kids #viral",
       "publishedAt": "2026-06-26T14:00:39.000Z",
       "durationSec": 52,
-      "views": 51692,
+      "views": 51702,
       "likes": 1860,
       "comments": 31,
       "isShort": true
@@ -2223,7 +2268,7 @@
       "title": "Surprise Your Other Half With A Shave Today #funny #prank #viral #meme",
       "publishedAt": "2026-06-26T14:00:11.000Z",
       "durationSec": 86,
-      "views": 42963,
+      "views": 42970,
       "likes": 1470,
       "comments": 21,
       "isShort": true
@@ -2234,8 +2279,8 @@
       "title": "Raccoons Are Absolutely Hilarious #raccoons #animals #viral #funny",
       "publishedAt": "2026-06-26T02:00:24.000Z",
       "durationSec": 112,
-      "views": 87555,
-      "likes": 3805,
+      "views": 87578,
+      "likes": 3806,
       "comments": 29,
       "isShort": true
     },
@@ -2245,8 +2290,8 @@
       "title": "Nothing Worse Than A Woman Scorned #women #funny #prank #viral",
       "publishedAt": "2026-06-26T02:00:12.000Z",
       "durationSec": 116,
-      "views": 623372,
-      "likes": 18054,
+      "views": 623522,
+      "likes": 18058,
       "comments": 122,
       "isShort": true
     },
@@ -2267,8 +2312,8 @@
       "title": "Lucky He Had His Camera Working #uber #viral #drama #uberdriver",
       "publishedAt": "2026-06-26T00:00:03.000Z",
       "durationSec": 84,
-      "views": 361818,
-      "likes": 14533,
+      "views": 362070,
+      "likes": 14540,
       "comments": 145,
       "isShort": true
     },
@@ -2300,8 +2345,8 @@
       "title": "ENOUGH IS ENOUGH",
       "publishedAt": "2026-06-25T17:19:15.000Z",
       "durationSec": 828,
-      "views": 10165,
-      "likes": 1260,
+      "views": 10168,
+      "likes": 1261,
       "comments": 238,
       "isShort": false
     },
@@ -2311,7 +2356,7 @@
       "title": "MASSIVE TRAGEDY",
       "publishedAt": "2026-06-25T15:06:21.000Z",
       "durationSec": 766,
-      "views": 105014,
+      "views": 105016,
       "likes": 6983,
       "comments": 1228,
       "isShort": false
@@ -2333,7 +2378,7 @@
       "title": "Leftists Really Need To Get In Shape #funny #viral #liberals #leftists",
       "publishedAt": "2026-06-25T14:00:11.000Z",
       "durationSec": 81,
-      "views": 6217,
+      "views": 6226,
       "likes": 817,
       "comments": 59,
       "isShort": true
@@ -2366,8 +2411,8 @@
       "title": "I Can't Believe This Happened #pilots #plane #travel #viral",
       "publishedAt": "2026-06-25T00:00:32.000Z",
       "durationSec": 135,
-      "views": 1152836,
-      "likes": 31473,
+      "views": 1152889,
+      "likes": 31476,
       "comments": 560,
       "isShort": true
     },
@@ -2377,7 +2422,7 @@
       "title": "Guys, Prepare To Cross Your Legs #accident #building #home #viral",
       "publishedAt": "2026-06-25T00:00:08.000Z",
       "durationSec": 22,
-      "views": 120812,
+      "views": 120827,
       "likes": 2030,
       "comments": 61,
       "isShort": true
@@ -2410,7 +2455,7 @@
       "title": "EVERYONE MUST WATCH",
       "publishedAt": "2026-06-24T20:38:53.000Z",
       "durationSec": 1134,
-      "views": 62378,
+      "views": 62381,
       "likes": 5652,
       "comments": 947,
       "isShort": false
@@ -2432,7 +2477,7 @@
       "title": "HIS CHANCES COLLAPSE",
       "publishedAt": "2026-06-24T18:04:29.000Z",
       "durationSec": 965,
-      "views": 54475,
+      "views": 54477,
       "likes": 5384,
       "comments": 745,
       "isShort": false
@@ -2454,7 +2499,7 @@
       "title": "Does Anyone Understand What She Is Saying  #cringe #viral #karmeloanthony #karmelo",
       "publishedAt": "2026-06-24T14:30:15.000Z",
       "durationSec": 155,
-      "views": 30701,
+      "views": 30711,
       "likes": 2320,
       "comments": 861,
       "isShort": true
@@ -2465,7 +2510,7 @@
       "title": "Girl Dads Are Just The Best #dads #family #heartwarming #viral",
       "publishedAt": "2026-06-24T14:00:11.000Z",
       "durationSec": 115,
-      "views": 11157,
+      "views": 11158,
       "likes": 707,
       "comments": 20,
       "isShort": true
@@ -2476,7 +2521,7 @@
       "title": "Grandparents Really Are The Best #family #heartwarming #viral #grandparents",
       "publishedAt": "2026-06-24T14:00:01.000Z",
       "durationSec": 139,
-      "views": 28967,
+      "views": 28971,
       "likes": 2514,
       "comments": 24,
       "isShort": true
@@ -2487,8 +2532,8 @@
       "title": "Do Dad's Really Wear The Pants  #viral #cringe #funny #meme",
       "publishedAt": "2026-06-24T02:30:12.000Z",
       "durationSec": 142,
-      "views": 78128,
-      "likes": 4830,
+      "views": 78168,
+      "likes": 4831,
       "comments": 238,
       "isShort": true
     },
@@ -2509,7 +2554,7 @@
       "title": "Entitled Karen Gives The Cops Attitude #bodycam #police #karen #liberals",
       "publishedAt": "2026-06-24T02:00:03.000Z",
       "durationSec": 177,
-      "views": 167316,
+      "views": 167330,
       "likes": 11940,
       "comments": 400,
       "isShort": true
@@ -2531,7 +2576,7 @@
       "title": "Bill Maher Really Schools This Guy #billmaher #cringe #liberals #viral",
       "publishedAt": "2026-06-24T00:30:10.000Z",
       "durationSec": 139,
-      "views": 85363,
+      "views": 85390,
       "likes": 6494,
       "comments": 1034,
       "isShort": true
@@ -2542,7 +2587,7 @@
       "title": "Doordash Driver Wastes Customers Time #food #doordash #viral #cringe",
       "publishedAt": "2026-06-24T00:00:30.000Z",
       "durationSec": 178,
-      "views": 275790,
+      "views": 275806,
       "likes": 11934,
       "comments": 459,
       "isShort": true
@@ -2553,7 +2598,7 @@
       "title": "Do You Take Your Pet To The Drive Through  #funny #animals #viral #heartwarming",
       "publishedAt": "2026-06-24T00:00:21.000Z",
       "durationSec": 150,
-      "views": 60958,
+      "views": 60960,
       "likes": 4447,
       "comments": 16,
       "isShort": true
@@ -2564,7 +2609,7 @@
       "title": "NEW INSANE GRIFT",
       "publishedAt": "2026-06-23T23:52:27.000Z",
       "durationSec": 1212,
-      "views": 22642,
+      "views": 22643,
       "likes": 2409,
       "comments": 427,
       "isShort": false
@@ -2608,7 +2653,7 @@
       "title": "WALMART FATIGUE GOES NUCLEAR",
       "publishedAt": "2026-06-23T20:27:52.000Z",
       "durationSec": 889,
-      "views": 100162,
+      "views": 100164,
       "likes": 9971,
       "comments": 1705,
       "isShort": false
@@ -2652,8 +2697,8 @@
       "title": "Airlines Are Out Of Control Nowadays #travel #airtravel #viral #planes",
       "publishedAt": "2026-06-23T02:00:06.000Z",
       "durationSec": 178,
-      "views": 154253,
-      "likes": 7131,
+      "views": 154322,
+      "likes": 7132,
       "comments": 251,
       "isShort": true
     },
@@ -2663,7 +2708,7 @@
       "title": "A Little Kindness Goes A Long Way #heartwarming #viral #nice #neighbors",
       "publishedAt": "2026-06-23T00:00:10.000Z",
       "durationSec": 91,
-      "views": 13592,
+      "views": 13597,
       "likes": 1123,
       "comments": 31,
       "isShort": true
@@ -2685,7 +2730,7 @@
       "title": "THIS IS HORRIBLE",
       "publishedAt": "2026-06-22T22:54:11.000Z",
       "durationSec": 1200,
-      "views": 57735,
+      "views": 57737,
       "likes": 5204,
       "comments": 752,
       "isShort": false
@@ -2707,7 +2752,7 @@
       "title": "SHE'S PANICKING",
       "publishedAt": "2026-06-22T21:04:44.000Z",
       "durationSec": 1113,
-      "views": 36814,
+      "views": 36815,
       "likes": 3483,
       "comments": 415,
       "isShort": false
@@ -2751,7 +2796,7 @@
       "title": "Would YOU Pay This Much!  #travel #airplane #viral #cringe",
       "publishedAt": "2026-06-22T02:30:34.000Z",
       "durationSec": 168,
-      "views": 293998,
+      "views": 294002,
       "likes": 11222,
       "comments": 379,
       "isShort": true
@@ -2762,9 +2807,9 @@
       "title": "This Guy Is So Fatigued #viral #cringe #fatigue #crime1",
       "publishedAt": "2026-06-22T00:30:08.000Z",
       "durationSec": 67,
-      "views": 957091,
-      "likes": 39139,
-      "comments": 4938,
+      "views": 960791,
+      "likes": 39257,
+      "comments": 4954,
       "isShort": true
     },
     {
@@ -2773,8 +2818,8 @@
       "title": "Feminism Has Driven These People Crazy #feminism #women #cringe #viral",
       "publishedAt": "2026-06-21T02:30:06.000Z",
       "durationSec": 37,
-      "views": 173600,
-      "likes": 7958,
+      "views": 173670,
+      "likes": 7963,
       "comments": 622,
       "isShort": true
     },
@@ -2784,7 +2829,7 @@
       "title": "Troon Throws Molotov At Republican Headquarters #leftwing #politics #crime #viral",
       "publishedAt": "2026-06-21T02:00:34.000Z",
       "durationSec": 37,
-      "views": 4701,
+      "views": 4705,
       "likes": 307,
       "comments": 79,
       "isShort": true
@@ -2795,7 +2840,7 @@
       "title": "Shannon Elizabeth Starts An Only Fans!  #celebrity #hollywood #viral #cringe",
       "publishedAt": "2026-06-21T02:00:18.000Z",
       "durationSec": 55,
-      "views": 15872,
+      "views": 15877,
       "likes": 768,
       "comments": 81,
       "isShort": true
@@ -2806,8 +2851,8 @@
       "title": "This Is Absolutely Disgusting #indianfood #fastfood #drama #cringe",
       "publishedAt": "2026-06-21T00:30:02.000Z",
       "durationSec": 118,
-      "views": 36679,
-      "likes": 1935,
+      "views": 36704,
+      "likes": 1936,
       "comments": 569,
       "isShort": true
     },
@@ -2817,7 +2862,7 @@
       "title": "McDonald's Employee Grossing Everyone Out #nothanks #gross #viral #nope",
       "publishedAt": "2026-06-21T00:00:39.000Z",
       "durationSec": 158,
-      "views": 10414,
+      "views": 10415,
       "likes": 1432,
       "comments": 156,
       "isShort": true
@@ -2828,7 +2873,7 @@
       "title": "This Poor Old Lady Got Scammed #scam #viral #cringe #drama",
       "publishedAt": "2026-06-21T00:00:00.000Z",
       "durationSec": 62,
-      "views": 31428,
+      "views": 31432,
       "likes": 1828,
       "comments": 52,
       "isShort": true
@@ -2850,8 +2895,8 @@
       "title": "Why Is This Kid Such A Brat!? #parents #viral #kids #funny",
       "publishedAt": "2026-06-20T13:30:37.000Z",
       "durationSec": 67,
-      "views": 29025,
-      "likes": 1166,
+      "views": 29026,
+      "likes": 1167,
       "comments": 125,
       "isShort": true
     },
@@ -2872,8 +2917,8 @@
       "title": "Liberals Are The Dumbest People #liberals #dumb #cringe #viral",
       "publishedAt": "2026-06-20T12:30:39.000Z",
       "durationSec": 135,
-      "views": 28056,
-      "likes": 3757,
+      "views": 28074,
+      "likes": 3759,
       "comments": 470,
       "isShort": true
     },
@@ -2883,8 +2928,8 @@
       "title": "This Kid Is The Cutest #baby #funny #kids #comedy",
       "publishedAt": "2026-06-20T02:30:04.000Z",
       "durationSec": 133,
-      "views": 644100,
-      "likes": 52295,
+      "views": 644720,
+      "likes": 52328,
       "comments": 1118,
       "isShort": true
     },
@@ -2894,8 +2939,8 @@
       "title": "This Lady's Questions Fry This Liberal's Brains #liberals #viral #democrats #trump",
       "publishedAt": "2026-06-20T02:00:36.000Z",
       "durationSec": 146,
-      "views": 246785,
-      "likes": 18576,
+      "views": 246871,
+      "likes": 18583,
       "comments": 368,
       "isShort": true
     },
@@ -2905,7 +2950,7 @@
       "title": "This Lady Is Busting H1B VISA Scammers #scam #viral #exposed #visa",
       "publishedAt": "2026-06-20T02:00:24.000Z",
       "durationSec": 121,
-      "views": 60448,
+      "views": 60453,
       "likes": 10224,
       "comments": 328,
       "isShort": true
@@ -2916,8 +2961,8 @@
       "title": "Australian Men Are Fearless #komododragon #animals #australia #wildlife",
       "publishedAt": "2026-06-20T00:30:35.000Z",
       "durationSec": 49,
-      "views": 266849,
-      "likes": 6558,
+      "views": 266976,
+      "likes": 6560,
       "comments": 373,
       "isShort": true
     },
@@ -2927,7 +2972,7 @@
       "title": "This Lady Has A Warrant Out For Her Arrest #unbeleivable #arrest #cringe #viral",
       "publishedAt": "2026-06-20T00:00:32.000Z",
       "durationSec": 179,
-      "views": 22816,
+      "views": 22820,
       "likes": 2430,
       "comments": 307,
       "isShort": true
@@ -2938,8 +2983,8 @@
       "title": "This Dude Is Legit Hilarious! #standup #standupcomedy #funny #viral",
       "publishedAt": "2026-06-20T00:00:08.000Z",
       "durationSec": 133,
-      "views": 366305,
-      "likes": 16797,
+      "views": 366578,
+      "likes": 16805,
       "comments": 65,
       "isShort": true
     },
@@ -2949,7 +2994,7 @@
       "title": "WE'RE IN TROUBLE",
       "publishedAt": "2026-06-19T21:40:10.000Z",
       "durationSec": 1231,
-      "views": 31524,
+      "views": 31525,
       "likes": 2403,
       "comments": 370,
       "isShort": false
@@ -2971,7 +3016,7 @@
       "title": "THIS IS INSANE",
       "publishedAt": "2026-06-19T18:42:50.000Z",
       "durationSec": 703,
-      "views": 18440,
+      "views": 18441,
       "likes": 2086,
       "comments": 293,
       "isShort": false
@@ -3004,7 +3049,7 @@
       "title": "ARREST THEM ALL",
       "publishedAt": "2026-06-19T16:18:33.000Z",
       "durationSec": 1021,
-      "views": 84020,
+      "views": 84028,
       "likes": 7446,
       "comments": 826,
       "isShort": false
@@ -3026,7 +3071,7 @@
       "title": "This Preacher Was Fearless #viral #democrats #streets #cringe",
       "publishedAt": "2026-06-19T13:30:28.000Z",
       "durationSec": 103,
-      "views": 58270,
+      "views": 58275,
       "likes": 5811,
       "comments": 218,
       "isShort": true
@@ -3037,7 +3082,7 @@
       "title": "The Onion Hired Their Alex Jones Actor #timheidecker #infowars #theonion #comedy",
       "publishedAt": "2026-06-19T13:30:27.000Z",
       "durationSec": 113,
-      "views": 3787,
+      "views": 3790,
       "likes": 207,
       "comments": 12,
       "isShort": true
@@ -3049,7 +3094,7 @@
       "publishedAt": "2026-06-19T00:00:12.000Z",
       "durationSec": 109,
       "views": 5917,
-      "likes": 551,
+      "likes": 552,
       "comments": 10,
       "isShort": true
     },
@@ -3070,7 +3115,7 @@
       "title": "The Healing Power Of Time #viral #hypnotic #vibes #art",
       "publishedAt": "2026-06-18T22:00:38.000Z",
       "durationSec": 55,
-      "views": 33623,
+      "views": 33625,
       "likes": 1573,
       "comments": 49,
       "isShort": true
@@ -3125,7 +3170,7 @@
       "title": "This Cop Didn't Skip Leg Day #police #bodycam #viral #cops",
       "publishedAt": "2026-06-18T14:30:26.000Z",
       "durationSec": 37,
-      "views": 131713,
+      "views": 131707,
       "likes": 5700,
       "comments": 288,
       "isShort": true
@@ -3136,7 +3181,7 @@
       "title": "This Lady Is Legit Hilarious #standup #funny #viral #comedy",
       "publishedAt": "2026-06-18T13:30:17.000Z",
       "durationSec": 78,
-      "views": 117642,
+      "views": 117644,
       "likes": 3150,
       "comments": 18,
       "isShort": true
@@ -3147,7 +3192,7 @@
       "title": "How Does This Happen!  #cringe #viral #funny #women",
       "publishedAt": "2026-06-18T13:30:03.000Z",
       "durationSec": 45,
-      "views": 21537,
+      "views": 21541,
       "likes": 1307,
       "comments": 67,
       "isShort": true
@@ -3158,7 +3203,7 @@
       "title": "Will You Use AI For Your Business!?  #business #AI #viral #funny",
       "publishedAt": "2026-06-18T02:30:15.000Z",
       "durationSec": 47,
-      "views": 47052,
+      "views": 47063,
       "likes": 1769,
       "comments": 164,
       "isShort": true
@@ -3169,7 +3214,7 @@
       "title": "Lucky His Camera Was Recording #bodycam #viral #crash #cars",
       "publishedAt": "2026-06-18T00:30:13.000Z",
       "durationSec": 64,
-      "views": 103731,
+      "views": 103741,
       "likes": 7455,
       "comments": 489,
       "isShort": true
@@ -3202,7 +3247,7 @@
       "title": "IT JUST GOT WORSE",
       "publishedAt": "2026-06-17T23:14:34.000Z",
       "durationSec": 1138,
-      "views": 59283,
+      "views": 59284,
       "likes": 6064,
       "comments": 732,
       "isShort": false
@@ -3224,8 +3269,8 @@
       "title": "Here's To Generation X #funny #standup #meme #comedy",
       "publishedAt": "2026-06-17T22:00:08.000Z",
       "durationSec": 151,
-      "views": 1539195,
-      "likes": 83598,
+      "views": 1539358,
+      "likes": 83610,
       "comments": 416,
       "isShort": true
     },
@@ -3246,7 +3291,7 @@
       "title": "THERE IS NO FIXING THIS",
       "publishedAt": "2026-06-17T20:11:44.000Z",
       "durationSec": 753,
-      "views": 13707,
+      "views": 13708,
       "likes": 1622,
       "comments": 158,
       "isShort": false
@@ -3268,7 +3313,7 @@
       "title": "THEY PUT A HIT OUT ON HIM",
       "publishedAt": "2026-06-17T18:57:52.000Z",
       "durationSec": 1136,
-      "views": 131000,
+      "views": 131001,
       "likes": 9942,
       "comments": 1346,
       "isShort": false
@@ -3312,7 +3357,7 @@
       "title": "The Left Are Perpetual Victims #democrats #liberals #trump #viral",
       "publishedAt": "2026-06-17T14:30:18.000Z",
       "durationSec": 81,
-      "views": 165598,
+      "views": 165614,
       "likes": 10417,
       "comments": 635,
       "isShort": true
@@ -3334,8 +3379,8 @@
       "title": "Young Karen Really FAFOs PART 2 #drama #police #bodycam #cringe",
       "publishedAt": "2026-06-17T13:30:11.000Z",
       "durationSec": 176,
-      "views": 28941,
-      "likes": 2601,
+      "views": 28978,
+      "likes": 2602,
       "comments": 184,
       "isShort": true
     },
@@ -3345,7 +3390,7 @@
       "title": "The Worst Robbery Ever #cringe #viral #crime #police",
       "publishedAt": "2026-06-17T02:30:10.000Z",
       "durationSec": 63,
-      "views": 16274,
+      "views": 16285,
       "likes": 844,
       "comments": 81,
       "isShort": true
@@ -3356,7 +3401,7 @@
       "title": "A Little Kindness Goes A Long Way #kindness #heartwarming #viral #nice",
       "publishedAt": "2026-06-17T00:30:34.000Z",
       "durationSec": 66,
-      "views": 130304,
+      "views": 130315,
       "likes": 5605,
       "comments": 201,
       "isShort": true
@@ -3378,8 +3423,8 @@
       "title": "Young Karen Really FAFOs PART 1 #drama #police #bodycam #cringe",
       "publishedAt": "2026-06-17T00:00:08.000Z",
       "durationSec": 177,
-      "views": 398520,
-      "likes": 17834,
+      "views": 398541,
+      "likes": 17837,
       "comments": 787,
       "isShort": true
     },
@@ -3389,7 +3434,7 @@
       "title": "HE'S IN HUGE TROUBLE",
       "publishedAt": "2026-06-16T23:07:45.000Z",
       "durationSec": 1033,
-      "views": 245231,
+      "views": 245241,
       "likes": 14285,
       "comments": 1422,
       "isShort": false
@@ -3433,7 +3478,7 @@
       "title": "Bikers Support Kid's Lemonade Stand #bikers #heartwarming #funny #nice",
       "publishedAt": "2026-06-16T22:00:21.000Z",
       "durationSec": 58,
-      "views": 28910,
+      "views": 28914,
       "likes": 2906,
       "comments": 20,
       "isShort": true
@@ -3488,7 +3533,7 @@
       "title": "Karen Arrested Over A Burger #karen #crime #arrest #bodycam",
       "publishedAt": "2026-06-16T14:30:33.000Z",
       "durationSec": 95,
-      "views": 40550,
+      "views": 40571,
       "likes": 3365,
       "comments": 400,
       "isShort": true
@@ -3499,8 +3544,8 @@
       "title": "Karen Loses It At Lyft Driver #cringe #viral #drama #karen",
       "publishedAt": "2026-06-16T13:30:19.000Z",
       "durationSec": 163,
-      "views": 135112,
-      "likes": 7588,
+      "views": 135148,
+      "likes": 7589,
       "comments": 326,
       "isShort": true
     },
@@ -3510,7 +3555,7 @@
       "title": "Well This Traffic Stop Got Awkward #bodycam #police #funny #drama",
       "publishedAt": "2026-06-16T13:30:14.000Z",
       "durationSec": 71,
-      "views": 3597,
+      "views": 3598,
       "likes": 236,
       "comments": 13,
       "isShort": true
@@ -3532,7 +3577,7 @@
       "title": "This Cat Was Not Giving Up #amazon #driver #cats #funny",
       "publishedAt": "2026-06-16T00:30:23.000Z",
       "durationSec": 63,
-      "views": 346461,
+      "views": 346471,
       "likes": 13470,
       "comments": 349,
       "isShort": true
@@ -3554,7 +3599,7 @@
       "title": "This Is The Best Prank Ever #funny #viral #meme #men",
       "publishedAt": "2026-06-16T00:00:02.000Z",
       "durationSec": 93,
-      "views": 245221,
+      "views": 245231,
       "likes": 6350,
       "comments": 90,
       "isShort": true
@@ -3587,8 +3632,8 @@
       "title": "Who Was In The Right Here! #servers #restaurant #drama #viral",
       "publishedAt": "2026-06-15T22:00:16.000Z",
       "durationSec": 178,
-      "views": 1012011,
-      "likes": 51479,
+      "views": 1012474,
+      "likes": 51500,
       "comments": 865,
       "isShort": true
     },
@@ -3598,7 +3643,7 @@
       "title": "Whose Side Are You On!  #drama #argument #viral #cringe",
       "publishedAt": "2026-06-15T22:00:10.000Z",
       "durationSec": 90,
-      "views": 58475,
+      "views": 58476,
       "likes": 1035,
       "comments": 43,
       "isShort": true
@@ -3653,7 +3698,7 @@
       "title": "Planet Fitness Drama #gym #fitness #cringe #viral",
       "publishedAt": "2026-06-14T15:30:35.000Z",
       "durationSec": 178,
-      "views": 105464,
+      "views": 105475,
       "likes": 4291,
       "comments": 518,
       "isShort": true
@@ -3664,7 +3709,7 @@
       "title": "What Is Going On Here! #music #concert #viral #weird",
       "publishedAt": "2026-06-14T15:00:15.000Z",
       "durationSec": 75,
-      "views": 17280,
+      "views": 17283,
       "likes": 476,
       "comments": 23,
       "isShort": true
@@ -3686,7 +3731,7 @@
       "title": "Jerry O'Connell Goes Off On Trolls #funny #podcast #meme #comedy",
       "publishedAt": "2026-06-14T14:30:08.000Z",
       "durationSec": 171,
-      "views": 25261,
+      "views": 25266,
       "likes": 1360,
       "comments": 293,
       "isShort": true
@@ -3697,7 +3742,7 @@
       "title": "Boy That Really Escalated Quickly #viral #roadrage #bodycam #scary",
       "publishedAt": "2026-06-14T14:00:17.000Z",
       "durationSec": 94,
-      "views": 16124,
+      "views": 16129,
       "likes": 2097,
       "comments": 147,
       "isShort": true
@@ -3708,7 +3753,7 @@
       "title": "They Tried To Scam The Cops #police #scam #viral #cringe",
       "publishedAt": "2026-06-14T14:00:04.000Z",
       "durationSec": 94,
-      "views": 37164,
+      "views": 37168,
       "likes": 2411,
       "comments": 24,
       "isShort": true
@@ -3719,7 +3764,7 @@
       "title": "That Did NOT Just Happen #funny #comedy #sailing #meme",
       "publishedAt": "2026-06-14T13:48:23.000Z",
       "durationSec": 39,
-      "views": 111556,
+      "views": 111563,
       "likes": 2901,
       "comments": 219,
       "isShort": true
@@ -3730,7 +3775,7 @@
       "title": "Some People Are Addicted To Drama #drama #fight #hotel #viral",
       "publishedAt": "2026-06-14T02:30:39.000Z",
       "durationSec": 103,
-      "views": 20918,
+      "views": 20930,
       "likes": 1541,
       "comments": 387,
       "isShort": true
@@ -3741,7 +3786,7 @@
       "title": "Dog Early Warning System #animals #funny #viral #meme",
       "publishedAt": "2026-06-14T00:30:24.000Z",
       "durationSec": 28,
-      "views": 82332,
+      "views": 82350,
       "likes": 2723,
       "comments": 68,
       "isShort": true
@@ -3752,8 +3797,8 @@
       "title": "This Is How You Deal With Pirates #funny #ship #pirates #viral",
       "publishedAt": "2026-06-14T00:00:08.000Z",
       "durationSec": 63,
-      "views": 1274351,
-      "likes": 17042,
+      "views": 1275468,
+      "likes": 17053,
       "comments": 191,
       "isShort": true
     },
@@ -3774,7 +3819,7 @@
       "title": "Journalist Gets Expertly Trolled #funny #spencerpratt #LA #viral",
       "publishedAt": "2026-06-13T22:00:18.000Z",
       "durationSec": 99,
-      "views": 29941,
+      "views": 29945,
       "likes": 1801,
       "comments": 19,
       "isShort": true
@@ -3807,7 +3852,7 @@
       "title": "Luke Skywalker On Jerry Springer #starwars #memes #funny #viral",
       "publishedAt": "2026-06-13T13:30:32.000Z",
       "durationSec": 143,
-      "views": 428688,
+      "views": 428703,
       "likes": 20037,
       "comments": 147,
       "isShort": true
@@ -3862,9 +3907,9 @@
       "title": "It's Always The Same People #karen #fatigue #angry #drama 1",
       "publishedAt": "2026-06-12T22:00:05.000Z",
       "durationSec": 88,
-      "views": 468983,
-      "likes": 15439,
-      "comments": 318,
+      "views": 469282,
+      "likes": 15443,
+      "comments": 319,
       "isShort": true
     },
     {
@@ -3895,7 +3940,7 @@
       "title": "LEGENDARY BACKFIRE",
       "publishedAt": "2026-06-12T19:03:31.000Z",
       "durationSec": 1112,
-      "views": 80078,
+      "views": 80079,
       "likes": 6058,
       "comments": 2201,
       "isShort": false
@@ -3939,7 +3984,7 @@
       "title": "Heroes Don't Always Wear Capes PART 2 #safety #hero #viral #men",
       "publishedAt": "2026-06-12T13:30:24.000Z",
       "durationSec": 171,
-      "views": 36987,
+      "views": 36989,
       "likes": 2737,
       "comments": 56,
       "isShort": true
@@ -4005,7 +4050,7 @@
       "title": "Guy Refuses To Pay For Date #cringe #dating #viral #women",
       "publishedAt": "2026-06-11T22:30:04.000Z",
       "durationSec": 67,
-      "views": 51839,
+      "views": 51850,
       "likes": 2092,
       "comments": 751,
       "isShort": true
@@ -4016,7 +4061,7 @@
       "title": "WHITES REVOLT",
       "publishedAt": "2026-06-11T22:23:52.000Z",
       "durationSec": 922,
-      "views": 78030,
+      "views": 78031,
       "likes": 7168,
       "comments": 1375,
       "isShort": false
@@ -4027,8 +4072,8 @@
       "title": "Fatigue Is Getting Worse #fatigue #argument #viral #cringe #fatigue",
       "publishedAt": "2026-06-11T22:00:18.000Z",
       "durationSec": 59,
-      "views": 776715,
-      "likes": 31983,
+      "views": 777310,
+      "likes": 32006,
       "comments": 158,
       "isShort": true
     },
@@ -4038,8 +4083,8 @@
       "title": "This Is Legit Terrifying #funny #dog #viral #cringe",
       "publishedAt": "2026-06-11T22:00:02.000Z",
       "durationSec": 44,
-      "views": 1498117,
-      "likes": 32599,
+      "views": 1498627,
+      "likes": 32604,
       "comments": 401,
       "isShort": true
     },
@@ -4050,7 +4095,7 @@
       "publishedAt": "2026-06-11T20:34:22.000Z",
       "durationSec": 884,
       "views": 11209,
-      "likes": 1373,
+      "likes": 1374,
       "comments": 297,
       "isShort": false
     },
@@ -4060,8 +4105,8 @@
       "title": "GARBAGE HUMANS",
       "publishedAt": "2026-06-11T19:24:54.000Z",
       "durationSec": 1478,
-      "views": 96114,
-      "likes": 7583,
+      "views": 96115,
+      "likes": 7584,
       "comments": 1781,
       "isShort": false
     },
@@ -4093,9 +4138,9 @@
       "title": "This Lady Absolutely Nails Men And Women #funny #cringe #men #women",
       "publishedAt": "2026-06-11T14:30:09.000Z",
       "durationSec": 178,
-      "views": 3591368,
-      "likes": 114980,
-      "comments": 940,
+      "views": 3605701,
+      "likes": 115370,
+      "comments": 943,
       "isShort": true
     },
     {
@@ -4115,8 +4160,8 @@
       "title": "Would You Hire This Lady!  #trump #donaldtrump #viral #cringe",
       "publishedAt": "2026-06-11T13:30:29.000Z",
       "durationSec": 102,
-      "views": 18982,
-      "likes": 2950,
+      "views": 18984,
+      "likes": 2951,
       "comments": 99,
       "isShort": true
     },
@@ -4126,7 +4171,7 @@
       "title": "Karens Are Mad At The 3 Year Old's Now #drama #karen #viral #complaints",
       "publishedAt": "2026-06-11T00:00:09.000Z",
       "durationSec": 179,
-      "views": 222229,
+      "views": 222234,
       "likes": 10632,
       "comments": 348,
       "isShort": true
@@ -4137,7 +4182,7 @@
       "title": "She Is Mad She Can't Get Junk Food #viral #junkfood #food #supermarket",
       "publishedAt": "2026-06-11T00:00:03.000Z",
       "durationSec": 78,
-      "views": 251779,
+      "views": 251792,
       "likes": 13589,
       "comments": 248,
       "isShort": true
@@ -4148,7 +4193,7 @@
       "title": "RIOTS ARE COMING",
       "publishedAt": "2026-06-10T23:49:07.000Z",
       "durationSec": 1185,
-      "views": 69199,
+      "views": 69202,
       "likes": 6298,
       "comments": 2020,
       "isShort": false
@@ -4170,7 +4215,7 @@
       "title": "Man Saves Animal From Fence #hero #animals #viral #heartwarming",
       "publishedAt": "2026-06-10T22:00:38.000Z",
       "durationSec": 71,
-      "views": 780228,
+      "views": 780229,
       "likes": 36502,
       "comments": 312,
       "isShort": true
@@ -4192,7 +4237,7 @@
       "title": "THIS IS ABSURD",
       "publishedAt": "2026-06-10T21:32:17.000Z",
       "durationSec": 1040,
-      "views": 93113,
+      "views": 93114,
       "likes": 8836,
       "comments": 1510,
       "isShort": false
@@ -4269,7 +4314,7 @@
       "title": "Fastest Police Response Ever #police #drama #viral #funny",
       "publishedAt": "2026-06-10T13:30:19.000Z",
       "durationSec": 48,
-      "views": 31402,
+      "views": 31404,
       "likes": 1570,
       "comments": 33,
       "isShort": true
@@ -4280,7 +4325,7 @@
       "title": "Walmart Is Rolling Out Digital Price Tags #walmart #retail #groceryshopping #price",
       "publishedAt": "2026-06-10T13:30:04.000Z",
       "durationSec": 42,
-      "views": 17146,
+      "views": 17147,
       "likes": 807,
       "comments": 43,
       "isShort": true
@@ -4302,7 +4347,7 @@
       "title": "How Much Do You Enjoy Your Job? #work #cringe #viral #funny",
       "publishedAt": "2026-06-10T00:30:01.000Z",
       "durationSec": 70,
-      "views": 26806,
+      "views": 26810,
       "likes": 1100,
       "comments": 29,
       "isShort": true
@@ -4313,7 +4358,7 @@
       "title": "Why Is This Kid Such A Brat!?  #parents #viral #kids #funny",
       "publishedAt": "2026-06-10T00:00:25.000Z",
       "durationSec": 67,
-      "views": 389845,
+      "views": 389846,
       "likes": 9768,
       "comments": 511,
       "isShort": true
@@ -4324,8 +4369,8 @@
       "title": "This Girl Experiences Love At First Sight #love #viral #funny #cute",
       "publishedAt": "2026-06-10T00:00:08.000Z",
       "durationSec": 165,
-      "views": 1015316,
-      "likes": 34530,
+      "views": 1015456,
+      "likes": 34539,
       "comments": 122,
       "isShort": true
     },
@@ -4335,7 +4380,7 @@
       "title": "SENTENCING INSANITY",
       "publishedAt": "2026-06-09T23:46:58.000Z",
       "durationSec": 1337,
-      "views": 91302,
+      "views": 91304,
       "likes": 8412,
       "comments": 1371,
       "isShort": false
@@ -4357,7 +4402,7 @@
       "title": "Karen Flees From Police #cringe #viral #car #bodycam",
       "publishedAt": "2026-06-09T22:30:25.000Z",
       "durationSec": 177,
-      "views": 62628,
+      "views": 62634,
       "likes": 3895,
       "comments": 599,
       "isShort": true
@@ -4390,7 +4435,7 @@
       "title": "CHAOS BREAKS OUT",
       "publishedAt": "2026-06-09T20:28:37.000Z",
       "durationSec": 812,
-      "views": 96011,
+      "views": 96012,
       "likes": 12425,
       "comments": 2801,
       "isShort": false
@@ -4445,7 +4490,7 @@
       "title": "Drone Footage Of Volcano #drone #volcano #geography #nature",
       "publishedAt": "2026-06-09T14:30:05.000Z",
       "durationSec": 63,
-      "views": 27406,
+      "views": 27418,
       "likes": 1517,
       "comments": 95,
       "isShort": true
@@ -4456,7 +4501,7 @@
       "title": "ATTACK AT COURT",
       "publishedAt": "2026-06-09T14:18:47.000Z",
       "durationSec": 1168,
-      "views": 130485,
+      "views": 130487,
       "likes": 11915,
       "comments": 1826,
       "isShort": false
@@ -4478,7 +4523,7 @@
       "title": "Police Arrive At Front Door #police #cringe #viral #family",
       "publishedAt": "2026-06-09T00:30:22.000Z",
       "durationSec": 175,
-      "views": 212737,
+      "views": 212741,
       "likes": 13728,
       "comments": 887,
       "isShort": true
@@ -4489,8 +4534,8 @@
       "title": "This Litterer Got What Was Coming #viral #fafo #cringe #karma",
       "publishedAt": "2026-06-09T00:00:39.000Z",
       "durationSec": 61,
-      "views": 735421,
-      "likes": 27412,
+      "views": 735555,
+      "likes": 27414,
       "comments": 96,
       "isShort": true
     },
@@ -4500,7 +4545,7 @@
       "title": "This Guy Needs To Control His Anger #angermanagement #conflict #roadrage #minibikes",
       "publishedAt": "2026-06-09T00:00:33.000Z",
       "durationSec": 159,
-      "views": 222096,
+      "views": 222097,
       "likes": 5857,
       "comments": 256,
       "isShort": true
@@ -4522,7 +4567,7 @@
       "title": "What Is Going On Here!? #cringe #dance #college #graduation",
       "publishedAt": "2026-06-08T22:30:20.000Z",
       "durationSec": 66,
-      "views": 16395,
+      "views": 16401,
       "likes": 762,
       "comments": 362,
       "isShort": true
@@ -4534,7 +4579,7 @@
       "publishedAt": "2026-06-08T22:13:18.000Z",
       "durationSec": 1199,
       "views": 164062,
-      "likes": 17022,
+      "likes": 17023,
       "comments": 2737,
       "isShort": false
     },
@@ -4544,7 +4589,7 @@
       "title": "This Lady Is Legit Hilarious #standupcomedy #standup #funny #viral",
       "publishedAt": "2026-06-08T22:00:39.000Z",
       "durationSec": 39,
-      "views": 220142,
+      "views": 220144,
       "likes": 9893,
       "comments": 24,
       "isShort": true
@@ -4555,8 +4600,8 @@
       "title": "Everyone Needs A Friend Like This #viral #funny #meme #prank",
       "publishedAt": "2026-06-08T22:00:34.000Z",
       "durationSec": 89,
-      "views": 47089,
-      "likes": 3896,
+      "views": 47090,
+      "likes": 3897,
       "comments": 229,
       "isShort": true
     },
@@ -4610,7 +4655,7 @@
       "title": "EMERGENCY MEETING",
       "publishedAt": "2026-06-08T19:16:13.000Z",
       "durationSec": 1141,
-      "views": 107031,
+      "views": 107032,
       "likes": 13426,
       "comments": 1892,
       "isShort": false
@@ -4622,7 +4667,7 @@
       "publishedAt": "2026-06-08T17:00:24.000Z",
       "durationSec": 683,
       "views": 25157,
-      "likes": 2477,
+      "likes": 2478,
       "comments": 381,
       "isShort": false
     },
@@ -4676,9 +4721,9 @@
       "title": "Have You Checked Your Notice Period #jobs #drama #viral #work",
       "publishedAt": "2026-06-07T14:30:11.000Z",
       "durationSec": 51,
-      "views": 1398821,
-      "likes": 40517,
-      "comments": 1597,
+      "views": 1398922,
+      "likes": 40516,
+      "comments": 1598,
       "isShort": true
     },
     {
@@ -4709,8 +4754,8 @@
       "title": "Who Is In The Wrong Here!? #cringe #funny #socialmedia #drama",
       "publishedAt": "2026-06-07T13:30:35.000Z",
       "durationSec": 174,
-      "views": 744157,
-      "likes": 44476,
+      "views": 744294,
+      "likes": 44478,
       "comments": 10377,
       "isShort": true
     },
@@ -4720,9 +4765,9 @@
       "title": "The Truth About Liberals #liberals #funny #viral #democrats",
       "publishedAt": "2026-06-07T00:30:15.000Z",
       "durationSec": 157,
-      "views": 1768963,
-      "likes": 140519,
-      "comments": 1962,
+      "views": 1771856,
+      "likes": 140773,
+      "comments": 1964,
       "isShort": true
     },
     {
@@ -4863,8 +4908,8 @@
       "title": "Live Streamers Are So Annoying #livestream #streaming #viral #funny",
       "publishedAt": "2026-06-06T13:30:24.000Z",
       "durationSec": 85,
-      "views": 11355,
-      "likes": 742,
+      "views": 11356,
+      "likes": 743,
       "comments": 13,
       "isShort": true
     },
@@ -4896,9 +4941,9 @@
       "title": "Arnie Absolutely Nailed This Answer #movies #theview #liberals #cringe",
       "publishedAt": "2026-06-06T00:00:38.000Z",
       "durationSec": 178,
-      "views": 3643688,
-      "likes": 98256,
-      "comments": 5679,
+      "views": 3646238,
+      "likes": 98308,
+      "comments": 5682,
       "isShort": true
     },
     {
@@ -5017,8 +5062,8 @@
       "title": "Karen FAFO Bigtime #cringe #police #bodycam #viral",
       "publishedAt": "2026-06-05T13:30:28.000Z",
       "durationSec": 165,
-      "views": 1865818,
-      "likes": 88982,
+      "views": 1865996,
+      "likes": 88986,
       "comments": 9413,
       "isShort": true
     },
@@ -5050,8 +5095,8 @@
       "title": "Jimmy Carr Rips On The British #funny #jimmycarr #standup #USA",
       "publishedAt": "2026-06-05T00:00:25.000Z",
       "durationSec": 70,
-      "views": 2131162,
-      "likes": 65725,
+      "views": 2131173,
+      "likes": 65724,
       "comments": 1688,
       "isShort": true
     },
@@ -5083,7 +5128,7 @@
       "title": "It's Crazy In Toilets Now #funny #cringe #drama #restaurant",
       "publishedAt": "2026-06-04T22:00:16.000Z",
       "durationSec": 105,
-      "views": 4762,
+      "views": 4763,
       "likes": 534,
       "comments": 10,
       "isShort": true
@@ -5094,9 +5139,9 @@
       "title": "How Are These People So Stupid? #dumb #cringe #zoo #fatigue",
       "publishedAt": "2026-06-04T22:00:12.000Z",
       "durationSec": 75,
-      "views": 2492006,
-      "likes": 37801,
-      "comments": 10483,
+      "views": 2492227,
+      "likes": 37804,
+      "comments": 10482,
       "isShort": true
     },
     {
@@ -5182,7 +5227,7 @@
       "title": "This Is Heartbreaking #cringe #viral #family #daughter",
       "publishedAt": "2026-06-04T13:30:04.000Z",
       "durationSec": 142,
-      "views": 692418,
+      "views": 692429,
       "likes": 43369,
       "comments": 6148,
       "isShort": true
@@ -5193,8 +5238,8 @@
       "title": "Is This Guy Right Or Wrong #viral #socialmedia #interview #cringe",
       "publishedAt": "2026-06-04T13:30:01.000Z",
       "durationSec": 131,
-      "views": 1516836,
-      "likes": 68500,
+      "views": 1516859,
+      "likes": 68501,
       "comments": 256,
       "isShort": true
     },
@@ -5215,7 +5260,7 @@
       "title": "This Dude Has Something To Say #immigration #USA #military #viral",
       "publishedAt": "2026-06-04T02:00:08.000Z",
       "durationSec": 178,
-      "views": 24759,
+      "views": 24761,
       "likes": 4941,
       "comments": 438,
       "isShort": true
@@ -5226,8 +5271,8 @@
       "title": "Dating Is So Tough These Days #dating #viral #socialmedia #funny",
       "publishedAt": "2026-06-04T00:00:36.000Z",
       "durationSec": 142,
-      "views": 1471537,
-      "likes": 67141,
+      "views": 1474851,
+      "likes": 67325,
       "comments": 515,
       "isShort": true
     },
@@ -5237,7 +5282,7 @@
       "title": "This Debate Made Me Lose Brain Cells #cringe #debate #funny #viral",
       "publishedAt": "2026-06-04T00:00:25.000Z",
       "durationSec": 102,
-      "views": 346808,
+      "views": 346809,
       "likes": 23694,
       "comments": 2201,
       "isShort": true
@@ -5270,7 +5315,7 @@
       "title": "Karen Holds Up Drive Through Queue #fastfood #cringe #drama #viral",
       "publishedAt": "2026-06-03T22:30:18.000Z",
       "durationSec": 88,
-      "views": 23577,
+      "views": 23588,
       "likes": 1262,
       "comments": 468,
       "isShort": true
@@ -5281,7 +5326,7 @@
       "title": "Sometimes A Little Thank You Goes A Long Way #kind #heartwarming #friendship #viral",
       "publishedAt": "2026-06-03T22:00:15.000Z",
       "durationSec": 131,
-      "views": 1230785,
+      "views": 1230788,
       "likes": 76518,
       "comments": 3861,
       "isShort": true
@@ -5380,7 +5425,7 @@
       "title": "This Activist FAFOed Bigtime #fafo #liberals #activism #viral",
       "publishedAt": "2026-06-03T15:00:27.000Z",
       "durationSec": 63,
-      "views": 396211,
+      "views": 396217,
       "likes": 18451,
       "comments": 549,
       "isShort": true
@@ -5391,7 +5436,7 @@
       "title": "Two Hands On The Wheel #cringe #viral #police #bodycam",
       "publishedAt": "2026-06-03T13:30:33.000Z",
       "durationSec": 50,
-      "views": 91607,
+      "views": 91609,
       "likes": 2772,
       "comments": 22,
       "isShort": true
@@ -5402,7 +5447,7 @@
       "title": "This Lady Owns This Liberal Student #cringe #viral #funny #interview",
       "publishedAt": "2026-06-03T13:30:31.000Z",
       "durationSec": 119,
-      "views": 455049,
+      "views": 455052,
       "likes": 29777,
       "comments": 2021,
       "isShort": true
@@ -5413,7 +5458,7 @@
       "title": "Michael Knowles Owns This Liberal #liberals #michaelknowles #cringe #viral",
       "publishedAt": "2026-06-03T02:00:26.000Z",
       "durationSec": 178,
-      "views": 7540,
+      "views": 7542,
       "likes": 734,
       "comments": 12,
       "isShort": true
@@ -5435,7 +5480,7 @@
       "title": "This Waitress Drops A Truth Bomb #viral #truth #food #tips",
       "publishedAt": "2026-06-03T01:30:14.000Z",
       "durationSec": 65,
-      "views": 50485,
+      "views": 50495,
       "likes": 2142,
       "comments": 531,
       "isShort": true
@@ -5446,7 +5491,7 @@
       "title": "This Dude Absolutely Nails Trump #funny #trump #viral #donaldtrump",
       "publishedAt": "2026-06-03T00:30:36.000Z",
       "durationSec": 65,
-      "views": 71191,
+      "views": 71193,
       "likes": 4575,
       "comments": 106,
       "isShort": true
@@ -5457,7 +5502,7 @@
       "title": "When Was The Last Time You Counted Your Fries?? #fastfood #cringe #viral #food",
       "publishedAt": "2026-06-03T00:00:31.000Z",
       "durationSec": 57,
-      "views": 28910,
+      "views": 28911,
       "likes": 2006,
       "comments": 29,
       "isShort": true
@@ -5468,7 +5513,7 @@
       "title": "Illegal Immigrant Causes Crash #police #cringe #viral #crime",
       "publishedAt": "2026-06-03T00:00:22.000Z",
       "durationSec": 42,
-      "views": 21738,
+      "views": 21740,
       "likes": 1947,
       "comments": 240,
       "isShort": true
@@ -5479,7 +5524,7 @@
       "title": "Matt Walsh Schools This Young Lady #mattwalsh #debate #viral #liberals",
       "publishedAt": "2026-06-02T22:30:31.000Z",
       "durationSec": 80,
-      "views": 58809,
+      "views": 58816,
       "likes": 4187,
       "comments": 208,
       "isShort": true
@@ -5490,7 +5535,7 @@
       "title": "This Is Really Unbelievable #cringe #viral #podcast #interview",
       "publishedAt": "2026-06-02T22:00:31.000Z",
       "durationSec": 105,
-      "views": 266645,
+      "views": 266646,
       "likes": 16079,
       "comments": 1521,
       "isShort": true
@@ -5578,7 +5623,7 @@
       "title": "LUNATIC ARRESTED",
       "publishedAt": "2026-06-02T18:15:13.000Z",
       "durationSec": 1018,
-      "views": 60030,
+      "views": 60032,
       "likes": 6577,
       "comments": 809,
       "isShort": false
@@ -5622,7 +5667,7 @@
       "title": "Do You Let Your Girl Drive Your Car  #cars #drama #cringe #driving",
       "publishedAt": "2026-06-02T15:00:10.000Z",
       "durationSec": 80,
-      "views": 25025,
+      "views": 25030,
       "likes": 1494,
       "comments": 316,
       "isShort": true
@@ -5633,7 +5678,7 @@
       "title": "Woman Goes Off On Judge #viral #cringe #court #family",
       "publishedAt": "2026-06-02T13:30:27.000Z",
       "durationSec": 178,
-      "views": 9692,
+      "views": 9694,
       "likes": 1035,
       "comments": 59,
       "isShort": true
@@ -5655,7 +5700,7 @@
       "title": "Brave Rescue Worker Rescues Kid From Window #viral #amazing #brave #heartwarming",
       "publishedAt": "2026-06-02T02:30:23.000Z",
       "durationSec": 68,
-      "views": 26780,
+      "views": 26791,
       "likes": 1846,
       "comments": 140,
       "isShort": true
@@ -5666,7 +5711,7 @@
       "title": "He Captured That Shape Perfectly #funny #impressive #viral #art",
       "publishedAt": "2026-06-02T02:00:37.000Z",
       "durationSec": 63,
-      "views": 7464,
+      "views": 7465,
       "likes": 493,
       "comments": 5,
       "isShort": true
@@ -5677,7 +5722,7 @@
       "title": "Guy Goes Crazy On Roof #funny #cringe #angry #viral",
       "publishedAt": "2026-06-02T02:00:23.000Z",
       "durationSec": 147,
-      "views": 5628,
+      "views": 5629,
       "likes": 277,
       "comments": 13,
       "isShort": true
@@ -5688,7 +5733,7 @@
       "title": "Kindergarten Class Shows Up For Kids Adoption #family #heartwarming #viral #nice",
       "publishedAt": "2026-06-02T01:30:09.000Z",
       "durationSec": 82,
-      "views": 27541,
+      "views": 27542,
       "likes": 2017,
       "comments": 52,
       "isShort": true
@@ -5699,8 +5744,8 @@
       "title": "Based Lady Has A Problem With AOC #liberals #AOC #democrats #viral",
       "publishedAt": "2026-06-02T00:00:32.000Z",
       "durationSec": 127,
-      "views": 1585757,
-      "likes": 172564,
+      "views": 1586410,
+      "likes": 172614,
       "comments": 323,
       "isShort": true
     },
@@ -5710,7 +5755,7 @@
       "title": "Live Streamers Really Are The Worst #cringe #viral #streaming #irl",
       "publishedAt": "2026-06-02T00:00:01.000Z",
       "durationSec": 178,
-      "views": 4096,
+      "views": 4097,
       "likes": 259,
       "comments": 9,
       "isShort": true
@@ -5721,7 +5766,7 @@
       "title": "Would You Let Your Server Take Your Food Early!  #food #prank #viral #funny",
       "publishedAt": "2026-06-01T23:30:38.000Z",
       "durationSec": 73,
-      "views": 22636,
+      "views": 22645,
       "likes": 920,
       "comments": 108,
       "isShort": true
@@ -5754,7 +5799,7 @@
       "title": "Karen Goes Crazy In Store #cringe #karen #funny #viral",
       "publishedAt": "2026-06-01T22:00:14.000Z",
       "durationSec": 178,
-      "views": 14249,
+      "views": 14250,
       "likes": 572,
       "comments": 95,
       "isShort": true
@@ -5831,7 +5876,7 @@
       "title": "HE EXPLODED",
       "publishedAt": "2026-06-01T17:18:51.000Z",
       "durationSec": 745,
-      "views": 6853,
+      "views": 6854,
       "likes": 1063,
       "comments": 87,
       "isShort": false
@@ -5875,7 +5920,7 @@
       "title": "Karen Gets Caught Stealing On Camera #drama #car #karen #viral",
       "publishedAt": "2026-05-31T15:30:04.000Z",
       "durationSec": 97,
-      "views": 297908,
+      "views": 297910,
       "likes": 10438,
       "comments": 973,
       "isShort": true
@@ -5897,7 +5942,7 @@
       "title": "This Dude Absolutely Killed It #standup #funny #comedy #viral",
       "publishedAt": "2026-05-31T15:00:20.000Z",
       "durationSec": 164,
-      "views": 69527,
+      "views": 69528,
       "likes": 2802,
       "comments": 51,
       "isShort": true
@@ -5919,8 +5964,8 @@
       "title": "This Dude Is Absolutely Hilarious #standup #funny #comedy #viral",
       "publishedAt": "2026-05-31T14:30:36.000Z",
       "durationSec": 151,
-      "views": 624476,
-      "likes": 29466,
+      "views": 624556,
+      "likes": 29467,
       "comments": 1535,
       "isShort": true
     },
@@ -5965,7 +6010,7 @@
       "title": "Woman Goes Off On Neighborhood Teens #viral #drama #funny #angry",
       "publishedAt": "2026-05-31T02:00:06.000Z",
       "durationSec": 178,
-      "views": 8426,
+      "views": 8427,
       "likes": 996,
       "comments": 136,
       "isShort": true
@@ -5976,7 +6021,7 @@
       "title": "Landlord Tries To Move New Tennant In #housing #cringe #viral #drama",
       "publishedAt": "2026-05-31T01:30:17.000Z",
       "durationSec": 143,
-      "views": 25346,
+      "views": 25349,
       "likes": 1849,
       "comments": 202,
       "isShort": true
@@ -5987,7 +6032,7 @@
       "title": "This Prank Will Have You In Stitches #prank #funny #viral #meme",
       "publishedAt": "2026-05-31T00:30:01.000Z",
       "durationSec": 67,
-      "views": 19413,
+      "views": 19417,
       "likes": 933,
       "comments": 58,
       "isShort": true
@@ -6009,7 +6054,7 @@
       "title": "Entitled Influencer Causes Trouble In Restaurant #viral #drama #food #restaurant",
       "publishedAt": "2026-05-31T00:00:08.000Z",
       "durationSec": 110,
-      "views": 48011,
+      "views": 48012,
       "likes": 3281,
       "comments": 511,
       "isShort": true
@@ -6020,7 +6065,7 @@
       "title": "Absolute Legend Saves Swan #animals #viral #men #hero",
       "publishedAt": "2026-05-30T22:00:38.000Z",
       "durationSec": 95,
-      "views": 18666,
+      "views": 18667,
       "likes": 1564,
       "comments": 68,
       "isShort": true
@@ -6053,7 +6098,7 @@
       "title": "This English Comedian Is Hilarious #viral #funny #police #meme",
       "publishedAt": "2026-05-30T15:00:21.000Z",
       "durationSec": 177,
-      "views": 19372,
+      "views": 19376,
       "likes": 1719,
       "comments": 84,
       "isShort": true
@@ -6075,7 +6120,7 @@
       "title": "Entitled Government Karen Embarrasses Herself #viral #cringe #government #fafo",
       "publishedAt": "2026-05-30T01:30:17.000Z",
       "durationSec": 173,
-      "views": 48695,
+      "views": 48702,
       "likes": 3214,
       "comments": 411,
       "isShort": true
@@ -6086,7 +6131,7 @@
       "title": "We Need More People Like This In The World #kindness #homeless #dogs #heartwarming",
       "publishedAt": "2026-05-30T00:30:35.000Z",
       "durationSec": 82,
-      "views": 15041,
+      "views": 15050,
       "likes": 1221,
       "comments": 62,
       "isShort": true
@@ -6097,7 +6142,7 @@
       "title": "Why Are There So Many Karens Around  #cringe #viral #angry #funny",
       "publishedAt": "2026-05-30T00:00:01.000Z",
       "durationSec": 77,
-      "views": 541049,
+      "views": 541050,
       "likes": 20829,
       "comments": 2458,
       "isShort": true
@@ -6108,7 +6153,7 @@
       "title": "Airport Customer Shows His Gratitude #heartwarming #viral #airport #travel",
       "publishedAt": "2026-05-29T22:30:39.000Z",
       "durationSec": 39,
-      "views": 23036,
+      "views": 23042,
       "likes": 1306,
       "comments": 55,
       "isShort": true
@@ -6119,7 +6164,7 @@
       "title": "Psycho Karen Keys Someone's Car #crime #karen #fafo #cctv",
       "publishedAt": "2026-05-29T22:30:33.000Z",
       "durationSec": 33,
-      "views": 52234,
+      "views": 52240,
       "likes": 2312,
       "comments": 226,
       "isShort": true
@@ -6229,7 +6274,7 @@
       "title": "This Driver Is A Good Human Being #viral #heartwarming #dogs #kindness",
       "publishedAt": "2026-05-29T15:00:31.000Z",
       "durationSec": 85,
-      "views": 30763,
+      "views": 30771,
       "likes": 3041,
       "comments": 197,
       "isShort": true
@@ -6240,7 +6285,7 @@
       "title": "Student Resorts To Violence FAFO #student #viral #drama #police",
       "publishedAt": "2026-05-29T15:00:02.000Z",
       "durationSec": 170,
-      "views": 15708,
+      "views": 15709,
       "likes": 2459,
       "comments": 163,
       "isShort": true
@@ -6262,7 +6307,7 @@
       "title": "Gina Carano Questioned About Disney Lawsuit #ginacarano #disney #drama #viral",
       "publishedAt": "2026-05-29T02:00:05.000Z",
       "durationSec": 90,
-      "views": 11604,
+      "views": 11605,
       "likes": 1101,
       "comments": 24,
       "isShort": true
@@ -6273,7 +6318,7 @@
       "title": "Class Mates Surprise Teacher With Present #college #heartwarming #surprise #viral",
       "publishedAt": "2026-05-29T00:00:19.000Z",
       "durationSec": 142,
-      "views": 355560,
+      "views": 355561,
       "likes": 13577,
       "comments": 464,
       "isShort": true
@@ -6418,7 +6463,7 @@
       "title": "This Guy Is Big Mad About His Watch #shopping #watch #funny #cringe",
       "publishedAt": "2026-05-28T15:00:29.000Z",
       "durationSec": 134,
-      "views": 22395,
+      "views": 22396,
       "likes": 946,
       "comments": 157,
       "isShort": true
@@ -6429,8 +6474,8 @@
       "title": "This Lady's Cat Speaks English #cat #viral #meme #funny",
       "publishedAt": "2026-05-28T13:30:25.000Z",
       "durationSec": 34,
-      "views": 52586,
-      "likes": 1238,
+      "views": 52588,
+      "likes": 1237,
       "comments": 29,
       "isShort": true
     },
@@ -6440,7 +6485,7 @@
       "title": "This Kid Learns About Taxes #cringe #funny #taxes #viral",
       "publishedAt": "2026-05-28T02:00:23.000Z",
       "durationSec": 85,
-      "views": 122124,
+      "views": 122125,
       "likes": 3162,
       "comments": 163,
       "isShort": true
@@ -6451,8 +6496,8 @@
       "title": "Gold Digger Gets A Big Reality Check #women #funny #cringe #viral",
       "publishedAt": "2026-05-28T02:00:04.000Z",
       "durationSec": 53,
-      "views": 967052,
-      "likes": 26189,
+      "views": 967125,
+      "likes": 26190,
       "comments": 2701,
       "isShort": true
     },
@@ -6462,8 +6507,8 @@
       "title": "Doordash Drive Confronts Cheating Customer #karen #doordash #drama #viral",
       "publishedAt": "2026-05-28T00:00:36.000Z",
       "durationSec": 129,
-      "views": 1302155,
-      "likes": 77621,
+      "views": 1302175,
+      "likes": 77623,
       "comments": 6573,
       "isShort": true
     },
@@ -6495,7 +6540,7 @@
       "title": "Karen Refuses To Be Arrested For Stealing #karen #police #bodycam #cringe",
       "publishedAt": "2026-05-27T22:00:14.000Z",
       "durationSec": 159,
-      "views": 294167,
+      "views": 294168,
       "likes": 14642,
       "comments": 1347,
       "isShort": true
@@ -6506,7 +6551,7 @@
       "title": "Sometimes You Need A Little Kindness #kindness #viral #heartwarming #shopping",
       "publishedAt": "2026-05-27T22:00:04.000Z",
       "durationSec": 73,
-      "views": 11239,
+      "views": 11240,
       "likes": 1061,
       "comments": 76,
       "isShort": true
@@ -6594,7 +6639,7 @@
       "title": "Dude Holds Up The Whole Line Over Ice #fastfood #viral #cringe #food",
       "publishedAt": "2026-05-27T15:00:36.000Z",
       "durationSec": 91,
-      "views": 42153,
+      "views": 42154,
       "likes": 1907,
       "comments": 330,
       "isShort": true
@@ -6694,7 +6739,7 @@
       "publishedAt": "2026-05-26T19:13:09.000Z",
       "durationSec": 1004,
       "views": 41671,
-      "likes": 4097,
+      "likes": 4098,
       "comments": 856,
       "isShort": false
     },
@@ -6825,8 +6870,8 @@
       "title": "This Dad Needed Some Christmas Spirit #drama #cringe #viral #dad",
       "publishedAt": "2026-05-25T22:00:14.000Z",
       "durationSec": 166,
-      "views": 2051664,
-      "likes": 66478,
+      "views": 2051697,
+      "likes": 66479,
       "comments": 2445,
       "isShort": true
     },
@@ -6946,7 +6991,7 @@
       "title": "This Baby Might Be The Cutest Baby Ever #baby #mother #heartwarming #funny",
       "publishedAt": "2026-05-24T14:30:00.000Z",
       "durationSec": 116,
-      "views": 479485,
+      "views": 479491,
       "likes": 23800,
       "comments": 1038,
       "isShort": true
@@ -6968,7 +7013,7 @@
       "title": "This Is A Great Life Hack For Male Clothing Shoppers #viral #funny #meme #shopping",
       "publishedAt": "2026-05-24T14:00:32.000Z",
       "durationSec": 18,
-      "views": 38437,
+      "views": 38438,
       "likes": 937,
       "comments": 43,
       "isShort": true
@@ -7001,8 +7046,8 @@
       "title": "Karen Bank Manager Causes Drama #police #cringe #karen #viral",
       "publishedAt": "2026-05-24T02:00:02.000Z",
       "durationSec": 135,
-      "views": 1092342,
-      "likes": 43441,
+      "views": 1092576,
+      "likes": 43450,
       "comments": 2538,
       "isShort": true
     },
@@ -7012,7 +7057,7 @@
       "title": "Mel Gibson Goes After Gavin Newsom #politics #melgibson #actors #viral",
       "publishedAt": "2026-05-24T01:30:06.000Z",
       "durationSec": 46,
-      "views": 53313,
+      "views": 53315,
       "likes": 4396,
       "comments": 137,
       "isShort": true
@@ -7023,7 +7068,7 @@
       "title": "Mads Mikkelsen Deals With Woke Reporter #woke #viral #movies #madsmikkelsen",
       "publishedAt": "2026-05-24T00:30:15.000Z",
       "durationSec": 24,
-      "views": 52667,
+      "views": 52675,
       "likes": 1221,
       "comments": 50,
       "isShort": true
@@ -7045,7 +7090,7 @@
       "title": "Customer Gets Abusive With Shop Worker #drama #viral #cringe #angry",
       "publishedAt": "2026-05-24T00:00:05.000Z",
       "durationSec": 70,
-      "views": 28281,
+      "views": 28282,
       "likes": 1543,
       "comments": 263,
       "isShort": true
@@ -7078,7 +7123,7 @@
       "title": "Karen Trashes Breakfast Bar After Getting Fired #drama #viral #funny #hotel",
       "publishedAt": "2026-05-23T22:30:21.000Z",
       "durationSec": 31,
-      "views": 28103,
+      "views": 28105,
       "likes": 953,
       "comments": 140,
       "isShort": true
@@ -7100,7 +7145,7 @@
       "title": "Karen Antagonizes Police Officers #karen #FAFO #police #bodycam 1",
       "publishedAt": "2026-05-23T22:00:38.000Z",
       "durationSec": 178,
-      "views": 6105,
+      "views": 6106,
       "likes": 435,
       "comments": 35,
       "isShort": true
@@ -7122,7 +7167,7 @@
       "title": "Liberal FAFOs Bigtime With MAGA Dude #maga #trump #donaldtrump #viral",
       "publishedAt": "2026-05-23T22:00:13.000Z",
       "durationSec": 71,
-      "views": 515793,
+      "views": 515794,
       "likes": 43390,
       "comments": 1516,
       "isShort": true
@@ -7199,7 +7244,7 @@
       "title": "Security Guard Gets Physical With Journalist #drama #viral #cringe #bodycam",
       "publishedAt": "2026-05-23T15:00:04.000Z",
       "durationSec": 146,
-      "views": 56176,
+      "views": 56178,
       "likes": 4553,
       "comments": 330,
       "isShort": true
@@ -7221,7 +7266,7 @@
       "title": "Should A Man Pay For Everything!  #women #dating #men #viral",
       "publishedAt": "2026-05-23T13:30:07.000Z",
       "durationSec": 86,
-      "views": 14097,
+      "views": 14098,
       "likes": 1275,
       "comments": 150,
       "isShort": true
@@ -7254,7 +7299,7 @@
       "title": "Cop Saves Woman From Jumping Off Building #hero #police #cop #drama",
       "publishedAt": "2026-05-23T02:00:01.000Z",
       "durationSec": 90,
-      "views": 5898,
+      "views": 5899,
       "likes": 476,
       "comments": 49,
       "isShort": true
@@ -7265,7 +7310,7 @@
       "title": "Hollywood Celebrities Moaning About Capitalism #movies #funny #cringe #viral",
       "publishedAt": "2026-05-23T01:30:02.000Z",
       "durationSec": 37,
-      "views": 90527,
+      "views": 90532,
       "likes": 2928,
       "comments": 339,
       "isShort": true
@@ -7276,9 +7321,9 @@
       "title": "Liberals Are The Stupidest People On The Planet #funny #viral #liberals #environment",
       "publishedAt": "2026-05-23T00:30:10.000Z",
       "durationSec": 59,
-      "views": 1050534,
-      "likes": 37582,
-      "comments": 4823,
+      "views": 1053099,
+      "likes": 37637,
+      "comments": 4831,
       "isShort": true
     },
     {
@@ -7441,7 +7486,7 @@
       "title": "THIS WONT END WELL",
       "publishedAt": "2026-05-22T16:08:05.000Z",
       "durationSec": 905,
-      "views": 28578,
+      "views": 28579,
       "likes": 2852,
       "comments": 451,
       "isShort": false
@@ -7452,7 +7497,7 @@
       "title": "When Your Wife Tries To Help #family #men #women #funny",
       "publishedAt": "2026-05-22T15:00:44.000Z",
       "durationSec": 83,
-      "views": 34160,
+      "views": 34166,
       "likes": 1320,
       "comments": 56,
       "isShort": true
@@ -7485,7 +7530,7 @@
       "title": "Can You Believe This Total Karen  #karen #neighbor #drama #viral",
       "publishedAt": "2026-05-22T13:30:35.000Z",
       "durationSec": 142,
-      "views": 9183,
+      "views": 9184,
       "likes": 756,
       "comments": 86,
       "isShort": true
@@ -7507,7 +7552,7 @@
       "title": "This Karen Bit Off More Than She Could Chew #drama #fight #viral #karen",
       "publishedAt": "2026-05-22T02:00:23.000Z",
       "durationSec": 47,
-      "views": 69264,
+      "views": 69266,
       "likes": 3091,
       "comments": 262,
       "isShort": true
@@ -7518,7 +7563,7 @@
       "title": "The Emotional Intelligence On This Kid Is Next Level #kids #funny #heartwarming #cute",
       "publishedAt": "2026-05-22T01:30:17.000Z",
       "durationSec": 42,
-      "views": 35881,
+      "views": 35886,
       "likes": 2330,
       "comments": 77,
       "isShort": true
@@ -7562,7 +7607,7 @@
       "title": "Do You Believe This Lady  #cringe #viral #drama #women",
       "publishedAt": "2026-05-22T00:00:20.000Z",
       "durationSec": 44,
-      "views": 10277,
+      "views": 10279,
       "likes": 452,
       "comments": 147,
       "isShort": true
@@ -7573,7 +7618,7 @@
       "title": "This Lady Cop Pulls Over The Wrong Lawyer #police #crime #bodycam #funny",
       "publishedAt": "2026-05-21T22:30:08.000Z",
       "durationSec": 87,
-      "views": 70923,
+      "views": 70930,
       "likes": 4020,
       "comments": 337,
       "isShort": true
@@ -7628,7 +7673,7 @@
       "title": "NO WONDER THEY HID IT",
       "publishedAt": "2026-05-21T21:40:10.000Z",
       "durationSec": 744,
-      "views": 34817,
+      "views": 34818,
       "likes": 3499,
       "comments": 281,
       "isShort": false
@@ -7639,7 +7684,7 @@
       "title": "MASSIVE NEW FRAUD",
       "publishedAt": "2026-05-21T20:52:39.000Z",
       "durationSec": 607,
-      "views": 7488,
+      "views": 7489,
       "likes": 1073,
       "comments": 117,
       "isShort": false
@@ -7672,7 +7717,7 @@
       "title": "FULL BLOWN PANIC",
       "publishedAt": "2026-05-21T17:24:53.000Z",
       "durationSec": 893,
-      "views": 46577,
+      "views": 46578,
       "likes": 6270,
       "comments": 617,
       "isShort": false
@@ -7683,7 +7728,7 @@
       "title": "This Guy Won't Be Running For A While #funny #meme #hilarious #meme",
       "publishedAt": "2026-05-21T15:00:52.000Z",
       "durationSec": 23,
-      "views": 31499,
+      "views": 31507,
       "likes": 1243,
       "comments": 64,
       "isShort": true
@@ -7705,7 +7750,7 @@
       "title": "Mother Finds Out Daughter Is IG Model #cringe #family #drama #viral",
       "publishedAt": "2026-05-21T13:30:08.000Z",
       "durationSec": 96,
-      "views": 9375,
+      "views": 9377,
       "likes": 599,
       "comments": 63,
       "isShort": true
@@ -7727,7 +7772,7 @@
       "title": "Woman Takes Sobriety Test This Is Hilarious #police #crime #viral #funny mp4",
       "publishedAt": "2026-05-21T02:00:29.000Z",
       "durationSec": 67,
-      "views": 14802,
+      "views": 14803,
       "likes": 727,
       "comments": 16,
       "isShort": true
@@ -7760,7 +7805,7 @@
       "title": "This Hairy Dude Is Big Mad At Anti Immigration Protestors #immigration #cringe #viral #funny",
       "publishedAt": "2026-05-21T00:30:16.000Z",
       "durationSec": 92,
-      "views": 51359,
+      "views": 51362,
       "likes": 2843,
       "comments": 732,
       "isShort": true
@@ -7804,7 +7849,7 @@
       "title": "Myron Gaines Calls Pokémon Player Mentally Ill #cringe #debate #pokemon #funny",
       "publishedAt": "2026-05-21T00:00:18.000Z",
       "durationSec": 165,
-      "views": 7769,
+      "views": 7770,
       "likes": 548,
       "comments": 29,
       "isShort": true
@@ -7815,7 +7860,7 @@
       "title": "DANGEROUS MELTDOWN",
       "publishedAt": "2026-05-20T23:31:59.000Z",
       "durationSec": 896,
-      "views": 17056,
+      "views": 17057,
       "likes": 2095,
       "comments": 221,
       "isShort": false
@@ -7826,7 +7871,7 @@
       "title": "Doctor Torches The Hantavirus Hysteria #hantavirus #health #medicine #viral",
       "publishedAt": "2026-05-20T22:30:06.000Z",
       "durationSec": 74,
-      "views": 26223,
+      "views": 26227,
       "likes": 1970,
       "comments": 67,
       "isShort": true
@@ -7850,7 +7895,7 @@
       "durationSec": 76,
       "views": 434866,
       "likes": 17268,
-      "comments": 1445,
+      "comments": 1444,
       "isShort": true
     },
     {
@@ -7881,7 +7926,7 @@
       "title": "THEY LOST EVERYTHING",
       "publishedAt": "2026-05-20T21:40:16.000Z",
       "durationSec": 635,
-      "views": 7608,
+      "views": 7609,
       "likes": 1347,
       "comments": 116,
       "isShort": false
@@ -7892,7 +7937,7 @@
       "title": "THE SQUAD IS DEAD",
       "publishedAt": "2026-05-20T21:39:37.000Z",
       "durationSec": 926,
-      "views": 34799,
+      "views": 34800,
       "likes": 4011,
       "comments": 218,
       "isShort": false
@@ -7914,7 +7959,7 @@
       "title": "BRUTAL NEW EVIDENCE",
       "publishedAt": "2026-05-20T19:49:05.000Z",
       "durationSec": 735,
-      "views": 12286,
+      "views": 12287,
       "likes": 1656,
       "comments": 141,
       "isShort": false
@@ -7925,7 +7970,7 @@
       "title": "MANIFESTO RELEASED",
       "publishedAt": "2026-05-20T19:19:04.000Z",
       "durationSec": 873,
-      "views": 44913,
+      "views": 44914,
       "likes": 4499,
       "comments": 655,
       "isShort": false
@@ -8002,7 +8047,7 @@
       "title": "Do You Think Bulgarians Are Racist  #bulgaria #viral #cringe #funny",
       "publishedAt": "2026-05-20T13:30:35.000Z",
       "durationSec": 129,
-      "views": 6104,
+      "views": 6111,
       "likes": 371,
       "comments": 62,
       "isShort": true
@@ -8024,7 +8069,7 @@
       "title": "Sister Gets Hospital Visit From Brother #family #heartwarming #viral #health",
       "publishedAt": "2026-05-20T02:00:14.000Z",
       "durationSec": 31,
-      "views": 14859,
+      "views": 14860,
       "likes": 985,
       "comments": 57,
       "isShort": true
@@ -8057,7 +8102,7 @@
       "title": "Couple Go Off At Woman Breast Feeding #cringe #viral #drama #restaurant",
       "publishedAt": "2026-05-20T00:30:24.000Z",
       "durationSec": 178,
-      "views": 15719,
+      "views": 15724,
       "likes": 1118,
       "comments": 460,
       "isShort": true
@@ -8090,9 +8135,9 @@
       "title": "George Carlin Was Years Ahead Of This Time #georgecarlin #standup #standupcomedy #comedy",
       "publishedAt": "2026-05-20T00:00:04.000Z",
       "durationSec": 158,
-      "views": 9378988,
-      "likes": 491799,
-      "comments": 11069,
+      "views": 9380338,
+      "likes": 491870,
+      "comments": 11072,
       "isShort": true
     },
     {
@@ -8145,7 +8190,7 @@
       "title": "People Were Angry With Jenny McCarthy But Not Bill Gates!  #vaccine #health #viral #cringe",
       "publishedAt": "2026-05-19T22:00:28.000Z",
       "durationSec": 37,
-      "views": 203459,
+      "views": 203460,
       "likes": 6627,
       "comments": 264,
       "isShort": true
@@ -8266,7 +8311,7 @@
       "title": "This Liberal Dude FAFO'ed Bigtime #fight #cringe #fafo #funny",
       "publishedAt": "2026-05-19T15:01:05.000Z",
       "durationSec": 59,
-      "views": 34578,
+      "views": 34584,
       "likes": 3721,
       "comments": 262,
       "isShort": true
@@ -8288,7 +8333,7 @@
       "title": "Are You OVER The Covid Lockdowns Yet!  #covid #health #viral #vaccine",
       "publishedAt": "2026-05-19T13:30:37.000Z",
       "durationSec": 178,
-      "views": 24519,
+      "views": 24520,
       "likes": 5817,
       "comments": 633,
       "isShort": true
@@ -8310,7 +8355,7 @@
       "title": "We Need To Bring Back Shame #women #viral #funny #cringe",
       "publishedAt": "2026-05-19T01:30:17.000Z",
       "durationSec": 72,
-      "views": 45798,
+      "views": 45804,
       "likes": 2032,
       "comments": 159,
       "isShort": true
@@ -8332,7 +8377,7 @@
       "title": "This Karen Picked On The Wrong Dude #karen #crime #fight #police",
       "publishedAt": "2026-05-19T00:30:05.000Z",
       "durationSec": 121,
-      "views": 33319,
+      "views": 33325,
       "likes": 3080,
       "comments": 182,
       "isShort": true
@@ -8431,9 +8476,9 @@
       "title": "Fat Liberal Gets Angry At Conservative Interviewer #protest #liberals #health #leftists",
       "publishedAt": "2026-05-18T22:00:15.000Z",
       "durationSec": 178,
-      "views": 1843512,
-      "likes": 89769,
-      "comments": 14593,
+      "views": 1843745,
+      "likes": 89773,
+      "comments": 14595,
       "isShort": true
     },
     {
@@ -8618,7 +8663,7 @@
       "title": "Son Surprises Mother At Swearing In #police #heartwarming #viral #family",
       "publishedAt": "2026-05-17T14:30:41.000Z",
       "durationSec": 85,
-      "views": 20169,
+      "views": 20172,
       "likes": 2726,
       "comments": 65,
       "isShort": true
@@ -8673,7 +8718,7 @@
       "title": "Woman Saves Man From Train #viral #amazing #train #hero",
       "publishedAt": "2026-05-17T13:30:35.000Z",
       "durationSec": 52,
-      "views": 18442,
+      "views": 18443,
       "likes": 1051,
       "comments": 107,
       "isShort": true
@@ -8684,7 +8729,7 @@
       "title": "These People Are Totally Deluded #justice #environment #liberals #cringe",
       "publishedAt": "2026-05-17T12:30:24.000Z",
       "durationSec": 63,
-      "views": 75239,
+      "views": 75244,
       "likes": 4912,
       "comments": 551,
       "isShort": true
@@ -8717,7 +8762,7 @@
       "title": "Liberals Need To Take A Look In The Mirror #liberals #cringe #funny #viral",
       "publishedAt": "2026-05-17T01:30:06.000Z",
       "durationSec": 133,
-      "views": 107775,
+      "views": 107781,
       "likes": 11242,
       "comments": 1136,
       "isShort": true
@@ -8728,7 +8773,7 @@
       "title": "Liberals Are Really Dumb #liberals #debate #viral #cringe",
       "publishedAt": "2026-05-17T00:30:55.000Z",
       "durationSec": 90,
-      "views": 30312,
+      "views": 30318,
       "likes": 2858,
       "comments": 250,
       "isShort": true
@@ -8772,7 +8817,7 @@
       "title": "Feminism Has Destroyed So Many Minds #feminism #women #men #viral",
       "publishedAt": "2026-05-16T22:30:07.000Z",
       "durationSec": 54,
-      "views": 31417,
+      "views": 31424,
       "likes": 2467,
       "comments": 174,
       "isShort": true
@@ -8882,7 +8927,7 @@
       "title": "Based Cop Handles Liberals Expertly #police #liberals #viral #funny",
       "publishedAt": "2026-05-16T15:00:59.000Z",
       "durationSec": 46,
-      "views": 124869,
+      "views": 124876,
       "likes": 6733,
       "comments": 316,
       "isShort": true
@@ -8904,7 +8949,7 @@
       "title": "This Lady Is Legit Hilarious #standupcomedy #standup #funny #viral",
       "publishedAt": "2026-05-16T14:00:35.000Z",
       "durationSec": 39,
-      "views": 53714,
+      "views": 53715,
       "likes": 2109,
       "comments": 27,
       "isShort": true
@@ -8926,7 +8971,7 @@
       "title": "If You Don't Have An Argument, Just Shout #viral #debate #funny #liberals",
       "publishedAt": "2026-05-16T02:00:59.000Z",
       "durationSec": 69,
-      "views": 197454,
+      "views": 197462,
       "likes": 9078,
       "comments": 574,
       "isShort": true
@@ -9113,7 +9158,7 @@
       "title": "Fatigue Hits The Movie Theaters #fatigue #viral #cringe #news",
       "publishedAt": "2026-05-15T15:01:10.000Z",
       "durationSec": 19,
-      "views": 75781,
+      "views": 75785,
       "likes": 2048,
       "comments": 654,
       "isShort": true
@@ -9168,7 +9213,7 @@
       "title": "We Have A Serious Mental Health Crisis #actor #ellenpage #viral #cringe",
       "publishedAt": "2026-05-15T02:00:33.000Z",
       "durationSec": 76,
-      "views": 31377,
+      "views": 31379,
       "likes": 1679,
       "comments": 566,
       "isShort": true
@@ -9190,7 +9235,7 @@
       "title": "This Boy Is A Hero #hero #viral #school #news",
       "publishedAt": "2026-05-15T00:06:59.000Z",
       "durationSec": 179,
-      "views": 39700,
+      "views": 39702,
       "likes": 4989,
       "comments": 279,
       "isShort": true
@@ -9201,7 +9246,7 @@
       "title": "Mom Forces Boy To Ruin PS5 #viral #parenting #cringe #ps5",
       "publishedAt": "2026-05-15T00:00:16.000Z",
       "durationSec": 74,
-      "views": 35231,
+      "views": 35233,
       "likes": 1679,
       "comments": 348,
       "isShort": true
@@ -9223,7 +9268,7 @@
       "title": "Entitled Influencer Finds Out! I The Quartering",
       "publishedAt": "2026-05-14T23:15:42.000Z",
       "durationSec": 674,
-      "views": 27343,
+      "views": 27344,
       "likes": 3571,
       "comments": 599,
       "isShort": false
@@ -9256,7 +9301,7 @@
       "title": "This Guy Has A Serious Attitude Problem #drama #cringe #viral #liberals",
       "publishedAt": "2026-05-14T22:30:03.000Z",
       "durationSec": 164,
-      "views": 314586,
+      "views": 314587,
       "likes": 17824,
       "comments": 3939,
       "isShort": true
@@ -9289,7 +9334,7 @@
       "title": "Most Controversial MTG Artwork #mtg #magicthegathering #mtgcards #tradingcards",
       "publishedAt": "2026-05-14T21:09:28.000Z",
       "durationSec": 172,
-      "views": 5000,
+      "views": 5001,
       "likes": 115,
       "comments": 29,
       "isShort": true
@@ -9311,7 +9356,7 @@
       "title": "The Race Wars Just Began...",
       "publishedAt": "2026-05-14T18:02:22.000Z",
       "durationSec": 816,
-      "views": 27709,
+      "views": 27710,
       "likes": 2562,
       "comments": 944,
       "isShort": false
@@ -9389,7 +9434,7 @@
       "publishedAt": "2026-05-14T14:01:28.000Z",
       "durationSec": 61,
       "views": 7731,
-      "likes": 477,
+      "likes": 478,
       "comments": 24,
       "isShort": true
     },
@@ -9410,7 +9455,7 @@
       "title": "Some People Are Really Stupid! #funny #viral #gameshow #cringe",
       "publishedAt": "2026-05-14T02:00:08.000Z",
       "durationSec": 71,
-      "views": 1142264,
+      "views": 1142268,
       "likes": 20332,
       "comments": 1242,
       "isShort": true
@@ -9521,7 +9566,7 @@
       "publishedAt": "2026-05-13T21:10:27.000Z",
       "durationSec": 715,
       "views": 86834,
-      "likes": 7465,
+      "likes": 7464,
       "comments": 1472,
       "isShort": false
     },
@@ -9542,7 +9587,7 @@
       "title": "Why Is Candace Attacking Nick Shirley | Jeremy Hambly",
       "publishedAt": "2026-05-13T19:19:39.000Z",
       "durationSec": 727,
-      "views": 7620,
+      "views": 7621,
       "likes": 1425,
       "comments": 379,
       "isShort": false
@@ -9553,7 +9598,7 @@
       "title": "Steven Crowder Just NAILED It! I The Quartering",
       "publishedAt": "2026-05-13T18:00:38.000Z",
       "durationSec": 845,
-      "views": 44804,
+      "views": 44805,
       "likes": 4215,
       "comments": 757,
       "isShort": false
@@ -9641,7 +9686,7 @@
       "title": "Lady Doesn't Realize E-car Has Surveillance Cam #funny #viral #cars #meme",
       "publishedAt": "2026-05-13T02:00:21.000Z",
       "durationSec": 39,
-      "views": 60776,
+      "views": 60778,
       "likes": 2451,
       "comments": 214,
       "isShort": true
@@ -9718,7 +9763,7 @@
       "title": "This Is Sickening!",
       "publishedAt": "2026-05-12T22:14:23.000Z",
       "durationSec": 727,
-      "views": 35171,
+      "views": 35172,
       "likes": 3911,
       "comments": 782,
       "isShort": false
@@ -9729,9 +9774,9 @@
       "title": "Kaitlin Bennett Gets Kicked Out Marketplace Part 1 #cringe #viral #debate #drama",
       "publishedAt": "2026-05-12T22:01:03.000Z",
       "durationSec": 174,
-      "views": 2092746,
-      "likes": 98234,
-      "comments": 9546,
+      "views": 2092908,
+      "likes": 98236,
+      "comments": 9547,
       "isShort": true
     },
     {
@@ -9850,7 +9895,7 @@
       "title": "Streaming Was A Huge Mistake #weird #viral #streaming #cringe",
       "publishedAt": "2026-05-12T15:00:35.000Z",
       "durationSec": 32,
-      "views": 27682,
+      "views": 27688,
       "likes": 851,
       "comments": 212,
       "isShort": true
@@ -9916,7 +9961,7 @@
       "title": "Kai Trump Has Eyes Everywhere #trump #donaldtrump #kaitrump #trumpfamily",
       "publishedAt": "2026-05-12T00:00:37.000Z",
       "durationSec": 104,
-      "views": 26340,
+      "views": 26341,
       "likes": 1410,
       "comments": 51,
       "isShort": true
@@ -9927,7 +9972,7 @@
       "title": "This Kid Is Legitimately Hilarious #viral #funny #family #kids",
       "publishedAt": "2026-05-11T23:30:01.000Z",
       "durationSec": 90,
-      "views": 1618275,
+      "views": 1618276,
       "likes": 48798,
       "comments": 1654,
       "isShort": true
@@ -9982,7 +10027,7 @@
       "title": "Walmart Worker THREATENS Shopper For Not Following Muslim Law",
       "publishedAt": "2026-05-11T21:00:37.000Z",
       "durationSec": 784,
-      "views": 41229,
+      "views": 41230,
       "likes": 4383,
       "comments": 1041,
       "isShort": false
@@ -9993,7 +10038,7 @@
       "title": "Jet RUNS OVER Crazed Man At Colorado Airport But Something Is Off",
       "publishedAt": "2026-05-11T19:49:38.000Z",
       "durationSec": 685,
-      "views": 24128,
+      "views": 24129,
       "likes": 2429,
       "comments": 559,
       "isShort": false
@@ -10103,7 +10148,7 @@
       "title": "How Influencers Eat Human Food #meme #comedy #influencer",
       "publishedAt": "2026-05-10T16:30:01.000Z",
       "durationSec": 87,
-      "views": 28548,
+      "views": 28553,
       "likes": 1459,
       "comments": 213,
       "isShort": true
@@ -10169,7 +10214,7 @@
       "title": "This Woman Has A Very Special Talent #michaeljackson #music #viral #memes",
       "publishedAt": "2026-05-10T02:00:18.000Z",
       "durationSec": 30,
-      "views": 102991,
+      "views": 102995,
       "likes": 4442,
       "comments": 371,
       "isShort": true
@@ -10202,7 +10247,7 @@
       "title": "This Man Is An Absolute Hero! #hero #viral #news #drama",
       "publishedAt": "2026-05-10T00:00:36.000Z",
       "durationSec": 59,
-      "views": 40815,
+      "views": 40816,
       "likes": 2645,
       "comments": 135,
       "isShort": true
@@ -10302,7 +10347,7 @@
       "publishedAt": "2026-05-09T17:57:35.000Z",
       "durationSec": 721,
       "views": 30798,
-      "likes": 2976,
+      "likes": 2977,
       "comments": 331,
       "isShort": false
     },
@@ -10334,7 +10379,7 @@
       "title": "Is Trump Protected By God!? #trump #donaldtrump #viral #religion",
       "publishedAt": "2026-05-09T15:01:43.000Z",
       "durationSec": 93,
-      "views": 21782,
+      "views": 21783,
       "likes": 2949,
       "comments": 196,
       "isShort": true
@@ -10400,7 +10445,7 @@
       "title": "Bill Maher Cooks Liberal Guy's Brain #billmaher #funny #viral #interview",
       "publishedAt": "2026-05-09T00:00:28.000Z",
       "durationSec": 83,
-      "views": 176255,
+      "views": 176256,
       "likes": 6499,
       "comments": 527,
       "isShort": true
