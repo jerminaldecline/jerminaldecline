@@ -9062,11 +9062,16 @@ function renderWindowList(startDate, endDate) {
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
   // Populate a period <select> with the broad presets, a separator, then each
   // individual month (newest first). Specific months use their YYYY-MM as value.
-  function populatePeriodDropdown(sel, current){
+  function populatePeriodDropdown(sel, current, includeMonths = true){
     if (!sel) return;
     const presets = [['ytd','YTD'],['12m','Last 12 months'],['24m','Last 24 months'],['since-peak','Since peak'],['all','All time']];
     let months = [];
-    try { if (typeof availableMonths === 'function') months = availableMonths(); } catch(e){}
+    // The Analysis dropdown is presets-only: its charts are trends, and a
+    // single-month window collapses them to one point/bar. Months remain on
+    // the Videos tab, where filtering to one month is genuinely useful.
+    if (includeMonths) {
+      try { if (typeof availableMonths === 'function') months = availableMonths(); } catch(e){}
+    }
     const presetOpts = presets.map(([v,l]) => `<option value="${v}"${v===current?' selected':''}>${l}</option>`).join('');
     const sep = months.length ? `<option disabled>──────────</option>` : '';
     const monthOpts = months.map(mm => `<option value="${mm}"${mm===current?' selected':''}>${monthName(mm)}</option>`).join('');
@@ -9074,7 +9079,7 @@ function renderWindowList(startDate, endDate) {
   }
   window.__populatePeriodDropdowns = function(){
     const anCur = (typeof window.__getAnalysisPreset === 'function') ? window.__getAnalysisPreset() : (document.getElementById('anPeriodSel')?.value || 'all');
-    populatePeriodDropdown(document.getElementById('anPeriodSel'), anCur);
+    populatePeriodDropdown(document.getElementById('anPeriodSel'), anCur, false);
     populatePeriodDropdown(document.getElementById('vidPeriodSel'), (typeof vidTimePreset!=='undefined')?vidTimePreset:'all');
   };
   function populateAnChannel(){
@@ -9084,7 +9089,7 @@ function renderWindowList(startDate, endDate) {
     sel.innerHTML = ['ALL', ...CHANNELS].map(s =>
       `<option value="${s}"${s===cur?' selected':''}>${(typeof SCOPE_LABEL!=='undefined'&&SCOPE_LABEL[s])||s}</option>`).join('');
     const anCur = (typeof window.__getAnalysisPreset === 'function') ? window.__getAnalysisPreset() : (document.getElementById('anPeriodSel')?.value || 'all');
-    populatePeriodDropdown(document.getElementById('anPeriodSel'), anCur);
+    populatePeriodDropdown(document.getElementById('anPeriodSel'), anCur, false);
   }
   window.__populateAnChannel = populateAnChannel;
   const anChannelSel = document.getElementById('anChannelSel');
