@@ -1,38 +1,60 @@
-# Topic candidates — 2026-07-07
+# Topic candidates — 2026-07-08
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @QuarteringLive
+
+Pool: 5 recent videos, 69 baseline videos
+
+### Cluster 1: `check`
+
+- **Recent saturation:** 3/5 videos (**60%**)
+- **Baseline saturation:** 1/69 videos (1%)
+- **Spike ratio:** 28.0x
+- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `check out`, `out quartering`, `quartering vlogs`
+- **Sample recent videos:**
+  - 2026-07-08 — _A HUGE MISTAKE_  
+    Bodycam Footage Allegedly Shows J’Dion Arrested for Disorderly Conduct
+  - 2026-07-07 — _DEAD ON ARRIVAL_  
+    Homer Interview Clip Sparks Backlash Over Question Turning Into Lecture
+  - 2026-07-06 — _THIS IS A JOKE_  
+    John C. Reilly Sparks Debate Over Empathy And Politics
+
 ## @JeremyHambly
 
-Pool: 8 recent videos, 110 baseline videos
+Pool: 10 recent videos, 107 baseline videos
 
 ### Cluster 1: `vlogs`
 
-- **Recent saturation:** 6/8 videos (**75%**)
-- **Baseline saturation:** 18/110 videos (16%)
-- **Spike ratio:** 4.5x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `political`, `charlie`, `kirk`, `sparks`
+- **Recent saturation:** 8/10 videos (**80%**)
+- **Baseline saturation:** 16/107 videos (15%)
+- **Spike ratio:** 5.2x
+- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `charlie`, `kirk`, `sparks`, `quartering vlogs`
 - **Sample recent videos:**
+  - 2026-07-07 — _BOMBSHELL BREAK IN CASE_  
+    DNA Evidence Links Witness As Charlie Kirk Murder Trial Continues In Court
+  - 2026-07-07 — _TIME FOR WAR_  
+    Birmingham Arrest Sparks Online Backlash Amid Dispute Over Police Response And Footage
   - 2026-07-06 — _HE ROASTED EM_  
     CNN Clash Over Reflecting Pool Vandalism Sparks Viral Political Debate Nationwide Today
   - 2026-07-06 — _MOST HATED MAN EVER_  
     Mamdani Sparks Backlash Over Patriotic Message, Immigration, And Political Controversies
   - 2026-07-06 — _HE'S COOKED_  
     Charlie Kirk Trial Begins As Supporters Rally Behind Family Seeking Justice Together
-  - 2026-07-06 — _ALL OUT WAR_  
-    Candace Owens, Andrew Kolvet Clash Over Alleged Israel Offer To TPUSA
-  - 2026-07-02 — _THIS WAS BRUTAL_  
-    NYC Energy Conservation Request Sparks Political Backlash During Summer Heatwave Debate
 
 ### Cluster 2: `backlash`
 
-- **Recent saturation:** 3/8 videos (**38%**)
-- **Baseline saturation:** 7/110 videos (6%)
-- **Spike ratio:** 5.5x
-- **Related terms:** `backlash`
+- **Recent saturation:** 5/10 videos (**50%**)
+- **Baseline saturation:** 15/107 videos (14%)
+- **Spike ratio:** 3.5x
+- **Related terms:** `backlash`, `political`, `debate`
 - **Sample recent videos:**
+  - 2026-07-07 — _TIME FOR WAR_  
+    Birmingham Arrest Sparks Online Backlash Amid Dispute Over Police Response And Footage
+  - 2026-07-06 — _HE ROASTED EM_  
+    CNN Clash Over Reflecting Pool Vandalism Sparks Viral Political Debate Nationwide Today
   - 2026-07-06 — _MOST HATED MAN EVER_  
     Mamdani Sparks Backlash Over Patriotic Message, Immigration, And Political Controversies
   - 2026-07-02 — _THIS WAS BRUTAL_  
@@ -44,41 +66,51 @@ Pool: 8 recent videos, 110 baseline videos
 
 Pool: 14 recent videos, 135 baseline videos
 
-### Cluster 1: `out quartering`
+### Cluster 1: `vlogs`
 
-- **Recent saturation:** 6/14 videos (**43%**)
-- **Baseline saturation:** 11/135 videos (8%)
-- **Spike ratio:** 5.1x
-- **Related terms:** `check`, `quartering`, `out`, `vlogs`, `out quartering`, `check out`, `quartering vlogs`
+- **Recent saturation:** 7/14 videos (**50%**)
+- **Baseline saturation:** 14/135 videos (10%)
+- **Spike ratio:** 4.7x
+- **Related terms:** `vlogs`, `check`, `quartering`, `out`, `nationwide`, `political`, `quartering vlogs`, `out quartering`
 - **Sample recent videos:**
+  - 2026-07-07 — _BRATS FOUND OUT_  
+    Bullying Incidents Spark Arrests, Tragedy, Arson Charges, And Community Outrage Nationwide
+  - 2026-07-07 — _NO COMING BACK NOW_  
+    Court Video Evidence Released In Charlie Kirk Murder Case Ahead Of Trial
+  - 2026-07-07 — _THIS IS VERY BAD_  
+    Allegations Against Graham Platner Ignite Political Fallout And Campaign Scrutiny Nationwide
   - 2026-07-06 — _THIS IS BAD_  
     Charlie Kirk Murder Suspect Appears In Court As Family Watches Emotional Hearing
   - 2026-07-06 — _WOKE NURSE INSTANT KARMA_  
     Texas Nurse Fired Following Viral Patient Discrimination Video And Investigation Findings
-  - 2026-07-06 — _THEY'RE ANIMALS!_  
-    Teen Takeovers Spark Violence, Police Injuries, Public Fear, And Political Backlash Nationwide
-  - 2026-07-06 — _HE WON!_  
-    Trump Celebrates America 250 With Historic Fireworks Amid Cost And Political Debate
-  - 2026-06-30 — _BAN THIS NOW!_  
-    Walmart Faces Boycott Calls Following Viral Video Sparking Outrage
 
-### Cluster 2: `post`
+### Cluster 2: `court`
 
-- **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 7/135 videos (5%)
-- **Spike ratio:** 6.5x
-- **Related terms:** `post`, `alleged`, `social`, `media`, `social media`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 1/135 videos (1%)
+- **Spike ratio:** 19.4x
+- **Related terms:** `court`
 - **Sample recent videos:**
-  - 2026-07-06 — _WOKE NURSE INSTANT KARMA_  
-    Texas Nurse Fired Following Viral Patient Discrimination Video And Investigation Findings
+  - 2026-07-07 — _NO COMING BACK NOW_  
+    Court Video Evidence Released In Charlie Kirk Murder Case Ahead Of Trial
+  - 2026-07-06 — _THIS IS BAD_  
+    Charlie Kirk Murder Suspect Appears In Court As Family Watches Emotional Hearing
+  - 2026-07-01 — _PAYBACK BEGINS_  
+    Texas Court Upholds Sarah Fields Lawsuit Against Drew Anthony
+
+### Cluster 3: `alleged`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 2/135 videos (1%)
+- **Spike ratio:** 11.7x
+- **Related terms:** `alleged`
+- **Sample recent videos:**
   - 2026-07-02 — _SHE WAS 13_  
     Minnesota Sting Operation Leads To Arrest In Alleged Child Predator Case
   - 2026-07-02 — _THIS IS VERY BAD_  
     Trans Suspect Arrested After Alleged Las Vegas Mass Shooting Terror Plot
   - 2026-07-01 — _THEY GOT HER_  
     FBI Fraud Arrest Scrutiny Over Ilhan Omar's Alleged Connections
-  - 2026-06-30 — _BAN THIS NOW!_  
-    Walmart Faces Boycott Calls Following Viral Video Sparking Outrage
 
 ---
 

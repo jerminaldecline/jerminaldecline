@@ -1,6 +1,27 @@
 {
-  "lastUpdated": "2026-07-07T07:57:47.246Z",
+  "lastUpdated": "2026-07-08T07:02:47.197Z",
   "trackers": [
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.6,
+        "baselineSaturation": 0.0214,
+        "spikeRatio": 28,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-07-08T07:02:47.197Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "vlogs",
@@ -9,45 +30,49 @@
         "quartering vlogs",
         "quartering",
         "out quartering",
-        "political",
         "check",
         "check out",
+        "out",
         "charlie",
         "kirk",
         "charlie kirk",
-        "out",
         "sparks"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.75,
-        "baselineSaturation": 0.1667,
-        "spikeRatio": 4.5,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-07-07T07:57:47.246Z"
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.1528,
+        "spikeRatio": 5.24,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-07-08T07:02:47.197Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "backlash",
       "keywords": [
-        "backlash"
+        "political",
+        "backlash",
+        "debate"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.375,
-        "baselineSaturation": 0.0676,
-        "spikeRatio": 5.55,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-07-07T07:57:47.246Z"
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.1435,
+        "spikeRatio": 3.48,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-07-08T07:02:47.197Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "out quartering",
+      "termId": "vlogs",
       "keywords": [
         "vlogs",
         "quartering vlogs",
+        "nationwide",
+        "nationwide check",
+        "political",
         "out quartering",
         "check",
         "quartering",
@@ -55,31 +80,12 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4286,
-        "baselineSaturation": 0.0846,
-        "spikeRatio": 5.07,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-07-07T07:57:47.246Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "post",
-      "keywords": [
-        "post",
-        "alleged",
-        "social",
-        "media",
-        "social media"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0551,
-        "spikeRatio": 6.48,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-07-07T07:57:47.246Z"
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.1066,
+        "spikeRatio": 4.69,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-07-08T07:02:47.197Z"
       }
     }
   ]
