@@ -162,3 +162,27 @@ jobs:
           done
           echo "view-velocity push failed after 3 attempts."
           exit 1
+
+      - name: Snapshot staleness tripwire
+        # Deliberately NOT continue-on-error. The snapshot and rebuild steps
+        # above are best-effort by design, which means a dead SNAPSHOTS token
+        # (or a broken sister repo) keeps every run green while the archive
+        # silently stops growing — and View Velocity, the ad ledger and
+        # historic views quietly freeze with it. This step turns that silence
+        # into a red run and a failure email within a day: snapshots land
+        # twice daily (max normal gap ~12h), so 36h+ since the sister repo's
+        # last commit means at least two halves genuinely failed.
+        env:
+          SNAPSHOTS_TOKEN: ${{ secrets.SNAPSHOTS_REPO_TOKEN }}
+          SNAPSHOTS_REPO: jerminaldecline/jerminaldecline-snapshots
+        run: |
+          set -e
+          LATEST=$(curl -sf --retry 3 -H "Authorization: Bearer ${SNAPSHOTS_TOKEN}" \
+            "https://api.github.com/repos/${SNAPSHOTS_REPO}/commits?per_page=1" \
+            | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['commit']['committer']['date'])")
+          AGE_H=$(python3 -c "import sys, datetime; d = datetime.datetime.fromisoformat(sys.argv[1].replace('Z', '+00:00')); print(int((datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() // 3600))" "$LATEST")
+          echo "Newest snapshots-repo commit: ${LATEST} (${AGE_H}h ago)"
+          if [ "$AGE_H" -ge 36 ]; then
+            echo "::error::Snapshot archive is stale: ${AGE_H}h since the last commit to ${SNAPSHOTS_REPO} (expected <24h). Likely a dead SNAPSHOTS_REPO_TOKEN or a failing snapshot step — check the 'Snapshot data' step logs of recent runs."
+            exit 1
+          fi
