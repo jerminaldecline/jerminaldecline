@@ -326,6 +326,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .season-bar.neg{fill:var(--down)}
 .season-years-cap{margin:1rem 0 0.2rem;font-size:0.78rem;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.05em}
 #seasonYears{width:100%;height:auto;display:block}
+#midtermChart{width:100%;height:auto;display:block}
+.midterm-kind{fill:var(--accent);font-size:9.5px;font-weight:800;letter-spacing:0.05em}
+.season-bar.inprog{opacity:0.55}
 .tagblock-key{margin-top:1.1rem;border-top:1px solid var(--border);padding-top:1rem;display:flex;flex-direction:column;gap:0.7rem}
 .tagblock-key[hidden]{display:none}
 .tagblock-key-item{display:flex;gap:0.6rem;align-items:flex-start}
@@ -2381,6 +2384,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <svg id="seasonYears" viewBox="0 0 720 150" role="img" aria-label="Summer performance year by year"></svg>
       <div class="season-foot" id="seasonFoot"></div>
     </div>
+    <!-- Companion: "the midterms will save the business" — autumn (Sep–Nov)
+         performance per year with election years marked. Rendered by the same
+         seasonCard IIFE; the current year's bar fills in live each autumn. -->
+    <div class="an-chart-card season-card" id="midtermCard" hidden>
+      <div class="an-chart-title">
+        <div class="an-chart-title-main">“The midterms will save the business” — checked</div>
+        <div class="an-chart-title-sub" id="midtermSub"></div>
+      </div>
+      <div class="season-verdict" id="midtermVerdict"></div>
+      <svg id="midtermChart" viewBox="0 0 720 280" role="img" aria-label="Autumn performance by year, election years marked"></svg>
+      <div class="season-foot" id="midtermFoot"></div>
+    </div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
@@ -4013,6 +4028,79 @@ function buildMonthlyData(scope){
       });
       document.getElementById('seasonYears').innerHTML = g2;
     }
+    // ===== Companion card: "the midterms will save the business" ===========
+    // Same era-normalised ratios; autumn (Sep–Nov) averaged per year, election
+    // years marked, non-election autumns shown as the control. The current
+    // year's bar fills in live as its autumn months complete, so the standing
+    // November prediction gets scored in real time. The channel's partial
+    // first year is excluded — no stable era exists inside the initial growth
+    // spike to measure against.
+    (function(){
+      const mtCard = document.getElementById('midtermCard');
+      if (!mtCard) return;
+      const firstFullYear = +series[0].m.slice(0, 4) + (series[0].m.slice(5) === '01' ? 0 : 1);
+      const autumn = [];
+      for (const y of [...new Set(ratios.map(x => x.y))]) {
+        if (+y < firstFullYear) continue;
+        const am = ratios.filter(x => x.y === y && x.mo >= 9 && x.mo <= 11);
+        if (!am.length) continue;
+        autumn.push({ y, dev: (am.reduce((a, x) => a + x.r, 0) / am.length - 1) * 100, nMo: am.length,
+          kind: +y % 2 === 0 ? (+y % 4 === 2 ? 'midterm' : 'presidential') : null });
+      }
+      const complete = autumn.filter(x => x.nMo === 3);
+      const elect = complete.filter(x => x.kind), ctrl = complete.filter(x => !x.kind);
+      if (elect.length < 3 || ctrl.length < 3) return;
+      const avgD = a => a.reduce((s, x) => s + x.dev, 0) / a.length;
+      const best = [...elect].sort((a, b) => b.dev - a.dev)[0];
+      const mids = elect.filter(x => x.kind === 'midterm').sort((a, b) => +a.y - +b.y);
+      const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(Math.round(n));
+      const yearMedAvg = y => { const ms = series.filter(s => s.m.startsWith(y) && s.n >= MIN_N); return ms.length ? ms.reduce((a, s) => a + s.med, 0) / ms.length : null; };
+      const curY = series[series.length - 1].m.slice(0, 4);
+      const curMed = yearMedAvg(curY), bestMed = yearMedAvg(best.y);
+
+      document.getElementById('midtermSub').textContent =
+        'His other standing forecast: election season rescues the numbers. Each bar is an autumn — September to November — against the channel’s own normal at the time, election years marked. The ' + curY + ' bar fills in live as the midterms actually arrive.';
+      let scaleTxt = '';
+      if (curMed && bestMed && curMed < bestMed) {
+        scaleTxt = ' Even a repeat of the best case on today’s ' + kfmt(curMed) + '-view median adds ≈' + kfmt(curMed * best.dev / 100) + ' views per video for one season — against a typical-video audience already down ' + Math.round((1 - curMed / bestMed) * 100) + '% since that autumn.';
+      }
+      document.getElementById('midtermVerdict').innerHTML =
+        'Verdict: <strong>history says no.</strong> Election autumns average ' + sgn(avgD(elect)) + ' against era-normal (non-election autumns: ' + sgn(avgD(ctrl)) + '), and the two midterms split ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' vs ') + '.' + scaleTxt;
+      document.getElementById('midtermFoot').textContent =
+        'Same method as the chart above: monthly medians against their surrounding ±6 months, Sep–Nov averaged per year; the channel’s partial first year excluded. 2022’s strong autumn coincides with the Twitter-takeover news cycle — outrage supply, not ballots, is the likelier driver. TheQuartering main channel, long-form only.';
+
+      const W2 = 720, H2 = 280;
+      const P2 = { top: 34, right: 24, bottom: 58, left: 56 };
+      const iw = W2 - P2.left - P2.right, ih = H2 - P2.top - P2.bottom;
+      const mx = Math.max(5, Math.ceil(Math.max(...autumn.map(x => Math.abs(x.dev))) / 5) * 5);
+      const yF = v => P2.top + (1 - (v + mx) / (2 * mx)) * ih;
+      const slot = iw / autumn.length;
+      const bw = Math.min(34, slot * 0.55);
+      const z = yF(0);
+      let out = '';
+      for (let v = -mx; v <= mx + 1e-9; v += 5) {
+        const yy = yF(v);
+        out += '<line class="chart-grid-line" x1="' + P2.left + '" y1="' + yy.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + yy.toFixed(1) + '" />';
+        out += '<text class="chart-axis-label y" x="' + (P2.left - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
+      }
+      out += '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z.toFixed(1) + '" />' +
+        '<text class="chart-axis-label" x="' + (W2 - P2.right - 2) + '" y="' + (z - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
+      autumn.forEach((x, i) => {
+        const cx = P2.left + slot * i + slot / 2;
+        const yy = yF(x.dev);
+        const top = Math.min(yy, z), bh = Math.max(2, Math.abs(z - yy));
+        const partial = x.nMo < 3;
+        out += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + (partial ? ' inprog' : '') + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>Autumn ' + x.y + (x.kind ? ' (' + x.kind + ')' : '') + ': ' + sgn(x.dev) + ' vs era-normal' + (partial ? ' — ' + x.nMo + ' of 3 months so far' : '') + '</title></rect>';
+        const ly = x.dev >= 0 ? top - 6 : top + bh + 13;
+        out += '<text class="chart-pt-label' + (partial ? ' inprogress' : '') + '" x="' + cx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + (partial ? '*' : '') + '</text>';
+        out += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H2 - 34) + '" text-anchor="middle">' + x.y + '</text>';
+        if (x.kind) out += '<text class="midterm-kind" x="' + cx.toFixed(1) + '" y="' + (H2 - 21) + '" text-anchor="middle">' + (x.kind === 'midterm' ? 'MIDTERM' : 'PRES.') + '</text>';
+      });
+      out += '<text class="chart-attribution" x="' + (W2 - P2.right) + '" y="' + (H2 - 6) + '" text-anchor="end">TheQuartering · autumns ' + autumn[0].y + '–' + autumn[autumn.length - 1].y + ' · jerminaldecline.com</text>';
+      document.getElementById('midtermChart').innerHTML = out;
+      mtCard.hidden = false;
+    })();
+
     card.hidden = false;
     done = true;
   };
