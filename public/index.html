@@ -3997,10 +3997,12 @@ function buildMonthlyData(scope){
     });
     const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
     const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
-    const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />' +
-      '<text class="chart-axis-label" x="' + (W - P.right - 2) + '" y="' + (zeroY - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
+    const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />';
+    // Painted after the bars with a surface-coloured halo so the rightmost
+    // bar can't swallow it (December is a strong month; it did).
+    const zeroLabel = '<text class="chart-axis-label" style="paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round;" x="' + (W - P.right - 2) + '" y="' + (zeroY - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
     const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
-    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + zeroLabel + attribution;
 
     // Year-by-year strip: the same era-normalised ratios, the three summer
     // months averaged per year — the honest granularity for "was THIS summer
@@ -4090,8 +4092,10 @@ function buildMonthlyData(scope){
         out += '<line class="chart-grid-line" x1="' + P2.left + '" y1="' + yy.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + yy.toFixed(1) + '" />';
         out += '<text class="chart-axis-label y" x="' + (P2.left - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
       }
-      out += '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z.toFixed(1) + '" />' +
-        '<text class="chart-axis-label" x="' + (W2 - P2.right - 2) + '" y="' + (z - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
+      out += '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z.toFixed(1) + '" />';
+      // Appended after the bars (see below) with a halo so the rightmost bar
+      // can't swallow it.
+      const zeroLabel = '<text class="chart-axis-label" style="paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round;" x="' + (W2 - P2.right - 2) + '" y="' + (z - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
       autumn.forEach((x, i) => {
         const cx = P2.left + slot * i + slot / 2;
         const yy = yF(x.dev);
@@ -4104,7 +4108,7 @@ function buildMonthlyData(scope){
         if (x.kind) out += '<text class="midterm-kind" x="' + cx.toFixed(1) + '" y="' + (H2 - 21) + '" text-anchor="middle">' + (x.kind === 'midterm' ? 'MIDTERM' : 'PRES.') + '</text>';
       });
       out += '<text class="chart-attribution" x="' + (W2 - P2.right) + '" y="' + (H2 - 6) + '" text-anchor="end">TheQuartering · autumns ' + autumn[0].y + '–' + autumn[autumn.length - 1].y + ' · jerminaldecline.com</text>';
-      document.getElementById('midtermChart').innerHTML = out;
+      document.getElementById('midtermChart').innerHTML = out + zeroLabel;
       mtCard.hidden = false;
     })();
 
@@ -7437,7 +7441,10 @@ function niceDurationAxis(minSec, maxSec) {
     const total = i1 - i0 + 1;
 
     const W = 720, ROW_H = 24;
-    const PAD = { top: 26, right: 18, bottom: 30, left: 178 };
+    // right pad reserves a gutter for the per-row video counts so active
+    // sponsors' bars (which run to the present) can't collide with them;
+    // bottom pad gives the year labels and the attribution separate lines.
+    const PAD = { top: 26, right: 56, bottom: 44, left: 178 };
     const H = PAD.top + rows.length * ROW_H + PAD.bottom;
     const innerW = W - PAD.left - PAD.right;
     const cw = innerW / total;
@@ -7448,18 +7455,34 @@ function niceDurationAxis(minSec, maxSec) {
     for (let y = +m0.slice(0, 4) + (m0.slice(5) === '01' ? 0 : 1); y <= +nowKey.slice(0, 4); y++) {
       const x = xAt(y * 12);
       svg += '<line class="chart-grid-line" x1="' + x.toFixed(1) + '" y1="' + PAD.top + '" x2="' + x.toFixed(1) + '" y2="' + (H - PAD.bottom) + '" />';
-      svg += '<text class="chart-axis-label x" x="' + x.toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle">' + y + '</text>';
+      svg += '<text class="chart-axis-label x" x="' + x.toFixed(1) + '" y="' + (H - 26) + '" text-anchor="middle">' + y + '</text>';
     }
+    const idxLbl = mi => MONL[mi % 12] + ' ' + Math.floor(mi / 12);
     rows.forEach((s, r) => {
       const yTop = PAD.top + r * ROW_H;
       const cy = yTop + ROW_H / 2;
-      svg += '<text class="sponsor-name' + (s.active ? '' : ' gone') + '" x="' + (PAD.left - 10) + '" y="' + (cy + 4).toFixed(1) + '" text-anchor="end">' + s.name.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</text>';
-      for (const m of s.months) {
-        svg += '<rect class="sponsor-cell' + (s.active ? '' : ' gone') + '" x="' + xAt(monIdx(m)).toFixed(1) + '" y="' + (yTop + 5).toFixed(1) + '" width="' + Math.max(1.5, cw - 0.8).toFixed(1) + '" height="' + (ROW_H - 10) + '" rx="1.5"><title>' + s.name.replace(/&/g, '&amp;').replace(/</g, '&lt;') + ' · ' + monthLbl(m) + '</title></rect>';
+      const safe = s.name.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      const spanMonths = monIdx(s.last) - monIdx(s.first) + 1;
+      const status = s.active ? 'still running' : 'departed';
+      const nameTip = safe + ' — ' + s.n + ' videos · ' + monthLbl(s.first) + ' – ' + monthLbl(s.last) + ' (' + spanMonths + ' month' + (spanMonths === 1 ? '' : 's') + ', ' + status + ')';
+      svg += '<text class="sponsor-name' + (s.active ? '' : ' gone') + '" x="' + (PAD.left - 10) + '" y="' + (cy + 4).toFixed(1) + '" text-anchor="end">' + safe + '<title>' + nameTip + '</title></text>';
+      // Consecutive months merge into one contiguous bar; a gap in the reads
+      // breaks the bar, so pauses and domain migrations stay visible.
+      const idxs = [...s.months].map(monIdx).sort((a, b) => a - b);
+      const runs = [];
+      for (const ix of idxs) {
+        const lastRun = runs[runs.length - 1];
+        if (lastRun && ix === lastRun.end + 1) lastRun.end = ix;
+        else runs.push({ start: ix, end: ix });
       }
-      svg += '<text class="sponsor-count" x="' + (W - PAD.right) + '" y="' + (cy + 3.5).toFixed(1) + '" text-anchor="end">' + s.n + '</text>';
+      for (const run of runs) {
+        const rw = (run.end - run.start + 1) * cw - 0.8;
+        const runTip = safe + ' · ' + (run.start === run.end ? idxLbl(run.start) : idxLbl(run.start) + ' – ' + idxLbl(run.end));
+        svg += '<rect class="sponsor-cell' + (s.active ? '' : ' gone') + '" x="' + xAt(run.start).toFixed(1) + '" y="' + (yTop + 5).toFixed(1) + '" width="' + Math.max(1.5, rw).toFixed(1) + '" height="' + (ROW_H - 10) + '" rx="2.5"><title>' + runTip + '</title></rect>';
+      }
+      svg += '<text class="sponsor-count" x="' + (W - 8) + '" y="' + (cy + 3.5).toFixed(1) + '" text-anchor="end">' + s.n + '</text>';
     });
-    svg += '<text class="chart-attribution" x="' + (W - PAD.right) + '" y="' + (H - 10) + '" text-anchor="end">jerminaldecline.com</text>';
+    svg += '<text class="chart-attribution" x="' + (W - 8) + '" y="' + (H - 8) + '" text-anchor="end">jerminaldecline.com</text>';
 
     const activeNames = activeNow.map(s => s.name).sort().join(', ') || 'none';
     const headline = '<strong>' + activeNow.length + ' sponsor' + (activeNow.length === 1 ? '' : 's') + ' visible in recent uploads</strong>' +
