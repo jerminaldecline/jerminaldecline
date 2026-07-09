@@ -329,6 +329,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .skey-item{display:inline-flex;align-items:center;gap:0.35rem}
 .skey-swatch{width:10px;height:10px;border-radius:2px}
 .skey-line{width:16px;border-top:2px solid var(--text);opacity:0.75}
+.skey-swatch.bm-rest{background:var(--text-dim);opacity:0.5}
+.bm-bar{fill:var(--text-dim);opacity:0.5}
+.bm-bar.best{fill:var(--up);opacity:1}
+.bm-bar.claimed{fill:var(--accent);opacity:1}
+#bestMonthChart{width:100%;height:auto;display:block}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
 .midterm-kind{fill:var(--accent);font-size:9.5px;font-weight:800;letter-spacing:0.05em}
@@ -2419,6 +2424,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="season-foot" id="midtermFoot"></div>
       </div>
     </div>
+    <!-- Claim check #3: "my best month in almost a year" (claimed July 2026,
+         about June). Re-evaluated monthly by the seasonCard IIFE: the latest
+         complete month ranked against the twelve before it. -->
+    <div class="desc-pattern-panel season-card" id="bestMonthCard" hidden>
+      <button type="button" class="desc-pattern-toggle" id="bestMonthToggle" aria-expanded="false" aria-controls="bestMonthBody">
+        <span class="desc-pattern-eyebrow">Claim check</span>
+        <span class="desc-pattern-headline">“My best month in almost a year” — checked</span>
+        <span class="desc-pattern-quote" id="bestMonthQuote"></span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="bestMonthBody" hidden>
+        <div class="an-chart-title-sub" id="bestMonthSub"></div>
+        <div class="season-verdict" id="bestMonthVerdict"></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--accent)"></span>the month he called his best</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>his actual best</span><span class="skey-item"><span class="skey-swatch bm-rest"></span>the other months</span></div>
+        <svg id="bestMonthChart" viewBox="0 0 720 260" role="img" aria-label="Long-form views by month, latest 13 months"></svg>
+        <div class="season-foot" id="bestMonthFoot"></div>
+      </div>
+    </div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
@@ -4132,8 +4155,74 @@ function buildMonthlyData(scope){
       mtCard.hidden = false;
     })();
 
+    // ===== Claim check #3: "my best month in almost a year" ================
+    // (claimed early July 2026, about June.) Re-run every month: the latest
+    // complete month, ranked against the twelve before it on total long-form
+    // views. Honest in both directions — a month that genuinely tops its
+    // trailing year gets a "true" verdict.
+    (function(){
+      const bmCard = document.getElementById('bestMonthCard');
+      if (!bmCard) return;
+      const totals = [...buckets.keys()].sort().map(m => ({ m, v: buckets.get(m).reduce((a, b) => a + b, 0) }));
+      if (totals.length < 13) return;
+      const win = totals.slice(-13);
+      const target = win[win.length - 1];
+      const rank = 1 + win.filter(x => x.v > target.v).length;
+      const best = win.reduce((a, b) => b.v > a.v ? b : a);
+      const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(Math.round(n));
+      const ord = n => n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th';
+      const lbl = m => MON[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+      // The most recent month in the whole history that truly topped its
+      // trailing twelve — for the "when was the last real one?" kicker.
+      let lastTrue = null;
+      for (let i = totals.length - 1; i >= 12; i--) {
+        const prevMax = Math.max(...totals.slice(i - 12, i).map(x => x.v));
+        if (totals[i].v >= prevMax) { lastTrue = totals[i].m; break; }
+      }
+      document.getElementById('bestMonthSub').textContent =
+        'In early July 2026 he called June “my best month in almost a year”. This card re-runs that check every month: the most recent complete month, ranked against the twelve before it by total views on his long-form uploads. A true best month needs the tallest bar.';
+      const isTrue = rank === 1;
+      document.getElementById('bestMonthQuote').textContent = isTrue
+        ? 'Verdict: for once, true — ' + lbl(target.m) + ' really was his best month of the trailing year. Expand for the bars.'
+        : 'Verdict: no — ' + lbl(target.m) + ' ranked ' + ord(rank) + ' of the last 13 months. Expand for the bars.';
+      document.getElementById('bestMonthVerdict').innerHTML = isTrue
+        ? 'Verdict: <strong>true.</strong> ' + lbl(target.m) + ' topped the previous twelve months on long-form views.'
+        : 'Verdict: <strong>no.</strong> ' + lbl(target.m) + ' (' + kfmt(target.v) + ' views) ranked ' + ord(rank) + ' of the last 13 months' +
+          (rank >= 8 ? ' — closer to his worst than his best' : '') + '. His actual best in that window: ' + lbl(best.m) + ', at ' + kfmt(best.v) +
+          ' — ' + (best.v / target.v).toFixed(1) + '× the month he called his best.' +
+          (lastTrue ? ' The last month that genuinely topped its trailing year: ' + lbl(lastTrue) + '.' : '');
+      document.getElementById('bestMonthFoot').textContent =
+        'Method, for the curious: total views now sitting on each calendar month’s long-form uploads, TheQuartering main channel, in-progress month excluded. Recent months have had less time to gather views than older ones, so only narrow verdicts could change as views accumulate.';
+
+      const W3 = 720, H3 = 260;
+      const P3 = { top: 30, right: 24, bottom: 46, left: 56 };
+      const iw = W3 - P3.left - P3.right, ih = H3 - P3.top - P3.bottom;
+      const maxV = best.v;
+      const yF = v => P3.top + (1 - v / maxV) * ih;
+      const slot = iw / win.length;
+      const bw = Math.min(36, slot * 0.62);
+      let out = '';
+      for (const frac of [0.25, 0.5, 0.75, 1]) {
+        const gy = yF(maxV * frac);
+        out += '<line class="chart-grid-line" x1="' + P3.left + '" y1="' + gy.toFixed(1) + '" x2="' + (W3 - P3.right) + '" y2="' + gy.toFixed(1) + '" />';
+        out += '<text class="chart-axis-label y" x="' + (P3.left - 8) + '" y="' + (gy + 4).toFixed(1) + '" text-anchor="end">' + kfmt(maxV * frac) + '</text>';
+      }
+      win.forEach((x, i) => {
+        const cx = P3.left + slot * i + slot / 2;
+        const yy = yF(x.v);
+        const cls = x.m === target.m ? ' claimed' : (x.m === best.m ? ' best' : '');
+        out += '<rect class="bm-bar' + cls + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(2, P3.top + ih - yy).toFixed(1) + '"><title>' + lbl(x.m) + ': ' + x.v.toLocaleString() + ' long-form views</title></rect>';
+        out += '<text class="chart-pt-label" x="' + cx.toFixed(1) + '" y="' + (yy - 5).toFixed(1) + '">' + kfmt(x.v) + '</text>';
+        out += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H3 - 26) + '" text-anchor="middle">' + MON[+x.m.slice(5, 7) - 1] + '</text>';
+        if (i === 0 || x.m.slice(5, 7) === '01') out += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H3 - 10) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
+      });
+      out += '<text class="chart-attribution" x="' + (W3 - P3.right) + '" y="' + (H3 - 10) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
+      document.getElementById('bestMonthChart').innerHTML = out;
+      bmCard.hidden = false;
+    })();
+
     // Collapse/expand wiring — static markup, wired exactly once (done-guarded).
-    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody']]) {
+    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody'], ['bestMonthToggle', 'bestMonthBody']]) {
       const btn = document.getElementById(btnId), body = document.getElementById(bodyId);
       if (btn && body) btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') !== 'true';
