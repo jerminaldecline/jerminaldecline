@@ -1576,6 +1576,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .desc-pattern-panel{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
 .desc-pattern-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
 .desc-pattern-body{padding:0 1.4rem 1.4rem}
+#sponsorChart{width:100%;height:auto;display:block}
+.sponsor-name{fill:var(--text);font-size:11px}
+.sponsor-name.gone{fill:var(--text-dim)}
+.sponsor-cell{fill:var(--accent-2)}
+.sponsor-cell.gone{opacity:0.4}
+.sponsor-count{fill:var(--text-dim);font-size:9.5px}
+.sponsor-foot{margin-top:0.7rem;font-size:0.72rem;color:var(--subtext);line-height:1.45}
 
 /* Description Patterns panel — same collapsible structure as the story
      tracker but distinct visual identity (muted accent, analytical
@@ -4059,7 +4066,7 @@ function buildMonthlyData(scope){
       const curMed = yearMedAvg(curY), bestMed = yearMedAvg(best.y);
 
       document.getElementById('midtermSub').textContent =
-        'His other standing forecast: election season rescues the numbers. Each bar is an autumn — September to November — against the channel’s own normal at the time, election years marked. The ' + curY + ' bar fills in live as the midterms actually arrive.';
+        'Each bar is an autumn — September to November — against the channel’s own normal at the time, election years marked. The ' + curY + ' bar fills in live as the midterms actually arrive.';
       let scaleTxt = '';
       if (curMed && bestMed && curMed < bestMed) {
         scaleTxt = ' Even a repeat of the best case on today’s ' + kfmt(curMed) + '-view median adds ≈' + kfmt(curMed * best.dev / 100) + ' views per video for one season — against a typical-video audience already down ' + Math.round((1 - curMed / bestMed) * 100) + '% since that autumn.';
@@ -7303,365 +7310,185 @@ function niceDurationAxis(minSec, maxSec) {
   window.renderWordCloud = renderWordCloud;
 
 
-  // ---- Description patterns (ported, Analysis deep-dive) ----
+  // ---- Sponsor watch (Analysis deep-dive) ---------------------------------
+  // Reworked from the old "description patterns" panel: the descriptions are
+  // far more valuable as a sponsorship ledger than as a boilerplate audit.
+  // Every sponsor read leaves a link; when a deal ends, the links stop
+  // appearing in new uploads. Extracting external domains from every
+  // long-form description therefore yields a timeline of who paid, when they
+  // arrived and when they left. Month-granular cells (not continuous spans)
+  // so gaps and domain migrations show honestly. Keeps the old panel shell,
+  // ids and the renderDescPatterns entry-point name so call sites are
+  // untouched. Descriptions reflect their CURRENT text — retroactively
+  // scrubbed sponsor links vanish from history too (noted in the footer).
   let descriptionsCache = null;
   let descriptionsLoadPromise = null;
   let descPatternExpanded = false;
-  const DESC_PATTERN_CONFIG = {
-  // Channels for which this analysis is editorially meaningful. The three
-  // TQ-network channels all show distinctive patterns:
-  //   - TheQuartering: "This news is totally insane" × 43 + thin one-liners
-  //   - JeremyHambly: identical 100-char boilerplate × 102 (incl. typo "Immensly")
-  //   - QuarteringLive: cross-promotion boilerplate template × 4-7 variations
-  channelHandles: ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'],
-  windowDays: 60,
-  // Two ways a description is "uninformative":
-  //   - Thin (under 50 chars) — too short to convey topic
-  //   - Boilerplate (verbatim reuse across 5+ videos) — long but template
-  // Both are functionally equivalent: don't tell you what the video is about.
-  thinDescThreshold: 50,
-  boilerplateReuseThreshold: 5,
-  // Minimum count for a description to appear in the "most-reused" table.
-  // Tightens the table to genuinely repeated patterns rather than noise.
-  minReuseCount: 2,
-  maxTableRows: 10,
-  // Headline trigger: if the top reused description hits this share of
-  // analysed videos, lead with the boilerplate finding; otherwise lead
-  // with the uninformative % stat. % share rather than absolute count so
-  // smaller channels still surface their pattern.
-  headlineReuseShareThreshold: 0.10,
-  // Long descriptions truncate to a single-line preview with an expand
-  // toggle in the table. Threshold chosen to keep ~80-char clickbait
-  // visible in full while collapsing the long sponsor/boilerplate texts
-  // that would otherwise dominate the table.
-  longDescThreshold: 90
-};
-
-  // Optional per-channel "info point" callouts shown above the description-
-  // patterns table (keyed by channel handle -> array of {label, text}). This is
-  // an editorial hook: leave a channel out (or empty) to show no callouts. It is
-  // referenced unconditionally below, so it must always exist - an undefined
-  // lookup here previously threw a ReferenceError that aborted the whole
-  // Analysis chart render. Populate as desired, e.g.:
-  //   '@TheQuartering': [{ label: 'Note', text: 'Descriptions rarely match the video.' }]
-  const DESC_PATTERN_INFO_POINTS = {};
-
-  // Common-misspelling reference for the title spelling-scan below: a fixed map
-  // of misspelling(lowercase) -> correct spelling. The scan counts how often each
-  // appears across the channel's long-form titles, so it self-updates as new
-  // uploads land - no per-channel data needed. Referenced unconditionally below,
-  // so it must always exist (an undefined lookup here threw a ReferenceError that
-  // aborted the Analysis chart render). Entries are general English misspellings
-  // plus a few seen in this network's titles; harmless if a given one never hits.
-  const SPELLING_DICTIONARY = {
-    'alot': 'a lot', 'embarass': 'embarrass', 'embarassing': 'embarrassing',
-    'publically': 'publicly', 'rediculous': 'ridiculous', 'maintainance': 'maintenance',
-    'definately': 'definitely', 'seperate': 'separate', 'occured': 'occurred',
-    'recieve': 'receive', 'wierd': 'weird', 'untill': 'until', 'tommorow': 'tomorrow',
-    'goverment': 'government', 'neccessary': 'necessary', 'accross': 'across',
-    'begining': 'beginning', 'beleive': 'believe', 'calender': 'calendar',
-    'concious': 'conscious', 'enviroment': 'environment', 'existance': 'existence',
-    'foriegn': 'foreign', 'harrass': 'harass', 'independant': 'independent',
-    'occassion': 'occasion', 'persistant': 'persistent', 'supercede': 'supersede',
-    'tyrany': 'tyranny', 'vaccum': 'vacuum', 'wether': 'whether', 'writting': 'writing',
-    'wich': 'which', 'thier': 'their', 'freind': 'friend', 'greatful': 'grateful',
-    'hipocrite': 'hypocrite', 'millenium': 'millennium', 'noticable': 'noticeable',
-    'occurance': 'occurrence', 'priviledge': 'privilege', 'refered': 'referred',
-    'relevent': 'relevant', 'religous': 'religious', 'remeber': 'remember',
-    'succesful': 'successful', 'tendancy': 'tendency', 'immensly': 'immensely',
-    // Recurring misspellings observed in this network's long-form titles, verified
-    // against the live dataset — 'accidently' (~35×) and 'bizzare' (~19×) are by
-    // far his most frequent, and were previously slipping through uncounted.
-    'bizzare': 'bizarre', 'tomatos': 'tomatoes', 'humilation': 'humiliation',
-    'humilating': 'humiliating', 'accidently': 'accidentally', 'destoryed': 'destroyed',
-    'hilarous': 'hilarious'
+  const SPONSOR_CONFIG = {
+    // Channels the panel may render for; data is scoped to the selected one.
+    channelHandles: ['@TheQuartering', '@JeremyHambly', '@QuarteringLive'],
+    minVideos: 8,          // a domain must appear in this many descriptions
+    maxRows: 14,           // timeline rows (top by video count)
+    activeWithinMonths: 3, // last seen within this = still active
+    minSponsors: 3,        // fewer than this and the panel hides itself
+    // Platform, self-promo, community and link-shortener domains — not sponsors.
+    ignore: /youtube|youtu\.be|twitter|x\.com|instagram|patreon|discord|facebook|tiktok|twitch|streamlabs|rumble|locals|teespring|spreadshop|linktr|bit\.ly|forms\.gle|docs\.google|drive\.google|apple|spotify|odysee|minds\.com|gab\.com|subscribestar|paypal|streamelements|kick\.com|cash\.app|venmo|ko-fi|gmail|reddit|bitchute|archive\.|gofundme|thequartering|quarteringgold|clik\.cc|thld\.co|wikipedia|imgur|parler|mewe\.com|dlive/i,
+    // Display names; also merges rebrands and alias domains into one sponsor.
+    alias: {
+      'privateinternetaccess.com': 'Private Internet Access', 'piavpn.com': 'Private Internet Access',
+      'sheathunderwear.com': 'Sheath', 'sheath.com': 'Sheath',
+      'coffeebrandcoffee.com': 'Coffee Brand Coffee', 'buycbc.com': 'Coffee Brand Coffee',
+      'establishedtitles.com': 'Established Titles', 'metapcs.com': 'MetaPCs',
+      'kamikoto.com': 'Kamikoto', 'aura.com': 'Aura', 'keeps.com': 'Keeps',
+      'nordvpn.org': 'NordVPN', 'nordvpn.com': 'NordVPN', 'displate.com': 'Displate',
+      'galaxylamps.co': 'Galaxy Lamps', 'tryfum.com': 'Füm', 'boncharge.com': 'BON CHARGE',
+      'blackforestsupplements.com': 'Black Forest Supplements',
+      'veebsapp.com': 'Veebs', 'guilded.gg': 'Guilded', 'tailgates4trump.com': 'Tailgates4Trump',
+      'amzn.to': 'Amazon affiliate', 'amazon.com': 'Amazon affiliate'
+    }
   };
+
   function loadDescriptions() {
-  if (descriptionsCache) return Promise.resolve(descriptionsCache);
-  if (descriptionsLoadPromise) return descriptionsLoadPromise;
-  descriptionsLoadPromise = fetch('descriptions.json')
-    .then(r => r.ok ? r.json() : null)
-    .then(json => {
-      descriptionsCache = json && json.descriptions ? json.descriptions : {};
-      return descriptionsCache;
-    })
-    .catch(err => {
-      console.warn('descriptions.json failed to load', err);
-      descriptionsCache = {};
-      return descriptionsCache;
-    });
-  return descriptionsLoadPromise;
-}
-  
+    if (descriptionsCache) return Promise.resolve(descriptionsCache);
+    if (descriptionsLoadPromise) return descriptionsLoadPromise;
+    descriptionsLoadPromise = fetch('descriptions.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(json => {
+        descriptionsCache = json && json.descriptions ? json.descriptions : {};
+        return descriptionsCache;
+      })
+      .catch(err => {
+        console.warn('descriptions.json failed to load', err);
+        descriptionsCache = {};
+        return descriptionsCache;
+      });
+    return descriptionsLoadPromise;
+  }
+
+  // Entry point keeps its historical name — renderAnalysisChart calls it.
   window.renderDescPatterns = function renderDescPatterns() {
-  const panel = document.getElementById('descPatternPanel');
-  if (!panel) return;
-  if (!ANALYTICS_DATASET) { panel.hidden = true; return; }
+    const panel = document.getElementById('descPatternPanel');
+    if (!panel) return;
+    if (!ANALYTICS_DATASET) { panel.hidden = true; return; }
 
-  // Channel filter — only renders for relevant channels.
-  const channelMap = ANALYTICS_DATASET.channels || {};
-  const allowedIds = new Set();
-  for (const [chId, ch] of Object.entries(channelMap)) {
-    if (DESC_PATTERN_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
-  }
-  if (!allowedIds.has(ANALYTICS_CHANNEL)) { panel.hidden = true; return; }
-
-  // Descriptions are loaded lazily; reuse the story tracker's cache.
-  if (!descriptionsCache) {
-    loadDescriptions()
-      .then(() => { try { window.renderDescPatterns(); } catch (e) { console.error('desc patterns (async)', e); } })
-      .catch(err => console.error('desc patterns load', err));
-    return;
-  }
-
-  const now = Date.now();
-  const windowStart = now - DESC_PATTERN_CONFIG.windowDays * 86400 * 1000;
-
-  // Eligible videos: long-form, in window, on the currently selected channel.
-  // The config's channelHandles list controls which channels the panel
-  // is allowed to render for; the actual data is then scoped to whichever
-  // single channel the user has selected, not the union of allowed channels.
-  const eligible = ANALYTICS_DATASET.videos.filter(v => {
-    if (v.channelId !== ANALYTICS_CHANNEL) return false;
-    if (v.isShort || v.unavailable) return false;
-    if (new Date(v.publishedAt).getTime() < windowStart) return false;
-    return true;
-  });
-
-  if (eligible.length === 0) { panel.hidden = true; return; }
-
-  // Group videos by their exact description text (normalised to trimmed).
-  // Empty/missing descriptions are excluded from the reuse counts because
-  // we can't distinguish "no description written" from "fetcher hasn't
-  // backfilled this yet". Once the audit completes with the new fetcher
-  // we'll see the true picture.
-  const descCounts = new Map();
-  let totalWithDesc = 0;
-  for (const v of eligible) {
-    const raw = descriptionsCache[v.id];
-    if (raw === undefined) continue; // not yet fetched — skip rather than count
-    totalWithDesc++;
-    const trimmed = raw.trim();
-    if (trimmed.length > 0) {
-      descCounts.set(trimmed, (descCounts.get(trimmed) || 0) + 1);
+    const channelMap = ANALYTICS_DATASET.channels || {};
+    const allowedIds = new Set();
+    for (const [chId, ch] of Object.entries(channelMap)) {
+      if (SPONSOR_CONFIG.channelHandles.includes(ch.handle)) allowedIds.add(chId);
     }
-  }
+    if (!allowedIds.has(ANALYTICS_CHANNEL)) { panel.hidden = true; return; }
 
-  if (totalWithDesc === 0) { panel.hidden = true; return; }
-
-  // Identify boilerplate: descriptions reused enough to be templates.
-  // Captures cases like JeremyHambly's 100-char "Joining The Channel..."
-  // which is technically long enough to escape the "thin" filter but is
-  // functionally identical across 102 videos.
-  const boilerplateDescs = new Set();
-  for (const [desc, count] of descCounts) {
-    if (count >= DESC_PATTERN_CONFIG.boilerplateReuseThreshold) {
-      boilerplateDescs.add(desc);
+    if (!descriptionsCache) {
+      loadDescriptions()
+        .then(() => { try { window.renderDescPatterns(); } catch (e) { console.error('sponsor watch (async)', e); } })
+        .catch(err => console.error('sponsor watch load', err));
+      return;
     }
-  }
 
-  // Second pass: classify each video against the broader uninformative set.
-  let uninformativeCount = 0;
-  let thinOnlyCount = 0;
-  let boilerplateOnlyCount = 0;
-  for (const v of eligible) {
-    const raw = descriptionsCache[v.id];
-    if (raw === undefined) continue;
-    const trimmed = raw.trim();
-    const isThin = trimmed.length < DESC_PATTERN_CONFIG.thinDescThreshold;
-    const isBoilerplate = boilerplateDescs.has(trimmed);
-    if (isThin || isBoilerplate) uninformativeCount++;
-    if (isThin && !isBoilerplate) thinOnlyCount++;
-    if (isBoilerplate && !isThin) boilerplateOnlyCount++;
-  }
-
-  const uninformativePct = uninformativeCount / totalWithDesc * 100;
-
-  // Build top-N reused descriptions table.
-  const reused = [...descCounts.entries()]
-    .filter(([, count]) => count >= DESC_PATTERN_CONFIG.minReuseCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, DESC_PATTERN_CONFIG.maxTableRows);
-
-  const topReused = reused[0]; // [desc, count] or undefined
-  // Hide if nothing interesting — neither significant reuse nor meaningful
-  // uninformative share.
-  if (!topReused && uninformativePct < 10) {
-    panel.hidden = true;
-    return;
-  }
-  panel.hidden = false;
-
-  const fmt = (n) => n.toLocaleString('en-GB');
-  const escape = escapeHtml;
-
-  // Headline: lead with the most striking finding. If a single description
-  // dominates a meaningful share of uploads, that's the punchier story.
-  // Otherwise fall back to the share of uninformative descriptions overall.
-  const topReuseShare = topReused ? topReused[1] / totalWithDesc : 0;
-  let headlineHTML;
-  if (topReused && topReuseShare >= DESC_PATTERN_CONFIG.headlineReuseShareThreshold) {
-    const [desc, count] = topReused;
-    const pctOfWindow = (topReuseShare * 100).toFixed(0);
-    // Truncate the quoted description so the headline doesn't sprawl
-    // when the boilerplate is the long "Joining The Channel..." text.
-    const quoted = desc.length > 110 ? desc.slice(0, 107) + '…' : desc;
-    headlineHTML = `
-      <strong>${count}</strong> long-form videos in the last
-      ${DESC_PATTERN_CONFIG.windowDays} days (${pctOfWindow}%) share the same description:
-      <span class="desc-pattern-quote">"${escape(quoted)}"</span>
-    `;
-  } else {
-    headlineHTML = `
-      <strong>${uninformativePct.toFixed(0)}%</strong> of long-form videos in the last
-      ${DESC_PATTERN_CONFIG.windowDays} days have descriptions too uninformative
-      to identify the video's topic
-    `;
-  }
-
-  // Render each reused description: if it exceeds the long threshold,
-  // wrap in a collapsible details element so it doesn't dominate the row.
-  // Otherwise show inline as before.
-  const renderDescCell = (desc) => {
-    if (desc.length <= DESC_PATTERN_CONFIG.longDescThreshold) {
-      return `<span class="desc-text">"${escape(desc)}"</span>`;
+    // Harvest sponsor domains from every long-form description on the channel.
+    const monthKey = d => d.slice(0, 7);
+    const nowKey = new Date().toISOString().slice(0, 7);
+    const monIdx = m => (+m.slice(0, 4)) * 12 + (+m.slice(5, 7)) - 1;
+    const sponsors = new Map(); // name -> {n, first, last, months:Set}
+    for (const v of ANALYTICS_DATASET.videos) {
+      if (v.channelId !== ANALYTICS_CHANNEL || v.isShort || v.unavailable) continue;
+      const text = descriptionsCache[v.id];
+      if (!text) continue;
+      const m = monthKey(v.publishedAt || '');
+      if (!m) continue;
+      const seen = new Set();
+      for (const u of (text.match(/https?:\/\/[^\s)">]+/g) || [])) {
+        let dom;
+        try { dom = new URL(u).hostname.replace(/^www\./, ''); } catch (e) { continue; }
+        if (SPONSOR_CONFIG.ignore.test(dom)) continue;
+        const name = SPONSOR_CONFIG.alias[dom] || (dom.replace(/\.(com|net|org|co|io|gg|to|app|shop|store)$/, ''));
+        if (seen.has(name)) continue;
+        seen.add(name);
+        if (!sponsors.has(name)) sponsors.set(name, { n: 0, first: m, last: m, months: new Set() });
+        const r = sponsors.get(name);
+        r.n++; if (m < r.first) r.first = m; if (m > r.last) r.last = m; r.months.add(m);
+      }
     }
-    const previewLen = DESC_PATTERN_CONFIG.longDescThreshold;
-    const preview = desc.slice(0, previewLen).replace(/\s+\S*$/, '') + '…';
-    return `
-      <details class="desc-pattern-long">
-        <summary>
-          <span class="desc-preview">"${escape(preview)}"</span>
-        </summary>
-        <div class="desc-full">${escape(desc)}</div>
-      </details>
-    `;
+    const qualified = [...sponsors.entries()]
+      .filter(([, r]) => r.n >= SPONSOR_CONFIG.minVideos)
+      .map(([name, r]) => ({ name, ...r, active: monIdx(nowKey) - monIdx(r.last) <= SPONSOR_CONFIG.activeWithinMonths }));
+    if (qualified.length < SPONSOR_CONFIG.minSponsors) { panel.hidden = true; return; }
+
+    // Headline numbers: visible-now vs the best calendar year on record.
+    const activeNow = qualified.filter(s => s.active);
+    const perYear = new Map();
+    for (const s of qualified) for (const m of s.months) {
+      const y = m.slice(0, 4);
+      if (!perYear.has(y)) perYear.set(y, new Set());
+      perYear.get(y).add(s.name);
+    }
+    let peakY = null, peakN = 0;
+    for (const [y, set] of perYear) if (set.size > peakN || (set.size === peakN && y < peakY)) { peakY = y; peakN = set.size; }
+    const departed = qualified.filter(s => !s.active).sort((a, b) => b.last < a.last ? -1 : 1);
+    const latestExit = departed[0] || null;
+    const MONL = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthLbl = m => MONL[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+
+    // Timeline rows: heaviest sponsors, ordered by arrival.
+    const rows = qualified.sort((a, b) => b.n - a.n).slice(0, SPONSOR_CONFIG.maxRows)
+      .sort((a, b) => a.first < b.first ? -1 : 1);
+    const m0 = rows.reduce((min, s) => s.first < min ? s.first : min, nowKey);
+    const i0 = monIdx(m0), i1 = monIdx(nowKey);
+    const total = i1 - i0 + 1;
+
+    const W = 720, ROW_H = 24;
+    const PAD = { top: 26, right: 18, bottom: 30, left: 178 };
+    const H = PAD.top + rows.length * ROW_H + PAD.bottom;
+    const innerW = W - PAD.left - PAD.right;
+    const cw = innerW / total;
+    const xAt = mi => PAD.left + (mi - i0) * cw;
+
+    let svg = '';
+    // Year gridlines + labels (January of each year in range).
+    for (let y = +m0.slice(0, 4) + (m0.slice(5) === '01' ? 0 : 1); y <= +nowKey.slice(0, 4); y++) {
+      const x = xAt(y * 12);
+      svg += '<line class="chart-grid-line" x1="' + x.toFixed(1) + '" y1="' + PAD.top + '" x2="' + x.toFixed(1) + '" y2="' + (H - PAD.bottom) + '" />';
+      svg += '<text class="chart-axis-label x" x="' + x.toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle">' + y + '</text>';
+    }
+    rows.forEach((s, r) => {
+      const yTop = PAD.top + r * ROW_H;
+      const cy = yTop + ROW_H / 2;
+      svg += '<text class="sponsor-name' + (s.active ? '' : ' gone') + '" x="' + (PAD.left - 10) + '" y="' + (cy + 4).toFixed(1) + '" text-anchor="end">' + s.name.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</text>';
+      for (const m of s.months) {
+        svg += '<rect class="sponsor-cell' + (s.active ? '' : ' gone') + '" x="' + xAt(monIdx(m)).toFixed(1) + '" y="' + (yTop + 5).toFixed(1) + '" width="' + Math.max(1.5, cw - 0.8).toFixed(1) + '" height="' + (ROW_H - 10) + '" rx="1.5"><title>' + s.name.replace(/&/g, '&amp;').replace(/</g, '&lt;') + ' · ' + monthLbl(m) + '</title></rect>';
+      }
+      svg += '<text class="sponsor-count" x="' + (W - PAD.right) + '" y="' + (cy + 3.5).toFixed(1) + '" text-anchor="end">' + s.n + '</text>';
+    });
+    svg += '<text class="chart-attribution" x="' + (W - PAD.right) + '" y="' + (H - 10) + '" text-anchor="end">jerminaldecline.com</text>';
+
+    const activeNames = activeNow.map(s => s.name).sort().join(', ') || 'none';
+    const headline = '<strong>' + activeNow.length + ' sponsor' + (activeNow.length === 1 ? '' : 's') + ' visible in recent uploads</strong>' +
+      (peakY ? ' — the ' + peakY + ' peak was ' + peakN : '') + '.';
+    const quote = latestExit
+      ? 'Most recent exit: ' + latestExit.name + ' (last seen ' + monthLbl(latestExit.last) + ', ' + latestExit.n + ' videos). Currently visible: ' + activeNames + '.'
+      : 'Currently visible: ' + activeNames + '.';
+
+    panel.hidden = false;
+    panel.innerHTML = `
+      <button type="button" class="desc-pattern-toggle" id="descPatternToggle"
+              aria-expanded="${descPatternExpanded}" aria-controls="descPatternBody">
+        <span class="desc-pattern-eyebrow">Sponsor watch — from video descriptions</span>
+        <span class="desc-pattern-headline">${headline}</span>
+        <span class="desc-pattern-quote">${quote}</span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="descPatternBody"${descPatternExpanded ? '' : ' hidden'}>
+        <svg id="sponsorChart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sponsor timeline from video descriptions">${svg}</svg>
+        <div class="sponsor-foot">Every sponsor read leaves a link. Each cell is a month in which the sponsor's domain appears in at least one new long-form description (${SPONSOR_CONFIG.minVideos}+ videos overall to qualify; platform, self-promotion and link-shortener domains excluded; rebrands merged — e.g. Coffee Brand Coffee's two domains). Row number = total videos carrying the link. Caveat: descriptions reflect their current text, so a sponsor scrubbed retroactively vanishes from this history too.</div>
+      </div>`;
+    const toggleBtn = document.getElementById('descPatternToggle');
+    const body = document.getElementById('descPatternBody');
+    if (toggleBtn && body) toggleBtn.addEventListener('click', () => {
+      descPatternExpanded = !descPatternExpanded;
+      toggleBtn.setAttribute('aria-expanded', String(descPatternExpanded));
+      body.hidden = !descPatternExpanded;
+    });
   };
-
-  const tableRows = reused.map(([desc, count]) => `
-    <tr>
-      <td>${renderDescCell(desc)}</td>
-      <td class="num">${count}</td>
-      <td class="num">${(count / totalWithDesc * 100).toFixed(1)}%</td>
-    </tr>
-  `).join('');
-
-  // Channel info points — look up by the active channel's handle.
-  const activeChannel = channelMap[ANALYTICS_CHANNEL];
-  const activeHandle = activeChannel ? activeChannel.handle : null;
-  const infoPoints = (activeHandle && DESC_PATTERN_INFO_POINTS[activeHandle]) || [];
-  const infoPointsHTML = infoPoints.map(pt => `
-    <div class="desc-pattern-info">
-      <div class="desc-pattern-info-label">ⓘ ${escape(pt.label)}</div>
-      <p>${escape(pt.text)}</p>
-    </div>
-  `).join('');
-
-  // Spelling scan — count common misspellings across ALL of this channel's
-  // long-form titles (not just the 60-day window: spelling is a lifetime
-  // habit, and the repeat-offender counts are the story). Self-updating as new
-  // uploads land. Shows each misspelling with how many times he's used it,
-  // plus one example title for context.
-  const spellingCounts = new Map(); // typo(lower) -> { display, correct, count, example }
-  for (const v of ANALYTICS_DATASET.videos) {
-    if (v.channelId !== ANALYTICS_CHANNEL || v.isShort || v.unavailable) continue;
-    const title = v.title || '';
-    const words = title.match(/[A-Za-z']+/g) || [];
-    for (const w of words) {
-      const lw = w.toLowerCase();
-      const correct = SPELLING_DICTIONARY[lw];
-      if (!correct) continue;
-      const entry = spellingCounts.get(lw) || { display: lw, correct, count: 0, example: title };
-      entry.count++;
-      if (entry.count === 1) entry.example = title;
-      spellingCounts.set(lw, entry);
-    }
-  }
-  const spellingList = [...spellingCounts.values()]
-    .filter(e => e.count >= 2)
-    .sort((a, b) => b.count - a.count);
-  const spellingTotal = spellingList.reduce((s, e) => s + e.count, 0);
-
-  const typosHTML = spellingList.length === 0 ? '' : `
-    <div class="desc-pattern-typos">
-      <div class="desc-pattern-typos-header">Spelling errors <span class="desc-pattern-typos-total">${spellingTotal} across ${spellingList.length} word${spellingList.length === 1 ? '' : 's'} · all-time</span></div>
-      <ul class="desc-pattern-typos-list">
-        ${spellingList.map(t => `
-          <li>
-            <span class="typo-wrong">${escape(t.display)}</span>
-            <span class="typo-arrow">→</span>
-            <span class="typo-right">${escape(t.correct)}</span>
-            <span class="typo-count">${t.count}&times;</span>
-            <span class="typo-context">e.g. "${escape(t.example.length > 52 ? t.example.slice(0, 52) + '…' : t.example)}"</span>
-          </li>
-        `).join('')}
-      </ul>
-    </div>
-  `;
-
-  // Tooltip text for stat-label info icons. Kept short — the goal is
-  // "what does this metric mean", not a full methodology lecture.
-  const tipUninformative = 'Either thin (under 50 characters) or boilerplate (the same text reused across 5+ videos). Both fail to convey what the video is about.';
-  const tipThin = 'Description is under 50 characters long — too short to identify the video\'s topic.';
-  const tipBoilerplate = 'Description is reused verbatim across 5+ videos. Long enough to escape the "thin" filter, but functionally identical across many uploads.';
-
-  panel.innerHTML = `
-    <button type="button" class="desc-pattern-toggle" id="descPatternToggle"
-            aria-expanded="${descPatternExpanded}" aria-controls="descPatternBody">
-      <span class="desc-pattern-eyebrow">📝 Description patterns</span>
-      <span class="desc-pattern-headline">${headlineHTML}</span>
-      <span class="desc-pattern-chevron">▼</span>
-    </button>
-    <div class="desc-pattern-body" id="descPatternBody"${descPatternExpanded ? '' : ' hidden'}>
-      ${infoPointsHTML}
-      <div class="desc-pattern-stats">
-        <div class="desc-pattern-stat">
-          <span class="desc-pattern-stat-value">${totalWithDesc}</span>
-          <span class="desc-pattern-stat-label">videos analysed · last ${DESC_PATTERN_CONFIG.windowDays}d</span>
-        </div>
-        <div class="desc-pattern-stat">
-          <span class="desc-pattern-stat-value">${uninformativePct.toFixed(0)}%</span>
-          <span class="desc-pattern-stat-label">uninformative descriptions <span class="info-icon" data-popover="${escape(tipUninformative)}" tabindex="0">ⓘ</span></span>
-        </div>
-        <div class="desc-pattern-stat">
-          <span class="desc-pattern-stat-value">${thinOnlyCount}</span>
-          <span class="desc-pattern-stat-label">thin <span class="info-icon" data-popover="${escape(tipThin)}" tabindex="0">ⓘ</span></span>
-        </div>
-        <div class="desc-pattern-stat">
-          <span class="desc-pattern-stat-value">${boilerplateOnlyCount}</span>
-          <span class="desc-pattern-stat-label">boilerplate <span class="info-icon" data-popover="${escape(tipBoilerplate)}" tabindex="0">ⓘ</span></span>
-        </div>
-        <div class="desc-pattern-stat">
-          <span class="desc-pattern-stat-value">${reused.length}</span>
-          <span class="desc-pattern-stat-label">distinct descriptions reused 2+ times</span>
-        </div>
-      </div>
-      ${reused.length > 0 ? `
-        <table class="desc-pattern-table">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th class="num">Count</th>
-              <th class="num">Share</th>
-            </tr>
-          </thead>
-          <tbody>${tableRows}</tbody>
-        </table>
-      ` : '<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">No descriptions reused 2+ times in this window.</p>'}
-      ${typosHTML}
-    </div>
-  `;
-
-  const toggleBtn = document.getElementById('descPatternToggle');
-  const body = document.getElementById('descPatternBody');
-  toggleBtn.addEventListener('click', () => {
-    descPatternExpanded = !descPatternExpanded;
-    toggleBtn.setAttribute('aria-expanded', String(descPatternExpanded));
-    body.hidden = !descPatternExpanded;
-  });
-};
-
-
 
   function computeAnalyticsBaselines(){
     const m = new Map();
