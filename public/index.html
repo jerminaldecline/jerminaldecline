@@ -3967,24 +3967,27 @@ function buildMonthlyData(scope){
     // Copy — all data-driven so it stays honest as the history grows.
     const yearsSpan = series[0].m.slice(0, 4) + '–' + series[series.length - 1].m.slice(0, 4);
     document.getElementById('seasonSub').textContent =
-      'His standing explanation for soft numbers, tested against every long-form upload ' + yearsSpan +
-      ' (' + vids.length.toLocaleString() + ' videos). Each bar: how videos posted in that calendar month typically perform against the channel’s own normal at the time — the long-term decline is removed, so only the seasonal shape remains.';
+      'He often blames quiet months on summer. So we checked every long-form video since ' + series[0].m.slice(0, 4) +
+      ' — ' + vids.length.toLocaleString() + ' of them. For each month of the year: did videos posted that month do better or worse than was usual for the channel around that time? Bars above the line mean better than usual; below means worse. Because each month is only compared with its own neighbours, the channel’s long decline doesn’t tilt the picture.';
     const gap = summer - rest;
+    const juneRank = [...months].sort((a, b) => b.dev - a.dev).findIndex(x => x.mo === 6) + 1;
     const verdictTxt = Math.abs(gap) < 5
-      ? 'not really. Summer performs ' + sgn(gap) + ' against the rest of the year — statistically indistinguishable.'
+      ? 'not really — his summer months are about normal for him'
       : (gap >= 5
-        ? 'the opposite. Summer runs ' + sgn(gap) + ' against the rest of the year.'
-        : 'partly. Summer runs ' + sgn(gap) + ' against the rest of the year.');
+        ? 'the opposite — his summers actually run better than the rest of his year'
+        : 'partly — his summers run a little below the rest of his year');
     const join = (worst[1].mo - worst[0].mo === 1) ? '–' : ' & ';
+    const slowMonths = MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1];
     // Collapsed-state one-liner: the finding is readable without expanding.
     document.getElementById('seasonQuote').textContent =
-      'Summer runs ' + sgn(gap) + ' vs the rest of his year — not slow. The real slump: ' +
-      MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + '. Expand for the 12-month fingerprint.';
+      'Verdict: ' + verdictTxt + ' (' + sgn(gap) + ' vs the rest of the year). His genuinely slow months are ' +
+      slowMonths + '. Expand for the full chart.';
     document.getElementById('seasonVerdict').innerHTML =
-      'Verdict: <strong>' + verdictTxt + '</strong> The months that actually run slow: ' +
-      MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + ' (' + sgn(worst[0].dev) + ', ' + sgn(worst[1].dev) + ').';
+      'Verdict: <strong>' + verdictTxt + '</strong> (summer overall: ' + sgn(gap) + ' compared with the rest of his year' +
+      (juneRank <= 3 ? ' — and June is his #' + juneRank + ' month' : '') + '). The months that genuinely run cold are ' +
+      slowMonths + ', at ' + sgn(worst[0].dev) + ' and ' + sgn(worst[1].dev) + ' versus usual.';
     document.getElementById('seasonFoot').textContent =
-      'Median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. The year strip averages each year’s three summer months the same way. Months with fewer than ' + MIN_N + ' uploads, partial summers and the in-progress month excluded. TheQuartering main channel, long-form only.';
+      'Method, for the curious: median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. The year strip averages each year’s three summer months the same way. Months with fewer than ' + MIN_N + ' uploads, partial summers and the in-progress month excluded. TheQuartering main channel, long-form only.';
 
     // Chart.
     const W = 720, H = 300;
@@ -4085,18 +4088,18 @@ function buildMonthlyData(scope){
       const curMed = yearMedAvg(curY), bestMed = yearMedAvg(best.y);
 
       document.getElementById('midtermSub').textContent =
-        'Each bar is an autumn — September to November — against the channel’s own normal at the time, election years marked. The ' + curY + ' bar fills in live as the midterms actually arrive.';
+        'He also says election season brings the views back. Same test, autumn by autumn: did September–November do better or worse than was usual for the channel at the time? Autumns with an election in them are labelled. The ' + curY + ' bar will fill in by itself as this year’s midterms actually arrive.';
       let scaleTxt = '';
       if (curMed && bestMed && curMed < bestMed) {
-        scaleTxt = ' Even a repeat of the best case on today’s ' + kfmt(curMed) + '-view median adds ≈' + kfmt(curMed * best.dev / 100) + ' views per video for one season — against a typical-video audience already down ' + Math.round((1 - curMed / bestMed) * 100) + '% since that autumn.';
+        scaleTxt = ' And even a repeat of his best election bump would add only about ' + kfmt(curMed * best.dev / 100) + ' views per video, for one season — on a channel where the typical video has lost ' + Math.round((1 - curMed / bestMed) * 100) + '% of its audience since that autumn.';
       }
       document.getElementById('midtermQuote').textContent =
-        'Election autumns average ' + sgn(avgD(elect)) + ' vs era-normal; the two midterms split ' +
-        mids.map(x => x.y + ' ' + sgn(x.dev)).join(' vs ') + '. Expand for cycle-by-cycle bars.';
+        'Verdict: no reliable lift. His two midterms went ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' and ') +
+        '. Expand for the full record.';
       document.getElementById('midtermVerdict').innerHTML =
-        'Verdict: <strong>history says no.</strong> Election autumns average ' + sgn(avgD(elect)) + ' against era-normal (non-election autumns: ' + sgn(avgD(ctrl)) + '), and the two midterms split ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' vs ') + '.' + scaleTxt;
+        'Verdict: <strong>history says no.</strong> Autumns with an election in them (' + sgn(avgD(elect)) + ' versus usual) don’t look meaningfully different from autumns without one (' + sgn(avgD(ctrl)) + '). His two midterms went ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' and ') + '.' + scaleTxt;
       document.getElementById('midtermFoot').textContent =
-        'Same method as the chart above: monthly medians against their surrounding ±6 months, Sep–Nov averaged per year; the channel’s partial first year excluded. 2022’s strong autumn coincides with the Twitter-takeover news cycle — outrage supply, not ballots, is the likelier driver. TheQuartering main channel, long-form only.';
+        'Method, for the curious: same as the chart above — monthly medians against their surrounding ±6 months, Sep–Nov averaged per year; the channel’s partial first year excluded. 2022’s strong autumn coincides with the Twitter-takeover news cycle — outrage supply, not ballots, is the likelier driver. TheQuartering main channel, long-form only.';
 
       const W2 = 720, H2 = 280;
       const P2 = { top: 34, right: 24, bottom: 58, left: 56 };
