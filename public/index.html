@@ -324,6 +324,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .season-slump-label{fill:var(--down);font-size:10.5px;font-weight:700}
 .season-bar.pos{fill:var(--up)}
 .season-bar.neg{fill:var(--down)}
+.season-years-cap{margin:1rem 0 0.2rem;font-size:0.78rem;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.05em}
+#seasonYears{width:100%;height:auto;display:block}
 .tagblock-key{margin-top:1.1rem;border-top:1px solid var(--border);padding-top:1rem;display:flex;flex-direction:column;gap:0.7rem}
 .tagblock-key[hidden]{display:none}
 .tagblock-key-item{display:flex;gap:0.6rem;align-items:flex-start}
@@ -2375,6 +2377,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       </div>
       <div class="season-verdict" id="seasonVerdict"></div>
       <svg id="seasonChart" viewBox="0 0 720 300" role="img" aria-label="How each calendar month performs against the channel's own normal"></svg>
+      <div class="season-years-cap" id="seasonYearsCap"></div>
+      <svg id="seasonYears" viewBox="0 0 720 150" role="img" aria-label="Summer performance year by year"></svg>
       <div class="season-foot" id="seasonFoot"></div>
     </div>
   </section>
@@ -3906,7 +3910,7 @@ function buildMonthlyData(scope){
         if (j !== i && series[j].n >= MIN_N) win.push(series[j].med);
       }
       if (win.length < 6) continue;
-      ratios.push({ mo: +series[i].m.slice(5), r: series[i].med / (win.reduce((a, b) => a + b, 0) / win.length) });
+      ratios.push({ y: series[i].m.slice(0, 4), mo: +series[i].m.slice(5), r: series[i].med / (win.reduce((a, b) => a + b, 0) / win.length) });
     }
     if (ratios.length < 24) return; // not enough history to say anything honest
 
@@ -3938,7 +3942,7 @@ function buildMonthlyData(scope){
       'Verdict: <strong>' + verdictTxt + '</strong> The months that actually run slow: ' +
       MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + ' (' + sgn(worst[0].dev) + ', ' + sgn(worst[1].dev) + ').';
     document.getElementById('seasonFoot').textContent =
-      'Median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. Months with fewer than ' + MIN_N + ' uploads and the in-progress month excluded. TheQuartering main channel, long-form only.';
+      'Median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. The year strip averages each year’s three summer months the same way. Months with fewer than ' + MIN_N + ' uploads, partial summers and the in-progress month excluded. TheQuartering main channel, long-form only.';
 
     // Chart.
     const W = 720, H = 300;
@@ -3975,6 +3979,40 @@ function buildMonthlyData(scope){
       '<text class="chart-axis-label" x="' + (W - P.right - 2) + '" y="' + (zeroY - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
     const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
     document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+
+    // Year-by-year strip: the same era-normalised ratios, the three summer
+    // months averaged per year — the honest granularity for "was THIS summer
+    // slow?". (A single month of a single year is one data point; charting
+    // those invites reading noise as seasonality, so no per-year fingerprint.)
+    const byYear = [];
+    for (const y of [...new Set(ratios.map(x => x.y))]) {
+      const sm = ratios.filter(x => x.y === y && x.mo >= 6 && x.mo <= 8);
+      if (sm.length < 3) continue; // partial summers (first/last year) sit out
+      byYear.push({ y, dev: (sm.reduce((a, x) => a + x.r, 0) / sm.length - 1) * 100 });
+    }
+    if (byYear.length >= 4) {
+      document.getElementById('seasonYearsCap').textContent = 'Summer, year by year — vs that year’s own normal';
+      const W2 = 720, H2 = 150;
+      const P2 = { top: 26, right: 24, bottom: 26, left: 56 };
+      const iw = W2 - P2.left - P2.right, ih = H2 - P2.top - P2.bottom;
+      const mx = Math.max(5, Math.ceil(Math.max(...byYear.map(x => Math.abs(x.dev))) / 5) * 5);
+      const y2 = v => P2.top + (1 - (v + mx) / (2 * mx)) * ih;
+      const sl = iw / byYear.length;
+      const bw = Math.min(30, sl * 0.5);
+      const z2 = y2(0);
+      let g2 = '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z2.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z2.toFixed(1) + '" />' +
+        '<text class="chart-axis-label" x="' + (P2.left - 8) + '" y="' + (z2 + 4).toFixed(1) + '" text-anchor="end">0%</text>';
+      byYear.forEach((x, i) => {
+        const cx = P2.left + sl * i + sl / 2;
+        const yy = y2(x.dev);
+        const top = Math.min(yy, z2), bh = Math.max(2, Math.abs(z2 - yy));
+        g2 += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>Summer ' + x.y + ': ' + sgn(x.dev) + ' vs that year’s normal</title></rect>';
+        const ly = x.dev >= 0 ? top - 5 : top + bh + 12;
+        g2 += '<text class="chart-pt-label" x="' + cx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
+        g2 += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H2 - 8) + '" text-anchor="middle">' + x.y + '</text>';
+      });
+      document.getElementById('seasonYears').innerHTML = g2;
+    }
     card.hidden = false;
     done = true;
   };
