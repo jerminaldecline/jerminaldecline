@@ -325,6 +325,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .season-bar.pos{fill:var(--up)}
 .season-bar.neg{fill:var(--down)}
 .season-years-cap{margin:1rem 0 0.2rem;font-size:0.78rem;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.05em}
+.season-key{display:flex;flex-wrap:wrap;gap:0.4rem 1.1rem;align-items:center;margin:0.1rem 0 0.6rem;font-size:0.72rem;color:var(--subtext)}
+.skey-item{display:inline-flex;align-items:center;gap:0.35rem}
+.skey-swatch{width:10px;height:10px;border-radius:2px}
+.skey-line{width:16px;border-top:2px solid var(--text);opacity:0.75}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
 .midterm-kind{fill:var(--accent);font-size:9.5px;font-weight:800;letter-spacing:0.05em}
@@ -2380,28 +2384,40 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
          TheQuartering's long-form uploads, computed client-side by
          renderSeasonCard() from the full history in data.json. Hidden until
          the computation succeeds (needs ~2 years of qualifying months). -->
-    <div class="an-chart-card season-card" id="seasonCard" hidden>
-      <div class="an-chart-title">
-        <div class="an-chart-title-main">“Things are slow in the summer” — checked</div>
+    <div class="desc-pattern-panel season-card" id="seasonCard" hidden>
+      <button type="button" class="desc-pattern-toggle" id="seasonToggle" aria-expanded="false" aria-controls="seasonBody">
+        <span class="desc-pattern-eyebrow">Claim check</span>
+        <span class="desc-pattern-headline">“Things are slow in the summer” — checked</span>
+        <span class="desc-pattern-quote" id="seasonQuote"></span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="seasonBody" hidden>
         <div class="an-chart-title-sub" id="seasonSub"></div>
+        <div class="season-verdict" id="seasonVerdict"></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-line"></span>the channel's own normal (0%)</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>above normal</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>below normal</span></div>
+        <svg id="seasonChart" viewBox="0 0 720 300" role="img" aria-label="How each calendar month performs against the channel's own normal"></svg>
+        <div class="season-years-cap" id="seasonYearsCap"></div>
+        <svg id="seasonYears" viewBox="0 0 720 150" role="img" aria-label="Summer performance year by year"></svg>
+        <div class="season-foot" id="seasonFoot"></div>
       </div>
-      <div class="season-verdict" id="seasonVerdict"></div>
-      <svg id="seasonChart" viewBox="0 0 720 300" role="img" aria-label="How each calendar month performs against the channel's own normal"></svg>
-      <div class="season-years-cap" id="seasonYearsCap"></div>
-      <svg id="seasonYears" viewBox="0 0 720 150" role="img" aria-label="Summer performance year by year"></svg>
-      <div class="season-foot" id="seasonFoot"></div>
     </div>
     <!-- Companion: "the midterms will save the business" — autumn (Sep–Nov)
          performance per year with election years marked. Rendered by the same
          seasonCard IIFE; the current year's bar fills in live each autumn. -->
-    <div class="an-chart-card season-card" id="midtermCard" hidden>
-      <div class="an-chart-title">
-        <div class="an-chart-title-main">“The midterms will save the business” — checked</div>
+    <div class="desc-pattern-panel season-card" id="midtermCard" hidden>
+      <button type="button" class="desc-pattern-toggle" id="midtermToggle" aria-expanded="false" aria-controls="midtermBody">
+        <span class="desc-pattern-eyebrow">Claim check</span>
+        <span class="desc-pattern-headline">“The midterms will save the business” — checked</span>
+        <span class="desc-pattern-quote" id="midtermQuote"></span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="midtermBody" hidden>
         <div class="an-chart-title-sub" id="midtermSub"></div>
+        <div class="season-verdict" id="midtermVerdict"></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-line"></span>the channel's own normal (0%)</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>above normal</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>below normal</span></div>
+        <svg id="midtermChart" viewBox="0 0 720 280" role="img" aria-label="Autumn performance by year, election years marked"></svg>
+        <div class="season-foot" id="midtermFoot"></div>
       </div>
-      <div class="season-verdict" id="midtermVerdict"></div>
-      <svg id="midtermChart" viewBox="0 0 720 280" role="img" aria-label="Autumn performance by year, election years marked"></svg>
-      <div class="season-foot" id="midtermFoot"></div>
     </div>
   </section>
 
@@ -3960,6 +3976,10 @@ function buildMonthlyData(scope){
         ? 'the opposite. Summer runs ' + sgn(gap) + ' against the rest of the year.'
         : 'partly. Summer runs ' + sgn(gap) + ' against the rest of the year.');
     const join = (worst[1].mo - worst[0].mo === 1) ? '–' : ' & ';
+    // Collapsed-state one-liner: the finding is readable without expanding.
+    document.getElementById('seasonQuote').textContent =
+      'Summer runs ' + sgn(gap) + ' vs the rest of his year — not slow. The real slump: ' +
+      MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + '. Expand for the 12-month fingerprint.';
     document.getElementById('seasonVerdict').innerHTML =
       'Verdict: <strong>' + verdictTxt + '</strong> The months that actually run slow: ' +
       MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + ' (' + sgn(worst[0].dev) + ', ' + sgn(worst[1].dev) + ').';
@@ -3998,11 +4018,8 @@ function buildMonthlyData(scope){
     const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
     const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
     const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />';
-    // Painted after the bars with a surface-coloured halo so the rightmost
-    // bar can't swallow it (December is a strong month; it did).
-    const zeroLabel = '<text class="chart-axis-label" style="paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round;" x="' + (W - P.right - 2) + '" y="' + (zeroY - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
     const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
-    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + zeroLabel + attribution;
+    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
 
     // Year-by-year strip: the same era-normalised ratios, the three summer
     // months averaged per year — the honest granularity for "was THIS summer
@@ -4073,6 +4090,9 @@ function buildMonthlyData(scope){
       if (curMed && bestMed && curMed < bestMed) {
         scaleTxt = ' Even a repeat of the best case on today’s ' + kfmt(curMed) + '-view median adds ≈' + kfmt(curMed * best.dev / 100) + ' views per video for one season — against a typical-video audience already down ' + Math.round((1 - curMed / bestMed) * 100) + '% since that autumn.';
       }
+      document.getElementById('midtermQuote').textContent =
+        'Election autumns average ' + sgn(avgD(elect)) + ' vs era-normal; the two midterms split ' +
+        mids.map(x => x.y + ' ' + sgn(x.dev)).join(' vs ') + '. Expand for cycle-by-cycle bars.';
       document.getElementById('midtermVerdict').innerHTML =
         'Verdict: <strong>history says no.</strong> Election autumns average ' + sgn(avgD(elect)) + ' against era-normal (non-election autumns: ' + sgn(avgD(ctrl)) + '), and the two midterms split ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' vs ') + '.' + scaleTxt;
       document.getElementById('midtermFoot').textContent =
@@ -4093,9 +4113,6 @@ function buildMonthlyData(scope){
         out += '<text class="chart-axis-label y" x="' + (P2.left - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
       }
       out += '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z.toFixed(1) + '" />';
-      // Appended after the bars (see below) with a halo so the rightmost bar
-      // can't swallow it.
-      const zeroLabel = '<text class="chart-axis-label" style="paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round;" x="' + (W2 - P2.right - 2) + '" y="' + (z - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
       autumn.forEach((x, i) => {
         const cx = P2.left + slot * i + slot / 2;
         const yy = yF(x.dev);
@@ -4108,9 +4125,19 @@ function buildMonthlyData(scope){
         if (x.kind) out += '<text class="midterm-kind" x="' + cx.toFixed(1) + '" y="' + (H2 - 21) + '" text-anchor="middle">' + (x.kind === 'midterm' ? 'MIDTERM' : 'PRES.') + '</text>';
       });
       out += '<text class="chart-attribution" x="' + (W2 - P2.right) + '" y="' + (H2 - 6) + '" text-anchor="end">TheQuartering · autumns ' + autumn[0].y + '–' + autumn[autumn.length - 1].y + ' · jerminaldecline.com</text>';
-      document.getElementById('midtermChart').innerHTML = out + zeroLabel;
+      document.getElementById('midtermChart').innerHTML = out;
       mtCard.hidden = false;
     })();
+
+    // Collapse/expand wiring — static markup, wired exactly once (done-guarded).
+    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody']]) {
+      const btn = document.getElementById(btnId), body = document.getElementById(bodyId);
+      if (btn && body) btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', String(open));
+        body.hidden = !open;
+      });
+    }
 
     card.hidden = false;
     done = true;
