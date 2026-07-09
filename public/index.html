@@ -4088,7 +4088,7 @@ function buildMonthlyData(scope){
       const curMed = yearMedAvg(curY), bestMed = yearMedAvg(best.y);
 
       document.getElementById('midtermSub').textContent =
-        'He also says election season brings the views back. Same test, autumn by autumn: did September–November do better or worse than was usual for the channel at the time? Autumns with an election in them are labelled. The ' + curY + ' bar will fill in by itself as this year’s midterms actually arrive.';
+        'Autumn by autumn since 2018: did videos posted in September–November do better or worse than was usual for the channel at the time? Bars above the line mean better than usual; below means worse. Autumns with an election in them are labelled. The ' + curY + ' bar will fill in by itself as this year’s midterms actually arrive.';
       let scaleTxt = '';
       if (curMed && bestMed && curMed < bestMed) {
         scaleTxt = ' And even a repeat of his best election bump would add only about ' + kfmt(curMed * best.dev / 100) + ' views per video, for one season — on a channel where the typical video has lost ' + Math.round((1 - curMed / bestMed) * 100) + '% of its audience since that autumn.';
@@ -4099,7 +4099,7 @@ function buildMonthlyData(scope){
       document.getElementById('midtermVerdict').innerHTML =
         'Verdict: <strong>history says no.</strong> Autumns with an election in them (' + sgn(avgD(elect)) + ' versus usual) don’t look meaningfully different from autumns without one (' + sgn(avgD(ctrl)) + '). His two midterms went ' + mids.map(x => x.y + ' ' + sgn(x.dev)).join(' and ') + '.' + scaleTxt;
       document.getElementById('midtermFoot').textContent =
-        'Method, for the curious: same as the chart above — monthly medians against their surrounding ±6 months, Sep–Nov averaged per year; the channel’s partial first year excluded. 2022’s strong autumn coincides with the Twitter-takeover news cycle — outrage supply, not ballots, is the likelier driver. TheQuartering main channel, long-form only.';
+        'Method, for the curious: monthly medians against their surrounding ±6 months, Sep–Nov averaged per year; the channel’s partial first year excluded. 2022’s strong autumn coincides with the Twitter-takeover news cycle — outrage supply, not ballots, is the likelier driver. TheQuartering main channel, long-form only.';
 
       const W2 = 720, H2 = 280;
       const P2 = { top: 34, right: 24, bottom: 58, left: 56 };
