@@ -314,6 +314,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+/* "Slow summer" excuse-checker card */
+.season-card{margin-top:1.25rem}
+.season-verdict{margin:0.75rem 0 1rem;font-size:0.92rem;line-height:1.5}
+#seasonChart{width:100%;height:auto;display:block}
+.season-foot{margin-top:0.65rem;font-size:0.72rem;color:var(--subtext);line-height:1.45}
+.season-band{fill:var(--accent-2-bg)}
+.season-band-label{fill:var(--accent-2);font-size:11px;font-weight:700}
+.season-slump-label{fill:var(--down);font-size:10.5px;font-weight:700}
+.season-bar.pos{fill:var(--up)}
+.season-bar.neg{fill:var(--down)}
 .tagblock-key{margin-top:1.1rem;border-top:1px solid var(--border);padding-top:1rem;display:flex;flex-direction:column;gap:0.7rem}
 .tagblock-key[hidden]{display:none}
 .tagblock-key-item{display:flex;gap:0.6rem;align-items:flex-start}
@@ -2354,6 +2364,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
     <div class="revenue-panel" id="revenuePanel" hidden></div>
     <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
+    <!-- "Slow summer" excuse checker: 12-month seasonal fingerprint of
+         TheQuartering's long-form uploads, computed client-side by
+         renderSeasonCard() from the full history in data.json. Hidden until
+         the computation succeeds (needs ~2 years of qualifying months). -->
+    <div class="an-chart-card season-card" id="seasonCard" hidden>
+      <div class="an-chart-title">
+        <div class="an-chart-title-main">“Things are slow in the summer” — checked</div>
+        <div class="an-chart-title-sub" id="seasonSub"></div>
+      </div>
+      <div class="season-verdict" id="seasonVerdict"></div>
+      <svg id="seasonChart" viewBox="0 0 720 300" role="img" aria-label="How each calendar month performs against the channel's own normal"></svg>
+      <div class="season-foot" id="seasonFoot"></div>
+    </div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
@@ -3841,6 +3864,122 @@ function buildMonthlyData(scope){
    IIFE-scoped with the externals it reads. Entry point: window.renderAnalysisChart().
    Feeds on buildMonthlyData() from the analytics data layer.
    ============================================================ */
+// ===== "Slow summer" excuse checker ========================================
+// Jeremy's standing explanation for soft numbers is that summer is slow. This
+// card tests the claim against his entire long-form history: median views per
+// upload-month, each month expressed as a ratio to its own era (mean of the
+// surrounding ±6 months' medians) so the channel's long-term decline cancels
+// out; those ratios are then averaged by calendar month across the years.
+// Fixed to TheQuartering because the claim is his. Computed once per session,
+// client-side, from the same data.json everything else renders from.
+(function seasonCard(){
+  let done = false;
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  window.renderSeasonCard = function(){
+    if (done) return;
+    const card = document.getElementById('seasonCard');
+    if (!card || !ANALYTICS_DATASET) return;
+    const entry = Object.entries(ANALYTICS_DATASET.channels || {}).find(([, c]) => c.handle === '@TheQuartering');
+    if (!entry) return;
+    const tqId = entry[0];
+    const vids = (ANALYTICS_DATASET.videos || []).filter(v => v.channelId === tqId && !v.isShort && v.views != null);
+
+    // Monthly median views per upload; in-progress month excluded.
+    const nowKey = new Date().toISOString().slice(0, 7);
+    const buckets = new Map();
+    for (const v of vids) {
+      const m = (v.publishedAt || '').slice(0, 7);
+      if (!m || m >= nowKey) continue;
+      if (!buckets.has(m)) buckets.set(m, []);
+      buckets.get(m).push(v.views || 0);
+    }
+    const med = a => { const s = [...a].sort((x, y) => x - y); const n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
+    const MIN_N = 8; // months with fewer uploads are too noisy to score
+    const series = [...buckets.keys()].sort().map(m => ({ m, n: buckets.get(m).length, med: med(buckets.get(m)) }));
+
+    // Detrend: each month against the mean of its qualifying ±6 neighbours.
+    const ratios = [];
+    for (let i = 0; i < series.length; i++) {
+      if (series[i].n < MIN_N) continue;
+      const win = [];
+      for (let j = Math.max(0, i - 6); j <= Math.min(series.length - 1, i + 6); j++) {
+        if (j !== i && series[j].n >= MIN_N) win.push(series[j].med);
+      }
+      if (win.length < 6) continue;
+      ratios.push({ mo: +series[i].m.slice(5), r: series[i].med / (win.reduce((a, b) => a + b, 0) / win.length) });
+    }
+    if (ratios.length < 24) return; // not enough history to say anything honest
+
+    const months = [];
+    for (let mo = 1; mo <= 12; mo++) {
+      const rs = ratios.filter(x => x.mo === mo);
+      if (!rs.length) return; // every calendar month must be represented
+      months.push({ mo, dev: (rs.reduce((a, x) => a + x.r, 0) / rs.length - 1) * 100, yrs: rs.length });
+    }
+    const avg = a => a.reduce((s, x) => s + x, 0) / a.length;
+    const summer = avg(months.filter(x => x.mo >= 6 && x.mo <= 8).map(x => x.dev));
+    const rest = avg(months.filter(x => x.mo < 6 || x.mo > 8).map(x => x.dev));
+    const worst = [...months].sort((a, b) => a.dev - b.dev).slice(0, 2).sort((a, b) => a.mo - b.mo);
+    const sgn = x => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(1) + '%';
+
+    // Copy — all data-driven so it stays honest as the history grows.
+    const yearsSpan = series[0].m.slice(0, 4) + '–' + series[series.length - 1].m.slice(0, 4);
+    document.getElementById('seasonSub').textContent =
+      'His standing explanation for soft numbers, tested against every long-form upload ' + yearsSpan +
+      ' (' + vids.length.toLocaleString() + ' videos). Each bar: how videos posted in that calendar month typically perform against the channel’s own normal at the time — the long-term decline is removed, so only the seasonal shape remains.';
+    const gap = summer - rest;
+    const verdictTxt = Math.abs(gap) < 5
+      ? 'not really. Summer performs ' + sgn(gap) + ' against the rest of the year — statistically indistinguishable.'
+      : (gap >= 5
+        ? 'the opposite. Summer runs ' + sgn(gap) + ' against the rest of the year.'
+        : 'partly. Summer runs ' + sgn(gap) + ' against the rest of the year.');
+    const join = (worst[1].mo - worst[0].mo === 1) ? '–' : ' & ';
+    document.getElementById('seasonVerdict').innerHTML =
+      'Verdict: <strong>' + verdictTxt + '</strong> The months that actually run slow: ' +
+      MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1] + ' (' + sgn(worst[0].dev) + ', ' + sgn(worst[1].dev) + ').';
+    document.getElementById('seasonFoot').textContent =
+      'Median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. Months with fewer than ' + MIN_N + ' uploads and the in-progress month excluded. TheQuartering main channel, long-form only.';
+
+    // Chart.
+    const W = 720, H = 300;
+    const P = { top: 40, right: 24, bottom: 64, left: 56 };
+    const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
+    const maxAbs = Math.max(5, Math.ceil(Math.max(...months.map(x => Math.abs(x.dev))) / 5) * 5);
+    const yFor = v => P.top + (1 - (v + maxAbs) / (2 * maxAbs)) * innerH;
+    const slot = innerW / 12;
+    const xFor = i => P.left + slot * i + slot / 2;
+    const barW = Math.min(34, slot * 0.62);
+
+    let grid = '', ylab = '';
+    for (let v = -maxAbs; v <= maxAbs; v += 5) {
+      const y = yFor(v);
+      grid += '<line class="chart-grid-line" x1="' + P.left + '" y1="' + y.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + y.toFixed(1) + '" />';
+      ylab += '<text class="chart-axis-label y" x="' + (P.left - 8) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
+    }
+    const zeroY = yFor(0);
+    const bandX = P.left + slot * 5, bandW = slot * 3;
+    const band = '<rect class="season-band" x="' + bandX.toFixed(1) + '" y="' + P.top + '" width="' + bandW.toFixed(1) + '" height="' + innerH + '" rx="6" />' +
+      '<text class="season-band-label" x="' + (bandX + bandW / 2).toFixed(1) + '" y="' + (P.top - 10) + '" text-anchor="middle">“the slow summer”</text>';
+    let bars = '', labels = '', xlab = '';
+    months.forEach((x, i) => {
+      const y = yFor(x.dev);
+      const top = Math.min(y, zeroY), bh = Math.max(2, Math.abs(zeroY - y));
+      bars += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (xFor(i) - barW / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>' + MON[x.mo - 1] + ': ' + sgn(x.dev) + ' vs the channel’s normal (' + x.yrs + ' years of data)</title></rect>';
+      const ly = x.dev >= 0 ? top - 6 : top + bh + 13;
+      labels += '<text class="chart-pt-label" x="' + xFor(i).toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
+      xlab += '<text class="chart-axis-label x" x="' + xFor(i).toFixed(1) + '" y="' + (H - 40) + '" text-anchor="middle">' + MON[x.mo - 1] + '</text>';
+    });
+    const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
+    const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
+    const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />' +
+      '<text class="chart-axis-label" x="' + (W - P.right - 2) + '" y="' + (zeroY - 6).toFixed(1) + '" text-anchor="end">his normal</text>';
+    const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
+    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+    card.hidden = false;
+    done = true;
+  };
+})();
+
 (function analyticsChartEngine(){
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   // Shared "YYYY-MM" → "Jan".."Dec" helper (was duplicated in 4 chart fns).
@@ -6738,6 +6877,7 @@ function niceDurationAxis(minSec, maxSec) {
     renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
+    if (typeof window.renderSeasonCard === 'function') { try { window.renderSeasonCard(); } catch(e){ console.error('season card', e); } }
   };
 
   // The tag-blocks chart draws a different x-axis on phones (fewer ticks, larger
