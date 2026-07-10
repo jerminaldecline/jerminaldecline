@@ -2836,17 +2836,19 @@ async function loadAndCompute(){
       }));
       const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
       const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
-      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      // Top 12 (not 6): the Overview card shows 6 collapsed and 12 expanded,
+      // so the payload must carry the full dozen.
+      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       // Theme + mode entry arrays (full, sorted; sliced at render time).
       const mkEntries = (counts) => Object.entries(counts).map(([t,o])=>({ id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v }));
       const themeEntries = mkEntries(thc), modeEntries = mkEntries(mdc);
-      const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       const themesTaggedCount = themeEntries.reduce((s,e)=>s+e.count,0);
       const themesTaggedViews = themeEntries.reduce((s,e)=>s+e.views,0);
-      const modesByCount = [...modeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const modesByViews = [...modeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const modesByCount = [...modeEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const modesByViews = [...modeEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       const modesTaggedCount = modeEntries.reduce((s,e)=>s+e.count,0);
       const modesTaggedViews = modeEntries.reduce((s,e)=>s+e.views,0);
       const top=topicsByCount.map(e=>[e.name,e.count]);
@@ -3456,15 +3458,14 @@ function render(m){
     // (tagged tail beyond the cut) and — subjects view only, where the
     // denominator is the month's full output — "No subject tagged" (streams
     // and videos with no single nameable entity get theme+format only).
-    const stacked = (items, total, valOf, unit, fmtVal) => {
+    const stacked = (items, total, taggedTotal, valOf, unit, fmtVal) => {
       const limit = ovTopicsExpanded ? 12 : 6;
       const top = items.slice(0, limit);
       const topSum = top.reduce((s,t)=>s+valOf(t), 0);
-      const allSum = items.reduce((s,t)=>s+valOf(t), 0);
-      const tailVal = Math.max(0, allSum - topSum);
-      const restVal = Math.max(0, total - allSum);
+      const tailVal = Math.max(0, taggedTotal - topSum);
+      const restVal = Math.max(0, total - taggedTotal);
       const segs = top.map(t => ({ name:t.name, color:t.color, val:valOf(t) }));
-      if (tailVal > 0) segs.push({ name:'Smaller topics (' + (items.length - top.length) + ')', color:TAIL_COLOR, val:tailVal, isOther:true });
+      if (tailVal > 0) segs.push({ name:'Smaller topics', color:TAIL_COLOR, val:tailVal, isOther:true });
       if (restVal > 0) segs.push({ name:(view === 'subject') ? 'No subject tagged' : 'Untagged', color:OTHER_COLOR, val:restVal, isOther:true });
       const pct = v => (v/total*100);
       const barSegs = segs.map(s =>
@@ -3483,8 +3484,8 @@ function render(m){
       return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul>${more}</div>`;
     };
     return {
-      uploads: stacked(byCount, totCount, t=>t.count, 'videos', v=>String(v)),
-      views: stacked(byViews, totViews, t=>t.views, 'views', v=>fmt(v))
+      uploads: stacked(byCount, totCount, tCount, t=>t.count, 'videos', v=>String(v)),
+      views: stacked(byViews, totViews, tViews, t=>t.views, 'views', v=>fmt(v))
     };
   })();
 
