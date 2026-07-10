@@ -124,7 +124,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-inline{font-size:1.05rem;font-weight:800;color:var(--accent);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.55rem;cursor:pointer;font-family:inherit;text-align:left}
 .month-inline:hover{border-color:var(--accent)}
 
-.peak-headline{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.peak-headline{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .mini-trend-line{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .mini-trend-line-prev{fill:none;stroke:var(--text-dim);stroke-width:1.4;stroke-dasharray:3 2.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0.85}
 .mini-trend-legend{display:flex;gap:0.9rem;margin-bottom:0.5rem;font-size:0.72rem;color:var(--text-muted);font-weight:600}
@@ -264,6 +264,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tsb-leg-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tsb-leg-val{margin-left:auto;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 .tsb-leg-other .tsb-leg-name{color:var(--text-muted);font-weight:500}
+.tsb-more{margin-top:0.45rem;background:none;border:none;color:var(--accent);font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;padding:0.15rem 0}
+.tsb-more:hover{text-decoration:underline}
 .cmp-table{width:100%;border-collapse:collapse;font-size:0.86rem}
 .cmp-table th{text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
 .cmp-table th:first-child{text-align:left}
@@ -2834,17 +2836,19 @@ async function loadAndCompute(){
       }));
       const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
       const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
-      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      // Top 12 (not 6): the Overview card shows 6 collapsed and 12 expanded,
+      // so the payload must carry the full dozen.
+      const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       // Theme + mode entry arrays (full, sorted; sliced at render time).
       const mkEntries = (counts) => Object.entries(counts).map(([t,o])=>({ id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v }));
       const themeEntries = mkEntries(thc), modeEntries = mkEntries(mdc);
-      const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       const themesTaggedCount = themeEntries.reduce((s,e)=>s+e.count,0);
       const themesTaggedViews = themeEntries.reduce((s,e)=>s+e.views,0);
-      const modesByCount = [...modeEntries].sort((a,b)=>b.count-a.count).slice(0,6);
-      const modesByViews = [...modeEntries].sort((a,b)=>b.views-a.views).slice(0,6);
+      const modesByCount = [...modeEntries].sort((a,b)=>b.count-a.count).slice(0,12);
+      const modesByViews = [...modeEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       const modesTaggedCount = modeEntries.reduce((s,e)=>s+e.count,0);
       const modesTaggedViews = modeEntries.reduce((s,e)=>s+e.views,0);
       const top=topicsByCount.map(e=>[e.name,e.count]);
@@ -2925,9 +2929,12 @@ async function loadAndCompute(){
     let lastSeen=null;
     const beforePeak=ms.filter(m=>m<pk);
     for(let i=beforePeak.length-1;i>=0;i--){ if(S[beforePeak[i]].tot<=S[low].tot){ lastSeen=beforePeak[i]; break; } }
+    const latest=ms[ms.length-1];
     peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
       pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0,
       lastSeenMonth:lastSeen,
+      latestMonth:latest, latestViews:S[latest].tot,
+      pctFromPeakLatest: S[pk].tot>0 ? Math.round((S[latest].tot-S[pk].tot)/S[pk].tot*100) : 0,
       series: ms.map(m=>({ m, v: S[m].tot||0 })) };
   }
 
@@ -3158,6 +3165,7 @@ let ovFormat = 'long';
 // Overview topic-card view: 'subject' | 'theme' | 'mode'. Shared by both topic
 // cards (share of uploads / share of views) so they switch together.
 let ovTopicView = 'subject';
+let ovTopicsExpanded = false; // topic cards: top 6 collapsed, top 12 expanded
 // Remembers what render() last drew (a month-key string or an aggregate object)
 // so view toggles (topic axis) can re-render the same report.
 let ovCurrent = null;
@@ -3446,15 +3454,22 @@ function render(m){
     const totCount = (view === 'subject') ? (d.n || tCount || byCount.reduce((s,t)=>s+t.count,0) || 1) : (tCount || byCount.reduce((s,t)=>s+t.count,0) || 1);
     const totViews = (view === 'subject') ? (d.tot || tViews || byViews.reduce((s,t)=>s+t.views,0) || 1) : (tViews || byViews.reduce((s,t)=>s+t.views,0) || 1);
     const OTHER_COLOR = 'var(--text-dim)';
-    // Build a single stacked bar + legend from the top-6 topics. Anything beyond
-    // the top 6 (and untagged output) is folded into a muted "Other" segment so
-    // the segments always sum to the month's full total.
-    const stacked = (items, total, valOf, unit, fmtVal) => {
-      const top = items.slice(0, 6);
+    const TAIL_COLOR = 'var(--subtext)';
+    // Build a single stacked bar + legend from the top topics (6 collapsed,
+    // 12 expanded via the Show-all toggle). The old single "Other" blob hid
+    // two very different things, so it is split honestly: "Smaller topics"
+    // (tagged tail beyond the cut) and — subjects view only, where the
+    // denominator is the month's full output — "No subject tagged" (streams
+    // and videos with no single nameable entity get theme+format only).
+    const stacked = (items, total, taggedTotal, valOf, unit, fmtVal) => {
+      const limit = ovTopicsExpanded ? 12 : 6;
+      const top = items.slice(0, limit);
       const topSum = top.reduce((s,t)=>s+valOf(t), 0);
-      const otherVal = Math.max(0, total - topSum);
+      const tailVal = Math.max(0, taggedTotal - topSum);
+      const restVal = Math.max(0, total - taggedTotal);
       const segs = top.map(t => ({ name:t.name, color:t.color, val:valOf(t) }));
-      if (otherVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:otherVal, isOther:true });
+      if (tailVal > 0) segs.push({ name:'Smaller topics', color:TAIL_COLOR, val:tailVal, isOther:true });
+      if (restVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:restVal, isOther:true });
       const pct = v => (v/total*100);
       const barSegs = segs.map(s =>
         `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${escapeHtml(s.name)}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
@@ -3466,11 +3481,14 @@ function render(m){
           <span class="tsb-leg-val">${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%</span>
         </li>`
       ).join('');
-      return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul></div>`;
+      const more = items.length > 6
+        ? `<button type="button" class="tsb-more" data-ovtopicsmore>${ovTopicsExpanded ? 'Show top 6 ▴' : 'Show all ' + Math.min(12, items.length) + ' ▾'}</button>`
+        : '';
+      return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul>${more}</div>`;
     };
     return {
-      uploads: stacked(byCount, totCount, t=>t.count, 'videos', v=>String(v)),
-      views: stacked(byViews, totViews, t=>t.views, 'views', v=>fmt(v))
+      uploads: stacked(byCount, totCount, tCount, t=>t.count, 'videos', v=>String(v)),
+      views: stacked(byViews, totViews, tViews, t=>t.views, 'views', v=>fmt(v))
     };
   })();
 
@@ -3508,6 +3526,11 @@ function render(m){
           <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
           ${pk.lastSeenMonth ? `<div class="peak-sub">Last seen at this level: <strong>${monthName(pk.lastSeenMonth)}</strong> · ${yearsAgoStr(pk.lastSeenMonth)}</div>` : ''}
         </div>
+        ${pk.latestMonth && pk.latestMonth !== pk.lowMonth ? `
+        <div class="peak-item">
+          <div class="peak-label">Latest complete month <span class="peak-when">— ${monthName(pk.latestMonth)}</span></div>
+          <div class="peak-val"><span class="peak-num">${fmt(pk.latestViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeakLatest)}% from peak</span></div>
+        </div>` : ''}
       </div>`;
     })()}
     <div class="hero">
@@ -3810,6 +3833,13 @@ document.addEventListener('click', (e) => {
   const ovtv = e.target.closest('.ov-topic-tabs [data-ovtopicview]');
   if (ovtv) {
     ovTopicView = ovtv.dataset.ovtopicview;
+    if (ovCurrent != null && typeof render === 'function') render(ovCurrent);
+    return;
+  }
+  // Topic cards: top-6 / top-12 expander (both cards re-render together).
+  const ovtm = e.target.closest('[data-ovtopicsmore]');
+  if (ovtm) {
+    ovTopicsExpanded = !ovTopicsExpanded;
     if (ovCurrent != null && typeof render === 'function') render(ovCurrent);
     return;
   }
