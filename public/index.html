@@ -264,6 +264,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tsb-leg-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tsb-leg-val{margin-left:auto;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 .tsb-leg-other .tsb-leg-name{color:var(--text-muted);font-weight:500}
+.tsb-more{margin-top:0.45rem;background:none;border:none;color:var(--accent);font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;padding:0.15rem 0}
+.tsb-more:hover{text-decoration:underline}
 .cmp-table{width:100%;border-collapse:collapse;font-size:0.86rem}
 .cmp-table th{text-align:right;font-size:0.74rem;color:var(--label);font-weight:700;padding:0.4rem 0.4rem;border-bottom:1px solid var(--border)}
 .cmp-table th:first-child{text-align:left}
@@ -3158,6 +3160,7 @@ let ovFormat = 'long';
 // Overview topic-card view: 'subject' | 'theme' | 'mode'. Shared by both topic
 // cards (share of uploads / share of views) so they switch together.
 let ovTopicView = 'subject';
+let ovTopicsExpanded = false; // topic cards: top 6 collapsed, top 12 expanded
 // Remembers what render() last drew (a month-key string or an aggregate object)
 // so view toggles (topic axis) can re-render the same report.
 let ovCurrent = null;
@@ -3446,15 +3449,23 @@ function render(m){
     const totCount = (view === 'subject') ? (d.n || tCount || byCount.reduce((s,t)=>s+t.count,0) || 1) : (tCount || byCount.reduce((s,t)=>s+t.count,0) || 1);
     const totViews = (view === 'subject') ? (d.tot || tViews || byViews.reduce((s,t)=>s+t.views,0) || 1) : (tViews || byViews.reduce((s,t)=>s+t.views,0) || 1);
     const OTHER_COLOR = 'var(--text-dim)';
-    // Build a single stacked bar + legend from the top-6 topics. Anything beyond
-    // the top 6 (and untagged output) is folded into a muted "Other" segment so
-    // the segments always sum to the month's full total.
+    const TAIL_COLOR = 'var(--subtext)';
+    // Build a single stacked bar + legend from the top topics (6 collapsed,
+    // 12 expanded via the Show-all toggle). The old single "Other" blob hid
+    // two very different things, so it is split honestly: "Smaller topics"
+    // (tagged tail beyond the cut) and — subjects view only, where the
+    // denominator is the month's full output — "No subject tagged" (streams
+    // and videos with no single nameable entity get theme+format only).
     const stacked = (items, total, valOf, unit, fmtVal) => {
-      const top = items.slice(0, 6);
+      const limit = ovTopicsExpanded ? 12 : 6;
+      const top = items.slice(0, limit);
       const topSum = top.reduce((s,t)=>s+valOf(t), 0);
-      const otherVal = Math.max(0, total - topSum);
+      const allSum = items.reduce((s,t)=>s+valOf(t), 0);
+      const tailVal = Math.max(0, allSum - topSum);
+      const restVal = Math.max(0, total - allSum);
       const segs = top.map(t => ({ name:t.name, color:t.color, val:valOf(t) }));
-      if (otherVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:otherVal, isOther:true });
+      if (tailVal > 0) segs.push({ name:'Smaller topics (' + (items.length - top.length) + ')', color:TAIL_COLOR, val:tailVal, isOther:true });
+      if (restVal > 0) segs.push({ name:(view === 'subject') ? 'No subject tagged' : 'Untagged', color:OTHER_COLOR, val:restVal, isOther:true });
       const pct = v => (v/total*100);
       const barSegs = segs.map(s =>
         `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${escapeHtml(s.name)}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
@@ -3466,7 +3477,10 @@ function render(m){
           <span class="tsb-leg-val">${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%</span>
         </li>`
       ).join('');
-      return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul></div>`;
+      const more = items.length > 6
+        ? `<button type="button" class="tsb-more" data-ovtopicsmore>${ovTopicsExpanded ? 'Show top 6 ▴' : 'Show all ' + Math.min(12, items.length) + ' ▾'}</button>`
+        : '';
+      return `<div class="tsb"><div class="tsb-bar">${barSegs}</div><ul class="tsb-legend">${legend}</ul>${more}</div>`;
     };
     return {
       uploads: stacked(byCount, totCount, t=>t.count, 'videos', v=>String(v)),
@@ -3810,6 +3824,13 @@ document.addEventListener('click', (e) => {
   const ovtv = e.target.closest('.ov-topic-tabs [data-ovtopicview]');
   if (ovtv) {
     ovTopicView = ovtv.dataset.ovtopicview;
+    if (ovCurrent != null && typeof render === 'function') render(ovCurrent);
+    return;
+  }
+  // Topic cards: top-6 / top-12 expander (both cards re-render together).
+  const ovtm = e.target.closest('[data-ovtopicsmore]');
+  if (ovtm) {
+    ovTopicsExpanded = !ovTopicsExpanded;
     if (ovCurrent != null && typeof render === 'function') render(ovCurrent);
     return;
   }
