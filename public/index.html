@@ -3469,7 +3469,7 @@ function render(m){
       const restVal = Math.max(0, total - taggedTotal);
       const segs = top.map(t => ({ name:t.name, color:t.color, val:valOf(t) }));
       if (tailVal > 0) segs.push({ name:'Smaller topics', color:TAIL_COLOR, val:tailVal, isOther:true });
-      if (restVal > 0) segs.push({ name:(view === 'subject') ? 'No subject tagged' : 'Untagged', color:OTHER_COLOR, val:restVal, isOther:true });
+      if (restVal > 0) segs.push({ name:'Other', color:OTHER_COLOR, val:restVal, isOther:true });
       const pct = v => (v/total*100);
       const barSegs = segs.map(s =>
         `<span class="tsb-seg" style="width:${pct(s.val).toFixed(2)}%;background:${s.color}" title="${escapeHtml(s.name)}: ${fmtVal(s.val)} ${unit} · ${Math.round(pct(s.val))}%"></span>`
