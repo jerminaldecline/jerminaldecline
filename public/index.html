@@ -7148,6 +7148,8 @@ function niceDurationAxis(minSec, maxSec) {
     if (anTimePreset === 'all') return;
     // Specific month (YYYY-MM): clamp to exactly that month.
     if (/^\d{4}-\d{2}$/.test(anTimePreset)) { monthlyData = monthlyData.filter(m => m.key === anTimePreset); return; }
+    // Whole calendar year (YYYY): clamp to that year's months.
+    if (/^\d{4}$/.test(anTimePreset)) { monthlyData = monthlyData.filter(m => m.key.slice(0, 4) === anTimePreset); return; }
     const cutoff = anCutoffMonth(anTimePreset, monthlyData.map(m=>m.key));
     if (cutoff) monthlyData = monthlyData.filter(m => m.key >= cutoff);
   }
@@ -9354,10 +9356,19 @@ function renderWindowList(startDate, endDate) {
     if (includeMonths) {
       try { if (typeof availableMonths === 'function') months = availableMonths(); } catch(e){}
     }
+    // The Analysis variant gets whole calendar years instead: a year window
+    // still gives every trend chart twelve data points, unlike the single
+    // months that were removed for collapsing charts to one bar.
+    let years = [];
+    if (!includeMonths) {
+      try { if (typeof availableMonths === 'function') years = [...new Set(availableMonths().map(m => m.slice(0, 4)))]; } catch(e){}
+    }
     const presetOpts = presets.map(([v,l]) => `<option value="${v}"${v===current?' selected':''}>${l}</option>`).join('');
     const sep = months.length ? `<option disabled>──────────</option>` : '';
     const monthOpts = months.map(mm => `<option value="${mm}"${mm===current?' selected':''}>${monthName(mm)}</option>`).join('');
-    sel.innerHTML = presetOpts + sep + monthOpts;
+    const sepY = years.length ? `<option disabled>──────────</option>` : '';
+    const yearOpts = years.map(y => `<option value="${y}"${y===current?' selected':''}>${y}</option>`).join('');
+    sel.innerHTML = presetOpts + sep + monthOpts + sepY + yearOpts;
   }
   window.__populatePeriodDropdowns = function(){
     const anCur = (typeof window.__getAnalysisPreset === 'function') ? window.__getAnalysisPreset() : (document.getElementById('anPeriodSel')?.value || 'all');
