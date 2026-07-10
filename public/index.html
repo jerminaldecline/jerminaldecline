@@ -326,6 +326,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .season-bar.neg{fill:var(--down)}
 .season-years-cap{margin:1rem 0 0.2rem;font-size:0.78rem;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.05em}
 .season-key{display:flex;flex-wrap:wrap;gap:0.4rem 1.1rem;align-items:center;margin:0.1rem 0 0.6rem;font-size:0.72rem;color:var(--subtext)}
+.season-measure-toggle{margin:0.2rem 0 0.85rem}
 .skey-item{display:inline-flex;align-items:center;gap:0.35rem}
 .skey-swatch{width:10px;height:10px;border-radius:2px}
 .skey-line{width:16px;border-top:2px solid var(--text);opacity:0.75}
@@ -2404,6 +2405,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
       </button>
       <div class="desc-pattern-body" id="seasonBody" hidden>
+        <div class="chart-metric-toggle season-measure-toggle" role="tablist" aria-label="Season measure">
+          <button type="button" data-season-measure="median" role="tab" aria-selected="true" class="active">Median views per video</button>
+          <button type="button" data-season-measure="total" role="tab" aria-selected="false">Total monthly views</button>
+        </div>
         <div class="an-chart-title-sub" id="seasonSub"></div>
         <div class="season-verdict" id="seasonVerdict"></div>
         <div class="season-key"><span class="skey-item"><span class="skey-line"></span>the channel's own normal (0%)</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>above normal</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>below normal</span></div>
@@ -3980,7 +3985,12 @@ function buildMonthlyData(scope){
     const tqId = entry[0];
     const vids = (ANALYTICS_DATASET.videos || []).filter(v => v.channelId === tqId && !v.isShort && v.views != null);
 
-    // Monthly median views per upload; in-progress month excluded.
+    // Month buckets of raw view counts; in-progress month excluded. The card
+    // renders from either measure — median views per upload (default: audience
+    // appetite per video, upload-rate-proof) or total monthly views (folds in
+    // his posting rate; summer looks even better there since July is his
+    // heaviest posting month). Tabs re-render; the midterms card below stays
+    // pinned to the median measure, the best-month card to totals.
     const nowKey = new Date().toISOString().slice(0, 7);
     const buckets = new Map();
     for (const v of vids) {
@@ -3991,126 +4001,135 @@ function buildMonthlyData(scope){
     }
     const med = a => { const s = [...a].sort((x, y) => x - y); const n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
     const MIN_N = 8; // months with fewer uploads are too noisy to score
-    const series = [...buckets.keys()].sort().map(m => ({ m, n: buckets.get(m).length, med: med(buckets.get(m)) }));
-
-    // Detrend: each month against the mean of its qualifying ±6 neighbours.
-    const ratios = [];
-    for (let i = 0; i < series.length; i++) {
-      if (series[i].n < MIN_N) continue;
-      const win = [];
-      for (let j = Math.max(0, i - 6); j <= Math.min(series.length - 1, i + 6); j++) {
-        if (j !== i && series[j].n >= MIN_N) win.push(series[j].med);
+    const buildSeries = valueOf => [...buckets.keys()].sort().map(m => ({ m, n: buckets.get(m).length, med: valueOf(buckets.get(m)) }));
+    // Detrend: each month vs the mean of its qualifying ±6 neighbours.
+    const buildRatios = ser => {
+      const out = [];
+      for (let i = 0; i < ser.length; i++) {
+        if (ser[i].n < MIN_N) continue;
+        const win = [];
+        for (let j = Math.max(0, i - 6); j <= Math.min(ser.length - 1, i + 6); j++) {
+          if (j !== i && ser[j].n >= MIN_N) win.push(ser[j].med);
+        }
+        if (win.length < 6) continue;
+        out.push({ y: ser[i].m.slice(0, 4), mo: +ser[i].m.slice(5), r: ser[i].med / (win.reduce((a, b) => a + b, 0) / win.length) });
       }
-      if (win.length < 6) continue;
-      ratios.push({ y: series[i].m.slice(0, 4), mo: +series[i].m.slice(5), r: series[i].med / (win.reduce((a, b) => a + b, 0) / win.length) });
-    }
+      return out;
+    };
+    // The median series/ratios also gate the card and drive the midterms card.
+    const series = buildSeries(a => med(a));
+    const ratios = buildRatios(series);
     if (ratios.length < 24) return; // not enough history to say anything honest
-
-    const months = [];
-    for (let mo = 1; mo <= 12; mo++) {
-      const rs = ratios.filter(x => x.mo === mo);
-      if (!rs.length) return; // every calendar month must be represented
-      months.push({ mo, dev: (rs.reduce((a, x) => a + x.r, 0) / rs.length - 1) * 100, yrs: rs.length });
-    }
-    const avg = a => a.reduce((s, x) => s + x, 0) / a.length;
-    const summer = avg(months.filter(x => x.mo >= 6 && x.mo <= 8).map(x => x.dev));
-    const rest = avg(months.filter(x => x.mo < 6 || x.mo > 8).map(x => x.dev));
-    const worst = [...months].sort((a, b) => a.dev - b.dev).slice(0, 2).sort((a, b) => a.mo - b.mo);
     const sgn = x => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(1) + '%';
-
-    // Copy — all data-driven so it stays honest as the history grows.
     const yearsSpan = series[0].m.slice(0, 4) + '–' + series[series.length - 1].m.slice(0, 4);
-    document.getElementById('seasonSub').textContent =
-      'He often blames quiet months on summer. So we checked every long-form video since ' + series[0].m.slice(0, 4) +
-      ' — ' + vids.length.toLocaleString() + ' of them. For each month of the year: did videos posted that month do better or worse than was usual for the channel around that time? Bars above the line mean better than usual; below means worse. Because each month is only compared with its own neighbours, the channel’s long decline doesn’t tilt the picture.';
-    const gap = summer - rest;
-    const juneRank = [...months].sort((a, b) => b.dev - a.dev).findIndex(x => x.mo === 6) + 1;
-    const verdictTxt = Math.abs(gap) < 5
-      ? 'not really — his summer months are about normal for him'
-      : (gap >= 5
-        ? 'the opposite — his summers actually run better than the rest of his year'
-        : 'partly — his summers run a little below the rest of his year');
-    const join = (worst[1].mo - worst[0].mo === 1) ? '–' : ' & ';
-    const slowMonths = MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1];
-    // Collapsed-state one-liner: the finding is readable without expanding.
-    document.getElementById('seasonQuote').textContent =
-      'Verdict: ' + verdictTxt + ' (' + sgn(gap) + ' vs the rest of the year). His genuinely slow months are ' +
-      slowMonths + '. Expand for the full chart.';
-    document.getElementById('seasonVerdict').innerHTML =
-      'Verdict: <strong>' + verdictTxt + '</strong> (summer overall: ' + sgn(gap) + ' compared with the rest of his year' +
-      (juneRank <= 3 ? ' — and June is his #' + juneRank + ' month' : '') + '). The months that genuinely run cold are ' +
-      slowMonths + ', at ' + sgn(worst[0].dev) + ' and ' + sgn(worst[1].dev) + ' versus usual.';
-    document.getElementById('seasonFoot').textContent =
-      'Method, for the curious: median views per upload; each month measured against the mean of its surrounding ±6 months, then averaged across the years. The year strip averages each year’s three summer months the same way. Months with fewer than ' + MIN_N + ' uploads, partial summers and the in-progress month excluded. TheQuartering main channel, long-form only.';
 
-    // Chart.
-    const W = 720, H = 300;
-    const P = { top: 40, right: 24, bottom: 64, left: 56 };
-    const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
-    const maxAbs = Math.max(5, Math.ceil(Math.max(...months.map(x => Math.abs(x.dev))) / 5) * 5);
-    const yFor = v => P.top + (1 - (v + maxAbs) / (2 * maxAbs)) * innerH;
-    const slot = innerW / 12;
-    const xFor = i => P.left + slot * i + slot / 2;
-    const barW = Math.min(34, slot * 0.62);
+    function renderSeasonMeasure(measure) {
+      const isTotal = measure === 'total';
+      const ser = isTotal ? buildSeries(a => a.reduce((x, y) => x + y, 0)) : series;
+      const rat = isTotal ? buildRatios(ser) : ratios;
+      const months = [];
+      for (let mo = 1; mo <= 12; mo++) {
+        const rs = rat.filter(x => x.mo === mo);
+        if (!rs.length) return;
+        months.push({ mo, dev: (rs.reduce((a, x) => a + x.r, 0) / rs.length - 1) * 100, yrs: rs.length });
+      }
+      const avg = a => a.reduce((s, x) => s + x, 0) / a.length;
+      const summer = avg(months.filter(x => x.mo >= 6 && x.mo <= 8).map(x => x.dev));
+      const rest = avg(months.filter(x => x.mo < 6 || x.mo > 8).map(x => x.dev));
+      const worst = [...months].sort((a, b) => a.dev - b.dev).slice(0, 2).sort((a, b) => a.mo - b.mo);
 
-    let grid = '', ylab = '';
-    for (let v = -maxAbs; v <= maxAbs; v += 5) {
-      const y = yFor(v);
-      grid += '<line class="chart-grid-line" x1="' + P.left + '" y1="' + y.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + y.toFixed(1) + '" />';
-      ylab += '<text class="chart-axis-label y" x="' + (P.left - 8) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
-    }
-    const zeroY = yFor(0);
-    const bandX = P.left + slot * 5, bandW = slot * 3;
-    const band = '<rect class="season-band" x="' + bandX.toFixed(1) + '" y="' + P.top + '" width="' + bandW.toFixed(1) + '" height="' + innerH + '" rx="6" />' +
-      '<text class="season-band-label" x="' + (bandX + bandW / 2).toFixed(1) + '" y="' + (P.top - 10) + '" text-anchor="middle">“the slow summer”</text>';
-    let bars = '', labels = '', xlab = '';
-    months.forEach((x, i) => {
-      const y = yFor(x.dev);
-      const top = Math.min(y, zeroY), bh = Math.max(2, Math.abs(zeroY - y));
-      bars += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (xFor(i) - barW / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>' + MON[x.mo - 1] + ': ' + sgn(x.dev) + ' vs the channel’s normal (' + x.yrs + ' years of data)</title></rect>';
-      const ly = x.dev >= 0 ? top - 6 : top + bh + 13;
-      labels += '<text class="chart-pt-label" x="' + xFor(i).toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
-      xlab += '<text class="chart-axis-label x" x="' + xFor(i).toFixed(1) + '" y="' + (H - 40) + '" text-anchor="middle">' + MON[x.mo - 1] + '</text>';
-    });
-    const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
-    const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
-    const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />';
-    const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
-    document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+      document.getElementById('seasonSub').textContent = isTotal
+        ? 'He often blames quiet months on summer. Same test on raw volume: did the videos posted in each month of the year collect more or fewer views in total than was usual for the channel around that time? Totals also fold in how many videos he posts — and summer is his heaviest posting season. Bars above the line mean better than usual; below means worse.'
+        : 'He often blames quiet months on summer. So we checked every long-form video since ' + series[0].m.slice(0, 4) +
+          ' — ' + vids.length.toLocaleString() + ' of them. For each month of the year: did videos posted that month do better or worse than was usual for the channel around that time? Bars above the line mean better than usual; below means worse. Because each month is only compared with its own neighbours, the channel’s long decline doesn’t tilt the picture.';
+      const gap = summer - rest;
+      const juneRank = [...months].sort((a, b) => b.dev - a.dev).findIndex(x => x.mo === 6) + 1;
+      const verdictTxt = Math.abs(gap) < 5
+        ? 'not really — his summer months are about normal for him'
+        : (gap >= 5
+          ? 'the opposite — his summers actually run better than the rest of his year'
+          : 'partly — his summers run a little below the rest of his year');
+      const join = (worst[1].mo - worst[0].mo === 1) ? '–' : ' & ';
+      const slowMonths = MON[worst[0].mo - 1] + join + MON[worst[1].mo - 1];
+      // Collapsed-state one-liner: the finding is readable without expanding.
+      document.getElementById('seasonQuote').textContent =
+        'Verdict: ' + verdictTxt + ' (' + sgn(gap) + ' vs the rest of the year). His genuinely slow months are ' +
+        slowMonths + '. Expand for the full chart.';
+      document.getElementById('seasonVerdict').innerHTML =
+        'Verdict: <strong>' + verdictTxt + '</strong> (summer overall: ' + sgn(gap) + ' compared with the rest of his year' +
+        (juneRank <= 3 ? ' — and June is his #' + juneRank + ' month' : '') + '). The months that genuinely run cold are ' +
+        slowMonths + ', at ' + sgn(worst[0].dev) + ' and ' + sgn(worst[1].dev) + ' versus usual.';
+      document.getElementById('seasonFoot').textContent =
+        'Method, for the curious: ' + (isTotal ? 'total views on each month’s long-form uploads' : 'median views per upload') +
+        '; each month measured against the mean of its surrounding ±6 months, then averaged across the years. The year strip averages each year’s three summer months the same way. Months with fewer than ' + MIN_N + ' uploads, partial summers and the in-progress month excluded. TheQuartering main channel, long-form only.';
 
-    // Year-by-year strip: the same era-normalised ratios, the three summer
-    // months averaged per year — the honest granularity for "was THIS summer
-    // slow?". (A single month of a single year is one data point; charting
-    // those invites reading noise as seasonality, so no per-year fingerprint.)
-    const byYear = [];
-    for (const y of [...new Set(ratios.map(x => x.y))]) {
-      const sm = ratios.filter(x => x.y === y && x.mo >= 6 && x.mo <= 8);
-      if (sm.length < 3) continue; // partial summers (first/last year) sit out
-      byYear.push({ y, dev: (sm.reduce((a, x) => a + x.r, 0) / sm.length - 1) * 100 });
-    }
-    if (byYear.length >= 4) {
-      document.getElementById('seasonYearsCap').textContent = 'Summer, year by year — vs that year’s own normal';
-      const W2 = 720, H2 = 150;
-      const P2 = { top: 26, right: 24, bottom: 26, left: 56 };
-      const iw = W2 - P2.left - P2.right, ih = H2 - P2.top - P2.bottom;
-      const mx = Math.max(5, Math.ceil(Math.max(...byYear.map(x => Math.abs(x.dev))) / 5) * 5);
-      const y2 = v => P2.top + (1 - (v + mx) / (2 * mx)) * ih;
-      const sl = iw / byYear.length;
-      const bw = Math.min(30, sl * 0.5);
-      const z2 = y2(0);
-      let g2 = '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z2.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z2.toFixed(1) + '" />' +
-        '<text class="chart-axis-label" x="' + (P2.left - 8) + '" y="' + (z2 + 4).toFixed(1) + '" text-anchor="end">0%</text>';
-      byYear.forEach((x, i) => {
-        const cx = P2.left + sl * i + sl / 2;
-        const yy = y2(x.dev);
-        const top = Math.min(yy, z2), bh = Math.max(2, Math.abs(z2 - yy));
-        g2 += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>Summer ' + x.y + ': ' + sgn(x.dev) + ' vs that year’s normal</title></rect>';
-        const ly = x.dev >= 0 ? top - 5 : top + bh + 12;
-        g2 += '<text class="chart-pt-label" x="' + cx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
-        g2 += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H2 - 8) + '" text-anchor="middle">' + x.y + '</text>';
+      const W = 720, H = 300;
+      const P = { top: 40, right: 24, bottom: 64, left: 56 };
+      const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
+      const maxAbs = Math.max(5, Math.ceil(Math.max(...months.map(x => Math.abs(x.dev))) / 5) * 5);
+      const yFor = v => P.top + (1 - (v + maxAbs) / (2 * maxAbs)) * innerH;
+      const slot = innerW / 12;
+      const xFor = i => P.left + slot * i + slot / 2;
+      const barW = Math.min(34, slot * 0.62);
+
+      let grid = '', ylab = '';
+      for (let v = -maxAbs; v <= maxAbs + 1e-9; v += 5) {
+        const y = yFor(v);
+        grid += '<line class="chart-grid-line" x1="' + P.left + '" y1="' + y.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + y.toFixed(1) + '" />';
+        ylab += '<text class="chart-axis-label y" x="' + (P.left - 8) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end">' + (v > 0 ? '+' : '') + v + '%</text>';
+      }
+      const zeroY = yFor(0);
+      const bandX = P.left + slot * 5, bandW = slot * 3;
+      const band = '<rect class="season-band" x="' + bandX.toFixed(1) + '" y="' + P.top + '" width="' + bandW.toFixed(1) + '" height="' + innerH + '" rx="6" />' +
+        '<text class="season-band-label" x="' + (bandX + bandW / 2).toFixed(1) + '" y="' + (P.top - 10) + '" text-anchor="middle">“the slow summer”</text>';
+      let bars = '', labels = '', xlab = '';
+      months.forEach((x, i) => {
+        const y = yFor(x.dev);
+        const top = Math.min(y, zeroY), bh = Math.max(2, Math.abs(zeroY - y));
+        bars += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (xFor(i) - barW / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>' + MON[x.mo - 1] + ': ' + sgn(x.dev) + ' vs the channel’s normal (' + x.yrs + ' years of data)</title></rect>';
+        const ly = x.dev >= 0 ? top - 6 : top + bh + 13;
+        labels += '<text class="chart-pt-label" x="' + xFor(i).toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
+        xlab += '<text class="chart-axis-label x" x="' + xFor(i).toFixed(1) + '" y="' + (H - 40) + '" text-anchor="middle">' + MON[x.mo - 1] + '</text>';
       });
-      document.getElementById('seasonYears').innerHTML = g2;
+      const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
+      const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
+      const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />';
+      const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
+      document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+
+      // Year-by-year strip on the same measure.
+      const byYear = [];
+      for (const y of [...new Set(rat.map(x => x.y))]) {
+        const sm = rat.filter(x => x.y === y && x.mo >= 6 && x.mo <= 8);
+        if (sm.length < 3) continue; // partial summers (first/last year) sit out
+        byYear.push({ y, dev: (sm.reduce((a, x) => a + x.r, 0) / sm.length - 1) * 100 });
+      }
+      if (byYear.length >= 4) {
+        document.getElementById('seasonYearsCap').textContent = 'Summer, year by year — vs that year’s own normal';
+        const W2 = 720, H2 = 150;
+        const P2 = { top: 26, right: 24, bottom: 26, left: 56 };
+        const iw = W2 - P2.left - P2.right, ih = H2 - P2.top - P2.bottom;
+        const mx = Math.max(5, Math.ceil(Math.max(...byYear.map(x => Math.abs(x.dev))) / 5) * 5);
+        const y2 = v => P2.top + (1 - (v + mx) / (2 * mx)) * ih;
+        const sl = iw / byYear.length;
+        const bw = Math.min(30, sl * 0.5);
+        const z2 = y2(0);
+        let g2 = '<line class="chart-bar-ref-line" x1="' + P2.left + '" y1="' + z2.toFixed(1) + '" x2="' + (W2 - P2.right) + '" y2="' + z2.toFixed(1) + '" />' +
+          '<text class="chart-axis-label" x="' + (P2.left - 8) + '" y="' + (z2 + 4).toFixed(1) + '" text-anchor="end">0%</text>';
+        byYear.forEach((x, i) => {
+          const cx = P2.left + sl * i + sl / 2;
+          const yy = y2(x.dev);
+          const top = Math.min(yy, z2), bh = Math.max(2, Math.abs(z2 - yy));
+          g2 += '<rect class="season-bar ' + (x.dev >= 0 ? 'pos' : 'neg') + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + bh.toFixed(1) + '"><title>Summer ' + x.y + ': ' + sgn(x.dev) + ' vs that year’s normal</title></rect>';
+          const ly = x.dev >= 0 ? top - 5 : top + bh + 12;
+          g2 += '<text class="chart-pt-label" x="' + cx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
+          g2 += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H2 - 8) + '" text-anchor="middle">' + x.y + '</text>';
+        });
+        document.getElementById('seasonYears').innerHTML = g2;
+      }
     }
+    renderSeasonMeasure('median');
+
     // ===== Companion card: "the midterms will save the business" ===========
     // Same era-normalised ratios; autumn (Sep–Nov) averaged per year, election
     // years marked, non-election autumns shown as the control. The current
@@ -4251,6 +4270,22 @@ function buildMonthlyData(scope){
       document.getElementById('bestMonthChart').innerHTML = out;
       bmCard.hidden = false;
     })();
+
+    // Measure tabs — re-render the season card on the chosen measure.
+    let seasonMeasure = 'median';
+    document.querySelectorAll('[data-season-measure]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.dataset.seasonMeasure;
+        if (next === seasonMeasure) return;
+        seasonMeasure = next;
+        document.querySelectorAll('[data-season-measure]').forEach(b => {
+          const on = b.dataset.seasonMeasure === next;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', String(on));
+        });
+        renderSeasonMeasure(next);
+      });
+    });
 
     // Collapse/expand wiring — static markup, wired exactly once (done-guarded).
     for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody'], ['bestMonthToggle', 'bestMonthBody']]) {
