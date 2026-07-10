@@ -3527,7 +3527,7 @@ function render(m){
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
         <div class="hero-num rev">${revStr}</div>
         <div class="hero-sub">${d.srevhi > 0
-          ? `<span class="nowrap">long-form ${money(d.lrevlo)} – ${money(d.lrevhi)}</span> · <span class="nowrap">Shorts ${money(d.srevlo)} – ${money(d.srevhi)}</span>`
+          ? `<div>long-form ${money(d.lrevlo)} – ${money(d.lrevhi)}</div><div>Shorts ${money(d.srevlo)} – ${money(d.srevhi)}</div>`
           : 'all long-form — no Shorts this period'}</div>
         ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
       </div>
