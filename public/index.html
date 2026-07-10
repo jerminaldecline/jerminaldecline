@@ -321,7 +321,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .season-foot{margin-top:0.65rem;font-size:0.72rem;color:var(--subtext);line-height:1.45}
 .season-band{fill:var(--accent-2-bg)}
 .season-band-label{fill:var(--accent-2);font-size:11px;font-weight:700}
-.season-slump-label{fill:var(--down);font-size:10.5px;font-weight:700}
 .season-bar.pos{fill:var(--up)}
 .season-bar.neg{fill:var(--down)}
 .season-years-cap{margin:1rem 0 0.2rem;font-size:0.78rem;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.05em}
@@ -4091,11 +4090,9 @@ function buildMonthlyData(scope){
         labels += '<text class="chart-pt-label" x="' + xFor(i).toFixed(1) + '" y="' + ly.toFixed(1) + '">' + sgn(x.dev) + '</text>';
         xlab += '<text class="chart-axis-label x" x="' + xFor(i).toFixed(1) + '" y="' + (H - 40) + '" text-anchor="middle">' + MON[x.mo - 1] + '</text>';
       });
-      const slumpX = (xFor(worst[0].mo - 1) + xFor(worst[1].mo - 1)) / 2;
-      const slump = '<text class="season-slump-label" x="' + slumpX.toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">↑ the actual slump</text>';
       const zero = '<line class="chart-bar-ref-line" x1="' + P.left + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - P.right) + '" y2="' + zeroY.toFixed(1) + '" />';
       const attribution = '<text class="chart-attribution" x="' + (W - P.right) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · ' + yearsSpan + ' · jerminaldecline.com</text>';
-      document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + slump + ylab + attribution;
+      document.getElementById('seasonChart').innerHTML = band + grid + zero + bars + labels + xlab + ylab + attribution;
 
       // Year-by-year strip on the same measure.
       const byYear = [];
