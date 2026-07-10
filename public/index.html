@@ -3851,6 +3851,15 @@ const AN_RPM_PESSIMISTIC = {
   longFormShort: { low: 0.43, high: 0.85 },
   shorts: { low: 0.02, high: 0.02 }
 };
+// The creator's own on-camera figures ("WHAT DOES YOUTUBE PAY?", his vlog
+// channel, 9 Jul 2026): "$1,000, $2,000" per million long-form views — a
+// $1–2 RPM, offered without a tier split, so both long-form tiers carry it —
+// and "about $30" per million Shorts views, a flat $0.03 RPM.
+const AN_RPM_SELF = {
+  longFormMidRoll: { low: 1.0, high: 2.0 },
+  longFormShort: { low: 1.0, high: 2.0 },
+  shorts: { low: 0.03, high: 0.03 }
+};
 const AN_MID_ROLL_THRESHOLD_SEC = 480;
 
 function anSummarise(videos) {
@@ -3883,6 +3892,9 @@ function anSummarise(videos) {
   const revPessLow = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
   const revPessHigh = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
   const revPessMid = (revPessLow + revPessHigh) / 2;
+  const revSelfLow = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.low + (shortViews/1000)*AN_RPM_SELF.shorts.low;
+  const revSelfHigh = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.high + (shortViews/1000)*AN_RPM_SELF.shorts.high;
+  const revSelfMid = (revSelfLow + revSelfHigh) / 2;
   const minLikeRateAgeMs = 3 * 86400 * 1000;
   const nowTs = Date.now();
   const eligibleRates = [];
@@ -3906,7 +3918,7 @@ function anSummarise(videos) {
     shortLikeRate: shortViews ? shortLikes / shortViews : 0,
     longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
     medianDuration, longViewsMedian, longFormDurations: durations.length, longFormTotalSeconds,
-    revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid,
+    revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid, revSelfLow, revSelfHigh, revSelfMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
     totalAvg() { return this.totalCount() ? this.totalViews() / this.totalCount() : 0; }
@@ -6795,11 +6807,12 @@ function renderRevenueChart(chartData, inProgressMonth, options = {}) {
   if (tooltip) tooltip.style.display = 'none';
 
   // Scenario accessors — the chart plots whichever scenario is active in
-  // the panel. Pessimistic uses revPess* fields, optimistic uses rev*.
-  const usePess = revenueScenario === 'pessimistic';
-  const rLow = m => (usePess ? m.curr.revPessLow : m.curr.revLow) || 0;
-  const rHigh = m => (usePess ? m.curr.revPessHigh : m.curr.revHigh) || 0;
-  const rMid = m => (usePess ? m.curr.revPessMid : m.curr.revMid) || 0;
+  // the panel: revPess* (pessimistic), revSelf* (the creator's own figures),
+  // or rev* (optimistic).
+  const scen = revenueScenario;
+  const rLow = m => (scen === 'pessimistic' ? m.curr.revPessLow : scen === 'self' ? m.curr.revSelfLow : m.curr.revLow) || 0;
+  const rHigh = m => (scen === 'pessimistic' ? m.curr.revPessHigh : scen === 'self' ? m.curr.revSelfHigh : m.curr.revHigh) || 0;
+  const rMid = m => (scen === 'pessimistic' ? m.curr.revPessMid : scen === 'self' ? m.curr.revSelfMid : m.curr.revMid) || 0;
 
   // Hide the chart entirely for a single completed month (with or without an
   // in-progress month) — a line/band with only one data point is meaningless
@@ -7709,21 +7722,23 @@ function niceDurationAxis(minSec, maxSec) {
       buckets.longFormShort.count++;
     }
   }
-  function bucketRevenue(b, rpm, rpmPess) {
+  function bucketRevenue(b, rpm, rpmPess, rpmSelf) {
     return {
       ...b,
       low: (b.views / 1000) * rpm.low,
       high: (b.views / 1000) * rpm.high,
       pessLow: (b.views / 1000) * rpmPess.low,
       pessHigh: (b.views / 1000) * rpmPess.high,
+      selfLow: (b.views / 1000) * rpmSelf.low,
+      selfHigh: (b.views / 1000) * rpmSelf.high,
       rpmLow: rpm.low,
       rpmHigh: rpm.high
     };
   }
   return {
-    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, AN_RPM.longFormMidRoll, AN_RPM_PESSIMISTIC.longFormMidRoll),
-    longFormShort: bucketRevenue(buckets.longFormShort, AN_RPM.longFormShort, AN_RPM_PESSIMISTIC.longFormShort),
-    shorts: bucketRevenue(buckets.shorts, AN_RPM.shorts, AN_RPM_PESSIMISTIC.shorts),
+    longFormMidRoll: bucketRevenue(buckets.longFormMidRoll, AN_RPM.longFormMidRoll, AN_RPM_PESSIMISTIC.longFormMidRoll, AN_RPM_SELF.longFormMidRoll),
+    longFormShort: bucketRevenue(buckets.longFormShort, AN_RPM.longFormShort, AN_RPM_PESSIMISTIC.longFormShort, AN_RPM_SELF.longFormShort),
+    shorts: bucketRevenue(buckets.shorts, AN_RPM.shorts, AN_RPM_PESSIMISTIC.shorts, AN_RPM_SELF.shorts),
     totalLow: 0,
     totalHigh: 0,
     totalViews: 0
@@ -7759,6 +7774,8 @@ function niceDurationAxis(minSec, maxSec) {
   rev.totalHigh = rev.longFormMidRoll.high + rev.longFormShort.high + rev.shorts.high;
   rev.totalPessLow = rev.longFormMidRoll.pessLow + rev.longFormShort.pessLow + rev.shorts.pessLow;
   rev.totalPessHigh = rev.longFormMidRoll.pessHigh + rev.longFormShort.pessHigh + rev.shorts.pessHigh;
+  rev.totalSelfLow = rev.longFormMidRoll.selfLow + rev.longFormShort.selfLow + rev.shorts.selfLow;
+  rev.totalSelfHigh = rev.longFormMidRoll.selfHigh + rev.longFormShort.selfHigh + rev.shorts.selfHigh;
   rev.totalViews = rev.longFormMidRoll.views + rev.longFormShort.views + rev.shorts.views;
 
   if (rev.totalViews === 0) { panel.hidden = true; return; }
@@ -7779,16 +7796,17 @@ function niceDurationAxis(minSec, maxSec) {
   // Scenario-aware accessors. 'pessimistic' uses the pess* figures and
   // AN_RPM_PESSIMISTIC labels; 'optimistic' uses the published-rate figures.
   const isPess = revenueScenario === 'pessimistic';
-  const activeRPM = isPess ? AN_RPM_PESSIMISTIC : AN_RPM;
-  const bucketLow = b => isPess ? b.pessLow : b.low;
-  const bucketHigh = b => isPess ? b.pessHigh : b.high;
-  const activeTotalLow = isPess ? rev.totalPessLow : rev.totalLow;
-  const activeTotalHigh = isPess ? rev.totalPessHigh : rev.totalHigh;
+  const isSelf = revenueScenario === 'self';
+  const activeRPM = isPess ? AN_RPM_PESSIMISTIC : isSelf ? AN_RPM_SELF : AN_RPM;
+  const bucketLow = b => isPess ? b.pessLow : isSelf ? b.selfLow : b.low;
+  const bucketHigh = b => isPess ? b.pessHigh : isSelf ? b.selfHigh : b.high;
+  const activeTotalLow = isPess ? rev.totalPessLow : isSelf ? rev.totalSelfLow : rev.totalLow;
+  const activeTotalHigh = isPess ? rev.totalPessHigh : isSelf ? rev.totalSelfHigh : rev.totalHigh;
 
   function row(label, bucket, tier) {
     if (bucket.count === 0) return '';
     const rpm = activeRPM[tier];
-    const sublabel = `RPM $${rpm.low.toFixed(2)}-$${rpm.high.toFixed(2)}`;
+    const sublabel = rpm.low === rpm.high ? `RPM $${rpm.low.toFixed(2)}` : `RPM $${rpm.low.toFixed(2)}-$${rpm.high.toFixed(2)}`;
     return `
       <tr>
         <td>
@@ -7800,11 +7818,16 @@ function niceDurationAxis(minSec, maxSec) {
     `;
   }
 
-  const summary = `${fmtUSD(activeTotalLow, true)} – ${fmtUSD(activeTotalHigh, true)} over ${rangeLabel()} (${isPess ? 'Pessimistic' : 'Optimistic'})`;
+  const summary = `${fmtUSD(activeTotalLow, true)} – ${fmtUSD(activeTotalHigh, true)} over ${rangeLabel()} (${isPess ? 'Pessimistic' : isSelf ? 'Self-reported' : 'Optimistic'})`;
 
   // Per-scenario explanation shown directly under the breakdown table.
   // Kept punchy — the shared methodology details live in the footnote below.
-  const scenarioExplanation = isPess
+  const scenarioExplanation = isSelf
+    ? `<strong>Self-reported scenario.</strong> The creator's own on-camera figures, applied to our
+       view counts: “$1,000, $2,000” per million long-form views ($1–$2 RPM — he offered no tier
+       split, so both long-form rows carry it) and “about $30” per million Shorts views (a flat
+       $0.03 RPM). Source linked in the footnote. His numbers, our arithmetic.`
+    : isPess
     ? `<strong>Pessimistic scenario.</strong> Stacks three drags specific to this channel:
        an audience demographic with the web's highest ad-block rates (blocked views count
        as views but earn $0); routine limited-ads ("yellow icon") treatment on culture-war
@@ -7823,7 +7846,7 @@ function niceDurationAxis(minSec, maxSec) {
       <div class="revenue-panel-header">
         <div class="revenue-panel-header-left">
           <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
-          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Two scenarios available — expand to switch and see the assumptions behind each.">${summary}</span>
+          <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Three scenarios available — including one built from the creator's own stated figures. Expand to switch.">${summary}</span>
         </div>
         <span class="revenue-panel-caret" aria-hidden="true"></span>
       </div>
@@ -7833,7 +7856,8 @@ function niceDurationAxis(minSec, maxSec) {
            visual consistency with the main chart's tabs. -->
       <div class="chart-metric-toggle revenue-scenario-toggle" role="tablist" aria-label="Revenue scenario">
         <button type="button" data-revenue-scenario="pessimistic" role="tab" aria-selected="${isPess}" class="${isPess ? 'active' : ''}">Pessimistic</button>
-        <button type="button" data-revenue-scenario="optimistic" role="tab" aria-selected="${!isPess}" class="${isPess ? '' : 'active'}">Optimistic</button>
+        <button type="button" data-revenue-scenario="optimistic" role="tab" aria-selected="${!isPess && !isSelf}" class="${!isPess && !isSelf ? 'active' : ''}">Optimistic</button>
+        <button type="button" data-revenue-scenario="self" role="tab" aria-selected="${isSelf}" class="${isSelf ? 'active' : ''}">Self-reported</button>
       </div>
       <!-- Revenue chart — sized to the panel width, sits above the breakdown
            table as the dramatic visual that sells the story. -->
