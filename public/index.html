@@ -4191,8 +4191,8 @@ function buildMonthlyData(scope){
         const prevMax = Math.max(...totals.slice(i - 12, i).map(x => x.v));
         if (totals[i].v >= prevMax) { lastTrue = totals[i].m; break; }
       }
-      document.getElementById('bestMonthSub').textContent =
-        'In early July 2026 he called June “my best month in almost a year”. This card re-runs that check every month: the most recent complete month, ranked against the twelve before it by total views on his long-form uploads. A true best month needs the tallest bar.';
+      document.getElementById('bestMonthSub').innerHTML =
+        'In early July 2026 he called June “my best month in almost a year” (<a href="https://www.youtube.com/watch?v=ix6KhrLKHbc" target="_blank" rel="noopener">source: “WHAT DOES YOUTUBE PAY?”, his vlog channel, 9 Jul 2026</a>). This card re-runs that check every month: the most recent complete month, ranked against the twelve before it by total views on his long-form uploads. A true best month needs the tallest bar.';
       const isTrue = rank === 1;
       document.getElementById('bestMonthQuote').textContent = isTrue
         ? 'Verdict: for once, true — ' + lbl(target.m) + ' really was his best month of the trailing year. Expand for the bars.'
