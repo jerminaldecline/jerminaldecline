@@ -310,7 +310,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.stat-row>.stat,.stat-row>.stat.stat-sm{grid-column:auto}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.mood-label{display:none}.util-cluster .mood-btn{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
+@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.stat-row>.stat,.stat-row>.stat.stat-sm{grid-column:auto}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.bmac-label{display:none}.util-social.bmac{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -329,6 +329,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .skey-item{display:inline-flex;align-items:center;gap:0.35rem}
 .skey-swatch{width:10px;height:10px;border-radius:2px}
 .skey-line{width:16px;border-top:2px solid var(--text);opacity:0.75}
+.skey-swatch.bm-rest{background:var(--text-dim);opacity:0.5}
+.bm-bar{fill:var(--text-dim);opacity:0.5}
+.bm-bar.best{fill:var(--up);opacity:1}
+.bm-bar.claimed{fill:var(--accent);opacity:1}
+#bestMonthChart{width:100%;height:auto;display:block}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
 .midterm-kind{fill:var(--accent);font-size:9.5px;font-weight:800;letter-spacing:0.05em}
@@ -2090,9 +2095,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .fw-lbl{font-size:0.6rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;font-weight:600}
 .fw-div{width:1px;align-self:stretch;background:var(--border);margin:0.15rem 0.45rem}
 .fw-message{font-size:0.8rem;font-style:italic;color:var(--subtext);text-align:center;line-height:1.3}
-.util-cluster .mood-btn{height:32px;padding:0 0.7rem 0 0.55rem;font-size:0.78rem;font-weight:700;gap:0.35rem;white-space:nowrap;box-shadow:none}
-.util-cluster .mood-btn:hover{transform:none;box-shadow:none}
-.util-cluster .mood-btn .mood-icon{font-size:0.9rem}
+.util-stack{display:flex;flex-direction:column;gap:0.3rem;align-items:stretch}
+.mood-pair{display:flex;gap:0.3rem}
+.mood-pair .mood-btn{flex:1 1 0;height:24px;padding:0;justify-content:center;font-size:0.78rem;box-shadow:none}
+.mood-pair .mood-btn:hover{transform:none;box-shadow:none}
+.mood-pair .mood-btn .mood-icon{font-size:0.85rem}
+.mood-pair .mood-label{display:none}
 /* Month quick-jump segmented control (Overview controls row) */
 .month-quick{display:inline-flex;gap:0.3rem;flex:0 0 auto}
 .mq-btn{appearance:none;border:1px solid var(--accent);border-radius:7px;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.04rem;padding:0.28rem 0.7rem;line-height:1.12;text-align:center;flex:1 1 0;min-width:0}
@@ -2279,12 +2287,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.241-.152-.143-.196-.366-.231-.572-.065-.378-.125-.756-.192-1.133-.057-.325-.102-.69-.25-.987-.195-.4-.597-.634-.996-.788a5.723 5.723 0 00-.626-.194c-1-.263-2.05-.36-3.077-.416a25.834 25.834 0 00-3.7.062c-.915.083-1.88.184-2.75.5-.318.116-.646.256-.888.501-.297.302-.393.77-.177 1.146.154.267.415.456.692.58.36.162.737.284 1.123.366 1.075.238 2.189.331 3.287.37 1.218.05 2.437.01 3.65-.118.299-.033.598-.073.896-.119.352-.054.578-.513.474-.834-.124-.383-.457-.531-.834-.473-.466.074-.96.108-1.382.146-1.177.08-2.358.082-3.536.006a22.228 22.228 0 01-1.157-.107c-.086-.01-.18-.025-.258-.036-.243-.036-.484-.08-.724-.13-.111-.027-.111-.185 0-.212h.005c.277-.06.557-.108.838-.147h.002c.131-.009.263-.032.394-.048a25.076 25.076 0 013.426-.12c.674.019 1.347.067 2.017.144l.228.031c.267.04.533.088.798.145.392.085.895.113 1.07.542.055.137.08.288.111.431l.319 1.484a.237.237 0 01-.199.284h-.003c-.037.006-.075.01-.112.015a36.704 36.704 0 01-4.743.295 37.059 37.059 0 01-4.699-.304c-.14-.017-.293-.042-.417-.06-.326-.048-.649-.108-.973-.161-.393-.065-.768-.032-1.123.161-.29.16-.527.404-.675.701-.154.316-.199.66-.267 1.004-.069.346-.176.708-.135 1.061.087.753.613 1.365 1.37 1.502a39.69 39.69 0 0011.343.376.483.483 0 01.535.53l-.071.697-1.018 9.907c-.041.41-.047.832-.125 1.237-.122.637-.553 1.028-1.182 1.171-.577.131-1.165.2-1.756.205-.656.004-1.31-.025-1.966-.022-.699.004-1.556-.06-2.095-.58-.475-.458-.54-1.174-.605-1.793l-.731-7.013-.322-3.094c-.037-.351-.286-.695-.678-.678-.336.015-.718.3-.678.679l.228 2.185.949 9.112c.147 1.344 1.174 2.068 2.446 2.272.742.12 1.503.144 2.257.156.966.016 1.942.053 2.892-.122 1.408-.258 2.465-1.198 2.616-2.657.34-3.332.683-6.663 1.024-9.995l.215-2.087a.484.484 0 01.39-.426c.402-.078.787-.212 1.074-.518.455-.488.546-1.124.385-1.766zm-1.478.772c-.145.137-.363.201-.578.233-2.416.359-4.866.54-7.308.46-1.748-.06-3.477-.254-5.207-.498-.17-.024-.353-.055-.47-.18-.22-.236-.111-.71-.054-.995.052-.26.152-.609.463-.646.484-.057 1.046.148 1.526.22.577.088 1.156.159 1.737.212 2.48.226 5.002.19 7.472-.14.45-.06.899-.13 1.345-.21.399-.072.84-.206 1.08.206.166.281.188.657.162.974a.544.544 0 01-.169.283zm-9.728 3.95l.005-.005c.003-.003.005-.005.008-.005l-.013.01z"/></svg>
         <span class="bmac-label">Buy me a coffee</span>
       </a>
-      <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false" title="Party mode"><span class="mood-icon">🎉</span><span class="mood-label">Party mode</span></button>
-      <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false" title="Funeral mode"><span class="mood-icon">⚰️</span><span class="mood-label">Funeral mode</span></button>
+      <div class="util-stack">
       <div class="theme-seg" id="themeSeg" role="group" aria-label="Colour theme">
         <button type="button" class="theme-seg-btn" data-theme-choice="system" title="Match system" aria-label="Match system"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 5h18v11H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8 20h8"/></svg><span class="theme-lbl">System</span></button>
         <button type="button" class="theme-seg-btn" data-theme-choice="light" title="Light mode" aria-label="Light mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg><span class="theme-lbl">Light</span></button>
         <button type="button" class="theme-seg-btn" data-theme-choice="dark" title="Dark mode" aria-label="Dark mode"><svg class="theme-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg><span class="theme-lbl">Dark</span></button>
+      </div>
+      <div class="mood-pair">
+        <button class="mood-btn mood-party" id="moodParty" type="button" aria-pressed="false" title="Party mode"><span class="mood-icon">🎉</span><span class="mood-label">Party mode</span></button>
+        <button class="mood-btn mood-funeral" id="moodFuneral" type="button" aria-pressed="false" title="Funeral mode"><span class="mood-icon">⚰️</span><span class="mood-label">Funeral mode</span></button>
+      </div>
       </div>
       <a class="util-social" href="https://x.com/JerminalDecline" target="_blank" rel="noopener" title="@JerminalDecline on X" aria-label="Follow on X">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -2417,6 +2429,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="season-key"><span class="skey-item"><span class="skey-line"></span>the channel's own normal (0%)</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>above normal</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>below normal</span></div>
         <svg id="midtermChart" viewBox="0 0 720 280" role="img" aria-label="Autumn performance by year, election years marked"></svg>
         <div class="season-foot" id="midtermFoot"></div>
+      </div>
+    </div>
+    <!-- Claim check #3: "my best month in almost a year" (claimed July 2026,
+         about June). Re-evaluated monthly by the seasonCard IIFE: the latest
+         complete month ranked against the twelve before it. -->
+    <div class="desc-pattern-panel season-card" id="bestMonthCard" hidden>
+      <button type="button" class="desc-pattern-toggle" id="bestMonthToggle" aria-expanded="false" aria-controls="bestMonthBody">
+        <span class="desc-pattern-eyebrow">Claim check</span>
+        <span class="desc-pattern-headline">“My best month in almost a year” — checked</span>
+        <span class="desc-pattern-quote" id="bestMonthQuote"></span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="bestMonthBody" hidden>
+        <div class="an-chart-title-sub" id="bestMonthSub"></div>
+        <div class="season-verdict" id="bestMonthVerdict"></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--accent)"></span>the month he called his best</span><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>his actual best</span><span class="skey-item"><span class="skey-swatch bm-rest"></span>the other months</span></div>
+        <svg id="bestMonthChart" viewBox="0 0 720 260" role="img" aria-label="Long-form views by month, latest 13 months"></svg>
+        <div class="season-foot" id="bestMonthFoot"></div>
       </div>
     </div>
   </section>
@@ -2681,7 +2711,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 })();
 
 /* ---------- data layer: fetch live JSON, compute per-scope/per-month ---------- */
-const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60] };
+const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.07] };
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
@@ -2829,8 +2859,17 @@ async function loadAndCompute(){
         comments: vs.reduce((s,v)=>s+(v.comments||0),0),
         avglen: durs.length?Math.round(median(durs)/60*10)/10:0,
         runtime: durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/3600*10)/10:0,
-        revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
-        revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
+        // Revenue: revlo/revhi are the TOTAL (long-form + Shorts) — the hero
+        // headline, its deltas and the report table all read these, so history
+        // stays comparable (every month recomputes on the same model). The
+        // l/s split feeds the hero card's breakdown line. Shorts use the same
+        // $0.02–0.07 RPM band the Analysis revenue panel publishes.
+        lrevlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
+        lrevhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
+        srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
+        srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
+        get revlo(){ return this.lrevlo + this.srevlo; },
+        get revhi(){ return this.lrevhi + this.srevhi; },
         top, topvid, debate, worstvid, shorts, vlist,
         topicsByCount, topicsByViews, taggedCount, taggedViews,
         themesByCount, themesByViews, themesTaggedCount, themesTaggedViews,
@@ -3483,6 +3522,9 @@ function render(m){
       <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
         <div class="hero-num rev">${revStr}</div>
+        <div class="hero-sub">${d.srevhi > 0
+          ? `<span class="nowrap">long-form ${money(d.lrevlo)} – ${money(d.lrevhi)}</span> · <span class="nowrap">Shorts ${money(d.srevlo)} – ${money(d.srevhi)}</span>`
+          : 'all long-form — no Shorts this period'}</div>
         ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
       </div>
     </div>
@@ -4132,8 +4174,74 @@ function buildMonthlyData(scope){
       mtCard.hidden = false;
     })();
 
+    // ===== Claim check #3: "my best month in almost a year" ================
+    // (claimed early July 2026, about June.) Re-run every month: the latest
+    // complete month, ranked against the twelve before it on total long-form
+    // views. Honest in both directions — a month that genuinely tops its
+    // trailing year gets a "true" verdict.
+    (function(){
+      const bmCard = document.getElementById('bestMonthCard');
+      if (!bmCard) return;
+      const totals = [...buckets.keys()].sort().map(m => ({ m, v: buckets.get(m).reduce((a, b) => a + b, 0) }));
+      if (totals.length < 13) return;
+      const win = totals.slice(-13);
+      const target = win[win.length - 1];
+      const rank = 1 + win.filter(x => x.v > target.v).length;
+      const best = win.reduce((a, b) => b.v > a.v ? b : a);
+      const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(Math.round(n));
+      const ord = n => n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th';
+      const lbl = m => MON[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+      // The most recent month in the whole history that truly topped its
+      // trailing twelve — for the "when was the last real one?" kicker.
+      let lastTrue = null;
+      for (let i = totals.length - 1; i >= 12; i--) {
+        const prevMax = Math.max(...totals.slice(i - 12, i).map(x => x.v));
+        if (totals[i].v >= prevMax) { lastTrue = totals[i].m; break; }
+      }
+      document.getElementById('bestMonthSub').innerHTML =
+        'In early July 2026 he called June “my best month in almost a year” (<a href="https://www.youtube.com/watch?v=ix6KhrLKHbc" target="_blank" rel="noopener">source: “WHAT DOES YOUTUBE PAY?”, his vlog channel, 9 Jul 2026</a>). This card re-runs that check every month: the most recent complete month, ranked against the twelve before it by total views on his long-form uploads. A true best month needs the tallest bar.';
+      const isTrue = rank === 1;
+      document.getElementById('bestMonthQuote').textContent = isTrue
+        ? 'Verdict: for once, true — ' + lbl(target.m) + ' really was his best month of the trailing year. Expand for the bars.'
+        : 'Verdict: no — ' + lbl(target.m) + ' ranked ' + ord(rank) + ' of the last 13 months. Expand for the bars.';
+      document.getElementById('bestMonthVerdict').innerHTML = isTrue
+        ? 'Verdict: <strong>true.</strong> ' + lbl(target.m) + ' topped the previous twelve months on long-form views.'
+        : 'Verdict: <strong>no.</strong> ' + lbl(target.m) + ' (' + kfmt(target.v) + ' views) ranked ' + ord(rank) + ' of the last 13 months' +
+          (rank >= 8 ? ' — closer to his worst than his best' : '') + '. His actual best in that window: ' + lbl(best.m) + ', at ' + kfmt(best.v) +
+          ' — ' + (best.v / target.v).toFixed(1) + '× the month he called his best.' +
+          (lastTrue ? ' The last month that genuinely topped its trailing year: ' + lbl(lastTrue) + '.' : '');
+      document.getElementById('bestMonthFoot').textContent =
+        'Method, for the curious: total views now sitting on each calendar month’s long-form uploads, TheQuartering main channel, in-progress month excluded. Recent months have had less time to gather views than older ones, so only narrow verdicts could change as views accumulate.';
+
+      const W3 = 720, H3 = 260;
+      const P3 = { top: 30, right: 24, bottom: 46, left: 56 };
+      const iw = W3 - P3.left - P3.right, ih = H3 - P3.top - P3.bottom;
+      const maxV = best.v;
+      const yF = v => P3.top + (1 - v / maxV) * ih;
+      const slot = iw / win.length;
+      const bw = Math.min(36, slot * 0.62);
+      let out = '';
+      for (const frac of [0.25, 0.5, 0.75, 1]) {
+        const gy = yF(maxV * frac);
+        out += '<line class="chart-grid-line" x1="' + P3.left + '" y1="' + gy.toFixed(1) + '" x2="' + (W3 - P3.right) + '" y2="' + gy.toFixed(1) + '" />';
+        out += '<text class="chart-axis-label y" x="' + (P3.left - 8) + '" y="' + (gy + 4).toFixed(1) + '" text-anchor="end">' + kfmt(maxV * frac) + '</text>';
+      }
+      win.forEach((x, i) => {
+        const cx = P3.left + slot * i + slot / 2;
+        const yy = yF(x.v);
+        const cls = x.m === target.m ? ' claimed' : (x.m === best.m ? ' best' : '');
+        out += '<rect class="bm-bar' + cls + '" x="' + (cx - bw / 2).toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(2, P3.top + ih - yy).toFixed(1) + '"><title>' + lbl(x.m) + ': ' + x.v.toLocaleString() + ' long-form views</title></rect>';
+        out += '<text class="chart-pt-label" x="' + cx.toFixed(1) + '" y="' + (yy - 5).toFixed(1) + '">' + kfmt(x.v) + '</text>';
+        out += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H3 - 26) + '" text-anchor="middle">' + MON[+x.m.slice(5, 7) - 1] + '</text>';
+        if (i === 0 || x.m.slice(5, 7) === '01') out += '<text class="chart-axis-label x" x="' + cx.toFixed(1) + '" y="' + (H3 - 10) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
+      });
+      out += '<text class="chart-attribution" x="' + (W3 - P3.right) + '" y="' + (H3 - 10) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
+      document.getElementById('bestMonthChart').innerHTML = out;
+      bmCard.hidden = false;
+    })();
+
     // Collapse/expand wiring — static markup, wired exactly once (done-guarded).
-    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody']]) {
+    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody'], ['bestMonthToggle', 'bestMonthBody']]) {
       const btn = document.getElementById(btnId), body = document.getElementById(bodyId);
       if (btn && body) btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') !== 'true';
@@ -7752,6 +7860,12 @@ function niceDurationAxis(minSec, maxSec) {
         </tbody>
       </table>
       <div class="revenue-scenario-explanation">${scenarioExplanation}</div>
+      <div class="revenue-panel-footnote"><strong>The creator's own numbers:</strong> in a 9 Jul 2026 vlog
+        (<a href="https://www.youtube.com/watch?v=ix6KhrLKHbc" target="_blank" rel="noopener">“WHAT DOES YOUTUBE PAY?”</a>)
+        he prices a million-view Short at “about $30” — a $0.03 RPM, inside this model's $0.02–$0.07 Shorts band —
+        and a million-view long-form video at “$1,000, $2,000” — a $1–$2 RPM, bracketed by the pessimistic
+        ($0.85–$1.28) and optimistic ($2.00–$3.25) long-form bands above. Self-reported and unaudited,
+        but his figures and this model agree.</div>
     </div>
   `;
 
@@ -10227,11 +10341,15 @@ function renderWindowList(startDate, endDate) {
     const funeralBtn = document.getElementById('moodFuneral');
     if (partyBtn) {
       partyBtn.setAttribute('aria-pressed', currentMode === 'party' ? 'true' : 'false');
-      const l = partyBtn.querySelector('.mood-label'); if (l) l.textContent = currentMode === 'party' ? 'Stop party' : 'Party mode';
+      const pl = currentMode === 'party' ? 'Stop party' : 'Party mode';
+      partyBtn.title = pl;
+      const l = partyBtn.querySelector('.mood-label'); if (l) l.textContent = pl;
     }
     if (funeralBtn) {
       funeralBtn.setAttribute('aria-pressed', currentMode === 'funeral' ? 'true' : 'false');
-      const l = funeralBtn.querySelector('.mood-label'); if (l) l.textContent = currentMode === 'funeral' ? 'Stop funeral' : 'Funeral mode';
+      const fl = currentMode === 'funeral' ? 'Stop funeral' : 'Funeral mode';
+      funeralBtn.title = fl;
+      const l = funeralBtn.querySelector('.mood-label'); if (l) l.textContent = fl;
     }
   }
   window.__syncMoodButtons = syncMoodButtons;
