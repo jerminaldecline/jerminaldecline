@@ -2704,7 +2704,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 })();
 
 /* ---------- data layer: fetch live JSON, compute per-scope/per-month ---------- */
-const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60] };
+const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.07] };
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
@@ -2852,8 +2852,17 @@ async function loadAndCompute(){
         comments: vs.reduce((s,v)=>s+(v.comments||0),0),
         avglen: durs.length?Math.round(median(durs)/60*10)/10:0,
         runtime: durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/3600*10)/10:0,
-        revlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
-        revhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
+        // Revenue: revlo/revhi are the TOTAL (long-form + Shorts) — the hero
+        // headline, its deltas and the report table all read these, so history
+        // stays comparable (every month recomputes on the same model). The
+        // l/s split feeds the hero card's breakdown line. Shorts use the same
+        // $0.02–0.07 RPM band the Analysis revenue panel publishes.
+        lrevlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
+        lrevhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
+        srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
+        srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
+        get revlo(){ return this.lrevlo + this.srevlo; },
+        get revhi(){ return this.lrevhi + this.srevhi; },
         top, topvid, debate, worstvid, shorts, vlist,
         topicsByCount, topicsByViews, taggedCount, taggedViews,
         themesByCount, themesByViews, themesTaggedCount, themesTaggedViews,
@@ -3506,6 +3515,9 @@ function render(m){
       <div class="hero-card">
         <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
         <div class="hero-num rev">${revStr}</div>
+        <div class="hero-sub">${d.srevhi > 0
+          ? `<span class="nowrap">long-form ${money(d.lrevlo)} – ${money(d.lrevhi)}</span> · <span class="nowrap">Shorts ${money(d.srevlo)} – ${money(d.srevhi)}</span>`
+          : 'all long-form — no Shorts this period'}</div>
         ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
       </div>
     </div>
