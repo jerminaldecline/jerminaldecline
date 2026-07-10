@@ -1,6 +1,48 @@
 {
-  "lastUpdated": "2026-07-09T08:08:56.833Z",
+  "lastUpdated": "2026-07-10T07:58:13.104Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "out quartering",
+        "check",
+        "quartering",
+        "check out",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.7333,
+        "baselineSaturation": 0.0985,
+        "spikeRatio": 7.44,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-07-10T07:58:13.104Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "charlie",
+      "keywords": [
+        "charlie",
+        "kirk",
+        "charlie kirk",
+        "kirk murder",
+        "prosecutors",
+        "murder case",
+        "court"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4,
+        "baselineSaturation": 0.0255,
+        "spikeRatio": 15.66,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-07-10T07:58:13.104Z"
+      }
+    },
     {
       "channelHandle": "@QuarteringLive",
       "termId": "check",
@@ -11,15 +53,17 @@
         "check out",
         "out quartering",
         "quartering vlogs",
-        "out"
+        "out",
+        "allegedly",
+        "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.625,
-        "baselineSaturation": 0.0214,
-        "spikeRatio": 29.17,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-07-09T08:08:56.833Z"
+        "recentSaturation": 0.7,
+        "baselineSaturation": 0.0929,
+        "spikeRatio": 7.54,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-07-10T07:58:13.104Z"
       }
     },
     {
@@ -29,34 +73,12 @@
         "support"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.375,
+        "recentSaturation": 0.3,
         "baselineSaturation": 0.0071,
-        "spikeRatio": 52.5,
+        "spikeRatio": 42,
         "recentVideoCount": 3,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-07-09T08:08:56.833Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "court",
-        "out quartering",
-        "check",
-        "quartering",
-        "check out",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.6429,
-        "baselineSaturation": 0.1148,
-        "spikeRatio": 5.6,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-07-09T08:08:56.833Z"
+        "detectedAt": "2026-07-10T07:58:13.104Z"
       }
     },
     {
@@ -70,35 +92,19 @@
         "check",
         "check out",
         "out",
-        "sparks",
+        "trial",
         "charlie",
         "kirk",
-        "charlie kirk"
+        "charlie kirk",
+        "murder"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8889,
-        "baselineSaturation": 0.1606,
-        "spikeRatio": 5.54,
+        "recentSaturation": 1,
+        "baselineSaturation": 0.2748,
+        "spikeRatio": 3.64,
         "recentVideoCount": 8,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-07-09T08:08:56.833Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "political",
-      "keywords": [
-        "political",
-        "backlash",
-        "debate"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4444,
-        "baselineSaturation": 0.1514,
-        "spikeRatio": 2.94,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-07-09T08:08:56.833Z"
+        "baselineVideoCount": 30,
+        "detectedAt": "2026-07-10T07:58:13.104Z"
       }
     }
   ]
