@@ -124,7 +124,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .month-inline{font-size:1.05rem;font-weight:800;color:var(--accent);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.55rem;cursor:pointer;font-family:inherit;text-align:left}
 .month-inline:hover{border-color:var(--accent)}
 
-.peak-headline{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.peak-headline{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .mini-trend-line{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .mini-trend-line-prev{fill:none;stroke:var(--text-dim);stroke-width:1.4;stroke-dasharray:3 2.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0.85}
 .mini-trend-legend{display:flex;gap:0.9rem;margin-bottom:0.5rem;font-size:0.72rem;color:var(--text-muted);font-weight:600}
@@ -2929,9 +2929,12 @@ async function loadAndCompute(){
     let lastSeen=null;
     const beforePeak=ms.filter(m=>m<pk);
     for(let i=beforePeak.length-1;i>=0;i--){ if(S[beforePeak[i]].tot<=S[low].tot){ lastSeen=beforePeak[i]; break; } }
+    const latest=ms[ms.length-1];
     peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
       pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0,
       lastSeenMonth:lastSeen,
+      latestMonth:latest, latestViews:S[latest].tot,
+      pctFromPeakLatest: S[pk].tot>0 ? Math.round((S[latest].tot-S[pk].tot)/S[pk].tot*100) : 0,
       series: ms.map(m=>({ m, v: S[m].tot||0 })) };
   }
 
@@ -3523,6 +3526,11 @@ function render(m){
           <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
           ${pk.lastSeenMonth ? `<div class="peak-sub">Last seen at this level: <strong>${monthName(pk.lastSeenMonth)}</strong> · ${yearsAgoStr(pk.lastSeenMonth)}</div>` : ''}
         </div>
+        ${pk.latestMonth && pk.latestMonth !== pk.lowMonth ? `
+        <div class="peak-item">
+          <div class="peak-label">Latest complete month <span class="peak-when">— ${monthName(pk.latestMonth)}</span></div>
+          <div class="peak-val"><span class="peak-num">${fmt(pk.latestViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeakLatest)}% from peak</span></div>
+        </div>` : ''}
       </div>`;
     })()}
     <div class="hero">
