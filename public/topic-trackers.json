@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-10T07:58:13.104Z",
+  "lastUpdated": "2026-07-11T06:33:59.679Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -15,11 +15,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.7333,
-        "baselineSaturation": 0.0985,
-        "spikeRatio": 7.44,
+        "baselineSaturation": 0.0993,
+        "spikeRatio": 7.39,
         "recentVideoCount": 11,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-07-10T07:58:13.104Z"
+        "detectedAt": "2026-07-11T06:33:59.679Z"
       }
     },
     {
@@ -32,15 +32,16 @@
         "kirk murder",
         "prosecutors",
         "murder case",
-        "court"
+        "court",
+        "murder"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4,
-        "baselineSaturation": 0.0255,
-        "spikeRatio": 15.66,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-07-10T07:58:13.104Z"
+        "recentSaturation": 0.4667,
+        "baselineSaturation": 0.1287,
+        "spikeRatio": 3.63,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-07-11T06:33:59.679Z"
       }
     },
     {
@@ -55,30 +56,16 @@
         "quartering vlogs",
         "out",
         "allegedly",
+        "claims",
         "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7,
-        "baselineSaturation": 0.0929,
-        "spikeRatio": 7.54,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-07-10T07:58:13.104Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "support",
-      "keywords": [
-        "support"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3,
-        "baselineSaturation": 0.0071,
-        "spikeRatio": 42,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-07-10T07:58:13.104Z"
+        "recentSaturation": 0.7273,
+        "baselineSaturation": 0.1232,
+        "spikeRatio": 5.9,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-07-11T06:33:59.679Z"
       }
     },
     {
@@ -100,11 +87,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2748,
-        "spikeRatio": 3.64,
+        "baselineSaturation": 0.2824,
+        "spikeRatio": 3.54,
         "recentVideoCount": 8,
         "baselineVideoCount": 30,
-        "detectedAt": "2026-07-10T07:58:13.104Z"
+        "detectedAt": "2026-07-11T06:33:59.679Z"
       }
     }
   ]

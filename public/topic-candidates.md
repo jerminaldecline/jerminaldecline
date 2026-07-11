@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-10
+# Topic candidates — 2026-07-11
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,12 +6,12 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 136 baseline videos
+Pool: 15 recent videos, 135 baseline videos
 
 ### Cluster 1: `vlogs`
 
 - **Recent saturation:** 11/15 videos (**73%**)
-- **Baseline saturation:** 13/136 videos (10%)
+- **Baseline saturation:** 13/135 videos (10%)
 - **Spike ratio:** 7.4x
 - **Related terms:** `vlogs`, `check`, `quartering`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
@@ -28,11 +28,13 @@ Pool: 15 recent videos, 136 baseline videos
 
 ### Cluster 2: `charlie`
 
-- **Recent saturation:** 6/15 videos (**40%**)
-- **Baseline saturation:** 3/136 videos (2%)
-- **Spike ratio:** 15.7x
-- **Related terms:** `charlie`, `kirk`, `court`, `prosecutors`, `charlie kirk`, `kirk murder`, `murder case`
+- **Recent saturation:** 7/15 videos (**47%**)
+- **Baseline saturation:** 17/135 videos (13%)
+- **Spike ratio:** 3.6x
+- **Related terms:** `charlie`, `kirk`, `murder`, `court`, `prosecutors`, `charlie kirk`, `kirk murder`, `murder case`
 - **Sample recent videos:**
+  - 2026-07-10 — _TOTAL MELTDOWN_  
+    Candace Owens Faces Renewed Scrutiny Over Claims In Charlie Kirk Murder Case
   - 2026-07-09 — _HE REGRETTED IT_  
     Prosecutors Reveal Alleged Confession Note In Charlie Kirk Murder Court Proceedings Today
   - 2026-07-09 — _HE JUST CONFESSED_  
@@ -41,14 +43,12 @@ Pool: 15 recent videos, 136 baseline videos
     New Evidence And Emotional Testimony Highlight Charlie Kirk Murder Court Proceedings 
   - 2026-07-08 — _NEW TRIAL DEMANDED_  
     Karmelo Anthony Requests New Trial While Challenging Judge's Continued Role In Court
-  - 2026-07-07 — _NO COMING BACK NOW_  
-    Court Video Evidence Released In Charlie Kirk Murder Case Ahead Of Trial
 
 ### Cluster 3: `nationwide`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 1/136 videos (1%)
-- **Spike ratio:** 24.4x
+- **Baseline saturation:** 1/135 videos (1%)
+- **Spike ratio:** 24.2x
 - **Related terms:** `nationwide`, `political`
 - **Sample recent videos:**
   - 2026-07-07 — _THEY RUINED THEIR LIVES_  
@@ -62,15 +62,17 @@ Pool: 15 recent videos, 136 baseline videos
 
 ## @QuarteringLive
 
-Pool: 10 recent videos, 69 baseline videos
+Pool: 11 recent videos, 68 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 7/10 videos (**70%**)
-- **Baseline saturation:** 6/69 videos (9%)
-- **Spike ratio:** 7.5x
-- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `allegedly`, `online`, `check out`, `out quartering`
+- **Recent saturation:** 8/11 videos (**73%**)
+- **Baseline saturation:** 8/68 videos (12%)
+- **Spike ratio:** 5.9x
+- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `allegedly`, `claims`, `online`, `check out`
 - **Sample recent videos:**
+  - 2026-07-10 — _HE RATTED HIM OUT!_  
+    Lance Twiggs Says He Recognizes Tyler Robinson In Surveillance Images
   - 2026-07-09 — _MIGRANT K*LLS WOKE WOMAN_  
     American Pro-Palestine Activist’s Killing Fuels Online Political Debate
   - 2026-07-09 — _FATTIES CRUSHED_  
@@ -79,14 +81,12 @@ Pool: 10 recent videos, 69 baseline videos
     Cyclospora Parasite Cases Quadruple In Michigan As Source Remains Unknown
   - 2026-07-08 — _HE'S COOKED_  
     Tyler Robinson UVU Campus Visits Video Set For Evidence Release
-  - 2026-07-08 — _A HUGE MISTAKE_  
-    Bodycam Footage Allegedly Shows J’Dion Arrested for Disorderly Conduct
 
 ### Cluster 2: `support`
 
-- **Recent saturation:** 3/10 videos (**30%**)
-- **Baseline saturation:** 0/69 videos (0%)
-- **Spike ratio:** 42.0x
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 0/68 videos (0%)
+- **Spike ratio:** 37.6x
 - **Related terms:** `support`
 - **Sample recent videos:**
   - 2026-07-08 — _NEW INSANE RACE HOAX, TYLER ROBINSON TRIAL UPDATES, KARMELO ANTHONY'S NEW GRIFT & SNEAKO ROASTED_  
@@ -98,13 +98,13 @@ Pool: 10 recent videos, 69 baseline videos
 
 ## @JeremyHambly
 
-Pool: 8 recent videos, 110 baseline videos
+Pool: 8 recent videos, 107 baseline videos
 
 ### Cluster 1: `vlogs`
 
 - **Recent saturation:** 8/8 videos (**100%**)
-- **Baseline saturation:** 30/110 videos (27%)
-- **Spike ratio:** 3.6x
+- **Baseline saturation:** 30/107 videos (28%)
+- **Spike ratio:** 3.5x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `charlie`, `kirk`, `trial`, `murder`
 - **Sample recent videos:**
   - 2026-07-09 — _HE ADMITTED EVERYTHING_  
