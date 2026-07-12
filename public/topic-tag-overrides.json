@@ -1,12 +1,21 @@
 {
-  "_doc": "Per-video topic overrides applied by the LLM tagger AFTER scoring. Value must be a valid id from topics.json (including legacy ids the merge preserves) or the current run's canon sets: a mode id sets the mode, a subject id sets the subject/tag, a theme id (theme-*) sets the theme. Use null to force-untag. Unknown ids are skipped with a loud per-id log line in the tagger output.",
-  "_lastUpdated": "2026-07-02",
-  "_retired": {
-    "LP94fw5JtYk": "was 'black-fatigue' — id never existed in topics.json (legacy keyword-tagger vocabulary); re-pin with a valid id if still wanted",
-    "7ONRyLrfAAs": "was 'henry-nowak' — id never existed in topics.json; re-pin with a valid id if still wanted"
-  },
-  "overrides": {
-    "eq6C-OgPxks": "theme-youtube-platform",
-    "NNWeJ_SS4Yc": "theme-grooming-gangs"
-  }
+ "_doc": "Per-video topic overrides applied by the LLM tagger AFTER scoring. Value must be a valid id from topics.json (including legacy ids the merge preserves) or the current run's canon sets: a mode id sets the mode, a subject id sets the subject/tag, a theme id (theme-*) sets the theme. Use null to force-untag. Unknown ids are skipped with a loud per-id log line in the tagger output.",
+ "_lastUpdated": "2026-07-12",
+ "_retired": {
+  "LP94fw5JtYk": "was 'black-fatigue' — id never existed in topics.json (legacy keyword-tagger vocabulary); re-pin with a valid id if still wanted",
+  "7ONRyLrfAAs": "was 'henry-nowak' — id never existed in topics.json; re-pin with a valid id if still wanted"
+ },
+ "overrides": {
+  "eq6C-OgPxks": "theme-youtube-platform",
+  "NNWeJ_SS4Yc": "theme-grooming-gangs",
+  "hVhiIUSpm30": "tyler-robinson",
+  "GrkRjpbGzSE": "tyler-robinson",
+  "X70q2QJ_VTc": "tyler-robinson",
+  "5-aqMctmOj0": "tyler-robinson",
+  "RqCqiY_KO9w": "tyler-robinson",
+  "RaTz8mQwStA": "candace-owens",
+  "PlhywXD0XpQ": "tyler-robinson",
+  "GeHr-yDtjrk": "candace-owens",
+  "GAE3CVPXItc": null
+ }
 }
