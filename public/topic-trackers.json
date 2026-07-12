@@ -1,6 +1,62 @@
 {
-  "lastUpdated": "2026-07-11T06:33:59.679Z",
+  "lastUpdated": "2026-07-12T07:06:31.482Z",
   "trackers": [
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out",
+        "allegedly"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.6667,
+        "baselineSaturation": 0.0515,
+        "spikeRatio": 12.95,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-07-12T07:06:31.482Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "online",
+      "keywords": [
+        "clip",
+        "online",
+        "sparks"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4167,
+        "baselineSaturation": 0.0956,
+        "spikeRatio": 4.36,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-07-12T07:06:31.482Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "claims",
+      "keywords": [
+        "post",
+        "political",
+        "claims"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4167,
+        "baselineSaturation": 0.0662,
+        "spikeRatio": 6.3,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-07-12T07:06:31.482Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
@@ -15,11 +71,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.7333,
-        "baselineSaturation": 0.0993,
-        "spikeRatio": 7.39,
+        "baselineSaturation": 0.1015,
+        "spikeRatio": 7.22,
         "recentVideoCount": 11,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-07-11T06:33:59.679Z"
+        "detectedAt": "2026-07-12T07:06:31.482Z"
       }
     },
     {
@@ -37,35 +93,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.4667,
-        "baselineSaturation": 0.1287,
-        "spikeRatio": 3.63,
+        "baselineSaturation": 0.1316,
+        "spikeRatio": 3.55,
         "recentVideoCount": 7,
         "baselineVideoCount": 17,
-        "detectedAt": "2026-07-11T06:33:59.679Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "out",
-        "allegedly",
-        "claims",
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.7273,
-        "baselineSaturation": 0.1232,
-        "spikeRatio": 5.9,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-07-11T06:33:59.679Z"
+        "detectedAt": "2026-07-12T07:06:31.482Z"
       }
     },
     {
@@ -87,11 +119,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2824,
-        "spikeRatio": 3.54,
+        "baselineSaturation": 0.2933,
+        "spikeRatio": 3.41,
         "recentVideoCount": 8,
         "baselineVideoCount": 30,
-        "detectedAt": "2026-07-11T06:33:59.679Z"
+        "detectedAt": "2026-07-12T07:06:31.482Z"
       }
     }
   ]
