@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-07-10-AM",
-    "snapshots": 55
+    "to": "2026-07-13-AM",
+    "snapshots": 61
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -16,7 +16,7 @@
     {
       "id": "7Mg87BPII_4",
       "title": "WALMART ACTUALLY DID IT",
-      "estPromotedViews": 9635,
+      "estPromotedViews": 9639,
       "spikeStartDate": "2026-06-27-PM"
     },
     {
