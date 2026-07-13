@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-12T07:06:31.482Z",
+  "lastUpdated": "2026-07-13T07:47:31.503Z",
   "trackers": [
     {
       "channelHandle": "@QuarteringLive",
@@ -12,49 +12,50 @@
         "out quartering",
         "quartering vlogs",
         "out",
-        "allegedly"
+        "claims",
+        "allegedly",
+        "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.6667,
-        "baselineSaturation": 0.0515,
-        "spikeRatio": 12.95,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "recentSaturation": 0.7692,
+        "baselineSaturation": 0.125,
+        "spikeRatio": 6.15,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     },
     {
       "channelHandle": "@QuarteringLive",
-      "termId": "online",
+      "termId": "clip",
       "keywords": [
         "clip",
-        "online",
         "sparks"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4167,
-        "baselineSaturation": 0.0956,
-        "spikeRatio": 4.36,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0515,
+        "spikeRatio": 5.98,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     },
     {
       "channelHandle": "@QuarteringLive",
-      "termId": "claims",
+      "termId": "post",
       "keywords": [
         "post",
         "political",
-        "claims"
+        "debate"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4167,
-        "baselineSaturation": 0.0662,
-        "spikeRatio": 6.3,
+        "recentSaturation": 0.3846,
+        "baselineSaturation": 0.0956,
+        "spikeRatio": 4.02,
         "recentVideoCount": 5,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     },
     {
@@ -71,11 +72,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.7333,
-        "baselineSaturation": 0.1015,
-        "spikeRatio": 7.22,
+        "baselineSaturation": 0.1038,
+        "spikeRatio": 7.06,
         "recentVideoCount": 11,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     },
     {
@@ -93,11 +94,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.4667,
-        "baselineSaturation": 0.1316,
-        "spikeRatio": 3.55,
+        "baselineSaturation": 0.1346,
+        "spikeRatio": 3.47,
         "recentVideoCount": 7,
         "baselineVideoCount": 17,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     },
     {
@@ -119,11 +120,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2933,
-        "spikeRatio": 3.41,
+        "baselineSaturation": 0.302,
+        "spikeRatio": 3.31,
         "recentVideoCount": 8,
         "baselineVideoCount": 30,
-        "detectedAt": "2026-07-12T07:06:31.482Z"
+        "detectedAt": "2026-07-13T07:47:31.503Z"
       }
     }
   ]
