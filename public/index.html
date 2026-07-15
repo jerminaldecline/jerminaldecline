@@ -4405,28 +4405,27 @@ function buildMonthlyData(scope){
         out += '<circle class="rally-dot' + (isPend ? ' pend' : '') + '" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="' + (isPend ? 6 : 4.5) + '"><title>' + lbl(totals[b.i].m) + ': rallied +' + b.gain + '% to ' + kfmt(totals[b.i].v) + (b.killI != null ? ' — killed ' + b.monthsToKill + ' month' + (b.monthsToKill === 1 ? '' : 's') + ' later' : ' — verdict pending') + '</title></circle>';
         out += '<text class="rally-lab' + (isPend ? ' pend' : '') + '" x="' + px.toFixed(1) + '" y="' + (py - 10).toFixed(1) + '">+' + b.gain + '%</text>';
       }
-      // Kill callouts: dedupe shared kill months, then drop dotted leaders to a
-      // two-tier label strip beneath the plot. The post-peak record low gets a
-      // callout too — it is the chart's deepest point but is not necessarily a
-      // "kill" month (May 2026: April had already killed its rally, so the
-      // record low itself carried no marker until this).
+      // Callouts: every kill month (deduped), the post-peak record low, and the
+      // first trough. Labels do NOT sit at their natural x — six kills cluster
+      // in 2025 and overlap unreadably — instead they occupy evenly distributed
+      // slots across the strip, joined to their marks by diagonal dotted
+      // leaders. Both sequences are sorted, so leaders never cross; slots are
+      // staggered across two rows, so labels can never collide.
       const killIs = [...new Set(dead.map(b => b.killI))].sort((a, b) => a - b);
       let minI = peakI; totals.forEach((x, i) => { if (i > peakI && x.v < totals[minI].v) minI = i; });
       const callouts = killIs.map(ki => ({ i: ki, kill: true, record: ki === minI }));
       if (!killIs.includes(minI)) callouts.push({ i: minI, kill: false, record: true });
       if (!callouts.some(c => c.i === firstTroughI)) callouts.push({ i: firstTroughI, kill: false, first: true });
       callouts.sort((a, b) => a.i - b.i);
-      const tierY = [H - 62, H - 42];
-      const lastEnd = [-1e9, -1e9];
-      callouts.forEach(c => {
+      const rowY = [H - 60, H - 42];
+      callouts.forEach((c, k) => {
         const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
         if (c.kill) out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ': new low ' + kfmt(totals[ki].v) + '</title></text>';
+        const slotX = PD.l + iw * ((k + 0.5) / callouts.length);
+        const y = rowY[k % 2];
         const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
-        const wEst = label.length * 6.4;
-        const tier = (kx - wEst / 2) > lastEnd[0] + 16 ? 0 : 1;
-        lastEnd[tier] = kx + wEst / 2;
-        out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (c.kill ? 9 : 6)).toFixed(1) + '" x2="' + kx.toFixed(1) + '" y2="' + (tierY[tier] - 10) + '" />';
-        out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + kx.toFixed(1) + '" y="' + tierY[tier] + '">' + label + '</text>';
+        out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (c.kill ? 9 : 6)).toFixed(1) + '" x2="' + slotX.toFixed(1) + '" y2="' + (y - 10) + '" />';
+        out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + slotX.toFixed(1) + '" y="' + y + '">' + label + '</text>';
       });
       out += '<text class="chart-attribution" x="' + (W - PD.r) + '" y="' + (H - 3) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
       document.getElementById('rallyChart').innerHTML = out;
