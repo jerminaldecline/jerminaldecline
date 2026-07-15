@@ -2482,7 +2482,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="desc-pattern-body" id="rallyBody" hidden>
         <div class="an-chart-title-sub" id="rallySub"></div>
         <div class="season-verdict" id="rallyVerdict"></div>
-        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the new low that killed it</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the month that erased the rally</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
         <svg id="rallyChart" viewBox="0 0 720 350" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
         <div class="season-foot" id="rallyFoot"></div>
       </div>
@@ -4362,18 +4362,18 @@ function buildMonthlyData(scope){
       const latest = pend.length ? pend[pend.length - 1] : null;
 
       document.getElementById('rallyQuote').textContent =
-        'Verdict: ' + dead.length + ' of ' + (dead.length + lived.length) + ' completed rallies since the peak died at a new low' +
+        'Verdict: ' + dead.length + ' of ' + (dead.length + lived.length) + ' completed rallies since the peak were fully erased' +
         (latest ? ' — the ' + lbl(totals[latest.i].m) + ' rally (+' + latest.gain + '%) is awaiting its verdict.' : '.') +
         ' Expand for the chart.';
       document.getElementById('rallySub').textContent =
-        'Since the ' + lbl(totals[peakI].m) + ' peak, every recovery has been temporary: a month rises off a low, and a lower low follows. Each rally on the chart is marked with its size; ✕ marks the month that erased it. The line is total views on each month’s long-form uploads.';
+        'Since the ' + lbl(totals[peakI].m) + ' peak, every recovery has been temporary. Each rally — a month that rose off a low — is marked with its size; ✕ marks the month the series fell back below the level that rally started from, fully erasing it. The line is total views on each month’s long-form uploads.';
       const early = dead.slice(0, 2).map(b => b.monthsToKill), late = dead.slice(2).map(b => b.monthsToKill);
       document.getElementById('rallyVerdict').innerHTML =
-        'Verdict: <strong>every completed rally has died — ' + dead.length + ' of ' + dead.length + '.</strong> The early rallies bought ' +
-        Math.min(...early) + '–' + Math.max(...early) + ' months before a new low; every rally since has died within ' + Math.max(...late) + ' month' + (Math.max(...late) === 1 ? '' : 's') + '.' +
+        'Verdict: <strong>every completed rally has been fully erased — ' + dead.length + ' of ' + dead.length + '.</strong> The early rallies held ' +
+        Math.min(...early) + '–' + Math.max(...early) + ' months before falling back below their starting lows; every rally since has been erased within ' + Math.max(...late) + ' month' + (Math.max(...late) === 1 ? '' : 's') + '.' +
         (latest ? ' Rally #' + bounces.length + ' — ' + lbl(totals[latest.i].m) + ', +' + latest.gain + '%, the largest of the entire decline — is still awaiting its verdict.' : '');
       document.getElementById('rallyFoot').textContent =
-        'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It dies when any later month closes below the pre-rally low; it would survive if twelve months passed without one — none have. Verdicts recompute as each month completes.';
+        'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It is erased when any later month closes below that rally’s own starting low — which is not always an all-time low (Dec ’24 erased the Oct ’23 rally by undercutting 11.8M, while the absolute record then still belonged to Feb ’23). Absolute records get their own callouts. A rally would survive if twelve months passed without being erased — none have. Verdicts recompute as each month completes.';
 
       const W = 720, H = 350;
       const PD = { t: 30, r: 24, b: 94, l: 56 };
@@ -4412,6 +4412,11 @@ function buildMonthlyData(scope){
       // leaders. Both sequences are sorted, so leaders never cross; slots are
       // staggered across two rows, so labels can never collide.
       const killIs = [...new Set(dead.map(b => b.killI))].sort((a, b) => a - b);
+      const killedBy = new Map(); // killI -> the pre-rally lows it breached
+      for (const b of dead) {
+        if (!killedBy.has(b.killI)) killedBy.set(b.killI, []);
+        killedBy.get(b.killI).push(lbl(totals[b.i - 1].m) + ' (' + kfmt(totals[b.i - 1].v) + ')');
+      }
       let minI = peakI; totals.forEach((x, i) => { if (i > peakI && x.v < totals[minI].v) minI = i; });
       const callouts = killIs.map(ki => ({ i: ki, kill: true, record: ki === minI }));
       if (!killIs.includes(minI)) callouts.push({ i: minI, kill: false, record: true });
@@ -4420,7 +4425,7 @@ function buildMonthlyData(scope){
       const rowY = [H - 60, H - 42];
       callouts.forEach((c, k) => {
         const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
-        if (c.kill) out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ': new low ' + kfmt(totals[ki].v) + '</title></text>';
+        if (c.kill) out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ' (' + kfmt(totals[ki].v) + '): fell back below the ' + killedBy.get(ki).join(' and the ') + ' low' + (killedBy.get(ki).length > 1 ? 's' : '') + '</title></text>';
         const slotX = PD.l + iw * ((k + 0.5) / callouts.length);
         const y = rowY[k % 2];
         const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
