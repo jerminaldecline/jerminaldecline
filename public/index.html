@@ -335,6 +335,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .bm-bar{fill:var(--text-dim);opacity:0.5}
 .bm-bar.best{fill:var(--up);opacity:1}
 .bm-bar.claimed{fill:var(--accent);opacity:1}
+#rallyChart{width:100%;height:auto;display:block}
+.skey-swatch.rally-pend{background:transparent;border:2px solid var(--accent)}
+.rally-line{fill:none;stroke:var(--text-dim);stroke-width:1.5;opacity:0.85}
+.rally-dot{fill:var(--up)}
+.rally-dot.pend{fill:var(--surface);stroke:var(--accent);stroke-width:2.5}
+.rally-kill{fill:var(--down);font-size:13px;font-weight:800;text-anchor:middle}
+.rally-lab{fill:var(--up);font-size:10.5px;font-weight:700;text-anchor:middle}
+.rally-lab.pend{fill:var(--accent)}
 #bestMonthChart{width:100%;height:auto;display:block}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
@@ -2455,6 +2463,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="season-foot" id="bestMonthFoot"></div>
       </div>
     </div>
+    <!-- Pattern watch: every post-peak rally has been followed by a new low.
+         Computed live by the seasonCard IIFE; the current rally's verdict
+         resolves automatically as months complete. -->
+    <div class="desc-pattern-panel season-card" id="rallyCard" hidden>
+      <button type="button" class="desc-pattern-toggle" id="rallyToggle" aria-expanded="false" aria-controls="rallyBody">
+        <span class="desc-pattern-eyebrow">Pattern watch</span>
+        <span class="desc-pattern-headline">Every rally dies — the post-peak staircase</span>
+        <span class="desc-pattern-quote" id="rallyQuote"></span>
+        <span class="desc-pattern-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="desc-pattern-body" id="rallyBody" hidden>
+        <div class="an-chart-title-sub" id="rallySub"></div>
+        <div class="season-verdict" id="rallyVerdict"></div>
+        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the new low that killed it</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
+        <svg id="rallyChart" viewBox="0 0 720 300" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
+        <div class="season-foot" id="rallyFoot"></div>
+      </div>
+    </div>
   </section>
 
   <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
@@ -4298,6 +4324,85 @@ function buildMonthlyData(scope){
       bmCard.hidden = false;
     })();
 
+    // ===== Pattern watch: "every rally dies" ================================
+    // Monthly long-form totals since 2022. After the all-time peak, find each
+    // rally (a month that rises off a >=6-month low) and check whether a later
+    // month closed below the pre-rally low. Verdicts are computed, so the
+    // current rally resolves itself as months complete. TQ long-form only.
+    (function(){
+      const rc = document.getElementById('rallyCard');
+      if (!rc) return;
+      const totals = [...buckets.keys()].sort().filter(m => m >= '2022-01').map(m => ({ m, v: buckets.get(m).reduce((a, b) => a + b, 0) }));
+      if (totals.length < 18) return;
+      let peakI = 0; totals.forEach((x, i) => { if (x.v > totals[peakI].v) peakI = i; });
+      const bounces = [];
+      for (let i = peakI + 2; i < totals.length; i++) {
+        if (totals[i].v <= totals[i-1].v) continue;
+        const win = totals.slice(Math.max(0, i - 7), i - 1).map(x => x.v);
+        if (win.length && totals[i-1].v > Math.min(...win)) continue; // must bounce off a local low
+        const later = totals.slice(i + 1);
+        const killRel = later.findIndex(x => x.v < totals[i-1].v);
+        bounces.push({ i, gain: Math.round((totals[i].v / totals[i-1].v - 1) * 100),
+          killI: killRel >= 0 ? i + 1 + killRel : null,
+          monthsToKill: killRel >= 0 ? killRel + 1 : null,
+          age: totals.length - 1 - i });
+      }
+      const dead = bounces.filter(b => b.killI != null);
+      const pend = bounces.filter(b => b.killI == null && b.age < 12);
+      const lived = bounces.filter(b => b.killI == null && b.age >= 12);
+      if (!bounces.length) return;
+      const lbl = m => MON[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+      const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : Math.round(n / 1e3) + 'K';
+      const latest = pend.length ? pend[pend.length - 1] : null;
+
+      document.getElementById('rallyQuote').textContent =
+        'Verdict: ' + dead.length + ' of ' + (dead.length + lived.length) + ' completed rallies since the peak died at a new low' +
+        (latest ? ' — the ' + lbl(totals[latest.i].m) + ' rally (+' + latest.gain + '%) is awaiting its verdict.' : '.') +
+        ' Expand for the chart.';
+      document.getElementById('rallySub').textContent =
+        'Since the ' + lbl(totals[peakI].m) + ' peak, every recovery has been temporary: a month rises off a low, and a lower low follows. Each rally on the chart is marked with its size; ✕ marks the month that erased it. The line is total views on each month’s long-form uploads.';
+      const early = dead.slice(0, 2).map(b => b.monthsToKill), late = dead.slice(2).map(b => b.monthsToKill);
+      document.getElementById('rallyVerdict').innerHTML =
+        'Verdict: <strong>every completed rally has died — ' + dead.length + ' of ' + dead.length + '.</strong> The early rallies bought ' +
+        Math.min(...early) + '–' + Math.max(...early) + ' months before a new low; every rally since has died within ' + Math.max(...late) + ' month' + (Math.max(...late) === 1 ? '' : 's') + '.' +
+        (latest ? ' Rally #' + bounces.length + ' — ' + lbl(totals[latest.i].m) + ', +' + latest.gain + '%, the largest of the entire decline — is still awaiting its verdict.' : '');
+      document.getElementById('rallyFoot').textContent =
+        'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It dies when any later month closes below the pre-rally low; it would survive if twelve months passed without one — none have. Verdicts recompute as each month completes.';
+
+      const W = 720, H = 300;
+      const PD = { t: 30, r: 24, b: 44, l: 56 };
+      const iw = W - PD.l - PD.r, ih = H - PD.t - PD.b;
+      const maxV = totals[peakI].v * 1.06;
+      const xF = i => PD.l + iw * (i / (totals.length - 1));
+      const yF = v => PD.t + ih * (1 - v / maxV);
+      let out = '';
+      for (const frac of [0.25, 0.5, 0.75, 1]) {
+        const gy = yF(maxV * frac);
+        out += '<line class="chart-grid-line" x1="' + PD.l + '" y1="' + gy.toFixed(1) + '" x2="' + (W - PD.r) + '" y2="' + gy.toFixed(1) + '" />';
+        out += '<text class="chart-axis-label y" x="' + (PD.l - 8) + '" y="' + (gy + 4).toFixed(1) + '" text-anchor="end">' + kfmt(maxV * frac) + '</text>';
+      }
+      totals.forEach((x, i) => {
+        if (x.m.slice(5, 7) === '01') {
+          out += '<text class="chart-axis-label x" x="' + xF(i).toFixed(1) + '" y="' + (H - 22) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
+          out += '<line class="chart-grid-line" x1="' + xF(i).toFixed(1) + '" y1="' + PD.t + '" x2="' + xF(i).toFixed(1) + '" y2="' + (PD.t + ih) + '" />';
+        }
+      });
+      out += '<path class="rally-line" d="' + totals.map((x, i) => (i ? 'L' : 'M') + xF(i).toFixed(1) + ' ' + yF(x.v).toFixed(1)).join(' ') + '" />';
+      out += '<text class="chart-axis-label" x="' + xF(peakI).toFixed(1) + '" y="' + (yF(totals[peakI].v) - 8).toFixed(1) + '" text-anchor="middle">peak · ' + kfmt(totals[peakI].v) + '</text>';
+      for (const b of bounces) {
+        const px = xF(b.i), py = yF(totals[b.i].v);
+        const isPend = b.killI == null && b.age < 12;
+        out += '<circle class="rally-dot' + (isPend ? ' pend' : '') + '" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="' + (isPend ? 6 : 4.5) + '"><title>' + lbl(totals[b.i].m) + ': rallied +' + b.gain + '% to ' + kfmt(totals[b.i].v) + (b.killI != null ? ' — killed ' + b.monthsToKill + ' month' + (b.monthsToKill === 1 ? '' : 's') + ' later' : ' — verdict pending') + '</title></circle>';
+        out += '<text class="rally-lab' + (isPend ? ' pend' : '') + '" x="' + px.toFixed(1) + '" y="' + (py - 10).toFixed(1) + '">+' + b.gain + '%</text>';
+        if (b.killI != null) {
+          out += '<text class="rally-kill" x="' + xF(b.killI).toFixed(1) + '" y="' + (yF(totals[b.killI].v) + 4).toFixed(1) + '">✕<title>' + lbl(totals[b.killI].m) + ': new low ' + kfmt(totals[b.killI].v) + ' — below the pre-rally trough</title></text>';
+        }
+      }
+      out += '<text class="chart-attribution" x="' + (W - PD.r) + '" y="' + (H - 6) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
+      document.getElementById('rallyChart').innerHTML = out;
+      rc.hidden = false;
+    })();
+
     // Measure tabs — re-render the season card on the chosen measure.
     let seasonMeasure = 'median';
     document.querySelectorAll('[data-season-measure]').forEach(btn => {
@@ -4315,7 +4420,7 @@ function buildMonthlyData(scope){
     });
 
     // Collapse/expand wiring — static markup, wired exactly once (done-guarded).
-    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody'], ['bestMonthToggle', 'bestMonthBody']]) {
+    for (const [btnId, bodyId] of [['seasonToggle', 'seasonBody'], ['midtermToggle', 'midtermBody'], ['bestMonthToggle', 'bestMonthBody'], ['rallyToggle', 'rallyBody']]) {
       const btn = document.getElementById(btnId), body = document.getElementById(bodyId);
       if (btn && body) btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') !== 'true';
