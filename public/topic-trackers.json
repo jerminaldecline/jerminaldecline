@@ -1,25 +1,43 @@
 {
-  "lastUpdated": "2026-07-14T06:33:54.653Z",
+  "lastUpdated": "2026-07-15T06:35:15.096Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "charlie",
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
       "keywords": [
-        "prosecutors",
-        "charlie",
-        "kirk",
-        "charlie kirk",
-        "kirk murder",
-        "murder case",
-        "court"
+        "post",
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "claims",
+        "out",
+        "online"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4,
-        "baselineSaturation": 0.0346,
-        "spikeRatio": 11.56,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
+        "recentSaturation": 0.8889,
+        "baselineSaturation": 0.1544,
+        "spikeRatio": 5.76,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "allegedly",
+      "keywords": [
+        "allegedly"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0515,
+        "spikeRatio": 6.48,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
       }
     },
     {
@@ -35,118 +53,69 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.6667,
-        "baselineSaturation": 0.1269,
-        "spikeRatio": 5.25,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
+        "recentSaturation": 0.7333,
+        "baselineSaturation": 0.1412,
+        "spikeRatio": 5.19,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 18,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "get",
+      "termId": "charlie",
       "keywords": [
-        "get",
-        "private",
-        "internet",
-        "months",
-        "free",
-        "get off",
-        "off private",
-        "private internet",
-        "internet access",
-        "access months",
-        "months free",
-        "off"
+        "charlie",
+        "kirk",
+        "charlie kirk",
+        "kirk murder",
+        "murder case",
+        "court"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3333,
-        "baselineSaturation": 0.1115,
-        "spikeRatio": 2.99,
+        "baselineSaturation": 0.042,
+        "spikeRatio": 7.94,
         "recentVideoCount": 5,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "internet",
+      "keywords": [
+        "internet",
+        "free"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.1031,
+        "spikeRatio": 3.23,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "vlogs",
       "keywords": [
-        "evidence",
         "vlogs",
         "quartering vlogs",
         "quartering",
         "out quartering",
         "check",
         "check out",
-        "out",
-        "trial",
-        "charlie",
-        "kirk",
-        "charlie kirk"
+        "out"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.201,
-        "spikeRatio": 4.98,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "online",
-      "keywords": [
-        "clip",
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4545,
-        "baselineSaturation": 0.0809,
-        "spikeRatio": 5.62,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "out",
-        "claims",
-        "allegedly"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8182,
-        "baselineSaturation": 0.0956,
-        "spikeRatio": 8.56,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "post",
-      "keywords": [
-        "post"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.0221,
-        "spikeRatio": 16.48,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-07-14T06:33:54.653Z"
+        "baselineSaturation": 0.1337,
+        "spikeRatio": 7.48,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-07-15T06:35:15.096Z"
       }
     }
   ]
