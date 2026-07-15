@@ -347,6 +347,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .rally-era-lab{fill:var(--down);font-size:10.5px;font-weight:700;opacity:0.8}
 .rally-callout{stroke:var(--text-dim);stroke-width:1;stroke-dasharray:2 2}
 .rally-kill-lab{fill:var(--down);font-size:10px;font-weight:650;text-anchor:middle}
+.rally-kill-lab.rec{font-weight:800;font-size:10.5px}
+.rally-kill-lab.first{fill:var(--text-dim)}
 #bestMonthChart{width:100%;height:auto;display:block}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
@@ -2481,7 +2483,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="an-chart-title-sub" id="rallySub"></div>
         <div class="season-verdict" id="rallyVerdict"></div>
         <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the new low that killed it</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
-        <svg id="rallyChart" viewBox="0 0 720 330" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
+        <svg id="rallyChart" viewBox="0 0 720 350" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
         <div class="season-foot" id="rallyFoot"></div>
       </div>
     </div>
@@ -4373,8 +4375,8 @@ function buildMonthlyData(scope){
       document.getElementById('rallyFoot').textContent =
         'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It dies when any later month closes below the pre-rally low; it would survive if twelve months passed without one — none have. Verdicts recompute as each month completes.';
 
-      const W = 720, H = 330;
-      const PD = { t: 30, r: 24, b: 74, l: 56 };
+      const W = 720, H = 350;
+      const PD = { t: 30, r: 24, b: 94, l: 56 };
       const iw = W - PD.l - PD.r, ih = H - PD.t - PD.b;
       const maxV = totals[peakI].v * 1.06;
       const xF = i => PD.l + iw * (i / (totals.length - 1));
@@ -4391,7 +4393,7 @@ function buildMonthlyData(scope){
       }
       totals.forEach((x, i) => {
         if (x.m.slice(5, 7) === '01') {
-          out += '<text class="chart-axis-label x" x="' + xF(i).toFixed(1) + '" y="' + (H - 14) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
+          out += '<text class="chart-axis-label x" x="' + xF(i).toFixed(1) + '" y="' + (H - 18) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
           out += '<line class="chart-grid-line" x1="' + xF(i).toFixed(1) + '" y1="' + PD.t + '" x2="' + xF(i).toFixed(1) + '" y2="' + (PD.t + ih) + '" />';
         }
       });
@@ -4404,19 +4406,27 @@ function buildMonthlyData(scope){
         out += '<text class="rally-lab' + (isPend ? ' pend' : '') + '" x="' + px.toFixed(1) + '" y="' + (py - 10).toFixed(1) + '">+' + b.gain + '%</text>';
       }
       // Kill callouts: dedupe shared kill months, then drop dotted leaders to a
-      // two-tier label strip beneath the plot so clustered kills stay legible.
+      // two-tier label strip beneath the plot. The post-peak record low gets a
+      // callout too — it is the chart's deepest point but is not necessarily a
+      // "kill" month (May 2026: April had already killed its rally, so the
+      // record low itself carried no marker until this).
       const killIs = [...new Set(dead.map(b => b.killI))].sort((a, b) => a - b);
-      const tierY = [H - 44, H - 30];
-      let lastEnd = [-1e9, -1e9];
-      killIs.forEach(ki => {
-        const kx = xF(ki), ky = yF(totals[ki].v);
-        out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ': new low ' + kfmt(totals[ki].v) + '</title></text>';
-        const label = lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
-        const wEst = label.length * 5.4;
-        const tier = (kx - wEst / 2) > lastEnd[0] + 6 ? 0 : 1;
+      let minI = peakI; totals.forEach((x, i) => { if (i > peakI && x.v < totals[minI].v) minI = i; });
+      const callouts = killIs.map(ki => ({ i: ki, kill: true, record: ki === minI }));
+      if (!killIs.includes(minI)) callouts.push({ i: minI, kill: false, record: true });
+      if (!callouts.some(c => c.i === firstTroughI)) callouts.push({ i: firstTroughI, kill: false, first: true });
+      callouts.sort((a, b) => a.i - b.i);
+      const tierY = [H - 62, H - 42];
+      const lastEnd = [-1e9, -1e9];
+      callouts.forEach(c => {
+        const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
+        if (c.kill) out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ': new low ' + kfmt(totals[ki].v) + '</title></text>';
+        const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
+        const wEst = label.length * 6.4;
+        const tier = (kx - wEst / 2) > lastEnd[0] + 16 ? 0 : 1;
         lastEnd[tier] = kx + wEst / 2;
-        out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + 9).toFixed(1) + '" x2="' + kx.toFixed(1) + '" y2="' + (tierY[tier] - 9) + '" />';
-        out += '<text class="rally-kill-lab" x="' + kx.toFixed(1) + '" y="' + tierY[tier] + '">' + label + '</text>';
+        out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (c.kill ? 9 : 6)).toFixed(1) + '" x2="' + kx.toFixed(1) + '" y2="' + (tierY[tier] - 10) + '" />';
+        out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + kx.toFixed(1) + '" y="' + tierY[tier] + '">' + label + '</text>';
       });
       out += '<text class="chart-attribution" x="' + (W - PD.r) + '" y="' + (H - 3) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
       document.getElementById('rallyChart').innerHTML = out;
