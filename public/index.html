@@ -2483,7 +2483,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="an-chart-title-sub" id="rallySub"></div>
         <div class="season-verdict" id="rallyVerdict"></div>
         <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the month that erased the rally</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
-        <svg id="rallyChart" viewBox="0 0 720 350" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
+        <svg id="rallyChart" viewBox="0 0 720 340" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
         <div class="season-foot" id="rallyFoot"></div>
       </div>
     </div>
@@ -4375,8 +4375,8 @@ function buildMonthlyData(scope){
       document.getElementById('rallyFoot').textContent =
         'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It is erased when any later month closes below that rally’s own starting low — which is not always an all-time low (Dec ’24 erased the Oct ’23 rally by undercutting 11.8M, while the absolute record then still belonged to Feb ’23). Absolute records get their own callouts. A rally would survive if twelve months passed without being erased — none have. Verdicts recompute as each month completes.';
 
-      const W = 720, H = 350;
-      const PD = { t: 30, r: 24, b: 94, l: 56 };
+      const W = 720, H = 340;
+      const PD = { t: 30, r: 24, b: 80, l: 56 };
       const iw = W - PD.l - PD.r, ih = H - PD.t - PD.b;
       const maxV = totals[peakI].v * 1.06;
       const xF = i => PD.l + iw * (i / (totals.length - 1));
@@ -4406,11 +4406,12 @@ function buildMonthlyData(scope){
         out += '<text class="rally-lab' + (isPend ? ' pend' : '') + '" x="' + px.toFixed(1) + '" y="' + (py - 10).toFixed(1) + '">+' + b.gain + '%</text>';
       }
       // Callouts: every kill month (deduped), the post-peak record low, and the
-      // first trough. Labels do NOT sit at their natural x — six kills cluster
-      // in 2025 and overlap unreadably — instead they occupy evenly distributed
-      // slots across the strip, joined to their marks by diagonal dotted
-      // leaders. Both sequences are sorted, so leaders never cross; slots are
-      // staggered across two rows, so labels can never collide.
+      // first trough. Labels use BOTH empty zones: callouts on the left (where
+      // the line is high) label below the plot; the right-side cluster
+      // alternates between the whitespace ABOVE the collapsed line and the
+      // bottom strip, so neither zone crowds. Slots are evenly pitched per
+      // zone and order is preserved, so labels cannot collide and leaders
+      // never cross.
       const killIs = [...new Set(dead.map(b => b.killI))].sort((a, b) => a - b);
       const killedBy = new Map(); // killI -> the pre-rally lows it breached
       for (const b of dead) {
@@ -4422,16 +4423,35 @@ function buildMonthlyData(scope){
       if (!killIs.includes(minI)) callouts.push({ i: minI, kill: false, record: true });
       if (!callouts.some(c => c.i === firstTroughI)) callouts.push({ i: firstTroughI, kill: false, first: true });
       callouts.sort((a, b) => a.i - b.i);
-      const rowY = [H - 60, H - 42];
-      callouts.forEach((c, k) => {
-        const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
-        if (c.kill) out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[ki].m) + ' (' + kfmt(totals[ki].v) + '): fell back below the ' + killedBy.get(ki).join(' and the ') + ' low' + (killedBy.get(ki).length > 1 ? 's' : '') + '</title></text>';
-        const slotX = PD.l + iw * ((k + 0.5) / callouts.length);
-        const y = rowY[k % 2];
-        const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
-        out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (c.kill ? 9 : 6)).toFixed(1) + '" x2="' + slotX.toFixed(1) + '" y2="' + (y - 10) + '" />';
-        out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + slotX.toFixed(1) + '" y="' + y + '">' + label + '</text>';
-      });
+      // Kill crosses first, then zone-placed labels.
+      for (const c of callouts) {
+        if (!c.kill) continue;
+        const kx = xF(c.i), ky = yF(totals[c.i].v);
+        out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[c.i].m) + ' (' + kfmt(totals[c.i].v) + '): fell back below the ' + killedBy.get(c.i).join(' and the ') + ' low' + (killedBy.get(c.i).length > 1 ? 's' : '') + '</title></text>';
+      }
+      const topZ = [], botZ = [];
+      let flip = true;
+      for (const c of callouts) {
+        const fx = (xF(c.i) - PD.l) / iw;
+        if (fx < 0.45) botZ.push(c);
+        else { (flip ? topZ : botZ).push(c); flip = !flip; }
+      }
+      const place = (zone, isTop) => {
+        const rows = isTop ? (zone.length > 3 ? [PD.t + 32, PD.t + 48] : [PD.t + 36]) : (zone.length > 5 ? [H - 62, H - 46] : [H - 52]);
+        const x0 = isTop ? 0.40 : 0, span = isTop ? 0.60 : 1;
+        zone.forEach((c, k) => {
+          const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
+          const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
+          const wEst = label.length * 6.2;
+          let slotX = PD.l + iw * (x0 + span * ((k + 0.5) / zone.length));
+          slotX = Math.max(PD.l + wEst / 2, Math.min(W - PD.r - wEst / 2, slotX));
+          const y = rows[k % rows.length];
+          out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (isTop ? -9 : (c.kill ? 9 : 6))).toFixed(1) + '" x2="' + slotX.toFixed(1) + '" y2="' + (isTop ? y + 4 : y - 10) + '" />';
+          out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + slotX.toFixed(1) + '" y="' + y + '">' + label + '</text>';
+        });
+      };
+      place(topZ, true);
+      place(botZ, false);
       out += '<text class="chart-attribution" x="' + (W - PD.r) + '" y="' + (H - 3) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
       document.getElementById('rallyChart').innerHTML = out;
       rc.hidden = false;
