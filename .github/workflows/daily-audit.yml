@@ -3,6 +3,9 @@ name: Daily audit (deletion check)
 on:
   schedule:
     - cron: '0 2 * * *'
+    - cron: '0 14 * * *'  # second daily pass (2026-07-16): halves the blind
+                          # window for deletions/retitles on catalogue videos
+                          # older than the incremental 60-day window
   workflow_dispatch:
 
 permissions:
