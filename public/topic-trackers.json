@@ -1,45 +1,6 @@
 {
-  "lastUpdated": "2026-07-15T06:35:15.096Z",
+  "lastUpdated": "2026-07-16T06:41:05.214Z",
   "trackers": [
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "post",
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "claims",
-        "out",
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8889,
-        "baselineSaturation": 0.1544,
-        "spikeRatio": 5.76,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "allegedly",
-      "keywords": [
-        "allegedly"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0515,
-        "spikeRatio": 6.48,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
@@ -54,31 +15,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.7333,
-        "baselineSaturation": 0.1412,
-        "spikeRatio": 5.19,
+        "baselineSaturation": 0.1604,
+        "spikeRatio": 4.57,
         "recentVideoCount": 11,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "charlie",
-      "keywords": [
-        "charlie",
-        "kirk",
-        "charlie kirk",
-        "kirk murder",
-        "murder case",
-        "court"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.042,
-        "spikeRatio": 7.94,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
+        "baselineVideoCount": 21,
+        "detectedAt": "2026-07-16T06:41:05.214Z"
       }
     },
     {
@@ -90,11 +31,65 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.3333,
-        "baselineSaturation": 0.1031,
-        "spikeRatio": 3.23,
+        "baselineSaturation": 0.1007,
+        "spikeRatio": 3.31,
         "recentVideoCount": 5,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
+        "detectedAt": "2026-07-16T06:41:05.214Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "claims",
+      "keywords": [
+        "post",
+        "claims",
+        "online"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5556,
+        "baselineSaturation": 0.125,
+        "spikeRatio": 4.44,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-07-16T06:41:05.214Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "female",
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8889,
+        "baselineSaturation": 0.1103,
+        "spikeRatio": 8.06,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-07-16T06:41:05.214Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "allegedly",
+      "keywords": [
+        "allegedly"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0662,
+        "spikeRatio": 5.04,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-07-16T06:41:05.214Z"
       }
     },
     {
@@ -107,15 +102,18 @@
         "out quartering",
         "check",
         "check out",
-        "out"
+        "out",
+        "charlie",
+        "kirk",
+        "charlie kirk"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1337,
-        "spikeRatio": 7.48,
+        "baselineSaturation": 0.197,
+        "spikeRatio": 5.08,
         "recentVideoCount": 6,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-07-16T06:41:05.214Z"
       }
     }
   ]
