@@ -4389,8 +4389,8 @@ function buildMonthlyData(scope){
       let out = '';
       // The staircase era: a faint band from the first post-peak trough to now.
       const firstTroughI = bounces[0].i - 1;
-      out += '<rect class="rally-era" x="' + xF(firstTroughI).toFixed(1) + '" y="' + PD.t + '" width="' + (W - PD.r - xF(firstTroughI)).toFixed(1) + '" height="' + ih + '" />';
-      out += '<text class="rally-era-lab" x="' + (xF(firstTroughI) + 8).toFixed(1) + '" y="' + (PD.t + 14) + '">the staircase era — ' + lbl(totals[firstTroughI].m) + ' →</text>';
+      out += '<rect class="rally-era" x="' + xF(peakI).toFixed(1) + '" y="' + PD.t + '" width="' + (W - PD.r - xF(peakI)).toFixed(1) + '" height="' + ih + '" />';
+      out += '<text class="rally-era-lab" x="' + (xF(peakI) + 52).toFixed(1) + '" y="' + (PD.t + 14) + '">the decline — ' + lbl(totals[peakI].m) + ' →</text>';
       for (const frac of [0.25, 0.5, 0.75, 1]) {
         const gy = yF(maxV * frac);
         out += '<line class="chart-grid-line" x1="' + PD.l + '" y1="' + gy.toFixed(1) + '" x2="' + (W - PD.r) + '" y2="' + gy.toFixed(1) + '" />';
@@ -4438,7 +4438,15 @@ function buildMonthlyData(scope){
         const cls = c.record ? ' rec' : c.first ? ' first' : '';
         const mLab = lbl(totals[c.i].m), vLab = kfmt(totals[c.i].v);
         let txt;
-        if (c.first) txt = mLab + ' — first trough · ' + vLab + ' · the staircase begins';
+        if (c.first) {
+          const ftM = totals[c.i].m, ftV = totals[c.i].v;
+          let since = null;
+          for (const m of [...buckets.keys()].sort()) {
+            if (m >= ftM) break;
+            if (buckets.get(m).reduce((a, b) => a + b, 0) <= ftV) since = m;
+          }
+          txt = mLab + ' — ' + vLab + ' · the first crack: his lowest month since ' + (since ? lbl(since) : 'the channel’s first years') + ', below anything the peak year produced';
+        }
         else {
           txt = c.kill ? mLab + ' — ' + vLab + ' · back below the ' + killedBy.get(c.i).join(' and the ') + ' low' + (killedBy.get(c.i).length > 1 ? 's' : '') : mLab + ' — ' + vLab;
           if (c.record) txt += ' · the record low';
