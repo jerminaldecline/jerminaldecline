@@ -345,10 +345,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .rally-lab.pend{fill:var(--accent)}
 .rally-era{fill:var(--down);opacity:0.05}
 .rally-era-lab{fill:var(--down);font-size:10.5px;font-weight:700;opacity:0.8}
-.rally-callout{stroke:var(--text-dim);stroke-width:1;stroke-dasharray:2 2}
-.rally-kill-lab{fill:var(--down);font-size:10px;font-weight:650;text-anchor:middle}
-.rally-kill-lab.rec{font-weight:800;font-size:10.5px}
-.rally-kill-lab.first{fill:var(--text-dim)}
+.rally-badge circle{fill:var(--down)}
+.rally-badge.first circle{fill:var(--text-dim)}
+.rally-badge.rec circle{stroke:var(--accent);stroke-width:2}
+.rally-badge text{fill:#fff;font-size:9.5px;font-weight:700;text-anchor:middle;font-family:inherit}
+.rally-legend{list-style:none;margin:0.75rem 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.35rem 1.4rem;font-size:0.76rem;color:var(--subtext);line-height:1.45}
+.rally-legend li{display:flex;align-items:baseline;gap:0.5rem}
+.rl-badge{flex:none;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--down);color:#fff;font-size:0.62rem;font-weight:700;transform:translateY(2px)}
+.rl-badge.first{background:var(--text-dim)}
+.rl-badge.rec{box-shadow:0 0 0 2px var(--accent)}
 #bestMonthChart{width:100%;height:auto;display:block}
 #seasonYears{width:100%;height:auto;display:block}
 #midtermChart{width:100%;height:auto;display:block}
@@ -2482,8 +2487,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="desc-pattern-body" id="rallyBody" hidden>
         <div class="an-chart-title-sub" id="rallySub"></div>
         <div class="season-verdict" id="rallyVerdict"></div>
-        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="skey-swatch" style="background:var(--down)"></span>✕ the month that erased the rally</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
-        <svg id="rallyChart" viewBox="0 0 720 340" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
+        <div class="season-key"><span class="skey-item"><span class="skey-swatch" style="background:var(--up)"></span>rally — a month that rose off a low</span><span class="skey-item"><span class="rl-badge">1</span>numbered lows — detailed beneath the chart</span><span class="skey-item"><span class="skey-swatch rally-pend"></span>awaiting verdict</span></div>
+        <svg id="rallyChart" viewBox="0 0 720 300" role="img" aria-label="Monthly long-form views with every post-peak rally and the new low that followed it"></svg>
+        <ol class="rally-legend" id="rallyLegend"></ol>
         <div class="season-foot" id="rallyFoot"></div>
       </div>
     </div>
@@ -4375,8 +4381,8 @@ function buildMonthlyData(scope){
       document.getElementById('rallyFoot').textContent =
         'Method, for the curious: total views on each complete month’s long-form uploads, TheQuartering main channel; the in-progress month is excluded. A rally is a month that rises off a ≥6-month low after the all-time peak. It is erased when any later month closes below that rally’s own starting low — which is not always an all-time low (Dec ’24 erased the Oct ’23 rally by undercutting 11.8M, while the absolute record then still belonged to Feb ’23). Absolute records get their own callouts. A rally would survive if twelve months passed without being erased — none have. Verdicts recompute as each month completes.';
 
-      const W = 720, H = 340;
-      const PD = { t: 30, r: 24, b: 80, l: 56 };
+      const W = 720, H = 300;
+      const PD = { t: 30, r: 24, b: 44, l: 56 };
       const iw = W - PD.l - PD.r, ih = H - PD.t - PD.b;
       const maxV = totals[peakI].v * 1.06;
       const xF = i => PD.l + iw * (i / (totals.length - 1));
@@ -4393,7 +4399,7 @@ function buildMonthlyData(scope){
       }
       totals.forEach((x, i) => {
         if (x.m.slice(5, 7) === '01') {
-          out += '<text class="chart-axis-label x" x="' + xF(i).toFixed(1) + '" y="' + (H - 18) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
+          out += '<text class="chart-axis-label x" x="' + xF(i).toFixed(1) + '" y="' + (H - 14) + '" text-anchor="middle">' + x.m.slice(0, 4) + '</text>';
           out += '<line class="chart-grid-line" x1="' + xF(i).toFixed(1) + '" y1="' + PD.t + '" x2="' + xF(i).toFixed(1) + '" y2="' + (PD.t + ih) + '" />';
         }
       });
@@ -4423,35 +4429,26 @@ function buildMonthlyData(scope){
       if (!killIs.includes(minI)) callouts.push({ i: minI, kill: false, record: true });
       if (!callouts.some(c => c.i === firstTroughI)) callouts.push({ i: firstTroughI, kill: false, first: true });
       callouts.sort((a, b) => a.i - b.i);
-      // Kill crosses first, then zone-placed labels.
-      for (const c of callouts) {
-        if (!c.kill) continue;
+      // Numbered badges on the marks; the prose lives in the legend list
+      // beneath the chart, where it has room to say which rally each low
+      // erased. Badge sits just under its point, clamped inside the plot.
+      const legendItems = [];
+      callouts.forEach((c, k) => {
         const kx = xF(c.i), ky = yF(totals[c.i].v);
-        out += '<text class="rally-kill" x="' + kx.toFixed(1) + '" y="' + (ky + 4).toFixed(1) + '">✕<title>' + lbl(totals[c.i].m) + ' (' + kfmt(totals[c.i].v) + '): fell back below the ' + killedBy.get(c.i).join(' and the ') + ' low' + (killedBy.get(c.i).length > 1 ? 's' : '') + '</title></text>';
-      }
-      const topZ = [], botZ = [];
-      let flip = true;
-      for (const c of callouts) {
-        const fx = (xF(c.i) - PD.l) / iw;
-        if (fx < 0.45) botZ.push(c);
-        else { (flip ? topZ : botZ).push(c); flip = !flip; }
-      }
-      const place = (zone, isTop) => {
-        const rows = isTop ? (zone.length > 3 ? [PD.t + 32, PD.t + 48] : [PD.t + 36]) : (zone.length > 5 ? [H - 62, H - 46] : [H - 52]);
-        const x0 = isTop ? 0.40 : 0, span = isTop ? 0.60 : 1;
-        zone.forEach((c, k) => {
-          const ki = c.i, kx = xF(ki), ky = yF(totals[ki].v);
-          const label = (c.record ? 'record low · ' : c.first ? 'first trough · ' : '') + lbl(totals[ki].m).replace(' 20', ' ’') + ' · ' + kfmt(totals[ki].v);
-          const wEst = label.length * 6.2;
-          let slotX = PD.l + iw * (x0 + span * ((k + 0.5) / zone.length));
-          slotX = Math.max(PD.l + wEst / 2, Math.min(W - PD.r - wEst / 2, slotX));
-          const y = rows[k % rows.length];
-          out += '<line class="rally-callout" x1="' + kx.toFixed(1) + '" y1="' + (ky + (isTop ? -9 : (c.kill ? 9 : 6))).toFixed(1) + '" x2="' + slotX.toFixed(1) + '" y2="' + (isTop ? y + 4 : y - 10) + '" />';
-          out += '<text class="rally-kill-lab' + (c.record ? ' rec' : c.first ? ' first' : '') + '" x="' + slotX.toFixed(1) + '" y="' + y + '">' + label + '</text>';
-        });
-      };
-      place(topZ, true);
-      place(botZ, false);
+        const by = Math.min(ky + 15, PD.t + ih - 10);
+        const cls = c.record ? ' rec' : c.first ? ' first' : '';
+        const mLab = lbl(totals[c.i].m), vLab = kfmt(totals[c.i].v);
+        let txt;
+        if (c.first) txt = mLab + ' — first trough · ' + vLab + ' · the staircase begins';
+        else {
+          txt = c.kill ? mLab + ' — ' + vLab + ' · back below the ' + killedBy.get(c.i).join(' and the ') + ' low' + (killedBy.get(c.i).length > 1 ? 's' : '') : mLab + ' — ' + vLab;
+          if (c.record) txt += ' · the record low';
+        }
+        out += '<g class="rally-badge' + cls + '"><circle cx="' + kx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="8"/><text x="' + kx.toFixed(1) + '" y="' + (by + 3.2).toFixed(1) + '">' + (k + 1) + '</text><title>' + txt + '</title></g>';
+        legendItems.push('<li><span class="rl-badge' + cls + '">' + (k + 1) + '</span><span>' + txt + '</span></li>');
+      });
+      const rlLeg = document.getElementById('rallyLegend');
+      if (rlLeg) rlLeg.innerHTML = legendItems.join('');
       out += '<text class="chart-attribution" x="' + (W - PD.r) + '" y="' + (H - 3) + '" text-anchor="end">TheQuartering · long-form · jerminaldecline.com</text>';
       document.getElementById('rallyChart').innerHTML = out;
       rc.hidden = false;
