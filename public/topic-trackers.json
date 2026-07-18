@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-17T06:36:34.147Z",
+  "lastUpdated": "2026-07-18T06:27:30.379Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -14,28 +14,12 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7333,
-        "baselineSaturation": 0.1715,
-        "spikeRatio": 4.28,
-        "recentVideoCount": 11,
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.1741,
+        "spikeRatio": 4.6,
+        "recentVideoCount": 12,
         "baselineVideoCount": 23,
-        "detectedAt": "2026-07-17T06:36:34.147Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "internet",
-      "keywords": [
-        "internet",
-        "free"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.1058,
-        "spikeRatio": 3.15,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-07-17T06:36:34.147Z"
+        "detectedAt": "2026-07-18T06:27:30.379Z"
       }
     },
     {
@@ -52,28 +36,12 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8571,
-        "baselineSaturation": 0.1397,
-        "spikeRatio": 6.14,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-07-17T06:36:34.147Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "post",
-      "keywords": [
-        "post",
-        "claims"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4286,
-        "baselineSaturation": 0.0662,
-        "spikeRatio": 6.48,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-07-17T06:36:34.147Z"
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.1591,
+        "spikeRatio": 5.24,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-07-18T06:27:30.379Z"
       }
     },
     {
@@ -90,11 +58,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.155,
-        "spikeRatio": 6.45,
+        "baselineSaturation": 0.1615,
+        "spikeRatio": 6.19,
         "recentVideoCount": 5,
         "baselineVideoCount": 15,
-        "detectedAt": "2026-07-17T06:36:34.147Z"
+        "detectedAt": "2026-07-18T06:27:30.379Z"
       }
     }
   ]

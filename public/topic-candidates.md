@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-17
+# Topic candidates — 2026-07-18
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,15 +6,17 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 136 baseline videos
+Pool: 15 recent videos, 134 baseline videos
 
 ### Cluster 1: `ice`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/136 videos (1%)
-- **Spike ratio:** 18.3x
-- **Related terms:** `ice`
+- **Recent saturation:** 4/15 videos (**27%**)
+- **Baseline saturation:** 1/134 videos (1%)
+- **Spike ratio:** 24.0x
+- **Related terms:** `ice`, `agents`
 - **Sample recent videos:**
+  - 2026-07-17 — _WOKE CHIC FOUND OUT_  
+    Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
   - 2026-07-15 — _LIBERAL FINDS OUT_  
     Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
   - 2026-07-14 — _RIOTS FAIL EPICLY_  
@@ -24,49 +26,31 @@ Pool: 15 recent videos, 136 baseline videos
 
 ### Cluster 2: `vlogs`
 
-- **Recent saturation:** 11/15 videos (**73%**)
-- **Baseline saturation:** 23/136 videos (17%)
-- **Spike ratio:** 4.3x
+- **Recent saturation:** 12/15 videos (**80%**)
+- **Baseline saturation:** 23/134 videos (17%)
+- **Spike ratio:** 4.6x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-16 — _HE ACTUALLY SAID IT_  
+  - 2026-07-17 — _WOKE CHIC FOUND OUT_  
+    Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
+  - 2026-07-16 — _I CAN'T BELIEVE IT_  
     JD Vance Actually Says Epstein Had Connections To Israeli Intelligence
-  - 2026-07-16 — _WE CAN'T BREATHE_  
+  - 2026-07-16 — _IT'S GETTING WORSE_  
     New York Can’t Breathe As Canadian Wildfire Smoke Engulfs City
   - 2026-07-15 — _IT GOT WORSE_  
     Elliot Page Calls Gender A Myth While Promoting The Odyssey
   - 2026-07-15 — _LIBERAL FINDS OUT_  
     Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
-  - 2026-07-15 — _WE'RE DYING_  
-    Illegal Migrant Kills Three Americans Then Gets Just Four Years
-
-### Cluster 3: `internet`
-
-- **Recent saturation:** 5/15 videos (**33%**)
-- **Baseline saturation:** 14/136 videos (10%)
-- **Spike ratio:** 3.1x
-- **Related terms:** `internet`, `free`
-- **Sample recent videos:**
-  - 2026-07-16 — _MOST EVIL WOMAN ALIVE_  
-    Breaking News
-  - 2026-07-14 — _NUCLEAR BLACK FATIGUE_  
-    Jersey Mike’s Worker Goes Nuclear On Entitled Birthday Freebie Karen
-  - 2026-07-13 — _KIDNAPPER FINDS OUT!_  
-    Hero Bystanders Destroy Nude Psycho After Police Ignore Emergency Calls
-  - 2026-07-10 — _SHE'S GOING TO PRISON_  
-    Minnesota Daycare Owner Pleads Guilty In Multi-Million Dollar Federal Fraud Scheme Today
-  - 2026-07-10 — _TOTAL MELTDOWN_  
-    Candace Owens Faces Renewed Scrutiny Over Claims In Charlie Kirk Murder Case
 
 ## @QuarteringLive
 
-Pool: 7 recent videos, 67 baseline videos
+Pool: 6 recent videos, 65 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 6/7 videos (**86%**)
-- **Baseline saturation:** 9/67 videos (13%)
-- **Spike ratio:** 6.1x
+- **Recent saturation:** 5/6 videos (**83%**)
+- **Baseline saturation:** 10/65 videos (15%)
+- **Spike ratio:** 5.2x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `female`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-15 — _PEAK WOKENESS_  
@@ -80,29 +64,15 @@ Pool: 7 recent videos, 67 baseline videos
   - 2026-07-12 — _EVERY RESTERAUNT SHOULD DO THIS_  
     Bay Area Chinese Restaurant Reportedly Fines Parents For Loud Children
 
-### Cluster 2: `post`
-
-- **Recent saturation:** 3/7 videos (**43%**)
-- **Baseline saturation:** 4/67 videos (6%)
-- **Spike ratio:** 6.5x
-- **Related terms:** `post`, `claims`
-- **Sample recent videos:**
-  - 2026-07-12 — _EVERY RESTERAUNT SHOULD DO THIS_  
-    Bay Area Chinese Restaurant Reportedly Fines Parents For Loud Children
-  - 2026-07-11 — _THIS WAS AMAZING_  
-    Alex Jones Mocking Sneako And Islam Sparks Online Reaction
-  - 2026-07-10 — _HE RATTED HIM OUT!_  
-    Lance Twiggs Says He Recognizes Tyler Robinson In Surveillance Images
-
 ## @JeremyHambly
 
-Pool: 5 recent videos, 99 baseline videos
+Pool: 5 recent videos, 95 baseline videos
 
 ### Cluster 1: `vlogs`
 
 - **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 15/99 videos (15%)
-- **Spike ratio:** 6.5x
+- **Baseline saturation:** 15/95 videos (16%)
+- **Spike ratio:** 6.2x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-15 — _THIS IS DEMONIC_  
