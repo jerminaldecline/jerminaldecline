@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-18T06:27:30.379Z",
+  "lastUpdated": "2026-07-19T07:04:29.020Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -15,11 +15,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8,
-        "baselineSaturation": 0.1741,
-        "spikeRatio": 4.6,
+        "baselineSaturation": 0.1794,
+        "spikeRatio": 4.46,
         "recentVideoCount": 12,
         "baselineVideoCount": 23,
-        "detectedAt": "2026-07-18T06:27:30.379Z"
+        "detectedAt": "2026-07-19T07:04:29.020Z"
       }
     },
     {
@@ -36,12 +36,12 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1591,
-        "spikeRatio": 5.24,
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1641,
+        "spikeRatio": 6.1,
         "recentVideoCount": 5,
         "baselineVideoCount": 10,
-        "detectedAt": "2026-07-18T06:27:30.379Z"
+        "detectedAt": "2026-07-19T07:04:29.020Z"
       }
     },
     {
@@ -58,11 +58,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1615,
-        "spikeRatio": 6.19,
+        "baselineSaturation": 0.1703,
+        "spikeRatio": 5.87,
         "recentVideoCount": 5,
         "baselineVideoCount": 15,
-        "detectedAt": "2026-07-18T06:27:30.379Z"
+        "detectedAt": "2026-07-19T07:04:29.020Z"
       }
     }
   ]

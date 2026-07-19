@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-18
+# Topic candidates — 2026-07-19
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,16 +6,16 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 134 baseline videos
+Pool: 15 recent videos, 130 baseline videos
 
 ### Cluster 1: `ice`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 1/134 videos (1%)
-- **Spike ratio:** 24.0x
+- **Baseline saturation:** 1/130 videos (1%)
+- **Spike ratio:** 23.3x
 - **Related terms:** `ice`, `agents`
 - **Sample recent videos:**
-  - 2026-07-17 — _WOKE CHIC FOUND OUT_  
+  - 2026-07-17 — _PERFECT INSTANT REGRET_  
     Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
   - 2026-07-15 — _LIBERAL FINDS OUT_  
     Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
@@ -27,11 +27,11 @@ Pool: 15 recent videos, 134 baseline videos
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 23/134 videos (17%)
-- **Spike ratio:** 4.6x
+- **Baseline saturation:** 23/130 videos (18%)
+- **Spike ratio:** 4.5x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-17 — _WOKE CHIC FOUND OUT_  
+  - 2026-07-17 — _PERFECT INSTANT REGRET_  
     Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
   - 2026-07-16 — _I CAN'T BELIEVE IT_  
     JD Vance Actually Says Epstein Had Connections To Israeli Intelligence
@@ -44,13 +44,13 @@ Pool: 15 recent videos, 134 baseline videos
 
 ## @QuarteringLive
 
-Pool: 6 recent videos, 65 baseline videos
+Pool: 5 recent videos, 63 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 5/6 videos (**83%**)
-- **Baseline saturation:** 10/65 videos (15%)
-- **Spike ratio:** 5.2x
+- **Recent saturation:** 5/5 videos (**100%**)
+- **Baseline saturation:** 10/63 videos (16%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `female`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-15 — _PEAK WOKENESS_  
@@ -66,13 +66,13 @@ Pool: 6 recent videos, 65 baseline videos
 
 ## @JeremyHambly
 
-Pool: 5 recent videos, 95 baseline videos
+Pool: 5 recent videos, 90 baseline videos
 
 ### Cluster 1: `vlogs`
 
 - **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 15/95 videos (16%)
-- **Spike ratio:** 6.2x
+- **Baseline saturation:** 15/90 videos (17%)
+- **Spike ratio:** 5.9x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-15 — _THIS IS DEMONIC_  
