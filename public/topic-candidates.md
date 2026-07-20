@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-19
+# Topic candidates — 2026-07-20
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 130 baseline videos
+Pool: 15 recent videos, 126 baseline videos
 
 ### Cluster 1: `ice`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 1/130 videos (1%)
-- **Spike ratio:** 23.3x
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 22.6x
 - **Related terms:** `ice`, `agents`
 - **Sample recent videos:**
   - 2026-07-17 — _PERFECT INSTANT REGRET_  
@@ -27,8 +27,8 @@ Pool: 15 recent videos, 130 baseline videos
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 23/130 videos (18%)
-- **Spike ratio:** 4.5x
+- **Baseline saturation:** 23/126 videos (18%)
+- **Spike ratio:** 4.3x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-17 — _PERFECT INSTANT REGRET_  
@@ -44,13 +44,13 @@ Pool: 15 recent videos, 130 baseline videos
 
 ## @QuarteringLive
 
-Pool: 5 recent videos, 63 baseline videos
+Pool: 4 recent videos, 61 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 10/63 videos (16%)
-- **Spike ratio:** 6.1x
+- **Recent saturation:** 4/4 videos (**100%**)
+- **Baseline saturation:** 11/61 videos (18%)
+- **Spike ratio:** 5.4x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `female`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-15 — _PEAK WOKENESS_  
@@ -61,18 +61,16 @@ Pool: 5 recent videos, 63 baseline videos
     Jersey Mike’s Worker Becomes Hero After Destroying Entitled Birthday Karen
   - 2026-07-14 — _FIRED FOR BEING CHRISTIAN_  
     Chili’s Fires Christian Worker For Refusing They Them Pronoun Demands
-  - 2026-07-12 — _EVERY RESTERAUNT SHOULD DO THIS_  
-    Bay Area Chinese Restaurant Reportedly Fines Parents For Loud Children
 
 ## @JeremyHambly
 
-Pool: 5 recent videos, 90 baseline videos
+Pool: 5 recent videos, 87 baseline videos
 
 ### Cluster 1: `vlogs`
 
 - **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 15/90 videos (17%)
-- **Spike ratio:** 5.9x
+- **Baseline saturation:** 14/87 videos (16%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-15 — _THIS IS DEMONIC_  
