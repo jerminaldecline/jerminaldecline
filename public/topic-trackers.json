@@ -1,45 +1,6 @@
 {
-  "lastUpdated": "2026-07-15T06:35:15.096Z",
+  "lastUpdated": "2026-07-21T07:05:34.331Z",
   "trackers": [
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "post",
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "claims",
-        "out",
-        "online"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8889,
-        "baselineSaturation": 0.1544,
-        "spikeRatio": 5.76,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "allegedly",
-      "keywords": [
-        "allegedly"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0515,
-        "spikeRatio": 6.48,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
@@ -53,48 +14,12 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7333,
-        "baselineSaturation": 0.1412,
-        "spikeRatio": 5.19,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "charlie",
-      "keywords": [
-        "charlie",
-        "kirk",
-        "charlie kirk",
-        "kirk murder",
-        "murder case",
-        "court"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.042,
-        "spikeRatio": 7.94,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "internet",
-      "keywords": [
-        "internet",
-        "free"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.1031,
-        "spikeRatio": 3.23,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
+        "recentSaturation": 0.8667,
+        "baselineSaturation": 0.2054,
+        "spikeRatio": 4.22,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-07-21T07:05:34.331Z"
       }
     },
     {
@@ -111,11 +36,33 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1337,
-        "spikeRatio": 7.48,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-07-15T06:35:15.096Z"
+        "baselineSaturation": 0.1966,
+        "spikeRatio": 5.09,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-07-21T07:05:34.331Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "female",
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1917,
+        "spikeRatio": 5.22,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-07-21T07:05:34.331Z"
       }
     }
   ]
