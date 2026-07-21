@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-20
+# Topic candidates — 2026-07-21
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,51 +6,87 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 126 baseline videos
+Pool: 15 recent videos, 128 baseline videos
 
-### Cluster 1: `ice`
+### Cluster 1: `massive`
+
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 1/128 videos (1%)
+- **Spike ratio:** 17.2x
+- **Related terms:** `massive`
+- **Sample recent videos:**
+  - 2026-07-20 — _INSANE WOKE COPE_  
+    The Odyssey Explodes As Woke Media Declares Culture War Over
+  - 2026-07-20 — _THIS IS INSANE_  
+    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
+  - 2026-07-16 — _IT'S GETTING WORSE_  
+    New York Can’t Breathe As Canadian Wildfire Smoke Engulfs City
+
+### Cluster 2: `ice`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 1/126 videos (1%)
-- **Spike ratio:** 22.6x
-- **Related terms:** `ice`, `agents`
+- **Baseline saturation:** 5/128 videos (4%)
+- **Spike ratio:** 6.3x
+- **Related terms:** `ice`, `federal`
 - **Sample recent videos:**
+  - 2026-07-20 — _SHE RAN INSTANTLY_  
+    Steven Crowder Unloads On Candace Owens & Demands Public Debate
   - 2026-07-17 — _PERFECT INSTANT REGRET_  
     Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
   - 2026-07-15 — _LIBERAL FINDS OUT_  
     Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
   - 2026-07-14 — _RIOTS FAIL EPICLY_  
     ICE Karens Return And Admit Facts Do Not Matter Anymore 
-  - 2026-07-13 — _IT HAPPENED AGAIN_  
-    ICE Agent Shoots Driver Dead And Maine Protests Instantly Erupt
 
-### Cluster 2: `vlogs`
+### Cluster 3: `vlogs`
 
-- **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 23/126 videos (18%)
-- **Spike ratio:** 4.3x
+- **Recent saturation:** 13/15 videos (**87%**)
+- **Baseline saturation:** 26/128 videos (20%)
+- **Spike ratio:** 4.2x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
+  - 2026-07-20 — _INSANE WOKE COPE_  
+    The Odyssey Explodes As Woke Media Declares Culture War Over
+  - 2026-07-20 — _NUCLEAR MELTDOWN_  
+    Police Investigate Stolen Car And Walk Into Transgender Campus Chaos
+  - 2026-07-20 — _THIS IS INSANE_  
+    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
+  - 2026-07-20 — _SHE RAN INSTANTLY_  
+    Steven Crowder Unloads On Candace Owens & Demands Public Debate
   - 2026-07-17 — _PERFECT INSTANT REGRET_  
     Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
-  - 2026-07-16 — _I CAN'T BELIEVE IT_  
-    JD Vance Actually Says Epstein Had Connections To Israeli Intelligence
-  - 2026-07-16 — _IT'S GETTING WORSE_  
-    New York Can’t Breathe As Canadian Wildfire Smoke Engulfs City
-  - 2026-07-15 — _IT GOT WORSE_  
-    Elliot Page Calls Gender A Myth While Promoting The Odyssey
-  - 2026-07-15 — _LIBERAL FINDS OUT_  
-    Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
+
+## @JeremyHambly
+
+Pool: 5 recent videos, 88 baseline videos
+
+### Cluster 1: `vlogs`
+
+- **Recent saturation:** 5/5 videos (**100%**)
+- **Baseline saturation:** 17/88 videos (19%)
+- **Spike ratio:** 5.1x
+- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
+- **Sample recent videos:**
+  - 2026-07-20 — _SHE'S PANICKING_  
+    Candace Owens Meltdown Gets Uglier As Charlie Kirk Feud Explodes
+  - 2026-07-20 — _BRUTAL BODYCAM_  
+    Sunny Hostin Pulls Do You Know Me Card On Police
+  - 2026-07-20 — _THIS IS BAD_  
+    Andrew Tate Arrested By US Marshals As Britain Demands Extradition
+  - 2026-07-15 — _THIS IS DEMONIC_  
+    Candace Owens Hits Rock Bottom With Latest Charlie Kirk Theory
+  - 2026-07-14 — _MAMDANI COLLAPSES_  
+    Mamdani’s Socialist Rent Freeze Backfires As New York Prices Explode
 
 ## @QuarteringLive
 
-Pool: 4 recent videos, 61 baseline videos
+Pool: 4 recent videos, 59 baseline videos
 
 ### Cluster 1: `check`
 
 - **Recent saturation:** 4/4 videos (**100%**)
-- **Baseline saturation:** 11/61 videos (18%)
-- **Spike ratio:** 5.4x
+- **Baseline saturation:** 11/59 videos (19%)
+- **Spike ratio:** 5.2x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `female`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-15 — _PEAK WOKENESS_  
@@ -61,28 +97,6 @@ Pool: 4 recent videos, 61 baseline videos
     Jersey Mike’s Worker Becomes Hero After Destroying Entitled Birthday Karen
   - 2026-07-14 — _FIRED FOR BEING CHRISTIAN_  
     Chili’s Fires Christian Worker For Refusing They Them Pronoun Demands
-
-## @JeremyHambly
-
-Pool: 5 recent videos, 87 baseline videos
-
-### Cluster 1: `vlogs`
-
-- **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 14/87 videos (16%)
-- **Spike ratio:** 6.1x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
-- **Sample recent videos:**
-  - 2026-07-15 — _THIS IS DEMONIC_  
-    Candace Owens Hits Rock Bottom With Latest Charlie Kirk Theory
-  - 2026-07-14 — _MAMDANI COLLAPSES_  
-    Mamdani’s Socialist Rent Freeze Backfires As New York Prices Explode
-  - 2026-07-13 — _THIS WAS SAVAGE_  
-    Tyler Robinson Could Face Trial After Overwhelming Charlie Kirk Evidence
-  - 2026-07-13 — _MASSIVE NEW FRAUD_  
-    Massive Medicaid Fraud Ring Exposed In Shocking Queens Investigation Video
-  - 2026-07-13 — _ASMONGOLD ATTACKED_  
-    Asmongold Gets Attacked For Saying What Millions Already Believe
 
 ---
 
