@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-21T07:05:34.331Z",
+  "lastUpdated": "2026-07-22T07:07:52.032Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -15,11 +15,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2054,
-        "spikeRatio": 4.22,
+        "baselineSaturation": 0.2305,
+        "spikeRatio": 3.76,
         "recentVideoCount": 13,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-07-21T07:05:34.331Z"
+        "baselineVideoCount": 29,
+        "detectedAt": "2026-07-22T07:07:52.032Z"
       }
     },
     {
@@ -30,24 +30,28 @@
         "quartering vlogs",
         "quartering",
         "out quartering",
+        "candace",
+        "owens",
+        "candace owens",
         "check",
         "check out",
-        "out"
+        "out",
+        "kirk",
+        "charlie"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1966,
-        "spikeRatio": 5.09,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-07-21T07:05:34.331Z"
+        "baselineSaturation": 0.3046,
+        "spikeRatio": 3.28,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-07-22T07:07:52.032Z"
       }
     },
     {
       "channelHandle": "@QuarteringLive",
       "termId": "check",
       "keywords": [
-        "female",
         "check",
         "quartering",
         "vlogs",
@@ -58,11 +62,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1917,
-        "spikeRatio": 5.22,
+        "baselineSaturation": 0.1949,
+        "spikeRatio": 5.13,
         "recentVideoCount": 4,
         "baselineVideoCount": 11,
-        "detectedAt": "2026-07-21T07:05:34.331Z"
+        "detectedAt": "2026-07-22T07:07:52.032Z"
       }
     }
   ]

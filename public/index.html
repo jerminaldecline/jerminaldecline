@@ -10914,11 +10914,15 @@ function renderWindowList(startDate, endDate) {
     let rows=data.reposts.filter(r=>ch==="ALL"||r.channelId===ch);
     if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed reposts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    const vById={}; if(ds&&ds.videos)for(const v of ds.videos)vById[v.id]=v;
+    const fmtViews=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
     const intro='<div class="reposts-intro">These Shorts still carry the <b>original creator’s platform watermark</b>, burned into the frame — hard proof they’re re-uploads of someone else’s video, posted without credit. Handles were verified by reading the on-screen stamp. <b>'+rows.length+'</b> confirmed this way'+(ch==="ALL"?" across the network":"")+'.</div>';
     const listHtml=rows.map(r=>{
       const yt='https://www.youtube.com/shorts/'+r.id;
       const chName=(chans[r.channelId]&&(chans[r.channelId].title||chans[r.channelId].handle))||r.channel||"";
-      const meta=nice(r.date)+(ch==="ALL"?" · "+esc(chName):"")+" · Short";
+      const vw=vById[r.id];
+      const views=(vw&&vw.views!=null)?fmtViews(vw.views)+" views":"";
+      const meta=nice(r.date)+(ch==="ALL"?" · "+esc(chName):"")+" · Short"+(views?" · "+views:"");
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
         '<a class="rt" href="'+yt+'" target="_blank" rel="noopener"><b>'+esc(r.title)+'</b><span>'+meta+'</span></a>'+
