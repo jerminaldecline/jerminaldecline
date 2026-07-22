@@ -10927,7 +10927,7 @@ function renderWindowList(startDate, endDate) {
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
     const vById={}; if(ds&&ds.videos)for(const v of ds.videos)vById[v.id]=v;
     const fmtViews=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
-    const intro='<div class="reposts-intro">These Shorts still carry the <b>original creator’s platform watermark</b>, burned into the frame — hard proof they’re re-uploads of someone else’s video, posted without credit. Handles were verified by reading the on-screen stamp. <b>'+rows.length+'</b> confirmed this way'+(ch==="ALL"?" across the network":"")+'.</div>';
+    const intro='<div class="reposts-intro">These Shorts still carry the <b>original creator’s platform watermark</b>, burned into the frame — hard proof they’re re-uploads of someone else’s video, posted without credit. Handles were verified by reading the on-screen stamp. <b>'+rows.length+'</b> confirmed this way'+(ch==="ALL"?" across the network":"")+'. If you wish to alert a creator, click <b>Copy alert</b> on their row for a ready-to-send response template.</div>';
     const AL=(window.__repostAlerts=window.__repostAlerts||{});
     const PLAT={tiktok:'TikTok',reels:'Instagram Reels',instagram:'Instagram',douyin:'Douyin',kwai:'Kwai',likee:'Likee'};
     const listHtml=rows.map(r=>{
@@ -10937,7 +10937,9 @@ function renderWindowList(startDate, endDate) {
       const views=(vw&&vw.views!=null)?fmtViews(vw.views)+" views":"";
       const meta=nice(r.date)+(ch==="ALL"?" · "+esc(chName):"")+" · Short"+(views?" · "+views:"");
       const platName=PLAT[String(r.platform||'').toLowerCase()]||'platform';
-      AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube:\n'+yt+'\n\nYour '+platName+' watermark is still visible in the re-upload. As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
+      const vnum=(vw&&vw.views!=null)?vw.views:null;
+      const viewsClause=vnum?(', where it has '+vnum.toLocaleString()+' views'):'';
+      AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\nYour '+platName+' watermark is still visible in the re-upload. As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
         '<a class="rt" href="'+yt+'" target="_blank" rel="noopener"><b>'+esc(r.title)+'</b><span>'+meta+'</span></a>'+
