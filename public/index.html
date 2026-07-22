@@ -10923,6 +10923,7 @@ function renderWindowList(startDate, endDate) {
     const esc=s=>String(s==null?"":s).replace(/</g,"&lt;");
     const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" ’"+String(q[0]).slice(2);};
+    ch="ALL";   // Reposts panel always shows the entire network list, regardless of the videos-tab channel filter
     let rows=data.reposts.filter(r=>ch==="ALL"||r.channelId===ch);
     if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed reposts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
@@ -10996,7 +10997,7 @@ function renderWindowList(startDate, endDate) {
       if(ds&&ds.videos){
         set("removed", ds.videos.filter(v=>(v.unavailable||v.unlisted)&&(ch==="ALL"||v.channelId===ch)).length);
         const rd=window.__repostsData&&window.__repostsData.reposts;
-        if(rd)set("reposts", rd.filter(r=>ch==="ALL"||r.channelId===ch).length);
+        if(rd)set("reposts", rd.length);   // reposts panel shows the whole network, so badge = total
         const ads=window.__adIdSet;
         if(ads&&ads.size)set("promos", ds.videos.filter(v=>ads.has(v.id)&&(ch==="ALL"||v.channelId===ch)).length);
       }
