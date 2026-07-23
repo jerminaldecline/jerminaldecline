@@ -2466,7 +2466,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="words" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg>Word cloud</button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promoted videos <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
-        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Reposts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
       </div>
       <div class="vbody" id="vBody" hidden>
         <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
@@ -10925,7 +10925,7 @@ function renderWindowList(startDate, endDate) {
     const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" ’"+String(q[0]).slice(2);};
     ch="ALL";   // Reposts panel always shows the entire network list, regardless of the videos-tab channel filter
     let rows=data.reposts.filter(r=>ch==="ALL"||r.channelId===ch);
-    if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed reposts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
+    if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed stolen shorts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
     const vById={}; if(ds&&ds.videos)for(const v of ds.videos)vById[v.id]=v;
     const fmtViews=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
