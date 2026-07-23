@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-07-22-AM",
-    "snapshots": 79
+    "to": "2026-07-23-AM",
+    "snapshots": 81
   },
   "params": {
     "MIN_AGE_DAYS": 7,
