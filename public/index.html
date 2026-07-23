@@ -2601,14 +2601,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
     /* ---- Videos tab: tabbed insights strip ---- */
     #panelVideos .insights{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
-    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.45rem;padding:0.75rem 0.8rem;border-bottom:1px solid var(--border)}
-    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.88rem;font-weight:700;padding:0.5rem 0.85rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
-    #panelVideos .vtab .ic{width:16px;height:16px;flex:0 0 auto;color:var(--accent)}
+    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
+    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.85rem;font-weight:700;padding:0.45rem 0.72rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
+    #panelVideos .vtab .ic{width:15px;height:15px;flex:0 0 auto;color:var(--accent)}
     #panelVideos .vtab:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
     #panelVideos .vtab.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent));color:#fff}
     #panelVideos .vtab.active .ic{color:#fff}
     #panelVideos .vtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-    #panelVideos .vtab-cnt{font-size:0.7rem;font-weight:800;line-height:1;padding:0.16rem 0.42rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
+    #panelVideos .vtab-cnt{font-size:0.68rem;font-weight:800;line-height:1;padding:0.14rem 0.38rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
     #panelVideos .vtab.active .vtab-cnt{background:rgba(255,255,255,0.22);color:#fff}
     /* hidden must beat .vt-active — panels hide themselves (e.g. no ads for this
        channel) and the tab display override was resurrecting their stale content */
