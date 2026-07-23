@@ -1,53 +1,6 @@
 {
-  "lastUpdated": "2026-07-22T07:07:52.032Z",
+  "lastUpdated": "2026-07-23T07:03:49.460Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2305,
-        "spikeRatio": 3.76,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 29,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "candace",
-        "owens",
-        "candace owens",
-        "check",
-        "check out",
-        "out",
-        "kirk",
-        "charlie"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3046,
-        "spikeRatio": 3.28,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
-      }
-    },
     {
       "channelHandle": "@QuarteringLive",
       "termId": "check",
@@ -62,11 +15,53 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1949,
-        "spikeRatio": 5.13,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
+        "baselineSaturation": 0.2417,
+        "spikeRatio": 4.14,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-07-23T07:03:49.460Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "quartering",
+        "out quartering",
+        "check",
+        "check out",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8667,
+        "baselineSaturation": 0.2559,
+        "spikeRatio": 3.39,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 32,
+        "detectedAt": "2026-07-23T07:03:49.460Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "quartering",
+        "out quartering",
+        "check",
+        "check out",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.2267,
+        "spikeRatio": 4.41,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-07-23T07:03:49.460Z"
       }
     }
   ]

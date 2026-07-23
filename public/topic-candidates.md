@@ -1,32 +1,50 @@
-# Topic candidates — 2026-07-22
+# Topic candidates — 2026-07-23
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @QuarteringLive
+
+Pool: 3 recent videos, 59 baseline videos
+
+### Cluster 1: `check`
+
+- **Recent saturation:** 3/3 videos (**100%**)
+- **Baseline saturation:** 14/59 videos (24%)
+- **Spike ratio:** 4.1x
+- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `check out`, `out quartering`, `quartering vlogs`
+- **Sample recent videos:**
+  - 2026-07-23 — _THIS IS WEIRD_  
+    Kathryn Krick Faces Christian Backlash Over Self-Proclaimed Apostle Revival Ministry
+  - 2026-07-22 — _TOTALLY GROSS!_  
+    Maryland Police Allegedly Decline Arrest After Man Urinates On Concertgoers
+  - 2026-07-21 — _STOP COPING_  
+    Website Claims Rotten Tomatoes Removes Negative Votes From Audience Scores
+
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 15 recent videos, 126 baseline videos
 
 ### Cluster 1: `odyssey`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 0/127 videos (0%)
-- **Spike ratio:** 51.2x
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 16.9x
 - **Related terms:** `odyssey`
 - **Sample recent videos:**
+  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
+    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
   - 2026-07-22 — _MASSIVE SCANDAL_  
     Sold Out Odyssey Screenings Reportedly Have Rows Of Empty Seats
   - 2026-07-20 — _THIS IS HILARIOUS_  
     The Odyssey Explodes As Woke Media Declares Culture War Over
-  - 2026-07-15 — _IT GOT WORSE_  
-    Elliot Page Calls Gender A Myth While Promoting The Odyssey
 
 ### Cluster 2: `massive`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/127 videos (1%)
-- **Spike ratio:** 17.1x
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 16.9x
 - **Related terms:** `massive`
 - **Sample recent videos:**
   - 2026-07-20 — _THIS IS HILARIOUS_  
@@ -36,48 +54,48 @@ Pool: 15 recent videos, 127 baseline videos
   - 2026-07-16 — _IT'S GETTING WORSE_  
     New York Can’t Breathe As Canadian Wildfire Smoke Engulfs City
 
-### Cluster 3: `ice`
+### Cluster 3: `federal`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 3/127 videos (2%)
-- **Spike ratio:** 7.3x
-- **Related terms:** `ice`
+- **Baseline saturation:** 4/126 videos (3%)
+- **Spike ratio:** 5.6x
+- **Related terms:** `federal`
 - **Sample recent videos:**
-  - 2026-07-21 — _A NEW LOW_  
-    Ilhan Omar Declares Victory Over ICE And Gets Brutally Mocked
+  - 2026-07-22 — _IT GOT WAY WORSE_  
+    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
+  - 2026-07-20 — _SHE RAN INSTANTLY_  
+    Steven Crowder Unloads On Candace Owens & Demands Public Debate
   - 2026-07-17 — _PERFECT INSTANT REGRET_  
     Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
-  - 2026-07-15 — _LIBERAL FINDS OUT_  
-    Woke Canadian Slaps MAGA Teen Then Lands In ICE Custody
 
 ### Cluster 4: `vlogs`
 
 - **Recent saturation:** 13/15 videos (**87%**)
-- **Baseline saturation:** 29/127 videos (23%)
-- **Spike ratio:** 3.8x
+- **Baseline saturation:** 32/126 videos (25%)
+- **Spike ratio:** 3.4x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
+  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
+    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
+  - 2026-07-22 — _IT GOT WAY WORSE_  
+    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
+  - 2026-07-22 — _WE'RE DONE WITH IT_  
+    Ben Crump’s Nolan Wells Autopsy Reveal Becomes An Epic Failure
   - 2026-07-22 — _MASSIVE SCANDAL_  
     Sold Out Odyssey Screenings Reportedly Have Rows Of Empty Seats
   - 2026-07-21 — _A NEW LOW_  
     Ilhan Omar Declares Victory Over ICE And Gets Brutally Mocked
-  - 2026-07-21 — _MASSIVE BLACK FATIGUE_  
-    Seven Diners Stuff Their Faces Then Execute Brazen Getaway Plan
-  - 2026-07-20 — _THIS IS HILARIOUS_  
-    The Odyssey Explodes As Woke Media Declares Culture War Over
-  - 2026-07-20 — _NUCLEAR MELTDOWN_  
-    Police Investigate Stolen Car And Walk Into Transgender Campus Chaos
 
 ## @JeremyHambly
 
-Pool: 7 recent videos, 86 baseline videos
+Pool: 6 recent videos, 85 baseline videos
 
 ### Cluster 1: `vlogs`
 
-- **Recent saturation:** 7/7 videos (**100%**)
-- **Baseline saturation:** 26/86 videos (30%)
-- **Spike ratio:** 3.3x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `candace`, `owens`, `kirk`, `charlie`
+- **Recent saturation:** 6/6 videos (**100%**)
+- **Baseline saturation:** 19/85 videos (22%)
+- **Spike ratio:** 4.4x
+- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-21 — _PEAK INSANITY_  
     Trump Blames Canada For Toxic Smoke Liberals Completely Explode
@@ -89,26 +107,6 @@ Pool: 7 recent videos, 86 baseline videos
     Candace Owens Meltdown Gets Uglier As Charlie Kirk Feud Explodes
   - 2026-07-20 — _BRUTAL BODYCAM_  
     Sunny Hostin Pulls Do You Know Me Card On Police
-
-## @QuarteringLive
-
-Pool: 4 recent videos, 58 baseline videos
-
-### Cluster 1: `check`
-
-- **Recent saturation:** 4/4 videos (**100%**)
-- **Baseline saturation:** 11/58 videos (19%)
-- **Spike ratio:** 5.1x
-- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `check out`, `out quartering`, `quartering vlogs`
-- **Sample recent videos:**
-  - 2026-07-21 — _STOP COPING_  
-    Website Claims Rotten Tomatoes Removes Negative Votes From Audience Scores
-  - 2026-07-15 — _PEAK WOKENESS_  
-    Woke Sports Rules Now Police Camera Angles Around Female Athletes
-  - 2026-07-15 — _FEMALE COP FINDS OUT_  
-    Female Cop Finds Out After Threatening Christian Preachers’ Free Speech
-  - 2026-07-15 — _EMPLOYEE OF THE CENTURY_  
-    Jersey Mike’s Worker Becomes Hero After Destroying Entitled Birthday Karen
 
 ---
 
