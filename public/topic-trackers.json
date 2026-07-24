@@ -1,27 +1,6 @@
 {
-  "lastUpdated": "2026-07-23T07:03:49.460Z",
+  "lastUpdated": "2026-07-24T07:05:01.147Z",
   "trackers": [
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.2417,
-        "spikeRatio": 4.14,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-07-23T07:03:49.460Z"
-      }
-    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
@@ -36,11 +15,32 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2559,
-        "spikeRatio": 3.39,
+        "baselineSaturation": 0.2695,
+        "spikeRatio": 3.22,
         "recentVideoCount": 13,
-        "baselineVideoCount": 32,
-        "detectedAt": "2026-07-23T07:03:49.460Z"
+        "baselineVideoCount": 34,
+        "detectedAt": "2026-07-24T07:05:01.147Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.25,
+        "spikeRatio": 4,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-07-24T07:05:01.147Z"
       }
     },
     {
@@ -57,11 +57,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2267,
-        "spikeRatio": 4.41,
-        "recentVideoCount": 6,
+        "baselineSaturation": 0.2294,
+        "spikeRatio": 4.36,
+        "recentVideoCount": 7,
         "baselineVideoCount": 19,
-        "detectedAt": "2026-07-23T07:03:49.460Z"
+        "detectedAt": "2026-07-24T07:05:01.147Z"
       }
     }
   ]
