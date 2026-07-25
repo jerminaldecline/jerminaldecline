@@ -1,46 +1,19 @@
 {
-  "lastUpdated": "2026-07-24T07:05:01.147Z",
+  "lastUpdated": "2026-07-25T06:36:53.979Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "vlogs",
+      "channelHandle": "@JeremyHambly",
+      "termId": "publicly",
       "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out",
-        "out"
+        "publicly"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2695,
-        "spikeRatio": 3.22,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 34,
-        "detectedAt": "2026-07-24T07:05:01.147Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
-        "quartering vlogs",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.25,
-        "spikeRatio": 4,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-07-24T07:05:01.147Z"
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0176,
+        "spikeRatio": 18.89,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-07-25T06:36:53.979Z"
       }
     },
     {
@@ -59,9 +32,52 @@
         "recentSaturation": 1,
         "baselineSaturation": 0.2294,
         "spikeRatio": 4.36,
-        "recentVideoCount": 7,
+        "recentVideoCount": 9,
         "baselineVideoCount": 19,
-        "detectedAt": "2026-07-24T07:05:01.147Z"
+        "detectedAt": "2026-07-25T06:36:53.979Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "quartering",
+        "out quartering",
+        "check",
+        "check out",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.9375,
+        "baselineSaturation": 0.2752,
+        "spikeRatio": 3.41,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 35,
+        "detectedAt": "2026-07-25T06:36:53.979Z"
+      }
+    },
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "check",
+      "keywords": [
+        "check",
+        "quartering",
+        "vlogs",
+        "check out",
+        "out quartering",
+        "quartering vlogs",
+        "out",
+        "claims"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.3017,
+        "spikeRatio": 3.31,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-07-25T06:36:53.979Z"
       }
     }
   ]

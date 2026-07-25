@@ -1,18 +1,54 @@
-# Topic candidates — 2026-07-24
+# Topic candidates — 2026-07-25
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @JeremyHambly
+
+Pool: 9 recent videos, 84 baseline videos
+
+### Cluster 1: `publicly`
+
+- **Recent saturation:** 3/9 videos (**33%**)
+- **Baseline saturation:** 1/84 videos (1%)
+- **Spike ratio:** 18.9x
+- **Related terms:** `publicly`
+- **Sample recent videos:**
+  - 2026-07-24 — _MAMDANI TERROR ATTACK_  
+    Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
+  - 2026-07-23 — _HASAN FAN ARRESTED_  
+    Hasan Piker Gets Roasted By The Democrats Who Hosted Him
+  - 2026-07-21 — _LEFTISTS COLLAPSE_  
+    New York Democrats Implode As DSA Race War Erupts Publicly
+
+### Cluster 2: `vlogs`
+
+- **Recent saturation:** 9/9 videos (**100%**)
+- **Baseline saturation:** 19/84 videos (23%)
+- **Spike ratio:** 4.4x
+- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
+- **Sample recent videos:**
+  - 2026-07-24 — _KAREN DESTROYED_  
+    Entitled Airport Karen Steals First Class Seat And Won’t Move
+  - 2026-07-24 — _MAMDANI TERROR ATTACK_  
+    Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
+  - 2026-07-23 — _HASAN FAN ARRESTED_  
+    Hasan Piker Gets Roasted By The Democrats Who Hosted Him
+  - 2026-07-21 — _PEAK INSANITY_  
+    Trump Blames Canada For Toxic Smoke Liberals Completely Explode
+  - 2026-07-21 — _LEFTISTS COLLAPSE_  
+    New York Democrats Implode As DSA Race War Erupts Publicly
+
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 16 recent videos, 128 baseline videos
 
 ### Cluster 1: `demands`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 0/127 videos (0%)
-- **Spike ratio:** 51.2x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 0/128 videos (0%)
+- **Spike ratio:** 48.4x
 - **Related terms:** `demands`
 - **Sample recent videos:**
   - 2026-07-23 — _ABSOLOUTE SCUM_  
@@ -24,9 +60,9 @@ Pool: 15 recent videos, 127 baseline videos
 
 ### Cluster 2: `million`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 2/127 videos (2%)
-- **Spike ratio:** 13.7x
+- **Recent saturation:** 4/16 videos (**25%**)
+- **Baseline saturation:** 2/128 videos (2%)
+- **Spike ratio:** 12.9x
 - **Related terms:** `million`, `odyssey`
 - **Sample recent videos:**
   - 2026-07-23 — _ABSOLOUTE SCUM_  
@@ -38,49 +74,37 @@ Pool: 15 recent videos, 127 baseline videos
   - 2026-07-20 — _THIS IS HILARIOUS_  
     The Odyssey Explodes As Woke Media Declares Culture War Over
 
-### Cluster 3: `federal`
+### Cluster 3: `vlogs`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 4/127 videos (3%)
-- **Spike ratio:** 5.7x
-- **Related terms:** `federal`
-- **Sample recent videos:**
-  - 2026-07-22 — _IT GOT WAY WORSE_  
-    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
-  - 2026-07-20 — _SHE RAN INSTANTLY_  
-    Steven Crowder Unloads On Candace Owens & Demands Public Debate
-  - 2026-07-17 — _PERFECT INSTANT REGRET_  
-    Oklahoma Official Gets Exposed After Vile Charlie Kirk Mockery Videos
-
-### Cluster 4: `vlogs`
-
-- **Recent saturation:** 13/15 videos (**87%**)
-- **Baseline saturation:** 34/127 videos (27%)
-- **Spike ratio:** 3.2x
+- **Recent saturation:** 15/16 videos (**94%**)
+- **Baseline saturation:** 35/128 videos (27%)
+- **Spike ratio:** 3.4x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-24 — _WERE BEING SCAMMED_  
+  - 2026-07-24 — _CONVICTED FOR HATE SPEECH_  
+    Jury Convicts Shiloh Hendrix But Acquits Her Over Child Confrontation
+  - 2026-07-24 — _HE DESTROYED HER_  
+    Elon Musk Confronted About Islam And His Answer Breaks Everyone
+  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
+    WNBA Star Says Biological Men Should Never Compete Against Women
+  - 2026-07-24 — _BOYCOTT THIS NOW_  
     USAID Is Back As America’s Biggest Lottery Goes International Again
   - 2026-07-23 — _ABSOLOUTE SCUM_  
     Convicted Killer Demands Seventy Five Million Dollars From Trump
-  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
-    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
-  - 2026-07-22 — _IT GOT WAY WORSE_  
-    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
-  - 2026-07-22 — _WE'RE DONE WITH IT_  
-    Ben Crump’s Nolan Wells Autopsy Reveal Becomes An Epic Failure
 
 ## @QuarteringLive
 
-Pool: 5 recent videos, 57 baseline videos
+Pool: 6 recent videos, 57 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 5/5 videos (**100%**)
-- **Baseline saturation:** 14/57 videos (25%)
-- **Spike ratio:** 4.0x
-- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `check out`, `out quartering`, `quartering vlogs`
+- **Recent saturation:** 6/6 videos (**100%**)
+- **Baseline saturation:** 17/57 videos (30%)
+- **Spike ratio:** 3.3x
+- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `claims`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
+  - 2026-07-24 — _BIBLICALLY BAD_  
+    Lawsuit Claims ChatGPT Dissuaded Florida Pastor From Seeking Emergency Care
   - 2026-07-23 — _THIS IS WEIRD_  
     Tate Brothers’ Arrest Prompts Powerful American Allies to Withdraw Support
   - 2026-07-23 — _USAID IS BACK_  
@@ -89,30 +113,6 @@ Pool: 5 recent videos, 57 baseline videos
     Kathryn Krick Faces Christian Backlash Over Self-Proclaimed Apostle Revival Ministry
   - 2026-07-22 — _TOTALLY GROSS!_  
     Maryland Police Allegedly Decline Arrest After Man Urinates On Concertgoers
-  - 2026-07-21 — _STOP COPING_  
-    Website Claims Rotten Tomatoes Removes Negative Votes From Audience Scores
-
-## @JeremyHambly
-
-Pool: 7 recent videos, 84 baseline videos
-
-### Cluster 1: `vlogs`
-
-- **Recent saturation:** 7/7 videos (**100%**)
-- **Baseline saturation:** 19/84 videos (23%)
-- **Spike ratio:** 4.4x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
-- **Sample recent videos:**
-  - 2026-07-23 — _HASAN FAN ARRESTED_  
-    Hasan Piker Gets Roasted By The Democrats Who Hosted Him
-  - 2026-07-21 — _PEAK INSANITY_  
-    Trump Blames Canada For Toxic Smoke Liberals Completely Explode
-  - 2026-07-21 — _LEFTISTS COLLAPSE_  
-    New York Democrats Implode As DSA Race War Erupts Publicly
-  - 2026-07-21 — _WHITE HOT RAGE_  
-    Erika Kirk Reportedly Unloads On Candace Owens In Private Tirades
-  - 2026-07-20 — _NO COMING BACK_  
-    Candace Owens Meltdown Gets Uglier As Charlie Kirk Feud Explodes
 
 ---
 
