@@ -1,7 +1,7 @@
 {
-  "_note": "Confirmed content reposts — his Shorts where the original creator's platform watermark is still visible in the frame. Attribution verified by hand from frame OCR (February + March + April + May + June + July 2026 scans; Dec 2025 & Jan 2026 also scanned, no qualifying hits).",
-  "_generated": "2026-07-22",
-  "_method": "watermark OCR + manual vision verification",
+  "_note": "Confirmed content reposts — his Shorts identified by the original creator's surviving platform watermark, or by community credit in the comments, each verified by hand. Watermark scans Feb–Jul 2026 (Dec 2025 & Jan 2026 also scanned, no qualifying hits).",
+  "_generated": "2026-07-23",
+  "_method": "watermark OCR or community comment credit, manually verified",
   "_scanned": 1213,
   "reposts": [
     {
@@ -513,6 +513,39 @@
       "platform": "tiktok",
       "creator": "TajanaTruthSeeker01011",
       "creatorUrl": "https://www.tiktok.com/@TajanaTruthSeeker01011"
+    },
+    {
+      "id": "TaAXW2XiDQ0",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "date": "2026-07-09",
+      "title": "Watch Out For This Scam #scam #hotel #viral #restaurant",
+      "platform": "youtube",
+      "creator": "karlrock",
+      "creatorUrl": "https://www.youtube.com/@KarlRock",
+      "via": "comment"
+    },
+    {
+      "id": "6TwS0kh8p9M",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "date": "2026-07-22",
+      "title": "Irish Tourist Has Thoughts On America And McGregor #Ireland #America #Comedy #Viral",
+      "platform": "tiktok",
+      "creator": "adamfranciscousa",
+      "creatorUrl": "https://www.tiktok.com/@adamfranciscousa",
+      "via": "comment"
+    },
+    {
+      "id": "GlVa-IXrLaw",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "date": "2026-07-23",
+      "title": "Poodle Is Cheering Like It's The Finals #Dogs #Pets #Funny #Viral",
+      "platform": "tiktok",
+      "creator": "trestyn29",
+      "creatorUrl": "https://www.tiktok.com/@trestyn29",
+      "via": "watermark"
     }
   ]
 }
