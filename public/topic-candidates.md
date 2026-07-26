@@ -1,18 +1,98 @@
-# Topic candidates — 2026-07-25
+# Topic candidates — 2026-07-26
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @TheQuartering
+
+Pool: 18 recent videos, 125 baseline videos
+
+### Cluster 1: `triggered`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 0/125 videos (0%)
+- **Spike ratio:** 42.0x
+- **Related terms:** `triggered`
+- **Sample recent videos:**
+  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
+    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
+  - 2026-07-24 — _HE DESTROYED HER_  
+    Elon Musk Confronted About Islam And His Answer Breaks Everyone
+  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
+    WNBA Star Says Biological Men Should Never Compete Against Women
+
+### Cluster 2: `demands`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 0/125 videos (0%)
+- **Spike ratio:** 42.0x
+- **Related terms:** `demands`
+- **Sample recent videos:**
+  - 2026-07-23 — _ABSOLOUTE SCUM_  
+    Convicted Killer Demands Seventy Five Million Dollars From Trump
+  - 2026-07-20 — _THIS IS INSANE_  
+    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
+  - 2026-07-20 — _SHE RAN INSTANTLY_  
+    Steven Crowder Unloads On Candace Owens & Demands Public Debate
+
+### Cluster 3: `million`
+
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 2/125 videos (2%)
+- **Spike ratio:** 11.2x
+- **Related terms:** `million`, `odyssey`
+- **Sample recent videos:**
+  - 2026-07-23 — _ABSOLOUTE SCUM_  
+    Convicted Killer Demands Seventy Five Million Dollars From Trump
+  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
+    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
+  - 2026-07-22 — _MASSIVE SCANDAL_  
+    Sold Out Odyssey Screenings Reportedly Have Rows Of Empty Seats
+  - 2026-07-20 — _THIS IS HILARIOUS_  
+    The Odyssey Explodes As Woke Media Declares Culture War Over
+
+### Cluster 4: `massive`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 8/125 videos (6%)
+- **Spike ratio:** 2.5x
+- **Related terms:** `massive`, `backlash`
+- **Sample recent videos:**
+  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
+    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
+  - 2026-07-20 — _THIS IS HILARIOUS_  
+    The Odyssey Explodes As Woke Media Declares Culture War Over
+  - 2026-07-20 — _THIS IS INSANE_  
+    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
+
+### Cluster 5: `vlogs`
+
+- **Recent saturation:** 17/18 videos (**94%**)
+- **Baseline saturation:** 35/125 videos (28%)
+- **Spike ratio:** 3.4x
+- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
+- **Sample recent videos:**
+  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
+    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
+  - 2026-07-25 — _TRUMP WENT NUCLEAR_  
+    Trump Humiliates Kaitlan Collins Before Wearing His Trump 2028 Hat
+  - 2026-07-24 — _CONVICTED FOR HATE SPEECH_  
+    Jury Convicts Shiloh Hendrix But Acquits Her Over Child Confrontation
+  - 2026-07-24 — _HE DESTROYED HER_  
+    Elon Musk Confronted About Islam And His Answer Breaks Everyone
+  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
+    WNBA Star Says Biological Men Should Never Compete Against Women
+
 ## @JeremyHambly
 
-Pool: 9 recent videos, 84 baseline videos
+Pool: 9 recent videos, 81 baseline videos
 
 ### Cluster 1: `publicly`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 1/84 videos (1%)
-- **Spike ratio:** 18.9x
+- **Baseline saturation:** 1/81 videos (1%)
+- **Spike ratio:** 18.2x
 - **Related terms:** `publicly`
 - **Sample recent videos:**
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
@@ -25,11 +105,11 @@ Pool: 9 recent videos, 84 baseline videos
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 19/84 videos (23%)
-- **Spike ratio:** 4.4x
+- **Baseline saturation:** 19/81 videos (23%)
+- **Spike ratio:** 4.2x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-24 — _KAREN DESTROYED_  
+  - 2026-07-24 — _KAREN HUMILATED_  
     Entitled Airport Karen Steals First Class Seat And Won’t Move
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
     Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
@@ -40,67 +120,15 @@ Pool: 9 recent videos, 84 baseline videos
   - 2026-07-21 — _LEFTISTS COLLAPSE_  
     New York Democrats Implode As DSA Race War Erupts Publicly
 
-## @TheQuartering
-
-Pool: 16 recent videos, 128 baseline videos
-
-### Cluster 1: `demands`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 0/128 videos (0%)
-- **Spike ratio:** 48.4x
-- **Related terms:** `demands`
-- **Sample recent videos:**
-  - 2026-07-23 — _ABSOLOUTE SCUM_  
-    Convicted Killer Demands Seventy Five Million Dollars From Trump
-  - 2026-07-20 — _THIS IS INSANE_  
-    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
-  - 2026-07-20 — _SHE RAN INSTANTLY_  
-    Steven Crowder Unloads On Candace Owens & Demands Public Debate
-
-### Cluster 2: `million`
-
-- **Recent saturation:** 4/16 videos (**25%**)
-- **Baseline saturation:** 2/128 videos (2%)
-- **Spike ratio:** 12.9x
-- **Related terms:** `million`, `odyssey`
-- **Sample recent videos:**
-  - 2026-07-23 — _ABSOLOUTE SCUM_  
-    Convicted Killer Demands Seventy Five Million Dollars From Trump
-  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
-    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
-  - 2026-07-22 — _MASSIVE SCANDAL_  
-    Sold Out Odyssey Screenings Reportedly Have Rows Of Empty Seats
-  - 2026-07-20 — _THIS IS HILARIOUS_  
-    The Odyssey Explodes As Woke Media Declares Culture War Over
-
-### Cluster 3: `vlogs`
-
-- **Recent saturation:** 15/16 videos (**94%**)
-- **Baseline saturation:** 35/128 videos (27%)
-- **Spike ratio:** 3.4x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
-- **Sample recent videos:**
-  - 2026-07-24 — _CONVICTED FOR HATE SPEECH_  
-    Jury Convicts Shiloh Hendrix But Acquits Her Over Child Confrontation
-  - 2026-07-24 — _HE DESTROYED HER_  
-    Elon Musk Confronted About Islam And His Answer Breaks Everyone
-  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
-    WNBA Star Says Biological Men Should Never Compete Against Women
-  - 2026-07-24 — _BOYCOTT THIS NOW_  
-    USAID Is Back As America’s Biggest Lottery Goes International Again
-  - 2026-07-23 — _ABSOLOUTE SCUM_  
-    Convicted Killer Demands Seventy Five Million Dollars From Trump
-
 ## @QuarteringLive
 
-Pool: 6 recent videos, 57 baseline videos
+Pool: 6 recent videos, 54 baseline videos
 
 ### Cluster 1: `check`
 
 - **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 17/57 videos (30%)
-- **Spike ratio:** 3.3x
+- **Baseline saturation:** 17/54 videos (31%)
+- **Spike ratio:** 3.1x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `claims`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-24 — _BIBLICALLY BAD_  
