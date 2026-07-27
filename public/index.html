@@ -2676,6 +2676,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .reposts-cred .rt-alert:active{transform:translateY(0.5px)}
     #panelVideos .reposts-cred .rt-alert.done{border-color:var(--up,#3fb950);color:var(--up,#3fb950);background:color-mix(in srgb,var(--up,#3fb950) 12%,transparent)}
     #panelVideos .reposts-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
+    @media(max-width:680px){
+      #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
+      #panelVideos a.rt b{white-space:normal}
+      #panelVideos .reposts-cred{flex:1 0 100%;text-align:left}
+      #panelVideos .reposts-cred small{display:inline;margin:0 0.35rem 0 0}
+      #panelVideos .reposts-cred .rt-alert{margin-top:0;margin-left:0.45rem}
+    }
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
       <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
