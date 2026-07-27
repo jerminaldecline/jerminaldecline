@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-26
+# Topic candidates — 2026-07-27
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 125 baseline videos
+Pool: 18 recent videos, 122 baseline videos
 
 ### Cluster 1: `triggered`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 0/125 videos (0%)
-- **Spike ratio:** 42.0x
+- **Baseline saturation:** 0/122 videos (0%)
+- **Spike ratio:** 41.0x
 - **Related terms:** `triggered`
 - **Sample recent videos:**
   - 2026-07-25 — _DISGUSTING TAX FRAUD_  
@@ -25,8 +25,8 @@ Pool: 18 recent videos, 125 baseline videos
 ### Cluster 2: `demands`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 0/125 videos (0%)
-- **Spike ratio:** 42.0x
+- **Baseline saturation:** 0/122 videos (0%)
+- **Spike ratio:** 41.0x
 - **Related terms:** `demands`
 - **Sample recent videos:**
   - 2026-07-23 — _ABSOLOUTE SCUM_  
@@ -39,8 +39,8 @@ Pool: 18 recent videos, 125 baseline videos
 ### Cluster 3: `million`
 
 - **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 2/125 videos (2%)
-- **Spike ratio:** 11.2x
+- **Baseline saturation:** 2/122 videos (2%)
+- **Spike ratio:** 10.9x
 - **Related terms:** `million`, `odyssey`
 - **Sample recent videos:**
   - 2026-07-23 — _ABSOLOUTE SCUM_  
@@ -55,8 +55,8 @@ Pool: 18 recent videos, 125 baseline videos
 ### Cluster 4: `massive`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 8/125 videos (6%)
-- **Spike ratio:** 2.5x
+- **Baseline saturation:** 8/122 videos (7%)
+- **Spike ratio:** 2.4x
 - **Related terms:** `massive`, `backlash`
 - **Sample recent videos:**
   - 2026-07-25 — _DISGUSTING TAX FRAUD_  
@@ -69,7 +69,7 @@ Pool: 18 recent videos, 125 baseline videos
 ### Cluster 5: `vlogs`
 
 - **Recent saturation:** 17/18 videos (**94%**)
-- **Baseline saturation:** 35/125 videos (28%)
+- **Baseline saturation:** 34/122 videos (28%)
 - **Spike ratio:** 3.4x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
@@ -86,13 +86,13 @@ Pool: 18 recent videos, 125 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 81 baseline videos
+Pool: 9 recent videos, 78 baseline videos
 
 ### Cluster 1: `publicly`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 1/81 videos (1%)
-- **Spike ratio:** 18.2x
+- **Baseline saturation:** 1/78 videos (1%)
+- **Spike ratio:** 17.6x
 - **Related terms:** `publicly`
 - **Sample recent videos:**
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
@@ -105,8 +105,8 @@ Pool: 9 recent videos, 81 baseline videos
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 19/81 videos (23%)
-- **Spike ratio:** 4.2x
+- **Baseline saturation:** 19/78 videos (24%)
+- **Spike ratio:** 4.1x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
   - 2026-07-24 — _KAREN HUMILATED_  
@@ -122,13 +122,13 @@ Pool: 9 recent videos, 81 baseline videos
 
 ## @QuarteringLive
 
-Pool: 6 recent videos, 54 baseline videos
+Pool: 6 recent videos, 51 baseline videos
 
 ### Cluster 1: `check`
 
 - **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 17/54 videos (31%)
-- **Spike ratio:** 3.1x
+- **Baseline saturation:** 17/51 videos (33%)
+- **Spike ratio:** 3.0x
 - **Related terms:** `check`, `quartering`, `vlogs`, `out`, `claims`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-24 — _BIBLICALLY BAD_  
