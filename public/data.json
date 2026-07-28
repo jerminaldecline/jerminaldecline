@@ -321,18 +321,18 @@
           "date": "2026-07-28",
           "channelViews": 1995760052,
           "subscriberCount": 2090000,
-          "videoCount": 9580
+          "videoCount": 9581
         }
       ],
       "meta": {
-        "videoCount": 11127,
-        "longFormCount": 9566,
-        "shortsCount": 16,
-        "unavailableCount": 1545,
+        "videoCount": 11128,
+        "longFormCount": 9567,
+        "shortsCount": 15,
+        "unavailableCount": 1546,
         "unlistedCount": 1,
         "oldestVideoDate": "2017-07-14T02:23:12.000Z",
-        "newestVideoDate": "2026-07-28T18:40:18.000Z",
-        "ytVideoCount": 9580
+        "newestVideoDate": "2026-07-28T20:59:06.000Z",
+        "ytVideoCount": 9581
       }
     },
     "UCEOtZuVe8emWLKRzJIkzVow": {
@@ -656,18 +656,18 @@
           "date": "2026-07-28",
           "channelViews": 133984764,
           "subscriberCount": 335000,
-          "videoCount": 1190
+          "videoCount": 1191
         }
       ],
       "meta": {
-        "videoCount": 1772,
-        "longFormCount": 1188,
-        "shortsCount": 5,
-        "unavailableCount": 579,
+        "videoCount": 1773,
+        "longFormCount": 1189,
+        "shortsCount": 3,
+        "unavailableCount": 581,
         "unlistedCount": 0,
         "oldestVideoDate": "2024-04-02T17:00:09.000Z",
-        "newestVideoDate": "2026-07-28T19:43:08.000Z",
-        "ytVideoCount": 1190
+        "newestVideoDate": "2026-07-28T21:48:48.000Z",
+        "ytVideoCount": 1191
       }
     },
     "UCIIeZClsD9f0KlRsT1CBpDw": {
@@ -1642,8 +1642,8 @@
       "meta": {
         "videoCount": 794,
         "longFormCount": 451,
-        "shortsCount": 2,
-        "unavailableCount": 341,
+        "shortsCount": 0,
+        "unavailableCount": 343,
         "unlistedCount": 0,
         "oldestVideoDate": "2025-07-16T19:58:13.000Z",
         "newestVideoDate": "2026-07-28T14:00:13.000Z",
@@ -1797,42 +1797,75 @@
         {
           "date": "2026-07-28",
           "channelViews": 46429,
-          "subscriberCount": 4030,
-          "videoCount": 6
+          "subscriberCount": 4050,
+          "videoCount": 7
         }
       ],
       "meta": {
-        "videoCount": 6,
-        "longFormCount": 6,
+        "videoCount": 7,
+        "longFormCount": 7,
         "shortsCount": 0,
         "unavailableCount": 0,
         "unlistedCount": 0,
         "oldestVideoDate": "2026-07-07T22:40:04.000Z",
-        "newestVideoDate": "2026-07-23T21:55:56.000Z",
-        "ytVideoCount": 6
+        "newestVideoDate": "2026-07-28T22:00:36.000Z",
+        "ytVideoCount": 7
       }
     }
   },
   "meta": {
-    "lastUpdated": "2026-07-28T20:52:22.905Z",
-    "videoCount": 15735,
-    "longFormCount": 13130,
-    "shortsCount": 24,
-    "unavailableCount": 2581,
+    "lastUpdated": "2026-07-28T22:13:21.154Z",
+    "videoCount": 15738,
+    "longFormCount": 13133,
+    "shortsCount": 19,
+    "unavailableCount": 2586,
     "oldestVideoDate": "2010-08-27T21:12:09.000Z",
-    "newestVideoDate": "2026-07-28T19:43:08.000Z",
+    "newestVideoDate": "2026-07-28T22:00:36.000Z",
     "shortsCutoffSec": 180
   },
   "videos": [
+    {
+      "id": "KrxjYr-9MF4",
+      "channelId": "UCd9lxVsVlQ9cvY8gi6bphUA",
+      "title": "THE ONLY TRUE FRIEND I'VE MET",
+      "publishedAt": "2026-07-28T22:00:36.000Z",
+      "durationSec": 2065,
+      "views": 87,
+      "likes": 19,
+      "comments": 2,
+      "isShort": false
+    },
+    {
+      "id": "Wosa6Z7HxYk",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "title": "THE FACE OF EVIL",
+      "publishedAt": "2026-07-28T21:48:48.000Z",
+      "durationSec": 809,
+      "views": 610,
+      "likes": 126,
+      "comments": 14,
+      "isShort": false
+    },
+    {
+      "id": "mBFgVkWgVAs",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "title": "MOST BRUTAL BACKFIRE YET",
+      "publishedAt": "2026-07-28T20:59:06.000Z",
+      "durationSec": 746,
+      "views": 4044,
+      "likes": 964,
+      "comments": 85,
+      "isShort": false
+    },
     {
       "id": "KABHp0kScuc",
       "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
       "title": "SHE'S PANICKING",
       "publishedAt": "2026-07-28T19:43:08.000Z",
       "durationSec": 912,
-      "views": 1258,
-      "likes": 303,
-      "comments": 53,
+      "views": 2961,
+      "likes": 752,
+      "comments": 126,
       "isShort": false
     },
     {
@@ -1841,9 +1874,9 @@
       "title": "HIS CAREER IS OVER",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "durationSec": 920,
-      "views": 11392,
-      "likes": 2232,
-      "comments": 559,
+      "views": 24897,
+      "likes": 3860,
+      "comments": 963,
       "isShort": false
     },
     {
@@ -1930,9 +1963,9 @@
       "title": "FAUCI BOMBSHELL",
       "publishedAt": "2026-07-27T23:36:28.000Z",
       "durationSec": 944,
-      "views": 21411,
-      "likes": 1825,
-      "comments": 299,
+      "views": 22191,
+      "likes": 1864,
+      "comments": 301,
       "isShort": false
     },
     {
@@ -1941,8 +1974,8 @@
       "title": "SHE'S OUT OF CONTROL",
       "publishedAt": "2026-07-27T23:00:12.000Z",
       "durationSec": 722,
-      "views": 6945,
-      "likes": 880,
+      "views": 7126,
+      "likes": 894,
       "comments": 148,
       "isShort": false
     },
@@ -1965,9 +1998,9 @@
       "title": "RACE RIOTS BEGIN",
       "publishedAt": "2026-07-27T22:02:34.000Z",
       "durationSec": 885,
-      "views": 52865,
-      "likes": 4407,
-      "comments": 1038,
+      "views": 54170,
+      "likes": 4479,
+      "comments": 1075,
       "isShort": false
     },
     {
@@ -2002,9 +2035,9 @@
       "title": "MAMDANI BANNED",
       "publishedAt": "2026-07-27T21:46:48.000Z",
       "durationSec": 870,
-      "views": 8759,
-      "likes": 1254,
-      "comments": 134,
+      "views": 8966,
+      "likes": 1277,
+      "comments": 135,
       "isShort": false
     },
     {
@@ -2013,9 +2046,9 @@
       "title": "THEY FIRED HER!",
       "publishedAt": "2026-07-27T20:35:47.000Z",
       "durationSec": 869,
-      "views": 30863,
-      "likes": 3561,
-      "comments": 449,
+      "views": 31722,
+      "likes": 3636,
+      "comments": 455,
       "isShort": false
     },
     {
@@ -2024,9 +2057,9 @@
       "title": "I CAN'T BELIEVE IT",
       "publishedAt": "2026-07-27T19:15:33.000Z",
       "durationSec": 754,
-      "views": 10906,
-      "likes": 1597,
-      "comments": 264,
+      "views": 11473,
+      "likes": 1641,
+      "comments": 273,
       "isShort": false
     },
     {
@@ -2035,9 +2068,9 @@
       "title": "THEY ASKED FOR IT",
       "publishedAt": "2026-07-27T18:39:32.000Z",
       "durationSec": 963,
-      "views": 28389,
-      "likes": 2629,
-      "comments": 468,
+      "views": 28639,
+      "likes": 2647,
+      "comments": 469,
       "isShort": false
     },
     {
@@ -2254,8 +2287,8 @@
       "title": "I'M GLAD ITS OVER",
       "publishedAt": "2026-07-25T20:07:07.000Z",
       "durationSec": 760,
-      "views": 18533,
-      "likes": 2132,
+      "views": 18557,
+      "likes": 2137,
       "comments": 269,
       "isShort": false
     },
@@ -2265,8 +2298,8 @@
       "title": "TRUMP WENT NUCLEAR",
       "publishedAt": "2026-07-25T18:24:36.000Z",
       "durationSec": 929,
-      "views": 33028,
-      "likes": 2666,
+      "views": 33047,
+      "likes": 2668,
       "comments": 194,
       "isShort": false
     },
@@ -2315,8 +2348,8 @@
       "title": "KAREN HUMILATED",
       "publishedAt": "2026-07-24T22:25:20.000Z",
       "durationSec": 600,
-      "views": 6721,
-      "likes": 784,
+      "views": 6730,
+      "likes": 787,
       "comments": 52,
       "isShort": false
     },
@@ -2339,9 +2372,9 @@
       "title": "BIBLICALLY BAD",
       "publishedAt": "2026-07-24T22:00:35.000Z",
       "durationSec": 907,
-      "views": 974,
-      "likes": 127,
-      "comments": 24,
+      "views": 983,
+      "likes": 128,
+      "comments": 25,
       "isShort": false
     },
     {
@@ -2350,8 +2383,8 @@
       "title": "HE DESTROYED HER",
       "publishedAt": "2026-07-24T20:45:14.000Z",
       "durationSec": 808,
-      "views": 27268,
-      "likes": 2683,
+      "views": 27325,
+      "likes": 2688,
       "comments": 241,
       "isShort": false
     },
@@ -2361,8 +2394,8 @@
       "title": "SHE ACTUALLY SAID IT",
       "publishedAt": "2026-07-24T19:42:09.000Z",
       "durationSec": 868,
-      "views": 22555,
-      "likes": 2089,
+      "views": 22623,
+      "likes": 2091,
       "comments": 201,
       "isShort": false
     },
@@ -2372,7 +2405,7 @@
       "title": "MAMDANI TERROR ATTACK",
       "publishedAt": "2026-07-24T19:12:58.000Z",
       "durationSec": 788,
-      "views": 16387,
+      "views": 16391,
       "likes": 1917,
       "comments": 211,
       "isShort": false
@@ -2422,8 +2455,8 @@
       "title": "BOYCOTT THIS NOW",
       "publishedAt": "2026-07-24T00:07:58.000Z",
       "durationSec": 751,
-      "views": 28198,
-      "likes": 2497,
+      "views": 28212,
+      "likes": 2498,
       "comments": 431,
       "isShort": false
     },
@@ -2436,7 +2469,9 @@
       "views": 5815,
       "likes": 577,
       "comments": 91,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T22:13:18.245Z"
     },
     {
       "id": "GibhJF5zmbs",
@@ -2457,7 +2492,7 @@
       "title": "THIS IS WEIRD",
       "publishedAt": "2026-07-23T23:30:16.000Z",
       "durationSec": 832,
-      "views": 2237,
+      "views": 2239,
       "likes": 156,
       "comments": 13,
       "isShort": false
@@ -2479,9 +2514,9 @@
       "title": "I'VE BEEN OUT AND ABOUT",
       "publishedAt": "2026-07-23T21:55:56.000Z",
       "durationSec": 1339,
-      "views": 3471,
-      "likes": 273,
-      "comments": 46,
+      "views": 3483,
+      "likes": 274,
+      "comments": 47,
       "isShort": false
     },
     {
@@ -2490,9 +2525,9 @@
       "title": "THEY GOT DESTROYED",
       "publishedAt": "2026-07-23T21:27:15.000Z",
       "durationSec": 909,
-      "views": 37574,
-      "likes": 3633,
-      "comments": 773,
+      "views": 37591,
+      "likes": 3634,
+      "comments": 775,
       "isShort": false
     },
     {
@@ -2501,8 +2536,8 @@
       "title": "ABSOLOUTE SCUM",
       "publishedAt": "2026-07-23T19:39:19.000Z",
       "durationSec": 899,
-      "views": 18974,
-      "likes": 2320,
+      "views": 18980,
+      "likes": 2321,
       "comments": 331,
       "isShort": false
     },
@@ -2512,8 +2547,8 @@
       "title": "HASAN FAN ARRESTED",
       "publishedAt": "2026-07-23T19:03:01.000Z",
       "durationSec": 711,
-      "views": 5200,
-      "likes": 717,
+      "views": 5205,
+      "likes": 718,
       "comments": 48,
       "isShort": false
     },
@@ -2625,8 +2660,8 @@
       "title": "BACKLASH GOES NUCLEAR",
       "publishedAt": "2026-07-23T00:05:17.000Z",
       "durationSec": 851,
-      "views": 49604,
-      "likes": 3489,
+      "views": 49613,
+      "likes": 3491,
       "comments": 583,
       "isShort": false
     },
@@ -2673,7 +2708,7 @@
       "title": "IT GOT WAY WORSE",
       "publishedAt": "2026-07-22T21:20:35.000Z",
       "durationSec": 754,
-      "views": 49956,
+      "views": 49959,
       "likes": 3181,
       "comments": 801,
       "isShort": false
@@ -2684,7 +2719,7 @@
       "title": "WE'RE DONE WITH IT",
       "publishedAt": "2026-07-22T19:35:17.000Z",
       "durationSec": 840,
-      "views": 56930,
+      "views": 56941,
       "likes": 4396,
       "comments": 879,
       "isShort": false
@@ -2786,8 +2821,8 @@
       "title": "MASSIVE SCANDAL",
       "publishedAt": "2026-07-22T00:00:26.000Z",
       "durationSec": 778,
-      "views": 94626,
-      "likes": 6664,
+      "views": 94639,
+      "likes": 6666,
       "comments": 773,
       "isShort": false
     },
@@ -2823,7 +2858,7 @@
       "title": "PEAK INSANITY",
       "publishedAt": "2026-07-21T23:00:34.000Z",
       "durationSec": 513,
-      "views": 4886,
+      "views": 4885,
       "likes": 666,
       "comments": 73,
       "isShort": false
@@ -2845,8 +2880,8 @@
       "title": "IT'S TIME TO MAKE A CHANGE",
       "publishedAt": "2026-07-21T22:00:23.000Z",
       "durationSec": 1286,
-      "views": 5168,
-      "likes": 436,
+      "views": 5173,
+      "likes": 437,
       "comments": 129,
       "isShort": false
     },
@@ -2856,7 +2891,7 @@
       "title": "A NEW LOW",
       "publishedAt": "2026-07-21T21:16:08.000Z",
       "durationSec": 828,
-      "views": 28614,
+      "views": 28625,
       "likes": 2489,
       "comments": 150,
       "isShort": false
@@ -2889,7 +2924,7 @@
       "title": "WHITE HOT RAGE",
       "publishedAt": "2026-07-21T18:13:26.000Z",
       "durationSec": 674,
-      "views": 13854,
+      "views": 13855,
       "likes": 1811,
       "comments": 254,
       "isShort": false
@@ -2955,7 +2990,9 @@
       "views": 5055,
       "likes": 302,
       "comments": 60,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T22:13:18.566Z"
     },
     {
       "id": "yukmjWCeqX0",
@@ -3037,8 +3074,8 @@
       "title": "NUCLEAR MELTDOWN",
       "publishedAt": "2026-07-20T22:03:47.000Z",
       "durationSec": 1019,
-      "views": 18476,
-      "likes": 1957,
+      "views": 18477,
+      "likes": 1958,
       "comments": 495,
       "isShort": false
     },
@@ -3070,8 +3107,8 @@
       "title": "SHE RAN INSTANTLY",
       "publishedAt": "2026-07-20T18:49:45.000Z",
       "durationSec": 999,
-      "views": 95901,
-      "likes": 8675,
+      "views": 95914,
+      "likes": 8676,
       "comments": 1020,
       "isShort": false
     },
@@ -3363,7 +3400,7 @@
       "title": "THEY GOT CAUGHT!",
       "publishedAt": "2026-07-17T19:32:26.000Z",
       "durationSec": 1083,
-      "views": 44328,
+      "views": 44331,
       "likes": 3392,
       "comments": 1004,
       "isShort": false
@@ -3502,7 +3539,7 @@
       "title": "WHAT'S TIM POOL REALLY LIKE?",
       "publishedAt": "2026-07-16T22:00:17.000Z",
       "durationSec": 1517,
-      "views": 8216,
+      "views": 8218,
       "likes": 843,
       "comments": 105,
       "isShort": false
@@ -3513,7 +3550,7 @@
       "title": "IT'S GETTING WORSE",
       "publishedAt": "2026-07-16T21:15:13.000Z",
       "durationSec": 694,
-      "views": 28431,
+      "views": 28433,
       "likes": 2346,
       "comments": 586,
       "isShort": false
@@ -3603,7 +3640,9 @@
       "views": 45126,
       "likes": 1655,
       "comments": 122,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T22:13:18.566Z"
     },
     {
       "id": "C_nTUfM0DYo",
@@ -3705,7 +3744,7 @@
       "title": "WE'RE DYING",
       "publishedAt": "2026-07-15T18:56:16.000Z",
       "durationSec": 782,
-      "views": 28794,
+      "views": 28795,
       "likes": 3462,
       "comments": 649,
       "isShort": false
@@ -3877,7 +3916,7 @@
       "title": "THIS IS BAD",
       "publishedAt": "2026-07-14T21:07:41.000Z",
       "durationSec": 775,
-      "views": 106210,
+      "views": 106211,
       "likes": 7568,
       "comments": 1588,
       "isShort": false
@@ -3888,7 +3927,7 @@
       "title": "MAMDANI COLLAPSES",
       "publishedAt": "2026-07-14T19:46:38.000Z",
       "durationSec": 689,
-      "views": 10202,
+      "views": 10203,
       "likes": 1422,
       "comments": 160,
       "isShort": false
@@ -4027,7 +4066,7 @@
       "title": "KIDNAPPER FINDS OUT!",
       "publishedAt": "2026-07-13T23:20:24.000Z",
       "durationSec": 898,
-      "views": 16249,
+      "views": 16250,
       "likes": 1632,
       "comments": 214,
       "isShort": false
@@ -4049,7 +4088,7 @@
       "title": "THIS IS INSANE",
       "publishedAt": "2026-07-13T22:32:55.000Z",
       "durationSec": 815,
-      "views": 26432,
+      "views": 26434,
       "likes": 2535,
       "comments": 474,
       "isShort": false
@@ -4308,7 +4347,7 @@
       "title": "SHE'S GOING TO PRISON",
       "publishedAt": "2026-07-10T22:19:07.000Z",
       "durationSec": 889,
-      "views": 38233,
+      "views": 38235,
       "likes": 3937,
       "comments": 479,
       "isShort": false
@@ -4330,7 +4369,7 @@
       "title": "TOTAL MELTDOWN",
       "publishedAt": "2026-07-10T19:40:35.000Z",
       "durationSec": 1180,
-      "views": 53726,
+      "views": 53727,
       "likes": 4876,
       "comments": 927,
       "isShort": false
@@ -4432,7 +4471,7 @@
       "title": "TIME FOR WAR",
       "publishedAt": "2026-07-10T00:00:19.000Z",
       "durationSec": 856,
-      "views": 61409,
+      "views": 61412,
       "likes": 6462,
       "comments": 1353,
       "isShort": false
@@ -4467,7 +4506,7 @@
       "title": "HE REGRETTED IT",
       "publishedAt": "2026-07-09T22:16:04.000Z",
       "durationSec": 993,
-      "views": 21405,
+      "views": 21404,
       "likes": 1907,
       "comments": 297,
       "isShort": false
@@ -4478,7 +4517,7 @@
       "title": "WHAT DOES YOUTUBE PAY?",
       "publishedAt": "2026-07-09T22:00:05.000Z",
       "durationSec": 1731,
-      "views": 6809,
+      "views": 6810,
       "likes": 699,
       "comments": 76,
       "isShort": false
@@ -4489,7 +4528,7 @@
       "title": "HE ADMITTED EVERYTHING",
       "publishedAt": "2026-07-09T20:44:57.000Z",
       "durationSec": 917,
-      "views": 14197,
+      "views": 14198,
       "likes": 1487,
       "comments": 218,
       "isShort": false
@@ -4650,7 +4689,7 @@
       "title": "IT GOT WORSE",
       "publishedAt": "2026-07-08T23:29:07.000Z",
       "durationSec": 1173,
-      "views": 52278,
+      "views": 52279,
       "likes": 4490,
       "comments": 782,
       "isShort": false
@@ -4672,7 +4711,7 @@
       "title": "THEY WANT WAR",
       "publishedAt": "2026-07-08T22:12:18.000Z",
       "durationSec": 858,
-      "views": 50212,
+      "views": 50213,
       "likes": 5128,
       "comments": 1215,
       "isShort": false
@@ -4705,7 +4744,7 @@
       "title": "NEW TRIAL DEMANDED",
       "publishedAt": "2026-07-08T19:05:27.000Z",
       "durationSec": 1103,
-      "views": 50186,
+      "views": 50187,
       "likes": 4299,
       "comments": 768,
       "isShort": false
@@ -4877,8 +4916,8 @@
       "title": "I WENT TO THE ER!",
       "publishedAt": "2026-07-07T22:40:04.000Z",
       "durationSec": 1438,
-      "views": 12753,
-      "likes": 1374,
+      "views": 12756,
+      "likes": 1375,
       "comments": 448,
       "isShort": false
     },
@@ -4910,7 +4949,7 @@
       "title": "THIS IS VERY BAD",
       "publishedAt": "2026-07-07T17:19:26.000Z",
       "durationSec": 848,
-      "views": 50140,
+      "views": 50141,
       "likes": 3997,
       "comments": 406,
       "isShort": false
@@ -5049,7 +5088,7 @@
       "title": "HE ROASTED EM",
       "publishedAt": "2026-07-06T23:33:31.000Z",
       "durationSec": 798,
-      "views": 8200,
+      "views": 8201,
       "likes": 1036,
       "comments": 84,
       "isShort": false
@@ -5060,7 +5099,7 @@
       "title": "THIS IS BAD",
       "publishedAt": "2026-07-06T23:23:25.000Z",
       "durationSec": 1006,
-      "views": 47801,
+      "views": 47802,
       "likes": 3883,
       "comments": 513,
       "isShort": false
@@ -5082,7 +5121,7 @@
       "title": "WOKE NURSE INSTANT KARMA",
       "publishedAt": "2026-07-06T21:48:12.000Z",
       "durationSec": 1107,
-      "views": 65293,
+      "views": 65294,
       "likes": 5608,
       "comments": 582,
       "isShort": false
@@ -5115,7 +5154,7 @@
       "title": "ALL OUT WAR",
       "publishedAt": "2026-07-06T19:29:36.000Z",
       "durationSec": 1028,
-      "views": 14504,
+      "views": 14505,
       "likes": 1738,
       "comments": 186,
       "isShort": false
@@ -5371,8 +5410,8 @@
       "title": "THIS IS CRAZY",
       "publishedAt": "2026-07-03T22:06:31.000Z",
       "durationSec": 967,
-      "views": 71180,
-      "likes": 5039,
+      "views": 71182,
+      "likes": 5040,
       "comments": 1650,
       "isShort": false
     },
@@ -5676,7 +5715,7 @@
       "title": "PAYBACK BEGINS",
       "publishedAt": "2026-07-01T19:05:05.000Z",
       "durationSec": 1109,
-      "views": 92985,
+      "views": 92988,
       "likes": 8110,
       "comments": 748,
       "isShort": false
@@ -5846,7 +5885,7 @@
       "title": "IT WENT NUCLEAR",
       "publishedAt": "2026-06-29T20:15:08.000Z",
       "durationSec": 918,
-      "views": 48545,
+      "views": 48546,
       "likes": 4259,
       "comments": 588,
       "isShort": false
@@ -6244,7 +6283,9 @@
       "views": 394770,
       "likes": 15155,
       "comments": 148,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T22:13:19.674Z"
     },
     {
       "id": "_FJjtUn95zA",
@@ -6252,7 +6293,7 @@
       "title": "FATIGUE GOES NUCLEAR",
       "publishedAt": "2026-06-25T22:00:18.000Z",
       "durationSec": 884,
-      "views": 70788,
+      "views": 70789,
       "likes": 5872,
       "comments": 1476,
       "isShort": false
@@ -6418,7 +6459,7 @@
       "title": "HIS CHANCES COLLAPSE",
       "publishedAt": "2026-06-24T18:04:29.000Z",
       "durationSec": 965,
-      "views": 54556,
+      "views": 54560,
       "likes": 5390,
       "comments": 742,
       "isShort": false
@@ -6728,7 +6769,7 @@
       "title": "THIS IS GHOULISH",
       "publishedAt": "2026-06-22T19:23:34.000Z",
       "durationSec": 727,
-      "views": 5485,
+      "views": 5486,
       "likes": 712,
       "comments": 100,
       "isShort": false
@@ -6865,7 +6906,7 @@
       "title": "ITS SO MUCH WORSE",
       "publishedAt": "2026-06-20T16:28:58.000Z",
       "durationSec": 1141,
-      "views": 63489,
+      "views": 63490,
       "likes": 5946,
       "comments": 1330,
       "isShort": false
@@ -7037,7 +7078,7 @@
       "title": "HE GOT BASED",
       "publishedAt": "2026-06-19T17:00:17.000Z",
       "durationSec": 821,
-      "views": 1632,
+      "views": 1633,
       "likes": 159,
       "comments": 19,
       "isShort": false
@@ -7168,7 +7209,7 @@
       "title": "HE'S DONE FOR",
       "publishedAt": "2026-06-18T18:00:35.000Z",
       "durationSec": 1036,
-      "views": 53466,
+      "views": 53467,
       "likes": 5122,
       "comments": 543,
       "isShort": false
@@ -7473,7 +7514,7 @@
       "title": "HE'S IN HUGE TROUBLE",
       "publishedAt": "2026-06-16T23:07:45.000Z",
       "durationSec": 1033,
-      "views": 245965,
+      "views": 245966,
       "likes": 14306,
       "comments": 1420,
       "isShort": false
@@ -7484,7 +7525,7 @@
       "title": "SHE GOT ROASTED",
       "publishedAt": "2026-06-16T22:07:09.000Z",
       "durationSec": 739,
-      "views": 11951,
+      "views": 11952,
       "likes": 1968,
       "comments": 165,
       "isShort": false
@@ -7508,7 +7549,7 @@
       "title": "RACE WARS ARE COMING",
       "publishedAt": "2026-06-16T22:00:25.000Z",
       "durationSec": 986,
-      "views": 47606,
+      "views": 47607,
       "likes": 4908,
       "comments": 1192,
       "isShort": false
@@ -7543,7 +7584,7 @@
       "title": "SWEET KARMA",
       "publishedAt": "2026-06-16T19:17:28.000Z",
       "durationSec": 1109,
-      "views": 89021,
+      "views": 89022,
       "likes": 8973,
       "comments": 1034,
       "isShort": false
@@ -7579,7 +7620,9 @@
       "views": 41304,
       "likes": 3386,
       "comments": 402,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T22:13:20.099Z"
     },
     {
       "id": "qfJgXr1jyTo",
@@ -7714,7 +7757,7 @@
       "publishedAt": "2026-06-15T20:31:54.000Z",
       "durationSec": 1329,
       "views": 169302,
-      "likes": 16701,
+      "likes": 16700,
       "comments": 1710,
       "isShort": false
     },
@@ -7735,7 +7778,7 @@
       "title": "THEY'RE PANICKING",
       "publishedAt": "2026-06-15T17:26:57.000Z",
       "durationSec": 1362,
-      "views": 80433,
+      "views": 80434,
       "likes": 7603,
       "comments": 808,
       "isShort": false
@@ -8105,7 +8148,7 @@
       "title": "THIS CHANGES EVERYTHING",
       "publishedAt": "2026-06-12T00:14:32.000Z",
       "durationSec": 952,
-      "views": 95803,
+      "views": 95802,
       "likes": 10119,
       "comments": 1761,
       "isShort": false
@@ -8214,7 +8257,7 @@
       "title": "GARBAGE HUMANS",
       "publishedAt": "2026-06-11T19:24:54.000Z",
       "durationSec": 1478,
-      "views": 96240,
+      "views": 96241,
       "likes": 7585,
       "comments": 1764,
       "isShort": false
@@ -8515,9 +8558,9 @@
       "title": "SENTENCING INSANITY",
       "publishedAt": "2026-06-09T23:46:58.000Z",
       "durationSec": 1337,
-      "views": 91342,
+      "views": 91343,
       "likes": 8409,
-      "comments": 1365,
+      "comments": 1364,
       "isShort": false
     },
     {
@@ -8823,7 +8866,7 @@
       "durationSec": 683,
       "views": 25171,
       "likes": 2476,
-      "comments": 376,
+      "comments": 377,
       "isShort": false
     },
     {
@@ -8984,7 +9027,7 @@
       "durationSec": 1123,
       "views": 191125,
       "likes": 22060,
-      "comments": 2613,
+      "comments": 2612,
       "isShort": false
     },
     {
