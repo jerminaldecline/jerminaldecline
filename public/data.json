@@ -321,18 +321,18 @@
           "date": "2026-07-28",
           "channelViews": 1995760052,
           "subscriberCount": 2090000,
-          "videoCount": 11127
+          "videoCount": 9580
         }
       ],
       "meta": {
         "videoCount": 11126,
         "longFormCount": 9565,
-        "shortsCount": 1559,
-        "unavailableCount": 2,
-        "unlistedCount": 2,
+        "shortsCount": 1437,
+        "unavailableCount": 124,
+        "unlistedCount": 1,
         "oldestVideoDate": "2017-07-14T02:23:12.000Z",
         "newestVideoDate": "2026-07-28T12:30:25.000Z",
-        "ytVideoCount": 11127
+        "ytVideoCount": 9580
       }
     },
     "UCEOtZuVe8emWLKRzJIkzVow": {
@@ -656,18 +656,18 @@
           "date": "2026-07-28",
           "channelViews": 133984764,
           "subscriberCount": 335000,
-          "videoCount": 1769
+          "videoCount": 1205
         }
       ],
       "meta": {
         "videoCount": 1771,
         "longFormCount": 1187,
-        "shortsCount": 582,
-        "unavailableCount": 2,
+        "shortsCount": 441,
+        "unavailableCount": 143,
         "unlistedCount": 1,
         "oldestVideoDate": "2024-04-02T17:00:09.000Z",
         "newestVideoDate": "2026-07-28T14:00:25.000Z",
-        "ytVideoCount": 1769
+        "ytVideoCount": 1205
       }
     },
     "UCIIeZClsD9f0KlRsT1CBpDw": {
@@ -991,7 +991,7 @@
           "date": "2026-07-28",
           "channelViews": 39834915,
           "subscriberCount": 185000,
-          "videoCount": 1556
+          "videoCount": 1554
         }
       ],
       "meta": {
@@ -1002,7 +1002,7 @@
         "unlistedCount": 0,
         "oldestVideoDate": "2012-02-03T21:26:45.000Z",
         "newestVideoDate": "2026-05-21T00:08:16.000Z",
-        "ytVideoCount": 1556
+        "ytVideoCount": 1554
       }
     },
     "UClSHrQSGGFdMw4AHgJsD6qw": {
@@ -1326,7 +1326,7 @@
           "date": "2026-07-28",
           "channelViews": 18656545,
           "subscriberCount": 64100,
-          "videoCount": 479
+          "videoCount": 383
         }
       ],
       "meta": {
@@ -1337,7 +1337,7 @@
         "unlistedCount": 0,
         "oldestVideoDate": "2010-08-27T21:12:09.000Z",
         "newestVideoDate": "2026-05-26T22:00:06.000Z",
-        "ytVideoCount": 479
+        "ytVideoCount": 383
       }
     },
     "UCYtHYzxsUH_QCZtrldLMyUg": {
@@ -1636,18 +1636,18 @@
           "date": "2026-07-28",
           "channelViews": 58765431,
           "subscriberCount": 74200,
-          "videoCount": 792
+          "videoCount": 463
         }
       ],
       "meta": {
         "videoCount": 794,
         "longFormCount": 451,
-        "shortsCount": 341,
-        "unavailableCount": 2,
-        "unlistedCount": 1,
+        "shortsCount": 202,
+        "unavailableCount": 141,
+        "unlistedCount": 0,
         "oldestVideoDate": "2025-07-16T19:58:13.000Z",
         "newestVideoDate": "2026-07-28T14:00:13.000Z",
-        "ytVideoCount": 792
+        "ytVideoCount": 463
       }
     },
     "UCd9lxVsVlQ9cvY8gi6bphUA": {
@@ -1814,11 +1814,11 @@
     }
   },
   "meta": {
-    "lastUpdated": "2026-07-28T16:47:09.219Z",
+    "lastUpdated": "2026-07-28T18:22:08.980Z",
     "videoCount": 15733,
     "longFormCount": 13129,
-    "shortsCount": 2598,
-    "unavailableCount": 6,
+    "shortsCount": 2196,
+    "unavailableCount": 408,
     "oldestVideoDate": "2010-08-27T21:12:09.000Z",
     "newestVideoDate": "2026-07-28T14:00:25.000Z",
     "shortsCutoffSec": 180
@@ -1833,7 +1833,9 @@
       "views": 1053,
       "likes": 235,
       "comments": 15,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "WgAm9nhEqnc",
@@ -1844,7 +1846,9 @@
       "views": 933,
       "likes": 309,
       "comments": 81,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "xrKTjb_1M3E",
@@ -1855,7 +1859,9 @@
       "views": 3056,
       "likes": 473,
       "comments": 39,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "fE1sqcCpw5U",
@@ -1866,7 +1872,9 @@
       "views": 24237,
       "likes": 3803,
       "comments": 714,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "AiVCP8-NJhM",
@@ -1877,7 +1885,9 @@
       "views": 2180,
       "likes": 422,
       "comments": 38,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "YPpfoqLrdiw",
@@ -1888,7 +1898,9 @@
       "views": 3152,
       "likes": 193,
       "comments": 37,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "Uq_3ds21BYM",
@@ -1896,9 +1908,9 @@
       "title": "FAUCI BOMBSHELL",
       "publishedAt": "2026-07-27T23:36:28.000Z",
       "durationSec": 944,
-      "views": 18893,
-      "likes": 1695,
-      "comments": 275,
+      "views": 20233,
+      "likes": 1759,
+      "comments": 283,
       "isShort": false
     },
     {
@@ -1907,9 +1919,9 @@
       "title": "SHE'S OUT OF CONTROL",
       "publishedAt": "2026-07-27T23:00:12.000Z",
       "durationSec": 722,
-      "views": 6338,
-      "likes": 821,
-      "comments": 145,
+      "views": 6709,
+      "likes": 855,
+      "comments": 148,
       "isShort": false
     },
     {
@@ -1921,7 +1933,9 @@
       "views": 9882,
       "likes": 1093,
       "comments": 428,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "AKo_8wMhW4U",
@@ -1929,9 +1943,9 @@
       "title": "RACE RIOTS BEGIN",
       "publishedAt": "2026-07-27T22:02:34.000Z",
       "durationSec": 885,
-      "views": 47926,
-      "likes": 4126,
-      "comments": 964,
+      "views": 50175,
+      "likes": 4287,
+      "comments": 1014,
       "isShort": false
     },
     {
@@ -1943,7 +1957,9 @@
       "views": 8329,
       "likes": 790,
       "comments": 133,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "hdpPJFz9Nkw",
@@ -1954,7 +1970,9 @@
       "views": 1232,
       "likes": 143,
       "comments": 6,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "0Dt-nO37qes",
@@ -1962,9 +1980,9 @@
       "title": "MAMDANI BANNED",
       "publishedAt": "2026-07-27T21:46:48.000Z",
       "durationSec": 870,
-      "views": 7991,
-      "likes": 1195,
-      "comments": 127,
+      "views": 8429,
+      "likes": 1228,
+      "comments": 131,
       "isShort": false
     },
     {
@@ -1973,9 +1991,9 @@
       "title": "THEY FIRED HER!",
       "publishedAt": "2026-07-27T20:35:47.000Z",
       "durationSec": 869,
-      "views": 28710,
-      "likes": 3402,
-      "comments": 439,
+      "views": 29896,
+      "likes": 3473,
+      "comments": 444,
       "isShort": false
     },
     {
@@ -1984,9 +2002,9 @@
       "title": "I CAN'T BELIEVE IT",
       "publishedAt": "2026-07-27T19:15:33.000Z",
       "durationSec": 754,
-      "views": 9676,
-      "likes": 1455,
-      "comments": 242,
+      "views": 10141,
+      "likes": 1514,
+      "comments": 250,
       "isShort": false
     },
     {
@@ -1995,9 +2013,9 @@
       "title": "THEY ASKED FOR IT",
       "publishedAt": "2026-07-27T18:39:32.000Z",
       "durationSec": 963,
-      "views": 27317,
-      "likes": 2559,
-      "comments": 454,
+      "views": 27749,
+      "likes": 2590,
+      "comments": 459,
       "isShort": false
     },
     {
@@ -2009,7 +2027,9 @@
       "views": 8901,
       "likes": 1639,
       "comments": 132,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "yBS7nx2lpDE",
@@ -2020,7 +2040,9 @@
       "views": 31188,
       "likes": 1300,
       "comments": 84,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "z3ETPqSNcnA",
@@ -2031,7 +2053,9 @@
       "views": 16029,
       "likes": 991,
       "comments": 190,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "au-oeM5-nAM",
@@ -2042,7 +2066,9 @@
       "views": 21095,
       "likes": 2627,
       "comments": 131,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "52h8sQeG9XA",
@@ -2053,7 +2079,9 @@
       "views": 27259,
       "likes": 3312,
       "comments": 231,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "Vuxg1DH3Cmo",
@@ -2064,7 +2092,9 @@
       "views": 28944,
       "likes": 1556,
       "comments": 269,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "DtbdqbpwK0o",
@@ -2075,7 +2105,9 @@
       "views": 18594,
       "likes": 2198,
       "comments": 146,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "Xoza7FxcAEo",
@@ -2086,7 +2118,9 @@
       "views": 8596,
       "likes": 994,
       "comments": 133,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "BAPZqLzuKdA",
@@ -2097,7 +2131,9 @@
       "views": 52801,
       "likes": 5939,
       "comments": 139,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "XlZzJLWulVI",
@@ -2108,7 +2144,9 @@
       "views": 5291,
       "likes": 1074,
       "comments": 116,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "IQPAwHsqiJc",
@@ -2119,7 +2157,9 @@
       "views": 72335,
       "likes": 5497,
       "comments": 227,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "J0Ijn-caFl8",
@@ -2130,7 +2170,9 @@
       "views": 6545,
       "likes": 1335,
       "comments": 166,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "nh8Brts2XFM",
@@ -2141,7 +2183,9 @@
       "views": 7257,
       "likes": 986,
       "comments": 103,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "7Aw0UjYYrHE",
@@ -2152,7 +2196,9 @@
       "views": 77287,
       "likes": 4930,
       "comments": 1116,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "QBAhSKZiPLs",
@@ -2163,7 +2209,9 @@
       "views": 33079,
       "likes": 2393,
       "comments": 212,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "Li-XwuLQ9W4",
@@ -2174,7 +2222,9 @@
       "views": 7159,
       "likes": 1058,
       "comments": 51,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "wA1ewhEEs9w",
@@ -2182,8 +2232,8 @@
       "title": "I'M GLAD ITS OVER",
       "publishedAt": "2026-07-25T20:07:07.000Z",
       "durationSec": 760,
-      "views": 18394,
-      "likes": 2123,
+      "views": 18459,
+      "likes": 2129,
       "comments": 269,
       "isShort": false
     },
@@ -2193,8 +2243,8 @@
       "title": "TRUMP WENT NUCLEAR",
       "publishedAt": "2026-07-25T18:24:36.000Z",
       "durationSec": 929,
-      "views": 32929,
-      "likes": 2662,
+      "views": 32969,
+      "likes": 2664,
       "comments": 194,
       "isShort": false
     },
@@ -2207,7 +2257,9 @@
       "views": 622543,
       "likes": 22454,
       "comments": 580,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "nPvk5BsLv2o",
@@ -2218,7 +2270,9 @@
       "views": 6138,
       "likes": 1273,
       "comments": 116,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "mXlRt7fAbwg",
@@ -2229,7 +2283,9 @@
       "views": 13559,
       "likes": 2013,
       "comments": 238,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "HocnWY9bHJQ",
@@ -2237,8 +2293,8 @@
       "title": "KAREN HUMILATED",
       "publishedAt": "2026-07-24T22:25:20.000Z",
       "durationSec": 600,
-      "views": 6677,
-      "likes": 781,
+      "views": 6703,
+      "likes": 784,
       "comments": 52,
       "isShort": false
     },
@@ -2261,8 +2317,8 @@
       "title": "BIBLICALLY BAD",
       "publishedAt": "2026-07-24T22:00:35.000Z",
       "durationSec": 907,
-      "views": 972,
-      "likes": 126,
+      "views": 973,
+      "likes": 127,
       "comments": 24,
       "isShort": false
     },
@@ -2272,9 +2328,9 @@
       "title": "HE DESTROYED HER",
       "publishedAt": "2026-07-24T20:45:14.000Z",
       "durationSec": 808,
-      "views": 27167,
-      "likes": 2669,
-      "comments": 240,
+      "views": 27212,
+      "likes": 2676,
+      "comments": 239,
       "isShort": false
     },
     {
@@ -2283,9 +2339,9 @@
       "title": "SHE ACTUALLY SAID IT",
       "publishedAt": "2026-07-24T19:42:09.000Z",
       "durationSec": 868,
-      "views": 22406,
-      "likes": 2086,
-      "comments": 199,
+      "views": 22463,
+      "likes": 2087,
+      "comments": 201,
       "isShort": false
     },
     {
@@ -2294,8 +2350,8 @@
       "title": "MAMDANI TERROR ATTACK",
       "publishedAt": "2026-07-24T19:12:58.000Z",
       "durationSec": 788,
-      "views": 16371,
-      "likes": 1913,
+      "views": 16379,
+      "likes": 1916,
       "comments": 211,
       "isShort": false
     },
@@ -2308,7 +2364,9 @@
       "views": 43480,
       "likes": 1086,
       "comments": 18,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "NTHFE4nNdd0",
@@ -2319,7 +2377,9 @@
       "views": 75555,
       "likes": 1498,
       "comments": 30,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "aBD-ZQmwxzU",
@@ -2330,7 +2390,9 @@
       "views": 33800,
       "likes": 2589,
       "comments": 179,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "JTCvUL9au3Y",
@@ -2338,8 +2400,8 @@
       "title": "BOYCOTT THIS NOW",
       "publishedAt": "2026-07-24T00:07:58.000Z",
       "durationSec": 751,
-      "views": 28167,
-      "likes": 2490,
+      "views": 28177,
+      "likes": 2492,
       "comments": 431,
       "isShort": false
     },
@@ -2349,8 +2411,8 @@
       "title": "They Found A Bullet Casing Inside Their Avocado #Food #Avocado #Funny #Viral",
       "publishedAt": "2026-07-24T00:00:39.000Z",
       "durationSec": 119,
-      "views": 5809,
-      "likes": 574,
+      "views": 5815,
+      "likes": 577,
       "comments": 91,
       "isShort": true
     },
@@ -2363,7 +2425,9 @@
       "views": 6258,
       "likes": 681,
       "comments": 20,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "M9Zxjy4lg4g",
@@ -2371,8 +2435,8 @@
       "title": "THIS IS WEIRD",
       "publishedAt": "2026-07-23T23:30:16.000Z",
       "durationSec": 832,
-      "views": 2234,
-      "likes": 155,
+      "views": 2237,
+      "likes": 156,
       "comments": 13,
       "isShort": false
     },
@@ -2393,7 +2457,7 @@
       "title": "I'VE BEEN OUT AND ABOUT",
       "publishedAt": "2026-07-23T21:55:56.000Z",
       "durationSec": 1339,
-      "views": 3450,
+      "views": 3461,
       "likes": 271,
       "comments": 46,
       "isShort": false
@@ -2404,9 +2468,9 @@
       "title": "THEY GOT DESTROYED",
       "publishedAt": "2026-07-23T21:27:15.000Z",
       "durationSec": 909,
-      "views": 37486,
-      "likes": 3631,
-      "comments": 769,
+      "views": 37515,
+      "likes": 3632,
+      "comments": 770,
       "isShort": false
     },
     {
@@ -2415,7 +2479,7 @@
       "title": "ABSOLOUTE SCUM",
       "publishedAt": "2026-07-23T19:39:19.000Z",
       "durationSec": 899,
-      "views": 18956,
+      "views": 18964,
       "likes": 2319,
       "comments": 331,
       "isShort": false
@@ -2426,9 +2490,9 @@
       "title": "HASAN FAN ARRESTED",
       "publishedAt": "2026-07-23T19:03:01.000Z",
       "durationSec": 711,
-      "views": 5195,
+      "views": 5198,
       "likes": 717,
-      "comments": 47,
+      "comments": 48,
       "isShort": false
     },
     {
@@ -2440,7 +2504,9 @@
       "views": 102740,
       "likes": 3684,
       "comments": 595,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "DJ6hNV60xEI",
@@ -2451,7 +2517,9 @@
       "views": 75450,
       "likes": 3616,
       "comments": 169,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "N0OtlcSEVAs",
@@ -2462,7 +2530,9 @@
       "views": 3992,
       "likes": 333,
       "comments": 51,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "vntbrpRcFWY",
@@ -2473,7 +2543,9 @@
       "views": 77319,
       "likes": 3864,
       "comments": 373,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "veM7t3g11wQ",
@@ -2484,7 +2556,9 @@
       "views": 137272,
       "likes": 4733,
       "comments": 101,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "Uez2IDWWA8g",
@@ -2495,7 +2569,9 @@
       "views": 13894,
       "likes": 2106,
       "comments": 118,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "SwM426MtZp0",
@@ -2506,7 +2582,9 @@
       "views": 22877,
       "likes": 1008,
       "comments": 60,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "TkiuuTARcxk",
@@ -2514,8 +2592,8 @@
       "title": "THIS IS WEIRD",
       "publishedAt": "2026-07-23T00:08:30.000Z",
       "durationSec": 924,
-      "views": 3620,
-      "likes": 289,
+      "views": 3621,
+      "likes": 290,
       "comments": 20,
       "isShort": false
     },
@@ -2539,7 +2617,9 @@
       "views": 99622,
       "likes": 1814,
       "comments": 14,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "GlVa-IXrLaw",
@@ -2550,7 +2630,9 @@
       "views": 7022,
       "likes": 671,
       "comments": 90,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "k6b94CCTeAk",
@@ -2569,9 +2651,9 @@
       "title": "IT GOT WAY WORSE",
       "publishedAt": "2026-07-22T21:20:35.000Z",
       "durationSec": 754,
-      "views": 49950,
-      "likes": 3180,
-      "comments": 802,
+      "views": 49956,
+      "likes": 3181,
+      "comments": 801,
       "isShort": false
     },
     {
@@ -2580,8 +2662,8 @@
       "title": "WE'RE DONE WITH IT",
       "publishedAt": "2026-07-22T19:35:17.000Z",
       "durationSec": 840,
-      "views": 56907,
-      "likes": 4393,
+      "views": 56919,
+      "likes": 4394,
       "comments": 879,
       "isShort": false
     },
@@ -2594,7 +2676,9 @@
       "views": 90370,
       "likes": 13731,
       "comments": 632,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "vT8g0GvohvA",
@@ -2605,7 +2689,9 @@
       "views": 2335,
       "likes": 239,
       "comments": 5,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "cTyPQjqhrNE",
@@ -2616,7 +2702,9 @@
       "views": 21235,
       "likes": 2214,
       "comments": 53,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "tFsC7b4Qc00",
@@ -2627,7 +2715,9 @@
       "views": 37041,
       "likes": 3917,
       "comments": 329,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "6TwS0kh8p9M",
@@ -2638,7 +2728,9 @@
       "views": 10769,
       "likes": 1115,
       "comments": 53,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "dd2qj8LEVlg",
@@ -2660,7 +2752,9 @@
       "views": 370885,
       "likes": 11769,
       "comments": 1200,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.050Z"
     },
     {
       "id": "zYa6lj4Fzc4",
@@ -2668,8 +2762,8 @@
       "title": "MASSIVE SCANDAL",
       "publishedAt": "2026-07-22T00:00:26.000Z",
       "durationSec": 778,
-      "views": 94600,
-      "likes": 6663,
+      "views": 94609,
+      "likes": 6664,
       "comments": 773,
       "isShort": false
     },
@@ -2682,7 +2776,9 @@
       "views": 22664,
       "likes": 1081,
       "comments": 134,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "qevzBmvKaL4",
@@ -2693,7 +2789,9 @@
       "views": 85209,
       "likes": 4220,
       "comments": 180,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "zZFPXQRFITQ",
@@ -2745,8 +2843,8 @@
       "title": "LEFTISTS COLLAPSE",
       "publishedAt": "2026-07-21T20:56:45.000Z",
       "durationSec": 644,
-      "views": 6795,
-      "likes": 964,
+      "views": 6801,
+      "likes": 965,
       "comments": 89,
       "isShort": false
     },
@@ -2756,7 +2854,7 @@
       "title": "MASSIVE BLACK FATIGUE",
       "publishedAt": "2026-07-21T19:35:01.000Z",
       "durationSec": 763,
-      "views": 45345,
+      "views": 45346,
       "likes": 4373,
       "comments": 796,
       "isShort": false
@@ -2781,7 +2879,9 @@
       "views": 20572,
       "likes": 1148,
       "comments": 61,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "3m862Btsd_M",
@@ -2792,7 +2892,9 @@
       "views": 8922,
       "likes": 798,
       "comments": 37,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "xYNw5swmAWA",
@@ -2803,7 +2905,9 @@
       "views": 12058,
       "likes": 521,
       "comments": 9,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "50f7Y-K6ehQ",
@@ -2814,7 +2918,9 @@
       "views": 45673,
       "likes": 5717,
       "comments": 272,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "KBmpg2w3T00",
@@ -2825,7 +2931,9 @@
       "views": 5050,
       "likes": 302,
       "comments": 60,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "yukmjWCeqX0",
@@ -2836,7 +2944,9 @@
       "views": 379251,
       "likes": 8182,
       "comments": 126,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "e4F4usRhEV8",
@@ -2847,7 +2957,9 @@
       "views": 190639,
       "likes": 5726,
       "comments": 412,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "SPJcAd1Vbuw",
@@ -2858,7 +2970,9 @@
       "views": 19959,
       "likes": 878,
       "comments": 14,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "gM9m2JZjhXc",
@@ -2869,7 +2983,9 @@
       "views": 34571,
       "likes": 3347,
       "comments": 148,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "-ZTfbvtURys",
@@ -2888,8 +3004,8 @@
       "title": "NO COMING BACK",
       "publishedAt": "2026-07-20T22:30:26.000Z",
       "durationSec": 851,
-      "views": 15486,
-      "likes": 1895,
+      "views": 15490,
+      "likes": 1896,
       "comments": 228,
       "isShort": false
     },
@@ -2899,8 +3015,8 @@
       "title": "NUCLEAR MELTDOWN",
       "publishedAt": "2026-07-20T22:03:47.000Z",
       "durationSec": 1019,
-      "views": 18473,
-      "likes": 1956,
+      "views": 18475,
+      "likes": 1957,
       "comments": 495,
       "isShort": false
     },
@@ -2910,7 +3026,7 @@
       "title": "THIS IS INSANE",
       "publishedAt": "2026-07-20T21:00:58.000Z",
       "durationSec": 891,
-      "views": 50365,
+      "views": 50370,
       "likes": 5113,
       "comments": 824,
       "isShort": false
@@ -2957,7 +3073,9 @@
       "views": 102278,
       "likes": 10471,
       "comments": 1203,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "IgkojxeoAgI",
@@ -2968,7 +3086,9 @@
       "views": 28255,
       "likes": 1773,
       "comments": 179,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "CCcPookqCMw",
@@ -2979,7 +3099,9 @@
       "views": 16265,
       "likes": 696,
       "comments": 24,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "rbjPMOw_V58",
@@ -2990,7 +3112,9 @@
       "views": 327662,
       "likes": 9767,
       "comments": 315,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "ar48WHK7n6I",
@@ -3001,7 +3125,9 @@
       "views": 36137,
       "likes": 2113,
       "comments": 115,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "-kUL0tvNtbk",
@@ -3012,7 +3138,9 @@
       "views": 15539,
       "likes": 1298,
       "comments": 83,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "74c5aViPvsw",
@@ -3023,7 +3151,9 @@
       "views": 28528,
       "likes": 2157,
       "comments": 105,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "bPZXvMYExZs",
@@ -3034,7 +3164,9 @@
       "views": 15089,
       "likes": 1443,
       "comments": 25,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "y7g6ubQbQ50",
@@ -3045,7 +3177,9 @@
       "views": 86230,
       "likes": 2151,
       "comments": 39,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "yfvE4qm7Hkc",
@@ -3056,7 +3190,9 @@
       "views": 266771,
       "likes": 14899,
       "comments": 5467,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "yxPhAkjtkAg",
@@ -3067,7 +3203,9 @@
       "views": 63770,
       "likes": 915,
       "comments": 45,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "hshjxR--2rc",
@@ -3078,7 +3216,9 @@
       "views": 35768,
       "likes": 2515,
       "comments": 241,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "YHExj8Fr7aQ",
@@ -3089,7 +3229,9 @@
       "views": 91344,
       "likes": 8193,
       "comments": 216,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "Sk-1UWjHQSY",
@@ -3100,7 +3242,9 @@
       "views": 16471,
       "likes": 1417,
       "comments": 25,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "kd8XO_jd3Bs",
@@ -3111,7 +3255,9 @@
       "views": 138676,
       "likes": 14544,
       "comments": 2932,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "B6APSNIW3ZY",
@@ -3119,7 +3265,7 @@
       "title": "Her Pilot Son Surprised Her #pilot #travel #family #moms",
       "publishedAt": "2026-07-18T02:00:26.000Z",
       "durationSec": 140,
-      "views": 8761,
+      "views": 8766,
       "likes": 1159,
       "comments": 84,
       "isShort": true
@@ -3133,7 +3279,9 @@
       "views": 789447,
       "likes": 19219,
       "comments": 373,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "H3HSuzOuu68",
@@ -3144,7 +3292,9 @@
       "views": 312761,
       "likes": 9125,
       "comments": 353,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "_1nr24yKQw4",
@@ -3155,7 +3305,9 @@
       "views": 254999,
       "likes": 5687,
       "comments": 30,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "jxciF8FG7-8",
@@ -3166,7 +3318,9 @@
       "views": 79914,
       "likes": 3395,
       "comments": 756,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "6A1JPaiqJNY",
@@ -3199,7 +3353,9 @@
       "views": 13448,
       "likes": 1040,
       "comments": 146,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "VHpT5y8HcyU",
@@ -3210,7 +3366,9 @@
       "views": 173743,
       "likes": 20548,
       "comments": 159,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "Wcl-FlDmWkk",
@@ -3221,7 +3379,9 @@
       "views": 490514,
       "likes": 12100,
       "comments": 259,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "oEPHarIlz_s",
@@ -3232,7 +3392,9 @@
       "views": 545854,
       "likes": 37443,
       "comments": 821,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "Fhx7bNDOI4c",
@@ -3243,7 +3405,9 @@
       "views": 37476,
       "likes": 4195,
       "comments": 272,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "gc9CUC185w8",
@@ -3251,7 +3415,7 @@
       "title": "Matt Rife Is Absolutely Hilarious #standup #hilarious #funny #comedy",
       "publishedAt": "2026-07-17T02:00:04.000Z",
       "durationSec": 178,
-      "views": 37726,
+      "views": 37750,
       "likes": 1391,
       "comments": 11,
       "isShort": true
@@ -3265,7 +3429,9 @@
       "views": 598379,
       "likes": 27346,
       "comments": 1316,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "doEPlRzP15w",
@@ -3276,7 +3442,9 @@
       "views": 9826,
       "likes": 1568,
       "comments": 43,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "8ZlVAh-J2mQ",
@@ -3287,7 +3455,9 @@
       "views": 3146,
       "likes": 118,
       "comments": 9,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "tLS_MVXvm1s",
@@ -3295,9 +3465,9 @@
       "title": "I CAN'T BELIEVE IT",
       "publishedAt": "2026-07-16T22:36:32.000Z",
       "durationSec": 875,
-      "views": 28757,
+      "views": 28758,
       "likes": 2175,
-      "comments": 230,
+      "comments": 229,
       "isShort": false
     },
     {
@@ -3306,7 +3476,7 @@
       "title": "WHAT'S TIM POOL REALLY LIKE?",
       "publishedAt": "2026-07-16T22:00:17.000Z",
       "durationSec": 1517,
-      "views": 8212,
+      "views": 8213,
       "likes": 840,
       "comments": 105,
       "isShort": false
@@ -3317,9 +3487,9 @@
       "title": "IT'S GETTING WORSE",
       "publishedAt": "2026-07-16T21:15:13.000Z",
       "durationSec": 694,
-      "views": 28428,
+      "views": 28431,
       "likes": 2346,
-      "comments": 589,
+      "comments": 586,
       "isShort": false
     },
     {
@@ -3328,7 +3498,7 @@
       "title": "MOST EVIL WOMAN ALIVE",
       "publishedAt": "2026-07-16T18:58:30.000Z",
       "durationSec": 761,
-      "views": 46316,
+      "views": 46320,
       "likes": 3957,
       "comments": 584,
       "isShort": false
@@ -3342,7 +3512,9 @@
       "views": 702354,
       "likes": 30547,
       "comments": 2318,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "JgpuQGDQC5w",
@@ -3353,7 +3525,9 @@
       "views": 778820,
       "likes": 20389,
       "comments": 438,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "OdIKALm0pgo",
@@ -3364,7 +3538,9 @@
       "views": 8417,
       "likes": 730,
       "comments": 50,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "ogd-VtlbTcs",
@@ -3375,7 +3551,9 @@
       "views": 203751,
       "likes": 12549,
       "comments": 863,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "6EKRW2TCqRo",
@@ -3386,7 +3564,9 @@
       "views": 7648,
       "likes": 701,
       "comments": 32,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "b3XArsvVDfk",
@@ -3408,7 +3588,9 @@
       "views": 14669,
       "likes": 1059,
       "comments": 24,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "5fJIrxi4sjI",
@@ -3419,7 +3601,9 @@
       "views": 105433,
       "likes": 4463,
       "comments": 186,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "IB2A_2K-P9A",
@@ -3430,7 +3614,9 @@
       "views": 541123,
       "likes": 16517,
       "comments": 645,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "IBV8iKjBuJo",
@@ -3438,7 +3624,7 @@
       "title": "IT GOT WORSE",
       "publishedAt": "2026-07-15T23:43:12.000Z",
       "durationSec": 770,
-      "views": 47747,
+      "views": 47748,
       "likes": 3918,
       "comments": 836,
       "isShort": false
@@ -3494,7 +3680,7 @@
       "publishedAt": "2026-07-15T18:56:16.000Z",
       "durationSec": 782,
       "views": 28793,
-      "likes": 3461,
+      "likes": 3462,
       "comments": 649,
       "isShort": false
     },
@@ -3518,7 +3704,9 @@
       "views": 185978,
       "likes": 9583,
       "comments": 1402,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.420Z"
     },
     {
       "id": "nhmqHMBdT_k",
@@ -3529,7 +3717,9 @@
       "views": 37714,
       "likes": 3144,
       "comments": 291,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "Z8Y20M8q3as",
@@ -3540,7 +3730,9 @@
       "views": 784805,
       "likes": 19506,
       "comments": 240,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "3kDYiVwds-4",
@@ -3551,7 +3743,9 @@
       "views": 88002,
       "likes": 8044,
       "comments": 1076,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "KtR0Mm5dN6w",
@@ -3562,7 +3756,9 @@
       "views": 907369,
       "likes": 59286,
       "comments": 327,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "muW1jAWWsS8",
@@ -3573,7 +3769,9 @@
       "views": 227863,
       "likes": 8977,
       "comments": 1298,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "IYbDYI18tU0",
@@ -3584,7 +3782,9 @@
       "views": 17908,
       "likes": 765,
       "comments": 12,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "O1saua5P_h0",
@@ -3595,7 +3795,9 @@
       "views": 28351,
       "likes": 1893,
       "comments": 94,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "vUA9u1-o7iA",
@@ -3606,7 +3808,9 @@
       "views": 462153,
       "likes": 12973,
       "comments": 393,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "GKvk5HwwN6Y",
@@ -3625,8 +3829,8 @@
       "title": "NUCLEAR BLACK FATIGUE",
       "publishedAt": "2026-07-14T22:39:18.000Z",
       "durationSec": 792,
-      "views": 60214,
-      "likes": 4809,
+      "views": 60215,
+      "likes": 4810,
       "comments": 672,
       "isShort": false
     },
@@ -3636,7 +3840,7 @@
       "title": "FINALLY COMING CLEAN",
       "publishedAt": "2026-07-14T22:00:11.000Z",
       "durationSec": 1727,
-      "views": 10193,
+      "views": 10195,
       "likes": 1005,
       "comments": 157,
       "isShort": false
@@ -3683,7 +3887,9 @@
       "views": 42454,
       "likes": 2725,
       "comments": 280,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "yUVp9BpHYEQ",
@@ -3694,7 +3900,9 @@
       "views": 108236,
       "likes": 7338,
       "comments": 594,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "DjuaksZXjec",
@@ -3705,7 +3913,9 @@
       "views": 3860,
       "likes": 215,
       "comments": 28,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "Ifu5qIJhRmY",
@@ -3716,7 +3926,9 @@
       "views": 31203,
       "likes": 1848,
       "comments": 58,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "oe1Uz2e-rmw",
@@ -3727,7 +3939,9 @@
       "views": 92779,
       "likes": 2526,
       "comments": 117,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "SueqYtBo8jQ",
@@ -3738,7 +3952,9 @@
       "views": 180739,
       "likes": 5980,
       "comments": 99,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "rxxjTDz_UDE",
@@ -3749,7 +3965,9 @@
       "views": 433203,
       "likes": 23311,
       "comments": 5694,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "aryuR4nyFu0",
@@ -3760,7 +3978,9 @@
       "views": 15720,
       "likes": 2277,
       "comments": 83,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "2KAYax9qIv8",
@@ -3771,7 +3991,9 @@
       "views": 204368,
       "likes": 5169,
       "comments": 19,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "jVdXmske7Q4",
@@ -3859,7 +4081,9 @@
       "views": 1864732,
       "likes": 50371,
       "comments": 155,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "EWGVuy575es",
@@ -3870,7 +4094,9 @@
       "views": 212303,
       "likes": 6205,
       "comments": 48,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "zUOE23TBMag",
@@ -3892,7 +4118,9 @@
       "views": 68393,
       "likes": 10395,
       "comments": 446,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "L8sXkBjK1LQ",
@@ -3903,7 +4131,9 @@
       "views": 12796,
       "likes": 682,
       "comments": 28,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "dDckLobx5K0",
@@ -3914,7 +4144,9 @@
       "views": 56280,
       "likes": 2373,
       "comments": 40,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "Miv-3Hmd9EY",
@@ -3925,7 +4157,9 @@
       "views": 73363,
       "likes": 3511,
       "comments": 57,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "tk6pbf3pKnE",
@@ -3936,7 +4170,9 @@
       "views": 190584,
       "likes": 6983,
       "comments": 166,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "N7hkkOWeaw4",
@@ -3947,7 +4183,9 @@
       "views": 175343,
       "likes": 8216,
       "comments": 464,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "33F8OE25t3w",
@@ -3969,7 +4207,9 @@
       "views": 94297,
       "likes": 4073,
       "comments": 234,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "O2gIZcIrpL8",
@@ -3980,7 +4220,9 @@
       "views": 259910,
       "likes": 8736,
       "comments": 372,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "sruYWyQYZEA",
@@ -3991,7 +4233,9 @@
       "views": 111647,
       "likes": 3593,
       "comments": 107,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "2cwc3KWhdIA",
@@ -4013,7 +4257,9 @@
       "views": 154569,
       "likes": 5626,
       "comments": 54,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "yE17XPdKVGo",
@@ -4024,7 +4270,9 @@
       "views": 5037,
       "likes": 383,
       "comments": 72,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "euR23O3_GaY",
@@ -4068,7 +4316,9 @@
       "views": 22592,
       "likes": 935,
       "comments": 66,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "NBXT3rSDlOM",
@@ -4092,7 +4342,9 @@
       "views": 39892,
       "likes": 1936,
       "comments": 316,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "WRhRuaOmNK0",
@@ -4103,7 +4355,9 @@
       "views": 14295,
       "likes": 1141,
       "comments": 16,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "TKnTHBAzRVI",
@@ -4127,7 +4381,9 @@
       "views": 66000,
       "likes": 2503,
       "comments": 364,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "_7SaHBcp8h4",
@@ -4138,7 +4394,9 @@
       "views": 815090,
       "likes": 33883,
       "comments": 539,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "WqAu8gLaW-4",
@@ -4160,7 +4418,9 @@
       "views": 511285,
       "likes": 16057,
       "comments": 6526,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "Xw9d-9Uqg8g",
@@ -4190,7 +4450,7 @@
       "title": "WHAT DOES YOUTUBE PAY?",
       "publishedAt": "2026-07-09T22:00:05.000Z",
       "durationSec": 1731,
-      "views": 6805,
+      "views": 6806,
       "likes": 698,
       "comments": 76,
       "isShort": false
@@ -4201,7 +4461,7 @@
       "title": "HE ADMITTED EVERYTHING",
       "publishedAt": "2026-07-09T20:44:57.000Z",
       "durationSec": 917,
-      "views": 14197,
+      "views": 14198,
       "likes": 1487,
       "comments": 218,
       "isShort": false
@@ -4212,8 +4472,8 @@
       "title": "HE JUST CONFESSED",
       "publishedAt": "2026-07-09T19:18:08.000Z",
       "durationSec": 920,
-      "views": 60830,
-      "likes": 4764,
+      "views": 60831,
+      "likes": 4765,
       "comments": 706,
       "isShort": false
     },
@@ -4237,7 +4497,9 @@
       "views": 47902,
       "likes": 3620,
       "comments": 278,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "yTyNW033sJQ",
@@ -4248,7 +4510,9 @@
       "views": 24447,
       "likes": 852,
       "comments": 25,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "za7sklk0nJk",
@@ -4259,7 +4523,9 @@
       "views": 24779,
       "likes": 2402,
       "comments": 72,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "EB6EWzTk7Eg",
@@ -4270,7 +4536,9 @@
       "views": 15216,
       "likes": 1412,
       "comments": 78,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "TaAXW2XiDQ0",
@@ -4281,7 +4549,9 @@
       "views": 23700,
       "likes": 1989,
       "comments": 155,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "_TTf-CCF5zU",
@@ -4292,7 +4562,9 @@
       "views": 63214,
       "likes": 1938,
       "comments": 18,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "LwhtZzcv1Us",
@@ -4303,7 +4575,9 @@
       "views": 49871,
       "likes": 3231,
       "comments": 257,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "sSWVOLiL2jU",
@@ -4325,7 +4599,9 @@
       "views": 58690,
       "likes": 3104,
       "comments": 255,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "EVkEbICXlpU",
@@ -4336,7 +4612,9 @@
       "views": 28892,
       "likes": 814,
       "comments": 11,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "5-aqMctmOj0",
@@ -4400,7 +4678,7 @@
       "publishedAt": "2026-07-08T19:05:27.000Z",
       "durationSec": 1103,
       "views": 50185,
-      "likes": 4298,
+      "likes": 4299,
       "comments": 768,
       "isShort": false
     },
@@ -4413,7 +4691,9 @@
       "views": 172207,
       "likes": 8495,
       "comments": 359,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "ZZtRt2cQxqc",
@@ -4424,7 +4704,9 @@
       "views": 23784,
       "likes": 2673,
       "comments": 46,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:06.758Z"
     },
     {
       "id": "p96LNk9GM2w",
@@ -4435,7 +4717,9 @@
       "views": 68786,
       "likes": 7743,
       "comments": 536,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "qTwOtO-speI",
@@ -4446,7 +4730,9 @@
       "views": 298996,
       "likes": 16190,
       "comments": 1425,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "Nwcsr7cx3lE",
@@ -4457,7 +4743,9 @@
       "views": 112812,
       "likes": 4908,
       "comments": 219,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "rF52mMITSjI",
@@ -4468,7 +4756,9 @@
       "views": 56055,
       "likes": 2255,
       "comments": 452,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "PYzSlOxdFmc",
@@ -4479,7 +4769,9 @@
       "views": 487437,
       "likes": 18139,
       "comments": 84,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "F5O0CAWRKSM",
@@ -4501,7 +4793,9 @@
       "views": 14784,
       "likes": 1308,
       "comments": 43,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "0LqBgZ4GpCA",
@@ -4512,7 +4806,9 @@
       "views": 6531,
       "likes": 553,
       "comments": 27,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "Wn2O0f64mVA",
@@ -4553,7 +4849,7 @@
       "title": "I WENT TO THE ER!",
       "publishedAt": "2026-07-07T22:40:04.000Z",
       "durationSec": 1438,
-      "views": 12752,
+      "views": 12753,
       "likes": 1374,
       "comments": 448,
       "isShort": false
@@ -4600,7 +4896,9 @@
       "views": 5486,
       "likes": 455,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "PUftrCbLId4",
@@ -4611,7 +4909,9 @@
       "views": 108120,
       "likes": 10680,
       "comments": 510,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "tDgOAPHBsyE",
@@ -4622,7 +4922,9 @@
       "views": 459275,
       "likes": 52513,
       "comments": 1014,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "CxYmW91WIdA",
@@ -4644,7 +4946,9 @@
       "views": 736338,
       "likes": 24840,
       "comments": 1909,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "Uh0vXDzbSgM",
@@ -4655,7 +4959,9 @@
       "views": 912294,
       "likes": 33228,
       "comments": 287,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "DjwZC5VgXtk",
@@ -4666,7 +4972,9 @@
       "views": 326288,
       "likes": 12840,
       "comments": 113,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "lMc8Iuluik0",
@@ -4677,7 +4985,9 @@
       "views": 144483,
       "likes": 5021,
       "comments": 258,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "pE5RUCe4aIA",
@@ -4688,7 +4998,9 @@
       "views": 94910,
       "likes": 7753,
       "comments": 202,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "w0iQt8c3Sh4",
@@ -4699,7 +5011,9 @@
       "views": 76962,
       "likes": 2109,
       "comments": 130,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "zTkzeixCwI0",
@@ -4708,7 +5022,7 @@
       "publishedAt": "2026-07-06T23:33:31.000Z",
       "durationSec": 798,
       "views": 8199,
-      "likes": 1035,
+      "likes": 1036,
       "comments": 84,
       "isShort": false
     },
@@ -4762,8 +5076,8 @@
       "title": "THEY'RE ANIMALS!",
       "publishedAt": "2026-07-06T20:12:40.000Z",
       "durationSec": 988,
-      "views": 46875,
-      "likes": 4798,
+      "views": 46876,
+      "likes": 4799,
       "comments": 1197,
       "isShort": false
     },
@@ -4784,7 +5098,7 @@
       "title": "HE WON!",
       "publishedAt": "2026-07-06T17:41:03.000Z",
       "durationSec": 1064,
-      "views": 49360,
+      "views": 49361,
       "likes": 5986,
       "comments": 465,
       "isShort": false
@@ -4820,7 +5134,9 @@
       "views": 40510,
       "likes": 2442,
       "comments": 30,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "GeFBL8pMkQA",
@@ -4831,7 +5147,9 @@
       "views": 1390667,
       "likes": 61347,
       "comments": 366,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "p_QNCBv1IGQ",
@@ -4842,7 +5160,9 @@
       "views": 15192,
       "likes": 1988,
       "comments": 68,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "JzNGTF0Lv14",
@@ -4853,7 +5173,9 @@
       "views": 164318,
       "likes": 4094,
       "comments": 81,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "fI2z47i0lJ4",
@@ -4864,7 +5186,9 @@
       "views": 34252,
       "likes": 1743,
       "comments": 63,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "olu6zkD1t6M",
@@ -4888,7 +5212,9 @@
       "views": 132654,
       "likes": 4130,
       "comments": 437,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "TXAjop8zGqo",
@@ -4899,7 +5225,9 @@
       "views": 156472,
       "likes": 10248,
       "comments": 290,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "AFlpFJwd07k",
@@ -4910,7 +5238,9 @@
       "views": 14912,
       "likes": 938,
       "comments": 23,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "J3X3Ti4Q_cE",
@@ -4923,7 +5253,9 @@
       "comments": 59,
       "isShort": true,
       "unlistedSince": "2026-07-06T04:35:43.001Z",
-      "unlisted": true
+      "unlisted": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "6OGNkb7TPE8",
@@ -4936,7 +5268,9 @@
       "comments": 397,
       "isShort": true,
       "unlistedSince": "2026-07-06T04:35:43.001Z",
-      "unlisted": true
+      "unlisted": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "dlA_hIXpPBg",
@@ -4947,7 +5281,9 @@
       "views": 541584,
       "likes": 23768,
       "comments": 1314,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "91jKvmjkCLc",
@@ -4958,7 +5294,9 @@
       "views": 12527,
       "likes": 943,
       "comments": 62,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "fv8Tt5dehUU",
@@ -4969,7 +5307,9 @@
       "views": 67681,
       "likes": 4157,
       "comments": 386,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "0tTIWyM8suc",
@@ -4980,7 +5320,9 @@
       "views": 40468,
       "likes": 1564,
       "comments": 41,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "TyWy6sbMBiU",
@@ -4991,7 +5333,9 @@
       "views": 262514,
       "likes": 23360,
       "comments": 293,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "-EG5kNxDKR4",
@@ -4999,7 +5343,7 @@
       "title": "THIS IS CRAZY",
       "publishedAt": "2026-07-03T22:06:31.000Z",
       "durationSec": 967,
-      "views": 71168,
+      "views": 71175,
       "likes": 5039,
       "comments": 1650,
       "isShort": false
@@ -5024,7 +5368,9 @@
       "views": 53203,
       "likes": 2815,
       "comments": 403,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "5pO0Bivvm2U",
@@ -5035,7 +5381,9 @@
       "views": 919412,
       "likes": 21859,
       "comments": 580,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "Fy0AadU7x_A",
@@ -5046,7 +5394,9 @@
       "views": 11093,
       "likes": 597,
       "comments": 9,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "hXmherz310g",
@@ -5054,7 +5404,7 @@
       "title": "Which Side Are You On!  #viral #cringe #drama",
       "publishedAt": "2026-07-03T02:00:19.000Z",
       "durationSec": 90,
-      "views": 596267,
+      "views": 596263,
       "likes": 22500,
       "comments": 1148,
       "isShort": true
@@ -5068,7 +5418,9 @@
       "views": 5085,
       "likes": 222,
       "comments": 2,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "3s0MewMyRYM",
@@ -5079,7 +5431,9 @@
       "views": 31761,
       "likes": 1618,
       "comments": 42,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "El89nB0u1qU",
@@ -5134,7 +5488,9 @@
       "views": 216321,
       "likes": 9954,
       "comments": 2441,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "fv3reKR5EyE",
@@ -5145,7 +5501,9 @@
       "views": 6987,
       "likes": 326,
       "comments": 34,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "IsZrhfDGl2s",
@@ -5156,7 +5514,9 @@
       "views": 351516,
       "likes": 21025,
       "comments": 444,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "Jn7WoD8L4Jc",
@@ -5167,7 +5527,9 @@
       "views": 185286,
       "likes": 11350,
       "comments": 2004,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "eW3A6xC01Ug",
@@ -5178,7 +5540,9 @@
       "views": 7621,
       "likes": 547,
       "comments": 16,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "cR-CKNMJMHE",
@@ -5189,7 +5553,9 @@
       "views": 21618,
       "likes": 792,
       "comments": 12,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "-hese1Oqubs",
@@ -5200,7 +5566,9 @@
       "views": 628735,
       "likes": 17891,
       "comments": 1331,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "48y94hHVWkg",
@@ -5208,7 +5576,7 @@
       "title": "SHE FOUND OUT",
       "publishedAt": "2026-07-02T00:15:33.000Z",
       "durationSec": 738,
-      "views": 41822,
+      "views": 41823,
       "likes": 4394,
       "comments": 938,
       "isShort": false
@@ -5222,7 +5590,9 @@
       "views": 11271,
       "likes": 431,
       "comments": 33,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "afR1Jd_58nw",
@@ -5233,7 +5603,9 @@
       "views": 25145,
       "likes": 2063,
       "comments": 74,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "RaTz8mQwStA",
@@ -5241,7 +5613,7 @@
       "title": "HARD TO WATCH THIS",
       "publishedAt": "2026-07-01T22:30:04.000Z",
       "durationSec": 1211,
-      "views": 12173,
+      "views": 12175,
       "likes": 1302,
       "comments": 399,
       "isShort": false
@@ -5274,7 +5646,7 @@
       "title": "PAYBACK BEGINS",
       "publishedAt": "2026-07-01T19:05:05.000Z",
       "durationSec": 1109,
-      "views": 92977,
+      "views": 92985,
       "likes": 8110,
       "comments": 748,
       "isShort": false
@@ -5288,7 +5660,9 @@
       "views": 18917,
       "likes": 1028,
       "comments": 63,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "QCCWTUoocVM",
@@ -5307,8 +5681,8 @@
       "title": "BAN THIS NOW!",
       "publishedAt": "2026-06-30T22:18:22.000Z",
       "durationSec": 913,
-      "views": 171141,
-      "likes": 20910,
+      "views": 171142,
+      "likes": 20909,
       "comments": 2848,
       "isShort": false
     },
@@ -5331,7 +5705,7 @@
       "title": "THIS IS BRUTAL",
       "publishedAt": "2026-06-30T18:55:27.000Z",
       "durationSec": 897,
-      "views": 80942,
+      "views": 80943,
       "likes": 6347,
       "comments": 762,
       "isShort": false
@@ -5345,7 +5719,9 @@
       "views": 131795,
       "likes": 11444,
       "comments": 2120,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.167Z"
     },
     {
       "id": "L59rh6l-7So",
@@ -5356,7 +5732,9 @@
       "views": 1430544,
       "likes": 82537,
       "comments": 41573,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "psaFgENiQ2k",
@@ -5367,7 +5745,9 @@
       "views": 79991,
       "likes": 4689,
       "comments": 91,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "_6xHgpp49RE",
@@ -5378,7 +5758,9 @@
       "views": 230017,
       "likes": 14101,
       "comments": 1508,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "57af6ptdQP8",
@@ -5389,7 +5771,9 @@
       "views": 19875,
       "likes": 2465,
       "comments": 130,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "EvLs99yLc6Q",
@@ -5400,7 +5784,9 @@
       "views": 23652,
       "likes": 1934,
       "comments": 66,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "Eyv04p1uYrg",
@@ -5466,7 +5852,9 @@
       "views": 24344,
       "likes": 2159,
       "comments": 366,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "OlABsAaGGEM",
@@ -5477,7 +5865,9 @@
       "views": 17289,
       "likes": 2122,
       "comments": 326,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "cxvxJXCVAtU",
@@ -5488,7 +5878,9 @@
       "views": 40585,
       "likes": 2864,
       "comments": 244,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "lS6441yVzhE",
@@ -5499,7 +5891,9 @@
       "views": 1038814,
       "likes": 82059,
       "comments": 2054,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "Sh2F4E2aipA",
@@ -5510,7 +5904,9 @@
       "views": 557064,
       "likes": 19882,
       "comments": 150,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "oxaXGfeuqW8",
@@ -5521,7 +5917,9 @@
       "views": 125053,
       "likes": 3381,
       "comments": 77,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "9bqta-Tv5Jg",
@@ -5532,7 +5930,9 @@
       "views": 48349,
       "likes": 2539,
       "comments": 69,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "jK9y3jWa0ns",
@@ -5543,7 +5943,9 @@
       "views": 3206581,
       "likes": 97310,
       "comments": 374,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "ePnwUrac_Cg",
@@ -5554,7 +5956,9 @@
       "views": 331338,
       "likes": 15683,
       "comments": 324,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "zTkDxOwZ7vQ",
@@ -5562,8 +5966,8 @@
       "title": "This Dude Is Absolutely Amazing #gym #viral #prank #weights",
       "publishedAt": "2026-06-28T00:30:06.000Z",
       "durationSec": 178,
-      "views": 27592,
-      "likes": 2209,
+      "views": 27597,
+      "likes": 2210,
       "comments": 95,
       "isShort": true
     },
@@ -5576,7 +5980,9 @@
       "views": 148641,
       "likes": 8822,
       "comments": 431,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "FAmNefpiKhw",
@@ -5587,7 +5993,9 @@
       "views": 58413,
       "likes": 2958,
       "comments": 58,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "gLHTxZ2WF5M",
@@ -5598,7 +6006,9 @@
       "views": 537261,
       "likes": 28189,
       "comments": 2607,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "vSHGtjfg7lE",
@@ -5609,7 +6019,9 @@
       "views": 16996,
       "likes": 991,
       "comments": 21,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "bh_NhY2YiyA",
@@ -5620,7 +6032,9 @@
       "views": 46092,
       "likes": 3323,
       "comments": 37,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "95bG2LeUkzI",
@@ -5631,7 +6045,9 @@
       "views": 1523748,
       "likes": 69145,
       "comments": 5729,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "5F9AoAdv2OQ",
@@ -5642,7 +6058,9 @@
       "views": 642424,
       "likes": 21620,
       "comments": 204,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "-d03Ms4lTnE",
@@ -5653,7 +6071,9 @@
       "views": 59084,
       "likes": 2674,
       "comments": 41,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "BPZM-Mv4hY0",
@@ -5664,7 +6084,9 @@
       "views": 26071,
       "likes": 2276,
       "comments": 62,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "lG935qLtnyA",
@@ -5675,7 +6097,9 @@
       "views": 23130,
       "likes": 1875,
       "comments": 47,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "M2BTqg-9Ohk",
@@ -5686,7 +6110,9 @@
       "views": 161260,
       "likes": 4394,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "uD4j-wVvAys",
@@ -5694,7 +6120,7 @@
       "title": "TOTAL DISASTER",
       "publishedAt": "2026-06-26T17:40:53.000Z",
       "durationSec": 1090,
-      "views": 42608,
+      "views": 42609,
       "likes": 3071,
       "comments": 406,
       "isShort": false
@@ -5708,7 +6134,9 @@
       "views": 22796,
       "likes": 1411,
       "comments": 117,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "wb9I0wj7RZo",
@@ -5719,7 +6147,9 @@
       "views": 51973,
       "likes": 1865,
       "comments": 31,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "V7YIiumHZso",
@@ -5730,7 +6160,9 @@
       "views": 43790,
       "likes": 1487,
       "comments": 20,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "i7NaRwAcOfA",
@@ -5741,7 +6173,9 @@
       "views": 89898,
       "likes": 3849,
       "comments": 29,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "mDP4Ag7QaCs",
@@ -5752,7 +6186,9 @@
       "views": 639094,
       "likes": 18429,
       "comments": 123,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "Ig28B9oJ4Qc",
@@ -5771,7 +6207,7 @@
       "title": "Lucky He Had His Camera Working #uber #viral #drama #uberdriver",
       "publishedAt": "2026-06-26T00:00:03.000Z",
       "durationSec": 84,
-      "views": 394766,
+      "views": 394770,
       "likes": 15155,
       "comments": 148,
       "isShort": true
@@ -5804,7 +6240,7 @@
       "title": "ENOUGH IS ENOUGH",
       "publishedAt": "2026-06-25T17:19:15.000Z",
       "durationSec": 828,
-      "views": 10245,
+      "views": 10246,
       "likes": 1268,
       "comments": 238,
       "isShort": false
@@ -5816,7 +6252,7 @@
       "publishedAt": "2026-06-25T15:06:21.000Z",
       "durationSec": 766,
       "views": 105069,
-      "likes": 6984,
+      "likes": 6983,
       "comments": 1224,
       "isShort": false
     },
@@ -5829,7 +6265,9 @@
       "views": 6655,
       "likes": 550,
       "comments": 38,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "3W6bYSBbbHU",
@@ -5840,7 +6278,9 @@
       "views": 6933,
       "likes": 842,
       "comments": 61,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "5pvpaAIca48",
@@ -5851,7 +6291,9 @@
       "views": 8164,
       "likes": 626,
       "comments": 32,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "16PJMVrn3vA",
@@ -5862,7 +6304,9 @@
       "views": 15677,
       "likes": 1255,
       "comments": 23,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "UI9NoURG6kc",
@@ -5873,7 +6317,9 @@
       "views": 1156254,
       "likes": 31584,
       "comments": 559,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "CeNtgBRTWKU",
@@ -5884,7 +6330,9 @@
       "views": 121748,
       "likes": 2041,
       "comments": 59,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "-CcZe5Bffzs",
@@ -5961,7 +6409,9 @@
       "views": 31251,
       "likes": 2332,
       "comments": 852,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "qWPJdGctnmM",
@@ -5972,7 +6422,9 @@
       "views": 11388,
       "likes": 716,
       "comments": 21,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "PSaUjsK-MIg",
@@ -5983,7 +6435,9 @@
       "views": 29455,
       "likes": 2527,
       "comments": 24,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "XMzImPjR9Ks",
@@ -5994,7 +6448,9 @@
       "views": 78824,
       "likes": 4859,
       "comments": 239,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "3bCLr3llG5Y",
@@ -6005,7 +6461,9 @@
       "views": 11616,
       "likes": 1515,
       "comments": 67,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "02OoxvTrIuo",
@@ -6016,7 +6474,9 @@
       "views": 167658,
       "likes": 11923,
       "comments": 398,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "7s246a1zfio",
@@ -6038,7 +6498,9 @@
       "views": 85919,
       "likes": 6503,
       "comments": 1028,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "VCrR_LtNDzw",
@@ -6049,7 +6511,9 @@
       "views": 276084,
       "likes": 11921,
       "comments": 460,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "cFkX8vHAu74",
@@ -6060,7 +6524,9 @@
       "views": 61410,
       "likes": 4460,
       "comments": 16,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "ddFBaUc538w",
@@ -6134,7 +6600,7 @@
       "title": "HE WENT BERSERK",
       "publishedAt": "2026-06-23T17:46:41.000Z",
       "durationSec": 1308,
-      "views": 106932,
+      "views": 106933,
       "likes": 8757,
       "comments": 1649,
       "isShort": false
@@ -6148,7 +6614,9 @@
       "views": 235208,
       "likes": 13928,
       "comments": 57,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "tUzB2o6EIvE",
@@ -6159,7 +6627,9 @@
       "views": 155302,
       "likes": 7159,
       "comments": 251,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.536Z"
     },
     {
       "id": "QeJjAEDekTc",
@@ -6170,7 +6640,9 @@
       "views": 13785,
       "likes": 1130,
       "comments": 27,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "JK_Mli650KY",
@@ -6258,7 +6730,9 @@
       "views": 294696,
       "likes": 11236,
       "comments": 379,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "5gVSaXzO-a4",
@@ -6269,7 +6743,9 @@
       "views": 1218182,
       "likes": 46784,
       "comments": 6009,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "syoL9hY1mcI",
@@ -6280,7 +6756,9 @@
       "views": 174808,
       "likes": 7985,
       "comments": 621,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "LT_w0SNNjoI",
@@ -6291,7 +6769,9 @@
       "views": 5213,
       "likes": 313,
       "comments": 79,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "mzVmfTAtPeA",
@@ -6302,7 +6782,9 @@
       "views": 16106,
       "likes": 773,
       "comments": 82,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "J7kNd4eS33A",
@@ -6313,7 +6795,9 @@
       "views": 37161,
       "likes": 1946,
       "comments": 568,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "P0d34zT86Bc",
@@ -6324,7 +6808,9 @@
       "views": 10567,
       "likes": 1439,
       "comments": 154,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "H9FCTjPr4f4",
@@ -6335,7 +6821,9 @@
       "views": 31869,
       "likes": 1837,
       "comments": 52,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "dlh4aduEbFI",
@@ -6343,7 +6831,7 @@
       "title": "ITS SO MUCH WORSE",
       "publishedAt": "2026-06-20T16:28:58.000Z",
       "durationSec": 1141,
-      "views": 63488,
+      "views": 63489,
       "likes": 5946,
       "comments": 1330,
       "isShort": false
@@ -6357,7 +6845,9 @@
       "views": 29497,
       "likes": 1179,
       "comments": 123,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "rrbFMaDDAsc",
@@ -6368,7 +6858,9 @@
       "views": 11898,
       "likes": 481,
       "comments": 66,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "qY6oMQO-XPk",
@@ -6379,7 +6871,9 @@
       "views": 28430,
       "likes": 3765,
       "comments": 465,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "DxszTKRM8oI",
@@ -6390,7 +6884,9 @@
       "views": 745664,
       "likes": 59738,
       "comments": 1180,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "m44_OwIt6NU",
@@ -6401,7 +6897,9 @@
       "views": 250895,
       "likes": 18780,
       "comments": 370,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "qdOeH5TdXic",
@@ -6412,7 +6910,9 @@
       "views": 60658,
       "likes": 10213,
       "comments": 327,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "abfSNpvuYzs",
@@ -6436,7 +6936,9 @@
       "views": 22992,
       "likes": 2428,
       "comments": 307,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "WVpPj9xjtS8",
@@ -6447,7 +6949,9 @@
       "views": 448877,
       "likes": 19604,
       "comments": 67,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "r3cTXMxBPbc",
@@ -6535,7 +7039,9 @@
       "views": 58423,
       "likes": 5812,
       "comments": 215,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "53MgtnsvsFM",
@@ -6546,7 +7052,9 @@
       "views": 4080,
       "likes": 210,
       "comments": 12,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "7IfVtytg0ZE",
@@ -6557,7 +7065,9 @@
       "views": 6205,
       "likes": 553,
       "comments": 10,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "cOW318q3l-s",
@@ -6579,7 +7089,9 @@
       "views": 33770,
       "likes": 1580,
       "comments": 49,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "uMnwGZHFrR8",
@@ -6590,7 +7102,9 @@
       "views": 22866,
       "likes": 1643,
       "comments": 44,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "WL_TgRFZxwo",
@@ -6599,7 +7113,7 @@
       "publishedAt": "2026-06-18T20:49:06.000Z",
       "durationSec": 1017,
       "views": 103586,
-      "likes": 8829,
+      "likes": 8828,
       "comments": 2240,
       "isShort": false
     },
@@ -6620,7 +7134,7 @@
       "title": "HE'S DONE FOR",
       "publishedAt": "2026-06-18T18:00:35.000Z",
       "durationSec": 1036,
-      "views": 53463,
+      "views": 53464,
       "likes": 5122,
       "comments": 543,
       "isShort": false
@@ -6634,7 +7148,9 @@
       "views": 132479,
       "likes": 5717,
       "comments": 285,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "Y3qQ6Zj64xo",
@@ -6645,7 +7161,9 @@
       "views": 117989,
       "likes": 3152,
       "comments": 17,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "LAMo9_lFJQY",
@@ -6656,7 +7174,9 @@
       "views": 21712,
       "likes": 1313,
       "comments": 66,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "u9z881bqLEk",
@@ -6667,7 +7187,9 @@
       "views": 47665,
       "likes": 1781,
       "comments": 165,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "uBmFo6JEn4M",
@@ -6678,7 +7200,9 @@
       "views": 104126,
       "likes": 7467,
       "comments": 487,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "QEMmrMkc1Rs",
@@ -6689,7 +7213,9 @@
       "views": 66099,
       "likes": 4969,
       "comments": 148,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "YZN3UAEssmg",
@@ -6700,7 +7226,9 @@
       "views": 12598,
       "likes": 848,
       "comments": 39,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "3VBBOxmzPBA",
@@ -6719,7 +7247,7 @@
       "title": "WE HAVE WON",
       "publishedAt": "2026-06-17T22:12:57.000Z",
       "durationSec": 711,
-      "views": 13262,
+      "views": 13263,
       "likes": 1391,
       "comments": 142,
       "isShort": false
@@ -6733,7 +7261,9 @@
       "views": 1549321,
       "likes": 83963,
       "comments": 416,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "y0dySF6Dxcg",
@@ -6775,7 +7305,7 @@
       "publishedAt": "2026-06-17T18:57:52.000Z",
       "durationSec": 1136,
       "views": 131209,
-      "likes": 9946,
+      "likes": 9945,
       "comments": 1336,
       "isShort": false
     },
@@ -6821,7 +7351,9 @@
       "views": 166009,
       "likes": 10428,
       "comments": 638,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "JljO5U-u_Eg",
@@ -6832,7 +7364,9 @@
       "views": 33878,
       "likes": 1911,
       "comments": 9,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "ISErU4wcd1Y",
@@ -6843,7 +7377,9 @@
       "views": 29315,
       "likes": 2630,
       "comments": 186,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "0Tb_fVAvWak",
@@ -6854,7 +7390,9 @@
       "views": 16685,
       "likes": 856,
       "comments": 81,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "-t6Z_iCJAPA",
@@ -6865,7 +7403,9 @@
       "views": 130729,
       "likes": 5609,
       "comments": 201,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "EqqtIxG8uQw",
@@ -6876,7 +7416,9 @@
       "views": 127157,
       "likes": 1952,
       "comments": 99,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "XlB7YmkakYs",
@@ -6887,7 +7429,9 @@
       "views": 399122,
       "likes": 17841,
       "comments": 784,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "6cddO19qrls",
@@ -6920,7 +7464,9 @@
       "views": 9491,
       "likes": 529,
       "comments": 10,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "LP94fw5JtYk",
@@ -6942,7 +7488,9 @@
       "views": 29188,
       "likes": 2907,
       "comments": 20,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "-RQ4ODKLegs",
@@ -7008,7 +7556,9 @@
       "views": 135573,
       "likes": 7602,
       "comments": 322,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "a28ewW93yyM",
@@ -7019,7 +7569,9 @@
       "views": 3914,
       "likes": 246,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "ObpjvP7iKqc",
@@ -7030,7 +7582,9 @@
       "views": 74416,
       "likes": 2867,
       "comments": 511,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "wptKHia_L7M",
@@ -7041,7 +7595,9 @@
       "views": 346909,
       "likes": 13470,
       "comments": 347,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "QhFgaFD5sdI",
@@ -7052,7 +7608,9 @@
       "views": 4193,
       "likes": 292,
       "comments": 37,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "mKvtTac5Pvs",
@@ -7063,7 +7621,9 @@
       "views": 245398,
       "likes": 6353,
       "comments": 90,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "iJQ5LL9Q_sM",
@@ -7096,7 +7656,9 @@
       "views": 1036671,
       "likes": 52704,
       "comments": 880,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "CHqn5y_jT3E",
@@ -7107,7 +7669,9 @@
       "views": 58769,
       "likes": 1038,
       "comments": 44,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "swMjLqVzeNQ",
@@ -7162,7 +7726,9 @@
       "views": 105785,
       "likes": 4298,
       "comments": 511,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:07.975Z"
     },
     {
       "id": "VLIG4YZ78Cw",
@@ -7173,7 +7739,9 @@
       "views": 17376,
       "likes": 478,
       "comments": 23,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "fDK5slwurRQ",
@@ -7184,7 +7752,9 @@
       "views": 166044,
       "likes": 2710,
       "comments": 87,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "9DHetNd5Rw0",
@@ -7195,7 +7765,9 @@
       "views": 25507,
       "likes": 1371,
       "comments": 290,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "KBwSYOqs9E8",
@@ -7206,7 +7778,9 @@
       "views": 16244,
       "likes": 2098,
       "comments": 146,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "JTPB6cZbx4Q",
@@ -7217,7 +7791,9 @@
       "views": 37422,
       "likes": 2412,
       "comments": 24,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "oCbtvGvcF2Q",
@@ -7228,7 +7804,9 @@
       "views": 111911,
       "likes": 2912,
       "comments": 216,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "tojlm02NaRs",
@@ -7239,7 +7817,9 @@
       "views": 21163,
       "likes": 1549,
       "comments": 382,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "_qYnVZVXHZo",
@@ -7250,7 +7830,9 @@
       "views": 82658,
       "likes": 2731,
       "comments": 69,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "PqY_GtXRtoA",
@@ -7261,7 +7843,9 @@
       "views": 1306707,
       "likes": 17448,
       "comments": 198,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "ovNZk1ZYz8U",
@@ -7272,7 +7856,9 @@
       "views": 497766,
       "likes": 22603,
       "comments": 3873,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "ljb1aTNMxYc",
@@ -7283,7 +7869,9 @@
       "views": 30029,
       "likes": 1803,
       "comments": 19,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "f5fnf-SN1qw",
@@ -7316,7 +7904,9 @@
       "views": 429416,
       "likes": 20030,
       "comments": 147,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "TdT16Seu_6M",
@@ -7327,7 +7917,9 @@
       "views": 4686,
       "likes": 220,
       "comments": 21,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "9UBucdyLLAI",
@@ -7338,7 +7930,9 @@
       "views": 7095,
       "likes": 685,
       "comments": 14,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "4PPT5uipjQU",
@@ -7349,7 +7943,9 @@
       "views": 27068,
       "likes": 3853,
       "comments": 73,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "1TxLcumDPnw",
@@ -7360,7 +7956,9 @@
       "views": 221466,
       "likes": 11844,
       "comments": 644,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "lPhUsnOs31Y",
@@ -7371,7 +7969,9 @@
       "views": 494369,
       "likes": 15921,
       "comments": 330,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "TYSU_ZiT9oU",
@@ -7380,7 +7980,7 @@
       "publishedAt": "2026-06-12T22:00:02.000Z",
       "durationSec": 964,
       "views": 54994,
-      "likes": 4899,
+      "likes": 4898,
       "comments": 836,
       "isShort": false
     },
@@ -7402,7 +8002,7 @@
       "publishedAt": "2026-06-12T19:03:31.000Z",
       "durationSec": 1112,
       "views": 80173,
-      "likes": 6055,
+      "likes": 6054,
       "comments": 2191,
       "isShort": false
     },
@@ -7448,7 +8048,9 @@
       "views": 37074,
       "likes": 2741,
       "comments": 56,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "RSKNEFLboE8",
@@ -7459,7 +8061,9 @@
       "views": 230933,
       "likes": 3445,
       "comments": 103,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "nM5qgOKOEsQ",
@@ -7481,7 +8085,9 @@
       "views": 101598,
       "likes": 2921,
       "comments": 15,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "jINNrh6KmKc",
@@ -7492,7 +8098,9 @@
       "views": 574130,
       "likes": 13869,
       "comments": 80,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "8EEAhypladw",
@@ -7514,7 +8122,9 @@
       "views": 52193,
       "likes": 2099,
       "comments": 734,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "E_K0pCUIiCI",
@@ -7533,7 +8143,7 @@
       "title": "Fatigue Is Getting Worse #fatigue #argument #viral #cringe #fatigue",
       "publishedAt": "2026-06-11T22:00:18.000Z",
       "durationSec": 59,
-      "views": 823156,
+      "views": 823153,
       "likes": 33370,
       "comments": 166,
       "isShort": true
@@ -7547,7 +8157,9 @@
       "views": 1545666,
       "likes": 33376,
       "comments": 416,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "A1QCyXskVWo",
@@ -7567,7 +8179,7 @@
       "publishedAt": "2026-06-11T19:24:54.000Z",
       "durationSec": 1478,
       "views": 96240,
-      "likes": 7586,
+      "likes": 7585,
       "comments": 1764,
       "isShort": false
     },
@@ -7602,7 +8214,9 @@
       "views": 7145021,
       "likes": 219418,
       "comments": 1267,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "Y27UkTmaebo",
@@ -7613,7 +8227,9 @@
       "views": 23052,
       "likes": 799,
       "comments": 18,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "oXv62OmdMIo",
@@ -7624,7 +8240,9 @@
       "views": 19052,
       "likes": 2954,
       "comments": 97,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "wF7ftHrVbDo",
@@ -7635,7 +8253,9 @@
       "views": 222319,
       "likes": 10622,
       "comments": 347,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "Qd-Hlxcz-zc",
@@ -7646,7 +8266,9 @@
       "views": 252384,
       "likes": 13572,
       "comments": 248,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "n3YcpVO3nBM",
@@ -7679,7 +8301,9 @@
       "views": 780318,
       "likes": 36428,
       "comments": 310,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "9EyYe9DgvGg",
@@ -7690,7 +8314,9 @@
       "views": 188418,
       "likes": 3679,
       "comments": 26,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "bUz-30ezKdg",
@@ -7744,7 +8370,7 @@
       "durationSec": 726,
       "views": 14329,
       "likes": 2009,
-      "comments": 422,
+      "comments": 423,
       "isShort": false
     },
     {
@@ -7767,7 +8393,9 @@
       "views": 158496,
       "likes": 8419,
       "comments": 790,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "6h-SL2yOX4Y",
@@ -7778,7 +8406,9 @@
       "views": 31659,
       "likes": 1564,
       "comments": 33,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "DeZ0v5lFD44",
@@ -7789,7 +8419,9 @@
       "views": 17227,
       "likes": 808,
       "comments": 43,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "bjLMRDYZI7o",
@@ -7811,7 +8443,9 @@
       "views": 27019,
       "likes": 1104,
       "comments": 29,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "YbEjcRmuti4",
@@ -7822,7 +8456,9 @@
       "views": 389925,
       "likes": 9761,
       "comments": 508,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "i9V6uIc3qvQ",
@@ -7833,7 +8469,9 @@
       "views": 1028078,
       "likes": 34891,
       "comments": 127,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "igmjuXKDgvU",
@@ -7866,7 +8504,9 @@
       "views": 62852,
       "likes": 3895,
       "comments": 600,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "QC-pygTPcdI",
@@ -7877,7 +8517,9 @@
       "views": 422156,
       "likes": 9865,
       "comments": 95,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "FfpcUEwfjtA",
@@ -7954,7 +8596,9 @@
       "views": 27637,
       "likes": 1519,
       "comments": 94,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "aILImz9EJLQ",
@@ -7976,7 +8620,9 @@
       "views": 248336,
       "likes": 1927,
       "comments": 22,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "P0ckgIErRZ8",
@@ -7987,7 +8633,9 @@
       "views": 212969,
       "likes": 13721,
       "comments": 885,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "AVN6rWUh1-c",
@@ -7998,7 +8646,9 @@
       "views": 739235,
       "likes": 27447,
       "comments": 96,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "jDgLV_z93Pk",
@@ -8009,7 +8659,9 @@
       "views": 222168,
       "likes": 5859,
       "comments": 255,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "e5z8QYU6Upc",
@@ -8031,7 +8683,9 @@
       "views": 16616,
       "likes": 764,
       "comments": 360,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "dA_1_lOiRJY",
@@ -8053,7 +8707,9 @@
       "views": 220401,
       "likes": 9867,
       "comments": 24,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "4WOnm9s5vb8",
@@ -8064,7 +8720,9 @@
       "views": 47150,
       "likes": 3897,
       "comments": 223,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "gc8JEZUti6I",
@@ -8163,7 +8821,9 @@
       "views": 1437409,
       "likes": 34651,
       "comments": 76,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "OP2Vowztpek",
@@ -8174,7 +8834,9 @@
       "views": 177593,
       "likes": 12229,
       "comments": 696,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "k7l5x-cynTo",
@@ -8185,7 +8847,9 @@
       "views": 1436121,
       "likes": 41044,
       "comments": 1633,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.405Z"
     },
     {
       "id": "voTP883V4rM",
@@ -8196,7 +8860,9 @@
       "views": 36563,
       "likes": 1483,
       "comments": 66,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "rqVdA-LI_Bc",
@@ -8207,7 +8873,9 @@
       "views": 10772,
       "likes": 480,
       "comments": 25,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "Yv74kXTkdbU",
@@ -8218,7 +8886,9 @@
       "views": 748305,
       "likes": 44605,
       "comments": 10398,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "hBO5Sapvoh0",
@@ -8229,7 +8899,9 @@
       "views": 1996606,
       "likes": 157660,
       "comments": 2082,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "TYz58TzhZTo",
@@ -8240,7 +8912,9 @@
       "views": 9340,
       "likes": 581,
       "comments": 16,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "wmfjynowUVE",
@@ -8262,7 +8936,9 @@
       "views": 363215,
       "likes": 9329,
       "comments": 851,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "tqlFierbKrI",
@@ -8271,7 +8947,7 @@
       "publishedAt": "2026-06-06T22:07:17.000Z",
       "durationSec": 1123,
       "views": 191125,
-      "likes": 22062,
+      "likes": 22061,
       "comments": 2613,
       "isShort": false
     },
@@ -8284,7 +8960,9 @@
       "views": 60925,
       "likes": 3732,
       "comments": 191,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "qbk1ErFFel0",
@@ -8295,7 +8973,9 @@
       "views": 17917,
       "likes": 878,
       "comments": 18,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "f3M5YFiajQg",
@@ -8372,7 +9052,9 @@
       "views": 11496,
       "likes": 745,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "KuGJmcqv5ug",
@@ -8383,7 +9065,9 @@
       "views": 344778,
       "likes": 7459,
       "comments": 1567,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "yMp7-fQwbHM",
@@ -8394,7 +9078,9 @@
       "views": 23356,
       "likes": 484,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "WNEPxkM-QF8",
@@ -8405,7 +9091,9 @@
       "views": 4282615,
       "likes": 112546,
       "comments": 6051,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "jvRzhsz4rok",
@@ -8416,7 +9104,9 @@
       "views": 15315,
       "likes": 488,
       "comments": 15,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "_Zlo2cgjUl0",
@@ -8426,7 +9116,7 @@
       "durationSec": 830,
       "views": 19731,
       "likes": 3063,
-      "comments": 486,
+      "comments": 487,
       "isShort": false
     },
     {
@@ -8449,7 +9139,9 @@
       "views": 7670,
       "likes": 531,
       "comments": 243,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "k1Fq8N3KhWE",
@@ -8526,7 +9218,9 @@
       "views": 1886404,
       "likes": 89581,
       "comments": 9436,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "_VVgZe9eqng",
@@ -8559,7 +9253,9 @@
       "views": 2131687,
       "likes": 65652,
       "comments": 1676,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "9vpFwfsjIBw",
@@ -8570,7 +9266,9 @@
       "views": 187136,
       "likes": 11548,
       "comments": 69,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "INCRcDb1HxE",
@@ -8580,7 +9278,7 @@
       "durationSec": 1067,
       "views": 21617,
       "likes": 2886,
-      "comments": 563,
+      "comments": 564,
       "isShort": false
     },
     {
@@ -8592,7 +9290,9 @@
       "views": 4916,
       "likes": 535,
       "comments": 10,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "t9Dw3AlSVzY",
@@ -8603,7 +9303,9 @@
       "views": 2505408,
       "likes": 37923,
       "comments": 10468,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "y_hkvJEDQqg",
@@ -8691,7 +9393,9 @@
       "views": 692564,
       "likes": 43333,
       "comments": 6127,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "voz-LO7gi8Q",
@@ -8702,7 +9406,9 @@
       "views": 1541428,
       "likes": 69212,
       "comments": 262,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "bx_7FrMgo5g",
@@ -8713,7 +9419,9 @@
       "views": 8011,
       "likes": 428,
       "comments": 2,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "XAHGtgtpiBg",
@@ -8724,7 +9432,9 @@
       "views": 24817,
       "likes": 4938,
       "comments": 435,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "adk5G61CqfM",
@@ -8735,7 +9445,9 @@
       "views": 1818377,
       "likes": 79558,
       "comments": 607,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "hOGS_xgjAp8",
@@ -8746,7 +9458,9 @@
       "views": 346860,
       "likes": 23664,
       "comments": 2194,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "7ONRyLrfAAs",
@@ -8779,7 +9493,9 @@
       "views": 23803,
       "likes": 1266,
       "comments": 467,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "Y9Fy2d_tWBE",
@@ -8790,7 +9506,9 @@
       "views": 1230879,
       "likes": 76412,
       "comments": 3849,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "cf699sirpe4",
@@ -8801,7 +9519,9 @@
       "views": 7090,
       "likes": 543,
       "comments": 8,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "vWOIioUW0A4",
@@ -8889,7 +9609,9 @@
       "views": 396519,
       "likes": 18439,
       "comments": 547,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "Vi6ETGkRTy8",
@@ -8900,7 +9622,9 @@
       "views": 91764,
       "likes": 2770,
       "comments": 22,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "nQSRybQfi6s",
@@ -8911,7 +9635,9 @@
       "views": 455220,
       "likes": 29748,
       "comments": 2011,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "dL_dv6DG4DI",
@@ -8922,7 +9648,9 @@
       "views": 7688,
       "likes": 740,
       "comments": 12,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "eRdKNEK6N_w",
@@ -8933,7 +9661,9 @@
       "views": 310699,
       "likes": 17383,
       "comments": 1818,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "5TUoHwWGLwg",
@@ -8944,7 +9674,9 @@
       "views": 50664,
       "likes": 2147,
       "comments": 530,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "GdQA46QX8IE",
@@ -8955,7 +9687,9 @@
       "views": 71343,
       "likes": 4573,
       "comments": 105,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "ockPqT8sWuU",
@@ -8963,8 +9697,8 @@
       "title": "When Was The Last Time You Counted Your Fries?? #fastfood #cringe #viral #food",
       "publishedAt": "2026-06-03T00:00:31.000Z",
       "durationSec": 57,
-      "views": 29082,
-      "likes": 2007,
+      "views": 29143,
+      "likes": 2008,
       "comments": 30,
       "isShort": true
     },
@@ -8977,7 +9711,9 @@
       "views": 21790,
       "likes": 1944,
       "comments": 239,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "osOw14wqV0E",
@@ -8988,7 +9724,9 @@
       "views": 59004,
       "likes": 4186,
       "comments": 208,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "3IERaRoYoxQ",
@@ -8999,7 +9737,9 @@
       "views": 266697,
       "likes": 16054,
       "comments": 1506,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "FlVxuTf7rlA",
@@ -9010,7 +9750,9 @@
       "views": 15561,
       "likes": 869,
       "comments": 8,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "Awj3K0PAn0c",
@@ -9097,7 +9839,7 @@
       "durationSec": 956,
       "views": 6885,
       "likes": 1190,
-      "comments": 265,
+      "comments": 266,
       "isShort": false
     },
     {
@@ -9131,7 +9873,9 @@
       "views": 25190,
       "likes": 1494,
       "comments": 316,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "5RN6HngnEOA",
@@ -9142,7 +9886,9 @@
       "views": 9726,
       "likes": 1037,
       "comments": 58,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "1Azyo3lKfks",
@@ -9153,7 +9899,9 @@
       "views": 58519,
       "likes": 2652,
       "comments": 18,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "EJmpUr5VddA",
@@ -9164,7 +9912,9 @@
       "views": 26928,
       "likes": 1848,
       "comments": 140,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "u0VCTgwSfwg",
@@ -9175,7 +9925,9 @@
       "views": 7494,
       "likes": 496,
       "comments": 5,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "EcWa6daTTnE",
@@ -9186,7 +9938,9 @@
       "views": 5756,
       "likes": 278,
       "comments": 13,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "9mtXF9FLJko",
@@ -9197,7 +9951,9 @@
       "views": 27659,
       "likes": 2017,
       "comments": 52,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "W-KebYh3MxE",
@@ -9208,7 +9964,9 @@
       "views": 1716006,
       "likes": 182874,
       "comments": 352,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "aUp7YpVlIG8",
@@ -9219,7 +9977,9 @@
       "views": 4121,
       "likes": 263,
       "comments": 9,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "E8MIO_flwsk",
@@ -9230,7 +9990,9 @@
       "views": 22802,
       "likes": 922,
       "comments": 108,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.738Z"
     },
     {
       "id": "FhnBtmkDitQ",
@@ -9249,7 +10011,7 @@
       "title": "SHE'S COLLAPSING",
       "publishedAt": "2026-06-01T22:51:27.000Z",
       "durationSec": 818,
-      "views": 30956,
+      "views": 30957,
       "likes": 2868,
       "comments": 250,
       "isShort": false
@@ -9263,7 +10025,9 @@
       "views": 14289,
       "likes": 576,
       "comments": 95,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "61r_4Pb_TV4",
@@ -9274,7 +10038,9 @@
       "views": 129883,
       "likes": 7461,
       "comments": 16,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "qz95b3o5FLI",
@@ -9339,7 +10105,7 @@
       "durationSec": 745,
       "views": 6859,
       "likes": 1063,
-      "comments": 86,
+      "comments": 87,
       "isShort": false
     },
     {
@@ -9384,7 +10150,9 @@
       "views": 298078,
       "likes": 10424,
       "comments": 969,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "_Z1LiChsNfU",
@@ -9395,7 +10163,9 @@
       "views": 11086,
       "likes": 1216,
       "comments": 21,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "Z0IOoRNiPZU",
@@ -9403,7 +10173,7 @@
       "title": "This Dude Absolutely Killed It #standup #funny #comedy #viral",
       "publishedAt": "2026-05-31T15:00:20.000Z",
       "durationSec": 164,
-      "views": 69676,
+      "views": 69678,
       "likes": 2803,
       "comments": 52,
       "isShort": true
@@ -9428,7 +10198,9 @@
       "views": 627514,
       "likes": 29520,
       "comments": 1532,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "8w2fBY3J5Ic",
@@ -9452,7 +10224,9 @@
       "views": 1185415,
       "likes": 41701,
       "comments": 128,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "ktzfnuuUlb8",
@@ -9463,7 +10237,9 @@
       "views": 4592,
       "likes": 287,
       "comments": 44,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "t6Bs91UAlHk",
@@ -9474,7 +10250,9 @@
       "views": 8453,
       "likes": 1000,
       "comments": 136,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "OckyZ6nmQ6Y",
@@ -9485,7 +10263,9 @@
       "views": 25512,
       "likes": 1853,
       "comments": 201,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "gR8zdTKPT_s",
@@ -9496,7 +10276,9 @@
       "views": 19556,
       "likes": 933,
       "comments": 58,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "yN4TilUyD70",
@@ -9507,7 +10289,9 @@
       "views": 219036,
       "likes": 6135,
       "comments": 68,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "kLBjD4npsAs",
@@ -9518,7 +10302,9 @@
       "views": 48044,
       "likes": 3277,
       "comments": 507,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "YcKTi8UTkXs",
@@ -9529,7 +10315,9 @@
       "views": 18697,
       "likes": 1565,
       "comments": 68,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "sFg6oJsRYnk",
@@ -9540,7 +10328,9 @@
       "views": 14833,
       "likes": 790,
       "comments": 59,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "fnLgiNXiw5k",
@@ -9562,7 +10352,9 @@
       "views": 19477,
       "likes": 1720,
       "comments": 83,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "BToRewuxOQw",
@@ -9584,7 +10376,9 @@
       "views": 48818,
       "likes": 3214,
       "comments": 410,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "42HKCvRaAUU",
@@ -9595,7 +10389,9 @@
       "views": 15184,
       "likes": 1226,
       "comments": 61,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "3wYCVXx4Gac",
@@ -9606,7 +10402,9 @@
       "views": 541093,
       "likes": 20792,
       "comments": 2447,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "V9gqSBGc86E",
@@ -9617,7 +10415,9 @@
       "views": 23174,
       "likes": 1310,
       "comments": 55,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "QwbUkXJa3-Q",
@@ -9628,7 +10428,9 @@
       "views": 52403,
       "likes": 2315,
       "comments": 226,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "Ou4JnBzL6C4",
@@ -9639,7 +10441,9 @@
       "views": 299866,
       "likes": 19763,
       "comments": 2765,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T18:22:08.935Z"
     },
     {
       "id": "Hw8S58-mBvo",
