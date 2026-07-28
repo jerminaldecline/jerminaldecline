@@ -327,8 +327,8 @@
       "meta": {
         "videoCount": 11126,
         "longFormCount": 9565,
-        "shortsCount": 27,
-        "unavailableCount": 1534,
+        "shortsCount": 20,
+        "unavailableCount": 1541,
         "unlistedCount": 1,
         "oldestVideoDate": "2017-07-14T02:23:12.000Z",
         "newestVideoDate": "2026-07-28T12:30:25.000Z",
@@ -1332,8 +1332,8 @@
       "meta": {
         "videoCount": 480,
         "longFormCount": 380,
-        "shortsCount": 4,
-        "unavailableCount": 96,
+        "shortsCount": 1,
+        "unavailableCount": 99,
         "unlistedCount": 0,
         "oldestVideoDate": "2010-08-27T21:12:09.000Z",
         "newestVideoDate": "2026-05-26T22:00:06.000Z",
@@ -1642,8 +1642,8 @@
       "meta": {
         "videoCount": 794,
         "longFormCount": 451,
-        "shortsCount": 8,
-        "unavailableCount": 335,
+        "shortsCount": 7,
+        "unavailableCount": 336,
         "unlistedCount": 0,
         "oldestVideoDate": "2025-07-16T19:58:13.000Z",
         "newestVideoDate": "2026-07-28T14:00:13.000Z",
@@ -1814,11 +1814,11 @@
     }
   },
   "meta": {
-    "lastUpdated": "2026-07-28T19:39:20.351Z",
+    "lastUpdated": "2026-07-28T19:44:06.736Z",
     "videoCount": 15733,
     "longFormCount": 13128,
-    "shortsCount": 47,
-    "unavailableCount": 2558,
+    "shortsCount": 36,
+    "unavailableCount": 2569,
     "oldestVideoDate": "2010-08-27T21:12:09.000Z",
     "newestVideoDate": "2026-07-28T14:00:25.000Z",
     "shortsCutoffSec": 180
@@ -10528,7 +10528,7 @@
       "title": "TRUMP CAN'T BE STOPPED",
       "publishedAt": "2026-05-29T16:02:31.000Z",
       "durationSec": 1045,
-      "views": 29902,
+      "views": 29901,
       "likes": 2800,
       "comments": 298,
       "isShort": false
@@ -11114,7 +11114,9 @@
       "views": 907,
       "likes": 47,
       "comments": 7,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:52.156Z"
     },
     {
       "id": "JPnpUv-eAsw",
@@ -11271,7 +11273,9 @@
       "views": 1183,
       "likes": 80,
       "comments": 2,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:52.156Z"
     },
     {
       "id": "7ZMKJXeaAYY",
@@ -12928,9 +12932,7 @@
       "views": 472441,
       "likes": 12734,
       "comments": 537,
-      "isShort": true,
-      "unavailable": true,
-      "unavailableSince": "2026-07-28T19:11:19.482Z"
+      "isShort": true
     },
     {
       "id": "KgjEznqb170",
@@ -12938,7 +12940,7 @@
       "title": "I CAN'T BELIEVE IT",
       "publishedAt": "2026-05-18T22:07:03.000Z",
       "durationSec": 245,
-      "views": 1567,
+      "views": 1568,
       "likes": 112,
       "comments": 17,
       "isShort": false
@@ -12952,7 +12954,9 @@
       "views": 1577,
       "likes": 25,
       "comments": 7,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:53.144Z"
     },
     {
       "id": "Hb2OmNFocHQ",
@@ -13859,7 +13863,7 @@
       "title": "Entitled Influencer Finds Out! I The Quartering",
       "publishedAt": "2026-05-14T23:15:42.000Z",
       "durationSec": 674,
-      "views": 27354,
+      "views": 27355,
       "likes": 3570,
       "comments": 597,
       "isShort": false
@@ -14318,7 +14322,9 @@
       "views": 60843,
       "likes": 2451,
       "comments": 211,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:53.750Z"
     },
     {
       "id": "vyZLlR9SV_k",
@@ -15733,7 +15739,9 @@
       "views": 37933,
       "likes": 2974,
       "comments": 404,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:54.392Z"
     },
     {
       "id": "FCPsTd8dEZI",
@@ -15869,8 +15877,8 @@
       "title": "Karen RUNS DOWN Kid On Bike!",
       "publishedAt": "2026-05-05T22:27:21.000Z",
       "durationSec": 676,
-      "views": 65843,
-      "likes": 6313,
+      "views": 65844,
+      "likes": 6312,
       "comments": 1349,
       "isShort": false
     },
@@ -17923,7 +17931,9 @@
       "views": 128960,
       "likes": 6703,
       "comments": 751,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:55.706Z"
     },
     {
       "id": "dCyXqcDZpMo",
@@ -20420,7 +20430,7 @@
       "title": "Dean Withers Gets Absolutely Demolished #debate #owned #deanwithers #trump",
       "publishedAt": "2026-04-13T22:30:08.000Z",
       "durationSec": 180,
-      "views": 5454,
+      "views": 5462,
       "likes": 340,
       "comments": 128,
       "isShort": true
@@ -20854,7 +20864,9 @@
       "views": 111035,
       "likes": 3182,
       "comments": 297,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:42:56.936Z"
     },
     {
       "id": "0AO-KG-q14w",
@@ -21969,7 +21981,7 @@
       "title": "Walmart Finally Snaps",
       "publishedAt": "2026-04-04T21:00:10.000Z",
       "durationSec": 758,
-      "views": 343095,
+      "views": 343094,
       "likes": 15049,
       "comments": 2836,
       "isShort": false
@@ -26143,7 +26155,7 @@
       "title": "Unhinged WOKE Teacher FIRED Today After Being Secretly Recorded In WILD Rant & Threatening Students",
       "publishedAt": "2026-03-11T23:02:08.000Z",
       "durationSec": 807,
-      "views": 118802,
+      "views": 118806,
       "likes": 9350,
       "comments": 2411,
       "isShort": false
@@ -26501,7 +26513,7 @@
       "title": "BLUE SKY IS DONE!",
       "publishedAt": "2026-03-09T22:00:44.000Z",
       "durationSec": 661,
-      "views": 70811,
+      "views": 70810,
       "likes": 6812,
       "comments": 660,
       "isShort": false
@@ -26512,7 +26524,7 @@
       "title": "Walmart BLACK FATIGUE Goes Nuclear",
       "publishedAt": "2026-03-09T21:10:41.000Z",
       "durationSec": 783,
-      "views": 137963,
+      "views": 137964,
       "likes": 8699,
       "comments": 2496,
       "isShort": false
@@ -26715,7 +26727,7 @@
       "title": "FAT ACCEPTANCE HAS GONE TOO FAR",
       "publishedAt": "2026-03-07T00:05:28.000Z",
       "durationSec": 779,
-      "views": 50321,
+      "views": 50322,
       "likes": 4919,
       "comments": 1340,
       "isShort": false
@@ -26727,7 +26739,7 @@
       "publishedAt": "2026-03-06T22:05:57.000Z",
       "durationSec": 785,
       "views": 170393,
-      "likes": 8784,
+      "likes": 8783,
       "comments": 2217,
       "isShort": false
     },
@@ -26891,7 +26903,9 @@
       "views": 59623,
       "likes": 3018,
       "comments": 209,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:00.219Z"
     },
     {
       "id": "dfShtMyOKEE",
@@ -26956,7 +26970,7 @@
       "title": "Woke Meltdown Over New Karen Video Game!",
       "publishedAt": "2026-03-04T20:37:35.000Z",
       "durationSec": 615,
-      "views": 22166,
+      "views": 22167,
       "likes": 1810,
       "comments": 218,
       "isShort": false
@@ -27563,7 +27577,7 @@
       "title": "LIBERALS RAGE AS TEAM USA DEFEATS CANADA IN HOCKEY AT OLYMPICS & DONALD TRUMP HAS HILARIOUS RESPONSE",
       "publishedAt": "2026-02-23T19:11:39.000Z",
       "durationSec": 904,
-      "views": 71625,
+      "views": 71626,
       "likes": 6071,
       "comments": 1166,
       "isShort": false
@@ -27750,7 +27764,7 @@
       "title": "Shia LaBeouf ATTACKS Man In \"MAGA\" Hat & Instantly Regrets It!",
       "publishedAt": "2026-02-19T21:05:26.000Z",
       "durationSec": 723,
-      "views": 131852,
+      "views": 131851,
       "likes": 9729,
       "comments": 2332,
       "isShort": false
@@ -28787,7 +28801,7 @@
       "title": "WOKE TEACHER MELTDOWN SECRETLY RECORDED BY STUDENT LEADS TO FIRING DEMANDS",
       "publishedAt": "2026-02-05T21:59:31.000Z",
       "durationSec": 698,
-      "views": 237740,
+      "views": 237741,
       "likes": 14048,
       "comments": 2971,
       "isShort": false
@@ -29374,7 +29388,9 @@
       "views": 28733,
       "likes": 2871,
       "comments": 262,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:01.325Z"
     },
     {
       "id": "Mb0MpzxGyQE",
@@ -33490,7 +33506,7 @@
       "title": "Is Youtube Out Of Money? Creator Charged Back $20,000 With Many More Seeing Negative Earnings!",
       "publishedAt": "2025-11-21T19:25:37.000Z",
       "durationSec": 756,
-      "views": 100576,
+      "views": 100577,
       "likes": 5599,
       "comments": 1071,
       "isShort": false
@@ -33567,7 +33583,7 @@
       "title": "Never Eat These Again! Indians RAGE As Beloved Christmas Cookies Found Made In Shocking Conditions",
       "publishedAt": "2025-11-20T00:02:32.000Z",
       "durationSec": 739,
-      "views": 225686,
+      "views": 225685,
       "likes": 12408,
       "comments": 3301,
       "isShort": false
@@ -33967,7 +33983,7 @@
       "title": "A Tax On Single Men Over 30 Demanded To Fix Low Birth Rates!",
       "publishedAt": "2025-11-11T23:45:42.000Z",
       "durationSec": 823,
-      "views": 112253,
+      "views": 112254,
       "likes": 7150,
       "comments": 4869,
       "isShort": false
@@ -34556,7 +34572,7 @@
       "title": "Obese Woman RAGES About Walmart Cutting Off SNAP & Food Stamps",
       "publishedAt": "2025-10-31T21:05:18.000Z",
       "durationSec": 773,
-      "views": 72291,
+      "views": 72292,
       "likes": 5315,
       "comments": 1643,
       "isShort": false
@@ -37563,7 +37579,7 @@
       "title": "Charlie Kirk Assassin Didn't Work Alone?  Hand Signals, Distractions & A Private Jet All Questioned",
       "publishedAt": "2025-09-11T17:22:52.000Z",
       "durationSec": 703,
-      "views": 117652,
+      "views": 117654,
       "likes": 6208,
       "comments": 1303,
       "isShort": false
@@ -37743,7 +37759,7 @@
       "title": "Cashier Suffers Black Fatigue & DESTROYS This Food Stamp Scammer!",
       "publishedAt": "2025-09-09T21:20:34.000Z",
       "durationSec": 702,
-      "views": 296365,
+      "views": 296367,
       "likes": 15810,
       "comments": 3878,
       "isShort": false
@@ -42987,7 +43003,9 @@
       "views": 44863,
       "likes": 4647,
       "comments": 486,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:07.303Z"
     },
     {
       "id": "UZ-v5Pv3_4E",
@@ -43078,7 +43096,7 @@
       "title": "Youtuber SaveAFox Took Her Own Life & I'll Unmask The SHOCKING Creeps Behind It! Mikayla Raines  RIP",
       "publishedAt": "2025-06-25T22:15:06.000Z",
       "durationSec": 1184,
-      "views": 217806,
+      "views": 217807,
       "likes": 16736,
       "comments": 5058,
       "isShort": false
@@ -46077,7 +46095,7 @@
       "title": "Best Lipo-Lithium RC Battery Storage! Don't Burn Your House Down! Lipo Bags vs Ammo Box Vs Bat-Box",
       "publishedAt": "2025-05-29T00:21:05.000Z",
       "durationSec": 861,
-      "views": 23314,
+      "views": 23320,
       "likes": 572,
       "comments": 152,
       "isShort": false
@@ -46501,7 +46519,7 @@
       "title": "Woke Ice Cream Shop BANS Cops-  Immediately Regrets It",
       "publishedAt": "2025-05-24T17:04:50.000Z",
       "durationSec": 655,
-      "views": 200499,
+      "views": 200500,
       "likes": 11981,
       "comments": 1743,
       "isShort": false
@@ -47240,7 +47258,7 @@
       "title": "Karmelo Anthony OUTRAGE As Victims Father STORMS Woke School After Officials For Allowing Graduation",
       "publishedAt": "2025-05-15T19:16:16.000Z",
       "durationSec": 735,
-      "views": 107186,
+      "views": 107187,
       "likes": 7336,
       "comments": 2216,
       "isShort": false
@@ -56127,12 +56145,10 @@
       "title": "Woke Worthless Degrees!",
       "publishedAt": "2025-01-14T00:26:48.000Z",
       "durationSec": 57,
-      "views": 620033,
+      "views": 620034,
       "likes": 56678,
       "comments": 7398,
-      "isShort": true,
-      "unavailable": true,
-      "unavailableSince": "2026-07-28T19:38:26.457Z"
+      "isShort": true
     },
     {
       "id": "2MWruIMXXtA",
@@ -73893,7 +73909,7 @@
       "title": "Jon Stewart BUSTED For Fraud Just Hours After Railing Against Trump For The Same On The Daily Show",
       "publishedAt": "2024-03-27T19:06:19.000Z",
       "durationSec": 700,
-      "views": 167732,
+      "views": 167731,
       "likes": 12860,
       "comments": 2193,
       "isShort": false
@@ -74355,7 +74371,7 @@
       "title": "Ford Raptor R 4X4 RC Car By Traxxas Unboxing & First Review! Is It WORTH It?",
       "publishedAt": "2024-03-17T22:09:58.000Z",
       "durationSec": 817,
-      "views": 9031,
+      "views": 9032,
       "likes": 411,
       "comments": 83,
       "isShort": false
@@ -75781,7 +75797,9 @@
       "views": 53906,
       "likes": 3426,
       "comments": 1120,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:21.996Z"
     },
     {
       "id": "ar-EOOcsqnY",
@@ -80302,7 +80320,7 @@
       "title": "Losi Promoto-MX Motorcycle RTR Unboxing & First Review! MASSIVE RC Dirtbike! Is It Amazing?",
       "publishedAt": "2023-11-28T22:33:57.000Z",
       "durationSec": 671,
-      "views": 5201,
+      "views": 5202,
       "likes": 292,
       "comments": 62,
       "isShort": false
@@ -80665,7 +80683,7 @@
       "title": "You'll Never Believe This",
       "publishedAt": "2023-11-18T23:18:59.000Z",
       "durationSec": 285,
-      "views": 12814,
+      "views": 12815,
       "likes": 871,
       "comments": 170,
       "isShort": false
@@ -82054,7 +82072,9 @@
       "views": 39196,
       "likes": 3300,
       "comments": 325,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:24.874Z"
     },
     {
       "id": "1D3nGmIp9kg",
@@ -84176,7 +84196,7 @@
       "title": "MxR Plays BLASTED By Youtube Over Harmless Starfield Mods On MxRMods Channel! Fully Demonetized!",
       "publishedAt": "2023-09-06T20:39:34.000Z",
       "durationSec": 794,
-      "views": 152013,
+      "views": 152014,
       "likes": 8428,
       "comments": 1803,
       "isShort": false
@@ -102403,7 +102423,7 @@
       "title": "G4TV Reveals Why Frosk Was FIRED As Kevin Pereira BAILS On The Company As Well! It's A Disaster!",
       "publishedAt": "2022-09-20T20:44:34.000Z",
       "durationSec": 672,
-      "views": 267810,
+      "views": 267811,
       "likes": 17355,
       "comments": 2455,
       "isShort": false
@@ -106457,7 +106477,9 @@
       "views": 70916,
       "likes": 9175,
       "comments": 538,
-      "isShort": true
+      "isShort": true,
+      "unavailable": true,
+      "unavailableSince": "2026-07-28T19:43:36.482Z"
     },
     {
       "id": "ajbU-SkQMSA",
@@ -113698,8 +113720,8 @@
       "publishedAt": "2022-02-22T23:17:59.000Z",
       "durationSec": 649,
       "views": 281380,
-      "likes": 0,
-      "comments": 0,
+      "likes": 12015,
+      "comments": 2343,
       "isShort": false
     },
     {
@@ -114346,7 +114368,7 @@
       "title": "Brie Larson DEMOLISHED By Her Own Fans! Massive Backlash To New Annoucement!",
       "publishedAt": "2022-02-08T21:39:50.000Z",
       "durationSec": 726,
-      "views": 175455,
+      "views": 175454,
       "likes": 10542,
       "comments": 1337,
       "isShort": false
@@ -114402,7 +114424,7 @@
       "publishedAt": "2022-02-07T22:42:59.000Z",
       "durationSec": 663,
       "views": 191999,
-      "likes": 16903,
+      "likes": 16902,
       "comments": 3368,
       "isShort": false
     },
@@ -124180,7 +124202,7 @@
       "title": "Asmongold Needs Our Help....",
       "publishedAt": "2021-06-14T22:45:11.000Z",
       "durationSec": 821,
-      "views": 95644,
+      "views": 95646,
       "likes": 7831,
       "comments": 1447,
       "isShort": false
@@ -172075,7 +172097,7 @@
       "title": "Illuminati Card Game Opening-Conspiracy?",
       "publishedAt": "2014-05-21T19:01:48.000Z",
       "durationSec": 530,
-      "views": 256158,
+      "views": 256159,
       "likes": 2129,
       "comments": 612,
       "isShort": false
@@ -172966,7 +172988,7 @@
       "title": "Best RC 4x4 Short Course Truck For Bashing",
       "publishedAt": "2014-01-12T19:30:35.000Z",
       "durationSec": 630,
-      "views": 131052,
+      "views": 131053,
       "likes": 932,
       "comments": 150,
       "isShort": false
@@ -177432,7 +177454,7 @@
       "title": "Arrma Raider RC Buggy Bashing Jumping Racing Dominating",
       "publishedAt": "2012-03-26T01:13:50.000Z",
       "durationSec": 158,
-      "views": 18972,
+      "views": 18973,
       "likes": 149,
       "comments": 50,
       "isShort": false
@@ -177674,7 +177696,7 @@
       "title": "Axial Wraith Drive Shaft Upgrade For Brushless",
       "publishedAt": "2012-02-14T17:11:20.000Z",
       "durationSec": 173,
-      "views": 10489,
+      "views": 10490,
       "likes": 77,
       "comments": 24,
       "isShort": false
@@ -177938,7 +177960,7 @@
       "title": "Losi 1/5 5IVE-T 4WD SCT Running RC Truck Video",
       "publishedAt": "2011-12-11T05:22:35.000Z",
       "durationSec": 177,
-      "views": 698737,
+      "views": 698738,
       "likes": 1469,
       "comments": 288,
       "isShort": false
@@ -177993,7 +178015,7 @@
       "title": "Traxxas T-Maxx Epic Bashing Video-A Must See",
       "publishedAt": "2011-11-11T08:19:15.000Z",
       "durationSec": 271,
-      "views": 921479,
+      "views": 921480,
       "likes": 1726,
       "comments": 298,
       "isShort": false
@@ -178367,7 +178389,7 @@
       "title": "Traxxas Spartan Upkeep & RC Boat Maintainance",
       "publishedAt": "2011-07-01T05:00:00.000Z",
       "durationSec": 531,
-      "views": 41926,
+      "views": 41927,
       "likes": 173,
       "comments": 57,
       "isShort": false
@@ -178598,7 +178620,7 @@
       "title": "How To Wire A  RC BEC How To Connect A BEC On Your RC Car or Truck",
       "publishedAt": "2011-05-10T14:12:49.000Z",
       "durationSec": 353,
-      "views": 85169,
+      "views": 85167,
       "likes": 505,
       "comments": 74,
       "isShort": false
@@ -178708,7 +178730,7 @@
       "title": "Program A Traxxas ESC-Calibrate & Setup How To",
       "publishedAt": "2011-04-20T14:00:36.000Z",
       "durationSec": 260,
-      "views": 198120,
+      "views": 198121,
       "likes": 605,
       "comments": 184,
       "isShort": false
@@ -178829,7 +178851,7 @@
       "title": "RC Brushed Motor Break In Methods-Both Wet & Dry Break In",
       "publishedAt": "2011-03-24T18:11:14.000Z",
       "durationSec": 317,
-      "views": 127538,
+      "views": 127539,
       "likes": 698,
       "comments": 218,
       "isShort": false
@@ -178851,7 +178873,7 @@
       "title": "How To Use Castle Link By Castle Creations-Tutorial Program Your ESC",
       "publishedAt": "2011-03-22T14:55:08.000Z",
       "durationSec": 324,
-      "views": 122686,
+      "views": 122687,
       "likes": 635,
       "comments": 91,
       "isShort": false
@@ -179269,7 +179291,7 @@
       "title": "How To install ESC Into A Traxxas Slash",
       "publishedAt": "2010-12-06T16:46:23.000Z",
       "durationSec": 503,
-      "views": 20852,
+      "views": 20853,
       "likes": 75,
       "comments": 9,
       "isShort": false
