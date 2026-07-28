@@ -2653,6 +2653,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
     #panelVideos .removed-when.unl{color:var(--accent-2)}
     #panelVideos .removed-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
+    #panelVideos .removed-summary{display:flex;flex-wrap:wrap;gap:0.55rem;margin:0 0 0.95rem}
+    #panelVideos .removed-stat{flex:1 1 130px;min-width:118px;background:color-mix(in srgb,var(--down) 6%,var(--surface-2));border:1px solid color-mix(in srgb,var(--down) 24%,var(--border));border-radius:9px;padding:0.6rem 0.78rem}
+    #panelVideos .removed-stat b{display:block;font-size:1.3rem;font-weight:800;line-height:1.05;color:var(--down)}
+    #panelVideos .removed-stat small{display:block;margin-top:0.2rem;font-size:0.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.03em;line-height:1.2}
     #panelVideos .reposts-section{display:none}
     #panelVideos .reposts-section.vt-active{display:block}
     #panelVideos .reposts-intro{font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin:0 0 0.85rem;padding:0.75rem 0.9rem;background:color-mix(in srgb,var(--down) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--down) 26%,var(--border));border-left:3px solid var(--down);border-radius:9px}
@@ -10899,7 +10903,17 @@ function renderWindowList(startDate, endDate) {
     vids.sort((a,b)=>since(b).localeCompare(since(a)));
     if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted, made private, or quietly unlisted appears here automatically.</div>';return;}
     const chName=id=>((chans[id]&&(chans[id].title||chans[id].handle))||"");
-    box.innerHTML=vids.map(v=>{
+    const sum=f=>vids.reduce((s,v)=>s+(f(v)||0),0);
+    const tv=sum(v=>v.views), teng=sum(v=>v.likes)+sum(v=>v.comments), nShorts=vids.filter(v=>v.isShort).length;
+    const full=n=>Math.round(n||0).toLocaleString();
+    const stat=(big,lab,tt)=>'<div class="removed-stat"'+(tt?' title="'+esc(tt)+'"':'')+'><b>'+big+'</b><small>'+lab+'</small></div>';
+    const banner='<div class="removed-summary">'+
+      stat(fmt(tv),'combined views',full(tv)+' views')+
+      stat(full(vids.length),vids.length===1?'video removed':'videos removed')+
+      stat(full(nShorts),nShorts===1?'was a Short':'were Shorts')+
+      stat(fmt(teng),'likes + comments')+
+      '</div>';
+    box.innerHTML=banner+vids.map(v=>{
       const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" \u2019"+String(q[0]).slice(2);};
       const when=v.unavailable?"Deleted or private":"Unlisted";
