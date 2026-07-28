@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-27
+# Topic candidates — 2026-07-28
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,83 +6,55 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 122 baseline videos
+Pool: 18 recent videos, 123 baseline videos
 
 ### Cluster 1: `triggered`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 0/122 videos (0%)
-- **Spike ratio:** 41.0x
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 55.1x
 - **Related terms:** `triggered`
 - **Sample recent videos:**
-  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
+  - 2026-07-27 — _THEY FIRED HER!_  
+    Customers Revolted And Cracker Barrel’s Woke CEO Is Finally Gone
+  - 2026-07-25 — _I'M GLAD ITS OVER_  
     USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
   - 2026-07-24 — _HE DESTROYED HER_  
     Elon Musk Confronted About Islam And His Answer Breaks Everyone
   - 2026-07-24 — _SHE ACTUALLY SAID IT_  
     WNBA Star Says Biological Men Should Never Compete Against Women
 
-### Cluster 2: `demands`
+### Cluster 2: `allegedly`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 0/122 videos (0%)
-- **Spike ratio:** 41.0x
-- **Related terms:** `demands`
+- **Baseline saturation:** 4/123 videos (3%)
+- **Spike ratio:** 4.6x
+- **Related terms:** `allegedly`
 - **Sample recent videos:**
-  - 2026-07-23 — _ABSOLOUTE SCUM_  
-    Convicted Killer Demands Seventy Five Million Dollars From Trump
-  - 2026-07-20 — _THIS IS INSANE_  
-    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
-  - 2026-07-20 — _SHE RAN INSTANTLY_  
-    Steven Crowder Unloads On Candace Owens & Demands Public Debate
+  - 2026-07-27 — _THEY ASKED FOR IT_  
+    ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
+  - 2026-07-22 — _IT GOT WAY WORSE_  
+    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
+  - 2026-07-21 — _MASSIVE BLACK FATIGUE_  
+    Seven Diners Stuff Their Faces Then Execute Brazen Getaway Plan
 
-### Cluster 3: `million`
-
-- **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 2/122 videos (2%)
-- **Spike ratio:** 10.9x
-- **Related terms:** `million`, `odyssey`
-- **Sample recent videos:**
-  - 2026-07-23 — _ABSOLOUTE SCUM_  
-    Convicted Killer Demands Seventy Five Million Dollars From Trump
-  - 2026-07-23 — _BACKLASH GOES NUCLEAR_  
-    The Odyssey Ticket Disaster Gets Worse As Scalpers Cash In
-  - 2026-07-22 — _MASSIVE SCANDAL_  
-    Sold Out Odyssey Screenings Reportedly Have Rows Of Empty Seats
-  - 2026-07-20 — _THIS IS HILARIOUS_  
-    The Odyssey Explodes As Woke Media Declares Culture War Over
-
-### Cluster 4: `massive`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 8/122 videos (7%)
-- **Spike ratio:** 2.4x
-- **Related terms:** `massive`, `backlash`
-- **Sample recent videos:**
-  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
-    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
-  - 2026-07-20 — _THIS IS HILARIOUS_  
-    The Odyssey Explodes As Woke Media Declares Culture War Over
-  - 2026-07-20 — _THIS IS INSANE_  
-    Muslim Day At Cedar Point Sparks Massive Backlash And Questions
-
-### Cluster 5: `vlogs`
+### Cluster 3: `vlogs`
 
 - **Recent saturation:** 17/18 videos (**94%**)
-- **Baseline saturation:** 34/122 videos (28%)
-- **Spike ratio:** 3.4x
+- **Baseline saturation:** 38/123 videos (31%)
+- **Spike ratio:** 3.0x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-25 — _DISGUSTING TAX FRAUD_  
+  - 2026-07-27 — _FAUCI BOMBSHELL_  
+    Fauci Diary Released The Pandemic Revelations Are Absolutely Insane
+  - 2026-07-27 — _RACE RIOTS BEGIN_  
+    Knife Wielding Suspect Shot By Police As Leftist Chaos Explodes
+  - 2026-07-27 — _THEY FIRED HER!_  
+    Customers Revolted And Cracker Barrel’s Woke CEO Is Finally Gone
+  - 2026-07-27 — _THEY ASKED FOR IT_  
+    ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
+  - 2026-07-25 — _I'M GLAD ITS OVER_  
     USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
-  - 2026-07-25 — _TRUMP WENT NUCLEAR_  
-    Trump Humiliates Kaitlan Collins Before Wearing His Trump 2028 Hat
-  - 2026-07-24 — _CONVICTED FOR HATE SPEECH_  
-    Jury Convicts Shiloh Hendrix But Acquits Her Over Child Confrontation
-  - 2026-07-24 — _HE DESTROYED HER_  
-    Elon Musk Confronted About Islam And His Answer Breaks Everyone
-  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
-    WNBA Star Says Biological Men Should Never Compete Against Women
 
 ## @JeremyHambly
 
@@ -90,11 +62,15 @@ Pool: 9 recent videos, 78 baseline videos
 
 ### Cluster 1: `publicly`
 
-- **Recent saturation:** 3/9 videos (**33%**)
+- **Recent saturation:** 5/9 videos (**56%**)
 - **Baseline saturation:** 1/78 videos (1%)
-- **Spike ratio:** 17.6x
-- **Related terms:** `publicly`
+- **Spike ratio:** 29.3x
+- **Related terms:** `publicly`, `democrats`
 - **Sample recent videos:**
+  - 2026-07-27 — _THIS IS NOT OKAY_  
+    Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
+  - 2026-07-27 — _I CAN'T BELIEVE IT_  
+    Kamala Harris Is Reportedly Running Again And Democrats Never Learn
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
     Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
   - 2026-07-23 — _HASAN FAN ARRESTED_  
@@ -105,20 +81,20 @@ Pool: 9 recent videos, 78 baseline videos
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 19/78 videos (24%)
-- **Spike ratio:** 4.1x
+- **Baseline saturation:** 22/78 videos (28%)
+- **Spike ratio:** 3.5x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
+  - 2026-07-27 — _THIS IS NOT OKAY_  
+    Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
+  - 2026-07-27 — _MAMDANI BANNED_  
+    Hundreds Of 9/11 Families Tell Mamdani He Is Not Welcome
+  - 2026-07-27 — _I CAN'T BELIEVE IT_  
+    Kamala Harris Is Reportedly Running Again And Democrats Never Learn
   - 2026-07-24 — _KAREN HUMILATED_  
     Entitled Airport Karen Steals First Class Seat And Won’t Move
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
     Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
-  - 2026-07-23 — _HASAN FAN ARRESTED_  
-    Hasan Piker Gets Roasted By The Democrats Who Hosted Him
-  - 2026-07-21 — _PEAK INSANITY_  
-    Trump Blames Canada For Toxic Smoke Liberals Completely Explode
-  - 2026-07-21 — _LEFTISTS COLLAPSE_  
-    New York Democrats Implode As DSA Race War Erupts Publicly
 
 ## @QuarteringLive
 
