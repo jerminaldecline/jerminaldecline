@@ -10904,14 +10904,14 @@ function renderWindowList(startDate, endDate) {
     if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted, made private, or quietly unlisted appears here automatically.</div>';return;}
     const chName=id=>((chans[id]&&(chans[id].title||chans[id].handle))||"");
     const sum=f=>vids.reduce((s,v)=>s+(f(v)||0),0);
-    const tv=sum(v=>v.views), teng=sum(v=>v.likes)+sum(v=>v.comments), nShorts=vids.filter(v=>v.isShort).length;
+    const tv=sum(v=>v.views), nShorts=vids.filter(v=>v.isShort).length;
     const full=n=>Math.round(n||0).toLocaleString();
+    const abbr=n=>{n=Math.round(n||0);const a=Math.abs(n);const u=(v,s)=>{const t=v.toFixed(1);return (t.endsWith('.0')?t.slice(0,-2):t)+s;};return a>=1e6?u(n/1e6,'M'):a>=1e3?u(n/1e3,'K'):''+n;};
     const stat=(big,lab,tt)=>'<div class="removed-stat"'+(tt?' title="'+esc(tt)+'"':'')+'><b>'+big+'</b><small>'+lab+'</small></div>';
     const banner='<div class="removed-summary">'+
-      stat(fmt(tv),'combined views',full(tv)+' views')+
+      stat(abbr(tv),'combined views',full(tv)+' views')+
       stat(full(vids.length),vids.length===1?'video removed':'videos removed')+
       stat(full(nShorts),nShorts===1?'was a Short':'were Shorts')+
-      stat(fmt(teng),'likes + comments')+
       '</div>';
     box.innerHTML=banner+vids.map(v=>{
       const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
