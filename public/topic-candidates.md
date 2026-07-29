@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-28
+# Topic candidates — 2026-07-29
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -24,37 +24,53 @@ Pool: 18 recent videos, 123 baseline videos
   - 2026-07-24 — _SHE ACTUALLY SAID IT_  
     WNBA Star Says Biological Men Should Never Compete Against Women
 
-### Cluster 2: `allegedly`
+### Cluster 2: `donald`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/123 videos (3%)
-- **Spike ratio:** 4.6x
-- **Related terms:** `allegedly`
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 3/123 videos (2%)
+- **Spike ratio:** 7.9x
+- **Related terms:** `donald`, `trump`, `donald trump`
 - **Sample recent videos:**
-  - 2026-07-27 — _THEY ASKED FOR IT_  
-    ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
-  - 2026-07-22 — _IT GOT WAY WORSE_  
-    Taco Bell May Never Recover From This Disgusting Parasite Outbreak
-  - 2026-07-21 — _MASSIVE BLACK FATIGUE_  
-    Seven Diners Stuff Their Faces Then Execute Brazen Getaway Plan
+  - 2026-07-28 — _MOST BRUTAL BACKFIRE YET_  
+    He Promised Free Beer When Trump Dies Now Business Collapses
+  - 2026-07-28 — _HIS CAREER IS OVER_  
+    Alan Ritchson Wants Political Opponents Waking Up Covered In Blood
+  - 2026-07-25 — _TRUMP WENT NUCLEAR_  
+    Trump Humiliates Kaitlan Collins Before Wearing His Trump 2028 Hat
+  - 2026-07-23 — _ABSOLOUTE SCUM_  
+    Convicted Killer Demands Seventy Five Million Dollars From Trump
 
 ### Cluster 3: `vlogs`
 
 - **Recent saturation:** 17/18 videos (**94%**)
-- **Baseline saturation:** 38/123 videos (31%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
+- **Baseline saturation:** 37/123 videos (30%)
+- **Spike ratio:** 3.1x
+- **Related terms:** `vlogs`, `quartering`, `check`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
+  - 2026-07-29 — _MURDERED OVER TIKTOK_  
+    Her Viral Netflix Trend Became A Horrifying Real-Life Murder Story
+  - 2026-07-28 — _MASSIVE LIE REVEALED_  
+    Fake Nolan Wells Audio Sparks Fury As Viral Claims Collapse
+  - 2026-07-28 — _MOST BRUTAL BACKFIRE YET_  
+    He Promised Free Beer When Trump Dies Now Business Collapses
+  - 2026-07-28 — _HIS CAREER IS OVER_  
+    Alan Ritchson Wants Political Opponents Waking Up Covered In Blood
   - 2026-07-27 — _FAUCI BOMBSHELL_  
     Fauci Diary Released The Pandemic Revelations Are Absolutely Insane
-  - 2026-07-27 — _RACE RIOTS BEGIN_  
-    Knife Wielding Suspect Shot By Police As Leftist Chaos Explodes
-  - 2026-07-27 — _THEY FIRED HER!_  
-    Customers Revolted And Cracker Barrel’s Woke CEO Is Finally Gone
-  - 2026-07-27 — _THEY ASKED FOR IT_  
-    ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
-  - 2026-07-25 — _I'M GLAD ITS OVER_  
-    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
+
+### Cluster 4: `viral`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 6/123 videos (5%)
+- **Spike ratio:** 3.2x
+- **Related terms:** `viral`
+- **Sample recent videos:**
+  - 2026-07-29 — _MURDERED OVER TIKTOK_  
+    Her Viral Netflix Trend Became A Horrifying Real-Life Murder Story
+  - 2026-07-28 — _MASSIVE LIE REVEALED_  
+    Fake Nolan Wells Audio Sparks Fury As Viral Claims Collapse
+  - 2026-07-23 — _THEY GOT DESTROYED_  
+    Bodycam Versus BLM Ends Exactly How Nobody Expected It Would
 
 ## @JeremyHambly
 
@@ -62,50 +78,46 @@ Pool: 9 recent videos, 78 baseline videos
 
 ### Cluster 1: `publicly`
 
-- **Recent saturation:** 5/9 videos (**56%**)
-- **Baseline saturation:** 1/78 videos (1%)
-- **Spike ratio:** 29.3x
-- **Related terms:** `publicly`, `democrats`
+- **Recent saturation:** 3/9 videos (**33%**)
+- **Baseline saturation:** 2/78 videos (3%)
+- **Spike ratio:** 10.5x
+- **Related terms:** `publicly`
 - **Sample recent videos:**
-  - 2026-07-27 — _THIS IS NOT OKAY_  
+  - 2026-07-27 — _SHE'S OUT OF CONTROL_  
     Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
-  - 2026-07-27 — _I CAN'T BELIEVE IT_  
-    Kamala Harris Is Reportedly Running Again And Democrats Never Learn
   - 2026-07-24 — _MAMDANI TERROR ATTACK_  
     Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
   - 2026-07-23 — _HASAN FAN ARRESTED_  
     Hasan Piker Gets Roasted By The Democrats Who Hosted Him
-  - 2026-07-21 — _LEFTISTS COLLAPSE_  
-    New York Democrats Implode As DSA Race War Erupts Publicly
 
 ### Cluster 2: `vlogs`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 22/78 videos (28%)
-- **Spike ratio:** 3.5x
+- **Baseline saturation:** 25/78 videos (32%)
+- **Spike ratio:** 3.1x
 - **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
 - **Sample recent videos:**
-  - 2026-07-27 — _THIS IS NOT OKAY_  
+  - 2026-07-28 — _SCUMBAG SCAMMER BUSTED_  
+    Fake Shiloh Fundraiser Creator Panics After Alleged Fraud Gets Exposed
+  - 2026-07-28 — _PURE EVIL_  
+    Colt Gray Admits Every Charge As Victims Demand No Mercy
+  - 2026-07-28 — _SHE'S PANICKING_  
+    Candace Owens Dumps Alleged Charlie Kirk Texts As Allies Revolt
+  - 2026-07-27 — _SHE'S OUT OF CONTROL_  
     Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
   - 2026-07-27 — _MAMDANI BANNED_  
     Hundreds Of 9/11 Families Tell Mamdani He Is Not Welcome
-  - 2026-07-27 — _I CAN'T BELIEVE IT_  
-    Kamala Harris Is Reportedly Running Again And Democrats Never Learn
-  - 2026-07-24 — _KAREN HUMILATED_  
-    Entitled Airport Karen Steals First Class Seat And Won’t Move
-  - 2026-07-24 — _MAMDANI TERROR ATTACK_  
-    Terror Hits Manhattan As Jewish Leaders Turn On Mamdani Publicly
 
 ## @QuarteringLive
 
-Pool: 6 recent videos, 51 baseline videos
+Pool: 5 recent videos, 50 baseline videos
 
 ### Cluster 1: `check`
 
-- **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 17/51 videos (33%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `claims`, `check out`, `out quartering`, `quartering vlogs`
+- **Recent saturation:** 5/5 videos (**100%**)
+- **Baseline saturation:** 15/50 videos (30%)
+- **Spike ratio:** 3.3x
+- **Related terms:** `check`, `quartering`, `vlogs`, `out`, `check out`, `out quartering`, `quartering vlogs`
 - **Sample recent videos:**
   - 2026-07-24 — _BIBLICALLY BAD_  
     Lawsuit Claims ChatGPT Dissuaded Florida Pastor From Seeking Emergency Care

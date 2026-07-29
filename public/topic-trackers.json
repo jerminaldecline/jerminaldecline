@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-28T07:10:49.263Z",
+  "lastUpdated": "2026-07-29T07:16:54.789Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -10,32 +10,30 @@
         "quartering",
         "out quartering",
         "check",
-        "check out",
-        "out"
+        "check out"
       ],
       "detectorMeta": {
         "recentSaturation": 0.9444,
-        "baselineSaturation": 0.3105,
-        "spikeRatio": 3.04,
+        "baselineSaturation": 0.3024,
+        "spikeRatio": 3.12,
         "recentVideoCount": 17,
-        "baselineVideoCount": 38,
-        "detectedAt": "2026-07-28T07:10:49.263Z"
+        "baselineVideoCount": 37,
+        "detectedAt": "2026-07-29T07:16:54.789Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "publicly",
       "keywords": [
-        "democrats",
         "publicly"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5556,
-        "baselineSaturation": 0.019,
-        "spikeRatio": 29.26,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-07-28T07:10:49.263Z"
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0316,
+        "spikeRatio": 10.53,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-07-29T07:16:54.789Z"
       }
     },
     {
@@ -52,11 +50,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2848,
-        "spikeRatio": 3.51,
+        "baselineSaturation": 0.3228,
+        "spikeRatio": 3.1,
         "recentVideoCount": 9,
-        "baselineVideoCount": 22,
-        "detectedAt": "2026-07-28T07:10:49.263Z"
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-07-29T07:16:54.789Z"
       }
     },
     {
@@ -69,16 +67,15 @@
         "check out",
         "out quartering",
         "quartering vlogs",
-        "out",
-        "claims"
+        "out"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3365,
-        "spikeRatio": 2.97,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-07-28T07:10:49.263Z"
+        "baselineSaturation": 0.3039,
+        "spikeRatio": 3.29,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-07-29T07:16:54.789Z"
       }
     }
   ]
