@@ -35,6 +35,14 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: node scripts/fetch-data.js --audit
 
+      # Resolve WHY newly-removed videos are gone (private / copyright / ToS / …)
+      # by reading each watch page's playabilityStatus. Best-effort: YouTube
+      # frequently bot-walls datacenter IPs, so this must never fail the build —
+      # on a blocked run the existing removed-reasons.json simply persists.
+      - name: Resolve removed-video reasons (best-effort)
+        continue-on-error: true
+        run: node scripts/resolve-removed-reasons.js
+
       - name: Commit audited data
         run: |
           git config user.name "github-actions[bot]"
@@ -42,7 +50,7 @@ jobs:
           # Audit also refreshes descriptions and titles on older videos, so
           # stage those side-files alongside data.json (the title-change ledger
           # is where re-titles of aged-out videos get recorded).
-          git add public/data.json public/descriptions.json public/title-history.json
+          git add public/data.json public/descriptions.json public/title-history.json public/removed-reasons.json
           if git diff --staged --quiet; then
             echo "Audit found no changes."
             exit 0
