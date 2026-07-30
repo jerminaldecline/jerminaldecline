@@ -2466,7 +2466,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="words" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M7 19h4"/></svg>Word cloud</button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promoted videos <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
-        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Reposts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
       </div>
       <div class="vbody" id="vBody" hidden>
         <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
@@ -2601,14 +2601,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
     /* ---- Videos tab: tabbed insights strip ---- */
     #panelVideos .insights{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
-    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.45rem;padding:0.75rem 0.8rem;border-bottom:1px solid var(--border)}
-    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.88rem;font-weight:700;padding:0.5rem 0.85rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
-    #panelVideos .vtab .ic{width:16px;height:16px;flex:0 0 auto;color:var(--accent)}
+    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
+    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.85rem;font-weight:700;padding:0.45rem 0.72rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
+    #panelVideos .vtab .ic{width:15px;height:15px;flex:0 0 auto;color:var(--accent)}
     #panelVideos .vtab:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
     #panelVideos .vtab.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent));color:#fff}
     #panelVideos .vtab.active .ic{color:#fff}
     #panelVideos .vtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-    #panelVideos .vtab-cnt{font-size:0.7rem;font-weight:800;line-height:1;padding:0.16rem 0.42rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
+    #panelVideos .vtab-cnt{font-size:0.68rem;font-weight:800;line-height:1;padding:0.14rem 0.38rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
     #panelVideos .vtab.active .vtab-cnt{background:rgba(255,255,255,0.22);color:#fff}
     /* hidden must beat .vt-active — panels hide themselves (e.g. no ads for this
        channel) and the tab display override was resurrecting their stale content */
@@ -2653,6 +2653,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-when{flex:0 0 auto;text-align:right;font-size:0.72rem;color:var(--down);font-weight:700}
     #panelVideos .removed-when.unl{color:var(--accent-2)}
     #panelVideos .removed-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
+    #panelVideos .removed-summary{display:flex;flex-wrap:wrap;gap:0.55rem;margin:0 0 0.95rem}
+    #panelVideos .removed-stat{flex:1 1 130px;min-width:118px;background:color-mix(in srgb,var(--down) 6%,var(--surface-2));border:1px solid color-mix(in srgb,var(--down) 24%,var(--border));border-radius:9px;padding:0.6rem 0.78rem}
+    #panelVideos .removed-stat b{display:block;font-size:1.3rem;font-weight:800;line-height:1.05;color:var(--down)}
+    #panelVideos .removed-stat small{display:block;margin-top:0.2rem;font-size:0.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.03em;line-height:1.2}
+    #panelVideos .removed-sort{display:flex;flex-wrap:wrap;align-items:center;gap:0.4rem;margin:0 0 0.9rem}
+    #panelVideos .removed-sort-lab{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-right:0.1rem}
+    #panelVideos .removed-sort-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;color:var(--text);font:inherit;font-size:0.8rem;font-weight:600;padding:0.34rem 0.66rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
+    #panelVideos .removed-sort-btn:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
+    #panelVideos .removed-sort-btn.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent));color:#fff}
+    #panelVideos .removed-sort-arrow{opacity:0.85;font-size:0.72rem;margin-left:0.15rem}
     #panelVideos .reposts-section{display:none}
     #panelVideos .reposts-section.vt-active{display:block}
     #panelVideos .reposts-intro{font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin:0 0 0.85rem;padding:0.75rem 0.9rem;background:color-mix(in srgb,var(--down) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--down) 26%,var(--border));border-left:3px solid var(--down);border-radius:9px}
@@ -2676,6 +2686,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .reposts-cred .rt-alert:active{transform:translateY(0.5px)}
     #panelVideos .reposts-cred .rt-alert.done{border-color:var(--up,#3fb950);color:var(--up,#3fb950);background:color-mix(in srgb,var(--up,#3fb950) 12%,transparent)}
     #panelVideos .reposts-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
+    @media(max-width:680px){
+      #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
+      #panelVideos a.rt b{white-space:normal}
+      #panelVideos .reposts-cred{flex:1 0 100%;text-align:left}
+      #panelVideos .reposts-cred small{display:inline;margin:0 0.35rem 0 0}
+      #panelVideos .reposts-cred .rt-alert{margin-top:0;margin-left:0.45rem}
+    }
     </style>
     <div class="wordcloud-section velocity-section" id="velocitySection">
       <button type="button" class="wordcloud-toggle" id="velocityToggle" aria-expanded="false" aria-controls="velocityPanel">
@@ -10889,10 +10906,26 @@ function renderWindowList(startDate, endDate) {
     let vids=ds.videos.filter(v=>v.unavailable||v.unlisted);
     if(ch&&ch!=="ALL")vids=vids.filter(v=>v.channelId===ch);
     const since=v=>String(v.unavailableSince||v.unlistedSince||"");
-    vids.sort((a,b)=>since(b).localeCompare(since(a)));
+    const SORT=window.__removedSort||(window.__removedSort={key:"removed",dir:"desc"});
+    const SDEF={removed:{lab:"Removed",num:false,get:since},posted:{lab:"Uploaded",num:false,get:v=>String(v.publishedAt||"")},views:{lab:"Views",num:true,get:v=>v.views||0},title:{lab:"Title",num:false,get:v=>String(v.title||"").toLowerCase()}};
+    const sdef=SDEF[SORT.key]||SDEF.removed;
+    vids.sort((a,b)=>{const x=sdef.get(a),y=sdef.get(b);const c=sdef.num?(x-y):String(x).localeCompare(String(y));return SORT.dir==="asc"?c:-c;});
     if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted, made private, or quietly unlisted appears here automatically.</div>';return;}
     const chName=id=>((chans[id]&&(chans[id].title||chans[id].handle))||"");
-    box.innerHTML=vids.map(v=>{
+    const sum=f=>vids.reduce((s,v)=>s+(f(v)||0),0);
+    const tv=sum(v=>v.views), nShorts=vids.filter(v=>v.isShort).length;
+    const full=n=>Math.round(n||0).toLocaleString();
+    const abbr=n=>{n=Math.round(n||0);const a=Math.abs(n);const u=(v,s)=>{const t=v.toFixed(1);return (t.endsWith('.0')?t.slice(0,-2):t)+s;};return a>=1e6?u(n/1e6,'M'):a>=1e3?u(n/1e3,'K'):''+n;};
+    const stat=(big,lab,tt)=>'<div class="removed-stat"'+(tt?' title="'+esc(tt)+'"':'')+'><b>'+big+'</b><small>'+lab+'</small></div>';
+    const banner='<div class="removed-summary">'+
+      stat(abbr(tv),'combined views',full(tv)+' views')+
+      stat(full(vids.length),vids.length===1?'video removed':'videos removed')+
+      stat(full(nShorts),nShorts===1?'was a Short':'were Shorts')+
+      '</div>';
+    const arrow=k=>SORT.key===k?'<span class="removed-sort-arrow">'+(SORT.dir==="asc"?"↑":"↓")+'</span>':'';
+    const sortBar='<div class="removed-sort"><span class="removed-sort-lab">Sort</span>'+
+      Object.keys(SDEF).map(k=>'<button type="button" class="removed-sort-btn'+(SORT.key===k?' active':'')+'" onclick="__removedSetSort(\''+k+'\')">'+SDEF[k].lab+arrow(k)+'</button>').join('')+'</div>';
+    box.innerHTML=banner+sortBar+vids.map(v=>{
       const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" \u2019"+String(q[0]).slice(2);};
       const when=v.unavailable?"Deleted or private":"Unlisted";
@@ -10904,6 +10937,11 @@ function renderWindowList(startDate, endDate) {
         '<span class="removed-when'+(v.unavailable?'':' unl')+'">'+esc(when)+'</span></a>';
     }).join("")+'<div class="removed-foot">“Detected” is when our checks first caught the change, not when it happened. Recent videos are re-checked several times a day and the full back catalogue once a day, so detection trails the actual change by a few hours — at most about a day. Exception: unlisted-detection began 2 Jul ’26, so unlisted entries with that date may have been hidden any time before it.</div>';
   }
+  window.__removedSetSort=function(k){
+    const S=window.__removedSort||(window.__removedSort={key:"removed",dir:"desc"});
+    if(S.key===k){S.dir=(S.dir==="asc"?"desc":"asc");}else{S.key=k;S.dir=(k==="title"?"asc":"desc");}
+    renderRemoved();
+  };
   window.__copyRepostAlert=function(btn){
     const msg=(window.__repostAlerts||{})[btn.getAttribute("data-id")];
     if(!msg)return;
@@ -10923,12 +10961,13 @@ function renderWindowList(startDate, endDate) {
     const esc=s=>String(s==null?"":s).replace(/</g,"&lt;");
     const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const nice=s=>{if(!s)return"";const q=String(s).slice(0,10).split("-");return MN[(+q[1]||1)-1]+" "+(+q[2]||1)+" ’"+String(q[0]).slice(2);};
+    ch="ALL";   // Reposts panel always shows the entire network list, regardless of the videos-tab channel filter
     let rows=data.reposts.filter(r=>ch==="ALL"||r.channelId===ch);
-    if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed reposts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
+    if(!rows.length){ box.innerHTML='<div class="vempty">No confirmed stolen shorts'+(ch!=="ALL"?" for this channel":"")+' yet.</div>'; return; }
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
     const vById={}; if(ds&&ds.videos)for(const v of ds.videos)vById[v.id]=v;
     const fmtViews=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
-    const intro='<div class="reposts-intro">These Shorts still carry the <b>original creator’s platform watermark</b>, burned into the frame — hard proof they’re re-uploads of someone else’s video, posted without credit. Handles were verified by reading the on-screen stamp. <b>'+rows.length+'</b> confirmed this way'+(ch==="ALL"?" across the network":"")+'.<span class="reposts-alert-note">If you wish to alert a creator, click <b>Copy alert</b> on their row for a ready-to-send alert template.</span></div>';
+    const intro='<div class="reposts-intro">These Shorts are re-uploads of someone else’s video, posted without credit — most caught by the <b>original creator’s platform watermark</b> still burned into the frame, a few by <b>viewers crediting the creator in the comments</b>. <b>'+rows.length+'</b> confirmed'+(ch==="ALL"?" across the network":"")+'.<span class="reposts-alert-note">If you wish to alert a creator, click <b>Copy alert</b> on their row for a ready-to-send alert template.</span></div>';
     const AL=(window.__repostAlerts=window.__repostAlerts||{});
     const PLAT={tiktok:'TikTok',reels:'Instagram Reels',instagram:'Instagram',douyin:'Douyin',kwai:'Kwai',likee:'Likee'};
     const listHtml=rows.map(r=>{
@@ -10940,7 +10979,8 @@ function renderWindowList(startDate, endDate) {
       const platName=PLAT[String(r.platform||'').toLowerCase()]||'platform';
       const vnum=(vw&&vw.views!=null)?vw.views:null;
       const viewsClause=vnum?(', where it has '+vnum.toLocaleString()+' views'):'';
-      AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\nYour '+platName+' watermark is still visible in the re-upload. As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
+      const proof=(String(r.via||'')==='comment')?'':('Your '+platName+' watermark is still visible in the re-upload. ');
+      AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\n'+proof+'As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
         '<a class="rt" href="'+yt+'" target="_blank" rel="noopener"><b>'+esc(r.title)+'</b><span>'+meta+'</span></a>'+
@@ -10949,7 +10989,7 @@ function renderWindowList(startDate, endDate) {
         '</span>'+
       '</div>';
     }).join("");
-    const foot='<div class="reposts-foot">A watermark scan of this month’s Shorts. Only the clips where the original stamp survived his crop are listed — the true repost rate is higher. A visible watermark proves the clip was lifted from that platform; the handle is read straight from the stamp.</div>';
+    const foot='<div class="reposts-foot">Most listed are clips where the original creator’s stamp survived his crop — a watermark proves the clip was lifted from that platform, and the handle is read straight from it — so the true repost rate is far higher. A few are creators viewers named in the comments.</div>';
     box.innerHTML=intro+listHtml+foot;
   }
   function closeCurrent(){
@@ -10996,7 +11036,7 @@ function renderWindowList(startDate, endDate) {
       if(ds&&ds.videos){
         set("removed", ds.videos.filter(v=>(v.unavailable||v.unlisted)&&(ch==="ALL"||v.channelId===ch)).length);
         const rd=window.__repostsData&&window.__repostsData.reposts;
-        if(rd)set("reposts", rd.filter(r=>ch==="ALL"||r.channelId===ch).length);
+        if(rd)set("reposts", rd.length);   // reposts panel shows the whole network, so badge = total
         const ads=window.__adIdSet;
         if(ads&&ads.size)set("promos", ds.videos.filter(v=>ads.has(v.id)&&(ch==="ALL"||v.channelId===ch)).length);
       }

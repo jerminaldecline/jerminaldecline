@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-07-22T07:07:52.032Z",
+  "lastUpdated": "2026-07-30T07:09:36.400Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
+      "channelHandle": "@JeremyHambly",
       "termId": "vlogs",
       "keywords": [
         "vlogs",
@@ -14,38 +14,30 @@
         "out"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2305,
-        "spikeRatio": 3.76,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 29,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
+        "recentSaturation": 1,
+        "baselineSaturation": 0.3228,
+        "spikeRatio": 3.1,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-07-30T07:09:36.400Z"
       }
     },
     {
-      "channelHandle": "@JeremyHambly",
+      "channelHandle": "@TheQuartering",
       "termId": "vlogs",
       "keywords": [
         "vlogs",
         "quartering vlogs",
         "quartering",
-        "out quartering",
-        "candace",
-        "owens",
-        "candace owens",
-        "check",
-        "check out",
-        "out",
-        "kirk",
-        "charlie"
+        "out quartering"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3046,
-        "spikeRatio": 3.28,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
+        "recentSaturation": 0.9412,
+        "baselineSaturation": 0.311,
+        "spikeRatio": 3.03,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 39,
+        "detectedAt": "2026-07-30T07:09:36.400Z"
       }
     },
     {
@@ -57,16 +49,15 @@
         "vlogs",
         "check out",
         "out quartering",
-        "quartering vlogs",
-        "out"
+        "quartering vlogs"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1949,
-        "spikeRatio": 5.13,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-07-22T07:07:52.032Z"
+        "baselineSaturation": 0.3235,
+        "spikeRatio": 3.09,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-07-30T07:09:36.400Z"
       }
     }
   ]
