@@ -10915,7 +10915,7 @@ function renderWindowList(startDate, endDate) {
       if(code&&REASON[code])return{label:REASON[code][0],cls:REASON[code][1],detail:(e&&e.detail)||""};
       return v.unavailable?{label:"Deleted or private",cls:"r-unavailable",detail:""}:{label:"Unlisted",cls:"r-unlisted",detail:""};};
     const SORT=window.__removedSort||(window.__removedSort={key:"removed",dir:"desc"});
-    const SDEF={removed:{lab:"Removed",num:false,get:since},posted:{lab:"Uploaded",num:false,get:v=>String(v.publishedAt||"")},reason:{lab:"Reason",num:false,get:v=>reasonOf(v).label},views:{lab:"Views",num:true,get:v=>v.views||0},title:{lab:"Title",num:false,get:v=>String(v.title||"").toLowerCase()}};
+    const SDEF={removed:{lab:"Removed Date",num:false,get:since},posted:{lab:"Uploaded Date",num:false,get:v=>String(v.publishedAt||"")},reason:{lab:"Reason",num:false,get:v=>reasonOf(v).label},views:{lab:"Views",num:true,get:v=>v.views||0},title:{lab:"Title",num:false,get:v=>String(v.title||"").toLowerCase()}};
     const sdef=SDEF[SORT.key]||SDEF.removed;
     vids.sort((a,b)=>{const x=sdef.get(a),y=sdef.get(b);const c=sdef.num?(x-y):String(x).localeCompare(String(y));return SORT.dir==="asc"?c:-c;});
     if(!vids.length){box.innerHTML='<div class="vempty">No removals detected'+(ch&&ch!=="ALL"?" for this channel":"")+'. Every video in the catalogue is re-checked at least daily; anything deleted, made private, or quietly unlisted appears here automatically.</div>';return;}
