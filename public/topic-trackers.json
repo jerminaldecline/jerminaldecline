@@ -1,41 +1,6 @@
 {
-  "lastUpdated": "2026-07-29T07:16:54.789Z",
+  "lastUpdated": "2026-07-30T07:09:36.400Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.9444,
-        "baselineSaturation": 0.3024,
-        "spikeRatio": 3.12,
-        "recentVideoCount": 17,
-        "baselineVideoCount": 37,
-        "detectedAt": "2026-07-29T07:16:54.789Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "publicly",
-      "keywords": [
-        "publicly"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0316,
-        "spikeRatio": 10.53,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-07-29T07:16:54.789Z"
-      }
-    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "vlogs",
@@ -52,9 +17,27 @@
         "recentSaturation": 1,
         "baselineSaturation": 0.3228,
         "spikeRatio": 3.1,
-        "recentVideoCount": 9,
+        "recentVideoCount": 12,
         "baselineVideoCount": 25,
-        "detectedAt": "2026-07-29T07:16:54.789Z"
+        "detectedAt": "2026-07-30T07:09:36.400Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "vlogs",
+      "keywords": [
+        "vlogs",
+        "quartering vlogs",
+        "quartering",
+        "out quartering"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.9412,
+        "baselineSaturation": 0.311,
+        "spikeRatio": 3.03,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 39,
+        "detectedAt": "2026-07-30T07:09:36.400Z"
       }
     },
     {
@@ -66,16 +49,15 @@
         "vlogs",
         "check out",
         "out quartering",
-        "quartering vlogs",
-        "out"
+        "quartering vlogs"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3039,
-        "spikeRatio": 3.29,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-07-29T07:16:54.789Z"
+        "baselineSaturation": 0.3235,
+        "spikeRatio": 3.09,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-07-30T07:09:36.400Z"
       }
     }
   ]
