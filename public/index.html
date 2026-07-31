@@ -2745,7 +2745,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .uc-xr .uc-dow{display:block;font-family:var(--uc-mono);font-size:9px;color:var(--text-dim);text-transform:uppercase}
     #panelVideos .uc-xr .uc-dnum{display:block;font-family:var(--uc-mono);font-size:10px;color:var(--text-muted);font-weight:600}
     #panelVideos .uc-xr.wknd .uc-dow,#panelVideos .uc-xr.wknd .uc-dnum{color:color-mix(in srgb,var(--down) 70%,var(--text-dim))}
-    #panelVideos .uc-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+    #panelVideos .uc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
     #panelVideos .uc-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
     #panelVideos .uc-tile .uc-k{font-size:11px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
     #panelVideos .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
@@ -11141,7 +11141,6 @@ function renderWindowList(startDate, endDate) {
         if(lfVis) inner+='<div class="uc-bar lf'+(!shVis?' top':'')+'" style="height:'+(x.lf/max*100)+'%"></div>';
         if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
         if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
-        else if(st.lf&&x.lf===0&&x.sh>0) inner+='<div class="uc-tick dark"></div>';
       }
       cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
@@ -11151,12 +11150,10 @@ function renderWindowList(startDate, endDate) {
     const occD=days.filter(x=>x.d<=today), wd=occD.filter(x=>x.wd<5), we=occD.filter(x=>x.wd>=5);
     const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
-    const darkWe=we.filter(x=>x.lf===0).length, totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
+    const totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
     const summary=
       '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">'+sum(wd,"lf")+' across '+wd.length+' weekdays</div></div>'+
-      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs '+weSH.toFixed(1)+'/day Shorts on weekends</div></div>'+
-      '<div class="uc-tile'+(tot>0&&we.length&&darkWe>=we.length-1?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--down)"></span>Dark weekend days</div><div class="uc-v">'+darkWe+'<small>/ '+we.length+'</small></div><div class="uc-note">weekend days with no long-form</div></div>'+
-      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
+      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs '+weSH.toFixed(1)+'/day Shorts on weekends</div></div>'+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
@@ -11168,7 +11165,7 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__ucToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__ucToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
-      '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span><span><i class="uc-sw dark"></i>Shorts but no long-form</span></div>'+
+      '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
