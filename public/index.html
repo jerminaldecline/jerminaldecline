@@ -11161,7 +11161,7 @@ function renderWindowList(startDate, endDate) {
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
     for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
-    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select></div>';
+    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>';
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
       '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3></div>'+
