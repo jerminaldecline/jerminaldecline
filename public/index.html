@@ -2706,13 +2706,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .uc-tog .uc-tdot{width:9px;height:9px;border-radius:2px;background:var(--text-dim);transition:background .12s}
     #panelVideos .uc-tog[aria-pressed="true"]{border-color:var(--shorts);color:var(--text);background:var(--shorts-soft,color-mix(in srgb,var(--shorts) 16%,var(--surface-2)))}
     #panelVideos .uc-tog[aria-pressed="true"] .uc-tdot{background:var(--shorts)}
+    #panelVideos .uc-tog.lf[aria-pressed="true"]{border-color:var(--brand);color:var(--text);background:color-mix(in srgb,var(--brand) 16%,var(--surface-2))}
+    #panelVideos .uc-tog.lf[aria-pressed="true"] .uc-tdot{background:var(--brand)}
     #panelVideos .uc-legend{display:flex;gap:16px;flex-wrap:wrap;margin:14px 2px 4px;font-size:12px;color:var(--text-muted)}
     #panelVideos .uc-legend span{display:inline-flex;align-items:center;gap:6px}
     #panelVideos .uc-sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
     #panelVideos .uc-sw.lf{background:var(--brand)}
     #panelVideos .uc-sw.sh{background:var(--shorts)}
     #panelVideos .uc-sw.dark{background:transparent;border:1.5px solid var(--down);border-radius:50%;width:10px;height:10px}
-    #panelVideos .uc-legend .uc-shkey.off{opacity:.42;text-decoration:line-through}
+    #panelVideos .uc-legend .uc-shkey.off,#panelVideos .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
     #panelVideos .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
     #panelVideos .uc-axcap span{color:var(--text-dim)}
     #panelVideos .uc-scroll{overflow-x:auto;padding-bottom:2px}
@@ -11116,13 +11118,14 @@ function renderWindowList(startDate, endDate) {
     const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
     const DOW=["M","T","W","T","F","S","S"];
     const months=ucMonths();
-    const st=window.__ucState||(window.__ucState={month:null,shorts:true});
+    const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true});
+    if(st.lf===undefined) st.lf=true;
     if(!st.month||months.indexOf(st.month)<0) st.month=months[months.length-1];
     const byMonth={}; months.forEach(m=>byMonth[m]=ucCompute(ds,ch,m));
     const days=byMonth[st.month];
     const nowP=ucLocalParts(new Date().toISOString()), curKey=nowP.ym;
     const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
-    let peak=1; months.forEach(m=>byMonth[m].forEach(x=>{peak=Math.max(peak,x.lf+(st.shorts?x.sh:0));}));
+    let peak=1; months.forEach(m=>byMonth[m].forEach(x=>{peak=Math.max(peak,(st.lf?x.lf:0)+(st.shorts?x.sh:0));}));
     peak=Math.max(peak,3);
     const step=peak<=10?1:(peak<=20?2:(peak<=45?3:5)), max=Math.ceil(peak/step)*step;
     let grid=""; for(let c=0;c<=max;c+=step){grid+='<div class="uc-gl" style="top:'+((1-c/max)*100)+'%"><span>'+c+'</span></div>';}
@@ -11131,9 +11134,11 @@ function renderWindowList(startDate, endDate) {
       const wknd=x.wd>=5, future=x.d>today, occurred=!future;
       let inner="";
       if(occurred){
-        if(x.lf>0) inner+='<div class="uc-bar lf'+((!st.shorts||x.sh<=0)?' top':'')+'" style="height:'+(x.lf/max*100)+'%"></div>';
-        if(st.shorts&&x.sh>0) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
-        if(x.lf===0) inner+='<div class="uc-tick '+(x.sh>0?'dark':'none')+'"></div>';
+        const lfVis=st.lf&&x.lf>0, shVis=st.shorts&&x.sh>0;
+        if(lfVis) inner+='<div class="uc-bar lf'+(!shVis?' top':'')+'" style="height:'+(x.lf/max*100)+'%"></div>';
+        if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
+        if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
+        else if(st.lf&&x.lf===0&&x.sh>0) inner+='<div class="uc-tick dark"></div>';
       }
       cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
@@ -11150,12 +11155,13 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-tile'+(tot>0&&we.length&&darkWe>=we.length-1?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--down)"></span>Dark weekend days</div><div class="uc-v">'+darkWe+'<small>/ '+we.length+'</small></div><div class="uc-note">weekend days with no long-form</div></div>'+
       '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
     const seg=months.map(m=>{const mm=+m.split("-")[1]; return '<button type="button" onclick="__ucSetMonth(\''+m+'\')" aria-pressed="'+(m===st.month?'true':'false')+'">'+MONF[mm-1]+'</button>';}).join("");
-    const axsub=st.shorts?'— long-form + Shorts stacked':'— long-form only';
+    const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
-      '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When does he actually publish?</h3><p class="uc-sub">Long-form is the work; Shorts largely auto-post.</p></div>'+
+      '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3></div>'+
       '<div class="uc-controls"><div class="uc-seg" role="group" aria-label="Month">'+seg+'</div>'+
+      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__ucToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
-      '<div class="uc-legend"><span><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span><span><i class="uc-sw dark"></i>Shorts but no long-form</span></div>'+
+      '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span><span><i class="uc-sw dark"></i>Shorts but no long-form</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
@@ -11164,8 +11170,9 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
   }
-  window.__ucSetMonth=function(m){ (window.__ucState||(window.__ucState={month:null,shorts:true})).month=m; renderUploadCadence(); };
-  window.__ucToggleShorts=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true}); st.shorts=!st.shorts; renderUploadCadence(); };
+  window.__ucSetMonth=function(m){ (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})).month=m; renderUploadCadence(); };
+  window.__ucToggleShorts=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.shorts=!st.shorts; renderUploadCadence(); };
+  window.__ucToggleLong=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.lf=!st.lf; renderUploadCadence(); };
   function __ucEnsureTip(){ let t=byId("ucTip"); if(!t){t=document.createElement("div");t.id="ucTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
   function __ucTip(e){
     const c=e.target.closest(".uc-col"), tip=__ucEnsureTip(); if(!c){tip.style.opacity="0";return;}
@@ -11175,12 +11182,10 @@ function renderWindowList(startDate, endDate) {
     else{
       const lf=+d.lf, sh=+d.sh, t=lf+sh; let body;
       if(t===0){ body='<div class="uc-ttnone">nothing published</div>'; }
-      else if(st.shorts){
+      else{
         body='<div class="uc-ttrow"><span class="uc-lab"><i style="background:var(--brand)"></i>Long-form</span><span>'+lf+'</span></div>'+
              '<div class="uc-ttrow"><span class="uc-lab"><i style="background:var(--shorts)"></i>Shorts</span><span>'+sh+'</span></div>'+
              '<div class="uc-tttot"><span>Total</span><span>'+t+'</span></div>'+(lf===0?'<div class="uc-ttnone" style="margin-top:5px">long-form: dark</div>':'');
-      } else {
-        body='<div class="uc-ttrow"><span class="uc-lab"><i style="background:var(--brand)"></i>Long-form</span><span>'+lf+'</span></div>'+(lf===0?'<div class="uc-ttnone" style="margin-top:5px">no long-form'+(sh>0?' · '+sh+' Shorts (hidden)':'')+'</div>':'');
       }
       html='<div class="uc-ttday">'+mn+' '+d.d+(d.wknd==="1"?' · weekend':'')+'</div>'+body;
     }
