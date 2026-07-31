@@ -2467,12 +2467,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promoted videos <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="cadence" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 17v-4M12 17v-2M16 17v-5"/></svg>Upload cadence</button>
       </div>
       <div class="vbody" id="vBody" hidden>
         <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
         <div class="vempty" id="vtabNA" hidden>Not available for this channel.</div>
         <div class="removed-section" id="removedSection"><div class="removed-body" id="removedBody"></div></div>
         <div class="reposts-section" id="repostsSection"><div class="reposts-body" id="repostsBody"></div></div>
+        <div class="cadence-section" id="cadenceSection"><div class="cadence-body" id="cadenceBody"></div></div>
     <div class="ad-panel" id="adPanel" hidden></div>
     <div class="wordcloud-section" id="wordcloudSection">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
@@ -2688,6 +2690,78 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .reposts-cred .rt-alert:active{transform:translateY(0.5px)}
     #panelVideos .reposts-cred .rt-alert.done{border-color:var(--up,#3fb950);color:var(--up,#3fb950);background:color-mix(in srgb,var(--up,#3fb950) 12%,transparent)}
     #panelVideos .reposts-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
+    /* ---- Upload cadence panel ---- */
+    #panelVideos .cadence-section{display:none}
+    #panelVideos .cadence-section.vt-active{display:block}
+    #panelVideos .cadence-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
+    #panelVideos .uc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+    #panelVideos .uc-eyebrow{font-family:var(--uc-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:0 0 3px}
+    #panelVideos .uc-h{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.01em;color:var(--text)}
+    #panelVideos .uc-sub{font-size:0.8rem;color:var(--text-muted);margin:4px 0 0}
+    #panelVideos .uc-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    #panelVideos .uc-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
+    #panelVideos .uc-seg button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+    #panelVideos .uc-seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+    #panelVideos .uc-nav{display:inline-flex;gap:6px}
+    #panelVideos .uc-sel{appearance:none;-webkit-appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:12.5px;font-weight:700;padding:5px 26px 5px 10px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23999' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+    #panelVideos .uc-sel:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    #panelVideos .uc-tog{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);transition:background .12s,color .12s,border-color .12s}
+    #panelVideos .uc-tog .uc-tdot{width:9px;height:9px;border-radius:2px;background:var(--text-dim);transition:background .12s}
+    #panelVideos .uc-tog[aria-pressed="true"]{border-color:var(--shorts);color:var(--text);background:var(--shorts-soft,color-mix(in srgb,var(--shorts) 16%,var(--surface-2)))}
+    #panelVideos .uc-tog[aria-pressed="true"] .uc-tdot{background:var(--shorts)}
+    #panelVideos .uc-tog.lf[aria-pressed="true"]{border-color:var(--brand);color:var(--text);background:color-mix(in srgb,var(--brand) 16%,var(--surface-2))}
+    #panelVideos .uc-tog.lf[aria-pressed="true"] .uc-tdot{background:var(--brand)}
+    #panelVideos .uc-legend{display:flex;gap:16px;flex-wrap:wrap;margin:14px 2px 4px;font-size:12px;color:var(--text-muted)}
+    #panelVideos .uc-legend span{display:inline-flex;align-items:center;gap:6px}
+    #panelVideos .uc-sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+    #panelVideos .uc-sw.lf{background:var(--brand)}
+    #panelVideos .uc-sw.sh{background:var(--shorts)}
+    #panelVideos .uc-sw.dark{background:transparent;border:1.5px solid var(--down);border-radius:50%;width:10px;height:10px}
+    #panelVideos .uc-legend .uc-shkey.off,#panelVideos .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
+    #panelVideos .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
+    #panelVideos .uc-axcap span{color:var(--text-dim)}
+    #panelVideos .uc-scroll{overflow-x:auto;padding-bottom:2px}
+    #panelVideos .uc-plot{position:relative;min-width:640px}
+    #panelVideos .uc-chartarea{position:relative;height:210px}
+    #panelVideos .uc-grid{position:absolute;left:28px;right:0;top:0;bottom:0;pointer-events:none}
+    #panelVideos .uc-gl{position:absolute;left:0;right:0;border-top:1px solid var(--border)}
+    #panelVideos .uc-gl span{position:absolute;left:-28px;top:-7px;width:22px;text-align:right;font-family:var(--uc-mono);font-size:10px;color:var(--text-dim);font-variant-numeric:tabular-nums}
+    #panelVideos .uc-cols{position:absolute;left:28px;right:0;top:0;bottom:0;display:flex;gap:3px;align-items:stretch}
+    #panelVideos .uc-col{flex:1 1 0;min-width:15px;height:100%;display:flex;flex-direction:column-reverse;justify-content:flex-start;position:relative;border-radius:5px}
+    #panelVideos .uc-bar{width:100%;min-height:0;transition:height .3s cubic-bezier(.2,.7,.2,1)}
+    #panelVideos .uc-bar.lf{background:var(--brand)}
+    #panelVideos .uc-bar.sh{background:var(--shorts);opacity:.92}
+    #panelVideos .uc-bar.top{border-radius:3px 3px 0 0}
+    #panelVideos .uc-tick{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%}
+    #panelVideos .uc-tick.dark{border:1.5px solid var(--down);opacity:.9}
+    #panelVideos .uc-tick.none{background:var(--text-dim);opacity:.32}
+    #panelVideos .uc-col.future{opacity:.35}
+    #panelVideos .uc-col.future .uc-bar,#panelVideos .uc-col.future .uc-tick{display:none}
+    #panelVideos .uc-col:hover .uc-bar{filter:brightness(1.13)}
+    #panelVideos .uc-today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--brand);opacity:.7}
+    #panelVideos .uc-today span{position:absolute;top:-15px;left:4px;font-family:var(--uc-mono);font-size:9px;letter-spacing:.06em;color:var(--brand);white-space:nowrap}
+    #panelVideos .uc-xrow{display:flex;gap:3px;padding-left:28px;margin-top:8px}
+    #panelVideos .uc-xr{flex:1 1 0;min-width:15px;text-align:center;line-height:1.25}
+    #panelVideos .uc-xr .uc-dow{display:block;font-family:var(--uc-mono);font-size:9px;color:var(--text-dim);text-transform:uppercase}
+    #panelVideos .uc-xr .uc-dnum{display:block;font-family:var(--uc-mono);font-size:10px;color:var(--text-muted);font-weight:600}
+    #panelVideos .uc-xr.wknd .uc-dow,#panelVideos .uc-xr.wknd .uc-dnum{color:color-mix(in srgb,var(--down) 70%,var(--text-dim))}
+    #panelVideos .uc-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+    #panelVideos .uc-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
+    #panelVideos .uc-tile .uc-k{font-size:11px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
+    #panelVideos .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+    #panelVideos .uc-tile .uc-v{font-family:var(--uc-mono);font-size:23px;font-weight:700;margin-top:6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text)}
+    #panelVideos .uc-tile .uc-v small{font-size:12px;color:var(--text-dim);font-weight:600;margin-left:2px}
+    #panelVideos .uc-tile .uc-note{font-size:11px;color:var(--text-dim);margin-top:2px}
+    #panelVideos .uc-tile.flag .uc-v{color:var(--down)}
+    #panelVideos .uc-foot{margin:12px 2px 0;font-size:11px;color:var(--text-dim);font-family:var(--uc-mono)}
+    #ucTip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.7);opacity:0;transition:opacity .1s;min-width:140px;color:var(--text)}
+    #ucTip .uc-ttday{font-weight:700;font-size:12.5px;margin-bottom:5px}
+    #ucTip .uc-ttrow{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px}
+    #ucTip .uc-ttrow .uc-lab{display:inline-flex;align-items:center;gap:6px;color:var(--text-muted)}
+    #ucTip .uc-ttrow .uc-lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
+    #ucTip .uc-tttot{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);font-weight:700}
+    #ucTip .uc-ttnone{color:var(--down);font-size:12px}
+    @media(max-width:680px){#panelVideos .uc-summary{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:680px){
       #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
       #panelVideos a.rt b{white-space:normal}
@@ -11000,11 +11074,142 @@ function renderWindowList(startDate, endDate) {
     const foot='<div class="reposts-foot">Most listed are clips where the original creator’s stamp survived his crop — a watermark proves the clip was lifted from that platform, and the handle is read straight from it — so the true repost rate is far higher. A few are creators viewers named in the comments.</div>';
     box.innerHTML=intro+listHtml+foot;
   }
+  // ---- Upload cadence panel: publishing rhythm (long-form vs Shorts) per day ----
+  // The creator is in Wisconsin (Central Time). Bucket uploads by HIS local
+  // calendar day, not UTC, so a late-night post lands on the right day/weekday.
+  // DST-aware via the America/Chicago zone; cached per timestamp.
+  const _ucFmt=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"});
+  function ucLocalParts(iso){
+    const cache=window.__ucDC||(window.__ucDC={});
+    if(cache[iso]) return cache[iso];
+    let v;
+    try{ const o={}; for(const x of _ucFmt.formatToParts(new Date(iso))) if(x.type!=="literal") o[x.type]=x.value; v={ym:o.year+"-"+o.month,day:+o.day}; }
+    catch(e){ v={ym:String(iso).slice(0,7),day:+String(iso).slice(8,10)}; }
+    cache[iso]=v; return v;
+  }
+  function ucCompute(ds, ch, monthKey){
+    const p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
+    const dim=new Date(Date.UTC(Y,M,0)).getUTCDate();
+    const buckets={};
+    for(const v of ds.videos){
+      if(ch!=="ALL"&&v.channelId!==ch) continue;
+      const p=v.publishedAt; if(!p) continue;
+      const lp=ucLocalParts(p); if(lp.ym!==monthKey) continue;
+      const b=buckets[lp.day]||(buckets[lp.day]={lf:0,sh:0});
+      if(v.isShort) b.sh++; else b.lf++;
+    }
+    const out=[];
+    for(let d=1;d<=dim;d++){ const wd=(new Date(Date.UTC(Y,M-1,d)).getUTCDay()+6)%7; const b=buckets[d]||{lf:0,sh:0}; out.push({d,wd,lf:b.lf,sh:b.sh}); }
+    return out;
+  }
+  function renderUploadCadence(){
+    const host=byId("cadenceBody"); if(!host) return;
+    const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
+    if(!ds||!ds.videos){host.innerHTML='<div class="vempty">No data loaded.</div>';return;}
+    const chans=ds.channels||{};
+    const sel=byId("vidChannelSel")||byId("anChannelSel");
+    let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+    if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
+    const chName=ch==="ALL"?"All channels":((chans[ch]&&(chans[ch].title||chans[ch].handle))||"this channel");
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const DOW=["M","T","W","T","F","S","S"];
+    const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true});
+    if(st.lf===undefined) st.lf=true;
+    if(st.shorts===undefined) st.shorts=true;
+    const nowP=ucLocalParts(new Date().toISOString()), curKey=nowP.ym;
+    // Full-history range for this channel scope (his local calendar months).
+    let minKey=null;
+    for(const v of ds.videos){ if(ch!=="ALL"&&v.channelId!==ch) continue; const p=v.publishedAt; if(!p) continue; const ym=ucLocalParts(p).ym; if(!minKey||ym<minKey) minKey=ym; }
+    if(!minKey) minKey=curKey;
+    if(!st.month) st.month=curKey;               // default view: current month
+    if(st.month>curKey) st.month=curKey;
+    if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
+    const days=ucCompute(ds,ch,st.month);
+    const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
+    let peak=1; days.forEach(x=>{peak=Math.max(peak,(st.lf?x.lf:0)+(st.shorts?x.sh:0));});
+    peak=Math.max(peak,3);
+    const step=peak<=10?1:(peak<=20?2:(peak<=45?3:5)), max=Math.ceil(peak/step)*step;
+    let grid=""; for(let c=0;c<=max;c+=step){grid+='<div class="uc-gl" style="top:'+((1-c/max)*100)+'%"><span>'+c+'</span></div>';}
+    let cols="", xrow="";
+    days.forEach(x=>{
+      const wknd=x.wd>=5, future=x.d>today, occurred=!future;
+      let inner="";
+      if(occurred){
+        const lfVis=st.lf&&x.lf>0, shVis=st.shorts&&x.sh>0;
+        if(lfVis) inner+='<div class="uc-bar lf'+(!shVis?' top':'')+'" style="height:'+(x.lf/max*100)+'%"></div>';
+        if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
+        if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
+        else if(st.lf&&x.lf===0&&x.sh>0) inner+='<div class="uc-tick dark"></div>';
+      }
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
+      xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
+    });
+    let todayLine="";
+    if(isCur){ const idx=today-1, n=days.length; todayLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>as of '+MONF[(+st.month.split("-")[1])-1]+' '+today+' · CT</span></div>'; }
+    const occD=days.filter(x=>x.d<=today), wd=occD.filter(x=>x.wd<5), we=occD.filter(x=>x.wd>=5);
+    const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
+    const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
+    const darkWe=we.filter(x=>x.lf===0).length, totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
+    const summary=
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">'+sum(wd,"lf")+' across '+wd.length+' weekdays</div></div>'+
+      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs '+weSH.toFixed(1)+'/day Shorts on weekends</div></div>'+
+      '<div class="uc-tile'+(tot>0&&we.length&&darkWe>=we.length-1?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--down)"></span>Dark weekend days</div><div class="uc-v">'+darkWe+'<small>/ '+we.length+'</small></div><div class="uc-note">weekend days with no long-form</div></div>'+
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
+    const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
+    let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
+    const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
+    for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
+    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>';
+    const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
+    host.innerHTML=
+      '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3></div>'+
+      '<div class="uc-controls">'+nav+
+      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
+      '<button type="button" class="uc-tog" onclick="__ucToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
+      '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span><span><i class="uc-sw dark"></i>Shorts but no long-form</span></div>'+
+      '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
+      '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
+      '<div class="uc-summary">'+summary+'</div>'+
+      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>';
+    window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
+    const colsEl=host.querySelector(".uc-cols");
+    if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
+  }
+  window.__ucSetMonthNum=function(m){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(); };
+  window.__ucSetYear=function(y){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(); };
+  window.__ucToggleShorts=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.shorts=!st.shorts; renderUploadCadence(); };
+  window.__ucToggleLong=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.lf=!st.lf; renderUploadCadence(); };
+  function __ucEnsureTip(){ let t=byId("ucTip"); if(!t){t=document.createElement("div");t.id="ucTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
+  function __ucTip(e){
+    const c=e.target.closest(".uc-col"), tip=__ucEnsureTip(); if(!c){tip.style.opacity="0";return;}
+    const d=c.dataset, mn=window.__ucCurMonthName||"", st=window.__ucState||{shorts:true};
+    let html;
+    if(d.future==="1"){ html='<div class="uc-ttday">'+mn+' '+d.d+'</div><div class="uc-ttnone">not yet published</div>'; }
+    else{
+      const lf=+d.lf, sh=+d.sh, t=lf+sh; let body;
+      if(t===0){ body='<div class="uc-ttnone">nothing published</div>'; }
+      else{
+        body='<div class="uc-ttrow"><span class="uc-lab"><i style="background:var(--brand)"></i>Long-form</span><span>'+lf+'</span></div>'+
+             '<div class="uc-ttrow"><span class="uc-lab"><i style="background:var(--shorts)"></i>Shorts</span><span>'+sh+'</span></div>'+
+             '<div class="uc-tttot"><span>Total</span><span>'+t+'</span></div>'+(lf===0?'<div class="uc-ttnone" style="margin-top:5px">long-form: dark</div>':'');
+      }
+      html='<div class="uc-ttday">'+mn+' '+d.d+(d.wknd==="1"?' · weekend':'')+'</div>'+body;
+    }
+    tip.innerHTML=html; tip.style.opacity="1";
+    const pad=14; let x=e.clientX+pad, y=e.clientY+pad; const r=tip.getBoundingClientRect();
+    if(x+r.width>innerWidth-8) x=e.clientX-r.width-pad;
+    if(y+r.height>innerHeight-8) y=e.clientY-r.height-pad;
+    tip.style.left=x+"px"; tip.style.top=y+"px";
+  }
+  function __ucHideTip(){ const t=byId("ucTip"); if(t)t.style.opacity="0"; }
   function closeCurrent(){
     if(!active)return;
     if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
     else if(active==="removed"){const s=byId("removedSection");if(s)s.classList.remove("vt-active");}
     else if(active==="reposts"){const s=byId("repostsSection");if(s)s.classList.remove("vt-active");}
+    else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
     else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
     const na=byId("vtabNA");if(na)na.hidden=true;
     const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb){tb.classList.remove("active");tb.setAttribute("aria-selected","false");}
@@ -11021,6 +11226,8 @@ function renderWindowList(startDate, endDate) {
       const s=byId("removedSection");if(s)s.classList.add("vt-active");renderRemoved();
     }else if(t==="reposts"){
       const s=byId("repostsSection");if(s)s.classList.add("vt-active");renderReposts();
+    }else if(t==="cadence"){
+      const s=byId("cadenceSection");if(s)s.classList.add("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="none";renderUploadCadence();
     }else{
       const s=byId(SECID[t]);if(s)s.classList.add("vt-active");
       const tog=byId(TOGID[t]);if(tog&&tog.getAttribute("aria-expanded")!=="true")tog.click();
