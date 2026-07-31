@@ -11070,9 +11070,21 @@ function renderWindowList(startDate, endDate) {
     box.innerHTML=intro+listHtml+foot;
   }
   // ---- Upload cadence panel: publishing rhythm (long-form vs Shorts) per day ----
+  // The creator is in Wisconsin (Central Time). Bucket uploads by HIS local
+  // calendar day, not UTC, so a late-night post lands on the right day/weekday.
+  // DST-aware via the America/Chicago zone; cached per timestamp.
+  const _ucFmt=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"});
+  function ucLocalParts(iso){
+    const cache=window.__ucDC||(window.__ucDC={});
+    if(cache[iso]) return cache[iso];
+    let v;
+    try{ const o={}; for(const x of _ucFmt.formatToParts(new Date(iso))) if(x.type!=="literal") o[x.type]=x.value; v={ym:o.year+"-"+o.month,day:+o.day}; }
+    catch(e){ v={ym:String(iso).slice(0,7),day:+String(iso).slice(8,10)}; }
+    cache[iso]=v; return v;
+  }
   function ucMonths(){
-    const out=[], now=new Date(); let y=now.getUTCFullYear(), m=now.getUTCMonth();
-    for(let i=0;i<6;i++){ out.unshift(y+"-"+String(m+1).padStart(2,"0")); m--; if(m<0){m=11;y--;} }
+    const p=ucLocalParts(new Date().toISOString()); const ym=p.ym.split("-"); let y=+ym[0], m=+ym[1];
+    const out=[]; for(let i=0;i<6;i++){ out.unshift(y+"-"+String(m).padStart(2,"0")); m--; if(m<1){m=12;y--;} }
     return out;
   }
   function ucCompute(ds, ch, monthKey){
@@ -11081,8 +11093,9 @@ function renderWindowList(startDate, endDate) {
     const buckets={};
     for(const v of ds.videos){
       if(ch!=="ALL"&&v.channelId!==ch) continue;
-      const p=v.publishedAt; if(!p||String(p).slice(0,7)!==monthKey) continue;
-      const day=+String(p).slice(8,10); const b=buckets[day]||(buckets[day]={lf:0,sh:0});
+      const p=v.publishedAt; if(!p) continue;
+      const lp=ucLocalParts(p); if(lp.ym!==monthKey) continue;
+      const b=buckets[lp.day]||(buckets[lp.day]={lf:0,sh:0});
       if(v.isShort) b.sh++; else b.lf++;
     }
     const out=[];
@@ -11107,8 +11120,8 @@ function renderWindowList(startDate, endDate) {
     if(!st.month||months.indexOf(st.month)<0) st.month=months[months.length-1];
     const byMonth={}; months.forEach(m=>byMonth[m]=ucCompute(ds,ch,m));
     const days=byMonth[st.month];
-    const now=new Date(), curKey=now.getUTCFullYear()+"-"+String(now.getUTCMonth()+1).padStart(2,"0");
-    const isCur=st.month===curKey, today=isCur?now.getUTCDate():days.length;
+    const nowP=ucLocalParts(new Date().toISOString()), curKey=nowP.ym;
+    const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
     let peak=1; months.forEach(m=>byMonth[m].forEach(x=>{peak=Math.max(peak,x.lf+(st.shorts?x.sh:0));}));
     peak=Math.max(peak,3);
     const step=peak<=10?1:(peak<=20?2:(peak<=45?3:5)), max=Math.ceil(peak/step)*step;
@@ -11126,7 +11139,7 @@ function renderWindowList(startDate, endDate) {
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
     });
     let todayLine="";
-    if(isCur){ const idx=today-1, n=days.length; todayLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>as of '+MONF[now.getUTCMonth()]+' '+today+'</span></div>'; }
+    if(isCur){ const idx=today-1, n=days.length; todayLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>as of '+MONF[(+st.month.split("-")[1])-1]+' '+today+' · CT</span></div>'; }
     const occD=days.filter(x=>x.d<=today), wd=occD.filter(x=>x.wd<5), we=occD.filter(x=>x.wd>=5);
     const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
@@ -11146,7 +11159,7 @@ function renderWindowList(startDate, endDate) {
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
-      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>';
+      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>';
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
