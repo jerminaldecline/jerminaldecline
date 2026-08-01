@@ -11329,8 +11329,8 @@ function renderWindowList(startDate, endDate) {
     const pctNew=tot>0?Math.round(totNew/tot*100):0;
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const summary=
-      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'This month</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · '+dvFmt(totNew)+' total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'Previous months</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · '+dvFmt(totOld)+' total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'Views from this month</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · '+dvFmt(totNew)+' total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'Views from prior months</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · '+dvFmt(totOld)+' total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note">'+dvFmt(tot)+' over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
