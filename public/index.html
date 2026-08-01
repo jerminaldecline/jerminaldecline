@@ -2468,6 +2468,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="cadence" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 17v-4M12 17v-2M16 17v-5"/></svg>Upload cadence</button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="dailyviews" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>Daily views</button>
       </div>
       <div class="vbody" id="vBody" hidden>
         <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
@@ -2475,6 +2476,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="removed-section" id="removedSection"><div class="removed-body" id="removedBody"></div></div>
         <div class="reposts-section" id="repostsSection"><div class="reposts-body" id="repostsBody"></div></div>
         <div class="cadence-section" id="cadenceSection"><div class="cadence-body" id="cadenceBody"></div></div>
+        <div class="dailyviews-section" id="dailyViewsSection"><div class="dailyviews-body" id="dailyViewsBody"></div></div>
     <div class="ad-panel" id="adPanel" hidden></div>
     <div class="wordcloud-section" id="wordcloudSection">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
@@ -2762,6 +2764,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #ucTip .uc-tttot{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);font-weight:700}
     #ucTip .uc-ttnone{color:var(--down);font-size:12px}
     @media(max-width:680px){#panelVideos .uc-summary{grid-template-columns:repeat(2,1fr)}}
+    /* ---- Daily views panel (view gains/day; shares uc- geometry) ---- */
+    #panelVideos .dailyviews-section{display:none}
+    #panelVideos .dailyviews-section.vt-active{display:block}
+    #panelVideos .dailyviews-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
+    #panelVideos .dv-bar.new{background:var(--brand)}
+    #panelVideos .dv-bar.old{background:color-mix(in srgb,var(--brand) 30%,var(--text-dim));opacity:.9}
+    #panelVideos .dv-bar.top{border-radius:3px 3px 0 0}
+    #panelVideos .dv-sw.new{background:var(--brand)}
+    #panelVideos .dv-sw.old{background:color-mix(in srgb,var(--brand) 30%,var(--text-dim))}
+    #dvTip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.7);opacity:0;transition:opacity .1s;min-width:158px;color:var(--text)}
+    #dvTip .uc-ttday{font-weight:700;font-size:12.5px;margin-bottom:5px}
+    #dvTip .uc-ttrow{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px}
+    #dvTip .uc-ttrow .uc-lab{display:inline-flex;align-items:center;gap:6px;color:var(--text-muted)}
+    #dvTip .uc-ttrow .uc-lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
+    #dvTip .uc-ttrow .uc-lab i.new{background:var(--brand)}
+    #dvTip .uc-ttrow .uc-lab i.old{background:color-mix(in srgb,var(--brand) 30%,var(--text-dim))}
+    #dvTip .uc-tttot{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);font-weight:700}
+    #dvTip .uc-ttnone{color:var(--text-dim);font-size:12px}
     @media(max-width:680px){
       #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
       #panelVideos a.rt b{white-space:normal}
@@ -8147,7 +8167,8 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
-      fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e))
+      fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
+      fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
   window.__loadVideosExtraData = loadVideosExtraData;
@@ -11214,12 +11235,139 @@ function renderWindowList(startDate, endDate) {
     tip.style.left=x+"px"; tip.style.top=y+"px";
   }
   function __ucHideTip(){ const t=byId("ucTip"); if(t)t.style.opacity="0"; }
+
+  // ---- Daily views panel: view GAINS per day (this-month uploads vs previous months) ----
+  // Source: public/daily-views.json — network-wide daily view deltas from the
+  // snapshot archive (scripts/build-daily-views.js). Bars stack back-catalogue
+  // (old) under this-month uploads (new); Shorts / Long-form toggles filter
+  // which formats are counted, mirroring the Upload cadence panel. History is
+  // limited to the snapshot window (Jun 2026 onward), so the month nav only
+  // offers months that actually have data.
+  function dvData(){ return window.__dvData||null; }
+  function dvMonths(){ const d=dvData(); if(!d||!d.days) return []; const s=new Set(); for(const k in d.days) s.add(k.slice(0,7)); return [...s].sort(); }
+  function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10; return m*pow; }
+  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(a>=1e7?0:1)+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
+  function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
+  function dvCompute(ch, monthKey, st){
+    const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
+    const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
+    for(let day=1;day<=dim;day++){
+      const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
+      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec; let nw=0,od=0;
+      if(rec){ const add=a=>{ if(!a) return; if(st.shorts){nw+=a[0];od+=a[2];} if(st.lf){nw+=a[1];od+=a[3];} };
+        if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); }
+      const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
+      out.push({d:day,wd,nw,od,inRange});
+    }
+    return out;
+  }
+  function renderDailyViews(){
+    const host=byId("dailyViewsBody"); if(!host) return;
+    const d=dvData();
+    if(!d||!d.days){ host.innerHTML='<div class="vempty">Daily-view data isn’t loaded yet.</div>'; return; }
+    const months=dvMonths();
+    if(!months.length){ host.innerHTML='<div class="vempty">No daily-view data yet.</div>'; return; }
+    const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
+    const chans=(ds&&ds.channels)||{};
+    const sel=byId("vidChannelSel")||byId("anChannelSel");
+    let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+    if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
+    const chName=ch==="ALL"?"All channels":((d._channels&&d._channels[ch])||(chans[ch]&&(chans[ch].title||chans[ch].handle))||"this channel");
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const DOW=["M","T","W","T","F","S","S"];
+    const minKey=months[0], maxKey=months[months.length-1];
+    const st=window.__dvState||(window.__dvState={month:null,shorts:true,lf:true});
+    if(st.shorts===undefined) st.shorts=true; if(st.lf===undefined) st.lf=true;
+    if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
+    if(st.month>maxKey) st.month=maxKey;
+    if(st.month<minKey) st.month=minKey;
+    if(months.indexOf(st.month)<0) st.month=maxKey; // snap to a month that actually has data
+    const days=dvCompute(ch,st.month,st);
+    let lastData=0; days.forEach(x=>{ if(x.inRange) lastData=x.d; });
+    const isLatest=st.month===maxKey;
+    let peak=1; days.forEach(x=>{ peak=Math.max(peak,x.nw+x.od); });
+    const max=dvNiceMax(peak), DIVS=4;
+    let grid=""; for(let g=0;g<=DIVS;g++){ grid+='<div class="uc-gl" style="top:'+((1-g/DIVS)*100)+'%"><span>'+dvFmt(max*g/DIVS)+'</span></div>'; }
+    let cols="", xrow="";
+    days.forEach(x=>{
+      const wknd=x.wd>=5, nodata=!x.inRange, total=x.nw+x.od;
+      let inner="";
+      if(!nodata){
+        if(total>0){
+          if(x.od>0) inner+='<div class="uc-bar dv-bar old'+(x.nw>0?'':' top')+'" style="height:'+(x.od/max*100)+'%"></div>';
+          if(x.nw>0) inner+='<div class="uc-bar dv-bar new top" style="height:'+(x.nw/max*100)+'%"></div>';
+        } else inner+='<div class="uc-tick none"></div>';
+      }
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(nodata?' future':'')+'" data-d="'+x.d+'" data-nw="'+x.nw+'" data-od="'+x.od+'" data-wknd="'+(wknd?1:0)+'" data-nodata="'+(nodata?1:0)+'">'+inner+'</div>';
+      xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
+    });
+    let asLine="";
+    if(isLatest && lastData>0 && lastData<days.length){ const n=days.length, idx=lastData-1; asLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>latest: '+MONF[(+st.month.split("-")[1])-1]+' '+lastData+'</span></div>'; }
+    const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
+    const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
+    const totNew=sum(inD,"nw"), totOld=sum(inD,"od"), tot=totNew+totOld;
+    const avgNew=totNew/nDays, avgOld=totOld/nDays, avg=tot/nDays;
+    const pctNew=tot>0?Math.round(totNew/tot*100):0;
+    const summary=
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip dv-sw new"></span>New uploads</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · '+dvFmt(totNew)+' total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip dv-sw old"></span>Back-catalogue</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(100-pctNew)+'% of views · '+dvFmt(totOld)+' total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note">'+dvFmt(tot)+' over '+nDays+' days</div></div>';
+    const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
+    const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
+    let yearOpts=""; years.forEach(y=>{ yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>'; });
+    const monthsInYear=months.filter(m=>+m.slice(0,4)===selY).map(m=>+m.slice(5,7));
+    let monOpts=""; monthsInYear.forEach(mm=>{ monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>'; });
+    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__dvSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__dvSetMonthNum(this.value)">'+monOpts+'</select></div>';
+    const axsub=(st.lf&&st.shorts)?'— Shorts + long-form':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
+    host.innerHTML=
+      '<div class="uc-head"><div><p class="uc-eyebrow">Daily views</p><h3 class="uc-h">How many views per day?</h3></div>'+
+      '<div class="uc-controls">'+nav+
+      '<button type="button" class="uc-tog lf" onclick="__dvToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
+      '<button type="button" class="uc-tog" onclick="__dvToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
+      '<div class="uc-legend"><span><i class="uc-sw dv-sw new"></i>Uploaded this month</span><span><i class="uc-sw dv-sw old"></i>Previous months</span></div>'+
+      '<p class="uc-axcap">Views gained / day <span>'+axsub+'</span></p>'+
+      '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
+      '<div class="uc-summary">'+summary+'</div>'+
+      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>';
+    window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
+    const colsEl=host.querySelector(".uc-cols");
+    if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
+  }
+  window.__dvSetMonthNum=function(m){ const st=window.__dvState||(window.__dvState={month:null,shorts:true,lf:true}); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(); };
+  window.__dvSetYear=function(y){ const st=window.__dvState||(window.__dvState={month:null,shorts:true,lf:true}); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(); };
+  window.__dvToggleShorts=function(){ const st=window.__dvState||(window.__dvState={month:null,shorts:true,lf:true}); st.shorts=!st.shorts; renderDailyViews(); };
+  window.__dvToggleLong=function(){ const st=window.__dvState||(window.__dvState={month:null,shorts:true,lf:true}); st.lf=!st.lf; renderDailyViews(); };
+  window.__dvRerenderIfActive=function(){ if(active==="dailyviews") renderDailyViews(); };
+  function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
+  function __dvTip(e){
+    const c=e.target.closest(".uc-col"), tip=__dvEnsureTip(); if(!c){tip.style.opacity="0";return;}
+    const dd=c.dataset, mn=window.__dvCurMonthName||"";
+    let html;
+    if(dd.nodata==="1"){ html='<div class="uc-ttday">'+mn+' '+dd.d+'</div><div class="uc-ttnone">no snapshot data</div>'; }
+    else{
+      const nw=+dd.nw, od=+dd.od, t=nw+od; let body;
+      if(t===0){ body='<div class="uc-ttnone">no views recorded</div>'; }
+      else body='<div class="uc-ttrow"><span class="uc-lab"><i class="new"></i>This month</span><span>'+dvFmtFull(nw)+'</span></div>'+
+                '<div class="uc-ttrow"><span class="uc-lab"><i class="old"></i>Previous</span><span>'+dvFmtFull(od)+'</span></div>'+
+                '<div class="uc-tttot"><span>Total</span><span>'+dvFmtFull(t)+'</span></div>';
+      html='<div class="uc-ttday">'+mn+' '+dd.d+(dd.wknd==="1"?' · weekend':'')+'</div>'+body;
+    }
+    tip.innerHTML=html; tip.style.opacity="1";
+    const pad=14; let x=e.clientX+pad, y=e.clientY+pad; const r=tip.getBoundingClientRect();
+    if(x+r.width>innerWidth-8) x=e.clientX-r.width-pad;
+    if(y+r.height>innerHeight-8) y=e.clientY-r.height-pad;
+    tip.style.left=x+"px"; tip.style.top=y+"px";
+  }
+  function __dvHideTip(){ const t=byId("dvTip"); if(t)t.style.opacity="0"; }
   function closeCurrent(){
     if(!active)return;
     if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
     else if(active==="removed"){const s=byId("removedSection");if(s)s.classList.remove("vt-active");}
     else if(active==="reposts"){const s=byId("repostsSection");if(s)s.classList.remove("vt-active");}
     else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
+    else if(active==="dailyviews"){const s=byId("dailyViewsSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
     else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
     const na=byId("vtabNA");if(na)na.hidden=true;
     const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb){tb.classList.remove("active");tb.setAttribute("aria-selected","false");}
@@ -11238,6 +11386,8 @@ function renderWindowList(startDate, endDate) {
       const s=byId("repostsSection");if(s)s.classList.add("vt-active");renderReposts();
     }else if(t==="cadence"){
       const s=byId("cadenceSection");if(s)s.classList.add("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="none";renderUploadCadence();
+    }else if(t==="dailyviews"){
+      const s=byId("dailyViewsSection");if(s)s.classList.add("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="none";renderDailyViews();
     }else{
       const s=byId(SECID[t]);if(s)s.classList.add("vt-active");
       const tog=byId(TOGID[t]);if(tog&&tog.getAttribute("aria-expanded")!=="true")tog.click();
