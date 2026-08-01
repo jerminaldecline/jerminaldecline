@@ -1,24 +1,36 @@
 {
-  "lastUpdated": "2026-07-31T07:21:11.447Z",
+  "lastUpdated": "2026-08-01T07:01:03.016Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
       "keywords": [
         "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out"
+        "quartering vlogs"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3269,
-        "spikeRatio": 3.06,
+        "recentSaturation": 0.9444,
+        "baselineSaturation": 0.293,
+        "spikeRatio": 3.22,
         "recentVideoCount": 17,
-        "baselineVideoCount": 42,
-        "detectedAt": "2026-07-31T07:21:11.447Z"
+        "baselineVideoCount": 37,
+        "detectedAt": "2026-08-01T07:01:03.016Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "demanding",
+      "keywords": [
+        "demanding",
+        "fifth"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0063,
+        "spikeRatio": 52.67,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-01T07:01:03.016Z"
       }
     },
     {
@@ -29,32 +41,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0313,
-        "spikeRatio": 10.67,
+        "baselineSaturation": 0.0316,
+        "spikeRatio": 10.53,
         "recentVideoCount": 4,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-07-31T07:21:11.447Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3312,
-        "spikeRatio": 3.02,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-07-31T07:21:11.447Z"
+        "detectedAt": "2026-08-01T07:01:03.016Z"
       }
     }
   ]

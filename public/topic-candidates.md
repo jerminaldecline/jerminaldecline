@@ -1,4 +1,4 @@
-# Topic candidates — 2026-07-31
+# Topic candidates — 2026-08-01
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,29 +6,27 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 129 baseline videos
+Pool: 18 recent videos, 127 baseline videos
 
-### Cluster 1: `triggered`
+### Cluster 1: `erupted`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 0/129 videos (0%)
-- **Spike ratio:** 61.2x
-- **Related terms:** `triggered`
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/127 videos (2%)
+- **Spike ratio:** 6.1x
+- **Related terms:** `erupted`
 - **Sample recent videos:**
-  - 2026-07-27 — _THEY FIRED HER!_  
-    Customers Revolted And Cracker Barrel’s Woke CEO Is Finally Gone
-  - 2026-07-25 — _I'M GLAD ITS OVER_  
-    USAID Cuts Leave Nepalese Trans Aid Workers Selling Sex Overnight
-  - 2026-07-24 — _HE DESTROYED HER_  
-    Elon Musk Confronted About Islam And His Answer Breaks Everyone
-  - 2026-07-24 — _SHE ACTUALLY SAID IT_  
-    WNBA Star Says Biological Men Should Never Compete Against Women
+  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
+    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
+  - 2026-07-31 — _THEY'RE TERRIFED_  
+    Europe’s Border Crisis Explodes As Tens Of Thousands Flood Ceuta
+  - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
+    Madison Riots Backfire As Evidence Destroys Their Entire Narrative
 
 ### Cluster 2: `suspect`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/129 videos (2%)
-- **Spike ratio:** 6.6x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/127 videos (2%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `suspect`
 - **Sample recent videos:**
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
@@ -40,9 +38,9 @@ Pool: 17 recent videos, 129 baseline videos
 
 ### Cluster 3: `donald`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 4/129 videos (3%)
-- **Spike ratio:** 5.1x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 4/127 videos (3%)
+- **Spike ratio:** 4.7x
 - **Related terms:** `donald`, `trump`, `donald trump`
 - **Sample recent videos:**
   - 2026-07-28 — _MOST BRUTAL BACKFIRE YET_  
@@ -54,31 +52,47 @@ Pool: 17 recent videos, 129 baseline videos
 
 ### Cluster 4: `vlogs`
 
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 42/129 videos (33%)
-- **Spike ratio:** 3.1x
-- **Related terms:** `vlogs`, `quartering`, `check`, `quartering vlogs`, `out quartering`, `check out`
+- **Recent saturation:** 17/18 videos (**94%**)
+- **Baseline saturation:** 37/127 videos (29%)
+- **Spike ratio:** 3.2x
+- **Related terms:** `vlogs`, `quartering vlogs`
 - **Sample recent videos:**
+  - 2026-07-31 — _THE OUTBREAK EXPLODES_  
+    Taco Bell Parasite Nightmare Spreads As Thousands More Become Sick
+  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
+    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
   - 2026-07-30 — _SHE ATTACKED A KID_  
     Woke WNBA Owner Attacks Girls Defending Women’s Sports Publicly
   - 2026-07-30 — _ILHAN OMAR BUSTED!_  
     Ilhan Omar Faces Scrutiny As Mysterious Millions Finally Surface
   - 2026-07-30 — _JOE ROGAN BLASTS MAGA_  
     Rogan Tells Furious Conservatives To Calm Down About Elliot Page
-  - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
-    Madison Riots Backfire As Evidence Destroys Their Entire Narrative
-  - 2026-07-29 — _PLEASE GOD NO_  
-    ConservaThots Are Replacing Serious Women And Destroying The Right
 
 ## @JeremyHambly
 
-Pool: 12 recent videos, 79 baseline videos
+Pool: 12 recent videos, 78 baseline videos
 
-### Cluster 1: `vlogs candace`
+### Cluster 1: `demanding`
 
 - **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 2/79 videos (3%)
-- **Spike ratio:** 10.7x
+- **Baseline saturation:** 0/78 videos (0%)
+- **Spike ratio:** 52.7x
+- **Related terms:** `demanding`, `fifth`
+- **Sample recent videos:**
+  - 2026-07-31 — _IT'S GETTING INSANE_  
+    Alex Jones Calls Trump Tyrannical And Wants Him Removed Now
+  - 2026-07-29 — _FAUCI IMPLODES_  
+    Fauci Pleads The Fifth Over One Hundred Times During Meltdown
+  - 2026-07-27 — _SHE'S OUT OF CONTROL_  
+    Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
+  - 2026-07-27 — _MAMDANI BANNED_  
+    Hundreds Of 9/11 Families Tell Mamdani He Is Not Welcome
+
+### Cluster 2: `vlogs candace`
+
+- **Recent saturation:** 4/12 videos (**33%**)
+- **Baseline saturation:** 2/78 videos (3%)
+- **Spike ratio:** 10.5x
 - **Related terms:** `vlogs candace`
 - **Sample recent videos:**
   - 2026-07-30 — _SHE'S GETTING SUED_  
@@ -89,24 +103,6 @@ Pool: 12 recent videos, 79 baseline videos
     Candace Owens Dumps Alleged Charlie Kirk Texts As Allies Revolt
   - 2026-07-27 — _SHE'S OUT OF CONTROL_  
     Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
-
-### Cluster 2: `vlogs`
-
-- **Recent saturation:** 12/12 videos (**100%**)
-- **Baseline saturation:** 26/79 videos (33%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `vlogs`, `quartering`, `check`, `out`, `quartering vlogs`, `out quartering`, `check out`
-- **Sample recent videos:**
-  - 2026-07-30 — _SHE'S GETTING SUED_  
-    Candace Owens Falls For Fake Medical Examiner Profiles Again Online
-  - 2026-07-29 — _SHE'S SCREWED NOW_  
-    Candace Releases Bombshell Then Realizes It Proves Her Wrong
-  - 2026-07-29 — _TOTAL DESTRUCTION_  
-    Stew Peters Begged For Debate Then Refused To Defend Anything
-  - 2026-07-29 — _FAUCI IMPLODES_  
-    Fauci Pleads The Fifth Over One Hundred Times During Meltdown
-  - 2026-07-28 — _SCUMBAG MAGA SCAMMER FINDS OUT_  
-    Fake Shiloh Fundraiser Creator Panics After Alleged Fraud Gets Exposed
 
 ---
 
