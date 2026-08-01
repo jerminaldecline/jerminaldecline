@@ -1,63 +1,51 @@
 {
-  "lastUpdated": "2026-07-30T07:09:36.400Z",
+  "lastUpdated": "2026-08-01T07:01:03.016Z",
   "trackers": [
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "vlogs",
-      "keywords": [
-        "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering",
-        "check",
-        "check out",
-        "out"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3228,
-        "spikeRatio": 3.1,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 25,
-        "detectedAt": "2026-07-30T07:09:36.400Z"
-      }
-    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "vlogs",
       "keywords": [
         "vlogs",
-        "quartering vlogs",
-        "quartering",
-        "out quartering"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.9412,
-        "baselineSaturation": 0.311,
-        "spikeRatio": 3.03,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 39,
-        "detectedAt": "2026-07-30T07:09:36.400Z"
-      }
-    },
-    {
-      "channelHandle": "@QuarteringLive",
-      "termId": "check",
-      "keywords": [
-        "check",
-        "quartering",
-        "vlogs",
-        "check out",
-        "out quartering",
         "quartering vlogs"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3235,
-        "spikeRatio": 3.09,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-07-30T07:09:36.400Z"
+        "recentSaturation": 0.9444,
+        "baselineSaturation": 0.293,
+        "spikeRatio": 3.22,
+        "recentVideoCount": 17,
+        "baselineVideoCount": 37,
+        "detectedAt": "2026-08-01T07:01:03.016Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "demanding",
+      "keywords": [
+        "demanding",
+        "fifth"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0063,
+        "spikeRatio": 52.67,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-01T07:01:03.016Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "vlogs candace",
+      "keywords": [
+        "vlogs candace"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0316,
+        "spikeRatio": 10.53,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-08-01T07:01:03.016Z"
       }
     }
   ]
