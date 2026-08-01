@@ -56,7 +56,7 @@ function loadSnap(file) {
   const d = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(SNAP_DIR, file))));
   const m = new Map();
   for (const v of d.videos) m.set(v.id, v);
-  return { videos: m, channels: d.channels || {} };
+  return { videos: m, channels: d.channels || {}, at: (d.meta && Date.parse(d.meta.lastUpdated)) || 0 };
 }
 
 function main() {
@@ -83,12 +83,26 @@ function main() {
     Object.entries(cur.channels).forEach(([id, c]) => { channelTitles[id] = c.title || c.handle || id; });
 
     // per-channel [newShort, newLong, oldShort, oldLong]
+    const prevTime = prev.at || Date.parse(dates[i - 1] + 'T00:00:00Z');
     const perCh = {};
     for (const [id, v] of cur.videos) {
       const before = prev.videos.get(id);
-      if (!before) continue;                        // brand-new video: no prior baseline to diff
-      let gain = (v.views || 0) - (before.views || 0);
-      if (gain <= 0) continue;                       // clamp drops (privatisations/corrections) to zero
+      let gain;
+      if (before) {
+        gain = (v.views || 0) - (before.views || 0);
+        if (gain <= 0) continue;                     // clamp drops (privatisations/corrections) to zero
+      } else {
+        // First time this video appears. Count its whole view count ONLY if it
+        // is a genuinely new upload (published since the previous snapshot) —
+        // those views all accrued inside this window, and skipping them would
+        // drop every upload's debut burst (the biggest chunk of its views).
+        // A video merely reappearing (un-privated, or re-added by the audit)
+        // carries historical views that were NOT gained now, so skip it.
+        const pub = Date.parse(v.publishedAt || '');
+        if (!(pub > prevTime)) continue;
+        gain = v.views || 0;
+        if (gain <= 0) continue;
+      }
       const isNew = pubMonthCT(v.publishedAt) === dayMonth;
       const idx = (isNew ? 0 : 2) + (v.isShort ? 0 : 1);
       const arr = perCh[v.channelId] || (perCh[v.channelId] = [0, 0, 0, 0]);
@@ -105,7 +119,7 @@ function main() {
 
   const out = {
     _note: 'Daily view gains across the network, split by format (Shorts/long-form) and content age (this-month vs previous-months uploads), per channel. Value arrays are [newShort, newLong, oldShort, oldLong].',
-    _method: 'consecutive daily snapshot diffs (jerminaldecline-snapshots), negative per-video deltas clamped to 0; days labelled in Central Time (Wisconsin)',
+    _method: 'consecutive daily snapshot diffs (jerminaldecline-snapshots); a new upload\'s full view count is counted on first appearance (debut burst), reappearances of old videos are ignored, negative deltas clamped to 0; days labelled in Central Time (Wisconsin)',
     _generated: new Date().toISOString().slice(0, 10),
     _range: { from: dates[0], to: dates[dates.length - 2] },
     _channels: channelTitles,
