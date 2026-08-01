@@ -9555,6 +9555,7 @@ function renderWindowList(startDate, endDate) {
   window.__populatePeriodDropdowns = function(){
     const anCur = (typeof window.__getAnalysisPreset === 'function') ? window.__getAnalysisPreset() : (document.getElementById('anPeriodSel')?.value || 'all');
     populatePeriodDropdown(document.getElementById('anPeriodSel'), anCur, false);
+    if (typeof normalizeVidPreset==='function') normalizeVidPreset();
     populatePeriodDropdown(document.getElementById('vidPeriodSel'), (typeof vidTimePreset!=='undefined')?vidTimePreset:'all');
   };
   function populateAnChannel(){
@@ -9592,6 +9593,16 @@ function renderWindowList(startDate, endDate) {
   }
   // ---- Videos tab controls ----
   let vidTimePreset = CURRENT_MONTH_KEY;
+  // A month preset (YYYY-MM) that isn't in the current scope's data — e.g. the
+  // wall-clock current month on the 1st, before any uploads that month — would
+  // match no dropdown option (so the browser shows the first, "YTD") AND filter
+  // the window to an empty month. Clamp such a value to the latest month that
+  // actually has data so the dropdown label and the window always agree.
+  function normalizeVidPreset(){
+    if(!/^\d{4}-\d{2}$/.test(vidTimePreset)) return;   // preset keywords are always valid
+    let ms=[]; try{ if(typeof availableMonths==='function') ms=availableMonths(); }catch(e){}
+    if(ms.length && ms.indexOf(vidTimePreset)<0) vidTimePreset = ms.slice().sort().pop();
+  }
   function vidCutoffMonth(preset){
     const now = new Date(); const y=now.getFullYear(), mo=now.getMonth()+1;
     const k=(yy,mm)=>`${yy}-${String(mm).padStart(2,'0')}`;
@@ -9610,6 +9621,7 @@ function renderWindowList(startDate, endDate) {
   window.__syncVidWindow = function(){
     const sd=document.getElementById('startDate'), ed=document.getElementById('endDate');
     if (!sd||!ed) return;
+    normalizeVidPreset();
     // Specific month (YYYY-MM): clamp the window to exactly that month.
     if (/^\d{4}-\d{2}$/.test(vidTimePreset)) {
       const [yy,mm]=vidTimePreset.split('-').map(Number);
@@ -9633,6 +9645,7 @@ function renderWindowList(startDate, endDate) {
     if (!sel || typeof CHANNELS==='undefined' || !CHANNELS) return;
     const cur=(typeof scope!=='undefined')?scope:'ALL';
     sel.innerHTML=['ALL',...CHANNELS].map(s=>`<option value="${s}"${s===cur?' selected':''}>${(typeof SCOPE_LABEL!=='undefined'&&SCOPE_LABEL[s])||s}</option>`).join('');
+    normalizeVidPreset();
     populatePeriodDropdown(document.getElementById('vidPeriodSel'), vidTimePreset);
   };
   const vidChannelSel = document.getElementById('vidChannelSel');
