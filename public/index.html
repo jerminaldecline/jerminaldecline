@@ -3855,6 +3855,9 @@ function render(m){
   // network-wide; other state persists in window.__dvOvState across re-renders.
   window.__dvOvMonth = monthKey;
   window.__dvOvChannel = (scope === 'ALL') ? 'ALL' : (HANDLE_TO_ID[scope] || 'ALL');
+  // The Daily views card is a single-month feature; hide it entirely when the
+  // report is showing a multi-month period (YTD, All time, Last 12/24m, Since peak).
+  window.__dvOvAgg = isAgg;
   if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
 }
 
@@ -11289,6 +11292,9 @@ function renderWindowList(startDate, endDate) {
     scope=scope||'main'; const isOv=scope==='ov';
     const host=byId(isOv?"ovDailyViewsBody":"dailyViewsBody"); if(!host) return;
     const card=isOv?byId("ovDailyViews"):null;
+    // Overview: the card is scoped to a single month, so hide it when the report is
+    // in a multi-month/aggregate period (YTD, All time, etc.) where it can't apply.
+    if(isOv && window.__dvOvAgg){ if(card) card.hidden=true; return; }
     const d=dvData();
     if(!d||!d.days){ if(!isOv) host.innerHTML='<div class="vempty">Daily-view data isn’t loaded yet.</div>'; return; }
     const months=dvMonths();
