@@ -2798,6 +2798,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr .uc-mo{display:block;height:11px;line-height:11px;font-family:var(--uc-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--brand);text-transform:uppercase}
     .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
     #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+    .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
+    .dv-host .uc-tog.dv-oldtog[aria-pressed="true"] .uc-tdot{background:var(--text-muted)}
     @media(max-width:680px){
       #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
       #panelVideos a.rt b{white-space:normal}
@@ -11316,9 +11318,9 @@ function renderWindowList(startDate, endDate) {
     let minKey=months[0]; const maxKey=months[months.length-1];
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
-    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false}))
-                 :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false}));
-    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false;
+    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true}))
+                 :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
+    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
     if(st.month>maxKey) st.month=maxKey;
@@ -11327,14 +11329,14 @@ function renderWindowList(startDate, endDate) {
     const days=st.full?dvSeriesAll(ch):dvCompute(ch,st.month);
     let lastData=0; days.forEach(x=>{ if(x.inRange) lastData=x.d; });
     const isLatest=st.month===maxKey;
-    const selTot=x=>(st.lf?x.lfNew+x.lfOld:0)+(st.shorts?x.shNew+x.shOld:0);
+    const selTot=x=>(st.lf?x.lfNew+(st.showOld?x.lfOld:0):0)+(st.shorts?x.shNew+(st.showOld?x.shOld:0):0);
     let peak=1; days.forEach(x=>{ peak=Math.max(peak,selTot(x)); });
     const max=dvNiceMax(peak), DIVS=4;
     let grid=""; for(let g=0;g<=DIVS;g++){ grid+='<div class="uc-gl" style="top:'+((1-g/DIVS)*100)+'%"><span>'+dvFmt(max*g/DIVS)+'</span></div>'; }
     let cols="", xrow="";
     days.forEach(x=>{
       const wknd=x.wd>=5, nodata=!x.inRange, moL=st.full&&x.moLabel?MONF[x.mo-1]:"";
-      const lfO=st.lf?x.lfOld:0, lfN=st.lf?x.lfNew:0, shO=st.shorts?x.shOld:0, shN=st.shorts?x.shNew:0;
+      const lfO=(st.lf&&st.showOld)?x.lfOld:0, lfN=st.lf?x.lfNew:0, shO=(st.shorts&&st.showOld)?x.shOld:0, shN=st.shorts?x.shNew:0;
       const total=lfO+lfN+shO+shN;
       let inner="";
       if(!nodata){
@@ -11372,21 +11374,23 @@ function renderWindowList(startDate, endDate) {
       '<button type="button" class="dv-seriestog" onclick="__dvToggleFull(\'main\')" aria-pressed="'+(st.full?'true':'false')+'" title="Toggle the full day-by-day series (scroll across all months)">All days</button></div>'):'';
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
-      '<div class="uc-head"><div><p class="uc-eyebrow">Daily views</p><h3 class="uc-h">How many views per day?</h3></div>'+
+      '<div class="uc-head"><div><p class="uc-eyebrow">Daily views</p>'+(isOv?'':'<h3 class="uc-h">How many views per day?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
-      '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
+      '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
+      (isOv?'<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>':'')+
+      '</div></div>'+
       '<div class="uc-legend">'+
         '<span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw dv-sw lf new"></i>Long-form · this month</span>'+
-        '<span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw dv-sw lf old"></i>· prior months</span>'+
+        '<span class="uc-lfkey'+((st.lf&&st.showOld)?'':' off')+'"><i class="uc-sw dv-sw lf old"></i>· prior months</span>'+
         '<span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw dv-sw sh new"></i>Shorts · this month</span>'+
-        '<span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw dv-sw sh old"></i>· prior months</span>'+
+        '<span class="uc-shkey'+((st.shorts&&st.showOld)?'':' off')+'"><i class="uc-sw dv-sw sh old"></i>· prior months</span>'+
       '</div>'+
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
-      '<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
-      '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>';
+      (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
+      '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
     if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
@@ -11398,6 +11402,7 @@ function renderWindowList(startDate, endDate) {
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
   window.__dvToggleLong=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.lf=!st.lf; renderDailyViews(scope); };
   window.__dvToggleFull=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.full=!st.full; renderDailyViews(scope); };
+  window.__dvToggleOld=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.showOld=!st.showOld; renderDailyViews(scope); };
   window.__dvRerenderIfActive=function(){ if(active==="dailyviews") renderDailyViews('main'); };
   window.__dvRenderOverview=function(){ renderDailyViews('ov'); };
   function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
