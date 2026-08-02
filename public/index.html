@@ -2754,7 +2754,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
     .dv-host .uc-tile .uc-v{font-family:var(--uc-mono);font-size:23px;font-weight:700;margin-top:6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text)}
     .dv-host .uc-tile .uc-v small{font-size:12px;color:var(--text-dim);font-weight:600;margin-left:2px}
-    .dv-host .uc-tile .uc-note{font-size:11px;color:var(--text-dim);margin-top:2px}
+    .dv-host .uc-tile .uc-note{font-size:12px;color:var(--text-muted);margin-top:3px}
+    .dv-host .uc-tile .uc-note b{font-weight:700;color:var(--text)}
+    .dv-host .uc-tile .uc-fine{font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic}
     .dv-host .uc-tile.flag .uc-v{color:var(--down)}
     .dv-host .uc-foot{margin:12px 2px 0;font-size:11px;color:var(--text-dim);font-family:var(--uc-mono)}
     #ucTip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.7);opacity:0;transition:opacity .1s;min-width:140px;color:var(--text)}
@@ -11379,9 +11381,9 @@ function renderWindowList(startDate, endDate) {
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
-      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+newLab+'</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · '+dvFmt(totNew)+' total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+oldLab+'</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · '+dvFmt(totOld)+' total'+pwNote+'</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note">'+dvFmt(tot)+' over '+nDays+' days</div></div>';
+      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+newLab+'</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+oldLab+'</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total'+pwNote+'</div><div class="uc-fine">These views are also tallied under their own months</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
     let yearOpts=""; years.forEach(y=>{ yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>'; });
