@@ -11319,15 +11319,13 @@ function renderWindowList(startDate, endDate) {
                  :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
     if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
-    // Overview: scope the card to the month the report is showing (window.__dvOvMonth,
-    // set by render()), but CLAMP it into the daily-view data range. Channels with
-    // no recent uploads make the report jump to an old month outside the snapshot
-    // window; clamping means we still show their recent historical/prior-month view
-    // gains for the nearest in-range month instead of blanking the card.
-    if(isOv && window.__dvOvMonth){
-      let want=window.__dvOvMonth;
-      if(want>maxKey) want=maxKey; else if(want<minKey) want=minKey;
-      if(months.indexOf(want)<0) want=maxKey;
+    // Overview: scope strictly to the report's selected month (window.__dvOvMonth,
+    // set by render()). The card is single-month and only has daily-view data from
+    // July 2026 on, so HIDE (don't clamp) for any month outside that range —
+    // pre-July months have no/incomplete data, and periods are handled above.
+    if(isOv){
+      const want=window.__dvOvMonth;
+      if(!want || want<minKey || want>maxKey || months.indexOf(want)<0){ if(card) card.hidden=true; return; }
       st.month=want;
     }
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
