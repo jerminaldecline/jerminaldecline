@@ -3733,6 +3733,8 @@ function render(m){
     </div>
     <!-- Daily views card: sits directly under the Topics cards, above Shorts activity & Views trend -->
     <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
+    <!-- Uploads card: overview version of "Upload cadence", scoped to the report's month/channel; sits under Daily views -->
+    <div class="ov-dailyviews-card dv-host" id="ovCadence" hidden><div class="dailyviews-body" id="ovCadenceBody"></div></div>
     <div class="breadth">
       <div class="shorts-strip${mForLinks ? ' shorts-link' : ''}"${mForLinks ? ` data-goto-videos="short" data-vid-month="${mForLinks}" role="button" tabindex="0"` : ''}>
         <div class="shorts-head">
@@ -3861,6 +3863,8 @@ function render(m){
   // report is showing a multi-month period (YTD, All time, Last 12/24m, Since peak).
   window.__dvOvAgg = isAgg;
   if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
+  // Overview "Uploads" card (mirrors the Videos-tab Upload cadence).
+  if (typeof window.__ucRenderOverview === 'function') window.__ucRenderOverview();
 }
 
 function refresh(month){
@@ -11150,30 +11154,45 @@ function renderWindowList(startDate, endDate) {
     for(let d=1;d<=dim;d++){ const wd=(new Date(Date.UTC(Y,M-1,d)).getUTCDay()+6)%7; const b=buckets[d]||{lf:0,sh:0}; out.push({d,wd,lf:b.lf,sh:b.sh}); }
     return out;
   }
-  function renderUploadCadence(){
-    const host=byId("cadenceBody"); if(!host) return;
+  function renderUploadCadence(scope){
+    scope=scope||'main'; const isOv=scope==='ov';
+    const host=byId(isOv?"ovCadenceBody":"cadenceBody"); if(!host) return;
+    const card=isOv?byId("ovCadence"):null;
+    // Overview: single-month feature — hide for multi-month/aggregate periods.
+    if(isOv && window.__dvOvAgg){ if(card) card.hidden=true; return; }
     const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
-    if(!ds||!ds.videos){host.innerHTML='<div class="vempty">No data loaded.</div>';return;}
+    if(!ds||!ds.videos){ if(!isOv) host.innerHTML='<div class="vempty">No data loaded.</div>'; return; }
     const chans=ds.channels||{};
-    const sel=byId("vidChannelSel")||byId("anChannelSel");
-    let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
-    if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
+    let ch;
+    if(isOv){ ch=window.__dvOvChannel||"ALL"; }   // overview: follow the report's channel filter
+    else { const sel=byId("vidChannelSel")||byId("anChannelSel");
+      ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+      if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";} }
     const chName=ch==="ALL"?"All channels":((chans[ch]&&(chans[ch].title||chans[ch].handle))||"this channel");
     const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
     const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
     const DOW=["M","T","W","T","F","S","S"];
-    const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true});
+    const st=isOv?(window.__ucOvState||(window.__ucOvState={month:null,shorts:false,lf:true}))
+                 :(window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}));
     if(st.lf===undefined) st.lf=true;
-    if(st.shorts===undefined) st.shorts=true;
+    if(st.shorts===undefined) st.shorts=isOv?false:true;
     const nowP=ucLocalParts(new Date().toISOString()), curKey=nowP.ym;
     // Full-history range for this channel scope (his local calendar months).
     let minKey=null;
     for(const v of ds.videos){ if(ch!=="ALL"&&v.channelId!==ch) continue; const p=v.publishedAt; if(!p) continue; const ym=ucLocalParts(p).ym; if(!minKey||ym<minKey) minKey=ym; }
     if(!minKey) minKey=curKey;
-    if(!st.month) st.month=curKey;               // default view: current month
-    if(st.month>curKey) st.month=curKey;
-    if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
+    if(isOv){
+      // Overview: scope to the report's selected month; hide if that month predates
+      // the channel's first upload (or is in the future).
+      const want=window.__dvOvMonth;
+      if(!want || want<minKey || want>curKey){ if(card) card.hidden=true; return; }
+      st.month=want;
+    } else {
+      if(!st.month) st.month=curKey;               // default view: current month
+      if(st.month>curKey) st.month=curKey;
+      if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
+    }
     const days=ucCompute(ds,ch,st.month);
     const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
     let peak=1; days.forEach(x=>{peak=Math.max(peak,(st.lf?x.lf:0)+(st.shorts?x.sh:0));});
@@ -11190,7 +11209,7 @@ function renderWindowList(startDate, endDate) {
         if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
         if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
       }
-      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-mo="'+MONF[(+st.month.slice(5,7))-1]+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
     });
     let todayLine="";
@@ -11200,36 +11219,41 @@ function renderWindowList(startDate, endDate) {
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
     const totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
     const summary=
-      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">'+sum(wd,"lf")+' across '+wd.length+' weekdays</div></div>'+
-      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs '+weSH.toFixed(1)+'/day Shorts on weekends</div></div>'+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note"><b>'+sum(wd,"lf")+'</b> across '+wd.length+' weekdays</div></div>'+
+      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs <b>'+weSH.toFixed(1)+'</b>/day Shorts on weekends</div></div>'+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+totLF+'</b> long-form · <b>'+totSH+'</b> Shorts'+(isCur?' · so far':'')+'</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
     for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
-    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>';
+    const nav=isOv?'':('<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>');
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
-      '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3></div>'+
+      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
-      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
-      '<button type="button" class="uc-tog" onclick="__ucToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
+      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
+      '<button type="button" class="uc-tog" onclick="__ucToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
       '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
-      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>';
+      (isOv?'':('<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>'));
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
+    if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
   }
-  window.__ucSetMonthNum=function(m){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(); };
-  window.__ucSetYear=function(y){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(); };
-  window.__ucToggleShorts=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.shorts=!st.shorts; renderUploadCadence(); };
-  window.__ucToggleLong=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.lf=!st.lf; renderUploadCadence(); };
+  function _ucst(scope){ return (scope==='ov') ? (window.__ucOvState||(window.__ucOvState={month:null,shorts:false,lf:true})) : (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})); }
+  window.__ucSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_ucst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(scope); };
+  window.__ucSetYear=function(y,scope){ scope=scope||'main'; const st=_ucst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(scope); };
+  window.__ucToggleShorts=function(scope){ scope=scope||'main'; const st=_ucst(scope); st.shorts=!st.shorts; renderUploadCadence(scope); };
+  window.__ucToggleLong=function(scope){ scope=scope||'main'; const st=_ucst(scope); st.lf=!st.lf; renderUploadCadence(scope); };
+  window.__ucRenderOverview=function(){ renderUploadCadence('ov'); };
   function __ucEnsureTip(){ let t=byId("ucTip"); if(!t){t=document.createElement("div");t.id="ucTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
   function __ucTip(e){
     const c=e.target.closest(".uc-col"), tip=__ucEnsureTip(); if(!c){tip.style.opacity="0";return;}
-    const d=c.dataset, mn=window.__ucCurMonthName||"", st=window.__ucState||{shorts:true};
+    const d=c.dataset, mn=d.mo||window.__ucCurMonthName||"";
+    // Use the state of the card actually being hovered (Overview vs Videos-tab).
+    const st=(c.closest('#ovCadence')?window.__ucOvState:window.__ucState)||{shorts:true};
     let html;
     if(d.future==="1"){ html='<div class="uc-ttday">'+mn+' '+d.d+'</div><div class="uc-ttnone">not yet published</div>'; }
     else{
