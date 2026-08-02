@@ -11422,7 +11422,10 @@ function renderWindowList(startDate, endDate) {
   function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
   function __dvTip(e){
     const c=e.target.closest(".uc-col"), tip=__dvEnsureTip(); if(!c){tip.style.opacity="0";return;}
-    const dd=c.dataset, mn=dd.mo||window.__dvCurMonthName||"", st=window.__dvState||{lf:true,shorts:false};
+    const dd=c.dataset, mn=dd.mo||window.__dvCurMonthName||"";
+    // Use the state of the card actually being hovered — the Overview card and the
+    // Videos-tab card have independent toggles (__dvOvState vs __dvState).
+    const st=(c.closest('#ovDailyViews')?window.__dvOvState:window.__dvState)||{lf:true,shorts:false};
     let html;
     if(dd.nodata==="1"){ html='<div class="uc-ttday">'+mn+' '+dd.d+'</div><div class="uc-ttnone">no snapshot data</div>'; }
     else{
