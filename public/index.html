@@ -3854,6 +3854,7 @@ function render(m){
   // the card hides itself if that month has no daily-view data. It stays
   // network-wide; other state persists in window.__dvOvState across re-renders.
   window.__dvOvMonth = monthKey;
+  window.__dvOvChannel = (scope === 'ALL') ? 'ALL' : (HANDLE_TO_ID[scope] || 'ALL');
   if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
 }
 
@@ -11295,7 +11296,7 @@ function renderWindowList(startDate, endDate) {
     const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
     const chans=(ds&&ds.channels)||{};
     let ch;
-    if(isOv){ ch="ALL"; }                          // overview widget is always network-wide
+    if(isOv){ ch=window.__dvOvChannel||"ALL"; }    // overview: follow the report's channel filter (set by render())
     else { const sel=byId("vidChannelSel")||byId("anChannelSel");
       ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
       if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";} }
