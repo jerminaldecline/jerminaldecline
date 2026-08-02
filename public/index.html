@@ -11318,9 +11318,9 @@ function renderWindowList(startDate, endDate) {
     let minKey=months[0]; const maxKey=months[months.length-1];
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
-    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true}))
+    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:false}))
                  :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
-    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
+    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=isOv?false:true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
     if(st.month>maxKey) st.month=maxKey;
@@ -11396,7 +11396,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
   }
-  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:false})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
   window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
