@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-01
+# Topic candidates — 2026-08-02
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,27 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 127 baseline videos
+Pool: 17 recent videos, 125 baseline videos
 
-### Cluster 1: `erupted`
+### Cluster 1: `killed`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/127 videos (2%)
-- **Spike ratio:** 6.1x
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 1/125 videos (1%)
+- **Spike ratio:** 14.8x
+- **Related terms:** `killed`
+- **Sample recent videos:**
+  - 2026-08-01 — _HE WENT NUCLEAR_  
+    He Killed A Six-Year-Old Boy And Now He Walks Free
+  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
+    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
+  - 2026-07-27 — _RACE RIOTS BEGIN_  
+    Knife Wielding Suspect Shot By Police As Leftist Chaos Explodes
+
+### Cluster 2: `erupted`
+
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 3/125 videos (2%)
+- **Spike ratio:** 6.4x
 - **Related terms:** `erupted`
 - **Sample recent videos:**
   - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
@@ -22,11 +36,11 @@ Pool: 18 recent videos, 127 baseline videos
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
     Madison Riots Backfire As Evidence Destroys Their Entire Narrative
 
-### Cluster 2: `suspect`
+### Cluster 3: `suspect`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/127 videos (2%)
-- **Spike ratio:** 6.1x
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 3/125 videos (2%)
+- **Spike ratio:** 6.4x
 - **Related terms:** `suspect`
 - **Sample recent videos:**
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
@@ -36,47 +50,15 @@ Pool: 18 recent videos, 127 baseline videos
   - 2026-07-27 — _THEY ASKED FOR IT_  
     ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
 
-### Cluster 3: `donald`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/127 videos (3%)
-- **Spike ratio:** 4.7x
-- **Related terms:** `donald`, `trump`, `donald trump`
-- **Sample recent videos:**
-  - 2026-07-28 — _MOST BRUTAL BACKFIRE YET_  
-    He Promised Free Beer When Trump Dies Now Business Collapses
-  - 2026-07-28 — _HIS CAREER IS OVER_  
-    Alan Ritchson Wants Political Opponents Waking Up Covered In Blood
-  - 2026-07-25 — _TRUMP WENT NUCLEAR_  
-    Trump Humiliates Kaitlan Collins Before Wearing His Trump 2028 Hat
-
-### Cluster 4: `vlogs`
-
-- **Recent saturation:** 17/18 videos (**94%**)
-- **Baseline saturation:** 37/127 videos (29%)
-- **Spike ratio:** 3.2x
-- **Related terms:** `vlogs`, `quartering vlogs`
-- **Sample recent videos:**
-  - 2026-07-31 — _THE OUTBREAK EXPLODES_  
-    Taco Bell Parasite Nightmare Spreads As Thousands More Become Sick
-  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
-    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
-  - 2026-07-30 — _SHE ATTACKED A KID_  
-    Woke WNBA Owner Attacks Girls Defending Women’s Sports Publicly
-  - 2026-07-30 — _ILHAN OMAR BUSTED!_  
-    Ilhan Omar Faces Scrutiny As Mysterious Millions Finally Surface
-  - 2026-07-30 — _JOE ROGAN BLASTS MAGA_  
-    Rogan Tells Furious Conservatives To Calm Down About Elliot Page
-
 ## @JeremyHambly
 
-Pool: 12 recent videos, 78 baseline videos
+Pool: 12 recent videos, 75 baseline videos
 
 ### Cluster 1: `demanding`
 
 - **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 0/78 videos (0%)
-- **Spike ratio:** 52.7x
+- **Baseline saturation:** 0/75 videos (0%)
+- **Spike ratio:** 50.7x
 - **Related terms:** `demanding`, `fifth`
 - **Sample recent videos:**
   - 2026-07-31 — _IT'S GETTING INSANE_  
@@ -91,8 +73,8 @@ Pool: 12 recent videos, 78 baseline videos
 ### Cluster 2: `vlogs candace`
 
 - **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 2/78 videos (3%)
-- **Spike ratio:** 10.5x
+- **Baseline saturation:** 2/75 videos (3%)
+- **Spike ratio:** 10.1x
 - **Related terms:** `vlogs candace`
 - **Sample recent videos:**
   - 2026-07-30 — _SHE'S GETTING SUED_  
