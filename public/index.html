@@ -3850,8 +3850,10 @@ function render(m){
 
   // The Overview's Daily views card now lives inside the report markup (between
   // the Topics cards and the Shorts/Views-trend row), so it must be (re)rendered
-  // after each report render. It's network-wide and independent of the report's
-  // month/scope; state persists in window.__dvOvState across re-renders.
+  // after each report render. Scope it to the report's active month (monthKey);
+  // the card hides itself if that month has no daily-view data. It stays
+  // network-wide; other state persists in window.__dvOvState across re-renders.
+  window.__dvOvMonth = monthKey;
   if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
 }
 
@@ -11310,6 +11312,14 @@ function renderWindowList(startDate, endDate) {
                  :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
     if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
+    // Overview: scope the card to the month the report is showing (window.__dvOvMonth,
+    // set by render()). If that month has no daily-view data, hide the card rather
+    // than silently showing a different month.
+    if(isOv && window.__dvOvMonth){
+      const want=window.__dvOvMonth;
+      if(want<minKey || want>maxKey || months.indexOf(want)<0){ if(card) card.hidden=true; return; }
+      st.month=want;
+    }
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
     if(st.month>maxKey) st.month=maxKey;
     if(st.month<minKey) st.month=minKey;
