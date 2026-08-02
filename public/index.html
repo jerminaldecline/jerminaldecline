@@ -2346,7 +2346,6 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
   <section class="ds-tabpanel" data-panel="overview" id="panelOverview">
     <div class="report" id="report"><div style="padding:3rem;text-align:center;color:var(--subtext)">Loading…</div></div>
-    <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
   </section>
 
   <section class="ds-tabpanel" data-panel="analysis" id="panelAnalysis" hidden>
@@ -3729,17 +3728,9 @@ function render(m){
           <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.views}</div>
-      <!-- "Month & year comparison" panel hidden from Overview (info available elsewhere on the page/site) -->
-      <div class="panel mini-trend-panel">
-        <div class="mini-trend-header">
-          <h3>Views trend</h3>
-          ${(()=>{ if(miniTrendState.scope===null) miniTrendState.scope = (PEAKS&&PEAKS[scope])?scope:'ALL'; return renderMiniTrendControls(); })()}
-        </div>
-        <div class="mini-trend-body" id="miniTrendBody">
-          ${(PEAKS&&PEAKS[miniTrendState.scope]) ? renderMiniTrendChart() : '<div class="empty">No trend data.</div>'}
-        </div>
-      </div>
     </div>
+    <!-- Daily views card: sits directly under the Topics cards, above Shorts activity & Views trend -->
+    <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
     <div class="breadth">
       <div class="shorts-strip${mForLinks ? ' shorts-link' : ''}"${mForLinks ? ` data-goto-videos="short" data-vid-month="${mForLinks}" role="button" tabindex="0"` : ''}>
         <div class="shorts-head">
@@ -3756,7 +3747,15 @@ function render(m){
           <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+escapeHtml(SD.best.ch) : ''}</div>
         </div>` : ''}
       </div>
-      <!-- "Across the network" panel hidden from Overview (info available elsewhere on the page/site) -->
+      <div class="panel mini-trend-panel">
+        <div class="mini-trend-header">
+          <h3>Views trend</h3>
+          ${(()=>{ if(miniTrendState.scope===null) miniTrendState.scope = (PEAKS&&PEAKS[scope])?scope:'ALL'; return renderMiniTrendControls(); })()}
+        </div>
+        <div class="mini-trend-body" id="miniTrendBody">
+          ${(PEAKS&&PEAKS[miniTrendState.scope]) ? renderMiniTrendChart() : '<div class="empty">No trend data.</div>'}
+        </div>
+      </div>
     </div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
@@ -3848,6 +3847,12 @@ function render(m){
       if (hint) hint.textContent = exp ? 'Show ▾' : 'Hide ▴';
     };
   }
+
+  // The Overview's Daily views card now lives inside the report markup (between
+  // the Topics cards and the Shorts/Views-trend row), so it must be (re)rendered
+  // after each report render. It's network-wide and independent of the report's
+  // month/scope; state persists in window.__dvOvState across re-renders.
+  if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
 }
 
 function refresh(month){
@@ -11252,8 +11257,8 @@ function renderWindowList(startDate, endDate) {
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
   // Raw four buckets per day (toggles applied at render time, not here).
-  function dvRoll(rec, ch){ let shNew=0,lfNew=0,shOld=0,lfOld=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; };
-    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); } return {shNew,lfNew,shOld,lfOld}; }
+  function dvRoll(rec, ch){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
+    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
   function dvCompute(ch, monthKey){
     const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
     const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
@@ -11261,7 +11266,7 @@ function renderWindowList(startDate, endDate) {
       const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
       const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch);
       const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
-      out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,inRange});
+      out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
     }
     return out;
   }
@@ -11272,7 +11277,7 @@ function renderWindowList(startDate, endDate) {
     for(const ds of dates){
       const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch);
       const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
-      out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,inRange:true,moLabel:M!==prevMo?1:0});
+      out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
       prevMo=M;
     }
     return out;
@@ -11338,14 +11343,23 @@ function renderWindowList(startDate, endDate) {
     const plotW=Math.max(640, days.length*(st.full?17:20)+40);
     const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
     const selNew=x=>(st.lf?x.lfNew:0)+(st.shorts?x.shNew:0), selOld=x=>(st.lf?x.lfOld:0)+(st.shorts?x.shOld:0);
+    const selPW=x=>(st.lf?(x.lfPW||0):0)+(st.shorts?(x.shPW||0):0);
     const totNew=inD.reduce((s,x)=>s+selNew(x),0), totOld=inD.reduce((s,x)=>s+selOld(x),0), tot=totNew+totOld;
+    const totPW=inD.reduce((s,x)=>s+selPW(x),0);
     const avgNew=totNew/nDays, avgOld=totOld/nDays, avg=tot/nDays;
     const pctNew=tot>0?Math.round(totNew/tot*100):0;
+    // "Final week of the previous month" — a recency slice of the prior-months
+    // bucket (data._pw). Only meaningful in single-month mode.
+    const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
+    const pwNote=(dvHasPW&&!st.full&&totOld>0)
+      ? ' · <b>'+dvFmt(totPW)+'</b> from '+_prevMonName+'’s final week'
+      : '';
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
       '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+newLab+'</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · '+dvFmt(totNew)+' total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+oldLab+'</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · '+dvFmt(totOld)+' total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+oldLab+'</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · '+dvFmt(totOld)+' total'+pwNote+'</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note">'+dvFmt(tot)+' over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);

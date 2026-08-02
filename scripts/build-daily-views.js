@@ -52,6 +52,20 @@ function pubMonthCT(iso) {
   return ym;
 }
 
+// Publish DATE (YYYY-MM-DD) in Central time — used to flag the "final week of the
+// previous month" slice of the prior-months bucket (a recency cut, not a new bucket).
+const _fmtD = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
+const _pdCache = new Map();
+function pubDateCT(iso) {
+  if (!iso) return null;
+  if (_pdCache.has(iso)) return _pdCache.get(iso);
+  let ymd;
+  try { const o = {}; for (const x of _fmtD.formatToParts(new Date(iso))) if (x.type !== 'literal') o[x.type] = x.value; ymd = o.year + '-' + o.month + '-' + o.day; }
+  catch (e) { ymd = String(iso).slice(0, 10); }
+  _pdCache.set(iso, ymd);
+  return ymd;
+}
+
 function loadSnap(file) {
   const d = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(SNAP_DIR, file))));
   const m = new Map();
@@ -79,6 +93,12 @@ function main() {
   for (let i = 1; i < dates.length; i++) {
     const labelDate = dates[i - 1];                 // gain over ~CT day = earlier snapshot's date
     const dayMonth = labelDate.slice(0, 7);         // this-month test is against the labelled day's month
+    // Previous calendar month + the first day of its final 7-day window. Used to
+    // flag the freshest slice of the "previous months" bucket.
+    const _dmY = +dayMonth.slice(0, 4), _dmM = +dayMonth.slice(5, 7);
+    const _pmY = _dmM === 1 ? _dmY - 1 : _dmY, _pmM = _dmM === 1 ? 12 : _dmM - 1;
+    const prevMonth = _pmY + '-' + String(_pmM).padStart(2, '0');
+    const prevMonthCutoff = new Date(Date.UTC(_pmY, _pmM, 0)).getUTCDate() - 6; // last 7 days inclusive
     const cur = loadSnap(byDate.get(dates[i]).file);
     Object.entries(cur.channels).forEach(([id, c]) => { channelTitles[id] = c.title || c.handle || id; });
 
@@ -105,20 +125,29 @@ function main() {
       }
       const isNew = pubMonthCT(v.publishedAt) === dayMonth;
       const idx = (isNew ? 0 : 2) + (v.isShort ? 0 : 1);
-      const arr = perCh[v.channelId] || (perCh[v.channelId] = [0, 0, 0, 0]);
+      const arr = perCh[v.channelId] || (perCh[v.channelId] = [0, 0, 0, 0, 0, 0]);
       arr[idx] += gain;
+      // Prev-month-final-week: an *additional* recency tally over the old bucket
+      // (already counted above) — uploads from the last 7 days of the prev month.
+      if (!isNew) {
+        const pd = pubDateCT(v.publishedAt);
+        if (pd && pd.slice(0, 7) === prevMonth && (+pd.slice(8, 10)) >= prevMonthCutoff) {
+          arr[4 + (v.isShort ? 0 : 1)] += gain;
+        }
+      }
     }
     // Drop channels with no gains that day; round to ints.
     const rec = {};
     for (const [id, arr] of Object.entries(perCh)) {
-      if (arr[0] || arr[1] || arr[2] || arr[3]) rec[id] = arr.map(n => Math.round(n));
+      if (arr.some(n => n)) rec[id] = arr.map(n => Math.round(n));
     }
     days[labelDate] = rec;
     prev = cur;
   }
 
   const out = {
-    _note: 'Daily view gains across the network, split by format (Shorts/long-form) and content age (this-month vs previous-months uploads), per channel. Value arrays are [newShort, newLong, oldShort, oldLong].',
+    _note: 'Daily view gains across the network, split by format (Shorts/long-form) and content age (this-month vs previous-months uploads), per channel. Value arrays are [newShort, newLong, oldShort, oldLong, prevWeekShort, prevWeekLong] — the last two are a recency subset of the old buckets: views on uploads from the final 7 days of the previous calendar month.',
+    _pw: true,
     _method: 'consecutive daily snapshot diffs (jerminaldecline-snapshots); a new upload\'s full view count is counted on first appearance (debut burst), reappearances of old videos are ignored, negative deltas clamped to 0; days labelled in Central Time (Wisconsin)',
     _generated: new Date().toISOString().slice(0, 10),
     _range: { from: dates[0], to: dates[dates.length - 2] },
