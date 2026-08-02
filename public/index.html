@@ -2700,6 +2700,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:2px}
     .dv-host .uc-eyebrow{font-family:var(--uc-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:0 0 3px}
     .dv-host .uc-h{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.01em;color:var(--text)}
+    .dv-host .uc-h-ov{font-size:1.5rem;letter-spacing:-.02em}
     .dv-host .uc-sub{font-size:0.8rem;color:var(--text-muted);margin:4px 0 0}
     .dv-host .uc-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .dv-host .uc-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
@@ -3728,18 +3729,7 @@ function render(m){
           <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.views}</div>
-      ${isAgg ? '' : `<div class="panel">
-        <h3>Month &amp; year comparison</h3>
-        <table class="cmp-table">
-          <tr><th></th><th class="now">${monthShort(m)}</th><th>${monthShort(pm)}</th><th>${monthShort(yo)}</th></tr>
-          <tr><td>Total views</td><td class="now">${fmt(d.tot)}</td><td>${p?fmt(p.tot):'—'}</td><td>${y?fmt(y.tot):'—'}</td></tr>
-          <tr><td>Average views</td><td class="now">${fmt(d.med)}</td><td>${p?fmt(p.med):'—'}</td><td>${y?fmt(y.med):'—'}</td></tr>
-          <tr><td>Uploads</td><td class="now">${d.n}</td><td>${p?p.n:'—'}</td><td>${y?y.n:'—'}</td></tr>
-          <tr><td>Like rate</td><td class="now">${d.lv}%</td><td>${p?p.lv+'%':'—'}</td><td>${y?y.lv+'%':'—'}</td></tr>
-          <tr><td>Comments</td><td class="now">${fmt(d.comments)}</td><td>${p?fmt(p.comments):'—'}</td><td>${y?fmt(y.comments):'—'}</td></tr>
-          <tr><td>Est. revenue</td><td class="now">${money(d.revlo)}</td><td>${p?money(p.revlo):'—'}</td><td>${y?money(y.revlo):'—'}</td></tr>
-        </table>
-      </div>`}
+      <!-- "Month & year comparison" panel hidden from Overview (info available elsewhere on the page/site) -->
       <div class="panel mini-trend-panel">
         <div class="mini-trend-header">
           <h3>Views trend</h3>
@@ -3766,14 +3756,7 @@ function render(m){
           <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+escapeHtml(SD.best.ch) : ''}</div>
         </div>` : ''}
       </div>
-      ${isAgg ? '' : `<div class="panel net-panel">
-        <h3>Across the network</h3>
-        <table class="net-table">
-          <tr><th rowspan="2" class="net-ch-h">Channel</th><th colspan="2" class="net-grp">Long-form</th><th colspan="2" class="net-grp net-grp-s">Shorts</th></tr>
-          <tr><th class="net-sub">Uploads</th><th class="net-sub">Views</th><th class="net-sub divcol">Uploads</th><th class="net-sub">Views</th></tr>
-          ${netRows}
-        </table>
-      </div>`}
+      <!-- "Across the network" panel hidden from Overview (info available elsewhere on the page/site) -->
     </div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
@@ -11318,9 +11301,9 @@ function renderWindowList(startDate, endDate) {
     let minKey=months[0]; const maxKey=months[months.length-1];
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
-    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:false}))
+    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true}))
                  :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
-    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=isOv?false:true;
+    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
     if(st.month>maxKey) st.month=maxKey;
@@ -11374,7 +11357,7 @@ function renderWindowList(startDate, endDate) {
       '<button type="button" class="dv-seriestog" onclick="__dvToggleFull(\'main\')" aria-pressed="'+(st.full?'true':'false')+'" title="Toggle the full day-by-day series (scroll across all months)">All days</button></div>'):'';
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
-      '<div class="uc-head"><div><p class="uc-eyebrow">Daily views</p>'+(isOv?'':'<h3 class="uc-h">How many views per day?</h3>')+'</div>'+
+      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Daily views</h3>':'<p class="uc-eyebrow">Daily views</p><h3 class="uc-h">How many views per day?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
@@ -11396,7 +11379,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
   }
-  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:false})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
   window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
