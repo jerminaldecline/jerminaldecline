@@ -11314,11 +11314,14 @@ function renderWindowList(startDate, endDate) {
     if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
     // Overview: scope the card to the month the report is showing (window.__dvOvMonth,
-    // set by render()). If that month has no daily-view data, hide the card rather
-    // than silently showing a different month.
+    // set by render()), but CLAMP it into the daily-view data range. Channels with
+    // no recent uploads make the report jump to an old month outside the snapshot
+    // window; clamping means we still show their recent historical/prior-month view
+    // gains for the nearest in-range month instead of blanking the card.
     if(isOv && window.__dvOvMonth){
-      const want=window.__dvOvMonth;
-      if(want<minKey || want>maxKey || months.indexOf(want)<0){ if(card) card.hidden=true; return; }
+      let want=window.__dvOvMonth;
+      if(want>maxKey) want=maxKey; else if(want<minKey) want=minKey;
+      if(months.indexOf(want)<0) want=maxKey;
       st.month=want;
     }
     if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
@@ -11353,6 +11356,9 @@ function renderWindowList(startDate, endDate) {
     if(!st.full && isLatest && lastData>0 && lastData<days.length){ const n=days.length, idx=lastData-1; asLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>latest: '+MONF[(+st.month.split("-")[1])-1]+' '+lastData+'</span></div>'; }
     const plotW=Math.max(640, days.length*(st.full?17:20)+40);
     const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
+    // Overview: only hide when this channel/month has NO view data at all (toggle-
+    // independent). Channels with small historical (prior-month) views still show.
+    if(isOv){ const rawTot=inD.reduce((s,x)=>s+x.lfNew+x.lfOld+x.shNew+x.shOld,0); if(rawTot===0){ if(card) card.hidden=true; return; } }
     const selNew=x=>(st.lf?x.lfNew:0)+(st.shorts?x.shNew:0), selOld=x=>(st.lf?x.lfOld:0)+(st.shorts?x.shOld:0);
     const selPW=x=>(st.lf?(x.lfPW||0):0)+(st.shorts?(x.shPW||0):0);
     const totNew=inD.reduce((s,x)=>s+selNew(x),0), totOld=inD.reduce((s,x)=>s+selOld(x),0), tot=totNew+totOld;
