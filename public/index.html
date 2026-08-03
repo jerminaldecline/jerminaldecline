@@ -11424,6 +11424,7 @@ function renderWindowList(startDate, endDate) {
     const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
     const oldInfo=((dvHasPW&&!st.full&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
+    const newInfo='Views these videos gained during the month itself (from the daily snapshots) — not their all-time total, which keeps rising after the month ends. So it reads a little below the lifetime views of videos published this month.';
     // Views excluded because the video has since been removed (privatised/deleted),
     // matching the current format + prior-months toggles so the note tracks the chart.
     let remViews=0; { const R=(d&&d.removed)||{};
@@ -11434,7 +11435,7 @@ function renderWindowList(startDate, endDate) {
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
-      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+newLab+'</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'<span>'+newLab+' <span class="uc-i" tabindex="0" title="'+esc(newInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" title="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
