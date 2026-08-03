@@ -3606,7 +3606,7 @@ function render(m){
       </div>
       ${hlStats(d.debate)}
     </div>` : '';
-  const worstHTML = d.worstvid ? `
+  const worstHTML = (d.worstvid && !(d.topvid && d.worstvid.id === d.topvid.id)) ? `
     <div class="hl worst">
       <div>
         ${labelRow(`Worst performer <span class="info-icon" tabindex="0" role="button" aria-label="About worst performer" data-popover="The month's least-watched long-form upload${d.worstvid.vsmed != null ? ` — ${d.worstvid.vsmed}% of the median` : ''}.">ⓘ</span>`, d.worstvid)}
@@ -3740,7 +3740,7 @@ function render(m){
       </div>
     </div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
-    <div class="highlights">${topHTML}${worstHTML}${debHTML}</div>
+    ${d.n >= 2 ? `<div class="highlights">${topHTML}${worstHTML}${debHTML}</div>` : ''}
     <div class="lower">
       <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
