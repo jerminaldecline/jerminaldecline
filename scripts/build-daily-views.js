@@ -85,7 +85,19 @@ function main() {
   const dates = [...byDate.keys()].sort();
   if (dates.length < 2) { console.error('Need at least two daily snapshots.'); process.exit(1); }
 
+  // Videos that are currently unavailable (privatised / deleted). The rest of the
+  // site excludes these everywhere, so the main buckets do too — their view gains
+  // are tallied separately into `removed` so the panel can note how many views
+  // came from since-removed videos.
+  const unavailableIds = new Set();
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'public', 'data.json'), 'utf8'));
+    for (const v of (data.videos || [])) if (v.unavailable) unavailableIds.add(v.id);
+    console.log('unavailable videos excluded from main counts: ' + unavailableIds.size);
+  } catch (e) { console.warn('Could not load data.json for the unavailable filter — nothing excluded:', e.message); }
+
   const days = {};
+  const removed = {};                       // [newShort, newLong, oldShort, oldLong] of since-removed videos' gains
   const channelTitles = {};
   let prev = loadSnap(byDate.get(dates[0]).file);
   Object.entries(prev.channels).forEach(([id, c]) => { channelTitles[id] = c.title || c.handle || id; });
@@ -105,6 +117,7 @@ function main() {
     // per-channel [newShort, newLong, oldShort, oldLong]
     const prevTime = prev.at || Date.parse(dates[i - 1] + 'T00:00:00Z');
     const perCh = {};
+    const remCh = {};
     for (const [id, v] of cur.videos) {
       const before = prev.videos.get(id);
       let gain;
@@ -124,6 +137,12 @@ function main() {
         if (gain <= 0) continue;
       }
       const isNew = pubMonthCT(v.publishedAt) === dayMonth;
+      // Since-removed video: tally into `removed`, keep out of the main buckets.
+      if (unavailableIds.has(id)) {
+        const rarr = remCh[v.channelId] || (remCh[v.channelId] = [0, 0, 0, 0]);
+        rarr[(isNew ? 0 : 2) + (v.isShort ? 0 : 1)] += gain;
+        continue;
+      }
       const idx = (isNew ? 0 : 2) + (v.isShort ? 0 : 1);
       const arr = perCh[v.channelId] || (perCh[v.channelId] = [0, 0, 0, 0, 0, 0]);
       arr[idx] += gain;
@@ -142,23 +161,28 @@ function main() {
       if (arr.some(n => n)) rec[id] = arr.map(n => Math.round(n));
     }
     days[labelDate] = rec;
+    const remRec = {};
+    for (const [id, arr] of Object.entries(remCh)) { if (arr.some(n => n)) remRec[id] = arr.map(n => Math.round(n)); }
+    if (Object.keys(remRec).length) removed[labelDate] = remRec;
     prev = cur;
   }
 
   const out = {
-    _note: 'Daily view gains across the network, split by format (Shorts/long-form) and content age (this-month vs previous-months uploads), per channel. Value arrays are [newShort, newLong, oldShort, oldLong, prevWeekShort, prevWeekLong] — the last two are a recency subset of the old buckets: views on uploads from the final 7 days of the previous calendar month.',
+    _note: 'Daily view gains across the network, split by format (Shorts/long-form) and content age (this-month vs previous-months uploads), per channel. Value arrays are [newShort, newLong, oldShort, oldLong, prevWeekShort, prevWeekLong] — the last two are a recency subset of the old buckets: views on uploads from the final 7 days of the previous calendar month. Currently-unavailable (privatised/deleted) videos are excluded from `days` and tallied separately in `removed` ([newShort, newLong, oldShort, oldLong]).',
     _pw: true,
-    _method: 'consecutive daily snapshot diffs (jerminaldecline-snapshots); a new upload\'s full view count is counted on first appearance (debut burst), reappearances of old videos are ignored, negative deltas clamped to 0; days labelled in Central Time (Wisconsin)',
+    _method: 'consecutive daily snapshot diffs (jerminaldecline-snapshots); a new upload\'s full view count is counted on first appearance (debut burst), reappearances of old videos are ignored, negative deltas clamped to 0; since-removed videos excluded from days (tallied in removed); days labelled in Central Time (Wisconsin)',
     _generated: new Date().toISOString().slice(0, 10),
     _range: { from: dates[0], to: dates[dates.length - 2] },
     _channels: channelTitles,
     days,
+    removed,
   };
   fs.writeFileSync(OUT, JSON.stringify(out));
   // Summary
   let tot = 0; const dcount = Object.keys(days).length;
   for (const rec of Object.values(days)) for (const arr of Object.values(rec)) tot += arr[0] + arr[1] + arr[2] + arr[3];
-  console.log('daily-views.json: ' + dcount + ' days (' + out._range.from + ' → ' + out._range.to + '), ' + tot.toLocaleString() + ' total views counted');
+  let rem = 0; for (const rec of Object.values(removed)) for (const arr of Object.values(rec)) rem += arr[0] + arr[1] + arr[2] + arr[3];
+  console.log('daily-views.json: ' + dcount + ' days (' + out._range.from + ' → ' + out._range.to + '), ' + tot.toLocaleString() + ' views counted; ' + rem.toLocaleString() + ' excluded from ' + Object.keys(removed).length + ' days as removed');
 }
 
 main();

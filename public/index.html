@@ -2800,6 +2800,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr .uc-mo{display:block;height:11px;line-height:11px;font-family:var(--uc-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--brand);text-transform:uppercase}
     .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
     #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+    .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
+    .dv-host .uc-foot.dv-remnote b{color:var(--text)}
     .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
     .dv-host .uc-tog.dv-oldtog[aria-pressed="true"] .uc-tdot{background:var(--text-muted)}
     @media(max-width:680px){
@@ -11402,6 +11404,13 @@ function renderWindowList(startDate, endDate) {
     const pwNote=(dvHasPW&&!st.full&&totOld>0)
       ? ' · <b>'+dvFmt(totPW)+'</b> from '+_prevMonName+'’s final week'
       : '';
+    // Views excluded because the video has since been removed (privatised/deleted),
+    // matching the current format + prior-months toggles so the note tracks the chart.
+    let remViews=0; { const R=(d&&d.removed)||{};
+      for(const date in R){ if(!st.full && date.slice(0,7)!==st.month) continue;
+        const rec=R[date], acc=a=>{ if(!a) return; if(st.shorts) remViews+=a[0]+(st.showOld?a[2]:0); if(st.lf) remViews+=a[1]+(st.showOld?a[3]:0); };
+        if(ch==="ALL"){ for(const id in rec) acc(rec[id]); } else acc(rec[ch]); } }
+    const remNote=remViews>0?('<p class="uc-foot dv-remnote">Excludes <b>'+dvFmt(remViews)+'</b> views on videos he’s since removed'+(st.full?'':' this month')+'.</p>'):'';
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
@@ -11433,6 +11442,7 @@ function renderWindowList(startDate, endDate) {
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-summary">'+summary+'</div>'+
+      remNote+
       (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
       '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
