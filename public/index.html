@@ -9500,7 +9500,7 @@ function renderWindowList(startDate, endDate) {
     if (gv && !e.target.closest('a')) {
       const fmt = gv.dataset.gotoVideos;
       const month = gv.dataset.vidMonth;
-      if (month) vidTimePreset = month;
+      if (month) { vidTimePreset = month; vidUserMonth = month; }
       if (window.__windowListState) window.__windowListState.formatFilter = fmt;
       show('videos');
       if (window.__populateVidChannel) window.__populateVidChannel();
@@ -9659,6 +9659,10 @@ function renderWindowList(startDate, endDate) {
   }
   // ---- Videos tab controls ----
   let vidTimePreset = CURRENT_MONTH_KEY;
+  // The month the user explicitly picked. Kept separate from vidTimePreset so a
+  // channel that lacks that month (which snaps the live preset down) doesn't
+  // permanently lose it — switching back to a scope that has it restores it.
+  let vidUserMonth = CURRENT_MONTH_KEY;
   // A month preset (YYYY-MM) that isn't in the current scope's data — e.g. the
   // wall-clock current month on the 1st, before any uploads that month — would
   // match no dropdown option (so the browser shows the first, "YTD") AND filter
@@ -9724,6 +9728,11 @@ function renderWindowList(startDate, endDate) {
           refresh(months.includes(cm)?cm:months[0]);
         }
       }
+      // Re-point the Videos-tab month at the user's chosen month if the new scope
+      // has it, else the newest month it does have — so switching to a channel
+      // without that month (and back) doesn't strand the list on a stale month.
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonths(); }catch(_){}
+        if (ms.length) vidTimePreset = (vidUserMonth && ms.indexOf(vidUserMonth)>=0) ? vidUserMonth : ms[0]; }
       if (window.__populateAnChannel) window.__populateAnChannel();
       if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
@@ -9733,6 +9742,7 @@ function renderWindowList(startDate, endDate) {
   if (vidPeriod) {
     vidPeriod.addEventListener('change', (e) => {
       vidTimePreset = e.target.value;
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) vidUserMonth = vidTimePreset;   // remember explicit month picks
       if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
@@ -11513,13 +11523,17 @@ function renderWindowList(startDate, endDate) {
     tip.style.left=x+"px"; tip.style.top=y+"px";
   }
   function __dvHideTip(){ const t=byId("dvTip"); if(t)t.style.opacity="0"; }
+  // Leaving Daily views / Upload cadence (which hide the page period selector and
+  // run their own month nav): re-sync the video-list window to the page period so
+  // the list below never shows a stale month after switching in and out.
+  function __resyncVidList(){ try{ if(window.__syncVidWindow) window.__syncVidWindow(); if(window.renderVideosTab) window.renderVideosTab(); }catch(e){} }
   function closeCurrent(){
     if(!active)return;
     if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
     else if(active==="removed"){const s=byId("removedSection");if(s)s.classList.remove("vt-active");}
     else if(active==="reposts"){const s=byId("repostsSection");if(s)s.classList.remove("vt-active");}
-    else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
-    else if(active==="dailyviews"){const s=byId("dailyViewsSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
+    else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";__resyncVidList();}
+    else if(active==="dailyviews"){const s=byId("dailyViewsSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";__resyncVidList();}
     else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
     const na=byId("vtabNA");if(na)na.hidden=true;
     const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb){tb.classList.remove("active");tb.setAttribute("aria-selected","false");}
