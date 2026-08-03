@@ -11150,7 +11150,7 @@ function renderWindowList(startDate, endDate) {
       const platName=PLAT[String(r.platform||'').toLowerCase()]||'platform';
       const vnum=(vw&&vw.views!=null)?vw.views:null;
       const viewsClause=vnum?(', where it has '+vnum.toLocaleString()+' views'):'';
-      const proof=(String(r.via||'')==='comment')?'':('Your '+platName+' watermark is still visible in the re-upload. ');
+      const proof=(!r.via||String(r.via)==='watermark')?('Your '+platName+' watermark is still visible in the re-upload. '):'';
       AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\n'+proof+'As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
