@@ -11389,7 +11389,7 @@ function renderWindowList(startDate, endDate) {
     // Overview: only hide when this channel/month has NO view data at all (toggle-
     // independent). Channels with small historical (prior-month) views still show.
     if(isOv){ const rawTot=inD.reduce((s,x)=>s+x.lfNew+x.lfOld+x.shNew+x.shOld,0); if(rawTot===0){ if(card) card.hidden=true; return; } }
-    const selNew=x=>(st.lf?x.lfNew:0)+(st.shorts?x.shNew:0), selOld=x=>(st.lf?x.lfOld:0)+(st.shorts?x.shOld:0);
+    const selNew=x=>(st.lf?x.lfNew:0)+(st.shorts?x.shNew:0), selOld=x=>st.showOld?((st.lf?x.lfOld:0)+(st.shorts?x.shOld:0)):0;
     const selPW=x=>(st.lf?(x.lfPW||0):0)+(st.shorts?(x.shPW||0):0);
     const totNew=inD.reduce((s,x)=>s+selNew(x),0), totOld=inD.reduce((s,x)=>s+selOld(x),0), tot=totNew+totOld;
     const totPW=inD.reduce((s,x)=>s+selPW(x),0);
