@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-02
+# Topic candidates — 2026-08-03
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 125 baseline videos
+Pool: 17 recent videos, 122 baseline videos
 
 ### Cluster 1: `killed`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 1/125 videos (1%)
-- **Spike ratio:** 14.8x
+- **Baseline saturation:** 1/122 videos (1%)
+- **Spike ratio:** 14.5x
 - **Related terms:** `killed`
 - **Sample recent videos:**
   - 2026-08-01 — _HE WENT NUCLEAR_  
@@ -25,8 +25,8 @@ Pool: 17 recent videos, 125 baseline videos
 ### Cluster 2: `erupted`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/125 videos (2%)
-- **Spike ratio:** 6.4x
+- **Baseline saturation:** 3/122 videos (2%)
+- **Spike ratio:** 6.2x
 - **Related terms:** `erupted`
 - **Sample recent videos:**
   - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
@@ -39,8 +39,8 @@ Pool: 17 recent videos, 125 baseline videos
 ### Cluster 3: `suspect`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/125 videos (2%)
-- **Spike ratio:** 6.4x
+- **Baseline saturation:** 3/122 videos (2%)
+- **Spike ratio:** 6.2x
 - **Related terms:** `suspect`
 - **Sample recent videos:**
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
@@ -52,13 +52,13 @@ Pool: 17 recent videos, 125 baseline videos
 
 ## @JeremyHambly
 
-Pool: 12 recent videos, 75 baseline videos
+Pool: 12 recent videos, 72 baseline videos
 
 ### Cluster 1: `demanding`
 
 - **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 0/75 videos (0%)
-- **Spike ratio:** 50.7x
+- **Baseline saturation:** 0/72 videos (0%)
+- **Spike ratio:** 48.7x
 - **Related terms:** `demanding`, `fifth`
 - **Sample recent videos:**
   - 2026-07-31 — _IT'S GETTING INSANE_  
@@ -73,8 +73,8 @@ Pool: 12 recent videos, 75 baseline videos
 ### Cluster 2: `vlogs candace`
 
 - **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 2/75 videos (3%)
-- **Spike ratio:** 10.1x
+- **Baseline saturation:** 2/72 videos (3%)
+- **Spike ratio:** 9.7x
 - **Related terms:** `vlogs candace`
 - **Sample recent videos:**
   - 2026-07-30 — _SHE'S GETTING SUED_  
