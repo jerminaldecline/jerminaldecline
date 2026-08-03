@@ -11316,7 +11316,7 @@ function renderWindowList(startDate, endDate) {
   // onward), so the month nav only offers months that actually have data.
   function dvData(){ return window.__dvData||null; }
   function dvMonths(){ const d=dvData(); if(!d||!d.days) return []; const s=new Set(); for(const k in d.days) s.add(k.slice(0,7)); return [...s].sort(); }
-  function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10; return m*pow; }
+  function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(s=>n<=s+1e-9)||10; return m*pow; }
   function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
