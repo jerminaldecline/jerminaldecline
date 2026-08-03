@@ -2812,6 +2812,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
     #panelOverview .ov-dv-row .uc-tile{padding:9px 10px}
     #panelOverview .ov-dv-row .uc-tile .uc-k{min-height:2.6em;align-items:flex-start}
+    .dv-host .uc-i{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--text-dim);color:var(--text-dim);font-size:9px;font-weight:700;font-style:italic;font-family:Georgia,"Times New Roman",serif;line-height:1;cursor:help;vertical-align:middle}
+    .dv-host .uc-i:hover,.dv-host .uc-i:focus-visible{border-color:var(--text-muted);color:var(--text-muted);outline:none}
     .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
     .dv-host .uc-foot.dv-remnote b{color:var(--text)}
     .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
@@ -11414,9 +11416,7 @@ function renderWindowList(startDate, endDate) {
     // bucket (data._pw). Only meaningful in single-month mode.
     const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
-    const pwNote=(dvHasPW&&!st.full&&totOld>0)
-      ? ' · <b>'+dvFmt(totPW)+'</b> from '+_prevMonName+'’s final week'
-      : '';
+    const oldInfo=((dvHasPW&&!st.full&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
     // Views excluded because the video has since been removed (privatised/deleted),
     // matching the current format + prior-months toggles so the note tracks the chart.
     let remViews=0; { const R=(d&&d.removed)||{};
@@ -11428,7 +11428,7 @@ function renderWindowList(startDate, endDate) {
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
       '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+newLab+'</div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+oldLab+'</div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total'+pwNote+'</div><div class="uc-fine">These views are also tallied under their own months</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" title="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
