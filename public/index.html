@@ -2812,6 +2812,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
     #panelOverview .ov-dv-row .uc-tile{padding:9px 10px}
     #panelOverview .ov-dv-row .uc-tile .uc-k{min-height:2.6em;align-items:flex-start}
+    /* Reserve a 2-row legend on both cards so the chart plots start at the same height. */
+    #panelOverview .ov-dv-row .uc-legend{row-gap:6px;min-height:40px;align-content:flex-start}
     .dv-host .uc-i{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--text-dim);color:var(--text-dim);font-size:9px;font-weight:700;font-style:italic;font-family:Georgia,"Times New Roman",serif;line-height:1;cursor:help;vertical-align:middle}
     .dv-host .uc-i:hover,.dv-host .uc-i:focus-visible{border-color:var(--text-muted);color:var(--text-muted);outline:none}
     .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
@@ -11235,9 +11237,14 @@ function renderWindowList(startDate, endDate) {
     const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
     const totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
-    const summary=
-      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note"><b>'+sum(wd,"lf")+'</b> across '+wd.length+' weekdays</div></div>'+
-      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs <b>'+weSH.toFixed(1)+'</b>/day Shorts on weekends</div></div>'+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+totLF+'</b> long-form · <b>'+totSH+'</b> Shorts'+(isCur?' · so far':'')+'</div></div>';
+    const nD=occD.length||1;
+    const summary=isOv
+      ? '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form</div><div class="uc-v">'+totLF+'</div><div class="uc-note"><b>'+(totLF/nD).toFixed(1)+'</b>/day</div></div>'+
+        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Shorts</div><div class="uc-v">'+totSH+'</div><div class="uc-note"><b>'+(totSH/nD).toFixed(1)+'</b>/day</div></div>'+
+        '<div class="uc-tile"><div class="uc-k">Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+(tot/nD).toFixed(1)+'</b>/day'+(isCur?' · so far':'')+'</div></div>'
+      : '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note"><b>'+sum(wd,"lf")+'</b> across '+wd.length+' weekdays</div></div>'+
+        '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs <b>'+weSH.toFixed(1)+'</b>/day Shorts on weekends</div></div>'+
+        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+totLF+'</b> long-form · <b>'+totSH+'</b> Shorts'+(isCur?' · so far':'')+'</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
