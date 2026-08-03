@@ -2800,6 +2800,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr .uc-mo{display:block;height:11px;line-height:11px;font-family:var(--uc-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--brand);text-transform:uppercase}
     .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
     #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+    /* Daily views + Uploads side by side; each collapses to full width when alone or on narrow screens. */
+    #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:start}
+    #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0}
+    #panelOverview .ov-dv-row .uc-plot{min-width:0!important}
+    #panelOverview .ov-dv-row .uc-col{min-width:8px}
+    #panelOverview .ov-dv-row .uc-xr{min-width:8px}
+    #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px}
+    #panelOverview .ov-dv-row .uc-tile{padding:9px 10px}
     .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
     .dv-host .uc-foot.dv-remnote b{color:var(--text)}
     .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
@@ -3733,10 +3741,11 @@ function render(m){
         </div>
         ${topicBars.views}</div>
     </div>
-    <!-- Daily views card: sits directly under the Topics cards, above Shorts activity & Views trend -->
-    <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
-    <!-- Uploads card: overview version of "Upload cadence", scoped to the report's month/channel; sits under Daily views -->
-    <div class="ov-dailyviews-card dv-host" id="ovCadence" hidden><div class="dailyviews-body" id="ovCadenceBody"></div></div>
+    <!-- Daily views + Uploads: two overview charts side by side (stack on narrow screens) -->
+    <div class="ov-dv-row">
+      <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
+      <div class="ov-dailyviews-card dv-host" id="ovCadence" hidden><div class="dailyviews-body" id="ovCadenceBody"></div></div>
+    </div>
     <div class="breadth">
       <div class="shorts-strip${mForLinks ? ' shorts-link' : ''}"${mForLinks ? ` data-goto-videos="short" data-vid-month="${mForLinks}" role="button" tabindex="0"` : ''}>
         <div class="shorts-head">
