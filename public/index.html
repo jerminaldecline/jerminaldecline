@@ -2897,7 +2897,13 @@ const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
-function ym(v){ return v.publishedAt.slice(0,7); }
+// Month window in the creator's local (Central / Wisconsin) time — the same
+// basis the Daily views + Upload cadence charts use, so "this month" counts
+// agree across the overview instead of splitting on the UTC date line.
+const _ctMonthFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit' });
+const _ctMonthCache = new Map();
+function ctMonth(iso){ if(!iso) return ''; if(_ctMonthCache.has(iso)) return _ctMonthCache.get(iso); let s; try{ const o={}; for(const x of _ctMonthFmt.formatToParts(new Date(iso))) if(x.type!=='literal') o[x.type]=x.value; s=o.year+'-'+o.month; }catch(e){ s=String(iso).slice(0,7); } _ctMonthCache.set(iso,s); return s; }
+function ym(v){ return ctMonth(v.publishedAt); }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
 
 let PAYLOAD = null; // {scopes, net, channels}
@@ -3153,7 +3159,7 @@ const fmt = n => { const uk=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const CURRENT_MONTH_KEY = (()=>{ const d=new Date(); return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`; })();
+const CURRENT_MONTH_KEY = ctMonth(new Date().toISOString());   // Central-time current month (matches ym)
 // Satirical "this channel is dying because…" excuses — the real list from the
 // live site. Cycled on click.
 const DYING_EXCUSES = [
@@ -3492,7 +3498,7 @@ function render(m){
     let days = 0;
     for (const k of keys) {
       if (!(k in S)) continue;
-      if (k === CURRENT_MONTH_KEY) days += new Date().getUTCDate();
+      if (k === CURRENT_MONTH_KEY) days += +new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',day:'numeric'}).format(new Date());
       else { const [yy, mo] = k.split('-').map(Number); days += new Date(Date.UTC(yy, mo, 0)).getUTCDate(); }
     }
     return days > 0 ? subsG / days : null;
@@ -11164,6 +11170,7 @@ function renderWindowList(startDate, endDate) {
     const buckets={};
     for(const v of ds.videos){
       if(ch!=="ALL"&&v.channelId!==ch) continue;
+      if(v.unavailable) continue;                    // exclude removed videos, like the rest of the site + Daily views
       const p=v.publishedAt; if(!p) continue;
       const lp=ucLocalParts(p); if(lp.ym!==monthKey) continue;
       const b=buckets[lp.day]||(buckets[lp.day]={lf:0,sh:0});
