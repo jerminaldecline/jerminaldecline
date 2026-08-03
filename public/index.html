@@ -11431,7 +11431,7 @@ function renderWindowList(startDate, endDate) {
     const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
     const oldInfo=((dvHasPW&&!st.full&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
-    const newInfo='Views these videos gained during the month itself (from the daily snapshots) — not their all-time total, which keeps rising after the month ends. So it reads a little below the lifetime views of videos published this month.';
+    const newInfo='Views gained during the month itself — not these videos’ lifetime total, which keeps rising afterward.';
     // Views excluded because the video has since been removed (privatised/deleted),
     // matching the current format + prior-months toggles so the note tracks the chart.
     let remViews=0; { const R=(d&&d.removed)||{};
