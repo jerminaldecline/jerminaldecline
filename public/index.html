@@ -2141,6 +2141,32 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    but holds steady rather than pulsing. */
 .mq-btn.is-live.active{animation:none}
 .mq-btn.is-live.active .mq-live-dot{animation:none;opacity:1;background:#fff}
+/* Complete-month indicator: the on-brand blue counterpart to the red live dot.
+   A small blue dot pulses next to the "Last complete month" label, with a gentle
+   blue text-tint — same restrained treatment as the live button, matched palette. */
+.mq-done-dot{display:none}
+.mq-btn.is-complete .mq-done-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);
+  margin-right:0.4rem;vertical-align:middle;flex:0 0 auto;
+  animation:mqDoneDotPulse 2.4s ease-in-out infinite}
+.mq-btn.is-complete .mq-main{display:inline-flex;align-items:center}
+.mq-btn.is-complete{animation:mqDoneTint 2.4s ease-in-out infinite}
+@keyframes mqDoneDotPulse{
+  0%,100%{opacity:0.45;box-shadow:0 0 0 0 rgba(106,163,255,0.5)}
+  50%    {opacity:1;box-shadow:0 0 5px 1px rgba(106,163,255,0.85)}
+}
+@keyframes mqDoneTint{
+  0%,100%{color:var(--subtext)}
+  50%    {color:var(--accent)}
+}
+@media(prefers-reduced-motion:reduce){
+  .mq-btn.is-complete{animation:none}
+  .mq-btn.is-complete .mq-done-dot{animation:none;opacity:1}
+}
+/* Selected: drop the pulse/tint — the filled active state already reads as chosen.
+   The dot holds steady and turns white to sit on the accent fill. */
+.mq-btn.is-complete.active{animation:none}
+.mq-btn.is-complete.active .mq-done-dot{animation:none;opacity:1;background:#fff}
 @media(max-width:680px){.mq-btn{padding:0.3rem 0.55rem}.sticky-controls{width:100%}.bar-controls{flex-wrap:wrap;width:100%}.month-quick{flex:1 1 100%}.month-quick .mq-btn{flex:1 1 0;align-items:center;text-align:center}.bar-controls .bar-sel{flex:1 1 calc(50% - 0.3rem);max-width:none}}
 /* Top topics panel header + "see all [month]'s videos" link */
 .panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.6rem;margin:0 0 1rem}
@@ -2315,7 +2341,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   <div class="sticky-controls" id="stickyControls">
     <div class="bar-controls" data-for="overview" id="ovBarControls">
       <div class="month-quick" role="group" aria-label="Quick month jump">
-        <button class="mq-btn" id="mqComplete" type="button"><span class="mq-main">Last complete month</span><span class="mq-sub" id="mqCompleteSub"></span></button>
+        <button class="mq-btn" id="mqComplete" type="button"><span class="mq-main"><span class="mq-done-dot" aria-hidden="true"></span>Last complete month</span><span class="mq-sub" id="mqCompleteSub"></span></button>
         <button class="mq-btn" id="mqCurrent" type="button"><span class="mq-main"><span class="mq-live-dot" aria-hidden="true"></span>Month in progress</span><span class="mq-sub" id="mqCurrentSub"></span></button>
       </div>
       <select id="scopeSel" class="bar-sel" aria-label="Channel"></select>
@@ -3850,7 +3876,7 @@ function render(m){
     const lcM = months2.find(mm => mm < CURRENT_MONTH_KEY) || months2[0];
     const bCur = document.getElementById('mqCurrent'), bLc = document.getElementById('mqComplete');
     const subCur = document.getElementById('mqCurrentSub'), subLc = document.getElementById('mqCompleteSub');
-    if (bLc)  { bLc.onclick = () => refresh(lcM); bLc.classList.toggle('active', m === lcM); if (subLc) subLc.textContent = monthName(lcM); bLc.title = 'Jump to ' + monthName(lcM) + ' (last complete month)'; bLc.style.display = (lcM === CURRENT_MONTH_KEY) ? 'none' : ''; }
+    if (bLc)  { bLc.onclick = () => refresh(lcM); bLc.classList.toggle('active', m === lcM); bLc.classList.toggle('is-complete', lcM !== CURRENT_MONTH_KEY); if (subLc) subLc.textContent = monthName(lcM); bLc.title = 'Jump to ' + monthName(lcM) + ' (last complete month)'; bLc.style.display = (lcM === CURRENT_MONTH_KEY) ? 'none' : ''; }
     if (bCur) { bCur.onclick = () => refresh(CURRENT_MONTH_KEY); bCur.classList.toggle('active', m === CURRENT_MONTH_KEY); bCur.classList.add('is-live'); if (subCur) subCur.textContent = monthName(CURRENT_MONTH_KEY); bCur.title = 'Jump to ' + monthName(CURRENT_MONTH_KEY) + ' (still in progress — live data)'; bCur.style.display = hasInProgress ? '' : 'none'; }
   })();
   // Overview month-detail collapse toggle
