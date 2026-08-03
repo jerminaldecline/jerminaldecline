@@ -2723,7 +2723,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-legend .uc-shkey.off,.dv-host .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
     .dv-host .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
     .dv-host .uc-axcap span{color:var(--text-dim)}
-    .dv-host .uc-scroll{overflow-x:auto;padding-top:10px;padding-bottom:2px}
+    .dv-host .uc-scroll{overflow-x:auto;padding-top:18px;padding-bottom:2px}
     .dv-host .uc-plot{position:relative;min-width:640px}
     .dv-host .uc-chartarea{position:relative;height:210px}
     .dv-host .uc-grid{position:absolute;left:28px;right:0;top:0;bottom:0;pointer-events:none}
@@ -3149,7 +3149,7 @@ let HANDLE_TO_ID = {}; // handle (e.g. '@TheQuartering') -> channelId; for Analy
 // Compact number formatter. K/M with one decimal, trailing ".0" stripped — so
 // round values stay clean (244K, 2M) while small thousands keep precision
 // (1426 → 1.4K, not 1K).
-const fmt = n => { const u=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? u(n/1000000,'M') : n>=1000 ? u(n/1000,'K') : ''+n; };
+const fmt = n => { const uk=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? (n/1000000).toFixed(2).replace(/\.?0+$/,'')+'M' : n>=1000 ? uk(n/1000,'K') : ''+n; };
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -11309,7 +11309,7 @@ function renderWindowList(startDate, endDate) {
   function dvData(){ return window.__dvData||null; }
   function dvMonths(){ const d=dvData(); if(!d||!d.days) return []; const s=new Set(); for(const k in d.days) s.add(k.slice(0,7)); return [...s].sort(); }
   function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10; return m*pow; }
-  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(a>=1e7?0:1)+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
+  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
   // Raw four buckets per day (toggles applied at render time, not here).
