@@ -92,9 +92,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .bar-sel:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.3))}
 .bar-sel:hover{border-color:var(--accent)}
 .bar-sel option{background:var(--surface);color:var(--text)}
-.ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
-.ds-tab:hover{color:var(--text)}
-.ds-tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);border-bottom-width:3px}
+.ds-tab{appearance:none;background:var(--surface);border:1px solid var(--border);border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.6rem 1.15rem;cursor:pointer;margin-bottom:-1px;border-radius:9px 9px 0 0;transition:background .14s,color .14s}
+.ds-tab:hover{color:var(--text);background:var(--surface-2)}
+.ds-tab:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.28))}
+.ds-tab[aria-selected="true"]{color:var(--accent);background:var(--surface-2);border-bottom-color:var(--accent);border-bottom-width:3px}
 .ds-tabpanel[hidden]{display:none}
 .tab-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:3rem 2rem;text-align:center}
 .tab-placeholder h3{margin:0 0 0.75rem;font-size:1.2rem;font-weight:800;color:var(--text)}
@@ -2308,7 +2309,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   <div class="tabbar-row">
   <nav class="ds-tabs" role="tablist" aria-label="Sections" id="dsTabs">
     <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
-    <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Analysis</button>
+    <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Charts &amp; Analysis</button>
     <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false">Videos</button>
   </nav>
   <div class="sticky-controls" id="stickyControls">
@@ -2457,7 +2458,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
   </section>
 
-  <section class="ds-tabpanel" data-panel="videos" id="panelVideos" hidden>
+  <section class="ds-tabpanel dv-host" data-panel="videos" id="panelVideos" hidden>
     <div class="insights" id="vInsights">
       <div class="vtabs" id="vtabs" role="tablist" aria-label="Video insights">
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="velocity" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>View Velocity <span class="vtab-cnt" data-cnt="velocity" hidden></span></button>
@@ -2468,6 +2469,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="cadence" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 17v-4M12 17v-2M16 17v-5"/></svg>Upload cadence</button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="dailyviews" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>Daily views</button>
       </div>
       <div class="vbody" id="vBody" hidden>
         <div class="vempty" id="promosEmpty" hidden>No paid promotions detected for this channel yet.</div>
@@ -2475,6 +2477,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="removed-section" id="removedSection"><div class="removed-body" id="removedBody"></div></div>
         <div class="reposts-section" id="repostsSection"><div class="reposts-body" id="repostsBody"></div></div>
         <div class="cadence-section" id="cadenceSection"><div class="cadence-body" id="cadenceBody"></div></div>
+        <div class="dailyviews-section" id="dailyViewsSection"><div class="dailyviews-body" id="dailyViewsBody"></div></div>
     <div class="ad-panel" id="adPanel" hidden></div>
     <div class="wordcloud-section" id="wordcloudSection">
       <button type="button" class="wordcloud-toggle" id="wordcloudToggle" aria-expanded="false" aria-controls="wordcloudPanel">
@@ -2691,69 +2694,72 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .reposts-cred .rt-alert.done{border-color:var(--up,#3fb950);color:var(--up,#3fb950);background:color-mix(in srgb,var(--up,#3fb950) 12%,transparent)}
     #panelVideos .reposts-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
     /* ---- Upload cadence panel ---- */
-    #panelVideos .cadence-section{display:none}
-    #panelVideos .cadence-section.vt-active{display:block}
-    #panelVideos .cadence-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
-    #panelVideos .uc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:2px}
-    #panelVideos .uc-eyebrow{font-family:var(--uc-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:0 0 3px}
-    #panelVideos .uc-h{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.01em;color:var(--text)}
-    #panelVideos .uc-sub{font-size:0.8rem;color:var(--text-muted);margin:4px 0 0}
-    #panelVideos .uc-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    #panelVideos .uc-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
-    #panelVideos .uc-seg button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
-    #panelVideos .uc-seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
-    #panelVideos .uc-nav{display:inline-flex;gap:6px}
-    #panelVideos .uc-sel{appearance:none;-webkit-appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:12.5px;font-weight:700;padding:5px 26px 5px 10px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23999' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
-    #panelVideos .uc-sel:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-    #panelVideos .uc-tog{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);transition:background .12s,color .12s,border-color .12s}
-    #panelVideos .uc-tog .uc-tdot{width:9px;height:9px;border-radius:2px;background:var(--text-dim);transition:background .12s}
-    #panelVideos .uc-tog[aria-pressed="true"]{border-color:var(--shorts);color:var(--text);background:var(--shorts-soft,color-mix(in srgb,var(--shorts) 16%,var(--surface-2)))}
-    #panelVideos .uc-tog[aria-pressed="true"] .uc-tdot{background:var(--shorts)}
-    #panelVideos .uc-tog.lf[aria-pressed="true"]{border-color:var(--brand);color:var(--text);background:color-mix(in srgb,var(--brand) 16%,var(--surface-2))}
-    #panelVideos .uc-tog.lf[aria-pressed="true"] .uc-tdot{background:var(--brand)}
-    #panelVideos .uc-legend{display:flex;gap:16px;flex-wrap:wrap;margin:14px 2px 4px;font-size:12px;color:var(--text-muted)}
-    #panelVideos .uc-legend span{display:inline-flex;align-items:center;gap:6px}
-    #panelVideos .uc-sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
-    #panelVideos .uc-sw.lf{background:var(--brand)}
-    #panelVideos .uc-sw.sh{background:var(--shorts)}
-    #panelVideos .uc-sw.dark{background:transparent;border:1.5px solid var(--down);border-radius:50%;width:10px;height:10px}
-    #panelVideos .uc-legend .uc-shkey.off,#panelVideos .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
-    #panelVideos .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
-    #panelVideos .uc-axcap span{color:var(--text-dim)}
-    #panelVideos .uc-scroll{overflow-x:auto;padding-bottom:2px}
-    #panelVideos .uc-plot{position:relative;min-width:640px}
-    #panelVideos .uc-chartarea{position:relative;height:210px}
-    #panelVideos .uc-grid{position:absolute;left:28px;right:0;top:0;bottom:0;pointer-events:none}
-    #panelVideos .uc-gl{position:absolute;left:0;right:0;border-top:1px solid var(--border)}
-    #panelVideos .uc-gl span{position:absolute;left:-28px;top:-7px;width:22px;text-align:right;font-family:var(--uc-mono);font-size:10px;color:var(--text-dim);font-variant-numeric:tabular-nums}
-    #panelVideos .uc-cols{position:absolute;left:28px;right:0;top:0;bottom:0;display:flex;gap:3px;align-items:stretch}
-    #panelVideos .uc-col{flex:1 1 0;min-width:15px;height:100%;display:flex;flex-direction:column-reverse;justify-content:flex-start;position:relative;border-radius:5px}
-    #panelVideos .uc-bar{width:100%;min-height:0;transition:height .3s cubic-bezier(.2,.7,.2,1)}
-    #panelVideos .uc-bar.lf{background:var(--brand)}
-    #panelVideos .uc-bar.sh{background:var(--shorts);opacity:.92}
-    #panelVideos .uc-bar.top{border-radius:3px 3px 0 0}
-    #panelVideos .uc-tick{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%}
-    #panelVideos .uc-tick.dark{border:1.5px solid var(--down);opacity:.9}
-    #panelVideos .uc-tick.none{background:var(--text-dim);opacity:.32}
-    #panelVideos .uc-col.future{opacity:.35}
-    #panelVideos .uc-col.future .uc-bar,#panelVideos .uc-col.future .uc-tick{display:none}
-    #panelVideos .uc-col:hover .uc-bar{filter:brightness(1.13)}
-    #panelVideos .uc-today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--brand);opacity:.7}
-    #panelVideos .uc-today span{position:absolute;top:-15px;left:4px;font-family:var(--uc-mono);font-size:9px;letter-spacing:.06em;color:var(--brand);white-space:nowrap}
-    #panelVideos .uc-xrow{display:flex;gap:3px;padding-left:28px;margin-top:8px}
-    #panelVideos .uc-xr{flex:1 1 0;min-width:15px;text-align:center;line-height:1.25}
-    #panelVideos .uc-xr .uc-dow{display:block;font-family:var(--uc-mono);font-size:9px;color:var(--text-dim);text-transform:uppercase}
-    #panelVideos .uc-xr .uc-dnum{display:block;font-family:var(--uc-mono);font-size:10px;color:var(--text-muted);font-weight:600}
-    #panelVideos .uc-xr.wknd .uc-dow,#panelVideos .uc-xr.wknd .uc-dnum{color:color-mix(in srgb,var(--down) 70%,var(--text-dim))}
-    #panelVideos .uc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
-    #panelVideos .uc-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
-    #panelVideos .uc-tile .uc-k{font-size:11px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
-    #panelVideos .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
-    #panelVideos .uc-tile .uc-v{font-family:var(--uc-mono);font-size:23px;font-weight:700;margin-top:6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text)}
-    #panelVideos .uc-tile .uc-v small{font-size:12px;color:var(--text-dim);font-weight:600;margin-left:2px}
-    #panelVideos .uc-tile .uc-note{font-size:11px;color:var(--text-dim);margin-top:2px}
-    #panelVideos .uc-tile.flag .uc-v{color:var(--down)}
-    #panelVideos .uc-foot{margin:12px 2px 0;font-size:11px;color:var(--text-dim);font-family:var(--uc-mono)}
+    .dv-host .cadence-section{display:none}
+    .dv-host .cadence-section.vt-active{display:block}
+    .dv-host .cadence-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
+    .dv-host .uc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+    .dv-host .uc-eyebrow{font-family:var(--uc-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:0 0 3px}
+    .dv-host .uc-h{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.01em;color:var(--text)}
+    .dv-host .uc-h-ov{font-size:1.5rem;letter-spacing:-.02em}
+    .dv-host .uc-sub{font-size:0.8rem;color:var(--text-muted);margin:4px 0 0}
+    .dv-host .uc-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .dv-host .uc-seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
+    .dv-host .uc-seg button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}
+    .dv-host .uc-seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+    .dv-host .uc-nav{display:inline-flex;gap:6px}
+    .dv-host .uc-sel{appearance:none;-webkit-appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:12.5px;font-weight:700;padding:5px 26px 5px 10px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23999' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+    .dv-host .uc-sel:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    .dv-host .uc-tog{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);transition:background .12s,color .12s,border-color .12s}
+    .dv-host .uc-tog .uc-tdot{width:9px;height:9px;border-radius:2px;background:var(--text-dim);transition:background .12s}
+    .dv-host .uc-tog[aria-pressed="true"]{border-color:var(--shorts);color:var(--text);background:var(--shorts-soft,color-mix(in srgb,var(--shorts) 16%,var(--surface-2)))}
+    .dv-host .uc-tog[aria-pressed="true"] .uc-tdot{background:var(--shorts)}
+    .dv-host .uc-tog.lf[aria-pressed="true"]{border-color:var(--brand);color:var(--text);background:color-mix(in srgb,var(--brand) 16%,var(--surface-2))}
+    .dv-host .uc-tog.lf[aria-pressed="true"] .uc-tdot{background:var(--brand)}
+    .dv-host .uc-legend{display:flex;gap:16px;flex-wrap:wrap;margin:14px 2px 4px;font-size:12px;color:var(--text-muted)}
+    .dv-host .uc-legend span{display:inline-flex;align-items:center;gap:6px}
+    .dv-host .uc-sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+    .dv-host .uc-sw.lf{background:var(--brand)}
+    .dv-host .uc-sw.sh{background:var(--shorts)}
+    .dv-host .uc-sw.dark{background:transparent;border:1.5px solid var(--down);border-radius:50%;width:10px;height:10px}
+    .dv-host .uc-legend .uc-shkey.off,.dv-host .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
+    .dv-host .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
+    .dv-host .uc-axcap span{color:var(--text-dim)}
+    .dv-host .uc-scroll{overflow-x:auto;padding-top:18px;padding-bottom:2px}
+    .dv-host .uc-plot{position:relative;min-width:640px}
+    .dv-host .uc-chartarea{position:relative;height:210px}
+    .dv-host .uc-grid{position:absolute;left:28px;right:0;top:0;bottom:0;pointer-events:none}
+    .dv-host .uc-gl{position:absolute;left:0;right:0;border-top:1px solid var(--border)}
+    .dv-host .uc-gl span{position:absolute;left:-28px;top:-7px;width:22px;text-align:right;font-family:var(--uc-mono);font-size:10px;color:var(--text-dim);font-variant-numeric:tabular-nums}
+    .dv-host .uc-cols{position:absolute;left:28px;right:0;top:0;bottom:0;display:flex;gap:3px;align-items:stretch}
+    .dv-host .uc-col{flex:1 1 0;min-width:15px;height:100%;display:flex;flex-direction:column-reverse;justify-content:flex-start;position:relative;border-radius:5px}
+    .dv-host .uc-bar{width:100%;min-height:0;transition:height .3s cubic-bezier(.2,.7,.2,1)}
+    .dv-host .uc-bar.lf{background:var(--brand)}
+    .dv-host .uc-bar.sh{background:var(--shorts);opacity:.92}
+    .dv-host .uc-bar.top{border-radius:3px 3px 0 0}
+    .dv-host .uc-tick{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%}
+    .dv-host .uc-tick.dark{border:1.5px solid var(--down);opacity:.9}
+    .dv-host .uc-tick.none{background:var(--text-dim);opacity:.32}
+    .dv-host .uc-col.future{opacity:.35}
+    .dv-host .uc-col.future .uc-bar,.dv-host .uc-col.future .uc-tick{display:none}
+    .dv-host .uc-col:hover .uc-bar{filter:brightness(1.13)}
+    .dv-host .uc-today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--brand);opacity:.7}
+    .dv-host .uc-today span{position:absolute;top:-15px;left:4px;font-family:var(--uc-mono);font-size:9px;letter-spacing:.06em;color:var(--brand);white-space:nowrap}
+    .dv-host .uc-xrow{display:flex;gap:3px;padding-left:28px;margin-top:8px}
+    .dv-host .uc-xr{flex:1 1 0;min-width:15px;text-align:center;line-height:1.25}
+    .dv-host .uc-xr .uc-dow{display:block;font-family:var(--uc-mono);font-size:9px;color:var(--text-dim);text-transform:uppercase}
+    .dv-host .uc-xr .uc-dnum{display:block;font-family:var(--uc-mono);font-size:10px;color:var(--text-muted);font-weight:600}
+    .dv-host .uc-xr.wknd .uc-dow,.dv-host .uc-xr.wknd .uc-dnum{color:color-mix(in srgb,var(--down) 70%,var(--text-dim))}
+    .dv-host .uc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .dv-host .uc-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
+    .dv-host .uc-tile .uc-k{font-size:11px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
+    .dv-host .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+    .dv-host .uc-tile .uc-v{font-family:var(--uc-mono);font-size:23px;font-weight:700;margin-top:6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text)}
+    .dv-host .uc-tile .uc-v small{font-size:12px;color:var(--text-dim);font-weight:600;margin-left:2px}
+    .dv-host .uc-tile .uc-note{font-size:12px;color:var(--text-muted);margin-top:3px}
+    .dv-host .uc-tile .uc-note b{font-weight:700;color:var(--text)}
+    .dv-host .uc-tile .uc-fine{font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic}
+    .dv-host .uc-tile.flag .uc-v{color:var(--down)}
+    .dv-host .uc-foot{margin:12px 2px 0;font-size:11px;color:var(--text-dim);font-family:var(--uc-mono)}
     #ucTip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.7);opacity:0;transition:opacity .1s;min-width:140px;color:var(--text)}
     #ucTip .uc-ttday{font-weight:700;font-size:12.5px;margin-bottom:5px}
     #ucTip .uc-ttrow{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px}
@@ -2761,7 +2767,61 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #ucTip .uc-ttrow .uc-lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
     #ucTip .uc-tttot{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);font-weight:700}
     #ucTip .uc-ttnone{color:var(--down);font-size:12px}
-    @media(max-width:680px){#panelVideos .uc-summary{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.dv-host .uc-summary{grid-template-columns:repeat(2,1fr)}}
+    /* ---- Daily views panel (view gains/day; shares uc- geometry) ---- */
+    .dv-host .dailyviews-section{display:none}
+    .dv-host .dailyviews-section.vt-active{display:block}
+    .dv-host .dailyviews-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
+    /* Hue = format (blue long-form, orange Shorts, matching Upload cadence);
+       shade = content age (solid = this month, pale = previous months). */
+    .dv-host .dv-bar.top{border-radius:3px 3px 0 0}
+    .dv-host .dv-bar.lf.new{background:var(--brand)}
+    .dv-host .dv-bar.lf.old{background:color-mix(in srgb,var(--brand) 42%,var(--surface))}
+    .dv-host .dv-bar.sh.new{background:var(--shorts)}
+    .dv-host .dv-bar.sh.old{background:color-mix(in srgb,var(--shorts) 42%,var(--surface))}
+    .dv-host .dv-sw.lf.new{background:var(--brand)}
+    .dv-host .dv-sw.lf.old{background:color-mix(in srgb,var(--brand) 42%,var(--surface))}
+    .dv-host .dv-sw.sh.new{background:var(--shorts)}
+    .dv-host .dv-sw.sh.old{background:color-mix(in srgb,var(--shorts) 42%,var(--surface))}
+    #dvTip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.7);opacity:0;transition:opacity .1s;min-width:158px;color:var(--text)}
+    #dvTip .uc-ttday{font-weight:700;font-size:12.5px;margin-bottom:5px}
+    #dvTip .uc-ttrow{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px}
+    #dvTip .uc-ttrow .uc-lab{display:inline-flex;align-items:center;gap:6px;color:var(--text-muted)}
+    #dvTip .uc-ttrow .uc-lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
+    #dvTip .uc-ttrow .uc-lab i.lf.new{background:var(--brand)}
+    #dvTip .uc-ttrow .uc-lab i.lf.old{background:color-mix(in srgb,var(--brand) 42%,var(--surface))}
+    #dvTip .uc-ttrow .uc-lab i.sh.new{background:var(--shorts)}
+    #dvTip .uc-ttrow .uc-lab i.sh.old{background:color-mix(in srgb,var(--shorts) 42%,var(--surface))}
+    #dvTip .uc-tttot{display:flex;justify-content:space-between;gap:14px;font-family:ui-monospace,monospace;font-size:11.5px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);font-weight:700}
+    #dvTip .uc-ttnone{color:var(--text-dim);font-size:12px}
+    .dv-host .uc-foot.dv-fn{font-family:inherit;font-style:italic;margin-top:3px;max-width:60ch}
+    .dv-host .dv-seriestog{appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font:inherit;font-size:12.5px;font-weight:700;padding:5px 12px;cursor:pointer;transition:background .12s,color .12s,border-color .12s}
+    .dv-host .dv-seriestog[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+    .dv-host .uc-nav .uc-sel:disabled{opacity:.4;cursor:not-allowed}
+    .dv-host .uc-xr .uc-mo{display:block;height:11px;line-height:11px;font-family:var(--uc-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--brand);text-transform:uppercase}
+    .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
+    #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+    #panelOverview .breadth{display:none}   /* hide "Shorts activity this month" + "Views trend" cards */
+    /* Daily views + Uploads side by side; each collapses to full width when alone or on narrow screens. */
+    #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:stretch}
+    #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0;display:flex;flex-direction:column}
+    #panelOverview .ov-dv-row .dailyviews-body{display:flex;flex-direction:column;flex:1 1 auto}
+    #panelOverview .ov-dv-row .uc-plot{min-width:0!important}
+    #panelOverview .ov-dv-row .uc-col{min-width:8px}
+    #panelOverview .ov-dv-row .uc-xr{min-width:8px}
+    /* Bottom-align the summary block so the tile rows line up across both cards. */
+    #panelOverview .ov-dv-row .uc-botzone{margin-top:auto}
+    #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+    #panelOverview .ov-dv-row .uc-tile{padding:9px 10px}
+    #panelOverview .ov-dv-row .uc-tile .uc-k{min-height:2.6em;align-items:flex-start}
+    /* Reserve a 2-row legend on both cards so the chart plots start at the same height. */
+    #panelOverview .ov-dv-row .uc-legend{row-gap:6px;min-height:40px;align-content:flex-start}
+    .dv-host .uc-i{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--text-dim);color:var(--text-dim);font-size:9px;font-weight:700;font-style:italic;font-family:Georgia,"Times New Roman",serif;line-height:1;cursor:help;vertical-align:middle}
+    .dv-host .uc-i:hover,.dv-host .uc-i:focus-visible{border-color:var(--text-muted);color:var(--text-muted);outline:none}
+    .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
+    .dv-host .uc-foot.dv-remnote b{color:var(--text)}
+    .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
+    .dv-host .uc-tog.dv-oldtog[aria-pressed="true"] .uc-tdot{background:var(--text-muted)}
     @media(max-width:680px){
       #panelVideos .reposts-row{flex-wrap:wrap;row-gap:0.4rem}
       #panelVideos a.rt b{white-space:normal}
@@ -2839,7 +2899,13 @@ const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
-function ym(v){ return v.publishedAt.slice(0,7); }
+// Month window in the creator's local (Central / Wisconsin) time — the same
+// basis the Daily views + Upload cadence charts use, so "this month" counts
+// agree across the overview instead of splitting on the UTC date line.
+const _ctMonthFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit' });
+const _ctMonthCache = new Map();
+function ctMonth(iso){ if(!iso) return ''; if(_ctMonthCache.has(iso)) return _ctMonthCache.get(iso); let s; try{ const o={}; for(const x of _ctMonthFmt.formatToParts(new Date(iso))) if(x.type!=='literal') o[x.type]=x.value; s=o.year+'-'+o.month; }catch(e){ s=String(iso).slice(0,7); } _ctMonthCache.set(iso,s); return s; }
+function ym(v){ return ctMonth(v.publishedAt); }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
 
 let PAYLOAD = null; // {scopes, net, channels}
@@ -3091,11 +3157,11 @@ let HANDLE_TO_ID = {}; // handle (e.g. '@TheQuartering') -> channelId; for Analy
 // Compact number formatter. K/M with one decimal, trailing ".0" stripped — so
 // round values stay clean (244K, 2M) while small thousands keep precision
 // (1426 → 1.4K, not 1K).
-const fmt = n => { const u=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? u(n/1000000,'M') : n>=1000 ? u(n/1000,'K') : ''+n; };
+const fmt = n => { const uk=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? (n/1000000).toFixed(2).replace(/\.?0+$/,'')+'M' : n>=1000 ? uk(n/1000,'K') : ''+n; };
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const CURRENT_MONTH_KEY = (()=>{ const d=new Date(); return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`; })();
+const CURRENT_MONTH_KEY = ctMonth(new Date().toISOString());   // Central-time current month (matches ym)
 // Satirical "this channel is dying because…" excuses — the real list from the
 // live site. Cycled on click.
 const DYING_EXCUSES = [
@@ -3434,7 +3500,7 @@ function render(m){
     let days = 0;
     for (const k of keys) {
       if (!(k in S)) continue;
-      if (k === CURRENT_MONTH_KEY) days += new Date().getUTCDate();
+      if (k === CURRENT_MONTH_KEY) days += +new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',day:'numeric'}).format(new Date());
       else { const [yy, mo] = k.split('-').map(Number); days += new Date(Date.UTC(yy, mo, 0)).getUTCDate(); }
     }
     return days > 0 ? subsG / days : null;
@@ -3690,27 +3756,11 @@ function render(m){
           <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.views}</div>
-      ${isAgg ? '' : `<div class="panel">
-        <h3>Month &amp; year comparison</h3>
-        <table class="cmp-table">
-          <tr><th></th><th class="now">${monthShort(m)}</th><th>${monthShort(pm)}</th><th>${monthShort(yo)}</th></tr>
-          <tr><td>Total views</td><td class="now">${fmt(d.tot)}</td><td>${p?fmt(p.tot):'—'}</td><td>${y?fmt(y.tot):'—'}</td></tr>
-          <tr><td>Average views</td><td class="now">${fmt(d.med)}</td><td>${p?fmt(p.med):'—'}</td><td>${y?fmt(y.med):'—'}</td></tr>
-          <tr><td>Uploads</td><td class="now">${d.n}</td><td>${p?p.n:'—'}</td><td>${y?y.n:'—'}</td></tr>
-          <tr><td>Like rate</td><td class="now">${d.lv}%</td><td>${p?p.lv+'%':'—'}</td><td>${y?y.lv+'%':'—'}</td></tr>
-          <tr><td>Comments</td><td class="now">${fmt(d.comments)}</td><td>${p?fmt(p.comments):'—'}</td><td>${y?fmt(y.comments):'—'}</td></tr>
-          <tr><td>Est. revenue</td><td class="now">${money(d.revlo)}</td><td>${p?money(p.revlo):'—'}</td><td>${y?money(y.revlo):'—'}</td></tr>
-        </table>
-      </div>`}
-      <div class="panel mini-trend-panel">
-        <div class="mini-trend-header">
-          <h3>Views trend</h3>
-          ${(()=>{ if(miniTrendState.scope===null) miniTrendState.scope = (PEAKS&&PEAKS[scope])?scope:'ALL'; return renderMiniTrendControls(); })()}
-        </div>
-        <div class="mini-trend-body" id="miniTrendBody">
-          ${(PEAKS&&PEAKS[miniTrendState.scope]) ? renderMiniTrendChart() : '<div class="empty">No trend data.</div>'}
-        </div>
-      </div>
+    </div>
+    <!-- Daily views + Uploads: two overview charts side by side (stack on narrow screens) -->
+    <div class="ov-dv-row">
+      <div class="ov-dailyviews-card dv-host" id="ovDailyViews" hidden><div class="dailyviews-body" id="ovDailyViewsBody"></div></div>
+      <div class="ov-dailyviews-card dv-host" id="ovCadence" hidden><div class="dailyviews-body" id="ovCadenceBody"></div></div>
     </div>
     <div class="breadth">
       <div class="shorts-strip${mForLinks ? ' shorts-link' : ''}"${mForLinks ? ` data-goto-videos="short" data-vid-month="${mForLinks}" role="button" tabindex="0"` : ''}>
@@ -3728,14 +3778,15 @@ function render(m){
           <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+escapeHtml(SD.best.ch) : ''}</div>
         </div>` : ''}
       </div>
-      ${isAgg ? '' : `<div class="panel net-panel">
-        <h3>Across the network</h3>
-        <table class="net-table">
-          <tr><th rowspan="2" class="net-ch-h">Channel</th><th colspan="2" class="net-grp">Long-form</th><th colspan="2" class="net-grp net-grp-s">Shorts</th></tr>
-          <tr><th class="net-sub">Uploads</th><th class="net-sub">Views</th><th class="net-sub divcol">Uploads</th><th class="net-sub">Views</th></tr>
-          ${netRows}
-        </table>
-      </div>`}
+      <div class="panel mini-trend-panel">
+        <div class="mini-trend-header">
+          <h3>Views trend</h3>
+          ${(()=>{ if(miniTrendState.scope===null) miniTrendState.scope = (PEAKS&&PEAKS[scope])?scope:'ALL'; return renderMiniTrendControls(); })()}
+        </div>
+        <div class="mini-trend-body" id="miniTrendBody">
+          ${(PEAKS&&PEAKS[miniTrendState.scope]) ? renderMiniTrendChart() : '<div class="empty">No trend data.</div>'}
+        </div>
+      </div>
     </div>
   `;
   // both selectors live inside the re-rendered report header — populate + bind each render
@@ -3827,6 +3878,20 @@ function render(m){
       if (hint) hint.textContent = exp ? 'Show ▾' : 'Hide ▴';
     };
   }
+
+  // The Overview's Daily views card now lives inside the report markup (between
+  // the Topics cards and the Shorts/Views-trend row), so it must be (re)rendered
+  // after each report render. Scope it to the report's active month (monthKey);
+  // the card hides itself if that month has no daily-view data. It stays
+  // network-wide; other state persists in window.__dvOvState across re-renders.
+  window.__dvOvMonth = monthKey;
+  window.__dvOvChannel = (scope === 'ALL') ? 'ALL' : (HANDLE_TO_ID[scope] || 'ALL');
+  // The Daily views card is a single-month feature; hide it entirely when the
+  // report is showing a multi-month period (YTD, All time, Last 12/24m, Since peak).
+  window.__dvOvAgg = isAgg;
+  if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
+  // Overview "Uploads" card (mirrors the Videos-tab Upload cadence).
+  if (typeof window.__ucRenderOverview === 'function') window.__ucRenderOverview();
 }
 
 function refresh(month){
@@ -4077,7 +4142,7 @@ function anSummarise(videos) {
   };
 }
 
-function anMonthKey(iso){ return iso.slice(0,7); }
+function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
 // channel scope ('ALL' or channelId), across all available months.
 function buildMonthlyData(scope){
@@ -4686,7 +4751,7 @@ function renderTrendChart(yoy) {
   // element so users can see "where we are right now" without it distorting
   // the comparison logic.
   const now = new Date();
-  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const currentMonthKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
   const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
   const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
   // "Subscribers" mode: dispatched before the empty-chartData early-return —
@@ -6553,7 +6618,7 @@ function renderSubsChart() {
 
   const sc = (typeof scope !== 'undefined') ? scope : 'ALL';
   const now = new Date();
-  const curKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const curKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
 
   const S = (typeof SUBS_GAINED !== 'undefined' && SUBS_GAINED && SUBS_GAINED[sc]) || {};
   const keys = monthlyData.map(m => m.key).filter(k => k in S);
@@ -8110,7 +8175,7 @@ function niceDurationAxis(minSec, maxSec) {
   let chartRendered = false;
   if (monthlyData && monthlyData.length) {
     const now = new Date();
-    const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+    const currentMonthKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
     const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
     const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
     if (chartData.length >= 2) {
@@ -8147,7 +8212,8 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
-      fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e))
+      fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
+      fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
   window.__loadVideosExtraData = loadVideosExtraData;
@@ -9434,7 +9500,7 @@ function renderWindowList(startDate, endDate) {
     if (gv && !e.target.closest('a')) {
       const fmt = gv.dataset.gotoVideos;
       const month = gv.dataset.vidMonth;
-      if (month) vidTimePreset = month;
+      if (month) { vidTimePreset = month; vidUserMonth = month; }
       if (window.__windowListState) window.__windowListState.formatFilter = fmt;
       show('videos');
       if (window.__populateVidChannel) window.__populateVidChannel();
@@ -9593,6 +9659,10 @@ function renderWindowList(startDate, endDate) {
   }
   // ---- Videos tab controls ----
   let vidTimePreset = CURRENT_MONTH_KEY;
+  // The month the user explicitly picked. Kept separate from vidTimePreset so a
+  // channel that lacks that month (which snaps the live preset down) doesn't
+  // permanently lose it — switching back to a scope that has it restores it.
+  let vidUserMonth = CURRENT_MONTH_KEY;
   // A month preset (YYYY-MM) that isn't in the current scope's data — e.g. the
   // wall-clock current month on the 1st, before any uploads that month — would
   // match no dropdown option (so the browser shows the first, "YTD") AND filter
@@ -9658,6 +9728,11 @@ function renderWindowList(startDate, endDate) {
           refresh(months.includes(cm)?cm:months[0]);
         }
       }
+      // Re-point the Videos-tab month at the user's chosen month if the new scope
+      // has it, else the newest month it does have — so switching to a channel
+      // without that month (and back) doesn't strand the list on a stale month.
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonths(); }catch(_){}
+        if (ms.length) vidTimePreset = (vidUserMonth && ms.indexOf(vidUserMonth)>=0) ? vidUserMonth : ms[0]; }
       if (window.__populateAnChannel) window.__populateAnChannel();
       if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
@@ -9667,6 +9742,7 @@ function renderWindowList(startDate, endDate) {
   if (vidPeriod) {
     vidPeriod.addEventListener('change', (e) => {
       vidTimePreset = e.target.value;
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) vidUserMonth = vidTimePreset;   // remember explicit month picks
       if (window.__resetVideoBatches) window.__resetVideoBatches();
       window.__syncVidWindow(); if (window.renderVideosTab) window.renderVideosTab();
     });
@@ -11106,6 +11182,7 @@ function renderWindowList(startDate, endDate) {
     const buckets={};
     for(const v of ds.videos){
       if(ch!=="ALL"&&v.channelId!==ch) continue;
+      if(v.unavailable) continue;                    // exclude removed videos, like the rest of the site + Daily views
       const p=v.publishedAt; if(!p) continue;
       const lp=ucLocalParts(p); if(lp.ym!==monthKey) continue;
       const b=buckets[lp.day]||(buckets[lp.day]={lf:0,sh:0});
@@ -11115,30 +11192,45 @@ function renderWindowList(startDate, endDate) {
     for(let d=1;d<=dim;d++){ const wd=(new Date(Date.UTC(Y,M-1,d)).getUTCDay()+6)%7; const b=buckets[d]||{lf:0,sh:0}; out.push({d,wd,lf:b.lf,sh:b.sh}); }
     return out;
   }
-  function renderUploadCadence(){
-    const host=byId("cadenceBody"); if(!host) return;
+  function renderUploadCadence(scope){
+    scope=scope||'main'; const isOv=scope==='ov';
+    const host=byId(isOv?"ovCadenceBody":"cadenceBody"); if(!host) return;
+    const card=isOv?byId("ovCadence"):null;
+    // Overview: single-month feature — hide for multi-month/aggregate periods.
+    if(isOv && window.__dvOvAgg){ if(card) card.hidden=true; return; }
     const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
-    if(!ds||!ds.videos){host.innerHTML='<div class="vempty">No data loaded.</div>';return;}
+    if(!ds||!ds.videos){ if(!isOv) host.innerHTML='<div class="vempty">No data loaded.</div>'; return; }
     const chans=ds.channels||{};
-    const sel=byId("vidChannelSel")||byId("anChannelSel");
-    let ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
-    if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";}
+    let ch;
+    if(isOv){ ch=window.__dvOvChannel||"ALL"; }   // overview: follow the report's channel filter
+    else { const sel=byId("vidChannelSel")||byId("anChannelSel");
+      ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+      if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";} }
     const chName=ch==="ALL"?"All channels":((chans[ch]&&(chans[ch].title||chans[ch].handle))||"this channel");
     const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
     const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
     const DOW=["M","T","W","T","F","S","S"];
-    const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true});
+    const st=isOv?(window.__ucOvState||(window.__ucOvState={month:null,shorts:true,lf:true}))
+                 :(window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}));
     if(st.lf===undefined) st.lf=true;
-    if(st.shorts===undefined) st.shorts=true;
+    if(st.shorts===undefined) st.shorts=isOv?false:true;
     const nowP=ucLocalParts(new Date().toISOString()), curKey=nowP.ym;
     // Full-history range for this channel scope (his local calendar months).
     let minKey=null;
     for(const v of ds.videos){ if(ch!=="ALL"&&v.channelId!==ch) continue; const p=v.publishedAt; if(!p) continue; const ym=ucLocalParts(p).ym; if(!minKey||ym<minKey) minKey=ym; }
     if(!minKey) minKey=curKey;
-    if(!st.month) st.month=curKey;               // default view: current month
-    if(st.month>curKey) st.month=curKey;
-    if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
+    if(isOv){
+      // Overview: scope to the report's selected month; hide if that month predates
+      // the channel's first upload (or is in the future).
+      const want=window.__dvOvMonth;
+      if(!want || want<minKey || want>curKey){ if(card) card.hidden=true; return; }
+      st.month=want;
+    } else {
+      if(!st.month) st.month=curKey;               // default view: current month
+      if(st.month>curKey) st.month=curKey;
+      if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
+    }
     const days=ucCompute(ds,ch,st.month);
     const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
     let peak=1; days.forEach(x=>{peak=Math.max(peak,(st.lf?x.lf:0)+(st.shorts?x.sh:0));});
@@ -11155,7 +11247,7 @@ function renderWindowList(startDate, endDate) {
         if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
         if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
       }
-      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-mo="'+MONF[(+st.month.slice(5,7))-1]+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
     });
     let todayLine="";
@@ -11164,37 +11256,47 @@ function renderWindowList(startDate, endDate) {
     const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
     const totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
-    const summary=
-      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">'+sum(wd,"lf")+' across '+wd.length+' weekdays</div></div>'+
-      '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs '+weSH.toFixed(1)+'/day Shorts on weekends</div></div>'+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note">'+totLF+' long-form · '+totSH+' Shorts'+(isCur?' · so far':'')+'</div></div>';
+    const nD=occD.length||1;
+    const summary=isOv
+      ? '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form</div><div class="uc-v">'+totLF+'</div><div class="uc-note"><b>'+(totLF/nD).toFixed(1)+'</b>/day</div></div>'+
+        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Shorts</div><div class="uc-v">'+totSH+'</div><div class="uc-note"><b>'+(totSH/nD).toFixed(1)+'</b>/day</div></div>'+
+        '<div class="uc-tile"><div class="uc-k">Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+(tot/nD).toFixed(1)+'</b>/day'+(isCur?' · so far':'')+'</div></div>'
+      : '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note"><b>'+sum(wd,"lf")+'</b> across '+wd.length+' weekdays</div></div>'+
+        '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs <b>'+weSH.toFixed(1)+'</b>/day Shorts on weekends</div></div>'+
+        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+totLF+'</b> long-form · <b>'+totSH+'</b> Shorts'+(isCur?' · so far':'')+'</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
     for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
-    const nav='<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>';
+    const nav=isOv?'':('<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>');
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
     host.innerHTML=
-      '<div class="uc-head"><div><p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3></div>'+
+      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
-      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong()" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
-      '<button type="button" class="uc-tog" onclick="__ucToggleShorts()" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
+      '<button type="button" class="uc-tog lf" onclick="__ucToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
+      '<button type="button" class="uc-tog" onclick="__ucToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
       '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-summary">'+summary+'</div>'+
-      '<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>';
+      '<div class="uc-botzone"><div class="uc-summary">'+summary+'</div></div>'+
+      (isOv?'':('<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>'));
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
+    if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
   }
-  window.__ucSetMonthNum=function(m){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(); };
-  window.__ucSetYear=function(y){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(); };
-  window.__ucToggleShorts=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.shorts=!st.shorts; renderUploadCadence(); };
-  window.__ucToggleLong=function(){ const st=window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}); st.lf=!st.lf; renderUploadCadence(); };
+  function _ucst(scope){ return (scope==='ov') ? (window.__ucOvState||(window.__ucOvState={month:null,shorts:true,lf:true})) : (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})); }
+  window.__ucSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_ucst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(scope); };
+  window.__ucSetYear=function(y,scope){ scope=scope||'main'; const st=_ucst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(scope); };
+  window.__ucToggleShorts=function(scope){ scope=scope||'main'; const st=_ucst(scope); st.shorts=!st.shorts; renderUploadCadence(scope); };
+  window.__ucToggleLong=function(scope){ scope=scope||'main'; const st=_ucst(scope); st.lf=!st.lf; renderUploadCadence(scope); };
+  window.__ucRenderOverview=function(){ renderUploadCadence('ov'); };
   function __ucEnsureTip(){ let t=byId("ucTip"); if(!t){t=document.createElement("div");t.id="ucTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
   function __ucTip(e){
     const c=e.target.closest(".uc-col"), tip=__ucEnsureTip(); if(!c){tip.style.opacity="0";return;}
-    const d=c.dataset, mn=window.__ucCurMonthName||"", st=window.__ucState||{shorts:true};
+    const d=c.dataset, mn=d.mo||window.__ucCurMonthName||"";
+    // Use the state of the card actually being hovered (Overview vs Videos-tab).
+    const st=(c.closest('#ovCadence')?window.__ucOvState:window.__ucState)||{shorts:true};
     let html;
     if(d.future==="1"){ html='<div class="uc-ttday">'+mn+' '+d.d+'</div><div class="uc-ttnone">not yet published</div>'; }
     else{
@@ -11214,12 +11316,224 @@ function renderWindowList(startDate, endDate) {
     tip.style.left=x+"px"; tip.style.top=y+"px";
   }
   function __ucHideTip(){ const t=byId("ucTip"); if(t)t.style.opacity="0"; }
+
+  // ---- Daily views panel: view GAINS per day (this-month uploads vs previous months) ----
+  // Source: public/daily-views.json — network-wide daily view deltas from the
+  // snapshot archive (scripts/build-daily-views.js). Colour matches Upload
+  // cadence: hue = format (blue long-form, orange Shorts), and within each
+  // format a solid shade = uploaded this month, a pale shade = previous months.
+  // With both toggles on, bars read long-form (bottom) then Shorts (top), each
+  // split light/dark by age. History is limited to the snapshot window (Jun 2026
+  // onward), so the month nav only offers months that actually have data.
+  function dvData(){ return window.__dvData||null; }
+  function dvMonths(){ const d=dvData(); if(!d||!d.days) return []; const s=new Set(); for(const k in d.days) s.add(k.slice(0,7)); return [...s].sort(); }
+  function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(s=>n<=s+1e-9)||10; return m*pow; }
+  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
+  function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
+  function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
+  // Raw four buckets per day (toggles applied at render time, not here).
+  function dvRoll(rec, ch){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
+    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
+  function dvCompute(ch, monthKey){
+    const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
+    const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
+    for(let day=1;day<=dim;day++){
+      const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
+      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch);
+      const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
+      out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
+    }
+    return out;
+  }
+  // Full series: every day with data, in date order, spanning all months.
+  function dvSeriesAll(ch){
+    const d=dvData(), out=[]; if(!d||!d.days) return out;
+    const dates=Object.keys(d.days).sort(); let prevMo=null;
+    for(const ds of dates){
+      const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch);
+      const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
+      out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
+      prevMo=M;
+    }
+    return out;
+  }
+  function renderDailyViews(scope){
+    scope=scope||'main'; const isOv=scope==='ov';
+    const host=byId(isOv?"ovDailyViewsBody":"dailyViewsBody"); if(!host) return;
+    const card=isOv?byId("ovDailyViews"):null;
+    // Overview: the card is scoped to a single month, so hide it when the report is
+    // in a multi-month/aggregate period (YTD, All time, etc.) where it can't apply.
+    if(isOv && window.__dvOvAgg){ if(card) card.hidden=true; return; }
+    const d=dvData();
+    if(!d||!d.days){ if(!isOv) host.innerHTML='<div class="vempty">Daily-view data isn’t loaded yet.</div>'; return; }
+    const months=dvMonths();
+    if(!months.length){ if(!isOv) host.innerHTML='<div class="vempty">No daily-view data yet.</div>'; return; }
+    const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
+    const chans=(ds&&ds.channels)||{};
+    let ch;
+    if(isOv){ ch=window.__dvOvChannel||"ALL"; }    // overview: follow the report's channel filter (set by render())
+    else { const sel=byId("vidChannelSel")||byId("anChannelSel");
+      ch=(sel&&sel.value)||(typeof ANALYTICS_CHANNEL!=="undefined"?ANALYTICS_CHANNEL:"ALL");
+      if(ch&&ch!=="ALL"&&!chans[ch]){const norm=s=>String(s).replace(/^@/,"").toLowerCase();let hit=null;for(const k in chans){if(norm(chans[k].handle)===norm(ch)){hit=k;break;}}ch=hit||"ALL";} }
+    const chName=ch==="ALL"?"All channels":((d._channels&&d._channels[ch])||(chans[ch]&&(chans[ch].title||chans[ch].handle))||"this channel");
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const DOW=["M","T","W","T","F","S","S"];
+    const showNav=!isOv, floorMonth=isOv?"2026-07":null;   // overview: July onward, no nav
+    let minKey=months[0]; const maxKey=months[months.length-1];
+    if(floorMonth && minKey<floorMonth) minKey=floorMonth;
+    if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
+    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true}))
+                 :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
+    if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
+    if(isOv) st.full=false;                        // overview never uses full-series mode
+    // Overview: scope strictly to the report's selected month (window.__dvOvMonth,
+    // set by render()). The card is single-month and only has daily-view data from
+    // July 2026 on, so HIDE (don't clamp) for any month outside that range —
+    // pre-July months have no/incomplete data, and periods are handled above.
+    if(isOv){
+      const want=window.__dvOvMonth;
+      if(!want || want<minKey || want>maxKey || months.indexOf(want)<0){ if(card) card.hidden=true; return; }
+      st.month=want;
+    }
+    if(!st.month) st.month=maxKey;                 // default: latest month WITH data (not the empty current month)
+    if(st.month>maxKey) st.month=maxKey;
+    if(st.month<minKey) st.month=minKey;
+    if(months.indexOf(st.month)<0) st.month=maxKey; // snap to a month that actually has data
+    const days=st.full?dvSeriesAll(ch):dvCompute(ch,st.month);
+    let lastData=0; days.forEach(x=>{ if(x.inRange) lastData=x.d; });
+    const isLatest=st.month===maxKey;
+    const selTot=x=>(st.lf?x.lfNew+(st.showOld?x.lfOld:0):0)+(st.shorts?x.shNew+(st.showOld?x.shOld:0):0);
+    let peak=1; days.forEach(x=>{ peak=Math.max(peak,selTot(x)); });
+    const max=dvNiceMax(peak), DIVS=4;
+    let grid=""; for(let g=0;g<=DIVS;g++){ grid+='<div class="uc-gl" style="top:'+((1-g/DIVS)*100)+'%"><span>'+dvFmt(max*g/DIVS)+'</span></div>'; }
+    let cols="", xrow="";
+    days.forEach(x=>{
+      const wknd=x.wd>=5, nodata=!x.inRange, moL=st.full&&x.moLabel?MONF[x.mo-1]:"";
+      const lfO=(st.lf&&st.showOld)?x.lfOld:0, lfN=st.lf?x.lfNew:0, shO=(st.shorts&&st.showOld)?x.shOld:0, shN=st.shorts?x.shNew:0;
+      const total=lfO+lfN+shO+shN;
+      let inner="";
+      if(!nodata){
+        if(total>0){
+          const segs=[]; // bottom → top: long-form under Shorts, older shade under newer
+          if(lfO>0) segs.push([lfO,'lf old']); if(lfN>0) segs.push([lfN,'lf new']);
+          if(shO>0) segs.push([shO,'sh old']); if(shN>0) segs.push([shN,'sh new']);
+          segs.forEach((s,i)=>{ inner+='<div class="uc-bar dv-bar '+s[1]+(i===segs.length-1?' top':'')+'" style="height:'+(s[0]/max*100)+'%"></div>'; });
+        } else inner+='<div class="uc-tick none"></div>';
+      }
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(nodata?' future':'')+(moL?' momark':'')+'" data-d="'+x.d+'" data-mo="'+MONF[x.mo-1]+'" data-lfn="'+x.lfNew+'" data-lfo="'+x.lfOld+'" data-shn="'+x.shNew+'" data-sho="'+x.shOld+'" data-wknd="'+(wknd?1:0)+'" data-nodata="'+(nodata?1:0)+'">'+inner+'</div>';
+      xrow+='<div class="uc-xr'+(wknd?' wknd':'')+(moL?' momark':'')+'">'+(st.full?'<span class="uc-mo">'+moL+'</span>':'')+'<span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
+    });
+    let asLine="";
+    if(!st.full && isLatest && lastData>0 && lastData<days.length){ const n=days.length, idx=lastData-1; asLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>latest: '+MONF[(+st.month.split("-")[1])-1]+' '+lastData+'</span></div>'; }
+    const plotW=Math.max(640, days.length*(st.full?17:20)+40);
+    const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
+    // Overview: only hide when this channel/month has NO view data at all (toggle-
+    // independent). Channels with small historical (prior-month) views still show.
+    if(isOv){ const rawTot=inD.reduce((s,x)=>s+x.lfNew+x.lfOld+x.shNew+x.shOld,0); if(rawTot===0){ if(card) card.hidden=true; return; } }
+    const selNew=x=>(st.lf?x.lfNew:0)+(st.shorts?x.shNew:0), selOld=x=>st.showOld?((st.lf?x.lfOld:0)+(st.shorts?x.shOld:0)):0;
+    const selPW=x=>(st.lf?(x.lfPW||0):0)+(st.shorts?(x.shPW||0):0);
+    const totNew=inD.reduce((s,x)=>s+selNew(x),0), totOld=inD.reduce((s,x)=>s+selOld(x),0), tot=totNew+totOld;
+    const totPW=inD.reduce((s,x)=>s+selPW(x),0);
+    const avgNew=totNew/nDays, avgOld=totOld/nDays, avg=tot/nDays;
+    const pctNew=tot>0?Math.round(totNew/tot*100):0;
+    // "Final week of the previous month" — a recency slice of the prior-months
+    // bucket (data._pw). Only meaningful in single-month mode.
+    const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
+    const oldInfo=((dvHasPW&&!st.full&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
+    const newInfo='Views gained during the month itself — not these videos’ lifetime total, which keeps rising afterward.';
+    // Views excluded because the video has since been removed (privatised/deleted),
+    // matching the current format + prior-months toggles so the note tracks the chart.
+    let remViews=0; { const R=(d&&d.removed)||{};
+      for(const date in R){ if(!st.full && date.slice(0,7)!==st.month) continue;
+        const rec=R[date], acc=a=>{ if(!a) return; if(st.shorts) remViews+=a[0]+(st.showOld?a[2]:0); if(st.lf) remViews+=a[1]+(st.showOld?a[3]:0); };
+        if(ch==="ALL"){ for(const id in rec) acc(rec[id]); } else acc(rec[ch]); } }
+    const remNote=remViews>0?('<p class="uc-foot dv-remnote">Excludes <b>'+dvFmt(remViews)+'</b> views on videos he’s since removed'+(st.full?'':' this month')+'.</p>'):'';
+    const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
+    const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
+    const summary=
+      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'<span>'+newLab+' <span class="uc-i" tabindex="0" title="'+esc(newInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" title="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
+    const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
+    const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
+    let yearOpts=""; years.forEach(y=>{ yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>'; });
+    const monthsInYear=months.filter(m=>+m.slice(0,4)===selY).map(m=>+m.slice(5,7));
+    let monOpts=""; monthsInYear.forEach(mm=>{ monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>'; });
+    const dis=st.full?' disabled':'';
+    const nav=showNav?('<div class="uc-nav"><select class="uc-sel" aria-label="Year"'+dis+' onchange="__dvSetYear(this.value,\'main\')">'+yearOpts+'</select><select class="uc-sel" aria-label="Month"'+dis+' onchange="__dvSetMonthNum(this.value,\'main\')">'+monOpts+'</select>'+
+      '<button type="button" class="dv-seriestog" onclick="__dvToggleFull(\'main\')" aria-pressed="'+(st.full?'true':'false')+'" title="Toggle the full day-by-day series (scroll across all months)">All days</button></div>'):'';
+    const axsub=(st.lf&&st.shorts)?'— long-form + Shorts':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
+    host.innerHTML=
+      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Daily views</h3>':'<p class="uc-eyebrow">Daily views</p><h3 class="uc-h">How many views per day?</h3>')+'</div>'+
+      '<div class="uc-controls">'+nav+
+      '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
+      '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
+      (isOv?'<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>':'')+
+      '</div></div>'+
+      '<div class="uc-legend">'+
+        '<span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw dv-sw lf new"></i>Long-form · this month</span>'+
+        '<span class="uc-lfkey'+((st.lf&&st.showOld)?'':' off')+'"><i class="uc-sw dv-sw lf old"></i>· prior months</span>'+
+        '<span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw dv-sw sh new"></i>Shorts · this month</span>'+
+        '<span class="uc-shkey'+((st.shorts&&st.showOld)?'':' off')+'"><i class="uc-sw dv-sw sh old"></i>· prior months</span>'+
+      '</div>'+
+      '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
+      '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
+      '<div class="uc-botzone">'+remNote+'<div class="uc-summary">'+summary+'</div></div>'+
+      (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
+      '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
+    window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
+    if(card) card.hidden=false;
+    const colsEl=host.querySelector(".uc-cols");
+    if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
+  }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
+  window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
+  window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
+  window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
+  window.__dvToggleLong=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.lf=!st.lf; renderDailyViews(scope); };
+  window.__dvToggleFull=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.full=!st.full; renderDailyViews(scope); };
+  window.__dvToggleOld=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.showOld=!st.showOld; renderDailyViews(scope); };
+  window.__dvRerenderIfActive=function(){ if(active==="dailyviews") renderDailyViews('main'); };
+  window.__dvRenderOverview=function(){ renderDailyViews('ov'); };
+  function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
+  function __dvTip(e){
+    const c=e.target.closest(".uc-col"), tip=__dvEnsureTip(); if(!c){tip.style.opacity="0";return;}
+    const dd=c.dataset, mn=dd.mo||window.__dvCurMonthName||"";
+    // Use the state of the card actually being hovered — the Overview card and the
+    // Videos-tab card have independent toggles (__dvOvState vs __dvState).
+    const st=(c.closest('#ovDailyViews')?window.__dvOvState:window.__dvState)||{lf:true,shorts:false};
+    let html;
+    if(dd.nodata==="1"){ html='<div class="uc-ttday">'+mn+' '+dd.d+'</div><div class="uc-ttnone">no snapshot data</div>'; }
+    else{
+      const lfN=+dd.lfn, lfO=+dd.lfo, shN=+dd.shn, shO=+dd.sho;
+      const row=(cls,lab,v)=>v>0?'<div class="uc-ttrow"><span class="uc-lab"><i class="'+cls+'"></i>'+lab+'</span><span>'+dvFmtFull(v)+'</span></div>':'';
+      let rows="", t=0;
+      if(st.lf){ rows+=row('lf new','Long-form · this month',lfN)+row('lf old','Long-form · prior months',lfO); t+=lfN+lfO; }
+      if(st.shorts){ rows+=row('sh new','Shorts · this month',shN)+row('sh old','Shorts · prior months',shO); t+=shN+shO; }
+      const body=(t===0||!rows)?'<div class="uc-ttnone">no views recorded</div>':(rows+'<div class="uc-tttot"><span>Total</span><span>'+dvFmtFull(t)+'</span></div>');
+      html='<div class="uc-ttday">'+mn+' '+dd.d+(dd.wknd==="1"?' · weekend':'')+'</div>'+body;
+    }
+    tip.innerHTML=html; tip.style.opacity="1";
+    const pad=14; let x=e.clientX+pad, y=e.clientY+pad; const r=tip.getBoundingClientRect();
+    if(x+r.width>innerWidth-8) x=e.clientX-r.width-pad;
+    if(y+r.height>innerHeight-8) y=e.clientY-r.height-pad;
+    tip.style.left=x+"px"; tip.style.top=y+"px";
+  }
+  function __dvHideTip(){ const t=byId("dvTip"); if(t)t.style.opacity="0"; }
+  // Leaving Daily views / Upload cadence (which hide the page period selector and
+  // run their own month nav): re-sync the video-list window to the page period so
+  // the list below never shows a stale month after switching in and out.
+  function __resyncVidList(){ try{ if(window.__syncVidWindow) window.__syncVidWindow(); if(window.renderVideosTab) window.renderVideosTab(); }catch(e){} }
   function closeCurrent(){
     if(!active)return;
     if(active==="promos"){const ap=byId("adPanel");if(ap)ap.classList.remove("vt-active");const pe=byId("promosEmpty");if(pe)pe.hidden=true;}
     else if(active==="removed"){const s=byId("removedSection");if(s)s.classList.remove("vt-active");}
     else if(active==="reposts"){const s=byId("repostsSection");if(s)s.classList.remove("vt-active");}
-    else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";}
+    else if(active==="cadence"){const s=byId("cadenceSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";__resyncVidList();}
+    else if(active==="dailyviews"){const s=byId("dailyViewsSection");if(s)s.classList.remove("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="";__resyncVidList();}
     else{const s=byId(SECID[active]);if(s)s.classList.remove("vt-active");const tog=byId(TOGID[active]);if(tog&&tog.getAttribute("aria-expanded")==="true")tog.click();}
     const na=byId("vtabNA");if(na)na.hidden=true;
     const tb=tabs.querySelector('.vtab[data-t="'+active+'"]');if(tb){tb.classList.remove("active");tb.setAttribute("aria-selected","false");}
@@ -11238,6 +11552,8 @@ function renderWindowList(startDate, endDate) {
       const s=byId("repostsSection");if(s)s.classList.add("vt-active");renderReposts();
     }else if(t==="cadence"){
       const s=byId("cadenceSection");if(s)s.classList.add("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="none";renderUploadCadence();
+    }else if(t==="dailyviews"){
+      const s=byId("dailyViewsSection");if(s)s.classList.add("vt-active");const ps=byId("vidPeriodSel");if(ps)ps.style.display="none";renderDailyViews();
     }else{
       const s=byId(SECID[t]);if(s)s.classList.add("vt-active");
       const tog=byId(TOGID[t]);if(tog&&tog.getAttribute("aria-expanded")!=="true")tog.click();
