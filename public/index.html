@@ -11257,13 +11257,10 @@ function renderWindowList(startDate, endDate) {
     const wdLF=wd.length?sum(wd,"lf")/wd.length:0, weLF=we.length?sum(we,"lf")/we.length:0, weSH=we.length?sum(we,"sh")/we.length:0;
     const totLF=sum(occD,"lf"), totSH=sum(occD,"sh"), tot=totLF+totSH;
     const nD=occD.length||1;
-    const summary=isOv
-      ? '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form</div><div class="uc-v">'+totLF+'</div><div class="uc-note"><b>'+(totLF/nD).toFixed(1)+'</b>/day</div></div>'+
-        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Shorts</div><div class="uc-v">'+totSH+'</div><div class="uc-note"><b>'+(totSH/nD).toFixed(1)+'</b>/day</div></div>'+
-        '<div class="uc-tile"><div class="uc-k">Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+(tot/nD).toFixed(1)+'</b>/day'+(isCur?' · so far':'')+'</div></div>'
-      : '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekday</div><div class="uc-v">'+wdLF.toFixed(1)+'<small>/day</small></div><div class="uc-note"><b>'+sum(wd,"lf")+'</b> across '+wd.length+' weekdays</div></div>'+
-        '<div class="uc-tile'+(tot>0&&weLF<0.7?' flag':'')+'"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form / weekend</div><div class="uc-v">'+weLF.toFixed(1)+'<small>/day</small></div><div class="uc-note">vs <b>'+weSH.toFixed(1)+'</b>/day Shorts on weekends</div></div>'+
-        '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+totLF+'</b> long-form · <b>'+totSH+'</b> Shorts'+(isCur?' · so far':'')+'</div></div>';
+    const summary=
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--brand)"></span>Long-form</div><div class="uc-v">'+totLF+'</div><div class="uc-note"><b>'+(totLF/nD).toFixed(1)+'</b>/day</div></div>'+
+      '<div class="uc-tile"><div class="uc-k"><span class="uc-chip" style="background:var(--shorts)"></span>Shorts</div><div class="uc-v">'+totSH+'</div><div class="uc-note"><b>'+(totSH/nD).toFixed(1)+'</b>/day</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">Total uploads</div><div class="uc-v">'+tot+'</div><div class="uc-note"><b>'+(tot/nD).toFixed(1)+'</b>/day'+(isCur?' · so far':'')+'</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7), minY=+minKey.slice(0,4), minMo=+minKey.slice(5,7), curY=+curKey.slice(0,4), curMo=+curKey.slice(5,7);
     let yearOpts=""; for(let y=curY;y>=minY;y--) yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
     const loM=(selY===minY)?minMo:1, hiM=(selY===curY)?curMo:12; let monOpts="";
@@ -11385,7 +11382,7 @@ function renderWindowList(startDate, endDate) {
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
     const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true}))
-                 :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
+                 :(window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false,showOld:true}));
     if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
     // Overview: scope strictly to the report's selected month (window.__dvOvMonth,
@@ -11489,7 +11486,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
   }
-  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
   window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
