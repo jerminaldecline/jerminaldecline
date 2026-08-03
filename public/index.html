@@ -4140,7 +4140,7 @@ function anSummarise(videos) {
   };
 }
 
-function anMonthKey(iso){ return iso.slice(0,7); }
+function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
 // channel scope ('ALL' or channelId), across all available months.
 function buildMonthlyData(scope){
@@ -4749,7 +4749,7 @@ function renderTrendChart(yoy) {
   // element so users can see "where we are right now" without it distorting
   // the comparison logic.
   const now = new Date();
-  const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const currentMonthKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
   const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
   const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
   // "Subscribers" mode: dispatched before the empty-chartData early-return —
@@ -6616,7 +6616,7 @@ function renderSubsChart() {
 
   const sc = (typeof scope !== 'undefined') ? scope : 'ALL';
   const now = new Date();
-  const curKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  const curKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
 
   const S = (typeof SUBS_GAINED !== 'undefined' && SUBS_GAINED && SUBS_GAINED[sc]) || {};
   const keys = monthlyData.map(m => m.key).filter(k => k in S);
@@ -8173,7 +8173,7 @@ function niceDurationAxis(minSec, maxSec) {
   let chartRendered = false;
   if (monthlyData && monthlyData.length) {
     const now = new Date();
-    const currentMonthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+    const currentMonthKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
     const chartData = monthlyData.filter(m => m.key !== currentMonthKey);
     const inProgressMonth = monthlyData.find(m => m.key === currentMonthKey) || null;
     if (chartData.length >= 2) {
