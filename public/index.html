@@ -2800,6 +2800,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr .uc-mo{display:block;height:11px;line-height:11px;font-family:var(--uc-mono);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--brand);text-transform:uppercase}
     .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
     #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+    #panelOverview .breadth{display:none}   /* hide "Shorts activity this month" + "Views trend" cards */
     /* Daily views + Uploads side by side; each collapses to full width when alone or on narrow screens. */
     #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:stretch}
     #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0;display:flex;flex-direction:column}
@@ -11199,7 +11200,7 @@ function renderWindowList(startDate, endDate) {
     const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
     const DOW=["M","T","W","T","F","S","S"];
-    const st=isOv?(window.__ucOvState||(window.__ucOvState={month:null,shorts:false,lf:true}))
+    const st=isOv?(window.__ucOvState||(window.__ucOvState={month:null,shorts:true,lf:true}))
                  :(window.__ucState||(window.__ucState={month:null,shorts:true,lf:true}));
     if(st.lf===undefined) st.lf=true;
     if(st.shorts===undefined) st.shorts=isOv?false:true;
@@ -11273,7 +11274,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
   }
-  function _ucst(scope){ return (scope==='ov') ? (window.__ucOvState||(window.__ucOvState={month:null,shorts:false,lf:true})) : (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})); }
+  function _ucst(scope){ return (scope==='ov') ? (window.__ucOvState||(window.__ucOvState={month:null,shorts:true,lf:true})) : (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})); }
   window.__ucSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_ucst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(scope); };
   window.__ucSetYear=function(y,scope){ scope=scope||'main'; const st=_ucst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderUploadCadence(scope); };
   window.__ucToggleShorts=function(scope){ scope=scope||'main'; const st=_ucst(scope); st.shorts=!st.shorts; renderUploadCadence(scope); };
@@ -11372,7 +11373,7 @@ function renderWindowList(startDate, endDate) {
     let minKey=months[0]; const maxKey=months[months.length-1];
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
-    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true}))
+    const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true}))
                  :(window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false,showOld:true}));
     if(st.shorts===undefined) st.shorts=false; if(st.lf===undefined) st.lf=true; if(st.full===undefined) st.full=false; if(st.showOld===undefined) st.showOld=true;
     if(isOv) st.full=false;                        // overview never uses full-series mode
@@ -11477,7 +11478,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
   }
-  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:false,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:false,lf:true,full:false})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
   window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
