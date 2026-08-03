@@ -2723,7 +2723,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-legend .uc-shkey.off,.dv-host .uc-legend .uc-lfkey.off{opacity:.42;text-decoration:line-through}
     .dv-host .uc-axcap{font-family:var(--uc-mono);font-size:10.5px;color:var(--text-muted);margin:10px 0 6px 2px}
     .dv-host .uc-axcap span{color:var(--text-dim)}
-    .dv-host .uc-scroll{overflow-x:auto;padding-bottom:2px}
+    .dv-host .uc-scroll{overflow-x:auto;padding-top:10px;padding-bottom:2px}
     .dv-host .uc-plot{position:relative;min-width:640px}
     .dv-host .uc-chartarea{position:relative;height:210px}
     .dv-host .uc-grid{position:absolute;left:28px;right:0;top:0;bottom:0;pointer-events:none}
@@ -2801,13 +2801,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr.momark .uc-dnum{color:var(--brand)}
     #panelOverview .ov-dailyviews-card{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
     /* Daily views + Uploads side by side; each collapses to full width when alone or on narrow screens. */
-    #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:start}
-    #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0}
+    #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:stretch}
+    #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0;display:flex;flex-direction:column}
+    #panelOverview .ov-dv-row .dailyviews-body{display:flex;flex-direction:column;flex:1 1 auto}
     #panelOverview .ov-dv-row .uc-plot{min-width:0!important}
     #panelOverview .ov-dv-row .uc-col{min-width:8px}
     #panelOverview .ov-dv-row .uc-xr{min-width:8px}
-    #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px}
+    /* Bottom-align the summary block so the tile rows line up across both cards. */
+    #panelOverview .ov-dv-row .uc-botzone{margin-top:auto}
+    #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
     #panelOverview .ov-dv-row .uc-tile{padding:9px 10px}
+    #panelOverview .ov-dv-row .uc-tile .uc-k{min-height:2.6em;align-items:flex-start}
     .dv-host .uc-foot.dv-remnote{font-family:inherit;color:var(--text-muted);margin-top:8px}
     .dv-host .uc-foot.dv-remnote b{color:var(--text)}
     .dv-host .uc-tog.dv-oldtog[aria-pressed="true"]{border-color:var(--text-muted);color:var(--text);background:color-mix(in srgb,var(--text-muted) 14%,var(--surface-2))}
@@ -11246,7 +11250,7 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-summary">'+summary+'</div>'+
+      '<div class="uc-botzone"><div class="uc-summary">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>'));
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
     if(card) card.hidden=false;
@@ -11450,8 +11454,7 @@ function renderWindowList(startDate, endDate) {
       '</div>'+
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-summary">'+summary+'</div>'+
-      remNote+
+      '<div class="uc-botzone">'+remNote+'<div class="uc-summary">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
       '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
