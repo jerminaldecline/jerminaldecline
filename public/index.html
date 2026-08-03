@@ -92,9 +92,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .bar-sel:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.3))}
 .bar-sel:hover{border-color:var(--accent)}
 .bar-sel option{background:var(--surface);color:var(--text)}
-.ds-tab{appearance:none;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.7rem 1.1rem;cursor:pointer;margin-bottom:-1px}
-.ds-tab:hover{color:var(--text)}
-.ds-tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);border-bottom-width:3px}
+.ds-tab{appearance:none;background:var(--surface);border:1px solid var(--border);border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.6rem 1.15rem;cursor:pointer;margin-bottom:-1px;border-radius:9px 9px 0 0;transition:background .14s,color .14s}
+.ds-tab:hover{color:var(--text);background:var(--surface-2)}
+.ds-tab:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.28))}
+.ds-tab[aria-selected="true"]{color:var(--accent);background:var(--surface-2);border-bottom-color:var(--accent);border-bottom-width:3px}
 .ds-tabpanel[hidden]{display:none}
 .tab-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:3rem 2rem;text-align:center}
 .tab-placeholder h3{margin:0 0 0.75rem;font-size:1.2rem;font-weight:800;color:var(--text)}
@@ -2308,7 +2309,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   <div class="tabbar-row">
   <nav class="ds-tabs" role="tablist" aria-label="Sections" id="dsTabs">
     <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
-    <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Analysis</button>
+    <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Charts &amp; Analysis</button>
     <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false">Videos</button>
   </nav>
   <div class="sticky-controls" id="stickyControls">
