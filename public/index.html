@@ -8161,6 +8161,11 @@ function niceDurationAxis(minSec, maxSec) {
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
   if (!startDate || !endDate) { panel.hidden = true; return; }
+  // Span of the window as Date objects — rangeLabel() below subtracts these to
+  // report the length in days. Keep them: the filter works on Central-time date
+  // keys, but the label still needs the two endpoints.
+  const start = new Date(startDate + 'T00:00:00Z');
+  const end = new Date(endDate + 'T23:59:59Z');
   const videos = anFilteredVideos().filter(v => {
     const k = ctDate(v.publishedAt);
     return k >= startDate && k <= endDate;
