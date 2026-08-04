@@ -1,36 +1,4 @@
 {
-  "lastUpdated": "2026-08-03T07:56:26.541Z",
-  "trackers": [
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "demanding",
-      "keywords": [
-        "demanding",
-        "fifth"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0068,
-        "spikeRatio": 48.67,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-08-03T07:56:26.541Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "vlogs candace",
-      "keywords": [
-        "vlogs candace"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0342,
-        "spikeRatio": 9.73,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-08-03T07:56:26.541Z"
-      }
-    }
-  ]
+  "lastUpdated": "2026-08-04T07:10:39.080Z",
+  "trackers": []
 }

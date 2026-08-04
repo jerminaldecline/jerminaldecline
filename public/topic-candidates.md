@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-03
+# Topic candidates — 2026-08-04
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -8,21 +8,7 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 Pool: 17 recent videos, 122 baseline videos
 
-### Cluster 1: `killed`
-
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 1/122 videos (1%)
-- **Spike ratio:** 14.5x
-- **Related terms:** `killed`
-- **Sample recent videos:**
-  - 2026-08-01 — _HE WENT NUCLEAR_  
-    He Killed A Six-Year-Old Boy And Now He Walks Free
-  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
-    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
-  - 2026-07-27 — _RACE RIOTS BEGIN_  
-    Knife Wielding Suspect Shot By Police As Leftist Chaos Explodes
-
-### Cluster 2: `erupted`
+### Cluster 1: `erupted`
 
 - **Recent saturation:** 3/17 videos (**18%**)
 - **Baseline saturation:** 3/122 videos (2%)
@@ -36,45 +22,15 @@ Pool: 17 recent videos, 122 baseline videos
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
     Madison Riots Backfire As Evidence Destroys Their Entire Narrative
 
-### Cluster 3: `suspect`
-
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 6.2x
-- **Related terms:** `suspect`
-- **Sample recent videos:**
-  - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
-    Madison Riots Backfire As Evidence Destroys Their Entire Narrative
-  - 2026-07-27 — _RACE RIOTS BEGIN_  
-    Knife Wielding Suspect Shot By Police As Leftist Chaos Explodes
-  - 2026-07-27 — _THEY ASKED FOR IT_  
-    ISIS Aspirant Returns To Germany Then Launches Pride Terror Attack
-
 ## @JeremyHambly
 
 Pool: 12 recent videos, 72 baseline videos
 
-### Cluster 1: `demanding`
+### Cluster 1: `vlogs candace`
 
-- **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 0/72 videos (0%)
-- **Spike ratio:** 48.7x
-- **Related terms:** `demanding`, `fifth`
-- **Sample recent videos:**
-  - 2026-07-31 — _IT'S GETTING INSANE_  
-    Alex Jones Calls Trump Tyrannical And Wants Him Removed Now
-  - 2026-07-29 — _FAUCI IMPLODES_  
-    Fauci Pleads The Fifth Over One Hundred Times During Meltdown
-  - 2026-07-27 — _SHE'S OUT OF CONTROL_  
-    Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
-  - 2026-07-27 — _MAMDANI BANNED_  
-    Hundreds Of 9/11 Families Tell Mamdani He Is Not Welcome
-
-### Cluster 2: `vlogs candace`
-
-- **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 2/72 videos (3%)
-- **Spike ratio:** 9.7x
+- **Recent saturation:** 3/12 videos (**25%**)
+- **Baseline saturation:** 3/72 videos (4%)
+- **Spike ratio:** 5.2x
 - **Related terms:** `vlogs candace`
 - **Sample recent videos:**
   - 2026-07-30 — _SHE'S GETTING SUED_  
@@ -83,8 +39,6 @@ Pool: 12 recent videos, 72 baseline videos
     Candace Releases Bombshell Then Realizes It Proves Her Wrong
   - 2026-07-28 — _SHE'S PANICKING_  
     Candace Owens Dumps Alleged Charlie Kirk Texts As Allies Revolt
-  - 2026-07-27 — _SHE'S OUT OF CONTROL_  
-    Candace Owens Takes Charlie Kirk Obsession To Disturbing New Level
 
 ---
 
