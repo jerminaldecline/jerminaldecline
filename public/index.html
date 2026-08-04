@@ -2875,15 +2875,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelOverview .ov-dv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem;margin-top:1.25rem;align-items:stretch}
     #panelOverview .ov-dv-row .ov-dailyviews-card{margin-top:0;min-width:0;display:flex;flex-direction:column}
     #panelOverview .ov-dv-row .dailyviews-body{display:flex;flex-direction:column;flex:1 1 auto}
-    #panelOverview .ov-dv-row .uc-plot{min-width:0!important}
+    /* Don't squeeze the month into the card — the renderers size the plot from the
+       day count so every day keeps a legible label, and .uc-scroll (overflow-x:auto)
+       scrolls when the card is narrower than that. Previously min-width:0!important
+       forced a fit, crushing columns to ~6px and running the day numbers together. */
     #panelOverview .ov-dv-row .uc-col{min-width:8px}
     #panelOverview .ov-dv-row .uc-xr{min-width:8px}
-    /* A month of day numbers can't fit these compact cards: columns are ~11px at
-       full width and ~6px on a phone, but two 10px monospace digits need ~12px,
-       so the numbers ran into each other. Label every fifth day instead — the
-       weekday letters (single char) still mark every column. */
-    #panelOverview .ov-dv-row .uc-xr .uc-dnum{display:none}
-    #panelOverview .ov-dv-row .uc-xr:nth-child(5n+1) .uc-dnum{display:block}
     /* Bottom-align the summary block so the tile rows line up across both cards. */
     #panelOverview .ov-dv-row .uc-botzone{margin-top:auto}
     #panelOverview .ov-dv-row .uc-summary{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
@@ -11422,6 +11419,10 @@ function renderWindowList(startDate, endDate) {
     for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
     const nav=isOv?'':('<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>');
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
+    // Width needed to keep every day's number legible (~14px per column + gap).
+    // The compact Overview card has no 640px floor, so it only scrolls when the
+    // card is actually too narrow for the month.
+    const plotW=Math.max(isOv?0:640, days.length*(isOv?17:20)+40);
     host.innerHTML=
       '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
@@ -11429,7 +11430,7 @@ function renderWindowList(startDate, endDate) {
       '<button type="button" class="uc-tog" onclick="__ucToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
       '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
-      '<div class="uc-scroll"><div class="uc-plot"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
+      '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-botzone"><div class="uc-summary">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>'));
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
@@ -11579,7 +11580,7 @@ function renderWindowList(startDate, endDate) {
     });
     let asLine="";
     if(!st.full && isLatest && lastData>0 && lastData<days.length){ const n=days.length, idx=lastData-1; asLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>latest: '+MONF[(+st.month.split("-")[1])-1]+' '+lastData+'</span></div>'; }
-    const plotW=Math.max(640, days.length*(st.full?17:20)+40);
+    const plotW=Math.max(isOv?0:640, days.length*(st.full||isOv?17:20)+40);
     const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
     // Overview: only hide when this channel/month has NO view data at all (toggle-
     // independent). Channels with small historical (prior-month) views still show.
