@@ -2662,14 +2662,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     @media(max-width:560px){#velocityPanel .vv-detail{flex-direction:column}#velocityPanel .vv-detail .vv-thumb{width:100%;height:auto;aspect-ratio:16/9}#velocityPanel .vv-mthumb{display:none}}
     /* ---- Videos tab: tabbed insights strip ---- */
     #panelVideos .insights{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.25rem}
-    #panelVideos .vtabs{display:flex;flex-wrap:wrap;gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
+    /* Equal-width columns instead of a wrapping flex row: nine buttons of
+       differing label lengths otherwise leave a ragged right edge and rows that
+       don't line up. Columns auto-fit to the available width. */
+    #panelVideos .vtabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
     #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.85rem;font-weight:700;padding:0.45rem 0.72rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
     #panelVideos .vtab .ic{width:15px;height:15px;flex:0 0 auto;color:var(--accent)}
     #panelVideos .vtab:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
     #panelVideos .vtab.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent));color:#fff}
     #panelVideos .vtab.active .ic{color:#fff}
     #panelVideos .vtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-    #panelVideos .vtab-cnt{font-size:0.68rem;font-weight:800;line-height:1;padding:0.14rem 0.38rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
+    /* margin-left:auto pins the count to the button's right edge, so the badges
+       line up down the grid instead of trailing each label at random offsets. */
+    #panelVideos .vtab-cnt{margin-left:auto;font-size:0.68rem;font-weight:800;line-height:1;padding:0.14rem 0.38rem;border-radius:999px;background:var(--accent-soft,rgba(106,163,255,0.15));color:var(--accent)}
     #panelVideos .vtab.active .vtab-cnt{background:rgba(255,255,255,0.22);color:#fff}
     /* hidden must beat .vt-active — panels hide themselves (e.g. no ads for this
        channel) and the tab display override was resurrecting their stale content */
