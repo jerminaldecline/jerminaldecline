@@ -933,14 +933,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;}
-.window-list .window-list-search {padding: 0.7rem 0.9rem;
+#windowList .window-list-search {padding: 0.7rem 0.9rem;
     border-bottom: 1px solid var(--border);
     background: var(--surface-2);
     display: flex; gap: 0.6rem; align-items: center;}
-@media(max-width:680px){.window-list .window-list-search{flex-wrap:wrap}}
-.window-list .window-list-search .wl-search-box {position: relative; flex: 1 1 auto; min-width: 0; max-width: 30rem; display: flex; align-items: center;}
-.window-list .window-list-search .wl-search-ico {position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;}
-.window-list .window-list-search input {width: 100%; min-width: 0;
+@media(max-width:680px){#windowList .window-list-search{flex-wrap:wrap}}
+#windowList .window-list-search .wl-search-box {position: relative; flex: 1 1 auto; min-width: 0; max-width: 30rem; display: flex; align-items: center;}
+#windowList .window-list-search .wl-search-ico {position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;}
+#windowList .window-list-search input {width: 100%; min-width: 0;
     background: var(--surface);
     color: var(--text);
     border: 1px solid var(--border);
@@ -949,8 +949,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-family: inherit;
     font-size: 0.85rem;
     transition: border-color .12s, box-shadow .12s;}
-.window-list .window-list-search input:hover {border-color: color-mix(in srgb, var(--accent) 45%, var(--border));}
-.window-list .window-list-search input::placeholder {color: var(--text-dim);}
+#windowList .window-list-search input:hover {border-color: color-mix(in srgb, var(--accent) 45%, var(--border));}
+#windowList .window-list-search input::placeholder {color: var(--text-dim);}
 .window-format-toggle {display: inline-flex; flex: none; background: var(--surface);
     border: 1px solid var(--border); border-radius: 8px; padding: 0.2rem; gap: 0.15rem;}
 .wf-btn {appearance: none; background: transparent; border: none; color: var(--text-muted);
@@ -970,7 +970,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-family: inherit; font-size: 0.78rem; font-weight: 600; padding: 0.36rem 0.65rem;
     cursor: pointer; white-space: nowrap; transition: background .12s, color .12s, border-color .12s;}
 .clear-filters-btn:hover {color: var(--text); border-color: var(--accent); background: var(--surface);}
-.window-list .window-list-search input:focus {outline: none;
+#windowList .window-list-search input:focus {outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-soft);}
 .window-list .window-list-stats {padding: 0.7rem 0.9rem;
@@ -1045,7 +1045,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     text-align: center;
     color: var(--text-dim);
     font-size: 0.95rem;}
-.window-list .window-list-search input {font-size: 16px;}
+/* iOS zooms on focus for inputs under 16px — keep the bump mobile-only so the
+   desktop search keeps its intended 0.85rem. */
+@media(max-width:680px){#windowList .window-list-search input {font-size: 16px;}}
 /* Topic cell in per-video rows */
   .video-topic {font-size: 0.78rem;
     color: var(--text-muted);
