@@ -374,8 +374,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tagblock-key-name{font-weight:700;color:var(--text);display:block}
 .tagblock-key-note{display:block;color:var(--text-muted);font-size:0.78rem;margin:0.05rem 0 0.15rem}
 .tagblock-key-tags{display:block;color:var(--subtext);font-family:var(--mono,monospace);font-size:0.78rem}
-.an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
-.an-metric-toggle::before{content:"Chart:";align-self:center;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-right:0.15rem}
+/* Equal-width columns rather than a wrapping flex row: the eight metric labels
+   vary a lot in length, so flex left a ragged edge with "Tag blocks" stranded
+   on its own line. Four columns split them evenly 4+4 (three when narrower).
+   The "Chart:" label spans the full row so it doesn't consume a button cell. */
+.an-metric-toggle{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0.4rem;margin-bottom:1.1rem}
+.an-metric-toggle::before{content:"Chart:";grid-column:1/-1;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.1rem}
+@media(max-width:900px){.an-metric-toggle{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
 .an-metric-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
 .an-metric-btn:active{transform:translateY(1px)}
