@@ -165,6 +165,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .peak-item .peak-sub{font-size:0.82rem;color:var(--text-muted);margin-top:0.2rem;font-weight:600}
 @media(max-width:680px){.peak-headline{grid-template-columns:1fr}}
 .hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
+.hero.cols4{grid-template-columns:repeat(4,1fr)}
+.hero.cols4 .hero-num.rev{font-size:1.6rem;letter-spacing:-0.02em}
+.hero-rowlabel{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:0.2rem 0 0.55rem 0.15rem}
+@media(max-width:900px){.hero.cols4{grid-template-columns:1fr 1fr}}
 .report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
 .report-topgrid .peak-headline{margin-bottom:0;padding-bottom:0;border-bottom:none;grid-template-columns:1fr;align-content:start;gap:0.9rem}
 .report-topgrid .hero{margin-bottom:0}
@@ -317,7 +321,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 .report-foot{margin-top:1.2rem;padding-top:0.95rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .report-foot .site{font-size:0.88rem;font-weight:800;color:var(--accent);letter-spacing:-0.01em}
-@media(max-width:680px){.hero,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.stat-row>.stat,.stat-row>.stat.stat-sm{grid-column:auto}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.kofi-label{display:none}.util-social.kofi{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
+@media(max-width:680px){.hero,.hero.cols4,.lower,.highlights,.breadth,.report-topgrid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.stat-row>.stat,.stat-row>.stat.stat-sm{grid-column:auto}.net-panel{overflow-x:auto}.net-table{min-width:340px}body{padding:14px}.kofi-label{display:none}.util-social.kofi{width:32px;padding:0;justify-content:center}.util-bar{flex-wrap:nowrap;gap:0.5rem}.util-brand{flex:1 1 auto;min-width:0}.util-cluster{flex:0 0 auto;margin-left:0;flex-wrap:nowrap;gap:0.35rem}.theme-lbl{display:none}.theme-seg-btn{padding:0.34rem 0.42rem}.util-brand-name{font-size:0.92rem}.util-brand-tagline{font-size:0.72rem}.util-brand{gap:0.5rem}}
 
 /* Analysis chart card (new design) */
 .an-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
@@ -3024,7 +3028,7 @@ async function loadAndCompute(){
     // months so aggregate figures use the IDENTICAL math (medians, best/worst,
     // topic counts) as a single month rather than re-summing rolled-up values.
     function computeStats(vs, sh){
-      const shorts={n:sh.length, v:sh.reduce((s,x)=>s+(x.views||0),0), best:null};
+      const shorts={n:sh.length, v:sh.reduce((s,x)=>s+(x.views||0),0), med:sh.length?median(sh.map(x=>x.views||0)):0, best:null};
       if(sh.length){ const b=[...sh].sort((a,b)=>(b.views||0)-(a.views||0))[0]; shorts.best=vstats(b); }
       if(!vs.length){ return {shortsOnly:true, shorts}; }
       const views=vs.map(v=>v.views||0);
@@ -3482,15 +3486,14 @@ function render(m){
 
   // cards
   const cards=[];
-  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long',abs:{unit:'',dec:0},cls:'stat-sm'});
-  cards.push({num:SD.n,lbl:'Shorts uploads',cur:SD.n,p:p&&p.shorts&&p.shorts.n,y:y&&y.shorts&&y.shorts.n,goodUp:true,goto:'short',abs:{unit:'',dec:0},cls:'stat-sm'});
+  // Long-form + Shorts uploads now render as hero cards in the two format rows above.
   // Like rate is itself a %, so show its change in percentage POINTS (cur-prev),
   // not a relative % of a % (which would be ambiguous). e.g. 8.4% → 7.9% = ▼ 0.5 pts.
-  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false},cls:'stat-sm'});
-  cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true,cls:'stat-sm'});
+  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
+  cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
-  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false},cls:'stat-sm'});
-  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false},cls:'stat-sm'});
+  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
+  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
   // Subscribers gained: net change in the (rounded) YouTube subscriber counter
   // over the selected period, from the daily channel snapshots. Only months
   // since June 2026 have data — older months show an em dash. No MoM/YoY minis:
@@ -3550,7 +3553,7 @@ function render(m){
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
   const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
-  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,cls:'stat-sm',foot:subsFoot});
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,foot:subsFoot});
   const cardHTML=cards.map(c=>{
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
@@ -3560,7 +3563,7 @@ function render(m){
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv)=>{ const dd=mini(lblMo,cur,pv,true)+mini(lblYr,cur,yv,true); return dd?`<div class="deltas">${dd}</div>`:''; };
+  const heroDeltas=(cur,pv,yv,abs)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); return dd?`<div class="deltas">${dd}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -3591,7 +3594,7 @@ function render(m){
   const _weekendInner = _isWknd
     ? `<div class="fw-message">It's the weekend.<br>What are you guys going up to?</div>`
     : `<div class="fw-pair"><div class="fw-side"><span class="fw-num">${_day}</span><span class="fw-lbl">days since</span></div><div class="fw-div"></div><div class="fw-side"><span class="fw-num">${6 - _day}</span><span class="fw-lbl">days until</span></div></div>`;
-  const funCardHTML = `<div class="stat stat-sm fun-card${_isWknd ? ' is-weekend' : ''}">
+  const funCardHTML = `<div class="stat fun-card${_isWknd ? ' is-weekend' : ''}">
       <div class="fun-head">Weekend status</div>
       <div class="fun-weekend">${_weekendInner}</div>
     </div>`;
@@ -3748,27 +3751,57 @@ function render(m){
         </div>` : ''}
       </div>`;
     })()}
-    <div class="hero">
+    <div class="hero-rowlabel">Long-form</div>
+    <div class="hero cols4">
       <div class="hero-card">
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
-        <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)} <span class="hero-numtag">long-form</span></div>
-        ${SD.n>0?`<div class="hero-num2" title="${fmtFull(SD.v)} views">${fmt(SD.v)} <span class="hero-numtag">Shorts</span></div>`:''}
+        <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
-        <div class="hero-label">Average long-form views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it. The % shows what share of the subscriber base that typical upload reaches (where subs are tracked — June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
+        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it. The % shows what share of the subscriber base that typical upload reaches (where subs are tracked — June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
         <div class="hero-num">${fmt(d.med)}</div>
         <div class="hero-sub">per long-form upload${medSubsStr}</div>
         ${heroDeltas(d.med,p&&p.med,y&&y.med)}
       </div>
       <div class="hero-card">
-        <div class="hero-label">Estimated ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
-        <div class="hero-num rev">${revStr}</div>
-        <div class="hero-sub">${d.srevhi > 0
-          ? `<div>long-form ${money(d.lrevlo)} – ${money(d.lrevhi)}</div><div>Shorts ${money(d.srevlo)} – ${money(d.srevhi)}</div>`
-          : 'all long-form — no Shorts this period'}</div>
-        ${heroDeltas(d.revlo,p&&p.revlo,y&&y.revlo)}
+        <div class="hero-label">Uploads ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
+        <div class="hero-num">${d.n||0}</div>
+        <div class="hero-sub">long-form videos</div>
+        ${heroDeltas(d.n,p&&p.n,y&&y.n,{unit:'',dec:0})}
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
+        <div class="hero-num rev">${money(d.lrevlo)} – ${money(d.lrevhi)}</div>
+        <div class="hero-sub">estimated</div>
+        ${heroDeltas(d.lrevlo,p&&p.lrevlo,y&&y.lrevlo)}
+      </div>
+    </div>
+    <div class="hero-rowlabel">Shorts</div>
+    <div class="hero cols4">
+      <div class="hero-card">
+        <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="short" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
+        <div class="hero-num" title="${fmtFull(SD.v)} views">${fmt(SD.v)}</div>
+        ${heroDeltas(SD.v,p&&p.shorts&&p.shorts.v,y&&y.shorts&&y.shorts.v)}
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical Short, so one viral hit or dead month can't skew it." tabindex="0" role="button" aria-label="About average Shorts views">ⓘ</span></div>
+        <div class="hero-num">${fmt(SD.med||0)}</div>
+        <div class="hero-sub">per Short</div>
+        ${heroDeltas(SD.med,p&&p.shorts&&p.shorts.med,y&&y.shorts&&y.shorts.med)}
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Uploads ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="short" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
+        <div class="hero-num">${SD.n}</div>
+        <div class="hero-sub">Shorts</div>
+        ${heroDeltas(SD.n,p&&p.shorts&&p.shorts.n,y&&y.shorts&&y.shorts.n,{unit:'',dec:0})}
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Ad revenue <button type="button" class="hero-chart-link" data-goto-revenue>full chart →</button></div>
+        <div class="hero-num rev">${d.srevhi>0?`${money(d.srevlo)} – ${money(d.srevhi)}`:'—'}</div>
+        <div class="hero-sub">estimated</div>
+        ${heroDeltas(d.srevlo,p&&p.srevlo,y&&y.srevlo)}
       </div>
     </div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
