@@ -11287,7 +11287,7 @@ function renderWindowList(startDate, endDate) {
     rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
     const vById={}; if(ds&&ds.videos)for(const v of ds.videos)vById[v.id]=v;
     const fmtViews=n=>{n=Math.round(n||0);const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+"M":a>=1e3?(n/1e3).toFixed(1)+"k":""+n;};
-    const intro='<div class="reposts-intro">These Shorts are re-uploads of someone else’s video, posted without credit — most caught by the <b>original creator’s platform watermark</b> still burned into the frame, a few by <b>viewers crediting the creator in the comments</b>. <b>'+rows.length+'</b> confirmed'+(ch==="ALL"?" across the network":"")+'.<span class="reposts-alert-note">If you wish to alert a creator, click <b>Copy alert</b> on their row for a ready-to-send alert template.</span></div>';
+    const intro='<div class="reposts-intro">These Shorts are re-uploads of someone else’s video, posted without credit — most caught by a <b>platform watermark</b> still burned into the frame, which names the account the clip was taken from, a few by <b>viewers naming the source in the comments</b>. <b>'+rows.length+'</b> confirmed'+(ch==="ALL"?" across the network":"")+'.<span class="reposts-alert-note">If you wish to alert an account, click <b>Copy alert</b> on their row for a ready-to-send template.</span></div>';
     const AL=(window.__repostAlerts=window.__repostAlerts||{});
     const PLAT={tiktok:'TikTok',reels:'Instagram Reels',instagram:'Instagram',douyin:'Douyin',kwai:'Kwai',likee:'Likee'};
     const listHtml=rows.map(r=>{
@@ -11300,16 +11300,16 @@ function renderWindowList(startDate, endDate) {
       const vnum=(vw&&vw.views!=null)?vw.views:null;
       const viewsClause=vnum?(', where it has '+vnum.toLocaleString()+' views'):'';
       const proof=(String(r.via||'')==='comment')?'':('Your '+platName+' watermark is still visible in the re-upload. ');
-      AL[r.id]='@'+r.creator+' — heads up, your video was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\n'+proof+'As the original creator you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
+      AL[r.id]='@'+r.creator+' — heads up, a video from your account was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\n'+proof+'If you’re the original creator, you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
         '<a class="rt" href="'+yt+'" target="_blank" rel="noopener"><b>'+esc(r.title)+'</b><span>'+meta+'</span></a>'+
         '<span class="reposts-cred"><small>reposted from</small><a class="cl" href="'+esc(r.creatorUrl)+'" target="_blank" rel="noopener">@'+esc(r.creator)+' ↗</a>'+
-          '<button type="button" class="rt-alert" data-id="'+esc(r.id)+'" onclick="__copyRepostAlert(this)" title="Copy a ready-to-send message alerting the original creator">Copy alert</button>'+
+          '<button type="button" class="rt-alert" data-id="'+esc(r.id)+'" onclick="__copyRepostAlert(this)" title="Copy a ready-to-send message alerting the source account">Copy alert</button>'+
         '</span>'+
       '</div>';
     }).join("");
-    const foot='<div class="reposts-foot">Most listed are clips where the original creator’s stamp survived his crop — a watermark proves the clip was lifted from that platform, and the handle is read straight from it — so the true repost rate is far higher. A few are creators viewers named in the comments.</div>';
+    const foot='<div class="reposts-foot">Most listed are clips where a platform stamp survived his crop — the watermark proves the clip was lifted from that account, and the handle is read straight from it — so the true repost rate is far higher. Note a watermarked account isn’t always the original creator: some are themselves repost accounts, so the handle shown is where <em>he</em> took it from, not necessarily who filmed it.</div>';
     box.innerHTML=intro+listHtml+foot;
   }
   // ---- Upload cadence panel: publishing rhythm (long-form vs Shorts) per day ----
