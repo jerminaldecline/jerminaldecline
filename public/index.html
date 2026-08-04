@@ -11419,10 +11419,11 @@ function renderWindowList(startDate, endDate) {
     for(let mm=loM;mm<=hiM;mm++) monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>';
     const nav=isOv?'':('<div class="uc-nav"><select class="uc-sel" aria-label="Year" onchange="__ucSetYear(this.value)">'+yearOpts+'</select><select class="uc-sel" aria-label="Month" onchange="__ucSetMonthNum(this.value)">'+monOpts+'</select></div>');
     const axsub=(st.lf&&st.shorts)?'— long-form + Shorts stacked':(st.lf?'— long-form only':(st.shorts?'— Shorts only':'— nothing selected'));
-    // Width needed to keep every day's number legible (~14px per column + gap).
-    // The compact Overview card has no 640px floor, so it only scrolls when the
-    // card is actually too narrow for the month.
-    const plotW=Math.max(isOv?0:640, days.length*(isOv?17:20)+40);
+    // Day numbers collide once the per-day pitch drops under ~12px (a 2-digit
+    // label at 10px mono). 13px/day is the floor that keeps them legible; a
+    // desktop card is wider than that so the plot just fills it and doesn't
+    // scroll — only narrower cards (phones, tablets) scroll.
+    const plotW = isOv ? days.length*13+30 : Math.max(640, days.length*20+40);
     host.innerHTML=
       '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
@@ -11580,7 +11581,7 @@ function renderWindowList(startDate, endDate) {
     });
     let asLine="";
     if(!st.full && isLatest && lastData>0 && lastData<days.length){ const n=days.length, idx=lastData-1; asLine='<div class="uc-today" style="left:calc(28px + '+(idx+0.5)+'/'+n+' * (100% - 28px))"><span>latest: '+MONF[(+st.month.split("-")[1])-1]+' '+lastData+'</span></div>'; }
-    const plotW=Math.max(isOv?0:640, days.length*(st.full||isOv?17:20)+40);
+    const plotW = isOv ? days.length*13+30 : Math.max(640, days.length*(st.full?17:20)+40);
     const inD=days.filter(x=>x.inRange), nDays=inD.length||1;
     // Overview: only hide when this channel/month has NO view data at all (toggle-
     // independent). Channels with small historical (prior-month) views still show.
