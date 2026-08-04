@@ -174,6 +174,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
 .hero-num.rev{font-size:2.05rem}  /* revenue is a range string, so a touch smaller to fit */
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
+/* Secondary headline figure (Shorts views on the Total views card): clearly
+   subordinate to the main long-form number, but heavier than sub-text. */
+.hero-num2{font-size:1.55rem;font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-top:0.4rem;color:var(--text)}
+.hero-numtag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--label);margin-left:0.35rem}
 .nowrap{white-space:nowrap}
 .deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
@@ -3478,11 +3482,11 @@ function render(m){
 
   // cards
   const cards=[];
-  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long',abs:{unit:'',dec:0}});
-  cards.push({num:SD.n,lbl:'Shorts uploads',cur:SD.n,p:p&&p.shorts&&p.shorts.n,y:y&&y.shorts&&y.shorts.n,goodUp:true,goto:'short',abs:{unit:'',dec:0}});
+  cards.push({num:d.n,lbl:'Long-form uploads',cur:d.n,p:p&&p.n,y:y&&y.n,goodUp:true,goto:'long',abs:{unit:'',dec:0},cls:'stat-sm'});
+  cards.push({num:SD.n,lbl:'Shorts uploads',cur:SD.n,p:p&&p.shorts&&p.shorts.n,y:y&&y.shorts&&y.shorts.n,goodUp:true,goto:'short',abs:{unit:'',dec:0},cls:'stat-sm'});
   // Like rate is itself a %, so show its change in percentage POINTS (cur-prev),
   // not a relative % of a % (which would be ambiguous). e.g. 8.4% → 7.9% = ▼ 0.5 pts.
-  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
+  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false},cls:'stat-sm'});
   cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true,cls:'stat-sm'});
   // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
   cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false},cls:'stat-sm'});
@@ -3747,8 +3751,9 @@ function render(m){
     <div class="hero">
       <div class="hero-card">
         <div class="hero-label">Total views ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
-        <div class="hero-num">${fmt(d.tot)}</div>
-        <div class="hero-sub">${fmtFull(d.tot)} views on ${d.n} long-form uploads${SD.n>0?` · <span class="nowrap">${fmt(SD.v)} views on ${SD.n} Short${SD.n===1?'':'s'}</span>`:''}${totSubsStr}</div>
+        <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)} <span class="hero-numtag">long-form</span></div>
+        ${SD.n>0?`<div class="hero-num2" title="${fmtFull(SD.v)} views">${fmt(SD.v)} <span class="hero-numtag">Shorts</span></div>`:''}
+        <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
