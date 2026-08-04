@@ -2665,8 +2665,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     /* Equal-width columns instead of a wrapping flex row: nine buttons of
        differing label lengths otherwise leave a ragged right edge and rows that
        don't line up. Columns auto-fit to the available width. */
-    #panelVideos .vtabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
-    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.85rem;font-weight:700;padding:0.45rem 0.72rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
+    #panelVideos .vtabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0.4rem;padding:0.7rem 0.75rem;border-bottom:1px solid var(--border)}
+    /* overflow:hidden is a backstop — the 190px column minimum already clears the
+       widest button (~184px), but this keeps a count badge inside the rounded
+       border rather than escaping it if text ever renders wider. */
+    #panelVideos .vtab{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;overflow:hidden;appearance:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:inherit;font-size:0.85rem;font-weight:700;padding:0.45rem 0.72rem;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
     #panelVideos .vtab .ic{width:15px;height:15px;flex:0 0 auto;color:var(--accent)}
     #panelVideos .vtab:hover{border-color:var(--accent);background:var(--accent-soft,rgba(106,163,255,0.12))}
     #panelVideos .vtab.active{background:var(--accent-fill,var(--accent));border-color:var(--accent-fill,var(--accent));color:#fff}
