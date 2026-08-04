@@ -178,7 +178,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .avg-toggle button[aria-pressed="true"]{background:var(--brand);color:#fff}
 /* End-of-month projection line on the long-form Total views card. Accent = firm
    (mid-month+), muted + "rough" tag = early-month wide guess. */
-.hero-proj{font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-top:0.3rem;display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;line-height:1.3}
+.hero-proj{font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-top:0.75rem;display:flex;flex-direction:column;gap:0.3rem;line-height:1.3}
+.hero-proj-conf{display:inline-flex;align-items:center;gap:0.3rem}
 .hero-proj-tag{font-size:0.58rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;border-radius:5px;padding:1px 6px}
 .hero-proj-tag.conf-low{color:var(--down);background:color-mix(in srgb,var(--down) 15%,transparent)}
 .hero-proj-tag.conf-med{color:var(--accent-2,#e0a458);background:color-mix(in srgb,var(--accent-2,#e0a458) 18%,transparent)}
@@ -3819,7 +3820,7 @@ function render(m){
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
-        ${projTot ? `<div class="hero-proj">↗ ~${fmt(projTot)} projected <span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'}</span> <span class="info-icon" data-popover="Projected month-end total from this month's upload pace. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="hero-proj-conf"><span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'} confidence</span> <span class="info-icon" data-popover="Projected month-end total from this month's upload pace. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></span></div>` : ``}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card avg-card">
