@@ -3507,11 +3507,11 @@ function render(m){
   // Long-form + Shorts uploads now render as hero cards in the two format rows above.
   // Like rate is itself a %, so show its change in percentage POINTS (cur-prev),
   // not a relative % of a % (which would be ambiguous). e.g. 8.4% → 7.9% = ▼ 0.5 pts.
-  cards.push({num:d.lv+'%',lbl:'Like rate',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
-  cards.push({num:fmt(d.comments),lbl:'Comments',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
+  cards.push({num:d.lv+'%',lbl:'Like rate (long-form)',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
+  cards.push({num:fmt(d.comments),lbl:'Comments (long-form)',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
-  cards.push({num:d.runtime+' h',lbl:'Total runtime',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
-  cards.push({num:d.avglen+' min',lbl:'Average video length',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
+  cards.push({num:d.runtime+' h',lbl:'Total runtime (long-form)',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
+  cards.push({num:d.avglen+' min',lbl:'Average video length (long-form)',cur:d.avglen,p:p&&p.avglen,y:y&&y.avglen,goodUp:null,abs:{unit:'m',dec:1,pct:false}});
   // Subscribers gained: net change in the (rounded) YouTube subscriber counter
   // over the selected period, from the daily channel snapshots. Only months
   // since June 2026 have data — older months show an em dash. No MoM/YoY minis:
