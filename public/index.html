@@ -11494,7 +11494,7 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
-      (isOv?'<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>':'')+
+      '<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>'+
       '</div></div>'+
       '<div class="uc-legend">'+
         '<span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw dv-sw lf new"></i>Long-form · this month</span>'+
@@ -11512,7 +11512,7 @@ function renderWindowList(startDate, endDate) {
     const colsEl=host.querySelector(".uc-cols");
     if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
   }
-  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false})); }
+  function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false,showOld:true})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
   window.__dvSetYear=function(y,scope){ scope=scope||'main'; const st=_dvst(scope); const mm=st.month?st.month.slice(5,7):"01"; st.month=y+"-"+mm; renderDailyViews(scope); };
   window.__dvToggleShorts=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.shorts=!st.shorts; renderDailyViews(scope); };
