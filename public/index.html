@@ -8324,10 +8324,16 @@ function niceDurationAxis(minSec, maxSec) {
 // Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
 // site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
 // doesn't drift for videos published near midnight.
+// Row date in the creator's local Central Time (Wisconsin), so a video posted
+// just after UTC midnight lands on the same day the upload cadence / daily-views
+// charts bucket it — not the UTC calendar day. (en-CA formats as YYYY-MM-DD.)
+const _ctRowFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
 function fmtRowDate(iso){
   const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const p = iso.slice(0, 10).split('-');
-  return `${+p[2]} ${M[+p[1]-1]} '${p[0].slice(2)}`;
+  let p;
+  try { p = _ctRowFmt.format(new Date(iso)).split('-'); }
+  catch(e){ p = iso.slice(0, 10).split('-'); }
+  return `${+p[2]} ${M[+p[1]-1]} '${String(p[0]).slice(2)}`;
 }
 function renderVideoRows(videos, emptyText) {
   if (videos.length === 0) {
