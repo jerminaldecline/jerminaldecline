@@ -179,7 +179,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-num2{font-size:1.55rem;font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-top:0.4rem;color:var(--text)}
 .hero-numtag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--label);margin-left:0.35rem}
 .nowrap{white-space:nowrap}
-.deltas{display:flex;gap:0.9rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
+.deltas{display:flex;flex-wrap:wrap;gap:0.9rem;row-gap:0.3rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
 
 .stat-row{display:grid;grid-template-columns:repeat(12,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
 .stat-row>.stat{grid-column:span 4}
@@ -188,12 +188,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
-.stat-deltas{display:flex;gap:0.5rem;margin-top:0.6rem}
+.stat-deltas{display:flex;flex-wrap:wrap;gap:0.5rem;row-gap:0.3rem;margin-top:0.6rem}
 .stat-link,.shorts-link{cursor:pointer;transition:border-color .12s ease,transform .12s ease,box-shadow .12s ease}
 .stat-link:hover,.shorts-link:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 12px rgba(0,0,0,0.07)}
 .stat-link:focus-visible,.shorts-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .stat-go{color:var(--accent);font-weight:800;margin-left:0.15rem}
-.mini{font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem}
+.mini{font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;white-space:nowrap}
 .mini .ml{color:var(--subtext)}
 .mini .mv{font-weight:700}
 .mini.up .mv{color:var(--up)}.mini.down .mv{color:var(--down)}.mini.flat .mv{color:var(--label)}
@@ -3757,7 +3757,7 @@ function render(m){
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card">
-        <div class="hero-label">Average views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it. The % shows what share of the subscriber base that typical upload reaches (where subs are tracked — June 2026 on)." tabindex="0" role="button" aria-label="About average views">ⓘ</span></div>
+        <div class="hero-label">Average long-form views <span class="info-icon" data-popover="Median — the typical upload, so one viral hit or dead month can't skew it. The % shows what share of the subscriber base that typical upload reaches (where subs are tracked — June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
         <div class="hero-num">${fmt(d.med)}</div>
         <div class="hero-sub">per long-form upload${medSubsStr}</div>
         ${heroDeltas(d.med,p&&p.med,y&&y.med)}
