@@ -2947,6 +2947,11 @@ const MIN_MONTH = '2017-07';
 const _ctMonthFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit' });
 const _ctMonthCache = new Map();
 function ctMonth(iso){ if(!iso) return ''; if(_ctMonthCache.has(iso)) return _ctMonthCache.get(iso); let s; try{ const o={}; for(const x of _ctMonthFmt.formatToParts(new Date(iso))) if(x.type!=='literal') o[x.type]=x.value; s=o.year+'-'+o.month; }catch(e){ s=String(iso).slice(0,7); } _ctMonthCache.set(iso,s); return s; }
+// Central-time calendar date key (YYYY-MM-DD), matching ctMonth + the cadence.
+// The single source of truth for "which Wisconsin day did this happen on". Cached.
+const _ctDateFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
+const _ctDateCache = new Map();
+function ctDate(iso){ if(!iso) return ''; if(_ctDateCache.has(iso)) return _ctDateCache.get(iso); let s; try{ s=_ctDateFmt.format(new Date(iso)); }catch(e){ s=String(iso).slice(0,10); } _ctDateCache.set(iso,s); return s; }
 function ym(v){ return ctMonth(v.publishedAt); }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
 
@@ -3051,7 +3056,7 @@ async function loadAndCompute(){
       const mdc={}; for(const v of vs){ const t=modesMap[v.id]; if(t){ if(!mdc[t]) mdc[t]={n:0,v:0}; mdc[t].n++; mdc[t].v+=(v.views||0); } }
       const leanVid = v => ({
         id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
-        d:v.durationSec||0, s:!!v.isShort, dt:(v.publishedAt||'').slice(0,10),
+        d:v.durationSec||0, s:!!v.isShort, dt:ctDate(v.publishedAt),
         tp: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
         tpc: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
         ch: handle[v.channelId]||'?'
@@ -3140,7 +3145,7 @@ async function loadAndCompute(){
 
   // Per-scope peak + lowest-since-peak (long-form monthly totals; exclude the
   // current in-progress month so a partial month can't masquerade as a low).
-  const nowMonth = new Date().toISOString().slice(0,7);
+  const nowMonth = CURRENT_MONTH_KEY;
   const peaks={};
   for(const sc of Object.keys(scopes)){
     const S=scopes[sc];
@@ -4305,10 +4310,10 @@ function buildMonthlyData(scope){
     // his posting rate; summer looks even better there since July is his
     // heaviest posting month). Tabs re-render; the midterms card below stays
     // pinned to the median measure, the best-month card to totals.
-    const nowKey = new Date().toISOString().slice(0, 7);
+    const nowKey = CURRENT_MONTH_KEY;
     const buckets = new Map();
     for (const v of vids) {
-      const m = (v.publishedAt || '').slice(0, 7);
+      const m = ym(v);
       if (!m || m >= nowKey) continue;
       if (!buckets.has(m)) buckets.set(m, []);
       buckets.get(m).push(v.views || 0);
@@ -7543,8 +7548,7 @@ function niceDurationAxis(minSec, maxSec) {
     const sd = sdEl && sdEl.value, ed = edEl && edEl.value;
     let vids = anFilteredVideos().filter(v => !v.isShort && !v.unavailable);
     if (sd && ed){
-      const start = new Date(sd+'T00:00:00Z'), end = new Date(ed+'T23:59:59Z');
-      vids = vids.filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+      vids = vids.filter(v => { const k = ctDate(v.publishedAt); return k >= sd && k <= ed; });
     }
     return vids;
   }
@@ -7757,12 +7761,9 @@ function niceDurationAxis(minSec, maxSec) {
     body.innerHTML = '<div class="wordcloud-empty">Set a valid date range first.</div>';
     return;
   }
-  const start = new Date(startDate + 'T00:00:00Z');
-  const end = new Date(endDate + 'T23:59:59Z');
-
   let videos = anFilteredVideos().filter(v => {
-    const d = new Date(v.publishedAt);
-    return d >= start && d <= end;
+    const k = ctDate(v.publishedAt);
+    return k >= startDate && k <= endDate;
   });
   // Respect the Videos-tab format filter (the word cloud now lives on the
   // Videos tab): 'long' → long-form only, 'short' → Shorts only, 'all' → both.
@@ -7890,8 +7891,8 @@ function niceDurationAxis(minSec, maxSec) {
     }
 
     // Harvest sponsor domains from every long-form description on the channel.
-    const monthKey = d => d.slice(0, 7);
-    const nowKey = new Date().toISOString().slice(0, 7);
+    const monthKey = d => ctMonth(d);
+    const nowKey = CURRENT_MONTH_KEY;
     const monIdx = m => (+m.slice(0, 4)) * 12 + (+m.slice(5, 7)) - 1;
     const sponsors = new Map(); // name -> {n, first, last, months:Set}
     for (const v of ANALYTICS_DATASET.videos) {
@@ -8110,11 +8111,9 @@ function niceDurationAxis(minSec, maxSec) {
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
   if (!startDate || !endDate) { panel.hidden = true; return; }
-  const start = new Date(startDate + 'T00:00:00Z');
-  const end = new Date(endDate + 'T23:59:59Z');
   const videos = anFilteredVideos().filter(v => {
-    const d = new Date(v.publishedAt);
-    return d >= start && d <= end;
+    const k = ctDate(v.publishedAt);
+    return k >= startDate && k <= endDate;
   });
   if (!videos.length) { panel.hidden = true; return; }
 
@@ -8414,7 +8413,7 @@ function renderVideoRows(videos, emptyText) {
       const chain = [th.first, ...th.changes.map(c => c.to)];
       const lastAt = th.changes[n - 1].at;
       let dateStr = '';
-      try { dateStr = new Date(lastAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); } catch (e) {}
+      try { dateStr = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Chicago', day: 'numeric', month: 'short' }).format(new Date(lastAt)); } catch (e) {}
       const chainStr = chain.map(t => `"${t}"`).join('  →  ');
       const lead = n === 1 ? 'Renamed once' : `Renamed ${n}×`;
       const pop = `${lead}${dateStr ? ' · last change ' + dateStr : ''}:  ${chainStr}`;
@@ -8589,8 +8588,8 @@ function renderAdPanel() {
   // Headline stats
   const totalViews = matched.reduce((s, v) => s + (v.views || 0), 0);
   const dates = matched.map(v => v.publishedAt).sort();
-  const earliest = dates[0].slice(0, 10);
-  const latest = dates[dates.length - 1].slice(0, 10);
+  const earliest = dates[0];
+  const latest = dates[dates.length - 1];
 
   // Pre-compute monthly medians of LONG-FORM videos, keyed by channel+month so
   // each ad video is compared against its OWN channel's peers (channels have
@@ -8627,8 +8626,7 @@ function renderAdPanel() {
   const totalExcess = rows.reduce((s, r) => s + (r.excess && r.excess > 0 ? r.excess : 0), 0);
 
   function ymLabel(isoDate) {
-    const d = new Date(isoDate);
-    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    return new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', month: 'short', year: 'numeric' }).format(new Date(isoDate));
   }
   function fmtMult(m) {
     if (m == null) return '—';
@@ -8676,7 +8674,7 @@ function renderAdPanel() {
           <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
           ${isAll ? `<span class="ad-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
         </td>
-        <td class="col-date">${r.v.publishedAt.slice(0, 10)}</td>
+        <td class="col-date">${ctDate(r.v.publishedAt)}</td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
         <td class="col-num">${fmtMult(r.multiplier)}</td>
@@ -8910,11 +8908,9 @@ function renderWindowList(startDate, endDate) {
     const el = document.getElementById(id); if (el) el.textContent = _ctx;
   });
 
-  const start = new Date(startDate + 'T00:00:00Z');
-  const end = new Date(endDate + 'T23:59:59Z');
   const allWindowVideos = anFilteredVideos().filter(v => {
-    const d = new Date(v.publishedAt);
-    return d >= start && d <= end;
+    const k = ctDate(v.publishedAt);
+    return k >= startDate && k <= endDate;
   });
 
   // Compute per-channel breakdown (only meaningful in All-combined mode)
@@ -9155,8 +9151,7 @@ function renderWindowList(startDate, endDate) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     if (!startDate || !endDate) { body.innerHTML = ''; return; }
-    const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
-    let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    let videos = anFilteredVideos().filter(v => { const k = ctDate(v.publishedAt); return k >= startDate && k <= endDate; });
     const fmtF = windowListState.formatFilter;
     if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
     else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
@@ -9207,8 +9202,7 @@ function renderWindowList(startDate, endDate) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     if (!startDate || !endDate) return [];
-    const start = new Date(startDate + 'T00:00:00Z'), end = new Date(endDate + 'T23:59:59Z');
-    let videos = anFilteredVideos().filter(v => { const d = new Date(v.publishedAt); return d >= start && d <= end; });
+    let videos = anFilteredVideos().filter(v => { const k = ctDate(v.publishedAt); return k >= startDate && k <= endDate; });
     const fmtF = windowListState.formatFilter;
     if (fmtF === 'long') videos = videos.filter(v => !v.isShort);
     else if (fmtF === 'short') videos = videos.filter(v => v.isShort);
