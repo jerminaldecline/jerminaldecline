@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-04
+# Topic candidates — 2026-08-05
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 122 baseline videos
+Pool: 19 recent videos, 122 baseline videos
 
 ### Cluster 1: `erupted`
 
-- **Recent saturation:** 3/17 videos (**18%**)
+- **Recent saturation:** 3/19 videos (**16%**)
 - **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 6.2x
+- **Spike ratio:** 5.5x
 - **Related terms:** `erupted`
 - **Sample recent videos:**
   - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
@@ -21,24 +21,6 @@ Pool: 17 recent videos, 122 baseline videos
     Europe’s Border Crisis Explodes As Tens Of Thousands Flood Ceuta
   - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
     Madison Riots Backfire As Evidence Destroys Their Entire Narrative
-
-## @JeremyHambly
-
-Pool: 12 recent videos, 72 baseline videos
-
-### Cluster 1: `vlogs candace`
-
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 3/72 videos (4%)
-- **Spike ratio:** 5.2x
-- **Related terms:** `vlogs candace`
-- **Sample recent videos:**
-  - 2026-07-30 — _SHE'S GETTING SUED_  
-    Candace Owens Falls For Fake Medical Examiner Profiles Again Online
-  - 2026-07-29 — _SHE'S SCREWED NOW_  
-    Candace Releases Bombshell Then Realizes It Proves Her Wrong
-  - 2026-07-28 — _SHE'S PANICKING_  
-    Candace Owens Dumps Alleged Charlie Kirk Texts As Allies Revolt
 
 ---
 
