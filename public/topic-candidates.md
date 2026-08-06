@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-05
+# Topic candidates — 2026-08-06
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -8,19 +8,83 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 Pool: 19 recent videos, 122 baseline videos
 
-### Cluster 1: `erupted`
+### Cluster 1: `finally`
+
+- **Recent saturation:** 4/19 videos (**21%**)
+- **Baseline saturation:** 1/122 videos (1%)
+- **Spike ratio:** 17.3x
+- **Related terms:** `finally`
+- **Sample recent videos:**
+  - 2026-08-05 — _WOKE RIOTERS FIND OUT_  
+    BLM Rioters Find Out As Police Destroy Their Autonomous Zone
+  - 2026-08-05 — _THE HORRIFYING TRUTH_  
+    Sad Truth Behind Perez Hilton’s Horrifying Livestream Finally Comes Out
+  - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
+    MAGA YouTubers Are Collapsing As Their Audiences Finally Walk Away
+  - 2026-07-30 — _ILHAN OMAR BUSTED!_  
+    Ilhan Omar Faces Scrutiny As Mysterious Millions Finally Surface
+
+### Cluster 2: `wnba`
+
+- **Recent saturation:** 3/19 videos (**16%**)
+- **Baseline saturation:** 1/122 videos (1%)
+- **Spike ratio:** 12.9x
+- **Related terms:** `wnba`
+- **Sample recent videos:**
+  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
+    WNBA Faces Full Blown Insanity As Trans Star Wants In
+  - 2026-08-04 — _IT WENT NUCLEAR_  
+    Caitlin Clark Stays Silent As WNBA Mob Targets Sophie Cunningham
+  - 2026-07-30 — _SHE ATTACKED A KID_  
+    Woke WNBA Owner Attacks Girls Defending Women’s Sports Publicly
+
+### Cluster 3: `reportedly`
 
 - **Recent saturation:** 3/19 videos (**16%**)
 - **Baseline saturation:** 3/122 videos (2%)
 - **Spike ratio:** 5.5x
-- **Related terms:** `erupted`
+- **Related terms:** `reportedly`
 - **Sample recent videos:**
-  - 2026-07-31 — _GOT WOKE, PEOPLE DIED_  
-    Absentee Police Chief Erupts At Reporter Before Firing Reports Explode
-  - 2026-07-31 — _THEY'RE TERRIFED_  
-    Europe’s Border Crisis Explodes As Tens Of Thousands Flood Ceuta
-  - 2026-07-29 — _THIS DISPROVES EVERYTHING_  
-    Madison Riots Backfire As Evidence Destroys Their Entire Narrative
+  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
+    WNBA Faces Full Blown Insanity As Trans Star Wants In
+  - 2026-08-04 — _HE CRIED LIKE A COWARD_  
+    Hero With A Gun Sends In-N-Out Mass Shooter Running Terrified
+  - 2026-08-03 — _RACE GRIFTERS FIND OUT_  
+    Nolan Wells Mystery Erupts As Innocent Families Face Death Threats
+
+## @JeremyHambly
+
+Pool: 11 recent videos, 72 baseline videos
+
+### Cluster 1: `primary`
+
+- **Recent saturation:** 4/11 videos (**36%**)
+- **Baseline saturation:** 0/72 videos (0%)
+- **Spike ratio:** 53.1x
+- **Related terms:** `primary`, `democratic`
+- **Sample recent videos:**
+  - 2026-08-05 — _WOKE POLITICIANS BLOWN OUT_  
+    Cori Bush And Shri Thanedar Both Crushed In Primary Defeats
+  - 2026-08-05 — _TOTAL MUSLIM TAKE OVER_  
+    Muslim Progressive Wins Michigan And Could Capture Senate Seat
+  - 2026-08-03 — _AOC HIT THE WALL_  
+    AOC Leads New Hampshire While Her National Popularity Falls Apart
+  - 2026-08-03 — _HASAN PIKER HUMILATED_  
+    Hasan Piker Sparks Democratic Civil War As Carville Walks Away
+
+### Cluster 2: `city`
+
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 5/72 videos (7%)
+- **Spike ratio:** 3.6x
+- **Related terms:** `city`, `mamdani`
+- **Sample recent videos:**
+  - 2026-08-05 — _HE'S LOST HIS MIND_  
+    Mamdani’s NYC Revives Giant Shame Stickers Drivers Must Scrape Off
+  - 2026-08-03 — _THEY'RE MOCKING HIM_  
+    USA Today Turns On Mamdani Over His Socialist Grocery Disaster
+  - 2026-07-31 — _MAMDANIS NEW LOW_  
+    Mamdani Celebrates $104 Million Tip Increase While New Yorkers Pay
 
 ---
 

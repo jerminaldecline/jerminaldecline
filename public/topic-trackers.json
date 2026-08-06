@@ -1,4 +1,21 @@
 {
-  "lastUpdated": "2026-08-05T07:11:58.154Z",
-  "trackers": []
+  "lastUpdated": "2026-08-06T07:14:24.407Z",
+  "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "primary",
+      "keywords": [
+        "primary",
+        "democratic"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3636,
+        "baselineSaturation": 0.0068,
+        "spikeRatio": 53.09,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-06T07:14:24.407Z"
+      }
+    }
+  ]
 }
