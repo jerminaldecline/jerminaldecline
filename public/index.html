@@ -7986,14 +7986,19 @@ function niceDurationAxis(minSec, maxSec) {
     const scopeOk = (typeof scope === 'undefined') || scope === '@TheQuartering' || scope === 'ALL';
     if (!scopeOk) { panel.hidden = true; return; }
 
-    const T = d._totals || {}, blocks = (d._sample && d._sample.blocks) || 1;
+    // Totals are seconds of runtime per category. Older builds of the file stored
+    // block counts instead, so fall back to the block total when there is no
+    // _totalSeconds — the arithmetic is a share either way.
+    const T = d._totals || {};
+    const denom = d._totalSeconds || (d._sample && d._sample.blocks) || 1;
+    const vDenom = v => v.secTotal || v.blocks || 1;
     const CATS = [
       ['S', 's', d.categories.S, 'his own point, analysis or argument'],
       ['Q', 'q', d.categories.Q, "reading someone else's article, post or clip"],
       ['F', 'f', d.categories.F, 'repetition, meandering set-up, stalling'],
       ['P', 'p', d.categories.P, 'sponsors, memberships, like-and-subscribe'],
     ];
-    const pc = k => (T[k] || 0) / blocks * 100;
+    const pc = k => (T[k] || 0) / denom * 100;
     // A block is ~30s, so share-of-blocks is share-of-runtime.
     const mins = k => (pc(k) / 100 * 14).toFixed(1);
 
@@ -8009,15 +8014,17 @@ function niceDurationAxis(minSec, maxSec) {
         `</span>`;
     }).join('');
 
-    const rows = d.videos.slice().sort((a, b) => (b.F / b.blocks) - (a.F / a.blocks)).map(v => {
-      const seg = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${(v[k] / v.blocks * 100).toFixed(2)}%"></span>`).join('');
-      const fp = Math.round(v.F / v.blocks * 100);
+    const rows = d.videos.slice().sort((a, b) => (b.F / vDenom(b)) - (a.F / vDenom(a))).map(v => {
+      const seg = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${(v[k] / vDenom(v) * 100).toFixed(2)}%"></span>`).join('');
+      const fp = Math.round(v.F / vDenom(v) * 100);
       return `<div class="tmix-row"><span class="tmix-row-t" title="${escapeHtml(v.title)}">` +
         `<a href="${ytLink(v.id)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${escapeHtml(v.title)}</a></span>` +
         `<span class="tmix-row-bar">${seg}</span><span class="tmix-row-f">${fp}%</span></div>`;
     }).join('');
 
     const agree = Math.round(((d._sample && d._sample.agreement) || 0) * 100);
+    const tx = d._texture || null;
+    const mad = (d._sample && d._sample.mad) || 0;
     panel.innerHTML =
       `<div class="tmix-body">
         <div class="tmix-eyebrow">Transcript study · ${escapeHtml(d._generated || '')}</div>
@@ -8027,11 +8034,15 @@ function niceDurationAxis(minSec, maxSec) {
         <div class="tmix-key">${key}</div>
         <div class="tmix-callout">In a typical 14-minute upload that works out at <b>${mins('S')} minutes</b> of his own substance,
           <b>${mins('Q')} minutes</b> reading other people's words aloud, <b>${mins('F')} minutes</b> of filler and
-          <b>${mins('P')} minutes</b> of promotion.</div>
+          <b>${mins('P')} minutes</b> of promotion.${tx && tx.blocks ? `
+          <br><span style="color:var(--text-muted)">The padding is woven through rather than pooled — not one
+          30-second block in the sample is more than ${Math.round(tx.maxBlockFiller * 100)}% filler, and
+          ${tx.underFifth} of ${tx.blocks} are under a fifth.</span>` : ''}</div>
         <div class="tmix-rows-h"><span>Per video — most padded first</span><span>Filler</span></div>
         ${rows}
-        <div class="tmix-foot">${escapeHtml(d._method || '')} ${escapeHtml(d._caveat || '')}
-          <br><b>Agreement check:</b> ${agree}% — and every disagreement ran in the direction of <em>less</em> filler being spotted, not more.</div>
+        <div class="tmix-foot">${escapeHtml(d._method || '')} ${escapeHtml(d._caveat || '')}${mad ? `
+          <br><b>How far apart were they?</b> Where the two raters differed, they differed by little: a mean
+          absolute difference of ${mad} percentage points per category across all ${(d._sample && d._sample.blocks) || 0} blocks.` : ''}</div>
       </div>`;
     panel.hidden = false;
   };
