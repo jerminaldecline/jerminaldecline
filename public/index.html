@@ -284,11 +284,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tsb-seg{height:100%;min-width:2px;transition:opacity .12s}
 .tsb-bar:hover .tsb-seg{opacity:0.55}
 .tsb-bar .tsb-seg:hover{opacity:1}
-.tsb-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 1rem}
+/* Auto-fit rather than a fixed two columns: on a phone each column was ~150px, so
+   the topic name (which ellipsises) collapsed to "Cand…" while the value, being
+   flex:none, kept its full width. Below ~400px this drops to one full-width row
+   per topic; two columns return as soon as they fit. */
+.tsb-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0.45rem 1rem}
 .tsb-leg-item{display:flex;align-items:center;gap:0.45rem;font-size:0.82rem;min-width:0}
 .tsb-leg-dot{width:9px;height:9px;border-radius:2px;flex:none}
 .tsb-leg-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tsb-leg-val{margin-left:auto;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.tsb-leg-val{margin-left:auto;padding-left:0.6rem;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 .tsb-leg-other .tsb-leg-name{color:var(--text-muted);font-weight:500}
 .tsb-more{margin-top:0.45rem;background:none;border:none;color:var(--accent);font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;padding:0.15rem 0}
 .tsb-more:hover{text-decoration:underline}
