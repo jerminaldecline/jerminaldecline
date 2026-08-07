@@ -72,15 +72,22 @@ const args = process.argv.slice(2);
 const arg = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 const MIN = +arg('--min-seconds', 300);
 const CHAN = arg('--channel', null);
+// Default cutoff. YouTube rolled disfluency transcription out gradually through
+// July 2020 — before it, half of all uploads contain zero "uh"/"um", and mid-July
+// the per-day rate climbs while zero-disfluency videos are still appearing. August
+// is the first clean month (2% zero), so everything earlier is excluded by default.
+// Pass --since 1970 to include it anyway, but the rates are not comparable.
+const SINCE = arg('--since', '2020-08');
 
 const files = fs.readdirSync(TR).filter(f => f.endsWith('.json'));
-const rows = []; let skipped = 0, unreadable = 0;
+const rows = []; let skipped = 0, unreadable = 0, preCutoff = 0;
 for (const f of files) {
   let t; try { t = JSON.parse(fs.readFileSync(path.join(TR, f), 'utf8')); } catch { unreadable++; continue; }
   const r = analyse(t);
   if (!r) { skipped++; continue; }
   if (CHAN && r.channelId !== CHAN) continue;
   if (r.durationSec < MIN) { skipped++; continue; }
+  if (SINCE && String(r.publishedAt).slice(0, 7) < SINCE) { preCutoff++; continue; }
   rows.push(r);
 }
 rows.sort((a, b) => String(a.publishedAt).localeCompare(String(b.publishedAt)));
@@ -89,15 +96,32 @@ const sum = (a, k) => a.reduce((s, r) => s + r[k], 0);
 const rate = (a, k) => sum(a, k) / sum(a, 'words') * 100;
 
 console.log(`scanned ${files.length} transcripts — ${rows.length} qualify ` +
-  `(>=${MIN}s${CHAN ? ', channel ' + CHAN : ''}), ${skipped} skipped, ${unreadable} unreadable\n`);
+  `(>=${MIN}s${CHAN ? ', channel ' + CHAN : ''}${SINCE ? ', from ' + SINCE : ''}), ` +
+  `${skipped} too short, ${preCutoff} before the cutoff, ${unreadable} unreadable`);
+if (SINCE) console.log(`  pre-${SINCE} uploads excluded — YouTube did not transcribe disfluencies then`);
 
-console.log('OVERALL');
-console.log(`  words            ${sum(rows, 'words').toLocaleString()}`);
-console.log(`  runtime          ${(sum(rows, 'durationSec') / 3600).toFixed(1)} hours`);
-console.log(`  hard disfluency  ${sum(rows, 'hard').toLocaleString()}  (${rate(rows, 'hard').toFixed(2)} per 100 words)`);
-console.log(`  stutter repeats  ${sum(rows, 'rep').toLocaleString()}  (${rate(rows, 'rep').toFixed(2)} per 100 words)`);
-console.log(`  hedges           ${sum(rows, 'hedge').toLocaleString()}  (${rate(rows, 'hedge').toFixed(2)} per 100 words)  [ambiguous]`);
-console.log(`  est. time on hard disfluencies: ${(sum(rows, 'hardSec') / 60).toFixed(0)} minutes of ${(sum(rows, 'durationSec') / 3600).toFixed(1)} hours`);
+const totalWords = sum(rows, 'words');
+const hrs = sum(rows, 'durationSec') / 3600;
+const tok = k => rows.reduce((s, r) => s + (r.hardBreak[k] || 0), 0);
+// Words are near-isochronous across a corpus this size, so share-of-words is a
+// fair proxy for share-of-time. An estimate, stated as one.
+const mins = n => (n / totalWords) * hrs * 60;
+const line = (label, n, note) => console.log('  ' + label.padEnd(22) + n.toLocaleString().padStart(9) +
+  (n / totalWords * 100).toFixed(2).padStart(10) + mins(n).toFixed(0).padStart(8) + '   ' + (note || ''));
+
+console.log(`\nOVERALL — ${totalWords.toLocaleString()} words over ${hrs.toFixed(0)} hours, ${rows.length} videos\n`);
+console.log('  ' + 'tally'.padEnd(22) + 'count'.padStart(9) + 'per 100w'.padStart(10) + '~mins'.padStart(8));
+line('uh', tok('uh'));
+line('um / umm', tok('um') + tok('umm'));
+line('hmm / mhm / mm', tok('hmm') + tok('mhm') + tok('mm'));
+line('DISFLUENCY total', sum(rows, 'hard'), 'unambiguous');
+console.log('');
+line('stutter repeats', sum(rows, 'rep'), '"if if you" — allowlist applied');
+line('  before allowlist', sum(rows, 'repAll'), 'includes "very very" etc');
+console.log('');
+line('COUNTABLE TOTAL', sum(rows, 'hard') + sum(rows, 'rep'), 'disfluency + stutter');
+console.log('');
+line('hedges', sum(rows, 'hedge'), 'AMBIGUOUS — never added in');
 
 const allHard = {};
 for (const r of rows) for (const [k, v] of Object.entries(r.hardBreak)) allHard[k] = (allHard[k] || 0) + v;
