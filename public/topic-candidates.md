@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-06
+# Topic candidates — 2026-08-07
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,43 +6,43 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 19 recent videos, 122 baseline videos
+Pool: 20 recent videos, 125 baseline videos
 
-### Cluster 1: `finally`
+### Cluster 1: `maga`
 
-- **Recent saturation:** 4/19 videos (**21%**)
-- **Baseline saturation:** 1/122 videos (1%)
-- **Spike ratio:** 17.3x
+- **Recent saturation:** 3/20 videos (**15%**)
+- **Baseline saturation:** 1/125 videos (1%)
+- **Spike ratio:** 12.6x
+- **Related terms:** `maga`
+- **Sample recent videos:**
+  - 2026-08-06 — _WOKE CANADIAN FACES NEW HUMILIATION_  
+    Canadian Who Slapped MAGA Teen Pleads Guilty And Gets Deported
+  - 2026-08-06 — _MATT WALSH BURRITOGATE_  
+    Matt Walsh Starts MAGA Civil War Over Twenty Dollar Burritos
+  - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
+    MAGA YouTubers Are Collapsing As Their Audiences Finally Walk Away
+
+### Cluster 2: `finally`
+
+- **Recent saturation:** 4/20 videos (**20%**)
+- **Baseline saturation:** 2/125 videos (2%)
+- **Spike ratio:** 10.1x
 - **Related terms:** `finally`
 - **Sample recent videos:**
+  - 2026-08-06 — _THEY ACTUALLY DID IT_  
+    Fauci Finally Faces DOJ After Senate Votes Him In Contempt
   - 2026-08-05 — _WOKE RIOTERS FIND OUT_  
     BLM Rioters Find Out As Police Destroy Their Autonomous Zone
   - 2026-08-05 — _THE HORRIFYING TRUTH_  
     Sad Truth Behind Perez Hilton’s Horrifying Livestream Finally Comes Out
   - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
     MAGA YouTubers Are Collapsing As Their Audiences Finally Walk Away
-  - 2026-07-30 — _ILHAN OMAR BUSTED!_  
-    Ilhan Omar Faces Scrutiny As Mysterious Millions Finally Surface
-
-### Cluster 2: `wnba`
-
-- **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 1/122 videos (1%)
-- **Spike ratio:** 12.9x
-- **Related terms:** `wnba`
-- **Sample recent videos:**
-  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
-    WNBA Faces Full Blown Insanity As Trans Star Wants In
-  - 2026-08-04 — _IT WENT NUCLEAR_  
-    Caitlin Clark Stays Silent As WNBA Mob Targets Sophie Cunningham
-  - 2026-07-30 — _SHE ATTACKED A KID_  
-    Woke WNBA Owner Attacks Girls Defending Women’s Sports Publicly
 
 ### Cluster 3: `reportedly`
 
-- **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 5.5x
+- **Recent saturation:** 3/20 videos (**15%**)
+- **Baseline saturation:** 3/125 videos (2%)
+- **Spike ratio:** 5.4x
 - **Related terms:** `reportedly`
 - **Sample recent videos:**
   - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
@@ -54,13 +54,13 @@ Pool: 19 recent videos, 122 baseline videos
 
 ## @JeremyHambly
 
-Pool: 11 recent videos, 72 baseline videos
+Pool: 11 recent videos, 73 baseline videos
 
 ### Cluster 1: `primary`
 
 - **Recent saturation:** 4/11 videos (**36%**)
-- **Baseline saturation:** 0/72 videos (0%)
-- **Spike ratio:** 53.1x
+- **Baseline saturation:** 0/73 videos (0%)
+- **Spike ratio:** 53.8x
 - **Related terms:** `primary`, `democratic`
 - **Sample recent videos:**
   - 2026-08-05 — _WOKE POLITICIANS BLOWN OUT_  
@@ -75,8 +75,8 @@ Pool: 11 recent videos, 72 baseline videos
 ### Cluster 2: `city`
 
 - **Recent saturation:** 3/11 videos (**27%**)
-- **Baseline saturation:** 5/72 videos (7%)
-- **Spike ratio:** 3.6x
+- **Baseline saturation:** 5/73 videos (7%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `city`, `mamdani`
 - **Sample recent videos:**
   - 2026-08-05 — _HE'S LOST HIS MIND_  
