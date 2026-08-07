@@ -1,8 +1,8 @@
 {
-  "_generated": "2026-08-07T19:09:12.856Z",
+  "_generated": "2026-08-07T20:52:28.237Z",
   "_videosTracked": 15852,
-  "_videosRetitled": 78,
-  "_totalChanges": 81,
+  "_videosRetitled": 79,
+  "_totalChanges": 82,
   "videos": {
     "KCivmZhC554": {
       "first": "This Cat Is A Regular #meme #funny #turkey #animals",
@@ -79825,8 +79825,15 @@
     },
     "edd9nwOf_oI": {
       "first": "KILLER CLOWN TAKES ELDERLY MAN",
-      "current": "KILLER CLOWN TAKES ELDERLY MAN",
-      "changes": []
+      "current": "THIS IS TERRIFYING",
+      "changes": [
+        {
+          "from": "KILLER CLOWN TAKES ELDERLY MAN",
+          "to": "THIS IS TERRIFYING",
+          "at": "2026-08-07T20:52:28.003Z",
+          "via": "incremental"
+        }
+      ]
     }
   }
 }
