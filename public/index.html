@@ -1632,11 +1632,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tmix-seg{height:100%;min-width:2px}
 .tmix-seg.s{background:var(--brand)} .tmix-seg.q{background:var(--accent-2,#e0a458)}
 .tmix-seg.f{background:var(--down)} .tmix-seg.p{background:var(--text-dim)}
-.tmix-key{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.4rem 1rem;margin-bottom:1.15rem}
-.tmix-key-item{display:flex;align-items:baseline;gap:0.45rem;font-size:0.84rem;min-width:0}
+/* Fixed 2×2 rather than auto-fit: four buckets in a 3-up grid strand the last one
+   beside a column of dead space. Collapses to one column on narrow screens. */
+.tmix-key{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.9rem 1.6rem;margin-bottom:1.15rem}
+.tmix-key-item{display:block;font-size:0.84rem;min-width:0}
+.tmix-key-top{display:flex;align-items:baseline;gap:0.45rem}
 .tmix-dot{width:10px;height:10px;border-radius:3px;flex:none;position:relative;top:1px}
 .tmix-key-name{font-weight:600;color:var(--label)}
 .tmix-key-val{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:0.5rem}
+/* A verbatim line from the sample under each bucket — the quote defines the
+   bucket far better than an abstract description does. */
+.tmix-key-eg{display:block;margin:0.3rem 0 0 0.95rem;padding-left:0.65rem;border-left:2px solid var(--border);font-size:0.775rem;line-height:1.45;color:var(--text-muted);font-style:italic}
+.tmix-key-note{font-style:normal;color:var(--text-dim);white-space:nowrap}
 .tmix-callout{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;font-size:0.9rem;color:var(--label);line-height:1.55;margin-bottom:1.2rem}
 .tmix-callout b{color:var(--text);font-weight:800}
 .tmix-rows-h{font-family:var(--mono,monospace);font-size:0.64rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;display:flex;justify-content:space-between}
@@ -1646,7 +1653,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .tmix-row-f{text-align:right;font-family:var(--mono,monospace);font-size:0.84rem;font-weight:700;color:var(--down);font-variant-numeric:tabular-nums}
 .tmix-foot{margin-top:1.1rem;padding-top:0.85rem;border-top:1px solid var(--border);font-size:0.76rem;color:var(--text-dim);line-height:1.6}
 .tmix-foot b{color:var(--text-muted);font-weight:600}
-@media(max-width:680px){.tmix-row{grid-template-columns:minmax(0,1fr) 96px 42px;gap:0.5rem}.tmix-body{padding:1.1rem}}
+@media(max-width:680px){.tmix-row{grid-template-columns:minmax(0,1fr) 96px 42px;gap:0.5rem}.tmix-body{padding:1.1rem}.tmix-key{grid-template-columns:1fr;gap:0.7rem}}
 .desc-pattern-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
 .desc-pattern-body{padding:0 1.4rem 1.4rem}
 #sponsorChart{width:100%;height:auto;display:block}
@@ -7991,10 +7998,16 @@ function niceDurationAxis(minSec, maxSec) {
     const mins = k => (pc(k) / 100 * 14).toFixed(1);
 
     const hero = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${pc(k).toFixed(2)}%" title="${escapeHtml(d.categories[k])}: ${pc(k).toFixed(0)}%"></span>`).join('');
-    const key = CATS.map(([k, cls, name, desc]) =>
-      `<span class="tmix-key-item" title="${escapeHtml(desc)}"><span class="tmix-dot tmix-seg ${cls}"></span>` +
-      `<span class="tmix-key-name">${escapeHtml(name)}</span>` +
-      `<span class="tmix-key-val">${pc(k).toFixed(0)}%</span></span>`).join('');
+    const key = CATS.map(([k, cls, name, desc]) => {
+      const eg = (d.examples || {})[k];
+      return `<span class="tmix-key-item" title="${escapeHtml(desc)}">` +
+        `<span class="tmix-key-top"><span class="tmix-dot tmix-seg ${cls}"></span>` +
+        `<span class="tmix-key-name">${escapeHtml(name)}</span>` +
+        `<span class="tmix-key-val">${pc(k).toFixed(0)}%</span></span>` +
+        (eg ? `<span class="tmix-key-eg">&ldquo;${escapeHtml(eg.quote)}&rdquo;` +
+          (eg.note ? ` <span class="tmix-key-note">&mdash; ${escapeHtml(eg.note)}</span>` : '') + `</span>` : '') +
+        `</span>`;
+    }).join('');
 
     const rows = d.videos.slice().sort((a, b) => (b.F / b.blocks) - (a.F / a.blocks)).map(v => {
       const seg = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${(v[k] / v.blocks * 100).toFixed(2)}%"></span>`).join('');
@@ -8009,7 +8022,7 @@ function niceDurationAxis(minSec, maxSec) {
       `<div class="tmix-body">
         <div class="tmix-eyebrow">Transcript study · ${escapeHtml(d._generated || '')}</div>
         <h3 class="tmix-h">What is actually in a 14-minute video?</h3>
-        <p class="tmix-sub">${(d._sample && d._sample.minutes) || 0} minutes of long-form runtime across ${(d._sample && d._sample.videos) || 0} videos, cut into ~30-second blocks and sorted into four buckets.</p>
+        <p class="tmix-sub">${(d._sample && d._sample.minutes) || 0} minutes of long-form runtime across ${(d._sample && d._sample.videos) || 0} videos, cut into ~30-second blocks and sorted into four buckets. The quoted lines are verbatim from the sample.</p>
         <div class="tmix-hero">${hero}</div>
         <div class="tmix-key">${key}</div>
         <div class="tmix-callout">In a typical 14-minute upload that works out at <b>${mins('S')} minutes</b> of his own substance,
