@@ -1623,6 +1623,30 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* Description patterns panel */
 .desc-pattern-panel{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+/* ---- Runtime breakdown (transcript study) ---- */
+.tmix-body{padding:1.3rem 1.45rem}
+.tmix-eyebrow{font-family:var(--mono,ui-monospace,Menlo,Consolas,monospace);font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}
+.tmix-h{font-size:1.15rem;font-weight:800;letter-spacing:-0.01em;margin:0 0 0.2rem}
+.tmix-sub{font-size:0.84rem;color:var(--text-muted);margin:0 0 1.1rem;line-height:1.5}
+.tmix-hero{display:flex;height:26px;border-radius:7px;overflow:hidden;background:var(--surface-2);margin-bottom:0.7rem}
+.tmix-seg{height:100%;min-width:2px}
+.tmix-seg.s{background:var(--brand)} .tmix-seg.q{background:var(--accent-2,#e0a458)}
+.tmix-seg.f{background:var(--down)} .tmix-seg.p{background:var(--text-dim)}
+.tmix-key{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.4rem 1rem;margin-bottom:1.15rem}
+.tmix-key-item{display:flex;align-items:baseline;gap:0.45rem;font-size:0.84rem;min-width:0}
+.tmix-dot{width:10px;height:10px;border-radius:3px;flex:none;position:relative;top:1px}
+.tmix-key-name{font-weight:600;color:var(--label)}
+.tmix-key-val{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:0.5rem}
+.tmix-callout{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;font-size:0.9rem;color:var(--label);line-height:1.55;margin-bottom:1.2rem}
+.tmix-callout b{color:var(--text);font-weight:800}
+.tmix-rows-h{font-family:var(--mono,monospace);font-size:0.64rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;display:flex;justify-content:space-between}
+.tmix-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,1.5fr) 52px;gap:1rem;align-items:center;padding:0.5rem 0;border-top:1px solid var(--border)}
+.tmix-row-t{font-size:0.86rem;color:var(--label);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tmix-row-bar{display:flex;height:11px;border-radius:4px;overflow:hidden;background:var(--surface-2)}
+.tmix-row-f{text-align:right;font-family:var(--mono,monospace);font-size:0.84rem;font-weight:700;color:var(--down);font-variant-numeric:tabular-nums}
+.tmix-foot{margin-top:1.1rem;padding-top:0.85rem;border-top:1px solid var(--border);font-size:0.76rem;color:var(--text-dim);line-height:1.6}
+.tmix-foot b{color:var(--text-muted);font-weight:600}
+@media(max-width:680px){.tmix-row{grid-template-columns:minmax(0,1fr) 96px 42px;gap:0.5rem}.tmix-body{padding:1.1rem}}
 .desc-pattern-toggle{width:100%;background:transparent;border:none;cursor:pointer;padding:1.1rem 1.4rem;text-align:left;font-family:inherit}
 .desc-pattern-body{padding:0 1.4rem 1.4rem}
 #sponsorChart{width:100%;height:auto;display:block}
@@ -2460,6 +2484,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
     <div class="revenue-panel" id="revenuePanel" hidden></div>
     <div class="desc-pattern-panel" id="descPatternPanel" hidden></div>
+    <!-- Runtime breakdown: a one-off transcript study baked into
+         transcript-mix.json (not a live feed). Hidden until that file loads. -->
+    <div class="desc-pattern-panel tmix-panel" id="tmixPanel" hidden></div>
     <!-- "Slow summer" excuse checker: 12-month seasonal fingerprint of
          TheQuartering's long-form uploads, computed client-side by
          renderSeasonCard() from the full history in data.json. Hidden until
@@ -7586,6 +7613,7 @@ function niceDurationAxis(minSec, maxSec) {
     renderTrendChart(showPrevYear);
     if (typeof window.renderRevenuePanel === 'function') { try { window.renderRevenuePanel(); } catch(e){ console.error('revenue panel', e); } }
     if (typeof window.renderDescPatterns === 'function') { try { window.renderDescPatterns(); } catch(e){ console.error('desc patterns', e); } }
+    if (typeof window.renderTranscriptMix === 'function') { try { window.renderTranscriptMix(); } catch(e){ console.error('transcript mix', e); } }
     if (typeof window.renderSeasonCard === 'function') { try { window.renderSeasonCard(); } catch(e){ console.error('season card', e); } }
   };
 
@@ -7938,6 +7966,63 @@ function niceDurationAxis(minSec, maxSec) {
   }
 
   // Entry point keeps its historical name — renderAnalysisChart calls it.
+  // Runtime breakdown of long-form videos, from the one-off transcript study in
+  // transcript-mix.json. Static by nature — the classification isn't recomputed on
+  // the fly — so the panel is explicit that it's a fixed sample, and only shows for
+  // the channel the study covered.
+  window.renderTranscriptMix = function renderTranscriptMix() {
+    const panel = document.getElementById('tmixPanel');
+    if (!panel) return;
+    const d = window.__tmixData;
+    if (!d || !Array.isArray(d.videos) || !d.videos.length) { panel.hidden = true; return; }
+    // The study is TheQuartering long-form only; hide it when another channel is picked.
+    const scopeOk = (typeof scope === 'undefined') || scope === '@TheQuartering' || scope === 'ALL';
+    if (!scopeOk) { panel.hidden = true; return; }
+
+    const T = d._totals || {}, blocks = (d._sample && d._sample.blocks) || 1;
+    const CATS = [
+      ['S', 's', d.categories.S, 'his own point, analysis or argument'],
+      ['Q', 'q', d.categories.Q, "reading someone else's article, post or clip"],
+      ['F', 'f', d.categories.F, 'repetition, meandering set-up, stalling'],
+      ['P', 'p', d.categories.P, 'sponsors, memberships, like-and-subscribe'],
+    ];
+    const pc = k => (T[k] || 0) / blocks * 100;
+    // A block is ~30s, so share-of-blocks is share-of-runtime.
+    const mins = k => (pc(k) / 100 * 14).toFixed(1);
+
+    const hero = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${pc(k).toFixed(2)}%" title="${escapeHtml(d.categories[k])}: ${pc(k).toFixed(0)}%"></span>`).join('');
+    const key = CATS.map(([k, cls, name, desc]) =>
+      `<span class="tmix-key-item" title="${escapeHtml(desc)}"><span class="tmix-dot tmix-seg ${cls}"></span>` +
+      `<span class="tmix-key-name">${escapeHtml(name)}</span>` +
+      `<span class="tmix-key-val">${pc(k).toFixed(0)}%</span></span>`).join('');
+
+    const rows = d.videos.slice().sort((a, b) => (b.F / b.blocks) - (a.F / a.blocks)).map(v => {
+      const seg = CATS.map(([k, cls]) => `<span class="tmix-seg ${cls}" style="width:${(v[k] / v.blocks * 100).toFixed(2)}%"></span>`).join('');
+      const fp = Math.round(v.F / v.blocks * 100);
+      return `<div class="tmix-row"><span class="tmix-row-t" title="${escapeHtml(v.title)}">` +
+        `<a href="${ytLink(v.id)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${escapeHtml(v.title)}</a></span>` +
+        `<span class="tmix-row-bar">${seg}</span><span class="tmix-row-f">${fp}%</span></div>`;
+    }).join('');
+
+    const agree = Math.round(((d._sample && d._sample.agreement) || 0) * 100);
+    panel.innerHTML =
+      `<div class="tmix-body">
+        <div class="tmix-eyebrow">Transcript study · ${escapeHtml(d._generated || '')}</div>
+        <h3 class="tmix-h">What is actually in a 14-minute video?</h3>
+        <p class="tmix-sub">${(d._sample && d._sample.minutes) || 0} minutes of long-form runtime across ${(d._sample && d._sample.videos) || 0} videos, cut into ~30-second blocks and sorted into four buckets.</p>
+        <div class="tmix-hero">${hero}</div>
+        <div class="tmix-key">${key}</div>
+        <div class="tmix-callout">In a typical 14-minute upload that works out at <b>${mins('S')} minutes</b> of his own substance,
+          <b>${mins('Q')} minutes</b> reading other people's words aloud, <b>${mins('F')} minutes</b> of filler and
+          <b>${mins('P')} minutes</b> of promotion.</div>
+        <div class="tmix-rows-h"><span>Per video — most padded first</span><span>Filler</span></div>
+        ${rows}
+        <div class="tmix-foot">${escapeHtml(d._method || '')} ${escapeHtml(d._caveat || '')}
+          <br><b>Agreement check:</b> ${agree}% — and every disagreement ran in the direction of <em>less</em> filler being spotted, not more.</div>
+      </div>`;
+    panel.hidden = false;
+  };
+
   window.renderDescPatterns = function renderDescPatterns() {
     const panel = document.getElementById('descPatternPanel');
     if (!panel) return;
@@ -8385,6 +8470,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
+      fetch('transcript-mix.json').then(async r => { if (r.ok){ window.__tmixData = await r.json(); if (typeof window.renderTranscriptMix === 'function') window.renderTranscriptMix(); } }).catch(e => console.warn('transcript-mix', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
