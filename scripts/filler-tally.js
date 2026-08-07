@@ -52,8 +52,24 @@ function analyse(t) {
     for (let i = 1; i < toks.length; i++) if (toks[i - 1] === a && toks[i] === b) n++;
     if (n) { hedge += n; hedgeBreak[a + ' ' + b] = n; }
   }
-  // "you know" already counted the words; nothing double-counts because unigram
-  // hedges and bigram hedges share no members.
+  // ---- the single combined figure ----------------------------------------
+  // The three tallies above OVERLAP: "uh uh" is two disfluencies and a repeat,
+  // "like like" is two hedges and a repeat. Adding them would double-count. So
+  // mark filler at the TOKEN level and count distinct marked words — that gives
+  // an honest "share of everything he says", and the unit becomes words rather
+  // than occurrences, which is what a per-100-words figure should mean.
+  const HEDGE_UNI_SET = new Set(HEDGE_UNI);
+  const mark = new Array(toks.length).fill(false);
+  for (let i = 0; i < toks.length; i++) {
+    if (HARD.has(toks[i])) mark[i] = true;
+    if (HEDGE_UNI_SET.has(toks[i])) mark[i] = true;
+    // Only the redundant second instance is filler; the first said something.
+    if (i > 0 && toks[i] === toks[i - 1] && !OK_DOUBLE.has(toks[i])) mark[i] = true;
+  }
+  for (const [a, b] of HEDGE_BI) {
+    for (let i = 1; i < toks.length; i++) if (toks[i - 1] === a && toks[i] === b) { mark[i - 1] = true; mark[i] = true; }
+  }
+  const fillerWords = mark.reduce((s, x) => s + (x ? 1 : 0), 0);
 
   return {
     id: t.videoId, channelId: t.channelId, title: t.title || '', publishedAt: t.publishedAt || null,
@@ -65,6 +81,8 @@ function analyse(t) {
     // Words are roughly isochronous over a whole video, so share-of-words is a
     // fair proxy for share-of-time. Stated as an estimate, not a measurement.
     hardSec: +((hard / toks.length) * dur).toFixed(1),
+    fillerWords, fillerPer100: +(fillerWords / toks.length * 100).toFixed(2),
+    fillerSec: +((fillerWords / toks.length) * dur).toFixed(1),
   };
 }
 
@@ -122,6 +140,14 @@ console.log('');
 line('COUNTABLE TOTAL', sum(rows, 'hard') + sum(rows, 'rep'), 'disfluency + stutter');
 console.log('');
 line('hedges', sum(rows, 'hedge'), 'AMBIGUOUS — never added in');
+
+// The one number: distinct words that are filler, overlaps resolved.
+const fw = sum(rows, 'fillerWords');
+console.log('\n  ' + '-'.repeat(62));
+line('VERBAL FILLER', fw, 'all of the above, de-overlapped');
+console.log('  ' + '-'.repeat(62));
+console.log(`\n  ${(fw / totalWords * 100).toFixed(2)} of every 100 words he speaks is verbal filler`);
+console.log(`  = 1 word in ${(totalWords / fw).toFixed(1)}, about ${(mins(fw) / 60).toFixed(0)} hours of the ${hrs.toFixed(0)} scanned`);
 
 const allHard = {};
 for (const r of rows) for (const [k, v] of Object.entries(r.hardBreak)) allHard[k] = (allHard[k] || 0) + v;
