@@ -3621,11 +3621,24 @@ function render(m){
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
-  // End-of-month projection (in-progress month, long-form Total views): current
-  // total + expected-remaining-uploads × current avg views/upload. Expected uploads
-  // = mean of the last 3 complete months. Gated to >=5 uploads (below that it's
-  // pure noise) and flagged "rough" until ~a third of the month's uploads are in —
-  // backtested on past months as ~±5% from mid-month, ~±3% in the final week.
+  // Projection for the in-progress month (long-form Total views): current total +
+  // expected-remaining-uploads × current avg views/upload. Expected uploads = mean
+  // of the last 3 complete months. Gated to >=5 uploads (below that it's pure noise)
+  // and flagged by confidence until ~a third of the month's uploads are in.
+  //
+  // What it predicts: the SETTLED total, not the figure showing on the last day.
+  // Measured from the snapshot archive, a month's videos keep earning for about a
+  // week after the month closes and then stop (June: +228k in week one, then +7k,
+  // +3k, +2k — a ×1.04-1.05 tail; July ×1.05). Replayed day-by-day against that
+  // settled target the estimate is near-unbiased — June mean abs error 2.6%
+  // (bias -1.8%), July 5.1% (bias +3.1%) — whereas against the last-day figure it
+  // reads ~5-8% high, purely because that tail hasn't arrived yet. So do NOT
+  // "correct" it downwards: the apparent optimism is the post-month tail.
+  //
+  // Deliberately NOT excluding young videos from the average. A video published
+  // hours ago drags the mean down, but the target contains equally-young videos
+  // (the ones posted on the 30th), so the drag is doing real work: filtering to
+  // >=24/48/72h made every backtest worse (mean abs error 6.2% -> 8.4/9.2/9.7%).
   let projTot = null, projConf = '', projExp = 0;
   if (isPartial && d && d.n && d.tot != null && typeof D !== 'undefined' && D) {
     const cm = Object.keys(D).filter(k => /^\d{4}-\d{2}$/.test(k) && k < CURRENT_MONTH_KEY && D[k] && D[k].n).sort();
@@ -3845,7 +3858,7 @@ function render(m){
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="hero-proj-conf"><span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'} confidence</span> <span class="info-icon" data-popover="Projected month-end total from this month's upload pace. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></span></div>` : ``}
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="hero-proj-conf"><span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'} confidence</span> <span class="info-icon" data-popover="Where this month's uploads should finish up — projected from the pace so far. A month's videos keep gaining for about a week after it ends, then stop, so this is the settled total rather than the figure on the 31st. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></span></div>` : ``}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card avg-card">
