@@ -4208,13 +4208,33 @@ function refreshPreset(preset){
     pop.style.left = left + 'px';
     pop.style.top = top + 'px';
     pop.style.visibility = 'visible';
+    pop._for = trigger;                     // so a second tap on the same hint closes it
   }
-  function hide(){ if (node) node.classList.remove('visible'); }
-  document.addEventListener('mouseover', (e) => { const t = e.target.closest('[data-popover]'); if (t) place(t); });
-  document.addEventListener('mouseout', (e) => { if (e.target.closest('[data-popover]')) hide(); });
+  function hide(){ if (node){ node.classList.remove('visible'); node._for = null; } }
+
+  // Touch has no hover. A tap also synthesises mouseover/click, so without
+  // distinguishing the two a tap would open the hint on mouseover and then
+  // immediately close it again on click. Track the pointer type and let each
+  // input method own its own path: hover on desktop, tap-to-toggle on touch.
+  let touch = false;
+  document.addEventListener('pointerdown', (e) => { touch = (e.pointerType === 'touch' || e.pointerType === 'pen'); }, true);
+
+  document.addEventListener('mouseover', (e) => { if (touch) return; const t = e.target.closest('[data-popover]'); if (t) place(t); });
+  document.addEventListener('mouseout', (e) => { if (touch) return; if (e.target.closest('[data-popover]')) hide(); });
   document.addEventListener('focusin', (e) => { const t = e.target.closest('[data-popover]'); if (t) place(t); });
   document.addEventListener('focusout', hide);
   document.addEventListener('scroll', hide, true);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-popover]');
+    if (!t){ hide(); return; }              // tapping anywhere else dismisses it
+    if (!touch) return;                     // desktop already showed it on hover
+    if (node && node.classList.contains('visible') && node._for === t) { hide(); return; }
+    place(t);
+    // A hint can sit inside a clickable card; don't let reading it navigate away.
+    e.stopPropagation(); e.preventDefault();
+  }, true);
 })();
 // Overview month-detail "show more" — bumps the per-group visible count and
 // re-renders just the month-detail body (preserves the expanded state).
@@ -9282,7 +9302,7 @@ function renderWindowList(startDate, endDate) {
     const _lr = _tv>0 ? (_tl/_tv*100) : 0;
     summaryStrip = `<div class="vid-summary" aria-label="Summary of shown videos">
       <div class="vs-item"><span class="vs-num">${fmt(shownForStats.length)}</span><span class="vs-lbl">Videos</span></div>
-      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Average duration <span class="vs-info" tabindex="0" role="img" aria-label="Median — the typical video, so one outlier can't skew it" title="Median — the typical video, so one outlier can't skew it">ⓘ</span></span></div>
+      <div class="vs-item"><span class="vs-num">${formatDuration(Math.round(_md))}</span><span class="vs-lbl">Average duration <span class="vs-info" tabindex="0" role="button" aria-label="Median — the typical video, so one outlier can't skew it" data-popover="Median — the typical video, so one outlier can't skew it">ⓘ</span></span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tv)}</span><span class="vs-lbl">Total views</span></div>
       <div class="vs-item"><span class="vs-num">${_lr.toFixed(1)}%</span><span class="vs-lbl">Like rate</span></div>
       <div class="vs-item"><span class="vs-num">${fmt(_tc)}</span><span class="vs-lbl">Comments</span></div>
@@ -11791,8 +11811,8 @@ function renderWindowList(startDate, endDate) {
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
     const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
     const summary=
-      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'<span>'+newLab+' <span class="uc-i" tabindex="0" title="'+esc(newInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" title="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'<span>'+newLab+' <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(newInfo)+'" data-popover="'+esc(newInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
+      '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(oldInfo)+'" data-popover="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
