@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-07
+# Topic candidates — 2026-08-08
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 20 recent videos, 125 baseline videos
+Pool: 19 recent videos, 125 baseline videos
 
 ### Cluster 1: `maga`
 
-- **Recent saturation:** 3/20 videos (**15%**)
+- **Recent saturation:** 3/19 videos (**16%**)
 - **Baseline saturation:** 1/125 videos (1%)
-- **Spike ratio:** 12.6x
+- **Spike ratio:** 13.3x
 - **Related terms:** `maga`
 - **Sample recent videos:**
   - 2026-08-06 — _WOKE CANADIAN FACES NEW HUMILIATION_  
@@ -24,9 +24,9 @@ Pool: 20 recent videos, 125 baseline videos
 
 ### Cluster 2: `finally`
 
-- **Recent saturation:** 4/20 videos (**20%**)
+- **Recent saturation:** 4/19 videos (**21%**)
 - **Baseline saturation:** 2/125 videos (2%)
-- **Spike ratio:** 10.1x
+- **Spike ratio:** 10.6x
 - **Related terms:** `finally`
 - **Sample recent videos:**
   - 2026-08-06 — _THEY ACTUALLY DID IT_  
@@ -40,9 +40,9 @@ Pool: 20 recent videos, 125 baseline videos
 
 ### Cluster 3: `reportedly`
 
-- **Recent saturation:** 3/20 videos (**15%**)
+- **Recent saturation:** 3/19 videos (**16%**)
 - **Baseline saturation:** 3/125 videos (2%)
-- **Spike ratio:** 5.4x
+- **Spike ratio:** 5.7x
 - **Related terms:** `reportedly`
 - **Sample recent videos:**
   - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
@@ -54,13 +54,13 @@ Pool: 20 recent videos, 125 baseline videos
 
 ## @JeremyHambly
 
-Pool: 11 recent videos, 73 baseline videos
+Pool: 10 recent videos, 72 baseline videos
 
 ### Cluster 1: `primary`
 
-- **Recent saturation:** 4/11 videos (**36%**)
-- **Baseline saturation:** 0/73 videos (0%)
-- **Spike ratio:** 53.8x
+- **Recent saturation:** 4/10 videos (**40%**)
+- **Baseline saturation:** 0/72 videos (0%)
+- **Spike ratio:** 58.4x
 - **Related terms:** `primary`, `democratic`
 - **Sample recent videos:**
   - 2026-08-05 — _WOKE POLITICIANS BLOWN OUT_  
@@ -71,20 +71,6 @@ Pool: 11 recent videos, 73 baseline videos
     AOC Leads New Hampshire While Her National Popularity Falls Apart
   - 2026-08-03 — _HASAN PIKER HUMILATED_  
     Hasan Piker Sparks Democratic Civil War As Carville Walks Away
-
-### Cluster 2: `city`
-
-- **Recent saturation:** 3/11 videos (**27%**)
-- **Baseline saturation:** 5/73 videos (7%)
-- **Spike ratio:** 3.7x
-- **Related terms:** `city`, `mamdani`
-- **Sample recent videos:**
-  - 2026-08-05 — _HE'S LOST HIS MIND_  
-    Mamdani’s NYC Revives Giant Shame Stickers Drivers Must Scrape Off
-  - 2026-08-03 — _THEY'RE MOCKING HIM_  
-    USA Today Turns On Mamdani Over His Socialist Grocery Disaster
-  - 2026-07-31 — _MAMDANIS NEW LOW_  
-    Mamdani Celebrates $104 Million Tip Increase While New Yorkers Pay
 
 ---
 
