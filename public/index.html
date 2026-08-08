@@ -3621,20 +3621,40 @@ function render(m){
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
-  // End-of-month projection (in-progress month, long-form Total views): current
-  // total + expected-remaining-uploads × current avg views/upload.
+  // Projection for the in-progress month (long-form Total views): current total +
+  // expected-remaining-uploads × current avg views/upload. Gated to >=5 uploads
+  // (below that it's pure noise) and flagged by confidence until ~a third of the
+  // month's uploads are in.
   //
-  // Expected uploads used to be the mean of the last 3 complete months. A mean
-  // cannot see a trend, and when upload volume moves it just drags an old month
-  // forward: on 8 July 2026 it assumed 187 uploads against a real 141, and
-  // projected 5.71M against a settled 4.22M — 35% high. It is now last month's
-  // count blended with this month's own pace (see below).
+  // What it predicts: the SETTLED total, not the figure showing on the last day.
+  // Measured from the snapshot archive, a month's videos keep earning for about a
+  // week after the month closes and then stop (June: +228k in week one, then +7k,
+  // +3k, +2k — a ×1.04-1.05 tail; July ×1.05). Replayed day-by-day against that
+  // settled target the estimate is near-unbiased — June mean abs error 2.6%
+  // (bias -1.8%), July 5.1% (bias +3.1%) — whereas against the last-day figure it
+  // reads ~5-8% high, purely because that tail hasn't arrived yet. So do NOT
+  // "correct" it downwards: the apparent optimism is the post-month tail.
   //
-  // The views-per-upload half needs no correction: on 8 July it read 30,555
-  // against a settled 29,929, so the upload count was carrying all of the error.
+  // Deliberately NOT excluding young videos from the average. A video published
+  // hours ago drags the mean down, but the target contains equally-young videos
+  // (the ones posted on the 30th), so the drag is doing real work: filtering to
+  // >=24/48/72h made every backtest worse (mean abs error 6.2% -> 8.4/9.2/9.7%).
   //
-  // Gated to >=5 uploads (below that it's pure noise) and flagged low/medium
-  // confidence until ~a third of the month's uploads are in.
+  // EXPECTED UPLOADS was the mean of the last 3 complete months. That is fine for
+  // a single channel with steady output, but a mean cannot see a trend, and on the
+  // all-channel view — where output has been falling — it just drags an old month
+  // forward. On 8 Aug 2026 it assumed 168 uploads against a run-rate of 116 and
+  // projected 5.28M. Replayed against settled months it ran bias +26.4% / MAE
+  // 26.4% network-wide, while looking fine (+4.2% / 5.8%) on TheQuartering alone,
+  // which is why the earlier single-channel backtest never caught it.
+  //
+  // Now: last month's count blended with the pace this month is actually setting,
+  // weighted by progress through the month. Better on BOTH scopes — network-wide
+  // +7.3% / MAE 9.7%, TheQuartering +1.7% / 5.3%.
+  //
+  // This does NOT contradict the "don't correct downwards" note above: that is
+  // about the post-month tail, and those backtests already score against the
+  // settled total, not the last-day figure. Two different errors.
   let projTot = null, projConf = '', projExp = 0;
   if (isPartial && d && d.n && d.tot != null && typeof D !== 'undefined' && D) {
     const cm = Object.keys(D).filter(k => /^\d{4}-\d{2}$/.test(k) && k < CURRENT_MONTH_KEY && D[k] && D[k].n).sort();
