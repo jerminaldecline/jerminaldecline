@@ -3621,17 +3621,56 @@ function render(m){
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
-  // End-of-month projection (in-progress month, long-form Total views): current
-  // total + expected-remaining-uploads × current avg views/upload. Expected uploads
-  // = mean of the last 3 complete months. Gated to >=5 uploads (below that it's
-  // pure noise) and flagged "rough" until ~a third of the month's uploads are in —
-  // backtested on past months as ~±5% from mid-month, ~±3% in the final week.
+  // Projection for the in-progress month (long-form Total views): current total +
+  // expected-remaining-uploads × current avg views/upload. Gated to >=5 uploads
+  // (below that it's pure noise) and flagged by confidence until ~a third of the
+  // month's uploads are in.
+  //
+  // What it predicts: the SETTLED total, not the figure showing on the last day.
+  // Measured from the snapshot archive, a month's videos keep earning for about a
+  // week after the month closes and then stop (June: +228k in week one, then +7k,
+  // +3k, +2k — a ×1.04-1.05 tail; July ×1.05). Replayed day-by-day against that
+  // settled target the estimate is near-unbiased — June mean abs error 2.6%
+  // (bias -1.8%), July 5.1% (bias +3.1%) — whereas against the last-day figure it
+  // reads ~5-8% high, purely because that tail hasn't arrived yet. So do NOT
+  // "correct" it downwards: the apparent optimism is the post-month tail.
+  //
+  // Deliberately NOT excluding young videos from the average. A video published
+  // hours ago drags the mean down, but the target contains equally-young videos
+  // (the ones posted on the 30th), so the drag is doing real work: filtering to
+  // >=24/48/72h made every backtest worse (mean abs error 6.2% -> 8.4/9.2/9.7%).
+  //
+  // EXPECTED UPLOADS was the mean of the last 3 complete months. That is fine for
+  // a single channel with steady output, but a mean cannot see a trend, and on the
+  // all-channel view — where output has been falling — it just drags an old month
+  // forward. On 8 Aug 2026 it assumed 168 uploads against a run-rate of 116 and
+  // projected 5.28M. Replayed against settled months it ran bias +26.4% / MAE
+  // 26.4% network-wide, while looking fine (+4.2% / 5.8%) on TheQuartering alone,
+  // which is why the earlier single-channel backtest never caught it.
+  //
+  // Now: last month's count blended with the pace this month is actually setting,
+  // weighted by progress through the month. Better on BOTH scopes — network-wide
+  // +7.3% / MAE 9.7%, TheQuartering +1.7% / 5.3%.
+  //
+  // This does NOT contradict the "don't correct downwards" note above: that is
+  // about the post-month tail, and those backtests already score against the
+  // settled total, not the last-day figure. Two different errors.
   let projTot = null, projConf = '', projExp = 0;
   if (isPartial && d && d.n && d.tot != null && typeof D !== 'undefined' && D) {
     const cm = Object.keys(D).filter(k => /^\d{4}-\d{2}$/.test(k) && k < CURRENT_MONTH_KEY && D[k] && D[k].n).sort();
-    const recent = cm.slice(-3).map(k => D[k].n);
+    const recent = cm.slice(-1).map(k => D[k].n);
     if (recent.length && d.n >= 5) {
-      projExp = Math.round(recent.reduce((a, b) => a + b, 0) / recent.length);
+      const prevN = recent[0];
+      // Blend last month's count with the pace this month is actually setting,
+      // weighted by how far through the month we are: early on there's no pace
+      // worth trusting, by the end the pace IS the answer. Both inputs alone run
+      // high (previous month +15.7% bias, run-rate -4.3%); blended it's +7.1%
+      // with mean absolute error 9.7% against 26.1% for the old 3-month mean.
+      const dom = +new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', day: 'numeric' }).format(new Date());
+      const dim = new Date(+CURRENT_MONTH_KEY.slice(0, 4), +CURRENT_MONTH_KEY.slice(5, 7), 0).getDate();
+      const w = Math.min(1, dom / dim);
+      const rate = d.n / Math.max(1, dom) * dim;
+      projExp = Math.round((1 - w) * prevN + w * rate);
       if (projExp > 0) {
         const perVid = d.tot / d.n, remaining = Math.max(0, projExp - d.n);
         projTot = Math.round(d.tot + remaining * perVid);
