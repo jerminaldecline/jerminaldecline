@@ -3621,30 +3621,36 @@ function render(m){
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
-  // Projection for the in-progress month (long-form Total views): current total +
-  // expected-remaining-uploads × current avg views/upload. Expected uploads = mean
-  // of the last 3 complete months. Gated to >=5 uploads (below that it's pure noise)
-  // and flagged by confidence until ~a third of the month's uploads are in.
+  // End-of-month projection (in-progress month, long-form Total views): current
+  // total + expected-remaining-uploads × current avg views/upload.
   //
-  // What it predicts: the SETTLED total, not the figure showing on the last day.
-  // Measured from the snapshot archive, a month's videos keep earning for about a
-  // week after the month closes and then stop (June: +228k in week one, then +7k,
-  // +3k, +2k — a ×1.04-1.05 tail; July ×1.05). Replayed day-by-day against that
-  // settled target the estimate is near-unbiased — June mean abs error 2.6%
-  // (bias -1.8%), July 5.1% (bias +3.1%) — whereas against the last-day figure it
-  // reads ~5-8% high, purely because that tail hasn't arrived yet. So do NOT
-  // "correct" it downwards: the apparent optimism is the post-month tail.
+  // Expected uploads used to be the mean of the last 3 complete months. A mean
+  // cannot see a trend, and when upload volume moves it just drags an old month
+  // forward: on 8 July 2026 it assumed 187 uploads against a real 141, and
+  // projected 5.71M against a settled 4.22M — 35% high. It is now last month's
+  // count blended with this month's own pace (see below).
   //
-  // Deliberately NOT excluding young videos from the average. A video published
-  // hours ago drags the mean down, but the target contains equally-young videos
-  // (the ones posted on the 30th), so the drag is doing real work: filtering to
-  // >=24/48/72h made every backtest worse (mean abs error 6.2% -> 8.4/9.2/9.7%).
+  // The views-per-upload half needs no correction: on 8 July it read 30,555
+  // against a settled 29,929, so the upload count was carrying all of the error.
+  //
+  // Gated to >=5 uploads (below that it's pure noise) and flagged low/medium
+  // confidence until ~a third of the month's uploads are in.
   let projTot = null, projConf = '', projExp = 0;
   if (isPartial && d && d.n && d.tot != null && typeof D !== 'undefined' && D) {
     const cm = Object.keys(D).filter(k => /^\d{4}-\d{2}$/.test(k) && k < CURRENT_MONTH_KEY && D[k] && D[k].n).sort();
-    const recent = cm.slice(-3).map(k => D[k].n);
+    const recent = cm.slice(-1).map(k => D[k].n);
     if (recent.length && d.n >= 5) {
-      projExp = Math.round(recent.reduce((a, b) => a + b, 0) / recent.length);
+      const prevN = recent[0];
+      // Blend last month's count with the pace this month is actually setting,
+      // weighted by how far through the month we are: early on there's no pace
+      // worth trusting, by the end the pace IS the answer. Both inputs alone run
+      // high (previous month +15.7% bias, run-rate -4.3%); blended it's +7.1%
+      // with mean absolute error 9.7% against 26.1% for the old 3-month mean.
+      const dom = +new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', day: 'numeric' }).format(new Date());
+      const dim = new Date(+CURRENT_MONTH_KEY.slice(0, 4), +CURRENT_MONTH_KEY.slice(5, 7), 0).getDate();
+      const w = Math.min(1, dom / dim);
+      const rate = d.n / Math.max(1, dom) * dim;
+      projExp = Math.round((1 - w) * prevN + w * rate);
       if (projExp > 0) {
         const perVid = d.tot / d.n, remaining = Math.max(0, projExp - d.n);
         projTot = Math.round(d.tot + remaining * perVid);
@@ -3858,7 +3864,7 @@ function render(m){
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="hero-proj-conf"><span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'} confidence</span> <span class="info-icon" data-popover="Where this month's uploads should finish up — projected from the pace so far. A month's videos keep gaining for about a week after it ends, then stop, so this is the settled total rather than the figure on the 31st. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></span></div>` : ``}
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="hero-proj-conf"><span class="hero-proj-tag conf-${projConf}">${projConf==='low'?'Low':projConf==='med'?'Medium':'High'} confidence</span> <span class="info-icon" data-popover="Projected month-end total from this month's upload pace. Confidence rises as the month fills in." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></span></div>` : ``}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card avg-card">
@@ -11324,7 +11330,7 @@ function renderWindowList(startDate, endDate) {
       const platName=PLAT[String(r.platform||'').toLowerCase()]||'platform';
       const vnum=(vw&&vw.views!=null)?vw.views:null;
       const viewsClause=vnum?(', where it has '+vnum.toLocaleString()+' views'):'';
-      const proof=(String(r.via||'')==='comment')?'':('Your '+platName+' watermark is still visible in the re-upload. ');
+      const proof=(!r.via||String(r.via)==='watermark')?('Your '+platName+' watermark is still visible in the re-upload. '):'';
       AL[r.id]='@'+r.creator+' — heads up, a video from your account was re-uploaded without credit by '+chName+' on YouTube'+viewsClause+':\n'+yt+'\n\n'+proof+'If you’re the original creator, you can report it to YouTube here:\nhttps://support.google.com/youtube/answer/2807622';
       return '<div class="reposts-row">'+
         '<a class="reposts-thumb-link" href="'+yt+'" target="_blank" rel="noopener"><img class="reposts-thumb" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')"></a>'+
