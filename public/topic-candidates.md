@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-08
+# Topic candidates — 2026-08-09
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,71 +6,51 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 19 recent videos, 125 baseline videos
+Pool: 19 recent videos, 120 baseline videos
 
 ### Cluster 1: `maga`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 1/125 videos (1%)
-- **Spike ratio:** 13.3x
+- **Baseline saturation:** 1/120 videos (1%)
+- **Spike ratio:** 12.7x
 - **Related terms:** `maga`
 - **Sample recent videos:**
   - 2026-08-06 — _WOKE CANADIAN FACES NEW HUMILIATION_  
-    Canadian Who Slapped MAGA Teen Pleads Guilty And Gets Deported
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Canadian Who Slapped MAGA Teen Pleads Guilty And G
   - 2026-08-06 — _MATT WALSH BURRITOGATE_  
-    Matt Walsh Starts MAGA Civil War Over Twenty Dollar Burritos
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Matt Walsh Starts MAGA Civil War Over Twenty Dolla
   - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
-    MAGA YouTubers Are Collapsing As Their Audiences Finally Walk Away
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ MAGA YouTubers Are Collapsing As Their Audiences F
 
 ### Cluster 2: `finally`
 
 - **Recent saturation:** 4/19 videos (**21%**)
-- **Baseline saturation:** 2/125 videos (2%)
-- **Spike ratio:** 10.6x
+- **Baseline saturation:** 2/120 videos (2%)
+- **Spike ratio:** 10.2x
 - **Related terms:** `finally`
 - **Sample recent videos:**
   - 2026-08-06 — _THEY ACTUALLY DID IT_  
-    Fauci Finally Faces DOJ After Senate Votes Him In Contempt
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Fauci Finally Faces DOJ After Senate Votes Him In 
   - 2026-08-05 — _WOKE RIOTERS FIND OUT_  
-    BLM Rioters Find Out As Police Destroy Their Autonomous Zone
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ BLM Rioters Find Out As Police Destroy Their Auton
   - 2026-08-05 — _THE HORRIFYING TRUTH_  
-    Sad Truth Behind Perez Hilton’s Horrifying Livestream Finally Comes Out
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Sad Truth Behind Perez Hilton’s Horrifying Livestr
   - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
-    MAGA YouTubers Are Collapsing As Their Audiences Finally Walk Away
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ MAGA YouTubers Are Collapsing As Their Audiences F
 
-### Cluster 3: `reportedly`
+### Cluster 3: `wnba`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 3/125 videos (2%)
-- **Spike ratio:** 5.7x
-- **Related terms:** `reportedly`
+- **Baseline saturation:** 2/120 videos (2%)
+- **Spike ratio:** 7.6x
+- **Related terms:** `wnba`
 - **Sample recent videos:**
+  - 2026-08-08 — _THE WBNA IS COOKED NOW!_  
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Enes Freedom Declares For WNBA Draft And Internet 
   - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
-    WNBA Faces Full Blown Insanity As Trans Star Wants In
-  - 2026-08-04 — _HE CRIED LIKE A COWARD_  
-    Hero With A Gun Sends In-N-Out Mass Shooter Running Terrified
-  - 2026-08-03 — _RACE GRIFTERS FIND OUT_  
-    Nolan Wells Mystery Erupts As Innocent Families Face Death Threats
-
-## @JeremyHambly
-
-Pool: 10 recent videos, 72 baseline videos
-
-### Cluster 1: `primary`
-
-- **Recent saturation:** 4/10 videos (**40%**)
-- **Baseline saturation:** 0/72 videos (0%)
-- **Spike ratio:** 58.4x
-- **Related terms:** `primary`, `democratic`
-- **Sample recent videos:**
-  - 2026-08-05 — _WOKE POLITICIANS BLOWN OUT_  
-    Cori Bush And Shri Thanedar Both Crushed In Primary Defeats
-  - 2026-08-05 — _TOTAL MUSLIM TAKE OVER_  
-    Muslim Progressive Wins Michigan And Could Capture Senate Seat
-  - 2026-08-03 — _AOC HIT THE WALL_  
-    AOC Leads New Hampshire While Her National Popularity Falls Apart
-  - 2026-08-03 — _HASAN PIKER HUMILATED_  
-    Hasan Piker Sparks Democratic Civil War As Carville Walks Away
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ WNBA Faces Full Blown Insanity As Trans Star Wants
+  - 2026-08-04 — _IT WENT NUCLEAR_  
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Caitlin Clark Stays Silent As WNBA Mob Targets Sop
 
 ---
 
