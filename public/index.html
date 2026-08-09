@@ -149,6 +149,27 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    (partial vs full months) would mislead — so they're hidden and this says why. */
 .partial-banner{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;margin-bottom:1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
 .partial-banner strong{color:var(--text)}
+/* Top-of-page alert for a copyright/guidelines removal detected in the last 24h.
+   Hidden entirely when there's nothing to report — this is rare (7 such removals
+   across the whole archive), so it must read as an event, not as furniture. */
+.strike-banner{display:flex;align-items:flex-start;gap:0.7rem;background:var(--down-bg);
+  border:1px solid var(--down);border-left-width:3px;border-radius:9px;
+  padding:0.7rem 0.9rem;margin:0 0 1rem;font-size:0.85rem;line-height:1.45}
+.strike-banner[hidden]{display:none}
+.strike-icon{flex:none;font-size:1rem;line-height:1.2}
+.strike-body{flex:1 1 auto;min-width:0;color:var(--label)}
+.strike-head{font-weight:800;color:var(--text);margin-bottom:0.15rem}
+.strike-list{margin:0.3rem 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0.25rem}
+.strike-list li{color:var(--text-muted);font-size:0.81rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.strike-list b{color:var(--label);font-weight:600}
+.strike-actions{display:flex;align-items:center;gap:0.4rem;flex:none}
+.strike-go{background:transparent;border:1px solid var(--down);color:var(--down);border-radius:999px;
+  padding:0.3rem 0.7rem;font:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.strike-go:hover{background:var(--down);color:var(--bg)}
+.strike-x{background:transparent;border:none;color:var(--text-dim);font-size:1.05rem;line-height:1;
+  cursor:pointer;padding:0.2rem 0.3rem;border-radius:6px}
+.strike-x:hover{color:var(--text)}
+@media(max-width:680px){.strike-banner{flex-wrap:wrap}.strike-actions{width:100%;justify-content:flex-end}}
 .report-head-main{min-width:0}
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
@@ -2339,6 +2360,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 <!-- Mood controls (floating bottom-right) -->
 <div class="wrap">
+  <!-- Populated by renderStrikeAlert(); stays hidden unless a copyright or
+       Community Guidelines removal was detected in the last 24 hours. -->
+  <div class="strike-banner" id="strikeBanner" role="status" aria-live="polite" hidden></div>
   <div class="sticky-head" id="stickyHead">
   <div class="util-bar">
     <div class="util-brand">
@@ -8405,6 +8429,76 @@ function niceDurationAxis(minSec, maxSec) {
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, density: 'detailed', longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
+  // Top-of-page alert: any channel in the network losing a video to a copyright
+  // claim or a Community Guidelines strike in the last 24 hours.
+  //
+  // The clock is `unavailableSince`, which is when the scan first FOUND the video
+  // gone, not when YouTube pulled it. Scans run hourly, so the lag is under an
+  // hour — fine for a 24h window, but it is why the wording says "detected".
+  //
+  // Dismissal is keyed by the set of video ids, so dismissing today's alert does
+  // not suppress tomorrow's: a new removal produces a new key and shows again.
+  const STRIKE_REASONS = { copyright: 'a copyright claim', guidelines: 'Community Guidelines' };
+  window.renderStrikeAlert = function renderStrikeAlert(){
+    const box = document.getElementById('strikeBanner');
+    if (!box) return;
+    const ds = (typeof ANALYTICS_DATASET !== 'undefined') ? ANALYTICS_DATASET : null;
+    const reasons = window.__removedReasons;
+    if (!ds || !ds.videos || !reasons) { box.hidden = true; return; }
+
+    const cutoff = Date.now() - 24 * 3600 * 1000;
+    const hits = ds.videos.filter(v => {
+      if (!v || !v.unavailable || !v.unavailableSince) return false;
+      const r = reasons[v.id];
+      if (!r || !STRIKE_REASONS[r.reason]) return false;
+      const t = Date.parse(v.unavailableSince);
+      return Number.isFinite(t) && t >= cutoff;
+    }).sort((a, b) => String(b.unavailableSince).localeCompare(String(a.unavailableSince)));
+
+    if (!hits.length) { box.hidden = true; box.innerHTML = ''; return; }
+
+    const key = 'jdStrikeSeen:' + hits.map(v => v.id).sort().join(',');
+    try { if (localStorage.getItem(key)) { box.hidden = true; return; } } catch (e) {}
+
+    const chans = ds.channels || {};
+    const n = hits.length;
+    const items = hits.map(v => {
+      const ch = chans[v.channelId] || {};
+      const why = STRIKE_REASONS[(reasons[v.id] || {}).reason] || 'removal';
+      // Shorts titles are mostly trailing hashtags; they drown the title in a
+      // one-line banner. Keep them if stripping would leave nothing.
+      const clean = String(v.title || '').replace(/(\s+#[\wÀ-ɏ]+)+\s*$/u, '').trim() || v.title || 'Untitled';
+      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b> — ` +
+        `${escapeHtml(clean)} <span style="opacity:0.75">(${escapeHtml(why)})</span></li>`;
+    }).join('');
+
+    box.innerHTML =
+      `<span class="strike-icon" aria-hidden="true">⚠</span>` +
+      `<div class="strike-body">` +
+        `<div class="strike-head">${n === 1 ? 'A video was removed' : n + ' videos were removed'} in the last 24 hours</div>` +
+        `<ul class="strike-list">${items}</ul>` +
+      `</div>` +
+      `<span class="strike-actions">` +
+        `<button type="button" class="strike-go" data-strike-go>View</button>` +
+        `<button type="button" class="strike-x" data-strike-dismiss aria-label="Dismiss this alert">✕</button>` +
+      `</span>`;
+    box.hidden = false;
+
+    box.querySelector('[data-strike-dismiss]').addEventListener('click', () => {
+      try { localStorage.setItem(key, '1'); } catch (e) {}
+      box.hidden = true;
+    });
+    box.querySelector('[data-strike-go]').addEventListener('click', () => {
+      try {
+        if (typeof show === 'function') show('videos');
+        const tab = document.querySelector('.vtab[data-t="removed"]');
+        if (tab) tab.click();
+        const body = document.getElementById('vBody') || document.getElementById('removedBody');
+        if (body && body.scrollIntoView) body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (e) {}
+    });
+  };
+
   async function loadVideosExtraData(){
     // Parallel + no cache-busters (ETag revalidation handles freshness).
     await Promise.all([
@@ -10004,6 +10098,9 @@ function renderWindowList(startDate, endDate) {
           const t = (new URLSearchParams(location.search).get('tab')) || 'overview';
           if (t === 'videos' && typeof window.renderVideosTab === 'function') window.renderVideosTab();
           if (window.__updateVtabBadges) window.__updateVtabBadges();
+          // Needs both data.json (for unavailableSince) and removed-reasons.json,
+          // so it runs here, once the side data has landed.
+          if (typeof window.renderStrikeAlert === 'function') window.renderStrikeAlert();
         } catch(e){}
       }).catch(()=>{});
     }
