@@ -162,6 +162,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .strike-list{margin:0.3rem 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0.25rem}
 .strike-list li{color:var(--text-muted);font-size:0.81rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .strike-list b{color:var(--label);font-weight:600}
+.strike-more{color:var(--text-dim);font-style:italic}
+/* Amber variant: nothing was enforced against him, he took them down himself. */
+.strike-banner.strike-soft{background:var(--accent-2-bg);border-color:var(--accent-2)}
+.strike-banner.strike-soft .strike-go{border-color:var(--accent-2);color:var(--accent-2)}
+.strike-banner.strike-soft .strike-go:hover{background:var(--accent-2);color:var(--bg)}
 .strike-actions{display:flex;align-items:center;gap:0.4rem;flex:none}
 .strike-go{background:transparent;border:1px solid var(--down);color:var(--down);border-radius:999px;
   padding:0.3rem 0.7rem;font:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -8438,7 +8443,15 @@ function niceDurationAxis(minSec, maxSec) {
   //
   // Dismissal is keyed by the set of video ids, so dismissing today's alert does
   // not suppress tomorrow's: a new removal produces a new key and shows again.
-  const STRIKE_REASONS = { copyright: 'a copyright claim', guidelines: 'Community Guidelines' };
+  // Severity matters twice over: it picks the banner's tone, and it decides which
+  // items survive the list cap. A bulk privating (148 in one day on 2026-07-28)
+  // must not push a copyright strike off the visible list.
+  const STRIKE_REASONS = {
+    copyright:  { label: 'a copyright claim',  rank: 0, strike: true },
+    guidelines: { label: 'Community Guidelines', rank: 1, strike: true },
+    deleted:    { label: 'deleted',            rank: 2, strike: false },
+    private:    { label: 'made private',       rank: 3, strike: false },
+  };
   window.renderStrikeAlert = function renderStrikeAlert(){
     const box = document.getElementById('strikeBanner');
     if (!box) return;
@@ -8453,7 +8466,12 @@ function niceDurationAxis(minSec, maxSec) {
       if (!r || !STRIKE_REASONS[r.reason]) return false;
       const t = Date.parse(v.unavailableSince);
       return Number.isFinite(t) && t >= cutoff;
-    }).sort((a, b) => String(b.unavailableSince).localeCompare(String(a.unavailableSince)));
+    }).sort((a, b) => {
+      const ra = STRIKE_REASONS[reasons[a.id].reason].rank;
+      const rb = STRIKE_REASONS[reasons[b.id].reason].rank;
+      if (ra !== rb) return ra - rb;                       // strikes first, so the cap keeps them
+      return String(b.unavailableSince).localeCompare(String(a.unavailableSince));
+    });
 
     if (!hits.length) { box.hidden = true; box.innerHTML = ''; return; }
 
@@ -8462,21 +8480,41 @@ function niceDurationAxis(minSec, maxSec) {
 
     const chans = ds.channels || {};
     const n = hits.length;
-    const items = hits.map(v => {
+    // A mass event — a channel termination, or a bulk claim sweep — could put
+    // hundreds of videos in the window. Cap the list so the banner stays a
+    // banner; the count carries the scale and "View" has the full list.
+    const MAX_LIST = 4;
+    const shown = hits.slice(0, MAX_LIST);
+    const items = shown.map(v => {
       const ch = chans[v.channelId] || {};
-      const why = STRIKE_REASONS[(reasons[v.id] || {}).reason] || 'removal';
-      // Shorts titles are mostly trailing hashtags; they drown the title in a
-      // one-line banner. Keep them if stripping would leave nothing.
-      const clean = String(v.title || '').replace(/(\s+#[\wÀ-ɏ]+)+\s*$/u, '').trim() || v.title || 'Untitled';
+      const why = (STRIKE_REASONS[(reasons[v.id] || {}).reason] || {}).label || 'removal';
+      // Shorts titles are mostly hashtags and they drown the title in a one-line
+      // banner. Stripped wherever they sit, not just at the end: some titles have
+      // trailing junk after the tags ("…#Viral mp4") which defeats an end anchor.
+      // Anything else he typed is left alone. Falls back if nothing survives.
+      const clean = String(v.title || '')
+        .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || v.title || 'Untitled';
       return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b> — ` +
         `${escapeHtml(clean)} <span style="opacity:0.75">(${escapeHtml(why)})</span></li>`;
     }).join('');
 
+    // An enforcement action and the creator privating his own uploads are not the
+    // same event and shouldn't look the same. Red only when something was taken
+    // out of his hands; amber when he did it himself.
+    const anyStrike = hits.some(v => STRIKE_REASONS[reasons[v.id].reason].strike);
+    box.classList.toggle('strike-soft', !anyStrike);
+    const verb = anyStrike ? 'removed' : 'no longer public';
+    const head = anyStrike
+      ? (n === 1 ? 'A video was removed' : n + ' videos were removed')
+      : (n === 1 ? 'A video is no longer public' : n + ' videos are no longer public');
+
     box.innerHTML =
-      `<span class="strike-icon" aria-hidden="true">⚠</span>` +
+      `<span class="strike-icon" aria-hidden="true">${anyStrike ? '⚠' : '👁'}</span>` +
       `<div class="strike-body">` +
-        `<div class="strike-head">${n === 1 ? 'A video was removed' : n + ' videos were removed'} in the last 24 hours</div>` +
-        `<ul class="strike-list">${items}</ul>` +
+        `<div class="strike-head">${head} in the last 24 hours</div>` +
+        `<ul class="strike-list">${items}` +
+          (n > MAX_LIST ? `<li class="strike-more">…and ${n - MAX_LIST} more</li>` : '') +
+        `</ul>` +
       `</div>` +
       `<span class="strike-actions">` +
         `<button type="button" class="strike-go" data-strike-go>View</button>` +
