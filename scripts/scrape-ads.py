@@ -89,7 +89,21 @@ def main():
         if ASJSON: print(json.dumps({"ok": False, "scraped": len(scraped)}))
         sys.exit(2)
 
-    missing = sorted(scraped - flagged)
+    # Two-run confirmation before a video earns the ad badge.
+    #
+    # The harvest is a heuristic: it captures any YouTube id appearing in network
+    # traffic on the advertiser page, so a single transient appearance is
+    # indistinguishable from a real campaign. On 2026-08-10 that put a permanent
+    # "AD" badge on a video off one 11:00 sighting that never reproduced in three
+    # later runs. Requiring an id in two consecutive runs costs at most a day's
+    # delay on a genuine campaign and stops one-offs becoming published claims.
+    pending = dict(ads.get("meta", {}).get("pending", {}))
+    seen_now = sorted(scraped - flagged)
+    confirmed = [i for i in seen_now if i in pending]        # seen last run too
+    first_seen = [i for i in seen_now if i not in pending]   # hold for next run
+    dropped = [i for i in pending if i not in scraped]       # one-off, never reappeared
+
+    missing = confirmed
     stale   = sorted(flagged - scraped)
     unknown = [i for i in missing if i not in meta]
 
@@ -99,10 +113,19 @@ def main():
 
     log(f"\nTransparency Center: {len(scraped)} ads   |   ad-videos.json: {len(flagged)}")
     log(f"MISSING (add): {len(missing)}   STALE (stopped, kept): {len(stale)}   UNKNOWN ids: {len(unknown)}")
-    for i in missing: log(f"  + {i}  {title(i)}")
+    for i in missing: log(f"  + {i}  {title(i)}  (confirmed in 2 consecutive runs)")
+    for i in first_seen: log(f"  ? {i}  {title(i)}  (seen once — held until it reappears)")
+    for i in dropped: log(f"  - {i}  {title(i)}  (one-off, never reappeared — discarded)")
 
     added = {}
     if APPLY:
+        today = datetime.date.today().isoformat()
+        # Carry forward only ids seen THIS run; anything held from last run that
+        # didn't reappear is dropped. This must be written even when nothing is
+        # added, or the confirmation never has a previous run to compare against.
+        new_pending = {i: pending.get(i, today) for i in first_seen}
+        changed = bool(missing) or new_pending != pending
+
         if missing:
             for i in missing:
                 v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
@@ -111,9 +134,12 @@ def main():
                 ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
             for c in ads["channels"].values():
                 c["videoIds"] = sorted(set(c["videoIds"]))
-            ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
-            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            ads["meta"]["lastUpdated"] = today
             log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
+
+        ads["meta"]["pending"] = new_pending
+        if changed:
+            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
         # Refresh the spike detector against the LATEST snapshots every run — so a
         # fresh velocity bump on an already-catalogued video is caught even in a
