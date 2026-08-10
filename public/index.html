@@ -7997,6 +7997,15 @@ function niceDurationAxis(minSec, maxSec) {
       'blackforestsupplements.com': 'Black Forest Supplements',
       'veebsapp.com': 'Veebs', 'guilded.gg': 'Guilded', 'tailgates4trump.com': 'Tailgates4Trump',
       'amzn.to': 'Amazon affiliate', 'amazon.com': 'Amazon affiliate'
+    },
+    // Descriptions are CURRENT text, so links back-filled onto OLD uploads make a
+    // sponsor look older than it really is. Floor a sponsor's timeline to when it
+    // actually began (YYYY-MM); appearances dated before this are ignored.
+    notBefore: {
+      // Coffee Brand Coffee is his own brand, launched ~Apr 2022 (its Shopify store's
+      // earliest products date to 2022-04), but its links were added to years of older
+      // descriptions — which wrongly showed the "sponsorship" running back to 2017.
+      'Coffee Brand Coffee': '2022-04'
     }
   };
 
@@ -8054,6 +8063,8 @@ function niceDurationAxis(minSec, maxSec) {
         try { dom = new URL(u).hostname.replace(/^www\./, ''); } catch (e) { continue; }
         if (SPONSOR_CONFIG.ignore.test(dom)) continue;
         const name = SPONSOR_CONFIG.alias[dom] || (dom.replace(/\.(com|net|org|co|io|gg|to|app|shop|store)$/, ''));
+        const floor = SPONSOR_CONFIG.notBefore[name];
+        if (floor && m < floor) continue;   // link back-filled onto a video predating this sponsor
         if (seen.has(name)) continue;
         seen.add(name);
         if (!sponsors.has(name)) sponsors.set(name, { n: 0, first: m, last: m, months: new Set() });
@@ -8150,7 +8161,7 @@ function niceDurationAxis(minSec, maxSec) {
       </button>
       <div class="desc-pattern-body" id="descPatternBody"${descPatternExpanded ? '' : ' hidden'}>
         <svg id="sponsorChart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sponsor timeline from video descriptions">${svg}</svg>
-        <div class="sponsor-foot">Every sponsor read leaves a link. Each cell is a month in which the sponsor's domain appears in at least one new long-form description (${SPONSOR_CONFIG.minVideos}+ videos overall to qualify; platform, self-promotion and link-shortener domains excluded; rebrands merged — e.g. Coffee Brand Coffee's two domains). Row number = total videos carrying the link. Caveat: descriptions reflect their current text, so a sponsor scrubbed retroactively vanishes from this history too.</div>
+        <div class="sponsor-foot">Every sponsor read leaves a link. Each cell is a month in which the sponsor's domain appears in at least one new long-form description (${SPONSOR_CONFIG.minVideos}+ videos overall to qualify; platform, self-promotion and link-shortener domains excluded; rebrands merged — e.g. Coffee Brand Coffee's two domains). Row number = total videos carrying the link. Caveat: descriptions reflect their current text, so a sponsor scrubbed retroactively vanishes from this history too — and links back-filled onto old uploads can make a sponsor look older than it is (a few known own-brand cases, e.g. Coffee Brand Coffee, are floored to their real start).</div>
       </div>`;
     const toggleBtn = document.getElementById('descPatternToggle');
     const body = document.getElementById('descPatternBody');
