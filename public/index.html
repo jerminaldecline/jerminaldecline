@@ -8547,13 +8547,15 @@ function niceDurationAxis(minSec, maxSec) {
       box.hidden = true;
     });
     box.querySelector('[data-strike-go]').addEventListener('click', () => {
-      try {
-        if (typeof show === 'function') show('videos');
-        const tab = document.querySelector('.vtab[data-t="removed"]');
-        if (tab) tab.click();
-        const body = document.getElementById('vBody') || document.getElementById('removedBody');
-        if (body && body.scrollIntoView) body.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (e) {}
+      // show() lives inside the tab controller's IIFE and is only reachable as
+      // window.__showTab. Calling the bare name silently did nothing — the inner
+      // Removed tab switched underneath while the page stayed on Overview, so the
+      // button looked dead. No try/catch here: a failure should surface, not hide.
+      if (typeof window.__showTab === 'function') window.__showTab('videos');
+      const tab = document.querySelector('.vtab[data-t="removed"]');
+      if (tab) tab.click();
+      const body = document.getElementById('vBody');
+      if (body && body.scrollIntoView) body.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
 
