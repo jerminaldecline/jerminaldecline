@@ -8472,10 +8472,11 @@ function niceDurationAxis(minSec, maxSec) {
   // items survive the list cap. A bulk privating (148 in one day on 2026-07-28)
   // must not push a copyright strike off the visible list.
   const STRIKE_REASONS = {
-    copyright:  { label: 'a copyright claim',  rank: 0, strike: true },
-    guidelines: { label: 'Community Guidelines', rank: 1, strike: true },
-    deleted:    { label: 'deleted',            rank: 2, strike: false },
-    private:    { label: 'made private',       rank: 3, strike: false },
+    terminated: { label: 'channel terminated', rank: 0, strike: true },
+    copyright:  { label: 'a copyright claim',  rank: 1, strike: true },
+    guidelines: { label: 'Community Guidelines', rank: 2, strike: true },
+    deleted:    { label: 'deleted',            rank: 3, strike: false },
+    private:    { label: 'made private',       rank: 4, strike: false },
   };
   window.renderStrikeAlert = function renderStrikeAlert(){
     const box = document.getElementById('strikeBanner');
@@ -8509,8 +8510,24 @@ function niceDurationAxis(minSec, maxSec) {
     // hundreds of videos in the window. Cap the list so the banner stays a
     // banner; the count carries the scale and "View" has the full list.
     const MAX_LIST = 4;
-    const shown = hits.slice(0, MAX_LIST);
-    const items = shown.map(v => {
+    // A termination takes the channel's whole catalogue at once, so listing four
+    // video titles and "…and 1,696 more" would bury the actual news. Terminated
+    // channels are collapsed into one line each and the rest listed as normal.
+    const termCount = {};
+    for (const v of hits) {
+      if (reasons[v.id].reason === 'terminated') termCount[v.channelId] = (termCount[v.channelId] || 0) + 1;
+    }
+    const termChannels = Object.keys(termCount);
+    const termItems = termChannels.map(cid => {
+      const ch = chans[cid] || {};
+      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b> — ` +
+        `channel terminated, ${termCount[cid].toLocaleString()} video${termCount[cid] === 1 ? '' : 's'} gone</li>`;
+    }).join('');
+
+    const rest = hits.filter(v => reasons[v.id].reason !== 'terminated');
+    const restRoom = Math.max(0, MAX_LIST - termChannels.length);
+    const shown = rest.slice(0, restRoom);
+    const items = termItems + shown.map(v => {
       const ch = chans[v.channelId] || {};
       const why = (STRIKE_REASONS[(reasons[v.id] || {}).reason] || {}).label || 'removal';
       // Shorts titles are mostly hashtags and they drown the title in a one-line
@@ -8528,17 +8545,23 @@ function niceDurationAxis(minSec, maxSec) {
     // out of his hands; amber when he did it himself.
     const anyStrike = hits.some(v => STRIKE_REASONS[reasons[v.id].reason].strike);
     box.classList.toggle('strike-soft', !anyStrike);
-    const verb = anyStrike ? 'removed' : 'no longer public';
-    const head = anyStrike
-      ? (n === 1 ? 'A video was removed' : n + ' videos were removed')
-      : (n === 1 ? 'A video is no longer public' : n + ' videos are no longer public');
+    // A termination is the headline, not a video count — say so plainly and name
+    // the channel, because that is the event the whole site exists to catch.
+    const head = termChannels.length
+      ? (termChannels.length === 1
+          ? `${(chans[termChannels[0]] || {}).handle || 'A channel'} has been terminated`
+          : `${termChannels.length} channels have been terminated`)
+      : anyStrike
+        ? (n === 1 ? 'A video was removed' : n + ' videos were removed')
+        : (n === 1 ? 'A video is no longer public' : n + ' videos are no longer public');
 
     box.innerHTML =
       `<span class="strike-icon" aria-hidden="true">${anyStrike ? '⚠' : '👁'}</span>` +
       `<div class="strike-body">` +
         `<div class="strike-head">${head} in the last 24 hours</div>` +
         `<ul class="strike-list">${items}` +
-          (n > MAX_LIST ? `<li class="strike-more">…and ${n - MAX_LIST} more</li>` : '') +
+          (rest.length > shown.length
+            ? `<li class="strike-more">…and ${(rest.length - shown.length).toLocaleString()} more</li>` : '') +
         `</ul>` +
       `</div>` +
       `<span class="strike-actions">` +
