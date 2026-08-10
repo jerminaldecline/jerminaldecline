@@ -163,6 +163,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .strike-list li{color:var(--text-muted);font-size:0.81rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .strike-list b{color:var(--label);font-weight:600}
 .strike-more{color:var(--text-dim);font-style:italic}
+/* Brief highlight so the row the banner was talking about is obvious once the
+   list has scrolled to it. Honours reduced-motion. */
+.removed-row.jd-flash{animation:jdFlash 2.2s ease-out 1}
+@keyframes jdFlash{0%,20%{background:var(--down-bg);box-shadow:inset 3px 0 0 var(--down)}100%{background:transparent;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){.removed-row.jd-flash{animation:none;background:var(--down-bg);box-shadow:inset 3px 0 0 var(--down)}}
 /* Amber variant: nothing was enforced against him, he took them down himself. */
 .strike-banner.strike-soft{background:var(--accent-2-bg);border-color:var(--accent-2)}
 .strike-banner.strike-soft .strike-go{border-color:var(--accent-2);color:var(--accent-2)}
@@ -8552,10 +8557,32 @@ function niceDurationAxis(minSec, maxSec) {
       // Removed tab switched underneath while the page stayed on Overview, so the
       // button looked dead. No try/catch here: a failure should surface, not hide.
       if (typeof window.__showTab === 'function') window.__showTab('videos');
+      if (window.__populateVidChannel) window.__populateVidChannel();
+
+      // Scope the list to the removal's own channel, otherwise the button lands
+      // on whatever channel the page was already showing — usually TheQuartering,
+      // while the removal was on JeremyHambly. Several channels at once falls
+      // back to ALL. The selector's option values are handles, not channel ids.
+      const handles = [...new Set(hits.map(v => (chans[v.channelId] || {}).handle).filter(Boolean))];
+      const sel = document.getElementById('vidChannelSel') || document.getElementById('anChannelSel');
+      if (sel) {
+        const want = handles.length === 1 ? handles[0] : 'ALL';
+        if ([...sel.options].some(o => o.value === want)) {
+          sel.value = want;
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
       const tab = document.querySelector('.vtab[data-t="removed"]');
       if (tab) tab.click();
-      const body = document.getElementById('vBody');
-      if (body && body.scrollIntoView) body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Then put the actual video on screen rather than the top of the list.
+      setTimeout(() => {
+        const row = document.querySelector('.removed-row[href*="' + hits[0].id + '"]');
+        const target = row || document.getElementById('vBody');
+        if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (row) { row.classList.add('jd-flash'); setTimeout(() => row.classList.remove('jd-flash'), 2400); }
+      }, 150);
     });
   };
 
