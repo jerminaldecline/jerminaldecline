@@ -8513,10 +8513,19 @@ function niceDurationAxis(minSec, maxSec) {
     // A termination takes the channel's whole catalogue at once, so listing four
     // video titles and "…and 1,696 more" would bury the actual news. Terminated
     // channels are collapsed into one line each and the rest listed as normal.
+    //
+    // Guarded by a threshold. Declaring "@X has been terminated" off a single
+    // video would be badly wrong if one video resolved that way spuriously — a
+    // transient watch-page response, or an oddity on one upload. A genuine
+    // termination takes the channel's entire catalogue, and the hourly fetcher
+    // re-checks a 60-day window, so a real one lands hundreds of videos at once.
+    // Below the threshold these are shown as ordinary removals instead.
+    const TERM_MIN = 5;
     const termCount = {};
     for (const v of hits) {
       if (reasons[v.id].reason === 'terminated') termCount[v.channelId] = (termCount[v.channelId] || 0) + 1;
     }
+    for (const cid of Object.keys(termCount)) if (termCount[cid] < TERM_MIN) delete termCount[cid];
     const termChannels = Object.keys(termCount);
     const termItems = termChannels.map(cid => {
       const ch = chans[cid] || {};
@@ -8524,7 +8533,10 @@ function niceDurationAxis(minSec, maxSec) {
         `channel terminated, ${termCount[cid].toLocaleString()} video${termCount[cid] === 1 ? '' : 's'} gone</li>`;
     }).join('');
 
-    const rest = hits.filter(v => reasons[v.id].reason !== 'terminated');
+    // Only drop the ones already covered by a collapsed channel line. A
+    // sub-threshold `terminated` video still gets listed individually rather than
+    // disappearing from the alert entirely.
+    const rest = hits.filter(v => !(reasons[v.id].reason === 'terminated' && termCount[v.channelId]));
     const restRoom = Math.max(0, MAX_LIST - termChannels.length);
     const shown = rest.slice(0, restRoom);
     const items = termItems + shown.map(v => {
