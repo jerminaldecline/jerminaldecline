@@ -292,8 +292,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-chart-link{background:transparent;border:none;color:var(--accent);font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;padding:0;margin-top:0.7rem;display:inline-block}
 .hero-chart-link:hover{text-decoration:underline}
 .mini-trend-link:hover{text-decoration:underline}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;min-width:0}
-.panel h3{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
+.surface-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;min-width:0}
+.surface-panel h3{margin:0 0 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--label)}
 .toplist{list-style:none;margin:0;padding:0;font-size:0.87rem;display:flex;flex-direction:column;gap:0.65rem}
 .toplist li .row{display:flex;justify-content:space-between;margin-bottom:0.3rem}
 .toplist .cnt{color:var(--subtext);font-size:0.8rem}
@@ -2678,7 +2678,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #velocityPanel .vv-mgain b{color:var(--up);font-size:0.9rem;font-weight:800}
     #velocityPanel .vv-mgain span{display:block;font-size:0.66rem;color:var(--text-muted)}
     #velocityPanel .vv-mtag{flex:0 0 auto;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;padding:0.14rem 0.4rem;border-radius:999px}
-    #velocityPanel .vv-mtag.ad{color:var(--accent-2);border:1px solid var(--accent-2);background:var(--accent-2-bg)}
+    #velocityPanel .vv-mtag.vv-mtag-promoted{color:var(--accent-2);border:1px solid var(--accent-2);background:var(--accent-2-bg)}
     #velocityPanel .vv-mtag.un{color:var(--down);border:1px solid var(--down)}
     #velocityPanel .vv-detail{display:flex;gap:1rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid var(--border)}
     #velocityPanel .vv-detail .vv-thumb{width:128px;height:72px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:var(--surface-2);border:1px solid var(--border)}
@@ -3969,14 +3969,14 @@ function render(m){
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
     ${d.n >= 2 ? `<div class="highlights">${topHTML}${worstHTML}${debHTML}</div>` : ''}
     <div class="lower">
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>
+      <div class="surface-panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
           <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
           <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
           <button type="button" class="ctag-viewtab${ovTopicView==='mode'?' active':''}" data-ovtopicview="mode" role="tab" aria-selected="${ovTopicView==='mode'}">Formats</button>
         </div>
         ${topicBars.uploads}</div>
-      <div class="panel"><div class="panel-head"><h3>Top topics — share of views</h3>${seeVidsLink('long')}</div>
+      <div class="surface-panel"><div class="panel-head"><h3>Top topics — share of views</h3>${seeVidsLink('long')}</div>
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
           <button type="button" class="ctag-viewtab${ovTopicView==='subject'?' active':''}" data-ovtopicview="subject" role="tab" aria-selected="${ovTopicView==='subject'}">Topics</button>
           <button type="button" class="ctag-viewtab${ovTopicView==='theme'?' active':''}" data-ovtopicview="theme" role="tab" aria-selected="${ovTopicView==='theme'}">Themes</button>
@@ -4005,7 +4005,7 @@ function render(m){
           <div class="bs-meta"><b>${fmt(SD.best.views)}</b> views${isAll ? ' · on '+escapeHtml(SD.best.ch) : ''}</div>
         </div>` : ''}
       </div>
-      <div class="panel mini-trend-panel">
+      <div class="surface-panel mini-trend-panel">
         <div class="mini-trend-header">
           <h3>Views trend</h3>
           ${(()=>{ if(miniTrendState.scope===null) miniTrendState.scope = (PEAKS&&PEAKS[scope])?scope:'ALL'; return renderMiniTrendControls(); })()}
@@ -8683,7 +8683,7 @@ function renderVideoRows(videos, emptyText) {
       creatorTagsBadge = `<span class="creator-tags-badge" tabindex="0" role="button" aria-label="${escapeHtml(tagPop)}" data-popover="${escapeHtml(tagPop)}">${tagIcon}</span>`;
     }
     return `
-      <div class="video-row${adVideoIds.has(v.id) ? ' is-ad' : ''}${topicColClass}">
+      <div class="video-row${adVideoIds.has(v.id) ? ' is-promoted' : ''}${topicColClass}">
         <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
         <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
@@ -11247,7 +11247,7 @@ function renderWindowList(startDate, endDate) {
   }
   function renderMlist(){
     document.getElementById("vvMlist").innerHTML=S.movers.videos.map((m,i)=>{
-      const tag=m.isAd?`<span class="vv-mtag ad">Known ad</span>`:`<span class="vv-mtag un">Unexplained</span>`;
+      const tag=m.isAd?`<span class="vv-mtag vv-mtag-promoted">Known ad</span>`:`<span class="vv-mtag un">Unexplained</span>`;
       return `<div class="vv-mrow${m.id===M.sel?' sel':''}" data-mid="${m.id}"><span class="vv-mrank">${i+1}</span><img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"><span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.age} days old · ${paceStr(m)}</span></span><span class="vv-mgain"><b>+${fmt(m.gain7)}</b><span>views this week</span></span>${tag}</div>`;
     }).join("");
   }
@@ -11301,7 +11301,7 @@ function renderWindowList(startDate, endDate) {
     l.innerHTML=rows.map((m,i)=>{
       const confirmed=m.adViews>0;
       const win=confirmed?(m.firstBurst===m.lastBurst?niceDate(m.firstBurst):niceDate(m.firstBurst)+" \u2192 "+niceDate(m.lastBurst)):"launch window only";
-      const tag=confirmed?'<span class="vv-mtag ad">Confirmed ads</span>':'<span class="vv-mtag ad">Launch ads</span>';
+      const tag=confirmed?'<span class="vv-mtag vv-mtag-promoted">Confirmed ads</span>':'<span class="vv-mtag vv-mtag-promoted">Launch ads</span>';
       return `<div class="vv-mrow${m.id===A.sel?' sel':''}" data-aid="${m.id}"><span class="vv-mrank">${i+1}</span>`+
         `<img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async">`+
         `<span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.bursts.length} paid run${m.bursts.length===1?"":"s"} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
