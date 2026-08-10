@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-09
+# Topic candidates — 2026-08-10
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 19 recent videos, 120 baseline videos
+Pool: 19 recent videos, 116 baseline videos
 
 ### Cluster 1: `maga`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 1/120 videos (1%)
-- **Spike ratio:** 12.7x
+- **Baseline saturation:** 1/116 videos (1%)
+- **Spike ratio:** 12.3x
 - **Related terms:** `maga`
 - **Sample recent videos:**
   - 2026-08-06 — _WOKE CANADIAN FACES NEW HUMILIATION_  
@@ -25,8 +25,8 @@ Pool: 19 recent videos, 120 baseline videos
 ### Cluster 2: `finally`
 
 - **Recent saturation:** 4/19 videos (**21%**)
-- **Baseline saturation:** 2/120 videos (2%)
-- **Spike ratio:** 10.2x
+- **Baseline saturation:** 2/116 videos (2%)
+- **Spike ratio:** 9.9x
 - **Related terms:** `finally`
 - **Sample recent videos:**
   - 2026-08-06 — _THEY ACTUALLY DID IT_  
@@ -41,8 +41,8 @@ Pool: 19 recent videos, 120 baseline videos
 ### Cluster 3: `wnba`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 2/120 videos (2%)
-- **Spike ratio:** 7.6x
+- **Baseline saturation:** 2/116 videos (2%)
+- **Spike ratio:** 7.4x
 - **Related terms:** `wnba`
 - **Sample recent videos:**
   - 2026-08-08 — _THE WBNA IS COOKED NOW!_  
