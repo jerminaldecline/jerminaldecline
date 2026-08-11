@@ -1390,7 +1390,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 }
 /* Sortable header cells — click affordance, hover state, active indicator.
      Uses the same .sort-arrow component as the window-list sortable rows. */
-  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; margin-top: 0.4rem;}
+  /* Search row above the promoted-videos table. Sits inside the panel body so it
+     scrolls away with the panel, not pinned over the sticky table header. */
+  .promo-search-row {display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.6rem;
+    margin-top: 0.7rem; max-width: 100%;}
+  .promo-search {flex: 1 1 200px; min-width: 0; max-width: 380px; padding: 0.45rem 0.6rem; font: inherit;
+    font-size: 0.85rem; color: var(--text); background: var(--bg-soft, rgba(255,255,255,0.04));
+    border: 1px solid var(--border); border-radius: 6px;}
+  .promo-search::placeholder {color: var(--text-dim);}
+  .promo-search:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px; border-color: transparent;}
+  .promo-search-count {flex: 0 0 auto; font-size: 0.75rem; color: var(--text-dim);
+    font-variant-numeric: tabular-nums; white-space: nowrap;}
+  .promo-search-empty {padding: 1.1rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
+  @media (max-width: 560px) {
+    .promo-search {font-size: 16px; padding: 0.5rem 0.6rem;} /* 16px stops iOS zooming on focus */
+  }
+  /* overflow-x keeps the wide table scrolling inside its own box; without it the
+     table stretched the whole panel past the viewport on narrow screens. */
+  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
 .promo-perf-table {width: 100%; border-collapse: collapse; font-size: 0.85rem;}
 .promo-perf-table th, .promo-perf-table td {padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top;}
 .promo-perf-table thead th {position: sticky; top: 0; background: var(--surface-2); z-index: 1;
@@ -3451,6 +3468,15 @@ function buildScopeLabels(){ CHANNELS.forEach(c=>SCOPE_LABEL[c]=c); }
 // months available in the current scope, trimmed to where TheQuartering era begins (2017-07)
 function availableMonths(){
   return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07' && !SCOPES[scope][m].shortsOnly).sort().reverse();
+}
+// Same list, but keeping months that contain ONLY Shorts. The Overview report is
+// built around long-form, so a shorts-only month has no report to show and is
+// excluded above. The Videos tab has no such problem — it lists Shorts happily —
+// and excluding them there silently stranded the list on an older month:
+// @QuarteringLive posted 23 Shorts and no long-form in Aug 2026, and the tab kept
+// showing July while the dropdown still read August.
+function availableMonthsForVideos(){
+  return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07').sort().reverse();
 }
 // both selectors are populated + bound inside render() (they live in the re-rendered report header)
 
@@ -8639,12 +8665,16 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
+      fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
   window.__loadVideosExtraData = loadVideosExtraData;
   let promoPanelExpanded = false;
   let promoPanelSort = { col: 'views', dir: 'desc' };
+  // Free-text filter over the promoted-videos table. Held outside the render so a
+  // re-render (sort click, late-arriving ad-campaigns.json) preserves what was typed.
+  let promoPanelQuery = '';
 // Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
 // site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
 // doesn't drift for videos published near midnight.
@@ -8962,6 +8992,19 @@ function renderAdPanel() {
   // Each column has its own sort key extractor and a sensible null/missing
   // handling (missing values always sort to the bottom regardless of direction
   // so they don't pollute either end of the visible list).
+  // Narrow the rows to those matching the search box. Every space-separated term
+  // must appear somewhere in the video's title or its channel name, so "walmart
+  // spying" finds the row regardless of the words' order in the title.
+  function filterRows(rs) {
+    const terms = promoPanelQuery.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return rs;
+    return rs.filter(r => {
+      const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
+      const hay = (r.v.title + ' ' + chan).toLowerCase();
+      return terms.every(t => hay.includes(t));
+    });
+  }
+
   function sortRows(rs) {
     const { col, dir } = promoPanelSort;
     const factor = dir === 'asc' ? 1 : -1;
@@ -8972,6 +9015,13 @@ function renderAdPanel() {
       median: r => r.monthMedian,
       perf: r => r.multiplier,
       excess: r => r.excess,
+      // Videos with no campaign record sort as -1 rather than 0, so "never
+      // recorded" stays distinct from a genuine zero at either end of the sort.
+      runs: r => {
+        const c = window.__adCampaigns;
+        const e = c && c.videos && c.videos[r.v.id];
+        return e && e.runs ? e.runs : -1;
+      },
     };
     const keyFn = keyFns[col] || keyFns.views;
     return rs.slice().sort((a, b) => {
@@ -8991,8 +9041,25 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // How many separate campaigns the Transparency Centre lists for a video, from
+  // ad-campaigns.json. The older ad-videos.json only records THAT a video was
+  // advertised — it dedupes to one entry per video, so repeat runs are invisible
+  // to it. Renders blank rather than "0" when we simply have no campaign record.
+  function promoRunCell(id) {
+    const c = window.__adCampaigns;
+    const v = c && c.videos && c.videos[id];
+    if (!v || !v.runs) return '<span style="color:var(--text-dim)">—</span>';
+    const span = (v.first && v.last) ? `${v.first} to ${v.last}` : '';
+    const title = `${v.runs} campaign${v.runs === 1 ? '' : 's'}${span ? ' · ' + span : ''}`;
+    return `<span data-popover="${escapeHtml(title)}" tabindex="0" role="button"` +
+      ` style="${v.runs > 1 ? 'font-weight:800;color:var(--accent-2)' : ''}">${v.runs}</span>`;
+  }
+
   function renderAdTableBody() {
-    const sorted = sortRows(rows);
+    const sorted = sortRows(filterRows(rows));
+    if (!sorted.length) {
+      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
+    }
     return sorted.map(r => `
       <tr>
         <td class="col-vid">
@@ -9000,6 +9067,7 @@ function renderAdPanel() {
           ${isAll ? `<span class="promo-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
         </td>
         <td class="col-date">${ctDate(r.v.publishedAt)}</td>
+        <td class="col-num">${promoRunCell(r.v.id)}</td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
         <td class="col-num">${fmtMult(r.multiplier)}</td>
@@ -9059,12 +9127,18 @@ function renderAdPanel() {
           </div>
         </div>
       ` : ''}
+      <div class="promo-search-row">
+        <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
+               aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        <span class="promo-search-count" id="promoSearchCount"></span>
+      </div>
       <div class="promo-perf-table-wrap">
         <table class="promo-perf-table">
           <thead>
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
+              ${sortHeader('Runs', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
               ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
               ${sortHeader('vs median', 'perf', 'col-num')}
@@ -9127,6 +9201,29 @@ function renderAdPanel() {
       }
     });
   });
+
+  // Title/channel search. Only the tbody is re-rendered, so the input keeps focus
+  // and the caret stays put while typing — rebuilding the panel would drop both.
+  const search = panel.querySelector('#promoSearch');
+  if (search) {
+    const count = panel.querySelector('#promoSearchCount');
+    const apply = () => {
+      promoPanelQuery = search.value.trim();
+      const body = document.getElementById('promoPerfTableBody');
+      if (body) body.innerHTML = renderAdTableBody();
+      if (count) {
+        const n = filterRows(rows).length;
+        count.textContent = promoPanelQuery ? `${n} of ${rows.length}` : '';
+      }
+    };
+    search.addEventListener('input', apply);
+    // Esc clears rather than only clearing the native search widget's own value,
+    // so the table returns to full in one keystroke.
+    search.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); search.value = ''; apply(); }
+    });
+    if (promoPanelQuery) apply();
+  }
 }
 
 // Shorten a mode's display name for a compact chip (full name stays in the
@@ -10029,7 +10126,11 @@ function renderWindowList(startDate, endDate) {
     // single-month window collapses them to one point/bar. Months remain on
     // the Videos tab, where filtering to one month is genuinely useful.
     if (includeMonths) {
-      try { if (typeof availableMonths === 'function') months = availableMonths(); } catch(e){}
+      // Months are only offered on the Videos tab, which lists Shorts as happily
+      // as long-form — so use the list that keeps shorts-only months. Without it
+      // a month like @QuarteringLive's Aug 2026 (23 Shorts, no long-form) simply
+      // wasn't selectable.
+      try { if (typeof availableMonthsForVideos === 'function') months = availableMonthsForVideos(); } catch(e){}
     }
     // The Analysis variant gets whole calendar years instead: a year window
     // still gives every trend chart twelve data points, unlike the single
@@ -10097,7 +10198,7 @@ function renderWindowList(startDate, endDate) {
   // actually has data so the dropdown label and the window always agree.
   function normalizeVidPreset(){
     if(!/^\d{4}-\d{2}$/.test(vidTimePreset)) return;   // preset keywords are always valid
-    let ms=[]; try{ if(typeof availableMonths==='function') ms=availableMonths(); }catch(e){}
+    let ms=[]; try{ if(typeof availableMonthsForVideos==='function') ms=availableMonthsForVideos(); }catch(e){}
     if(ms.length && ms.indexOf(vidTimePreset)<0) vidTimePreset = ms.slice().sort().pop();
   }
   function vidCutoffMonth(preset){
@@ -10158,7 +10259,7 @@ function renderWindowList(startDate, endDate) {
       // Re-point the Videos-tab month at the user's chosen month if the new scope
       // has it, else the newest month it does have — so switching to a channel
       // without that month (and back) doesn't strand the list on a stale month.
-      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonths(); }catch(_){}
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonthsForVideos(); }catch(_){}
         if (ms.length) vidTimePreset = (vidUserMonth && ms.indexOf(vidUserMonth)>=0) ? vidUserMonth : ms[0]; }
       if (window.__populateAnChannel) window.__populateAnChannel();
       if (window.__resetVideoBatches) window.__resetVideoBatches();
