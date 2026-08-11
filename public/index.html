@@ -8758,6 +8758,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
+      fetch('ad-yield.json').then(async r => { if (r.ok){ window.__adYield = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-yield', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
@@ -9273,14 +9274,33 @@ function renderAdPanel() {
             <b>+${fmtCompact(totalExcess)}</b>
             <small>excess views over median</small>
           </div>
-          <div class="promo-stat">
-            <b>${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</b>
-            <small>estimated spend
+          ${(() => {
+            // Spend is priced off MEASURED campaign yield, not off "excess views
+            // over the month's median". That proxy credited a video's organic
+            // outperformance to advertising and ran ~5.5x the measured figure.
+            // With no yield data we say nothing: the old basis is known wrong, so
+            // falling back to it would be worse than omitting the card.
+            const y = window.__adYield;
+            if (!y || !y.viewsPerCampaignDay || !y.campaignDaysByVideo) return '';
+            const cdays = rows.reduce((s, r) => s + (y.campaignDaysByVideo[r.v.id] || 0), 0);
+            if (!cdays) return '';
+            const views = cdays * y.viewsPerCampaignDay.central;
+            const from = (window.__adCampaigns || {}).trackingFrom;
+            const note = `Measured, not benchmarked. ${y.sample.campaigns} completed campaigns were tracked `
+              + `against the view archive, giving about ${fmt(y.viewsPerCampaignDay.central)} ad-driven views per `
+              + `campaign-day. That rate is applied to the ${fmt(cdays)} campaign-days the Transparency Centre `
+              + `lists for these videos, then priced at $${y.cpvUSD.low}–$${y.cpvUSD.high} per view. `
+              + (from ? `Covers campaigns since ${from} only — the Centre keeps about 10 months, so anything earlier is not counted. ` : '')
+              + `A small sample, and it will tighten as more campaigns fall inside the archive.`;
+            return `<div class="promo-stat">
+            <b>${fmtUSD(views * y.cpvUSD.low, true)}–${fmtUSD(views * y.cpvUSD.high, true)}</b>
+            <small>estimated spend, recorded campaigns
               <span class="info-icon" tabindex="0" role="button"
                     aria-label="About the spend estimate"
-                    data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
+                    data-popover="${escapeHtml(note)}">ⓘ</span>
             </small>
-          </div>
+          </div>`;
+          })()}
         </div>
       ` : ''}
       <div class="promo-search-row">
@@ -9338,11 +9358,13 @@ function renderAdPanel() {
       </div>
       <div class="promo-panel-footnote">
         <strong>Reading this table:</strong> each video's views against the median long-form upload of the same month. 2× is twice
-        that typical figure; <strong>excess</strong> is the views above it — a rough proxy for paid uplift, though some may be organic.
+        that typical figure; <strong>excess</strong> is the views above it.
         Flagged videos also carry an <span class="promo-badge">ad</span> badge in the lists below.
         <br><br>
-        <strong>Estimated spend</strong> prices that excess at $0.03–$0.10 CPV. Read it as an upper bound: Google bills per qualified
-        view, and not all excess is paid for. Identified via the
+        <strong>Estimated spend</strong> is measured, not benchmarked: the view archive shows what a day of advertising actually
+        buys, applied to the campaign-days on record at $0.03–$0.10 per view. It deliberately does <em>not</em> price the excess
+        above — beating a monthly median may just mean the video did well. Caveats: a small sample, only the ~10 months the Centre
+        still lists, and not every counted view is one Google bills for. Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
       </div>
     </div>
