@@ -8639,6 +8639,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
+      fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
@@ -8991,6 +8992,20 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // How many separate campaigns the Transparency Centre lists for a video, from
+  // ad-campaigns.json. The older ad-videos.json only records THAT a video was
+  // advertised — it dedupes to one entry per video, so repeat runs are invisible
+  // to it. Renders blank rather than "0" when we simply have no campaign record.
+  function promoRunCell(id) {
+    const c = window.__adCampaigns;
+    const v = c && c.videos && c.videos[id];
+    if (!v || !v.runs) return '<span style="color:var(--text-dim)">—</span>';
+    const span = (v.first && v.last) ? `${v.first} to ${v.last}` : '';
+    const title = `${v.runs} campaign${v.runs === 1 ? '' : 's'}${span ? ' · ' + span : ''}`;
+    return `<span data-popover="${escapeHtml(title)}" tabindex="0" role="button"` +
+      ` style="${v.runs > 1 ? 'font-weight:800;color:var(--accent-2)' : ''}">${v.runs}</span>`;
+  }
+
   function renderAdTableBody() {
     const sorted = sortRows(rows);
     return sorted.map(r => `
@@ -9000,6 +9015,7 @@ function renderAdPanel() {
           ${isAll ? `<span class="promo-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
         </td>
         <td class="col-date">${ctDate(r.v.publishedAt)}</td>
+        <td class="col-num">${promoRunCell(r.v.id)}</td>
         <td class="col-num">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
         <td class="col-num">${fmtMult(r.multiplier)}</td>
@@ -9065,6 +9081,7 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
+              <th class="col-num">Runs <span class="info-icon" tabindex="0" role="button" aria-label="About ad runs" data-popover="How many separate ad campaigns the Transparency Centre lists for this video. A video re-promoted months later counts again. Blank means no campaign recorded.">ⓘ</span></th>
               ${sortHeader('Views', 'views', 'col-num')}
               ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
               ${sortHeader('vs median', 'perf', 'col-num')}
