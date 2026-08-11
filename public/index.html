@@ -1435,13 +1435,59 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-runs:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px;}
 .promo-runs-none {color: var(--text-dim);}
 
+/* Phone sort bar. Hidden on desktop, where the table header does this job. */
+.promo-msort {display: none; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: 0 0 0.6rem;}
+.promo-msort-lab {font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); margin-right: 0.1rem;}
+.promo-msort-btn {appearance: none; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 7px; color: var(--text); font: inherit; font-size: 0.78rem; font-weight: 600;
+    padding: 0.3rem 0.6rem; cursor: pointer; transition: background .12s, border-color .12s, color .12s;}
+.promo-msort-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
+.promo-msort-arrow {margin-left: 0.2rem; font-size: 0.7rem;}
+
 @media (max-width: 640px) {
   .promo-thumb, .promo-thumb img {width: 60px;}
   .promo-thumb img {height: 34px;}
   .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.45rem;}
-  /* Relax the desktop min-width, which would otherwise push the table further
-     past a phone viewport than the columns actually need. */
-  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {min-width: 180px;}
+}
+
+/* Below 560px a seven-column table cannot be read: at 390px the titles wrapped
+   to six or seven lines and every figure sat off-screen behind a horizontal
+   scroll. The table collapses to one stacked block per video — thumbnail and
+   title, then the figures as labelled chips — matching how the Removed and
+   Stolen-shorts lists already read on a phone. The <table> markup is unchanged,
+   so sorting and the desktop layout are untouched; the header's sorting role
+   passes to .promo-msort, which is why that bar exists. */
+@media (max-width: 560px) {
+  .promo-msort {display: flex;}
+  .promo-perf-table-wrap {overflow-x: visible; max-height: none;}
+  .promo-perf-table, .promo-perf-table tbody, .promo-perf-table td {display: block; width: auto;}
+  .promo-perf-table thead {display: none;}
+  /* Flex, not block, so the figures can be ordered independently of the column
+     order the desktop table needs — the headline numbers lead, and the
+     supporting ones follow, rather than Views landing on the second line. */
+  .promo-perf-table tr {display: flex; flex-wrap: wrap; align-items: baseline;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--border);}
+  .promo-perf-table td {border: none; padding: 0;}
+  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {flex: 0 0 100%; width: auto; min-width: 0; margin-bottom: 0.45rem; order: 0;}
+  .promo-perf-table td[data-lab="Views"]     {order: 1;}
+  .promo-perf-table td[data-lab="vs median"] {order: 2;}
+  .promo-perf-table td[data-lab="Runs"]      {order: 3;}
+  .promo-perf-table td[data-lab="Excess"]    {order: 4;}
+  .promo-perf-table td[data-lab="Median"]    {order: 5;}
+  .promo-perf-table td[data-lab="Published"] {order: 6;}
+  .promo-perf-table td.promo-search-empty {flex: 0 0 100%;}
+  .promo-vid-title {font-size: 0.9rem;}
+  /* Figures become inline chips, each labelled by the header it lost. */
+  .promo-perf-table td.col-num, .promo-perf-table td.col-date {
+    display: inline-flex; align-items: baseline; gap: 0.28rem; width: auto;
+    margin: 0 0.85rem 0.2rem 0; text-align: left; font-size: 0.8rem; white-space: nowrap;}
+  .promo-perf-table td.col-num::before, .promo-perf-table td.col-date::before {
+    content: attr(data-lab); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--label); font-weight: 700;}
+  .promo-perf-table td.promo-num-strong {font-size: 0.88rem;}
+  .promo-perf-table tbody tr:hover {background: none;}
+  .promo-search-empty {display: block; padding: 1.4rem 0.5rem;}
 }
 .promo-perf-table thead th.sortable {cursor: pointer;
     user-select: none;
@@ -9170,12 +9216,12 @@ function renderAdPanel() {
             </div>
           </div>
         </td>
-        <td class="col-date">${ctDate(r.v.publishedAt)}</td>
-        <td class="col-num">${promoRunCell(r.v.id)}</td>
-        <td class="col-num promo-num-strong">${fmt(r.views)}</td>
-        <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
-        <td class="col-num">${fmtMult(r.multiplier)}</td>
-        <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
+        <td class="col-date" data-lab="Published">${ctDate(r.v.publishedAt)}</td>
+        <td class="col-num" data-lab="Runs">${promoRunCell(r.v.id)}</td>
+        <td class="col-num promo-num-strong" data-lab="Views">${fmt(r.views)}</td>
+        <td class="col-num" data-lab="Median">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
+        <td class="col-num" data-lab="vs median">${fmtMult(r.multiplier)}</td>
+        <td class="col-num" data-lab="Excess">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
       </tr>
     `;}).join('');
   }
@@ -9258,6 +9304,20 @@ function renderAdPanel() {
         })()}
         <span class="promo-search-count" id="promoSearchCount"></span>
       </div>
+      ${(() => {
+        // On a phone the table collapses to stacked rows and its header — which
+        // is also the sort control — goes with it. This bar takes over there,
+        // driving the same promoPanelSort state, in the pill idiom the Removed
+        // panel already uses for exactly this job.
+        const cols = [['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
+                      ['excess', 'Excess'], ['date', 'Published'], ['title', 'Title']];
+        return `<div class="promo-msort" role="group" aria-label="Sort promoted videos">
+          <span class="promo-msort-lab">Sort</span>
+          ${cols.map(([k, l]) => `<button type="button" class="promo-msort-btn${promoPanelSort.col === k ? ' active' : ''}"
+            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}<span class="promo-msort-arrow">${
+              promoPanelSort.col === k ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : ''}</span></button>`).join('')}
+        </div>`;
+      })()}
       <div class="promo-perf-table-wrap">
         <table class="promo-perf-table">
           <thead>
@@ -9266,9 +9326,9 @@ function renderAdPanel() {
               ${sortHeader('Published', 'date', 'col-date')}
               ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Median', 'median', 'col-num')}
               ${sortHeader('vs median', 'perf', 'col-num')}
-              ${sortHeader('Excess', 'excess', 'col-num hide-mobile')}
+              ${sortHeader('Excess', 'excess', 'col-num')}
             </tr>
           </thead>
           <tbody id="promoPerfTableBody">
@@ -9293,39 +9353,54 @@ function renderAdPanel() {
   // descending (intuitive default for numeric columns where users typically want
   // "biggest first"). Exception: title column starts at ascending (A–Z is the
   // natural first read).
-  panel.querySelectorAll('[data-promo-sort]').forEach(th => {
-    function doSort() {
-      const col = th.getAttribute('data-promo-sort');
-      if (promoPanelSort.col === col) {
-        promoPanelSort.dir = promoPanelSort.dir === 'asc' ? 'desc' : 'asc';
-      } else {
-        promoPanelSort.col = col;
-        promoPanelSort.dir = col === 'title' ? 'asc' : 'desc';
-      }
-      // Re-render tbody + refresh header arrows (without rebuilding the whole panel)
-      document.getElementById('promoPerfTableBody').innerHTML = renderAdTableBody();
-      panel.querySelectorAll('[data-promo-sort]').forEach(hdr => {
-        const isActive = hdr.getAttribute('data-promo-sort') === promoPanelSort.col;
-        hdr.classList.toggle('active-sort', isActive);
-        // Update aria-sort so screen readers announce the current sort state
-        hdr.setAttribute('aria-sort', isActive ? (promoPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
-        const arrow = hdr.querySelector('.sort-arrow');
-        if (arrow) {
-          arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
-          arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
-        }
-      });
+  // One sort path for both controls. The table header and the phone sort bar are
+  // two views of the same promoPanelSort state, so they must be updated together
+  // — otherwise rotating the phone shows a header disagreeing with the pills.
+  function applySort(col) {
+    if (promoPanelSort.col === col) {
+      promoPanelSort.dir = promoPanelSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      promoPanelSort.col = col;
+      promoPanelSort.dir = col === 'title' ? 'asc' : 'desc';
     }
+    const body = document.getElementById('promoPerfTableBody');
+    if (body) body.innerHTML = renderAdTableBody();
+
+    panel.querySelectorAll('[data-promo-sort]').forEach(hdr => {
+      const isActive = hdr.getAttribute('data-promo-sort') === promoPanelSort.col;
+      hdr.classList.toggle('active-sort', isActive);
+      // Update aria-sort so screen readers announce the current sort state
+      hdr.setAttribute('aria-sort', isActive ? (promoPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
+      const arrow = hdr.querySelector('.sort-arrow');
+      if (arrow) {
+        arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
+        arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+      }
+    });
+    panel.querySelectorAll('[data-msort]').forEach(btn => {
+      const isActive = btn.getAttribute('data-msort') === promoPanelSort.col;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+      const arrow = btn.querySelector('.promo-msort-arrow');
+      if (arrow) arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+    });
+  }
+
+  panel.querySelectorAll('[data-promo-sort]').forEach(th => {
+    const col = th.getAttribute('data-promo-sort');
     // The (i) inside a header sits within the sortable <th>, so without this a
     // click to read the note would also re-sort the table underneath it.
     const fromInfo = e => !!(e.target.closest && e.target.closest('.info-icon'));
-    th.addEventListener('click', e => { if (!fromInfo(e)) doSort(); });
+    th.addEventListener('click', e => { if (!fromInfo(e)) applySort(col); });
     th.addEventListener('keydown', e => {
       if ((e.key === 'Enter' || e.key === ' ') && !fromInfo(e)) {
         e.preventDefault();
-        doSort();
+        applySort(col);
       }
     });
+  });
+  panel.querySelectorAll('[data-msort]').forEach(btn => {
+    btn.addEventListener('click', () => applySort(btn.getAttribute('data-msort')));
   });
 
   // Search and the "Running now" toggle share one update path, so the row count
