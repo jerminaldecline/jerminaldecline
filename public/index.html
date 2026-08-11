@@ -2806,6 +2806,29 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-when.unl,#panelVideos .removed-when.r-unlisted{color:var(--accent-2)}
     #panelVideos .removed-when.r-private{color:var(--text-muted)}
     #panelVideos .removed-when.r-copyright,#panelVideos .removed-when.r-terms,#panelVideos .removed-when.r-guidelines,#panelVideos .removed-when.r-terminated{color:var(--down);text-transform:uppercase;font-size:0.66rem;letter-spacing:0.03em;padding:0.16rem 0.42rem;border-radius:6px;background:color-mix(in srgb,var(--down) 12%,transparent);border:1px solid color-mix(in srgb,var(--down) 30%,transparent)}
+    /* On a phone the reason and the title fight over one line, and the reason
+       wins because it is flex:0 0 auto. A copyright claim is a 116px label, so
+       at 390px it left the title 106px — less room than the label squeezing it,
+       and every title truncated to a few words. Below 560px the reason drops to
+       its own line under the text, indented past the thumbnail, which hands the
+       title back the full row. Longer reasons are the serious ones, so they were
+       the worst affected. */
+    @media(max-width:560px){
+      #panelVideos .removed-row{flex-wrap:wrap}
+      #panelVideos .removed-thumb{order:1}
+      /* flex-basis:0, not auto. Wrapping is decided on the hypothetical main
+         size before any shrinking, so an auto basis (the title's full ~440px)
+         bumped the text block onto its own line below the thumbnail. */
+      #panelVideos .removed-row .rt{order:2;flex:1 1 0;min-width:0}
+      /* A zero-height full-width item forces the break. The reason itself must
+         stay content-sized — giving it flex-basis:100% instead stretched the
+         copyright pill's background across the whole row. */
+      #panelVideos .removed-row::after{content:"";flex:0 0 100%;height:0;order:3}
+      #panelVideos .removed-when{order:4;flex:0 0 auto;text-align:left;margin-top:0.3rem;margin-left:calc(74px + 0.7rem)}
+      /* With the row to itself the title can afford two lines instead of being
+         cut to a few words. */
+      #panelVideos .removed-row .rt b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    }
     #panelVideos .removed-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
     #panelVideos .removed-summary{display:flex;flex-wrap:wrap;gap:0.55rem;margin:0 0 0.95rem}
     #panelVideos .removed-stat{flex:1 1 130px;min-width:118px;background:color-mix(in srgb,var(--down) 6%,var(--surface-2));border:1px solid color-mix(in srgb,var(--down) 24%,var(--border));border-radius:9px;padding:0.6rem 0.78rem}
