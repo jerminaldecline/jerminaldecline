@@ -1412,6 +1412,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-live-dot {width: 6px; height: 6px; border-radius: 50%; background: var(--up); flex: none;
     animation: promoLivePulse 2.4s ease-in-out infinite;}
 .promo-live-sum {margin-left: 0.5rem; vertical-align: middle;}
+/* Filter pill: the site's .promo-only-btn shape, but green when engaged so it
+   reads as the same idea as the row badges it filters to. */
+.promo-live-btn {display: inline-flex; align-items: center; gap: 0.4rem;}
+.promo-live-btn .promo-live-dot {animation: none;}
+.promo-live-btn.active {background: var(--up); border-color: var(--up); color: #06120d;}
+.promo-live-btn.active .promo-live-dot {background: #06120d;}
+.promo-live-btn.active:hover {border-color: var(--up);}
+.promo-live-btn-n {font-variant-numeric: tabular-nums; opacity: 0.75; font-weight: 800;}
 @keyframes promoLivePulse {0%,100%{opacity:1} 50%{opacity:0.35}}
 @media (prefers-reduced-motion: reduce) {.promo-live-dot {animation: none;}}
 
@@ -8690,6 +8698,8 @@ function niceDurationAxis(minSec, maxSec) {
   // Free-text filter over the promoted-videos table. Held outside the render so a
   // re-render (sort click, late-arriving ad-campaigns.json) preserves what was typed.
   let promoPanelQuery = '';
+  // "Running now" filter, toggled by the pill beside the search box.
+  let promoLiveOnly = false;
 // Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
 // site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
 // doesn't drift for videos published near midnight.
@@ -9011,9 +9021,17 @@ function renderAdPanel() {
   // must appear somewhere in the video's title or its channel name, so "walmart
   // spying" finds the row regardless of the words' order in the title.
   function filterRows(rs) {
+    let out = rs;
+    // Live filter first — cheaper, and it usually cuts the most. If the capture
+    // has gone stale mid-session promoLiveSet returns null; ignore the toggle
+    // rather than filter against an empty set and show an empty table.
+    if (promoLiveOnly) {
+      const live = promoLiveSet();
+      if (live) out = out.filter(r => live.has(r.v.id));
+    }
     const terms = promoPanelQuery.toLowerCase().split(/\s+/).filter(Boolean);
-    if (!terms.length) return rs;
-    return rs.filter(r => {
+    if (!terms.length) return out;
+    return out.filter(r => {
       const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
       const hay = (r.v.title + ' ' + chan).toLowerCase();
       return terms.every(t => hay.includes(t));
@@ -9099,7 +9117,12 @@ function renderAdPanel() {
     const genDate = (window.__adCampaigns || {})._generated || '';
     const sorted = sortRows(filterRows(rows));
     if (!sorted.length) {
-      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
+      // Name whichever filters are actually on, so an empty table explains itself
+      // rather than quoting a search term the reader may not have typed.
+      const bits = [];
+      if (promoLiveOnly) bits.push('still running');
+      if (promoPanelQuery) bits.push(`matching “${escapeHtml(promoPanelQuery)}”`);
+      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos ${bits.join(' and ') || 'to show'}.</td></tr>`;
     }
     return sorted.map(r => {
       // Thumbnail + title + channel, matching the Removed and Stolen-shorts rows.
@@ -9198,6 +9221,18 @@ function renderAdPanel() {
           <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
                  aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
         </div>
+        ${(() => {
+          // Only offer the filter when there is something to filter to. With no
+          // live campaigns — or a capture too stale to tell — the button would
+          // either empty the table or imply a state we can't vouch for.
+          const l = promoLiveSet();
+          const n = l ? rows.filter(r => l.has(r.v.id)).length : 0;
+          if (!n) return '';
+          return `<button type="button" class="promo-only-btn promo-live-btn${promoLiveOnly ? ' active' : ''}"
+            id="promoLiveBtn" aria-pressed="${promoLiveOnly}"
+            data-popover="Show only the videos with a campaign still running as of the last check."
+            ><span class="promo-live-dot" aria-hidden="true"></span>Running now <span class="promo-live-btn-n">${n}</span></button>`;
+        })()}
         <span class="promo-search-count" id="promoSearchCount"></span>
       </div>
       <div class="promo-perf-table-wrap">
@@ -9270,28 +9305,40 @@ function renderAdPanel() {
     });
   });
 
-  // Title/channel search. Only the tbody is re-rendered, so the input keeps focus
-  // and the caret stays put while typing — rebuilding the panel would drop both.
+  // Search and the "Running now" toggle share one update path, so the row count
+  // always reflects both filters rather than whichever fired last. Only the tbody
+  // is re-rendered, which keeps focus and the caret in the search input.
   const search = panel.querySelector('#promoSearch');
+  const liveBtn = panel.querySelector('#promoLiveBtn');
+  const count = panel.querySelector('#promoSearchCount');
+  const apply = () => {
+    if (search) promoPanelQuery = search.value.trim();
+    const body = document.getElementById('promoPerfTableBody');
+    if (body) body.innerHTML = renderAdTableBody();
+    if (count) {
+      const n = filterRows(rows).length;
+      const filtering = promoPanelQuery || promoLiveOnly;
+      count.textContent = filtering ? `${n} of ${rows.length}` : '';
+    }
+  };
+
   if (search) {
-    const count = panel.querySelector('#promoSearchCount');
-    const apply = () => {
-      promoPanelQuery = search.value.trim();
-      const body = document.getElementById('promoPerfTableBody');
-      if (body) body.innerHTML = renderAdTableBody();
-      if (count) {
-        const n = filterRows(rows).length;
-        count.textContent = promoPanelQuery ? `${n} of ${rows.length}` : '';
-      }
-    };
     search.addEventListener('input', apply);
     // Esc clears rather than only clearing the native search widget's own value,
     // so the table returns to full in one keystroke.
     search.addEventListener('keydown', e => {
       if (e.key === 'Escape') { e.preventDefault(); search.value = ''; apply(); }
     });
-    if (promoPanelQuery) apply();
   }
+  if (liveBtn) {
+    liveBtn.addEventListener('click', () => {
+      promoLiveOnly = !promoLiveOnly;
+      liveBtn.classList.toggle('active', promoLiveOnly);
+      liveBtn.setAttribute('aria-pressed', String(promoLiveOnly));
+      apply();
+    });
+  }
+  if (promoPanelQuery || promoLiveOnly) apply();
 }
 
 // Shorten a mode's display name for a compact chip (full name stays in the
