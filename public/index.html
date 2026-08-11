@@ -9138,7 +9138,7 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
-              ${sortHeader('Runs', 'runs', 'col-num')}
+              ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
               ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
               ${sortHeader('vs median', 'perf', 'col-num')}
@@ -9151,16 +9151,13 @@ function renderAdPanel() {
         </table>
       </div>
       <div class="promo-panel-footnote">
-        <strong>Reading this table:</strong> each video's views compared to the median (typical) views of long-form videos uploaded the same month.
-        A video at 2× earned twice as many views as the typical upload that month. "Excess over median" is the views above the typical baseline —
-        a rough proxy for the impact of paid promotion, though some excess may reflect organic virality.
-        Individual videos are also flagged with an <span class="promo-badge">ad</span> badge in the lists below.
+        <strong>Reading this table:</strong> each video's views against the median long-form upload of the same month. 2× is twice
+        that typical figure; <strong>excess</strong> is the views above it — a rough proxy for paid uplift, though some may be organic.
+        Flagged videos also carry an <span class="promo-badge">ad</span> badge in the lists below.
         <br><br>
-        <strong>Estimated spend</strong> multiplies excess views by industry CPV (cost-per-view) benchmarks of $0.03–$0.10
-        (good–expensive bands for YouTube ad campaigns). This is an UPPER-BOUND estimate: excess views are a proxy for the paid uplift,
-        but some excess may be organic (a hit video doing well on its own merits), and Google bills per qualified view rather than total view, so total view counts
-        don't directly map to ad spend. Actual spend is likely lower than the upper bound.
-        Identified via the <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
+        <strong>Estimated spend</strong> prices that excess at $0.03–$0.10 CPV. Read it as an upper bound: Google bills per qualified
+        view, and not all excess is paid for. Identified via the
+        <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
       </div>
     </div>
   `;
@@ -9193,9 +9190,12 @@ function renderAdPanel() {
         }
       });
     }
-    th.addEventListener('click', doSort);
+    // The (i) inside a header sits within the sortable <th>, so without this a
+    // click to read the note would also re-sort the table underneath it.
+    const fromInfo = e => !!(e.target.closest && e.target.closest('.info-icon'));
+    th.addEventListener('click', e => { if (!fromInfo(e)) doSort(); });
     th.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if ((e.key === 'Enter' || e.key === ' ') && !fromInfo(e)) {
         e.preventDefault();
         doSort();
       }
