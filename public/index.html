@@ -1380,7 +1380,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    content), so without this the title column gives up space to whichever
    header happens to be longest and titles wrap to four lines. */
 .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
-.promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
+/* Tighter than the default cell padding: five column notes added ~76px of
+   header furniture, and with width:1% numeric columns that came straight out
+   of the title column, pushing titles to four lines. Trimmed on header and body
+   together so the figures stay aligned under their headings. */
+.promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;
+    padding-left: 0.4rem; padding-right: 0.55rem;}
 .promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
 .promo-perf-table tbody tr {transition: background .12s;}
 .promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
@@ -1497,7 +1502,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-perf-table thead th.sortable.active-sort {color: var(--text);}
 .promo-perf-table thead th.sortable:focus-visible {outline: 2px solid var(--accent);
     outline-offset: -2px;}
-.promo-perf-table thead th .sort-arrow {margin-left: 0.35rem;}
+.promo-perf-table thead th .sort-arrow {margin-left: 0.25rem;}
+/* The note icon sits between the label and the sort arrow, so it gets a hair
+   less breathing room here than elsewhere on the site. */
+.promo-perf-table thead th .info-icon {margin-left: 0.28rem; vertical-align: middle;}
 .promo-panel-footnote {font-size: 0.78rem;
     color: var(--text-muted);
     padding-top: 0.85rem;
@@ -9144,6 +9152,21 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // What each column actually means, for a reader who hasn't been staring at
+  // this data all week. One source of truth: the desktop table header and the
+  // phone sort bar both render from here, so the two can't drift apart.
+  const COL_NOTES = {
+    views:  'Every view the video has now, from all sources. A campaign measurably adds a few thousand, so most of this number is not the ad.',
+    median: 'The typical long-form upload from the same month — half of that month did better, half worse. It is the yardstick for the two columns after it.',
+    perf:   'Views divided by that median. 2× is twice the typical upload from its month; under 1× means it underperformed its own month despite being promoted.',
+    excess: 'Views above the median. This is outperformance, not money spent — a video can beat its month on its own merits. Spend is measured separately, from the campaign dates.',
+    runs:   'Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view.',
+  };
+  const colInfo = (key, label) => COL_NOTES[key]
+    ? ` <span class="info-icon" data-popover="${escapeHtml(COL_NOTES[key])}" tabindex="0"` +
+      ` role="button" aria-label="About ${escapeHtml(label)}">ⓘ</span>`
+    : '';
+
   // Which videos were still being advertised at the moment of the last capture.
   //
   // The Centre reports a running campaign with the current date as its
@@ -9329,12 +9352,16 @@ function renderAdPanel() {
         // is also the sort control — goes with it. This bar takes over there,
         // driving the same promoPanelSort state, in the pill idiom the Removed
         // panel already uses for exactly this job.
+        // Median was missing here, so it could not be sorted on a phone at all.
+        // The (i) rides along on the pills because the table header — where the
+        // desktop notes live — is hidden at this width, leaving a phone reader
+        // with no way to ask what a column means.
         const cols = [['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
-                      ['excess', 'Excess'], ['date', 'Published'], ['title', 'Title']];
+                      ['excess', 'Excess'], ['median', 'Median'], ['date', 'Published'], ['title', 'Title']];
         return `<div class="promo-msort" role="group" aria-label="Sort promoted videos">
           <span class="promo-msort-lab">Sort</span>
           ${cols.map(([k, l]) => `<button type="button" class="promo-msort-btn${promoPanelSort.col === k ? ' active' : ''}"
-            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}<span class="promo-msort-arrow">${
+            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}${colInfo(k, l)}<span class="promo-msort-arrow">${
               promoPanelSort.col === k ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : ''}</span></button>`).join('')}
         </div>`;
       })()}
@@ -9344,11 +9371,11 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
-              ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
-              ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Median', 'median', 'col-num')}
-              ${sortHeader('vs median', 'perf', 'col-num')}
-              ${sortHeader('Excess', 'excess', 'col-num')}
+              ${sortHeader('Runs' + colInfo('runs', 'campaign runs'), 'runs', 'col-num')}
+              ${sortHeader('Views' + colInfo('views', 'views'), 'views', 'col-num')}
+              ${sortHeader('Median' + colInfo('median', 'the month median'), 'median', 'col-num')}
+              ${sortHeader('vs median' + colInfo('perf', 'views vs median'), 'perf', 'col-num')}
+              ${sortHeader('Excess' + colInfo('excess', 'excess over median'), 'excess', 'col-num')}
             </tr>
           </thead>
           <tbody id="promoPerfTableBody">
@@ -9422,7 +9449,12 @@ function renderAdPanel() {
     });
   });
   panel.querySelectorAll('[data-msort]').forEach(btn => {
-    btn.addEventListener('click', () => applySort(btn.getAttribute('data-msort')));
+    // Same guard as the table header: the (i) lives inside the sort control, so
+    // without this a tap to read the note would re-sort the list underneath it.
+    btn.addEventListener('click', e => {
+      if (e.target.closest && e.target.closest('.info-icon')) return;
+      applySort(btn.getAttribute('data-msort'));
+    });
   });
 
   // Search and the "Running now" toggle share one update path, so the row count
