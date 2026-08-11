@@ -1390,7 +1390,24 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 }
 /* Sortable header cells — click affordance, hover state, active indicator.
      Uses the same .sort-arrow component as the window-list sortable rows. */
-  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; margin-top: 0.4rem;}
+  /* Search row above the promoted-videos table. Sits inside the panel body so it
+     scrolls away with the panel, not pinned over the sticky table header. */
+  .promo-search-row {display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.6rem;
+    margin-top: 0.7rem; max-width: 100%;}
+  .promo-search {flex: 1 1 200px; min-width: 0; max-width: 380px; padding: 0.45rem 0.6rem; font: inherit;
+    font-size: 0.85rem; color: var(--text); background: var(--bg-soft, rgba(255,255,255,0.04));
+    border: 1px solid var(--border); border-radius: 6px;}
+  .promo-search::placeholder {color: var(--text-dim);}
+  .promo-search:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px; border-color: transparent;}
+  .promo-search-count {flex: 0 0 auto; font-size: 0.75rem; color: var(--text-dim);
+    font-variant-numeric: tabular-nums; white-space: nowrap;}
+  .promo-search-empty {padding: 1.1rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
+  @media (max-width: 560px) {
+    .promo-search {font-size: 16px; padding: 0.5rem 0.6rem;} /* 16px stops iOS zooming on focus */
+  }
+  /* overflow-x keeps the wide table scrolling inside its own box; without it the
+     table stretched the whole panel past the viewport on narrow screens. */
+  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
 .promo-perf-table {width: 100%; border-collapse: collapse; font-size: 0.85rem;}
 .promo-perf-table th, .promo-perf-table td {padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top;}
 .promo-perf-table thead th {position: sticky; top: 0; background: var(--surface-2); z-index: 1;
@@ -8655,6 +8672,9 @@ function niceDurationAxis(minSec, maxSec) {
   window.__loadVideosExtraData = loadVideosExtraData;
   let promoPanelExpanded = false;
   let promoPanelSort = { col: 'views', dir: 'desc' };
+  // Free-text filter over the promoted-videos table. Held outside the render so a
+  // re-render (sort click, late-arriving ad-campaigns.json) preserves what was typed.
+  let promoPanelQuery = '';
 // Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
 // site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
 // doesn't drift for videos published near midnight.
@@ -8972,6 +8992,19 @@ function renderAdPanel() {
   // Each column has its own sort key extractor and a sensible null/missing
   // handling (missing values always sort to the bottom regardless of direction
   // so they don't pollute either end of the visible list).
+  // Narrow the rows to those matching the search box. Every space-separated term
+  // must appear somewhere in the video's title or its channel name, so "walmart
+  // spying" finds the row regardless of the words' order in the title.
+  function filterRows(rs) {
+    const terms = promoPanelQuery.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return rs;
+    return rs.filter(r => {
+      const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
+      const hay = (r.v.title + ' ' + chan).toLowerCase();
+      return terms.every(t => hay.includes(t));
+    });
+  }
+
   function sortRows(rs) {
     const { col, dir } = promoPanelSort;
     const factor = dir === 'asc' ? 1 : -1;
@@ -9023,7 +9056,10 @@ function renderAdPanel() {
   }
 
   function renderAdTableBody() {
-    const sorted = sortRows(rows);
+    const sorted = sortRows(filterRows(rows));
+    if (!sorted.length) {
+      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
+    }
     return sorted.map(r => `
       <tr>
         <td class="col-vid">
@@ -9091,6 +9127,11 @@ function renderAdPanel() {
           </div>
         </div>
       ` : ''}
+      <div class="promo-search-row">
+        <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
+               aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        <span class="promo-search-count" id="promoSearchCount"></span>
+      </div>
       <div class="promo-perf-table-wrap">
         <table class="promo-perf-table">
           <thead>
@@ -9160,6 +9201,29 @@ function renderAdPanel() {
       }
     });
   });
+
+  // Title/channel search. Only the tbody is re-rendered, so the input keeps focus
+  // and the caret stays put while typing — rebuilding the panel would drop both.
+  const search = panel.querySelector('#promoSearch');
+  if (search) {
+    const count = panel.querySelector('#promoSearchCount');
+    const apply = () => {
+      promoPanelQuery = search.value.trim();
+      const body = document.getElementById('promoPerfTableBody');
+      if (body) body.innerHTML = renderAdTableBody();
+      if (count) {
+        const n = filterRows(rows).length;
+        count.textContent = promoPanelQuery ? `${n} of ${rows.length}` : '';
+      }
+    };
+    search.addEventListener('input', apply);
+    // Esc clears rather than only clearing the native search widget's own value,
+    // so the table returns to full in one keystroke.
+    search.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); search.value = ''; apply(); }
+    });
+    if (promoPanelQuery) apply();
+  }
 }
 
 // Shorten a mode's display name for a compact chip (full name stays in the
