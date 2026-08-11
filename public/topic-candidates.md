@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-10
+# Topic candidates — 2026-08-11
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -8,25 +8,25 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 Pool: 19 recent videos, 116 baseline videos
 
-### Cluster 1: `maga`
+### Cluster 1: `wnba`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 1/116 videos (1%)
-- **Spike ratio:** 12.3x
-- **Related terms:** `maga`
+- **Baseline saturation:** 2/116 videos (2%)
+- **Spike ratio:** 7.4x
+- **Related terms:** `wnba`
 - **Sample recent videos:**
-  - 2026-08-06 — _WOKE CANADIAN FACES NEW HUMILIATION_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Canadian Who Slapped MAGA Teen Pleads Guilty And G
-  - 2026-08-06 — _MATT WALSH BURRITOGATE_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Matt Walsh Starts MAGA Civil War Over Twenty Dolla
-  - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ MAGA YouTubers Are Collapsing As Their Audiences F
+  - 2026-08-10 — _THE RACE WAR IS ON_  
+    WNBA Race War Explodes After Brutal Sophie Cunningham Foul Fallout
+  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ WNBA Faces Full Blown Insanity As Trans Star Wants
+  - 2026-08-04 — _IT WENT NUCLEAR_  
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Caitlin Clark Stays Silent As WNBA Mob Targets Sop
 
 ### Cluster 2: `finally`
 
-- **Recent saturation:** 4/19 videos (**21%**)
-- **Baseline saturation:** 2/116 videos (2%)
-- **Spike ratio:** 9.9x
+- **Recent saturation:** 3/19 videos (**16%**)
+- **Baseline saturation:** 3/116 videos (3%)
+- **Spike ratio:** 5.3x
 - **Related terms:** `finally`
 - **Sample recent videos:**
   - 2026-08-06 — _THEY ACTUALLY DID IT_  
@@ -35,22 +35,6 @@ Pool: 19 recent videos, 116 baseline videos
     Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ BLM Rioters Find Out As Police Destroy Their Auton
   - 2026-08-05 — _THE HORRIFYING TRUTH_  
     Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Sad Truth Behind Perez Hilton’s Horrifying Livestr
-  - 2026-08-03 — _MAGA YOUTUBE COLLAPSES_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ MAGA YouTubers Are Collapsing As Their Audiences F
-
-### Cluster 3: `wnba`
-
-- **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 2/116 videos (2%)
-- **Spike ratio:** 7.4x
-- **Related terms:** `wnba`
-- **Sample recent videos:**
-  - 2026-08-08 — _THE WBNA IS COOKED NOW!_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Enes Freedom Declares For WNBA Draft And Internet 
-  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ WNBA Faces Full Blown Insanity As Trans Star Wants
-  - 2026-08-04 — _IT WENT NUCLEAR_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Caitlin Clark Stays Silent As WNBA Mob Targets Sop
 
 ---
 
