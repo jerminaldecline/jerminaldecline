@@ -1329,97 +1329,96 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Expanded body */
   .promo-panel-body {padding: 0 1.1rem 1.1rem;
     border-top: 1px solid var(--border);}
-/* Performance callout — three stat blocks side-by-side at the top of the
-     panel body. Each stat: big number on top, descriptor underneath. Reads
-     like a proper KPI dashboard: parallel, scannable, no awkward "label —
-     value — label" rhythm. Collapses to single column on narrow viewports.
-     Background tint + left border accent in the panel's --shorts theme tie
-     this visually to "paid promotion". */
-  .promo-panel-callout {display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    padding: 1.2rem 0.5rem;
-    margin: 0.85rem 0 1.1rem;
-    background: var(--shorts-soft);
-    border-left: 3px solid var(--shorts);
-    border-radius: var(--radius-sm);}
-.promo-panel-callout-stat {display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0;
-    padding: 0 1.4rem;
-    text-align: center;
-    align-items: center;}
-.promo-panel-callout-stat + .promo-panel-callout-stat {border-left: 1px solid var(--border);}
-.promo-panel-callout-value {font-size: 2.1rem;
-    font-weight: 800;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    white-space: nowrap;}
-.promo-panel-callout-of {font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-muted);}
-.promo-panel-callout-label {font-size: 0.8rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-    max-width: 22ch;}
-/* (ⓘ) icon inside a callout label — small info hint, matches the
-     hero-stat-info pattern but lighter weight for the smaller text. */
-  .promo-panel-callout-info {display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-dim);
-    cursor: pointer;
-    margin-left: 0.1rem;
-    font-size: 0.95em;
-    transition: color 0.15s;
-    padding: 6px;
-    margin: -6px -6px -6px calc(0.1rem - 6px);
-    border-radius: 3px;
-    vertical-align: middle;}
-.promo-panel-callout-info:hover,
-  .promo-panel-callout-info:focus-visible {color: var(--shorts);
-    outline: none;
-    background: rgba(225, 117, 23, 0.12);}
-@media(max-width:680px){
-  .promo-panel-callout {grid-template-columns: 1fr; gap: 0.85rem;}
-  .promo-panel-callout-stat + .promo-panel-callout-stat {border-left: none; border-top: 1px solid var(--border); padding-top: 0.85rem;}
-  .promo-panel-callout-value {font-size: 1.5rem;}
-}
+/* The old .promo-panel-callout block lived here: a full-width tinted wash with
+   three centred stats divided by hairlines. It was replaced by .promo-stat
+   cards below, which follow the Removed panel's pattern, so every rule for it
+   was removed rather than left orphaned. */
 /* Sortable header cells — click affordance, hover state, active indicator.
      Uses the same .sort-arrow component as the window-list sortable rows. */
-  /* Search row above the promoted-videos table. Sits inside the panel body so it
-     scrolls away with the panel, not pinned over the sticky table header. */
+  /* Stat cards, on the same pattern as the Removed panel's — bordered, tinted
+     with the section's own accent rather than a filled wash, so the three
+     feature panels read as siblings. Amber here is the site's "ad" colour. */
+  .promo-stats {display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.15rem 0 0.9rem;}
+  .promo-stat {flex: 1 1 150px; min-width: 132px; border-radius: 9px; padding: 0.6rem 0.78rem;
+    background: color-mix(in srgb, var(--accent-2) 6%, var(--surface-2));
+    border: 1px solid color-mix(in srgb, var(--accent-2) 24%, var(--border));}
+  .promo-stat b {display: block; font-size: 1.3rem; font-weight: 800; line-height: 1.05;
+    color: var(--accent-2); font-variant-numeric: tabular-nums;}
+  .promo-stat-of {font-size: 0.85rem; font-weight: 700; color: var(--text-muted);}
+  .promo-stat small {display: block; margin-top: 0.2rem; font-size: 0.66rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.2;}
+
+  /* Pill search, matching the Videos list's own search box. */
   .promo-search-row {display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.6rem;
-    margin-top: 0.7rem; max-width: 100%;}
-  .promo-search {flex: 1 1 200px; min-width: 0; max-width: 380px; padding: 0.45rem 0.6rem; font: inherit;
-    font-size: 0.85rem; color: var(--text); background: var(--bg-soft, rgba(255,255,255,0.04));
-    border: 1px solid var(--border); border-radius: 6px;}
+    margin-bottom: 0.55rem; max-width: 100%;}
+  .promo-search-box {position: relative; flex: 1 1 200px; min-width: 0; max-width: 24rem;
+    display: flex; align-items: center;}
+  .promo-search-ico {position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); pointer-events: none;}
+  .promo-search {width: 100%; min-width: 0; background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px; padding: 0.55rem 1rem 0.55rem 2.5rem;
+    font-family: inherit; font-size: 0.85rem; transition: border-color .12s, box-shadow .12s;}
+  .promo-search:hover {border-color: color-mix(in srgb, var(--accent) 45%, var(--border));}
   .promo-search::placeholder {color: var(--text-dim);}
-  .promo-search:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px; border-color: transparent;}
+  .promo-search:focus-visible {outline: none; border-color: var(--accent-2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 22%, transparent);}
   .promo-search-count {flex: 0 0 auto; font-size: 0.75rem; color: var(--text-dim);
     font-variant-numeric: tabular-nums; white-space: nowrap;}
-  .promo-search-empty {padding: 1.1rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
+  .promo-search-empty {padding: 1.4rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
   @media (max-width: 560px) {
-    .promo-search {font-size: 16px; padding: 0.5rem 0.6rem;} /* 16px stops iOS zooming on focus */
+    .promo-search {font-size: 16px;} /* 16px stops iOS zooming on focus */
   }
   /* overflow-x keeps the wide table scrolling inside its own box; without it the
      table stretched the whole panel past the viewport on narrow screens. */
-  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
+  .promo-perf-table-wrap {max-height: 560px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
 .promo-perf-table {width: 100%; border-collapse: collapse; font-size: 0.85rem;}
-.promo-perf-table th, .promo-perf-table td {padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top;}
+.promo-perf-table th, .promo-perf-table td {padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: middle;}
 .promo-perf-table thead th {position: sticky; top: 0; background: var(--surface-2); z-index: 1;
-    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;}
-.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: auto;}
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;
+    vertical-align: middle; box-shadow: inset 0 -1px 0 var(--border);}
+/* Claim the column explicitly. The numeric columns are width:1% (shrink to
+   content), so without this the title column gives up space to whichever
+   header happens to be longest and titles wrap to four lines. */
+.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
 .promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
-.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted);}
-.promo-perf-table td.col-vid a {color: var(--text); text-decoration: none; font-weight: 600; display: block;}
-.promo-perf-table td.col-vid a:hover {color: var(--accent); text-decoration: underline;}
-.promo-perf-date {display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 0.15rem; font-variant-numeric: tabular-nums;}
-.promo-perf-table td.col-num {color: var(--text);}
+.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
+.promo-perf-table tbody tr {transition: background .12s;}
+.promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
+.promo-perf-table td.col-num {color: var(--text-muted);}
+.promo-perf-table td.promo-num-strong {color: var(--text); font-weight: 700;}
 .promo-perf-table tbody tr:last-child td {border-bottom: none;}
+
+/* Video cell: thumbnail + title, as the Removed and Stolen-shorts rows do it. */
+.promo-vid {display: flex; align-items: center; gap: 0.6rem; min-width: 0;}
+.promo-thumb {flex: 0 0 auto; display: block; width: 84px; border-radius: 6px; overflow: hidden;
+    background: var(--surface-2); border: 1px solid var(--border); line-height: 0;}
+.promo-thumb img {width: 84px; height: 47px; object-fit: cover; display: block;}
+.promo-vid-col {min-width: 0;}
+.promo-vid-title {color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.86rem;
+    line-height: 1.3; display: block;}
+.promo-vid-title:hover {color: var(--accent); text-decoration: underline;}
+.promo-vid-chan {display: block; font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem;}
+
+/* Runs pill. Repeated promotion is the interesting signal, so only that is
+   given the accent; a single run stays quiet, and no record reads as a dash. */
+.promo-runs {display: inline-block; font-size: 0.82rem; font-weight: 600; cursor: help;
+    font-variant-numeric: tabular-nums; color: var(--text-muted);}
+/* Only repeat promotion gets the pill. Badging every single-run video too made
+   a column of near-identical chips that drew the eye without saying anything. */
+.promo-runs.multi {min-width: 1.5rem; padding: 0.12rem 0.42rem; border-radius: 999px; font-weight: 700;
+    color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 38%, transparent);}
+.promo-runs:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px;}
+.promo-runs-none {color: var(--text-dim);}
+
+@media (max-width: 640px) {
+  .promo-thumb, .promo-thumb img {width: 60px;}
+  .promo-thumb img {height: 34px;}
+  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.45rem;}
+  /* Relax the desktop min-width, which would otherwise push the table further
+     past a phone viewport than the columns actually need. */
+  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {min-width: 180px;}
+}
 .promo-perf-table thead th.sortable {cursor: pointer;
     user-select: none;
     transition: color 0.12s, background 0.12s;}
@@ -9048,11 +9047,11 @@ function renderAdPanel() {
   function promoRunCell(id) {
     const c = window.__adCampaigns;
     const v = c && c.videos && c.videos[id];
-    if (!v || !v.runs) return '<span style="color:var(--text-dim)">—</span>';
+    if (!v || !v.runs) return '<span class="promo-runs-none" aria-label="no campaign on record">—</span>';
     const span = (v.first && v.last) ? `${v.first} to ${v.last}` : '';
     const title = `${v.runs} campaign${v.runs === 1 ? '' : 's'}${span ? ' · ' + span : ''}`;
-    return `<span data-popover="${escapeHtml(title)}" tabindex="0" role="button"` +
-      ` style="${v.runs > 1 ? 'font-weight:800;color:var(--accent-2)' : ''}">${v.runs}</span>`;
+    return `<span class="promo-runs${v.runs > 1 ? ' multi' : ''}" data-popover="${escapeHtml(title)}"` +
+      ` tabindex="0" role="button">${v.runs}</span>`;
   }
 
   function renderAdTableBody() {
@@ -9060,20 +9059,32 @@ function renderAdPanel() {
     if (!sorted.length) {
       return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
     }
-    return sorted.map(r => `
+    return sorted.map(r => {
+      // Thumbnail + title + channel, matching the Removed and Stolen-shorts rows.
+      // The thumb is decorative (the title beside it is the real link), so it is
+      // hidden from assistive tech rather than announced as a second copy.
+      const chan = isAll ? (ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '') : '';
+      return `
       <tr>
         <td class="col-vid">
-          <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-          ${isAll ? `<span class="promo-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
+          <div class="promo-vid">
+            <a class="promo-thumb" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank"
+               rel="noopener" tabindex="-1" aria-hidden="true"><img
+               src="https://i.ytimg.com/vi/${r.v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>
+            <div class="promo-vid-col">
+              <a class="promo-vid-title" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
+              ${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}
+            </div>
+          </div>
         </td>
         <td class="col-date">${ctDate(r.v.publishedAt)}</td>
         <td class="col-num">${promoRunCell(r.v.id)}</td>
-        <td class="col-num">${fmt(r.views)}</td>
+        <td class="col-num promo-num-strong">${fmt(r.views)}</td>
         <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
         <td class="col-num">${fmtMult(r.multiplier)}</td>
         <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
       </tr>
-    `).join('');
+    `;}).join('');
   }
 
   // Header cell with sort indicator. Active column gets an arrow; inactive
@@ -9108,28 +9119,32 @@ function renderAdPanel() {
     </button>
     <div class="promo-panel-body" id="promoPanelBody"${promoPanelExpanded ? '' : ' hidden'}>
       ${outperformed > 0 ? `
-        <div class="promo-panel-callout">
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">${outperformed} <span class="promo-panel-callout-of">/ ${rows.length}</span></div>
-            <div class="promo-panel-callout-label">ad-promoted videos beat their month's median</div>
+        <div class="promo-stats">
+          <div class="promo-stat">
+            <b>${outperformed}<span class="promo-stat-of">/${rows.length}</span></b>
+            <small>beat their month's median</small>
           </div>
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">+${fmtCompact(totalExcess)}</div>
-            <div class="promo-panel-callout-label">excess views above the monthly median</div>
+          <div class="promo-stat">
+            <b>+${fmtCompact(totalExcess)}</b>
+            <small>excess views over median</small>
           </div>
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</div>
-            <div class="promo-panel-callout-label">estimated paid-promotion spend
-              <span class="promo-panel-callout-info" tabindex="0" role="button"
+          <div class="promo-stat">
+            <b>${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</b>
+            <small>estimated spend
+              <span class="info-icon" tabindex="0" role="button"
                     aria-label="About the spend estimate"
                     data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
-            </div>
+            </small>
           </div>
         </div>
       ` : ''}
       <div class="promo-search-row">
-        <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
-               aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        <div class="promo-search-box">
+          <svg class="promo-search-ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
+                 aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        </div>
         <span class="promo-search-count" id="promoSearchCount"></span>
       </div>
       <div class="promo-perf-table-wrap">
@@ -9140,9 +9155,9 @@ function renderAdPanel() {
               ${sortHeader('Published', 'date', 'col-date')}
               ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Median', 'median', 'col-num hide-mobile')}
               ${sortHeader('vs median', 'perf', 'col-num')}
-              ${sortHeader('Excess over median', 'excess', 'col-num hide-mobile')}
+              ${sortHeader('Excess', 'excess', 'col-num hide-mobile')}
             </tr>
           </thead>
           <tbody id="promoPerfTableBody">
