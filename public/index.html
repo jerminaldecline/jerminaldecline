@@ -1380,7 +1380,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    content), so without this the title column gives up space to whichever
    header happens to be longest and titles wrap to four lines. */
 .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
-.promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
+/* Tighter than the default cell padding: five column notes added ~76px of
+   header furniture, and with width:1% numeric columns that came straight out
+   of the title column, pushing titles to four lines. Trimmed on header and body
+   together so the figures stay aligned under their headings. */
+.promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;
+    padding-left: 0.4rem; padding-right: 0.55rem;}
 .promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
 .promo-perf-table tbody tr {transition: background .12s;}
 .promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
@@ -1497,7 +1502,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-perf-table thead th.sortable.active-sort {color: var(--text);}
 .promo-perf-table thead th.sortable:focus-visible {outline: 2px solid var(--accent);
     outline-offset: -2px;}
-.promo-perf-table thead th .sort-arrow {margin-left: 0.35rem;}
+.promo-perf-table thead th .sort-arrow {margin-left: 0.25rem;}
+/* The note icon sits between the label and the sort arrow, so it gets a hair
+   less breathing room here than elsewhere on the site. */
+.promo-perf-table thead th .info-icon {margin-left: 0.28rem; vertical-align: middle;}
 .promo-panel-footnote {font-size: 0.78rem;
     color: var(--text-muted);
     padding-top: 0.85rem;
@@ -8758,6 +8766,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
+      fetch('ad-yield.json').then(async r => { if (r.ok){ window.__adYield = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-yield', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
@@ -9143,6 +9152,21 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // What each column actually means, for a reader who hasn't been staring at
+  // this data all week. One source of truth: the desktop table header and the
+  // phone sort bar both render from here, so the two can't drift apart.
+  const COL_NOTES = {
+    views:  'Every view the video has now, from all sources. A campaign measurably adds a few thousand, so most of this number is not the ad.',
+    median: 'The typical long-form upload from the same month — half of that month did better, half worse. It is the yardstick for the two columns after it.',
+    perf:   'Views divided by that median. 2× is twice the typical upload from its month; under 1× means it underperformed its own month despite being promoted.',
+    excess: 'Views above the median. This is outperformance, not money spent — a video can beat its month on its own merits. Spend is measured separately, from the campaign dates.',
+    runs:   'Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view.',
+  };
+  const colInfo = (key, label) => COL_NOTES[key]
+    ? ` <span class="info-icon" data-popover="${escapeHtml(COL_NOTES[key])}" tabindex="0"` +
+      ` role="button" aria-label="About ${escapeHtml(label)}">ⓘ</span>`
+    : '';
+
   // Which videos were still being advertised at the moment of the last capture.
   //
   // The Centre reports a running campaign with the current date as its
@@ -9273,14 +9297,33 @@ function renderAdPanel() {
             <b>+${fmtCompact(totalExcess)}</b>
             <small>excess views over median</small>
           </div>
-          <div class="promo-stat">
-            <b>${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</b>
-            <small>estimated spend
+          ${(() => {
+            // Spend is priced off MEASURED campaign yield, not off "excess views
+            // over the month's median". That proxy credited a video's organic
+            // outperformance to advertising and ran ~5.5x the measured figure.
+            // With no yield data we say nothing: the old basis is known wrong, so
+            // falling back to it would be worse than omitting the card.
+            const y = window.__adYield;
+            if (!y || !y.viewsPerCampaignDay || !y.campaignDaysByVideo) return '';
+            const cdays = rows.reduce((s, r) => s + (y.campaignDaysByVideo[r.v.id] || 0), 0);
+            if (!cdays) return '';
+            const views = cdays * y.viewsPerCampaignDay.central;
+            const from = (window.__adCampaigns || {}).trackingFrom;
+            const note = `Measured, not benchmarked. ${y.sample.campaigns} completed campaigns were tracked `
+              + `against the view archive, giving about ${fmt(y.viewsPerCampaignDay.central)} ad-driven views per `
+              + `campaign-day. That rate is applied to the ${fmt(cdays)} campaign-days the Transparency Centre `
+              + `lists for these videos, then priced at $${y.cpvUSD.low}–$${y.cpvUSD.high} per view. `
+              + (from ? `Covers campaigns since ${from} only — the Centre keeps about 10 months, so anything earlier is not counted. ` : '')
+              + `A small sample, and it will tighten as more campaigns fall inside the archive.`;
+            return `<div class="promo-stat">
+            <b>${fmtUSD(views * y.cpvUSD.low, true)}–${fmtUSD(views * y.cpvUSD.high, true)}</b>
+            <small>estimated spend, recorded campaigns
               <span class="info-icon" tabindex="0" role="button"
                     aria-label="About the spend estimate"
-                    data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
+                    data-popover="${escapeHtml(note)}">ⓘ</span>
             </small>
-          </div>
+          </div>`;
+          })()}
         </div>
       ` : ''}
       <div class="promo-search-row">
@@ -9309,12 +9352,16 @@ function renderAdPanel() {
         // is also the sort control — goes with it. This bar takes over there,
         // driving the same promoPanelSort state, in the pill idiom the Removed
         // panel already uses for exactly this job.
+        // Median was missing here, so it could not be sorted on a phone at all.
+        // The (i) rides along on the pills because the table header — where the
+        // desktop notes live — is hidden at this width, leaving a phone reader
+        // with no way to ask what a column means.
         const cols = [['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
-                      ['excess', 'Excess'], ['date', 'Published'], ['title', 'Title']];
+                      ['excess', 'Excess'], ['median', 'Median'], ['date', 'Published'], ['title', 'Title']];
         return `<div class="promo-msort" role="group" aria-label="Sort promoted videos">
           <span class="promo-msort-lab">Sort</span>
           ${cols.map(([k, l]) => `<button type="button" class="promo-msort-btn${promoPanelSort.col === k ? ' active' : ''}"
-            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}<span class="promo-msort-arrow">${
+            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}${colInfo(k, l)}<span class="promo-msort-arrow">${
               promoPanelSort.col === k ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : ''}</span></button>`).join('')}
         </div>`;
       })()}
@@ -9324,11 +9371,11 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
-              ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
-              ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Median', 'median', 'col-num')}
-              ${sortHeader('vs median', 'perf', 'col-num')}
-              ${sortHeader('Excess', 'excess', 'col-num')}
+              ${sortHeader('Runs' + colInfo('runs', 'campaign runs'), 'runs', 'col-num')}
+              ${sortHeader('Views' + colInfo('views', 'views'), 'views', 'col-num')}
+              ${sortHeader('Median' + colInfo('median', 'the month median'), 'median', 'col-num')}
+              ${sortHeader('vs median' + colInfo('perf', 'views vs median'), 'perf', 'col-num')}
+              ${sortHeader('Excess' + colInfo('excess', 'excess over median'), 'excess', 'col-num')}
             </tr>
           </thead>
           <tbody id="promoPerfTableBody">
@@ -9338,11 +9385,13 @@ function renderAdPanel() {
       </div>
       <div class="promo-panel-footnote">
         <strong>Reading this table:</strong> each video's views against the median long-form upload of the same month. 2× is twice
-        that typical figure; <strong>excess</strong> is the views above it — a rough proxy for paid uplift, though some may be organic.
+        that typical figure; <strong>excess</strong> is the views above it.
         Flagged videos also carry an <span class="promo-badge">ad</span> badge in the lists below.
         <br><br>
-        <strong>Estimated spend</strong> prices that excess at $0.03–$0.10 CPV. Read it as an upper bound: Google bills per qualified
-        view, and not all excess is paid for. Identified via the
+        <strong>Estimated spend</strong> is measured, not benchmarked: the view archive shows what a day of advertising actually
+        buys, applied to the campaign-days on record at $0.03–$0.10 per view. It deliberately does <em>not</em> price the excess
+        above — beating a monthly median may just mean the video did well. Caveats: a small sample, only the ~10 months the Centre
+        still lists, and not every counted view is one Google bills for. Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
       </div>
     </div>
@@ -9400,7 +9449,12 @@ function renderAdPanel() {
     });
   });
   panel.querySelectorAll('[data-msort]').forEach(btn => {
-    btn.addEventListener('click', () => applySort(btn.getAttribute('data-msort')));
+    // Same guard as the table header: the (i) lives inside the sort control, so
+    // without this a tap to read the note would re-sort the list underneath it.
+    btn.addEventListener('click', e => {
+      if (e.target.closest && e.target.closest('.info-icon')) return;
+      applySort(btn.getAttribute('data-msort'));
+    });
   });
 
   // Search and the "Running now" toggle share one update path, so the row count

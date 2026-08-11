@@ -349,6 +349,14 @@ def main():
             subprocess.run(["git", "pull", "--ff-only", "-q"], cwd=snap_repo)
         subprocess.run(["node", str(ROOT/"scripts"/"detect-spikes.js"), "--quiet"], cwd=ROOT)
 
+        # Re-measure what a campaign-day of advertising actually buys, now that
+        # both this run's campaign windows and today's snapshots are in place.
+        # Non-fatal: it exits non-zero when there is nothing new worth measuring,
+        # and a stale ad-yield.json is better than aborting the whole reconcile.
+        y = subprocess.run(["node", str(ROOT/"scripts"/"measure-campaign-yield.js"), "--quiet"], cwd=ROOT)
+        if y.returncode != 0:
+            log(f"  (campaign-yield measurement skipped, exit {y.returncode} — keeping the previous ad-yield.json)")
+
         if COMMIT:
             # SAFETY GUARDS: this runs unattended (scheduled task, Sundays) inside the
             # active dev checkout, which is sometimes on `staging` for UI work. Without
@@ -361,7 +369,8 @@ def main():
                 log(f"ABORT commit: repo is on '{branch}', not main. Ad data written locally but NOT committed.")
                 sys.exit(3)
             subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json",
-                            "public/ad-campaigns.json", "scripts/ad-creative-cache.json"],
+                            "public/ad-campaigns.json", "public/ad-yield.json",
+                            "scripts/ad-creative-cache.json"],
                            cwd=ROOT, check=True)
             staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
             if staged.returncode != 0:           # something actually changed
