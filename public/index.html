@@ -1397,7 +1397,23 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-vid-title {color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.86rem;
     line-height: 1.3; display: block;}
 .promo-vid-title:hover {color: var(--accent); text-decoration: underline;}
-.promo-vid-chan {display: block; font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem;}
+.promo-vid-meta {display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.45rem; margin-top: 0.25rem;}
+.promo-vid-chan {font-size: 0.72rem; color: var(--text-dim);}
+
+/* "Running now" — a campaign the Centre still listed at the last capture.
+   Green, because it is a live-state indicator like the header's freshness dot,
+   not another shade of the amber that means "this was an ad". */
+.promo-live {display: inline-flex; align-items: center; gap: 0.3rem; cursor: help;
+    font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--up); background: color-mix(in srgb, var(--up) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--up) 34%, transparent);
+    border-radius: 999px; padding: 0.08rem 0.42rem; white-space: nowrap;}
+.promo-live:focus-visible {outline: 2px solid var(--up); outline-offset: 1px;}
+.promo-live-dot {width: 6px; height: 6px; border-radius: 50%; background: var(--up); flex: none;
+    animation: promoLivePulse 2.4s ease-in-out infinite;}
+.promo-live-sum {margin-left: 0.5rem; vertical-align: middle;}
+@keyframes promoLivePulse {0%,100%{opacity:1} 50%{opacity:0.35}}
+@media (prefers-reduced-motion: reduce) {.promo-live-dot {animation: none;}}
 
 /* Runs pill. Repeated promotion is the interesting signal, so only that is
    given the accent; a single run stays quiet, and no record reads as a dash. */
@@ -9040,6 +9056,30 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // Which videos were still being advertised at the moment of the last capture.
+  //
+  // The Centre reports a running campaign with the current date as its
+  // last-shown, so "still running" is an exact match against the capture's own
+  // _generated date — not against the reader's clock, which would drift and
+  // would quietly turn every campaign "live" or "ended" for the wrong reasons.
+  //
+  // Returns null, meaning "we don't know", if there is no campaign data or the
+  // capture is more than a day old. A stale file must not keep asserting that
+  // someone is running ads today; saying nothing is the honest failure here.
+  function promoLiveSet() {
+    const c = window.__adCampaigns;
+    if (!c || !c.videos || !c._generated) return null;
+    const gen = c._generated;
+    const today = _ctDateFmt.format(new Date());
+    const ageDays = Math.round((Date.parse(today + 'T00:00:00Z') - Date.parse(gen + 'T00:00:00Z')) / 86400000);
+    if (!(ageDays >= 0 && ageDays <= 1)) return null;
+    const live = new Set();
+    for (const [id, v] of Object.entries(c.videos)) {
+      if ((v.windows || []).some(w => w && w[1] === gen)) live.add(id);
+    }
+    return live;
+  }
+
   // How many separate campaigns the Transparency Centre lists for a video, from
   // ad-campaigns.json. The older ad-videos.json only records THAT a video was
   // advertised — it dedupes to one entry per video, so repeat runs are invisible
@@ -9055,6 +9095,8 @@ function renderAdPanel() {
   }
 
   function renderAdTableBody() {
+    const live = promoLiveSet();
+    const genDate = (window.__adCampaigns || {})._generated || '';
     const sorted = sortRows(filterRows(rows));
     if (!sorted.length) {
       return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
@@ -9064,6 +9106,11 @@ function renderAdPanel() {
       // The thumb is decorative (the title beside it is the real link), so it is
       // hidden from assistive tech rather than announced as a second copy.
       const chan = isAll ? (ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '') : '';
+      const isLive = live && live.has(r.v.id);
+      const liveTag = isLive
+        ? `<span class="promo-live" data-popover="This video was still being advertised as of the last check (${escapeHtml(genDate)}). The Transparency Centre lists a campaign for it running up to that date."` +
+          ` tabindex="0" role="button"><span class="promo-live-dot" aria-hidden="true"></span>Running now</span>`
+        : '';
       return `
       <tr>
         <td class="col-vid">
@@ -9073,7 +9120,7 @@ function renderAdPanel() {
                src="https://i.ytimg.com/vi/${r.v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>
             <div class="promo-vid-col">
               <a class="promo-vid-title" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-              ${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}
+              ${chan || liveTag ? `<span class="promo-vid-meta">${liveTag}${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}</span>` : ''}
             </div>
           </div>
         </td>
@@ -9112,7 +9159,13 @@ function renderAdPanel() {
       <div class="promo-panel-header">
         <div class="promo-panel-header-left">
           <span class="promo-panel-eyebrow">Confirmed paid promotion</span>
-          <span class="promo-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span></span>
+          <span class="promo-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span>${(() => {
+            // Answer "is he advertising right now?" without opening the panel.
+            const l = promoLiveSet();
+            if (!l) return '';
+            const n = rows.filter(r => l.has(r.v.id)).length;
+            return n ? `<span class="promo-live promo-live-sum"><span class="promo-live-dot" aria-hidden="true"></span>${n} running now</span>` : '';
+          })()}</span>
         </div>
         <span class="promo-panel-caret" aria-hidden="true"></span>
       </div>
