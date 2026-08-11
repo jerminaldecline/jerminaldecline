@@ -7,6 +7,16 @@ returns an empty shell. We drive headless Chromium (Playwright), scroll until
 the ad list stops growing, and harvest the advertised YouTube video IDs from the
 `i.ytimg.com/vi/<ID>/` thumbnail requests every video-ad card makes.
 
+What earns a badge: a video is catalogued when the Centre holds a CREATIVE for
+it — a dated campaign record read from the page's own SearchCreatives API — not
+because a thumbnail request went past. The thumbnail harvest is still run, as a
+cross-check and to spot campaigns that have stopped.
+
+Note the Centre only retains roughly the last ~10 months of creatives, so a
+video advertised before that has no record. Catalogued videos are therefore
+never removed for lack of one; absence is only meaningful for a video newer
+than the retention edge (see ad-campaigns.json "trackingFrom").
+
 Modes:
   (default)   report the diff only — no writes
   --apply     add MISSING ids to ad-videos.json (mapped to channel via its
@@ -14,10 +24,12 @@ Modes:
               removes the "stale" ids (ads that stopped and aged off the page).
   --commit    with --apply: git add/commit/push the change (ad data -> main,
               per the project's data-update rule). No-op if nothing changed.
+  --campaigns capture creatives and write ad-campaigns.json only; no reconcile.
   --json      machine-readable summary on stdout.
   --headful   show the browser (debugging).
-  --min-ads N safety floor (default 50): if the scrape harvests fewer than N
-              ids, abort WITHOUT writing — guards against a bot-block/empty load.
+  --min-ads N safety floor (default 50): if either the harvest or the creative
+              capture comes back under N, abort WITHOUT writing — guards against
+              a bot-block, an empty load, or a payload shape change.
 
 Requires Playwright + Chromium (installed locally). Run from anywhere; paths are
 resolved relative to this file.
@@ -30,11 +42,14 @@ URL = f"https://adstransparency.google.com/advertiser/{ADVERTISER}?region=anywhe
 ROOT = Path(__file__).resolve().parent.parent
 ADS_FILE = ROOT / "public" / "ad-videos.json"
 DATA_FILE = ROOT / "public" / "data.json"
+CAMPAIGNS_FILE = ROOT / "public" / "ad-campaigns.json"
+CREATIVE_CACHE = ROOT / "scripts" / "ad-creative-cache.json"
 
 APPLY   = "--apply" in sys.argv
 COMMIT  = "--commit" in sys.argv
 ASJSON  = "--json" in sys.argv
 HEADFUL = "--headful" in sys.argv
+CAMPAIGNS = "--campaigns" in sys.argv
 MIN_ADS = int(sys.argv[sys.argv.index("--min-ads")+1]) if "--min-ads" in sys.argv else 50
 
 def log(*a):
@@ -75,22 +90,18 @@ def scrape_ids():
         b.close()
     return ids
 
-CAMPAIGNS_FILE = ROOT / "public" / "ad-campaigns.json"
-CREATIVE_CACHE = Path(__file__).resolve().parent / "ad-creative-cache.json"
-CAMPAIGNS = "--campaigns" in sys.argv
-
 
 def scrape_creatives():
     """Capture the advertiser page's SearchCreatives responses.
 
-    The default harvest reads video ids out of thumbnail requests and puts them in
-    a set, so a video advertised several times counts once and repeat runs are
-    invisible. The page's own SearchCreatives API returns one record per creative
-    with a first-shown and last-shown timestamp, which is where run counts and
-    real campaign dates actually live.
+    scrape_ids() reads video ids out of thumbnail requests and puts them in a set,
+    so a video advertised several times counts once and a single stray request is
+    indistinguishable from a real campaign. The page's own SearchCreatives API
+    returns one record per creative with first-shown and last-shown timestamps —
+    a dated, checkable claim, which is what the badge is now gated on.
 
-    Runs its own browser session on purpose: scrape_ids() is what the scheduled
-    task depends on and is left completely untouched.
+    Runs its own browser session on purpose: scrape_ids() is what the rest of this
+    script has always depended on and is left completely untouched.
 
     Returns [{creative, first_ms, last_ms, preview}], newest capture wins.
     """
@@ -192,14 +203,19 @@ def resolve_creative_videos(creatives):
     return cache
 
 
-def build_campaigns():
-    """Write public/ad-campaigns.json: per-video run counts and campaign windows."""
+def build_campaigns(write=True):
+    """Per-video run counts and campaign windows from the creative records.
+
+    Returns the document, or None if the capture came back too thin to trust —
+    the caller must treat None as "no evidence available this run" and add
+    nothing, never as "nothing is advertised".
+    """
     creatives = scrape_creatives()
     log(f"creatives captured: {len(creatives)}")
     if len(creatives) < MIN_ADS:
         log(f"ABORT: only {len(creatives)} creatives parsed (< --min-ads {MIN_ADS}); "
             "likely a bot-block or a payload shape change. Nothing written.")
-        return 2
+        return None
 
     cache = resolve_creative_videos(creatives)
     day = lambda ms: datetime.datetime.utcfromtimestamp(ms / 1000).strftime("%Y-%m-%d") if ms else None
@@ -236,19 +252,16 @@ def build_campaigns():
         "trackingFrom": min((w[0] for w in allw), default=None),
         "videos": videos,
     }
-    CAMPAIGNS_FILE.write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
-    top = sorted(videos.items(), key=lambda kv: -kv[1]["runs"])[:5]
-    log(f"\nwrote {CAMPAIGNS_FILE.name}: {len(videos)} videos, {len(creatives)} creatives, "
-        f"{unresolved} unresolved, history from {doc['trackingFrom']}")
-    for vid, v in top:
-        log(f"  {v['runs']:>2} runs  {v.get('first')} -> {v.get('last')}  {vid}")
-    return 0
+    if write:
+        CAMPAIGNS_FILE.write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
+        log(f"\nwrote {CAMPAIGNS_FILE.name}: {len(videos)} videos, {len(creatives)} creatives, "
+            f"{unresolved} unresolved, history from {doc['trackingFrom']}")
+    return doc
 
 
 def main():
-    if CAMPAIGNS:
-        sys.exit(build_campaigns())
-
+    if CAMPAIGNS:                       # capture-only mode, no reconcile
+        sys.exit(0 if build_campaigns() else 2)
     ads = json.loads(ADS_FILE.read_text(encoding="utf-8"))
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
     meta = {v["id"]: v for v in data["videos"]}
@@ -262,7 +275,33 @@ def main():
         if ASJSON: print(json.dumps({"ok": False, "scraped": len(scraped)}))
         sys.exit(2)
 
-    missing = sorted(scraped - flagged)
+    # A video earns the ad badge when the Transparency Centre holds a CREATIVE for
+    # it — a dated campaign record with first/last-shown timestamps — not merely
+    # because its thumbnail appeared in the page's network traffic.
+    #
+    # This replaced a two-run rule (badge only after an id showed up in two
+    # consecutive runs), which was a proxy for evidence rather than evidence: it
+    # still rested on the same thumbnail heuristic, and it cost a day's delay on
+    # every genuine campaign. A creative record is checkable, carries the campaign
+    # dates, and confirms on the first run. It also catches videos the thumbnail
+    # harvest misses entirely.
+    #
+    # The capture is deliberately fail-closed. If it comes back thin — bot-block,
+    # or Google renumbering the protobuf fields — build_campaigns returns None and
+    # nothing is added. Absence of evidence must never read as evidence of absence,
+    # because here that would silently stop detecting ads while reporting success.
+    campaigns = build_campaigns(write=APPLY)   # default mode reports, never writes
+    if campaigns is None:
+        log("ABORT: no trustworthy creative capture this run; nothing added.")
+        if ASJSON: print(json.dumps({"ok": False, "reason": "creative-capture-failed"}))
+        sys.exit(2)
+
+    evidenced = {v for v in campaigns["videos"] if v}
+    missing = sorted(evidenced - flagged)
+    # Harvested from thumbnails but with no creative behind it. Not badged, and
+    # worth seeing in the log: a persistent entry here means the two sources
+    # disagree, which is exactly the case the old rule couldn't distinguish.
+    unevidenced = sorted(scraped - flagged - evidenced)
     stale   = sorted(flagged - scraped)
     unknown = [i for i in missing if i not in meta]
 
@@ -270,12 +309,23 @@ def main():
         v = meta.get(i)
         return f"{v.get('title','')[:60]}" if v else "(not in data.json)"
 
-    log(f"\nTransparency Center: {len(scraped)} ads   |   ad-videos.json: {len(flagged)}")
+    log(f"\nTransparency Center: {len(scraped)} ads harvested, {len(evidenced)} with creative records"
+        f"   |   ad-videos.json: {len(flagged)}")
     log(f"MISSING (add): {len(missing)}   STALE (stopped, kept): {len(stale)}   UNKNOWN ids: {len(unknown)}")
-    for i in missing: log(f"  + {i}  {title(i)}")
+    for i in missing:
+        c = campaigns["videos"][i]
+        log(f"  + {i}  {title(i)}  ({c['runs']} campaign(s), {c.get('first')} -> {c.get('last')})")
+    for i in unevidenced:
+        log(f"  ? {i}  {title(i)}  (in harvest, no creative record — not badged)")
 
     added = {}
     if APPLY:
+        today = datetime.date.today().isoformat()
+        # meta.pending belonged to the two-run rule. Clear it so a stale hold-list
+        # can't be mistaken for live state by anything reading this file.
+        changed = bool(missing) or "pending" in ads.get("meta", {})
+        ads.get("meta", {}).pop("pending", None)
+
         if missing:
             for i in missing:
                 v = meta.get(i); h = cid2handle.get(v.get("channelId")) if v else None
@@ -284,9 +334,11 @@ def main():
                 ads["channels"][h]["videoIds"].append(i); added[h] = added.get(h, 0) + 1
             for c in ads["channels"].values():
                 c["videoIds"] = sorted(set(c["videoIds"]))
-            ads["meta"]["lastUpdated"] = datetime.date.today().isoformat()
-            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            ads["meta"]["lastUpdated"] = today
             log(f"\nApplied: {added}  (total now {sum(len(c['videoIds']) for c in ads['channels'].values())})")
+
+        if changed:
+            ADS_FILE.write_text(json.dumps(ads, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
         # Refresh the spike detector against the LATEST snapshots every run — so a
         # fresh velocity bump on an already-catalogued video is caught even in a
@@ -308,7 +360,9 @@ def main():
             if branch != "main":
                 log(f"ABORT commit: repo is on '{branch}', not main. Ad data written locally but NOT committed.")
                 sys.exit(3)
-            subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json"], cwd=ROOT, check=True)
+            subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json",
+                            "public/ad-campaigns.json", "scripts/ad-creative-cache.json"],
+                           cwd=ROOT, check=True)
             staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
             if staged.returncode != 0:           # something actually changed
                 n = sum(added.values())

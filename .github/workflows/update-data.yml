@@ -84,9 +84,11 @@ jobs:
           echo "Push failed after 3 attempts."
           exit 1
 
-      - name: Snapshot data (twice-daily AM/PM)
+      - name: Snapshot data (twice-daily AM/PM) + hourly debut sample
         # Best-effort: if this fails (auth glitch, sister repo down),
         # the main data update has already succeeded — don't fail the workflow.
+        # The staleness tripwire at the end of the job is what turns a persistent
+        # failure here into a red run.
         continue-on-error: true
         env:
           SNAPSHOTS_TOKEN: ${{ secrets.SNAPSHOTS_REPO_TOKEN }}
@@ -100,19 +102,34 @@ jobs:
 
           git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/snapshots
 
+          # The twice-daily full dump runs FIRST and is unchanged — still idempotent
+          # per half. It is the irreplaceable artefact, so nothing optional is
+          # allowed to run ahead of it and risk aborting the step under `set -e`.
           if [ -f "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}" ]; then
-            echo "Snapshot ${SNAPSHOT_FILE} already exists — skipping."
-            exit 0
+            echo "Snapshot ${SNAPSHOT_FILE} already exists — skipping the full dump."
+          else
+            mkdir -p /tmp/snapshots/snapshots
+            gzip -c public/data.json > "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}"
+            echo "Wrote snapshot ${SNAPSHOT_FILE}."
           fi
 
-          mkdir -p /tmp/snapshots/snapshots
-          gzip -c public/data.json > "/tmp/snapshots/snapshots/${SNAPSHOT_FILE}"
+          # Hourly debut sample. Nearly all of a video's views arrive on its first
+          # day, which twice-daily snapshots cannot resolve. This run already
+          # fetched every view count, so keeping the reading costs no extra API
+          # quota — it just stops discarding 22 of the 24 daily readings.
+          # Explicitly non-fatal: a sampler bug must never cost us a snapshot.
+          mkdir -p /tmp/snapshots/debut
+          node scripts/sample-debut.js --out /tmp/snapshots/debut || echo "::warning::debut sample failed — snapshot unaffected"
 
           cd /tmp/snapshots
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "snapshots/${SNAPSHOT_FILE}"
-          git commit -m "snapshot: ${DATE} ${HALF}"
+          git add -A snapshots debut
+          if git diff --staged --quiet; then
+            echo "Nothing new to commit."
+            exit 0
+          fi
+          git commit -m "snapshot ${DATE} ${HALF} + debut ${DATE}-${HOUR}"
           for attempt in 1 2 3; do
             if git push; then
               echo "Snapshot push succeeded on attempt $attempt."
@@ -135,13 +152,18 @@ jobs:
           SNAPSHOTS_REPO: jerminaldecline/jerminaldecline-snapshots
         run: |
           set -e
-          if [ ! -d /tmp/vv-snapshots/snapshots ]; then
-            git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/vv-snapshots
+          # Reuse the clone the snapshot step already made rather than pulling the
+          # whole archive a second time in the same run — it was ~119MB fetched
+          # twice an hour for identical content. Still clones if that step failed
+          # before it got that far.
+          if [ ! -d /tmp/snapshots/snapshots ]; then
+            echo "No clone from the snapshot step — cloning."
+            git clone --depth 1 "https://x-access-token:${SNAPSHOTS_TOKEN}@github.com/${SNAPSHOTS_REPO}.git" /tmp/snapshots
           fi
-          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-view-velocity.py
-          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-ad-ledger.py
-          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots python scripts/build-historic-views.py
-          SNAPSHOTS_DIR=/tmp/vv-snapshots/snapshots node scripts/build-daily-views.js
+          SNAPSHOTS_DIR=/tmp/snapshots/snapshots python scripts/build-view-velocity.py
+          SNAPSHOTS_DIR=/tmp/snapshots/snapshots python scripts/build-ad-ledger.py
+          SNAPSHOTS_DIR=/tmp/snapshots/snapshots python scripts/build-historic-views.py
+          SNAPSHOTS_DIR=/tmp/snapshots/snapshots node scripts/build-daily-views.js
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/view-velocity.json public/ad-ledger.json public/historic-views.json public/daily-views.json
@@ -175,8 +197,11 @@ jobs:
           SNAPSHOTS_REPO: jerminaldecline/jerminaldecline-snapshots
         run: |
           set -e
+          # MUST stay filtered to the snapshots/ path. The debut sampler now commits
+          # to this repo every hour, so "newest commit" would always look fresh and
+          # this tripwire would never fire again even with the full dumps dead.
           LATEST=$(curl -sf --retry 3 -H "Authorization: Bearer ${SNAPSHOTS_TOKEN}" \
-            "https://api.github.com/repos/${SNAPSHOTS_REPO}/commits?per_page=1" \
+            "https://api.github.com/repos/${SNAPSHOTS_REPO}/commits?path=snapshots&per_page=1" \
             | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['commit']['committer']['date'])")
           AGE_H=$(python3 -c "import sys, datetime; d = datetime.datetime.fromisoformat(sys.argv[1].replace('Z', '+00:00')); print(int((datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() // 3600))" "$LATEST")
           echo "Newest snapshots-repo commit: ${LATEST} (${AGE_H}h ago)"

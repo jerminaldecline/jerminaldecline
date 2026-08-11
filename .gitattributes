@@ -18,6 +18,13 @@
 *.yml    text eol=lf
 *.yaml   text eol=lf
 
+# Batch files are the exception: cmd.exe parses them line by line and misreads
+# an LF-only file, turning "REM"/"setlocal" into unknown commands. The blanket
+# `eol=lf` above was checking out run-scrape-ads.cmd with LF, which broke the
+# scheduled ad scrape at the wrapper before Python was ever reached.
+*.cmd    text eol=crlf
+*.bat    text eol=crlf
+
 # Binary files — never touch line endings
 *.png    binary
 *.gif    binary
