@@ -3452,6 +3452,15 @@ function buildScopeLabels(){ CHANNELS.forEach(c=>SCOPE_LABEL[c]=c); }
 function availableMonths(){
   return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07' && !SCOPES[scope][m].shortsOnly).sort().reverse();
 }
+// Same list, but keeping months that contain ONLY Shorts. The Overview report is
+// built around long-form, so a shorts-only month has no report to show and is
+// excluded above. The Videos tab has no such problem — it lists Shorts happily —
+// and excluding them there silently stranded the list on an older month:
+// @QuarteringLive posted 23 Shorts and no long-form in Aug 2026, and the tab kept
+// showing July while the dropdown still read August.
+function availableMonthsForVideos(){
+  return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07').sort().reverse();
+}
 // both selectors are populated + bound inside render() (they live in the re-rendered report header)
 
 function fmtDurOv(sec){ sec=Math.round(sec||0); const h=Math.floor(sec/3600),mm=Math.floor((sec%3600)/60),ss=sec%60; return (h>0?h+':'+String(mm).padStart(2,'0'):mm)+':'+String(ss).padStart(2,'0'); }
@@ -8973,6 +8982,13 @@ function renderAdPanel() {
       median: r => r.monthMedian,
       perf: r => r.multiplier,
       excess: r => r.excess,
+      // Videos with no campaign record sort as -1 rather than 0, so "never
+      // recorded" stays distinct from a genuine zero at either end of the sort.
+      runs: r => {
+        const c = window.__adCampaigns;
+        const e = c && c.videos && c.videos[r.v.id];
+        return e && e.runs ? e.runs : -1;
+      },
     };
     const keyFn = keyFns[col] || keyFns.views;
     return rs.slice().sort((a, b) => {
@@ -9081,7 +9097,7 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
-              <th class="col-num">Runs <span class="info-icon" tabindex="0" role="button" aria-label="About ad runs" data-popover="How many separate ad campaigns the Transparency Centre lists for this video. A video re-promoted months later counts again. Blank means no campaign recorded.">ⓘ</span></th>
+              ${sortHeader('Runs', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
               ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
               ${sortHeader('vs median', 'perf', 'col-num')}
@@ -10046,7 +10062,11 @@ function renderWindowList(startDate, endDate) {
     // single-month window collapses them to one point/bar. Months remain on
     // the Videos tab, where filtering to one month is genuinely useful.
     if (includeMonths) {
-      try { if (typeof availableMonths === 'function') months = availableMonths(); } catch(e){}
+      // Months are only offered on the Videos tab, which lists Shorts as happily
+      // as long-form — so use the list that keeps shorts-only months. Without it
+      // a month like @QuarteringLive's Aug 2026 (23 Shorts, no long-form) simply
+      // wasn't selectable.
+      try { if (typeof availableMonthsForVideos === 'function') months = availableMonthsForVideos(); } catch(e){}
     }
     // The Analysis variant gets whole calendar years instead: a year window
     // still gives every trend chart twelve data points, unlike the single
@@ -10114,7 +10134,7 @@ function renderWindowList(startDate, endDate) {
   // actually has data so the dropdown label and the window always agree.
   function normalizeVidPreset(){
     if(!/^\d{4}-\d{2}$/.test(vidTimePreset)) return;   // preset keywords are always valid
-    let ms=[]; try{ if(typeof availableMonths==='function') ms=availableMonths(); }catch(e){}
+    let ms=[]; try{ if(typeof availableMonthsForVideos==='function') ms=availableMonthsForVideos(); }catch(e){}
     if(ms.length && ms.indexOf(vidTimePreset)<0) vidTimePreset = ms.slice().sort().pop();
   }
   function vidCutoffMonth(preset){
@@ -10175,7 +10195,7 @@ function renderWindowList(startDate, endDate) {
       // Re-point the Videos-tab month at the user's chosen month if the new scope
       // has it, else the newest month it does have — so switching to a channel
       // without that month (and back) doesn't strand the list on a stale month.
-      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonths(); }catch(_){}
+      if (/^\d{4}-\d{2}$/.test(vidTimePreset)) { let ms=[]; try{ ms=availableMonthsForVideos(); }catch(_){}
         if (ms.length) vidTimePreset = (vidUserMonth && ms.indexOf(vidUserMonth)>=0) ? vidUserMonth : ms[0]; }
       if (window.__populateAnChannel) window.__populateAnChannel();
       if (window.__resetVideoBatches) window.__resetVideoBatches();
