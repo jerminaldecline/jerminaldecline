@@ -1329,97 +1329,166 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Expanded body */
   .promo-panel-body {padding: 0 1.1rem 1.1rem;
     border-top: 1px solid var(--border);}
-/* Performance callout — three stat blocks side-by-side at the top of the
-     panel body. Each stat: big number on top, descriptor underneath. Reads
-     like a proper KPI dashboard: parallel, scannable, no awkward "label —
-     value — label" rhythm. Collapses to single column on narrow viewports.
-     Background tint + left border accent in the panel's --shorts theme tie
-     this visually to "paid promotion". */
-  .promo-panel-callout {display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    padding: 1.2rem 0.5rem;
-    margin: 0.85rem 0 1.1rem;
-    background: var(--shorts-soft);
-    border-left: 3px solid var(--shorts);
-    border-radius: var(--radius-sm);}
-.promo-panel-callout-stat {display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0;
-    padding: 0 1.4rem;
-    text-align: center;
-    align-items: center;}
-.promo-panel-callout-stat + .promo-panel-callout-stat {border-left: 1px solid var(--border);}
-.promo-panel-callout-value {font-size: 2.1rem;
-    font-weight: 800;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    white-space: nowrap;}
-.promo-panel-callout-of {font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-muted);}
-.promo-panel-callout-label {font-size: 0.8rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-    max-width: 22ch;}
-/* (ⓘ) icon inside a callout label — small info hint, matches the
-     hero-stat-info pattern but lighter weight for the smaller text. */
-  .promo-panel-callout-info {display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-dim);
-    cursor: pointer;
-    margin-left: 0.1rem;
-    font-size: 0.95em;
-    transition: color 0.15s;
-    padding: 6px;
-    margin: -6px -6px -6px calc(0.1rem - 6px);
-    border-radius: 3px;
-    vertical-align: middle;}
-.promo-panel-callout-info:hover,
-  .promo-panel-callout-info:focus-visible {color: var(--shorts);
-    outline: none;
-    background: rgba(225, 117, 23, 0.12);}
-@media(max-width:680px){
-  .promo-panel-callout {grid-template-columns: 1fr; gap: 0.85rem;}
-  .promo-panel-callout-stat + .promo-panel-callout-stat {border-left: none; border-top: 1px solid var(--border); padding-top: 0.85rem;}
-  .promo-panel-callout-value {font-size: 1.5rem;}
-}
+/* The old .promo-panel-callout block lived here: a full-width tinted wash with
+   three centred stats divided by hairlines. It was replaced by .promo-stat
+   cards below, which follow the Removed panel's pattern, so every rule for it
+   was removed rather than left orphaned. */
 /* Sortable header cells — click affordance, hover state, active indicator.
      Uses the same .sort-arrow component as the window-list sortable rows. */
-  /* Search row above the promoted-videos table. Sits inside the panel body so it
-     scrolls away with the panel, not pinned over the sticky table header. */
+  /* Stat cards, on the same pattern as the Removed panel's — bordered, tinted
+     with the section's own accent rather than a filled wash, so the three
+     feature panels read as siblings. Amber here is the site's "ad" colour. */
+  .promo-stats {display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.15rem 0 0.9rem;}
+  .promo-stat {flex: 1 1 150px; min-width: 132px; border-radius: 9px; padding: 0.6rem 0.78rem;
+    background: color-mix(in srgb, var(--accent-2) 6%, var(--surface-2));
+    border: 1px solid color-mix(in srgb, var(--accent-2) 24%, var(--border));}
+  .promo-stat b {display: block; font-size: 1.3rem; font-weight: 800; line-height: 1.05;
+    color: var(--accent-2); font-variant-numeric: tabular-nums;}
+  .promo-stat-of {font-size: 0.85rem; font-weight: 700; color: var(--text-muted);}
+  .promo-stat small {display: block; margin-top: 0.2rem; font-size: 0.66rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.2;}
+
+  /* Pill search, matching the Videos list's own search box. */
   .promo-search-row {display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.6rem;
-    margin-top: 0.7rem; max-width: 100%;}
-  .promo-search {flex: 1 1 200px; min-width: 0; max-width: 380px; padding: 0.45rem 0.6rem; font: inherit;
-    font-size: 0.85rem; color: var(--text); background: var(--bg-soft, rgba(255,255,255,0.04));
-    border: 1px solid var(--border); border-radius: 6px;}
+    margin-bottom: 0.55rem; max-width: 100%;}
+  .promo-search-box {position: relative; flex: 1 1 200px; min-width: 0; max-width: 24rem;
+    display: flex; align-items: center;}
+  .promo-search-ico {position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); pointer-events: none;}
+  .promo-search {width: 100%; min-width: 0; background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px; padding: 0.55rem 1rem 0.55rem 2.5rem;
+    font-family: inherit; font-size: 0.85rem; transition: border-color .12s, box-shadow .12s;}
+  .promo-search:hover {border-color: color-mix(in srgb, var(--accent) 45%, var(--border));}
   .promo-search::placeholder {color: var(--text-dim);}
-  .promo-search:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px; border-color: transparent;}
+  .promo-search:focus-visible {outline: none; border-color: var(--accent-2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-2) 22%, transparent);}
   .promo-search-count {flex: 0 0 auto; font-size: 0.75rem; color: var(--text-dim);
     font-variant-numeric: tabular-nums; white-space: nowrap;}
-  .promo-search-empty {padding: 1.1rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
+  .promo-search-empty {padding: 1.4rem 0.5rem; text-align: center; color: var(--text-dim); font-size: 0.85rem;}
   @media (max-width: 560px) {
-    .promo-search {font-size: 16px; padding: 0.5rem 0.6rem;} /* 16px stops iOS zooming on focus */
+    .promo-search {font-size: 16px;} /* 16px stops iOS zooming on focus */
   }
   /* overflow-x keeps the wide table scrolling inside its own box; without it the
      table stretched the whole panel past the viewport on narrow screens. */
-  .promo-perf-table-wrap {max-height: 420px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
+  .promo-perf-table-wrap {max-height: 560px; overflow-y: auto; overflow-x: auto; margin-top: 0.4rem;}
 .promo-perf-table {width: 100%; border-collapse: collapse; font-size: 0.85rem;}
-.promo-perf-table th, .promo-perf-table td {padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top;}
+.promo-perf-table th, .promo-perf-table td {padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: middle;}
 .promo-perf-table thead th {position: sticky; top: 0; background: var(--surface-2); z-index: 1;
-    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;}
-.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: auto;}
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--label); font-weight: 700; text-align: right; white-space: nowrap;
+    vertical-align: middle; box-shadow: inset 0 -1px 0 var(--border);}
+/* Claim the column explicitly. The numeric columns are width:1% (shrink to
+   content), so without this the title column gives up space to whichever
+   header happens to be longest and titles wrap to four lines. */
+.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
 .promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;}
-.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted);}
-.promo-perf-table td.col-vid a {color: var(--text); text-decoration: none; font-weight: 600; display: block;}
-.promo-perf-table td.col-vid a:hover {color: var(--accent); text-decoration: underline;}
-.promo-perf-date {display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 0.15rem; font-variant-numeric: tabular-nums;}
-.promo-perf-table td.col-num {color: var(--text);}
+.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
+.promo-perf-table tbody tr {transition: background .12s;}
+.promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
+.promo-perf-table td.col-num {color: var(--text-muted);}
+.promo-perf-table td.promo-num-strong {color: var(--text); font-weight: 700;}
 .promo-perf-table tbody tr:last-child td {border-bottom: none;}
+
+/* Video cell: thumbnail + title, as the Removed and Stolen-shorts rows do it. */
+.promo-vid {display: flex; align-items: center; gap: 0.6rem; min-width: 0;}
+.promo-thumb {flex: 0 0 auto; display: block; width: 84px; border-radius: 6px; overflow: hidden;
+    background: var(--surface-2); border: 1px solid var(--border); line-height: 0;}
+.promo-thumb img {width: 84px; height: 47px; object-fit: cover; display: block;}
+.promo-vid-col {min-width: 0;}
+.promo-vid-title {color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.86rem;
+    line-height: 1.3; display: block;}
+.promo-vid-title:hover {color: var(--accent); text-decoration: underline;}
+.promo-vid-meta {display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.45rem; margin-top: 0.25rem;}
+.promo-vid-chan {font-size: 0.72rem; color: var(--text-dim);}
+
+/* "Running now" — a campaign the Centre still listed at the last capture.
+   Green, because it is a live-state indicator like the header's freshness dot,
+   not another shade of the amber that means "this was an ad". */
+.promo-live {display: inline-flex; align-items: center; gap: 0.3rem; cursor: help;
+    font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--up); background: color-mix(in srgb, var(--up) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--up) 34%, transparent);
+    border-radius: 999px; padding: 0.08rem 0.42rem; white-space: nowrap;}
+.promo-live:focus-visible {outline: 2px solid var(--up); outline-offset: 1px;}
+.promo-live-dot {width: 6px; height: 6px; border-radius: 50%; background: var(--up); flex: none;
+    animation: promoLivePulse 2.4s ease-in-out infinite;}
+.promo-live-sum {margin-left: 0.5rem; vertical-align: middle;}
+/* Filter pill: the site's .promo-only-btn shape, but green when engaged so it
+   reads as the same idea as the row badges it filters to. */
+.promo-live-btn {display: inline-flex; align-items: center; gap: 0.4rem;}
+.promo-live-btn .promo-live-dot {animation: none;}
+.promo-live-btn.active {background: var(--up); border-color: var(--up); color: #06120d;}
+.promo-live-btn.active .promo-live-dot {background: #06120d;}
+.promo-live-btn.active:hover {border-color: var(--up);}
+.promo-live-btn-n {font-variant-numeric: tabular-nums; opacity: 0.75; font-weight: 800;}
+@keyframes promoLivePulse {0%,100%{opacity:1} 50%{opacity:0.35}}
+@media (prefers-reduced-motion: reduce) {.promo-live-dot {animation: none;}}
+
+/* Runs pill. Repeated promotion is the interesting signal, so only that is
+   given the accent; a single run stays quiet, and no record reads as a dash. */
+.promo-runs {display: inline-block; font-size: 0.82rem; font-weight: 600; cursor: help;
+    font-variant-numeric: tabular-nums; color: var(--text-muted);}
+/* Only repeat promotion gets the pill. Badging every single-run video too made
+   a column of near-identical chips that drew the eye without saying anything. */
+.promo-runs.multi {min-width: 1.5rem; padding: 0.12rem 0.42rem; border-radius: 999px; font-weight: 700;
+    color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-2) 38%, transparent);}
+.promo-runs:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px;}
+.promo-runs-none {color: var(--text-dim);}
+
+/* Phone sort bar. Hidden on desktop, where the table header does this job. */
+.promo-msort {display: none; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: 0 0 0.6rem;}
+.promo-msort-lab {font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-muted); margin-right: 0.1rem;}
+.promo-msort-btn {appearance: none; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 7px; color: var(--text); font: inherit; font-size: 0.78rem; font-weight: 600;
+    padding: 0.3rem 0.6rem; cursor: pointer; transition: background .12s, border-color .12s, color .12s;}
+.promo-msort-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
+.promo-msort-arrow {margin-left: 0.2rem; font-size: 0.7rem;}
+
+@media (max-width: 640px) {
+  .promo-thumb, .promo-thumb img {width: 60px;}
+  .promo-thumb img {height: 34px;}
+  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.45rem;}
+}
+
+/* Below 560px a seven-column table cannot be read: at 390px the titles wrapped
+   to six or seven lines and every figure sat off-screen behind a horizontal
+   scroll. The table collapses to one stacked block per video — thumbnail and
+   title, then the figures as labelled chips — matching how the Removed and
+   Stolen-shorts lists already read on a phone. The <table> markup is unchanged,
+   so sorting and the desktop layout are untouched; the header's sorting role
+   passes to .promo-msort, which is why that bar exists. */
+@media (max-width: 560px) {
+  .promo-msort {display: flex;}
+  .promo-perf-table-wrap {overflow-x: visible; max-height: none;}
+  .promo-perf-table, .promo-perf-table tbody, .promo-perf-table td {display: block; width: auto;}
+  .promo-perf-table thead {display: none;}
+  /* Flex, not block, so the figures can be ordered independently of the column
+     order the desktop table needs — the headline numbers lead, and the
+     supporting ones follow, rather than Views landing on the second line. */
+  .promo-perf-table tr {display: flex; flex-wrap: wrap; align-items: baseline;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--border);}
+  .promo-perf-table td {border: none; padding: 0;}
+  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {flex: 0 0 100%; width: auto; min-width: 0; margin-bottom: 0.45rem; order: 0;}
+  .promo-perf-table td[data-lab="Views"]     {order: 1;}
+  .promo-perf-table td[data-lab="vs median"] {order: 2;}
+  .promo-perf-table td[data-lab="Runs"]      {order: 3;}
+  .promo-perf-table td[data-lab="Excess"]    {order: 4;}
+  .promo-perf-table td[data-lab="Median"]    {order: 5;}
+  .promo-perf-table td[data-lab="Published"] {order: 6;}
+  .promo-perf-table td.promo-search-empty {flex: 0 0 100%;}
+  .promo-vid-title {font-size: 0.9rem;}
+  /* Figures become inline chips, each labelled by the header it lost. */
+  .promo-perf-table td.col-num, .promo-perf-table td.col-date {
+    display: inline-flex; align-items: baseline; gap: 0.28rem; width: auto;
+    margin: 0 0.85rem 0.2rem 0; text-align: left; font-size: 0.8rem; white-space: nowrap;}
+  .promo-perf-table td.col-num::before, .promo-perf-table td.col-date::before {
+    content: attr(data-lab); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--label); font-weight: 700;}
+  .promo-perf-table td.promo-num-strong {font-size: 0.88rem;}
+  .promo-perf-table tbody tr:hover {background: none;}
+  .promo-search-empty {display: block; padding: 1.4rem 0.5rem;}
+}
 .promo-perf-table thead th.sortable {cursor: pointer;
     user-select: none;
     transition: color 0.12s, background 0.12s;}
@@ -2783,6 +2852,29 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .removed-when.unl,#panelVideos .removed-when.r-unlisted{color:var(--accent-2)}
     #panelVideos .removed-when.r-private{color:var(--text-muted)}
     #panelVideos .removed-when.r-copyright,#panelVideos .removed-when.r-terms,#panelVideos .removed-when.r-guidelines,#panelVideos .removed-when.r-terminated{color:var(--down);text-transform:uppercase;font-size:0.66rem;letter-spacing:0.03em;padding:0.16rem 0.42rem;border-radius:6px;background:color-mix(in srgb,var(--down) 12%,transparent);border:1px solid color-mix(in srgb,var(--down) 30%,transparent)}
+    /* On a phone the reason and the title fight over one line, and the reason
+       wins because it is flex:0 0 auto. A copyright claim is a 116px label, so
+       at 390px it left the title 106px — less room than the label squeezing it,
+       and every title truncated to a few words. Below 560px the reason drops to
+       its own line under the text, indented past the thumbnail, which hands the
+       title back the full row. Longer reasons are the serious ones, so they were
+       the worst affected. */
+    @media(max-width:560px){
+      #panelVideos .removed-row{flex-wrap:wrap}
+      #panelVideos .removed-thumb{order:1}
+      /* flex-basis:0, not auto. Wrapping is decided on the hypothetical main
+         size before any shrinking, so an auto basis (the title's full ~440px)
+         bumped the text block onto its own line below the thumbnail. */
+      #panelVideos .removed-row .rt{order:2;flex:1 1 0;min-width:0}
+      /* A zero-height full-width item forces the break. The reason itself must
+         stay content-sized — giving it flex-basis:100% instead stretched the
+         copyright pill's background across the whole row. */
+      #panelVideos .removed-row::after{content:"";flex:0 0 100%;height:0;order:3}
+      #panelVideos .removed-when{order:4;flex:0 0 auto;text-align:left;margin-top:0.3rem;margin-left:calc(74px + 0.7rem)}
+      /* With the row to itself the title can afford two lines instead of being
+         cut to a few words. */
+      #panelVideos .removed-row .rt b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    }
     #panelVideos .removed-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
     #panelVideos .removed-summary{display:flex;flex-wrap:wrap;gap:0.55rem;margin:0 0 0.95rem}
     #panelVideos .removed-stat{flex:1 1 130px;min-width:118px;background:color-mix(in srgb,var(--down) 6%,var(--surface-2));border:1px solid color-mix(in srgb,var(--down) 24%,var(--border));border-radius:9px;padding:0.6rem 0.78rem}
@@ -8675,6 +8767,8 @@ function niceDurationAxis(minSec, maxSec) {
   // Free-text filter over the promoted-videos table. Held outside the render so a
   // re-render (sort click, late-arriving ad-campaigns.json) preserves what was typed.
   let promoPanelQuery = '';
+  // "Running now" filter, toggled by the pill beside the search box.
+  let promoLiveOnly = false;
 // Friendly compact date for the video rows, e.g. "24 Jun '26" — matches the
 // site's date voice elsewhere rather than raw ISO. Uses the UTC date so it
 // doesn't drift for videos published near midnight.
@@ -8996,9 +9090,17 @@ function renderAdPanel() {
   // must appear somewhere in the video's title or its channel name, so "walmart
   // spying" finds the row regardless of the words' order in the title.
   function filterRows(rs) {
+    let out = rs;
+    // Live filter first — cheaper, and it usually cuts the most. If the capture
+    // has gone stale mid-session promoLiveSet returns null; ignore the toggle
+    // rather than filter against an empty set and show an empty table.
+    if (promoLiveOnly) {
+      const live = promoLiveSet();
+      if (live) out = out.filter(r => live.has(r.v.id));
+    }
     const terms = promoPanelQuery.toLowerCase().split(/\s+/).filter(Boolean);
-    if (!terms.length) return rs;
-    return rs.filter(r => {
+    if (!terms.length) return out;
+    return out.filter(r => {
       const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
       const hay = (r.v.title + ' ' + chan).toLowerCase();
       return terms.every(t => hay.includes(t));
@@ -9041,6 +9143,30 @@ function renderAdPanel() {
   // Render just the tbody — called on initial render AND on sort changes.
   // Pulled out so sort clicks don't re-render the whole panel (which would
   // collapse it back to closed, lose scroll position, etc).
+  // Which videos were still being advertised at the moment of the last capture.
+  //
+  // The Centre reports a running campaign with the current date as its
+  // last-shown, so "still running" is an exact match against the capture's own
+  // _generated date — not against the reader's clock, which would drift and
+  // would quietly turn every campaign "live" or "ended" for the wrong reasons.
+  //
+  // Returns null, meaning "we don't know", if there is no campaign data or the
+  // capture is more than a day old. A stale file must not keep asserting that
+  // someone is running ads today; saying nothing is the honest failure here.
+  function promoLiveSet() {
+    const c = window.__adCampaigns;
+    if (!c || !c.videos || !c._generated) return null;
+    const gen = c._generated;
+    const today = _ctDateFmt.format(new Date());
+    const ageDays = Math.round((Date.parse(today + 'T00:00:00Z') - Date.parse(gen + 'T00:00:00Z')) / 86400000);
+    if (!(ageDays >= 0 && ageDays <= 1)) return null;
+    const live = new Set();
+    for (const [id, v] of Object.entries(c.videos)) {
+      if ((v.windows || []).some(w => w && w[1] === gen)) live.add(id);
+    }
+    return live;
+  }
+
   // How many separate campaigns the Transparency Centre lists for a video, from
   // ad-campaigns.json. The older ad-videos.json only records THAT a video was
   // advertised — it dedupes to one entry per video, so repeat runs are invisible
@@ -9048,32 +9174,56 @@ function renderAdPanel() {
   function promoRunCell(id) {
     const c = window.__adCampaigns;
     const v = c && c.videos && c.videos[id];
-    if (!v || !v.runs) return '<span style="color:var(--text-dim)">—</span>';
+    if (!v || !v.runs) return '<span class="promo-runs-none" aria-label="no campaign on record">—</span>';
     const span = (v.first && v.last) ? `${v.first} to ${v.last}` : '';
     const title = `${v.runs} campaign${v.runs === 1 ? '' : 's'}${span ? ' · ' + span : ''}`;
-    return `<span data-popover="${escapeHtml(title)}" tabindex="0" role="button"` +
-      ` style="${v.runs > 1 ? 'font-weight:800;color:var(--accent-2)' : ''}">${v.runs}</span>`;
+    return `<span class="promo-runs${v.runs > 1 ? ' multi' : ''}" data-popover="${escapeHtml(title)}"` +
+      ` tabindex="0" role="button">${v.runs}</span>`;
   }
 
   function renderAdTableBody() {
+    const live = promoLiveSet();
+    const genDate = (window.__adCampaigns || {})._generated || '';
     const sorted = sortRows(filterRows(rows));
     if (!sorted.length) {
-      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos match “${escapeHtml(promoPanelQuery)}”.</td></tr>`;
+      // Name whichever filters are actually on, so an empty table explains itself
+      // rather than quoting a search term the reader may not have typed.
+      const bits = [];
+      if (promoLiveOnly) bits.push('still running');
+      if (promoPanelQuery) bits.push(`matching “${escapeHtml(promoPanelQuery)}”`);
+      return `<tr><td colspan="7" class="promo-search-empty">No promoted videos ${bits.join(' and ') || 'to show'}.</td></tr>`;
     }
-    return sorted.map(r => `
+    return sorted.map(r => {
+      // Thumbnail + title + channel, matching the Removed and Stolen-shorts rows.
+      // The thumb is decorative (the title beside it is the real link), so it is
+      // hidden from assistive tech rather than announced as a second copy.
+      const chan = isAll ? (ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '') : '';
+      const isLive = live && live.has(r.v.id);
+      const liveTag = isLive
+        ? `<span class="promo-live" data-popover="This video was still being advertised as of the last check (${escapeHtml(genDate)}). The Transparency Centre lists a campaign for it running up to that date."` +
+          ` tabindex="0" role="button"><span class="promo-live-dot" aria-hidden="true"></span>Running now</span>`
+        : '';
+      return `
       <tr>
         <td class="col-vid">
-          <a href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-          ${isAll ? `<span class="promo-perf-date">${escapeHtml(ANALYTICS_DATASET?.channels?.[r.v.channelId]?.title || '')}</span>` : ''}
+          <div class="promo-vid">
+            <a class="promo-thumb" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank"
+               rel="noopener" tabindex="-1" aria-hidden="true"><img
+               src="https://i.ytimg.com/vi/${r.v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>
+            <div class="promo-vid-col">
+              <a class="promo-vid-title" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
+              ${chan || liveTag ? `<span class="promo-vid-meta">${liveTag}${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}</span>` : ''}
+            </div>
+          </div>
         </td>
-        <td class="col-date">${ctDate(r.v.publishedAt)}</td>
-        <td class="col-num">${promoRunCell(r.v.id)}</td>
-        <td class="col-num">${fmt(r.views)}</td>
-        <td class="col-num hide-mobile">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
-        <td class="col-num">${fmtMult(r.multiplier)}</td>
-        <td class="col-num hide-mobile">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
+        <td class="col-date" data-lab="Published">${ctDate(r.v.publishedAt)}</td>
+        <td class="col-num" data-lab="Runs">${promoRunCell(r.v.id)}</td>
+        <td class="col-num promo-num-strong" data-lab="Views">${fmt(r.views)}</td>
+        <td class="col-num" data-lab="Median">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
+        <td class="col-num" data-lab="vs median">${fmtMult(r.multiplier)}</td>
+        <td class="col-num" data-lab="Excess">${r.excess == null ? '—' : (r.excess > 0 ? '+' + fmt(r.excess) : fmt(r.excess))}</td>
       </tr>
-    `).join('');
+    `;}).join('');
   }
 
   // Header cell with sort indicator. Active column gets an arrow; inactive
@@ -9101,37 +9251,73 @@ function renderAdPanel() {
       <div class="promo-panel-header">
         <div class="promo-panel-header-left">
           <span class="promo-panel-eyebrow">Confirmed paid promotion</span>
-          <span class="promo-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span></span>
+          <span class="promo-panel-summary"><span title="${fmt(totalViews)} total views">${matched.length} videos · ${fmtCompact(totalViews)} views · ${ymLabel(earliest)}–${ymLabel(latest)}</span>${(() => {
+            // Answer "is he advertising right now?" without opening the panel.
+            const l = promoLiveSet();
+            if (!l) return '';
+            const n = rows.filter(r => l.has(r.v.id)).length;
+            return n ? `<span class="promo-live promo-live-sum"><span class="promo-live-dot" aria-hidden="true"></span>${n} running now</span>` : '';
+          })()}</span>
         </div>
         <span class="promo-panel-caret" aria-hidden="true"></span>
       </div>
     </button>
     <div class="promo-panel-body" id="promoPanelBody"${promoPanelExpanded ? '' : ' hidden'}>
       ${outperformed > 0 ? `
-        <div class="promo-panel-callout">
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">${outperformed} <span class="promo-panel-callout-of">/ ${rows.length}</span></div>
-            <div class="promo-panel-callout-label">ad-promoted videos beat their month's median</div>
+        <div class="promo-stats">
+          <div class="promo-stat">
+            <b>${outperformed}<span class="promo-stat-of">/${rows.length}</span></b>
+            <small>beat their month's median</small>
           </div>
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">+${fmtCompact(totalExcess)}</div>
-            <div class="promo-panel-callout-label">excess views above the monthly median</div>
+          <div class="promo-stat">
+            <b>+${fmtCompact(totalExcess)}</b>
+            <small>excess views over median</small>
           </div>
-          <div class="promo-panel-callout-stat">
-            <div class="promo-panel-callout-value">${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</div>
-            <div class="promo-panel-callout-label">estimated paid-promotion spend
-              <span class="promo-panel-callout-info" tabindex="0" role="button"
+          <div class="promo-stat">
+            <b>${fmtUSD(totalExcess * 0.03, true)}–${fmtUSD(totalExcess * 0.10, true)}</b>
+            <small>estimated spend
+              <span class="info-icon" tabindex="0" role="button"
                     aria-label="About the spend estimate"
                     data-popover="Rough upper-bound estimate: excess views × industry CPV benchmarks ($0.03 low, $0.10 high). Excess views are a proxy for the paid uplift; some may be organic. Actual spend is likely lower than the upper bound.">ⓘ</span>
-            </div>
+            </small>
           </div>
         </div>
       ` : ''}
       <div class="promo-search-row">
-        <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
-               aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        <div class="promo-search-box">
+          <svg class="promo-search-ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="search" id="promoSearch" class="promo-search" placeholder="Search these videos…"
+                 aria-label="Search promoted videos by title" value="${escapeHtml(promoPanelQuery)}">
+        </div>
+        ${(() => {
+          // Only offer the filter when there is something to filter to. With no
+          // live campaigns — or a capture too stale to tell — the button would
+          // either empty the table or imply a state we can't vouch for.
+          const l = promoLiveSet();
+          const n = l ? rows.filter(r => l.has(r.v.id)).length : 0;
+          if (!n) return '';
+          return `<button type="button" class="promo-only-btn promo-live-btn${promoLiveOnly ? ' active' : ''}"
+            id="promoLiveBtn" aria-pressed="${promoLiveOnly}"
+            data-popover="Show only the videos with a campaign still running as of the last check."
+            ><span class="promo-live-dot" aria-hidden="true"></span>Running now <span class="promo-live-btn-n">${n}</span></button>`;
+        })()}
         <span class="promo-search-count" id="promoSearchCount"></span>
       </div>
+      ${(() => {
+        // On a phone the table collapses to stacked rows and its header — which
+        // is also the sort control — goes with it. This bar takes over there,
+        // driving the same promoPanelSort state, in the pill idiom the Removed
+        // panel already uses for exactly this job.
+        const cols = [['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
+                      ['excess', 'Excess'], ['date', 'Published'], ['title', 'Title']];
+        return `<div class="promo-msort" role="group" aria-label="Sort promoted videos">
+          <span class="promo-msort-lab">Sort</span>
+          ${cols.map(([k, l]) => `<button type="button" class="promo-msort-btn${promoPanelSort.col === k ? ' active' : ''}"
+            data-msort="${k}" aria-pressed="${promoPanelSort.col === k}">${l}<span class="promo-msort-arrow">${
+              promoPanelSort.col === k ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : ''}</span></button>`).join('')}
+        </div>`;
+      })()}
       <div class="promo-perf-table-wrap">
         <table class="promo-perf-table">
           <thead>
@@ -9140,9 +9326,9 @@ function renderAdPanel() {
               ${sortHeader('Published', 'date', 'col-date')}
               ${sortHeader('Runs <span class="info-icon" data-popover="Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view." tabindex="0" role="button" aria-label="About campaign runs">ⓘ</span>', 'runs', 'col-num')}
               ${sortHeader('Views', 'views', 'col-num')}
-              ${sortHeader('Month median', 'median', 'col-num hide-mobile')}
+              ${sortHeader('Median', 'median', 'col-num')}
               ${sortHeader('vs median', 'perf', 'col-num')}
-              ${sortHeader('Excess over median', 'excess', 'col-num hide-mobile')}
+              ${sortHeader('Excess', 'excess', 'col-num')}
             </tr>
           </thead>
           <tbody id="promoPerfTableBody">
@@ -9167,63 +9353,90 @@ function renderAdPanel() {
   // descending (intuitive default for numeric columns where users typically want
   // "biggest first"). Exception: title column starts at ascending (A–Z is the
   // natural first read).
-  panel.querySelectorAll('[data-promo-sort]').forEach(th => {
-    function doSort() {
-      const col = th.getAttribute('data-promo-sort');
-      if (promoPanelSort.col === col) {
-        promoPanelSort.dir = promoPanelSort.dir === 'asc' ? 'desc' : 'asc';
-      } else {
-        promoPanelSort.col = col;
-        promoPanelSort.dir = col === 'title' ? 'asc' : 'desc';
-      }
-      // Re-render tbody + refresh header arrows (without rebuilding the whole panel)
-      document.getElementById('promoPerfTableBody').innerHTML = renderAdTableBody();
-      panel.querySelectorAll('[data-promo-sort]').forEach(hdr => {
-        const isActive = hdr.getAttribute('data-promo-sort') === promoPanelSort.col;
-        hdr.classList.toggle('active-sort', isActive);
-        // Update aria-sort so screen readers announce the current sort state
-        hdr.setAttribute('aria-sort', isActive ? (promoPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
-        const arrow = hdr.querySelector('.sort-arrow');
-        if (arrow) {
-          arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
-          arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
-        }
-      });
+  // One sort path for both controls. The table header and the phone sort bar are
+  // two views of the same promoPanelSort state, so they must be updated together
+  // — otherwise rotating the phone shows a header disagreeing with the pills.
+  function applySort(col) {
+    if (promoPanelSort.col === col) {
+      promoPanelSort.dir = promoPanelSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      promoPanelSort.col = col;
+      promoPanelSort.dir = col === 'title' ? 'asc' : 'desc';
     }
+    const body = document.getElementById('promoPerfTableBody');
+    if (body) body.innerHTML = renderAdTableBody();
+
+    panel.querySelectorAll('[data-promo-sort]').forEach(hdr => {
+      const isActive = hdr.getAttribute('data-promo-sort') === promoPanelSort.col;
+      hdr.classList.toggle('active-sort', isActive);
+      // Update aria-sort so screen readers announce the current sort state
+      hdr.setAttribute('aria-sort', isActive ? (promoPanelSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
+      const arrow = hdr.querySelector('.sort-arrow');
+      if (arrow) {
+        arrow.className = 'sort-arrow' + (isActive ? ' active' : '');
+        arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+      }
+    });
+    panel.querySelectorAll('[data-msort]').forEach(btn => {
+      const isActive = btn.getAttribute('data-msort') === promoPanelSort.col;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+      const arrow = btn.querySelector('.promo-msort-arrow');
+      if (arrow) arrow.textContent = isActive ? (promoPanelSort.dir === 'asc' ? '↑' : '↓') : '';
+    });
+  }
+
+  panel.querySelectorAll('[data-promo-sort]').forEach(th => {
+    const col = th.getAttribute('data-promo-sort');
     // The (i) inside a header sits within the sortable <th>, so without this a
     // click to read the note would also re-sort the table underneath it.
     const fromInfo = e => !!(e.target.closest && e.target.closest('.info-icon'));
-    th.addEventListener('click', e => { if (!fromInfo(e)) doSort(); });
+    th.addEventListener('click', e => { if (!fromInfo(e)) applySort(col); });
     th.addEventListener('keydown', e => {
       if ((e.key === 'Enter' || e.key === ' ') && !fromInfo(e)) {
         e.preventDefault();
-        doSort();
+        applySort(col);
       }
     });
   });
+  panel.querySelectorAll('[data-msort]').forEach(btn => {
+    btn.addEventListener('click', () => applySort(btn.getAttribute('data-msort')));
+  });
 
-  // Title/channel search. Only the tbody is re-rendered, so the input keeps focus
-  // and the caret stays put while typing — rebuilding the panel would drop both.
+  // Search and the "Running now" toggle share one update path, so the row count
+  // always reflects both filters rather than whichever fired last. Only the tbody
+  // is re-rendered, which keeps focus and the caret in the search input.
   const search = panel.querySelector('#promoSearch');
+  const liveBtn = panel.querySelector('#promoLiveBtn');
+  const count = panel.querySelector('#promoSearchCount');
+  const apply = () => {
+    if (search) promoPanelQuery = search.value.trim();
+    const body = document.getElementById('promoPerfTableBody');
+    if (body) body.innerHTML = renderAdTableBody();
+    if (count) {
+      const n = filterRows(rows).length;
+      const filtering = promoPanelQuery || promoLiveOnly;
+      count.textContent = filtering ? `${n} of ${rows.length}` : '';
+    }
+  };
+
   if (search) {
-    const count = panel.querySelector('#promoSearchCount');
-    const apply = () => {
-      promoPanelQuery = search.value.trim();
-      const body = document.getElementById('promoPerfTableBody');
-      if (body) body.innerHTML = renderAdTableBody();
-      if (count) {
-        const n = filterRows(rows).length;
-        count.textContent = promoPanelQuery ? `${n} of ${rows.length}` : '';
-      }
-    };
     search.addEventListener('input', apply);
     // Esc clears rather than only clearing the native search widget's own value,
     // so the table returns to full in one keystroke.
     search.addEventListener('keydown', e => {
       if (e.key === 'Escape') { e.preventDefault(); search.value = ''; apply(); }
     });
-    if (promoPanelQuery) apply();
   }
+  if (liveBtn) {
+    liveBtn.addEventListener('click', () => {
+      promoLiveOnly = !promoLiveOnly;
+      liveBtn.classList.toggle('active', promoLiveOnly);
+      liveBtn.setAttribute('aria-pressed', String(promoLiveOnly));
+      apply();
+    });
+  }
+  if (promoPanelQuery || promoLiveOnly) apply();
 }
 
 // Shorten a mode's display name for a compact chip (full name stays in the
