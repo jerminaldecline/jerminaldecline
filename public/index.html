@@ -9314,7 +9314,8 @@ function renderAdPanel() {
               + `campaign-day. That rate is applied to the ${fmt(cdays)} campaign-days the Transparency Centre `
               + `lists for these videos, then priced at $${y.cpvUSD.low}–$${y.cpvUSD.high} per view. `
               + (from ? `Covers campaigns since ${from} only — the Centre keeps about 10 months, so anything earlier is not counted. ` : '')
-              + `A small sample, and it will tighten as more campaigns fall inside the archive.`;
+              + `The view rate is measured from our own archive; the per-view price is a published benchmark, since nobody `
+              + `discloses what he actually pays. A small sample, and it will tighten as more campaigns fall inside the archive.`;
             return `<div class="promo-stat">
             <b>${fmtUSD(views * y.cpvUSD.low, true)}–${fmtUSD(views * y.cpvUSD.high, true)}</b>
             <small>estimated spend, recorded campaigns
@@ -9389,7 +9390,12 @@ function renderAdPanel() {
         Flagged videos also carry an <span class="promo-badge">ad</span> badge in the lists below.
         <br><br>
         <strong>Estimated spend</strong> is measured, not benchmarked: the view archive shows what a day of advertising actually
-        buys, applied to the campaign-days on record at $0.03–$0.10 per view. It deliberately does <em>not</em> price the excess
+        buys, applied to the campaign-days on record${(() => {
+          // Read the band from the data rather than repeating it here — it moved
+          // once already and a hardcoded copy would have gone stale silently.
+          const c = (window.__adYield || {}).cpvUSD;
+          return c ? ` at $${c.low}–$${c.high} per view` : '';
+        })()}. It deliberately does <em>not</em> price the excess
         above — beating a monthly median may just mean the video did well. Caveats: a small sample, only the ~10 months the Centre
         still lists, and not every counted view is one Google bills for. Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
