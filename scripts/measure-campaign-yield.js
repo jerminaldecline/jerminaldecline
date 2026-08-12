@@ -43,6 +43,27 @@ const log = (...a) => { if (!QUIET) console.log(...a); };
 const AGE_MIN = 14;        // days after upload before paid can be separated
 const MIN_SAMPLE = 3;      // below this the rate is not worth publishing
 
+// What a view costs. This is the one borrowed number in the estimate — the
+// yield rate above it is measured from our own archive, but nobody publishes
+// what this advertiser actually pays, so CPV comes from published benchmarks.
+//
+// It previously ran $0.03–$0.10, which priced him like a personal-injury firm:
+// $0.03 is roughly the whole market's average, and the $0.05–$0.10 band belongs
+// to finance, legal and tech. Commentary sits at the cheap end. Reference points
+// for 2026: a $0.024 cross-network average for skippable in-stream, by-device
+// figures of $0.022 mobile / $0.029 desktop / $0.038 connected TV, and a
+// by-industry spread from $0.018 (CPG) to $0.058 (legal).
+//
+// So: centred near that $0.024 average, with headroom at the top for US-only
+// targeting and any CTV skew. Both ends still lean high rather than low, because
+// the views we measure are public-counter increments and not every one of those
+// is a billable view.
+const CPV = { low: 0.015, high: 0.04 };
+const CPV_BASIS = '2026 published benchmarks: ~$0.024 cross-network average for skippable '
+  + 'in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) '
+  + 'by industry. Commentary sits at the cheap end, so the band is centred near the average '
+  + 'rather than in the $0.05+ range used by finance, legal and tech.';
+
 const day = ms => new Date(ms).toISOString().slice(0, 10);
 const addDays = (d, n) => day(Date.parse(d) + n * 864e5);
 const span = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
@@ -154,7 +175,8 @@ function main() {
     ageMinDays: AGE_MIN,
     sample: { campaigns: measurements.length, campaignDays: totDays, adViews: totAd },
     viewsPerCampaignDay: rate,
-    cpvUSD: { low: 0.03, high: 0.10 },
+    cpvUSD: CPV,
+    cpvBasis: CPV_BASIS,
     campaignDaysByVideo: campaignDays,
     measurements: measurements.sort((a, b) => a.from.localeCompare(b.from)),
   };
@@ -165,8 +187,8 @@ function main() {
   const totalDays = Object.values(campaignDays).reduce((s, n) => s + n, 0);
   log(`network-wide: ${totalDays} campaign-days -> ` +
       `${(rate.central * totalDays).toLocaleString()} ad-driven views -> ` +
-      `$${Math.round(rate.central * totalDays * 0.03).toLocaleString()}–` +
-      `$${Math.round(rate.central * totalDays * 0.10).toLocaleString()}`);
+      `$${Math.round(rate.central * totalDays * CPV.low).toLocaleString()}–` +
+      `$${Math.round(rate.central * totalDays * CPV.high).toLocaleString()}`);
   log(`wrote ${path.relative(ROOT, OUT)}`);
 }
 

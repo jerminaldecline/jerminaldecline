@@ -2756,6 +2756,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #velocityPanel .vv-chart{position:relative;width:100%;padding:0.5rem 0.2rem;margin-top:0.4rem}
     #velocityPanel .vv-chart svg{width:100%;height:auto;display:block;overflow:visible}
     #velocityPanel .vv-gl{stroke:var(--border);stroke-width:1;stroke-dasharray:2 3}
+    /* Movement bars. The flat variant is a checked-and-unchanged interval: dim,
+       so a dormant run reads as a quiet baseline rather than competing with the
+       spike, but present, so "we were watching" stays visible. */
+    #velocityPanel .vv-mbar{fill:var(--accent)}
+    #velocityPanel .vv-mbar.flat{fill:var(--accent);opacity:0.3}
     #velocityPanel .vv-ax{fill:var(--text-dim);font-size:13px}
     #velocityPanel .vv-ax.x{text-anchor:middle}
     #velocityPanel .vv-ax.y{text-anchor:end}
@@ -9314,7 +9319,8 @@ function renderAdPanel() {
               + `campaign-day. That rate is applied to the ${fmt(cdays)} campaign-days the Transparency Centre `
               + `lists for these videos, then priced at $${y.cpvUSD.low}–$${y.cpvUSD.high} per view. `
               + (from ? `Covers campaigns since ${from} only — the Centre keeps about 10 months, so anything earlier is not counted. ` : '')
-              + `A small sample, and it will tighten as more campaigns fall inside the archive.`;
+              + `The view rate is measured from our own archive; the per-view price is a published benchmark, since nobody `
+              + `discloses what he actually pays. A small sample, and it will tighten as more campaigns fall inside the archive.`;
             return `<div class="promo-stat">
             <b>${fmtUSD(views * y.cpvUSD.low, true)}–${fmtUSD(views * y.cpvUSD.high, true)}</b>
             <small>estimated spend, recorded campaigns
@@ -9389,7 +9395,12 @@ function renderAdPanel() {
         Flagged videos also carry an <span class="promo-badge">ad</span> badge in the lists below.
         <br><br>
         <strong>Estimated spend</strong> is measured, not benchmarked: the view archive shows what a day of advertising actually
-        buys, applied to the campaign-days on record at $0.03–$0.10 per view. It deliberately does <em>not</em> price the excess
+        buys, applied to the campaign-days on record${(() => {
+          // Read the band from the data rather than repeating it here — it moved
+          // once already and a hardcoded copy would have gone stale silently.
+          const c = (window.__adYield || {}).cpvUSD;
+          return c ? ` at $${c.low}–$${c.high} per view` : '';
+        })()}. It deliberately does <em>not</em> price the excess
         above — beating a monthly median may just mean the video did well. Caveats: a small sample, only the ~10 months the Centre
         still lists, and not every counted view is one Google bills for. Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
@@ -11701,11 +11712,33 @@ function renderWindowList(startDate, endDate) {
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
     for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
-    const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
-    const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
-    let ptl="";pts.forEach(p=>{if(p[2]>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${p[0].toFixed(1)}" y="${(p[1]-9).toFixed(1)}">${fmt(p[2])}</text>`;});
-    document.getElementById("vvMcharth").textContent="Views gained between checks (we snapshot ~twice a day) since tracking began ("+niceDate(DATA.trackingStart)+") — a flat line that suddenly jumps is the sign to notice.";
-    document.getElementById("vvMchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}${ptl}</svg>`;
+    // Bars, not a line. Each value is the views gained BETWEEN two checks, so
+    // nothing was measured in between and a line's rise into a spike is drawn
+    // rather than observed. Nearly every interval here is zero, so bars also put
+    // the ink where something happened instead of tracing a long flat baseline,
+    // and a solid column carries more weight than a thin triangular peak — which
+    // is the whole point of a panel about videos that were dormant and jumped.
+    const zeroY=yFor(0);
+    const slot=(MW-MP.left-MP.right)/Math.max(1,vel.length-1);
+    const barW=Math.max(3,Math.min(28,slot*0.7));
+    let bars="",ptl="";
+    vel.forEach((v,i)=>{
+      if(v==null)return;                       // no reading — a gap stays a gap
+      const x=(xFor(i)-barW/2).toFixed(1),when=(dates[i+1]||"").replace(/"/g,"");
+      // Checked and flat still gets a baseline tick. Without it "it was dormant"
+      // loses its evidence: an empty stretch would look the same whether we were
+      // watching and saw nothing, or simply weren't watching.
+      // 2px, not 1: the zero gridline is dashed and sits exactly here, so a
+      // 1px tick was indistinguishable from chart furniture. Real movement gets
+      // a 3px floor so that "something happened" is never drawn shorter than
+      // "nothing happened".
+      if(v<=0){bars+=`<rect class="vv-mbar flat" x="${x}" y="${(zeroY-2).toFixed(1)}" width="${barW.toFixed(1)}" height="2"><title>no change · ${when}</title></rect>`;return;}
+      const y=yFor(v);
+      bars+=`<rect class="vv-mbar" x="${x}" y="${Math.min(y,zeroY-3).toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(3,zeroY-y).toFixed(1)}"><title>+${fmt(v)} views · ${when}</title></rect>`;
+      if(v>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${xFor(i).toFixed(1)}" y="${(y-6).toFixed(1)}">${fmt(v)}</text>`;
+    });
+    document.getElementById("vvMcharth").textContent="Views gained between checks (we snapshot ~twice a day) since tracking began ("+niceDate(DATA.trackingStart)+") — long flat stretches broken by a sudden tall bar are the sign to notice.";
+    document.getElementById("vvMchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${grid}${xlab}${bars}${ptl}</svg>`;
     document.getElementById("vvMdetail").innerHTML=detailHtml(m,`Posted ${m.pub} · ${fmtDur(m.dur)} long · ${fmt(m.views)} total views · ${m.age} days old · <b style="color:var(--up)">+${fmt(m.gain7)} this week</b>${m.isAd?' · <b style="color:var(--accent-2)">known ad</b>':' · <b style="color:var(--down)">unexplained — worth a look</b>'}`);
   }
 
