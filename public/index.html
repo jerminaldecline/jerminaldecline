@@ -11703,6 +11703,31 @@ function renderWindowList(startDate, endDate) {
       return `<div class="vv-mrow${m.id===M.sel?' sel':''}" data-mid="${m.id}"><span class="vv-mrank">${i+1}</span><img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"><span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.age} days old · ${paceStr(m)}</span></span><span class="vv-mgain"><b>+${fmt(m.gain7)}</b><span>views this week</span></span>${tag}</div>`;
     }).join("");
   }
+  // Per-interval deltas as bars, shared by both velocity charts so they cannot
+  // drift apart. Each value is the views gained BETWEEN two checks: nothing was
+  // measured in between, so a line's rise into a spike is drawn rather than
+  // observed, and most intervals are flat anyway.
+  //
+  // A checked-but-unchanged interval still gets a 2px tick — 1px is lost against
+  // the dashed zero gridline — and real movement gets a 3px floor so "something
+  // happened" is never drawn shorter than "nothing happened".
+  function velBarW(n){
+    const slot=(MW-MP.left-MP.right)/Math.max(1,n-1);
+    return Math.max(3,Math.min(28,slot*0.7));
+  }
+  function velBars(vel,xFor,yFor,dates){
+    const zeroY=yFor(0), barW=velBarW(vel.length);
+    let out="";
+    vel.forEach((v,i)=>{
+      if(v==null)return;                       // no reading — a gap stays a gap
+      const x=(xFor(i)-barW/2).toFixed(1), when=(dates[i+1]||"").replace(/"/g,"");
+      if(v<=0){out+=`<rect class="vv-mbar flat" x="${x}" y="${(zeroY-2).toFixed(1)}" width="${barW.toFixed(1)}" height="2"><title>no change · ${when}</title></rect>`;return;}
+      const y=yFor(v);
+      out+=`<rect class="vv-mbar" x="${x}" y="${Math.min(y,zeroY-3).toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(3,zeroY-y).toFixed(1)}"><title>+${fmt(v)} views · ${when}</title></rect>`;
+    });
+    return out;
+  }
+
   function renderMchart(){
     const m=S.movers.videos.find(x=>x.id===M.sel);if(!m)return;
     const s=m.series,dates=S.movers.dates,n=s.length;
@@ -11712,30 +11737,12 @@ function renderWindowList(startDate, endDate) {
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
     for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
-    // Bars, not a line. Each value is the views gained BETWEEN two checks, so
-    // nothing was measured in between and a line's rise into a spike is drawn
-    // rather than observed. Nearly every interval here is zero, so bars also put
-    // the ink where something happened instead of tracing a long flat baseline,
-    // and a solid column carries more weight than a thin triangular peak — which
-    // is the whole point of a panel about videos that were dormant and jumped.
-    const zeroY=yFor(0);
-    const slot=(MW-MP.left-MP.right)/Math.max(1,vel.length-1);
-    const barW=Math.max(3,Math.min(28,slot*0.7));
-    let bars="",ptl="";
+    // Drawn as bars by velBars() above; see the note there for why a line
+    // misrepresents a per-interval delta.
+    const bars=velBars(vel,xFor,yFor,dates);
+    let ptl="";
     vel.forEach((v,i)=>{
-      if(v==null)return;                       // no reading — a gap stays a gap
-      const x=(xFor(i)-barW/2).toFixed(1),when=(dates[i+1]||"").replace(/"/g,"");
-      // Checked and flat still gets a baseline tick. Without it "it was dormant"
-      // loses its evidence: an empty stretch would look the same whether we were
-      // watching and saw nothing, or simply weren't watching.
-      // 2px, not 1: the zero gridline is dashed and sits exactly here, so a
-      // 1px tick was indistinguishable from chart furniture. Real movement gets
-      // a 3px floor so that "something happened" is never drawn shorter than
-      // "nothing happened".
-      if(v<=0){bars+=`<rect class="vv-mbar flat" x="${x}" y="${(zeroY-2).toFixed(1)}" width="${barW.toFixed(1)}" height="2"><title>no change · ${when}</title></rect>`;return;}
-      const y=yFor(v);
-      bars+=`<rect class="vv-mbar" x="${x}" y="${Math.min(y,zeroY-3).toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(3,zeroY-y).toFixed(1)}"><title>+${fmt(v)} views · ${when}</title></rect>`;
-      if(v>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${xFor(i).toFixed(1)}" y="${(y-6).toFixed(1)}">${fmt(v)}</text>`;
+      if(v!=null&&v>=yMax*0.25)ptl+=`<text class="vv-ptl" fill="var(--accent)" x="${xFor(i).toFixed(1)}" y="${(yFor(v)-6).toFixed(1)}">${fmt(v)}</text>`;
     });
     document.getElementById("vvMcharth").textContent="Views gained between checks (we snapshot ~twice a day) since tracking began ("+niceDate(DATA.trackingStart)+") — long flat stretches broken by a sudden tall bar are the sign to notice.";
     document.getElementById("vvMchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${grid}${xlab}${bars}${ptl}</svg>`;
@@ -11746,7 +11753,7 @@ function renderWindowList(startDate, endDate) {
   function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
   function buildAds(){
     feat().innerHTML=
-      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours — the line dipping inside a shaded run is overnight, not the campaign stopping.</div>`+
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours, so bars rise and fall within a run — a short one is overnight, not the campaign stopping.</div>`+
       `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
@@ -11804,10 +11811,14 @@ function renderWindowList(startDate, endDate) {
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
     for(let i=0;i<vel.length;i++){if(i%stride===0||i===vel.length-1)xlab+=`<text class="vv-ax x" x="${xFor(i).toFixed(1)}" y="${MH-MP.bottom+18}">${(dates[i+1]||"").split(" ")[0]}</text>`;}
-    const pts=[];vel.forEach((v,i)=>{if(v!=null)pts.push([xFor(i),yFor(v),v]);});
-    const pth=pts.length>1?`<path d="${pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`:"";
-    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven).";
-    document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${pth}${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="var(--accent)"/>`).join("")}</svg>`+(runsCap?`<div class="vv-runs">${runsCap}</div>`:"");
+    // Same bars as the movement chart \u2014 this is the same per-interval data over
+    // the same window, just with the paid runs shaded behind it. Bars sit inside
+    // a band cleanly, where a line crossed its edges and blurred where a run
+    // started and stopped; and the overnight dip now reads as short bars between
+    // tall ones rather than as a line that looks like the campaign paused.
+    const bars=velBars(vel,xFor,yFor,dates);
+    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven). Short bars inside a run are overnight, not the campaign stopping.";
+    document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${bars}</svg>`+(runsCap?`<div class="vv-runs">${runsCap}</div>`:"");
     const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
     document.getElementById("vvAdetail").innerHTML=
       `<a href="${link}" target="_blank" rel="noopener"><img class="vv-thumb" src="${thumb}" alt="" loading="lazy" decoding="async"></a>`+
