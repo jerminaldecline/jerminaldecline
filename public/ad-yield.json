@@ -1,22 +1,23 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
  "_generated": "2026-08-12",
- "method": "view gain across the campaign window minus the video's dormant baseline",
+ "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
+ "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-08-11",
-  "snapshots": 119
+  "to": "2026-08-12",
+  "snapshots": 121
  },
  "ageMinDays": 14,
  "sample": {
   "campaigns": 5,
   "campaignDays": 21,
-  "adViews": 31454
+  "adViews": 33900
  },
  "viewsPerCampaignDay": {
-  "low": 0,
-  "central": 1498,
-  "high": 1916
+  "low": 1367,
+  "central": 1614,
+  "high": 2452
  },
  "cpvUSD": {
   "low": 0.015,
@@ -24,12 +25,12 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
-  "FiLs5ovIfts": 56,
-  "kT0UsZpuKaU": 2,
-  "Sr0WmHdxJvs": 43,
-  "n-I7Cp9iTTw": 8,
-  "3O6sdSffHzs": 37,
-  "aGDMKiNGFr8": 1,
+  "FiLs5ovIfts": 57,
+  "Sr0WmHdxJvs": 44,
+  "kT0UsZpuKaU": 3,
+  "n-I7Cp9iTTw": 9,
+  "3O6sdSffHzs": 38,
+  "aGDMKiNGFr8": 2,
   "tcevefZ9G18": 1,
   "7Mg87BPII_4": 8,
   "TYPV_Ej1ND4": 1,
@@ -151,10 +152,12 @@
    "from": "2026-06-27",
    "to": "2026-07-01",
    "days": 5,
-   "gain": 9645,
+   "observedTo": "2026-07-03",
+   "observedDays": 7,
+   "gain": 9658,
    "baselinePerDay": 13,
-   "adViews": 9580,
-   "perDay": 1916
+   "adViews": 9567,
+   "perDay": 1913
   },
   {
    "id": "TYPV_Ej1ND4",
@@ -162,10 +165,12 @@
    "from": "2026-06-27",
    "to": "2026-06-27",
    "days": 1,
-   "gain": 0,
+   "observedTo": "2026-06-29",
+   "observedDays": 3,
+   "gain": 2455,
    "baselinePerDay": 1,
-   "adViews": 0,
-   "perDay": 0
+   "adViews": 2452,
+   "perDay": 2452
   },
   {
    "id": "FiLs5ovIfts",
@@ -173,9 +178,11 @@
    "from": "2026-06-28",
    "to": "2026-07-02",
    "days": 5,
-   "gain": 6835,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 6837,
    "baselinePerDay": 0,
-   "adViews": 6835,
+   "adViews": 6837,
    "perDay": 1367
   },
   {
@@ -184,10 +191,12 @@
    "from": "2026-06-28",
    "to": "2026-07-02",
    "days": 5,
-   "gain": 7108,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 7116,
    "baselinePerDay": 0,
-   "adViews": 7108,
-   "perDay": 1422
+   "adViews": 7116,
+   "perDay": 1423
   },
   {
    "id": "3O6sdSffHzs",
@@ -195,9 +204,11 @@
    "from": "2026-06-28",
    "to": "2026-07-02",
    "days": 5,
-   "gain": 7936,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 7935,
    "baselinePerDay": 1,
-   "adViews": 7931,
+   "adViews": 7928,
    "perDay": 1586
   }
  ]

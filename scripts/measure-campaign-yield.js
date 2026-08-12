@@ -42,6 +42,28 @@ const log = (...a) => { if (!QUIET) console.log(...a); };
 
 const AGE_MIN = 14;        // days after upload before paid can be separated
 const MIN_SAMPLE = 3;      // below this the rate is not worth publishing
+const TAIL_DAYS = 2;       // observe past last-shown; delivery outlives serving
+
+// What a view costs. This is the one borrowed number in the estimate — the
+// yield rate above it is measured from our own archive, but nobody publishes
+// what this advertiser actually pays, so CPV comes from published benchmarks.
+//
+// It previously ran $0.03–$0.10, which priced him like a personal-injury firm:
+// $0.03 is roughly the whole market's average, and the $0.05–$0.10 band belongs
+// to finance, legal and tech. Commentary sits at the cheap end. Reference points
+// for 2026: a $0.024 cross-network average for skippable in-stream, by-device
+// figures of $0.022 mobile / $0.029 desktop / $0.038 connected TV, and a
+// by-industry spread from $0.018 (CPG) to $0.058 (legal).
+//
+// So: centred near that $0.024 average, with headroom at the top for US-only
+// targeting and any CTV skew. Both ends still lean high rather than low, because
+// the views we measure are public-counter increments and not every one of those
+// is a billable view.
+const CPV = { low: 0.015, high: 0.04 };
+const CPV_BASIS = '2026 published benchmarks: ~$0.024 cross-network average for skippable '
+  + 'in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) '
+  + 'by industry. Commentary sits at the cheap end, so the band is centred near the average '
+  + 'rather than in the $0.05+ range used by finance, legal and tech.';
 
 // What a view costs. This is the one borrowed number in the estimate — the
 // yield rate above it is measured from our own archive, but nobody publishes
@@ -135,11 +157,34 @@ function main() {
     // A campaign still running at the capture date is only partly observed.
     if (w.to === eraTo) continue;
     const len = span(w.from, w.to) + 1;
-    const v0 = at(w.id, addDays(w.from, -1)), v1 = at(w.id, w.to), base = baseline(w.id, w.from);
+
+    // Measure a couple of days past the last-shown date. That date is when the
+    // ad stopped serving, not when its views stopped landing — a cross-check
+    // against ad-ledger.json caught a one-day campaign reading as zero because
+    // the window closed before most of its delivery arrived.
+    //
+    // The tail is clamped so it can never reach into the next campaign on the
+    // same video, or past the archive: either would book someone else's views
+    // against this run.
+    const nextStart = (camp.videos[w.id].windows || [])
+      .map(x => x[0]).filter(d => d > w.to).sort()[0];
+    let end = addDays(w.to, TAIL_DAYS);
+    if (nextStart && end >= nextStart) end = addDays(nextStart, -1);
+    if (end > eraTo) end = eraTo;
+    if (end < w.to) end = w.to;
+    const obsDays = span(w.from, end) + 1;
+
+    const v0 = at(w.id, addDays(w.from, -1)), v1 = at(w.id, end), base = baseline(w.id, w.from);
     if (v0 == null || v1 == null || base == null) continue;
-    const adViews = Math.max(0, (v1 - v0) - base * len);
+
+    // Baseline is subtracted across everything observed, tail included, since
+    // organic views accrue then too. But the rate is per day of ADVERTISING —
+    // divided by the campaign's own length, not the observation window — so it
+    // reads as "what one paid day buys, including views that land afterwards".
+    const adViews = Math.max(0, (v1 - v0) - base * obsDays);
     measurements.push({ id: w.id, title: (meta[w.id] || {}).title || '', from: w.from, to: w.to,
-      days: len, gain: v1 - v0, baselinePerDay: base, adViews: Math.round(adViews),
+      days: len, observedTo: end, observedDays: obsDays,
+      gain: v1 - v0, baselinePerDay: base, adViews: Math.round(adViews),
       perDay: Math.round(adViews / len) });
   }
 
@@ -170,7 +215,10 @@ function main() {
       'Replaces pricing "excess views over the month\'s median", which credited organic ' +
       'outperformance to advertising and overstated the total several-fold.',
     _generated: new Date().toISOString().slice(0, 10),
-    method: 'view gain across the campaign window minus the video\'s dormant baseline',
+    method: 'view gain across the campaign window plus a ' + TAIL_DAYS + '-day tail (clamped so it '
+      + 'cannot reach the next campaign), minus the video\'s dormant baseline; divided by the '
+      + 'campaign\'s own length, so the rate is per day of advertising',
+    tailDays: TAIL_DAYS,
     snapshotEra: { from: eraFrom, to: eraTo, snapshots: files.length },
     ageMinDays: AGE_MIN,
     sample: { campaigns: measurements.length, campaignDays: totDays, adViews: totAd },

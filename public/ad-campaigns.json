@@ -1,11 +1,11 @@
 {
  "_note": "Per-video advertising history from the Google Ads Transparency Centre. Each creative is one ad entry with its own first/last-shown dates, so a video promoted repeatedly shows a run count above 1. Independent of ad-ledger.json, which infers bursts from view snapshots and only reaches back to 2026-06-11.",
  "_method": "SearchCreatives capture; each creative's preview resolved to its video",
- "_generated": "2026-08-11",
+ "_generated": "2026-08-12",
  "advertiser": "Marketing Sheriff",
- "creatives": 217,
+ "creatives": 218,
  "resolved": 215,
- "unresolved": 2,
+ "unresolved": 3,
  "trackingFrom": "2025-10-21",
  "videos": {
   "FiLs5ovIfts": {
@@ -61,22 +61,11 @@
     ],
     [
      "2026-08-10",
-     "2026-08-11"
+     "2026-08-12"
     ]
    ],
    "first": "2025-12-10",
-   "last": "2026-08-11"
-  },
-  "kT0UsZpuKaU": {
-   "runs": 1,
-   "windows": [
-    [
-     "2026-08-10",
-     "2026-08-11"
-    ]
-   ],
-   "first": "2026-08-10",
-   "last": "2026-08-11"
+   "last": "2026-08-12"
   },
   "Sr0WmHdxJvs": {
    "runs": 10,
@@ -119,11 +108,22 @@
     ],
     [
      "2026-08-10",
-     "2026-08-11"
+     "2026-08-12"
     ]
    ],
    "first": "2026-04-19",
-   "last": "2026-08-11"
+   "last": "2026-08-12"
+  },
+  "kT0UsZpuKaU": {
+   "runs": 1,
+   "windows": [
+    [
+     "2026-08-10",
+     "2026-08-12"
+    ]
+   ],
+   "first": "2026-08-10",
+   "last": "2026-08-12"
   },
   "n-I7Cp9iTTw": {
    "runs": 2,
@@ -134,11 +134,11 @@
     ],
     [
      "2026-08-10",
-     "2026-08-11"
+     "2026-08-12"
     ]
    ],
    "first": "2026-06-27",
-   "last": "2026-08-11"
+   "last": "2026-08-12"
   },
   "3O6sdSffHzs": {
    "runs": 6,
@@ -165,22 +165,22 @@
     ],
     [
      "2026-08-10",
-     "2026-08-11"
+     "2026-08-12"
     ]
    ],
    "first": "2026-04-11",
-   "last": "2026-08-11"
+   "last": "2026-08-12"
   },
   "aGDMKiNGFr8": {
    "runs": 1,
    "windows": [
     [
      "2026-08-10",
-     "2026-08-10"
+     "2026-08-11"
     ]
    ],
    "first": "2026-08-10",
-   "last": "2026-08-10"
+   "last": "2026-08-11"
   },
   "tcevefZ9G18": {
    "runs": 1,
