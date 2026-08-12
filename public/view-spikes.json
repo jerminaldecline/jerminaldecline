@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-11-AM",
-    "snapshots": 119
+    "to": "2026-08-12-AM",
+    "snapshots": 121
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -14,9 +14,27 @@
   },
   "knownAdSpikes": [
     {
+      "id": "3O6sdSffHzs",
+      "title": "Walmart Will Be DESTROYED By This",
+      "estPromotedViews": 17954,
+      "spikeStartDate": "2026-08-10-AM"
+    },
+    {
       "id": "Sr0WmHdxJvs",
       "title": "Movie Theatre Black Fatigue Backfire!",
-      "estPromotedViews": 9713,
+      "estPromotedViews": 17505,
+      "spikeStartDate": "2026-08-10-AM"
+    },
+    {
+      "id": "FiLs5ovIfts",
+      "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+      "estPromotedViews": 14373,
+      "spikeStartDate": "2026-08-10-AM"
+    },
+    {
+      "id": "n-I7Cp9iTTw",
+      "title": "WALMART FATIGUE GOES NUCLEAR",
+      "estPromotedViews": 10220,
       "spikeStartDate": "2026-08-10-AM"
     },
     {
@@ -26,29 +44,131 @@
       "spikeStartDate": "2026-06-27-PM"
     },
     {
-      "id": "3O6sdSffHzs",
-      "title": "Walmart Will Be DESTROYED By This",
-      "estPromotedViews": 8972,
-      "spikeStartDate": "2026-08-10-AM"
-    },
-    {
-      "id": "FiLs5ovIfts",
-      "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-      "estPromotedViews": 7616,
-      "spikeStartDate": "2026-08-10-AM"
-    },
-    {
-      "id": "n-I7Cp9iTTw",
-      "title": "WALMART FATIGUE GOES NUCLEAR",
-      "estPromotedViews": 4683,
-      "spikeStartDate": "2026-08-10-AM"
-    },
-    {
       "id": "TYPV_Ej1ND4",
       "title": "Never EAT McDonalds Again!",
       "estPromotedViews": 2505,
       "spikeStartDate": "2026-06-27-PM"
     }
   ],
-  "spikes": []
+  "spikes": [
+    {
+      "id": "rPkFK9TgI3w",
+      "title": "SHE ATTACKED A KID",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "channel": "TheQuartering",
+      "publishedAt": "2026-07-30T23:00:10.000Z",
+      "ageDaysAtSpike": 7,
+      "baselinePerDay": 56,
+      "peakPerDay": 774,
+      "ratio": 13.8,
+      "spikeStartDate": "2026-08-06-AM",
+      "elevatedSnapshots": 6,
+      "status": "sustained",
+      "estPromotedViews": 1563,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-07-31-AM",
+          7444
+        ],
+        [
+          "2026-07-31-PM",
+          41223
+        ],
+        [
+          "2026-08-01-AM",
+          57390
+        ],
+        [
+          "2026-08-01-PM",
+          60263
+        ],
+        [
+          "2026-08-02-AM",
+          64521
+        ],
+        [
+          "2026-08-02-PM",
+          65465
+        ],
+        [
+          "2026-08-03-AM",
+          67066
+        ],
+        [
+          "2026-08-03-PM",
+          67610
+        ],
+        [
+          "2026-08-04-AM",
+          69404
+        ],
+        [
+          "2026-08-04-PM",
+          69623
+        ],
+        [
+          "2026-08-05-AM",
+          70343
+        ],
+        [
+          "2026-08-05-PM",
+          70394
+        ],
+        [
+          "2026-08-06-AM",
+          70421
+        ],
+        [
+          "2026-08-06-PM",
+          70688
+        ],
+        [
+          "2026-08-07-AM",
+          70959
+        ],
+        [
+          "2026-08-07-PM",
+          71214
+        ],
+        [
+          "2026-08-08-AM",
+          71601
+        ],
+        [
+          "2026-08-08-PM",
+          71831
+        ],
+        [
+          "2026-08-09-AM",
+          72152
+        ],
+        [
+          "2026-08-09-PM",
+          72181
+        ],
+        [
+          "2026-08-10-AM",
+          72204
+        ],
+        [
+          "2026-08-10-PM",
+          72219
+        ],
+        [
+          "2026-08-11-AM",
+          72238
+        ],
+        [
+          "2026-08-11-PM",
+          72251
+        ],
+        [
+          "2026-08-12-AM",
+          72239
+        ]
+      ]
+    }
+  ]
 }
