@@ -78,8 +78,28 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .util-social{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:background .12s,color .12s,border-color .12s}
 .util-social:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
-.util-social.kofi{width:auto;gap:0.4rem;padding:0 0.7rem;background:#f5a623;border-color:#f5a623;color:#0d0c0c;font-family:inherit;font-size:0.8rem;font-weight:800;text-decoration:none}
-.util-social.kofi:hover{background:#ffb43f;border-color:#ffb43f;color:#0d0c0c}
+/* Support button. Was a flat slab of hardcoded #f5a623 — louder than anything
+   else in the bar and not a colour the site uses anywhere. Now built from the
+   --shorts/--accent-2 amber family so it belongs, with a soft top highlight and
+   a shadow to give it the raised quality a call-to-action wants. The lift on
+   hover is what makes it feel like a button rather than a coloured rectangle. */
+.util-social.kofi{width:auto;gap:0.45rem;padding:0 0.9rem;
+  background:linear-gradient(180deg,#f2ab52 0%,#e0a458 55%,#d2913f 100%);
+  border-color:#c8853a;color:#2a1a05;
+  font-family:inherit;font-size:0.8rem;font-weight:800;letter-spacing:0.005em;text-decoration:none;
+  box-shadow:0 1px 2px rgba(0,0,0,0.28),inset 0 1px 0 rgba(255,255,255,0.34);
+  transition:background .14s,border-color .14s,box-shadow .14s,transform .14s}
+.util-social.kofi:hover{
+  background:linear-gradient(180deg,#ffbe68 0%,#f0b167 55%,#dd9c48 100%);
+  border-color:#d8933f;color:#2a1a05;transform:translateY(-1px);
+  box-shadow:0 5px 12px rgba(224,164,88,0.30),inset 0 1px 0 rgba(255,255,255,0.44)}
+.util-social.kofi:active{transform:translateY(0);
+  box-shadow:0 1px 1px rgba(0,0,0,0.3),inset 0 2px 4px rgba(0,0,0,0.18)}
+.util-social.kofi:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.util-social.kofi svg{opacity:0.9}
+@media(prefers-reduced-motion:reduce){
+  .util-social.kofi{transition:background .14s,border-color .14s}
+  .util-social.kofi:hover,.util-social.kofi:active{transform:none}}
 .kofi-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
 .tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
