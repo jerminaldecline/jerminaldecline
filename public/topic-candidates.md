@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-11
+# Topic candidates — 2026-08-12
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,27 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 19 recent videos, 116 baseline videos
+Pool: 18 recent videos, 118 baseline videos
 
-### Cluster 1: `wnba`
+### Cluster 1: `finally`
 
-- **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 2/116 videos (2%)
-- **Spike ratio:** 7.4x
-- **Related terms:** `wnba`
-- **Sample recent videos:**
-  - 2026-08-10 — _THE RACE WAR IS ON_  
-    WNBA Race War Explodes After Brutal Sophie Cunningham Foul Fallout
-  - 2026-08-05 — _WNBA DISASTER BACKFIRES_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ WNBA Faces Full Blown Insanity As Trans Star Wants
-  - 2026-08-04 — _IT WENT NUCLEAR_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Caitlin Clark Stays Silent As WNBA Mob Targets Sop
-
-### Cluster 2: `finally`
-
-- **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 3/116 videos (3%)
-- **Spike ratio:** 5.3x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/118 videos (3%)
+- **Spike ratio:** 5.7x
 - **Related terms:** `finally`
 - **Sample recent videos:**
   - 2026-08-06 — _THEY ACTUALLY DID IT_  
