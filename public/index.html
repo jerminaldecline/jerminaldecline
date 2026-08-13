@@ -1470,6 +1470,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-vid-title:hover {color: var(--accent); text-decoration: underline;}
 .promo-vid-meta {display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.45rem; margin-top: 0.25rem;}
 .promo-vid-chan {font-size: 0.72rem; color: var(--text-dim);}
+/* When it last ran. Quiet — it is context for the row, not a status like the
+   green "Running now" badge sitting in the same line. */
+.promo-lastad {font-size: 0.7rem; color: var(--text-dim); cursor: help;
+    border-bottom: 1px dotted color-mix(in srgb, var(--text-dim) 55%, transparent);}
+.promo-lastad:focus-visible {outline: 2px solid var(--accent-2); outline-offset: 1px;}
 
 /* "Running now" — a campaign the Centre still listed at the last capture.
    Green, because it is a live-state indicator like the header's freshness dot,
@@ -1482,7 +1487,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-live:focus-visible {outline: 2px solid var(--up); outline-offset: 1px;}
 .promo-live-dot {width: 6px; height: 6px; border-radius: 50%; background: var(--up); flex: none;
     animation: promoLivePulse 2.4s ease-in-out infinite;}
-.promo-live-sum {margin-left: 0.5rem; vertical-align: middle;}
+/* Header read-out. No pill, no border — chrome is reserved for things you can
+   click, and this sits close enough to the "Running now" filter that matching
+   its shape made it look like a second control. */
+.promo-live-sum {display: inline-flex; align-items: center; gap: 0.32rem; margin-left: 0.55rem;
+    vertical-align: middle; color: var(--up); font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.01em; white-space: nowrap;}
 /* Filter pill: the site's .promo-only-btn shape, but green when engaged so it
    reads as the same idea as the row badges it filters to. */
 .promo-live-btn {display: inline-flex; align-items: center; gap: 0.4rem;}
@@ -9246,6 +9256,16 @@ function renderAdPanel() {
       ` role="button" aria-label="About ${escapeHtml(label)}">ⓘ</span>`
     : '';
 
+  // Campaign dates arrive as plain YYYY-MM-DD calendar strings from the Centre,
+  // not timestamps. Passing them through ctDate() would parse them as UTC
+  // midnight and re-render them in Central time, shifting every one back a day.
+  const AD_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function adDay(s) {
+    const p = String(s || '').split('-');
+    if (p.length !== 3) return String(s || '');
+    return (+p[2]) + ' ' + (AD_MONTHS[+p[1] - 1] || '');
+  }
+
   // Which videos were still being advertised at the moment of the last capture.
   //
   // The Centre reports a running campaign with the current date as its
@@ -9306,6 +9326,17 @@ function renderAdPanel() {
         ? `<span class="promo-live" data-popover="This video was still being advertised as of the last check (${escapeHtml(genDate)}). The Transparency Centre lists a campaign for it running up to that date."` +
           ` tabindex="0" role="button"><span class="promo-live-dot" aria-hidden="true"></span>Running now</span>`
         : '';
+      // When it last ran, for anything not running now — "it was advertised" is a
+      // much weaker fact than "it was advertised last Tuesday". Only shown for
+      // stopped campaigns: for a live one the date is today and just repeats the
+      // badge beside it.
+      const camp = (window.__adCampaigns || {}).videos || {};
+      const lastAd = (!isLive && camp[r.v.id] && camp[r.v.id].last) ? camp[r.v.id].last : null;
+      const lastTag = lastAd
+        ? `<span class="promo-lastad" data-popover="The most recent day the Transparency Centre showed an ad for this video.${
+             camp[r.v.id].runs > 1 ? ' It has been advertised on ' + camp[r.v.id].runs + ' separate occasions.' : ''
+           }" tabindex="0" role="button">last ad ${escapeHtml(adDay(lastAd))}</span>`
+        : '';
       return `
       <tr>
         <td class="col-vid">
@@ -9315,7 +9346,7 @@ function renderAdPanel() {
                src="https://i.ytimg.com/vi/${r.v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>
             <div class="promo-vid-col">
               <a class="promo-vid-title" href="https://www.youtube.com/watch?v=${r.v.id}" target="_blank" rel="noopener">${escapeHtml(r.v.title)}</a>
-              ${chan || liveTag ? `<span class="promo-vid-meta">${liveTag}${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}</span>` : ''}
+              ${chan || liveTag || lastTag ? `<span class="promo-vid-meta">${liveTag}${lastTag}${chan ? `<span class="promo-vid-chan">${escapeHtml(chan)}</span>` : ''}</span>` : ''}
             </div>
           </div>
         </td>
@@ -9359,7 +9390,11 @@ function renderAdPanel() {
             const l = promoLiveSet();
             if (!l) return '';
             const n = rows.filter(r => l.has(r.v.id)).length;
-            return n ? `<span class="promo-live promo-live-sum"><span class="promo-live-dot" aria-hidden="true"></span>${n} running now</span>` : '';
+            // Deliberately NOT the .promo-live pill used by the row badges and the
+            // filter button: this is a read-out, not a control, and an identical
+            // green pill sitting inches from the "Running now" filter read as a
+            // second button that did nothing when clicked.
+            return n ? `<span class="promo-live-sum"><span class="promo-live-dot" aria-hidden="true"></span>${n} ${n === 1 ? 'ad' : 'ads'} live</span>` : '';
           })()}</span>
         </div>
         <span class="promo-panel-caret" aria-hidden="true"></span>
