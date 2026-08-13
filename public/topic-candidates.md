@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-12
+# Topic candidates — 2026-08-13
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,21 +6,57 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 118 baseline videos
+Pool: 18 recent videos, 120 baseline videos
 
-### Cluster 1: `finally`
+### Cluster 1: `candace`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/118 videos (3%)
-- **Spike ratio:** 5.7x
-- **Related terms:** `finally`
+- **Baseline saturation:** 3/120 videos (3%)
+- **Spike ratio:** 5.8x
+- **Related terms:** `candace`, `owens`, `candace owens`
 - **Sample recent videos:**
-  - 2026-08-06 — _THEY ACTUALLY DID IT_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Fauci Finally Faces DOJ After Senate Votes Him In 
-  - 2026-08-05 — _WOKE RIOTERS FIND OUT_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ BLM Rioters Find Out As Police Destroy Their Auton
-  - 2026-08-05 — _THE HORRIFYING TRUTH_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Sad Truth Behind Perez Hilton’s Horrifying Livestr
+  - 2026-08-12 — _THEY GAVE UP_  
+    He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
+  - 2026-08-11 — _THEY FELL FOR IT_  
+    Tim Pool Expertly Trolls Candace Owens And Her Fans Explode
+  - 2026-08-06 — _JOE ROGAN VS CANDACE OWENS_  
+    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Candace Refuses $300,000 Debate Then Gets Exposed 
+
+### Cluster 2: `massive`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 5/120 videos (4%)
+- **Spike ratio:** 3.7x
+- **Related terms:** `massive`
+- **Sample recent videos:**
+  - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
+    Stephanie White Preaches Love Then Tells Angry Critics Go Hell
+  - 2026-08-11 — _MASSIVE INDIAN INVASION_  
+    Massive Indian Fraud Pipeline Funds Illegal Cross Border Smuggling
+  - 2026-08-10 — _IT KEEPS GETTING WORSE_  
+    Massive Food Recall Hits Walmart Target And Whole Foods Nationwide
+
+## @JeremyHambly
+
+Pool: 11 recent videos, 68 baseline videos
+
+### Cluster 1: `candace`
+
+- **Recent saturation:** 6/11 videos (**55%**)
+- **Baseline saturation:** 16/68 videos (24%)
+- **Spike ratio:** 2.3x
+- **Related terms:** `candace`, `owens`, `wilson`, `andrew`, `candace owens`, `andrew wilson`
+- **Sample recent videos:**
+  - 2026-08-12 — _THIS WAS BRUTAL_  
+    Candace Owens Posts Joe Rogan Message And Instantly Regrets
+  - 2026-08-10 — _CANDACE OWENS FULL BLOWN MELTDOWN_  
+    Candace Owens Threatens Police Report As Her Conspiracy Implodes
+  - 2026-08-10 — _THIS WAS GREAT_  
+    Candace Owens Gets A Painful Reality Check From Michael Knowles
+  - 2026-08-08 — _I CAN'T BELIEVE IT!_  
+    Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Owens And Andrew Wilson Finally Agree To Explo
+  - 2026-08-07 — _THIS IS HER END_  
+    Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Demands More Money Total Control Before Accept
 
 ---
 
