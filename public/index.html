@@ -126,13 +126,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   box-shadow:0 1px 1px rgba(0,0,0,0.30),inset 0 2px 5px rgba(96,52,6,0.34)}
 .util-social.kofi:focus-visible{outline:2px solid #ffcb7f;outline-offset:2px}
 
-/* Steam only moves on hover — a permanently animating header is a distraction. */
+/* Steam runs continuously. It sits a little below full strength at rest so it
+   reads as alive rather than insistent, and comes up to full on hover. */
 .kofi-ico{overflow:visible}
-.kofi-steam{opacity:0;transition:opacity .18s ease}
-.kofi-steam path{transform-origin:center bottom}
-.util-social.kofi:hover .kofi-steam{opacity:0.92}
-.util-social.kofi:hover .kofi-steam path{animation:kofiSteam 1.9s ease-in-out infinite}
-.util-social.kofi:hover .kofi-steam path:nth-child(2){animation-delay:.42s}
+.kofi-steam{opacity:0.8;transition:opacity .18s ease}
+.kofi-steam path{transform-origin:center bottom;animation:kofiSteam 1.9s ease-in-out infinite}
+.kofi-steam path:nth-child(2){animation-delay:.42s}
+.util-social.kofi:hover .kofi-steam{opacity:1}
 
 @keyframes kofiSteam{
   0%{opacity:0;transform:translateY(1.5px) scaleY(0.75)}
@@ -144,8 +144,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .util-social.kofi{transition:background .16s,border-color .16s}
   .util-social.kofi:hover,.util-social.kofi:active{transform:none}
   .util-social.kofi:hover::after{animation:none}
-  .util-social.kofi:hover .kofi-steam{opacity:0.7}
-  .util-social.kofi:hover .kofi-steam path{animation:none}}
+  .kofi-steam{opacity:0.7}
+  .kofi-steam path{animation:none}}
 .kofi-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
 .tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
