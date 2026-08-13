@@ -223,10 +223,25 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   padding:0.7rem 0.9rem;margin:0 0 1rem;font-size:0.85rem;line-height:1.45}
 .strike-banner[hidden]{display:none}
 .strike-icon{flex:none;font-size:1rem;line-height:1.2}
-.strike-body{flex:1 1 auto;min-width:0;color:var(--label)}
+/* basis 0, not auto: with the wrap enabled below 680px, an auto basis makes the
+   body's max-content width force a line break, orphaning the warning icon on a
+   row of its own above the heading. min-width:0 permits shrinking but wrapping
+   wins first, so the basis is what has to give. */
+.strike-body{flex:1 1 0;min-width:0;color:var(--label)}
 .strike-head{font-weight:800;color:var(--text);margin-bottom:0.15rem}
 .strike-list{margin:0.3rem 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0.25rem}
-.strike-list li{color:var(--text-muted);font-size:0.81rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* One line per removal, but the REASON must never be what gets cut. It sits last,
+   so a plain nowrap+ellipsis on the li ate it first ("(Community ..."), losing the
+   one field that separates an enforcement action from him privating his own video.
+   Laying the row out as flex lets the title be the only shrinkable part.
+   Spacing is carried by non-breaking spaces inside the separators rather than a
+   flex `gap`, so the row still reads as words when copied or announced — a gap is
+   drawn, not written, and collapsed the line to "@TheQuartering—I Cannot…". */
+.strike-list li{display:flex;align-items:baseline;min-width:0;
+  color:var(--text-muted);font-size:0.81rem;white-space:nowrap}
+.strike-list li>b,.strike-list li>.strike-why,.strike-list li>.strike-dash{flex:none}
+.strike-title{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.strike-why{opacity:0.75}
 .strike-list b{color:var(--label);font-weight:600}
 .strike-more{color:var(--text-dim);font-style:italic}
 /* Brief highlight so the row the banner was talking about is obvious once the
@@ -8767,8 +8782,10 @@ function niceDurationAxis(minSec, maxSec) {
     const termChannels = Object.keys(termCount);
     const termItems = termChannels.map(cid => {
       const ch = chans[cid] || {};
-      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b> — ` +
-        `channel terminated, ${termCount[cid].toLocaleString()} video${termCount[cid] === 1 ? '' : 's'} gone</li>`;
+      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b>` +
+        `<span class="strike-dash" aria-hidden="true">&nbsp;—&nbsp;</span>` +
+        `<span class="strike-title">channel terminated, ${termCount[cid].toLocaleString()} ` +
+        `video${termCount[cid] === 1 ? '' : 's'} gone</span></li>`;
     }).join('');
 
     // Only drop the ones already covered by a collapsed channel line. A
@@ -8786,8 +8803,10 @@ function niceDurationAxis(minSec, maxSec) {
       // Anything else he typed is left alone. Falls back if nothing survives.
       const clean = String(v.title || '')
         .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || v.title || 'Untitled';
-      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b> — ` +
-        `${escapeHtml(clean)} <span style="opacity:0.75">(${escapeHtml(why)})</span></li>`;
+      return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b>` +
+        `<span class="strike-dash" aria-hidden="true">&nbsp;—&nbsp;</span>` +
+        `<span class="strike-title">${escapeHtml(clean)}</span>` +
+        `<span class="strike-why">&nbsp;(${escapeHtml(why)})</span></li>`;
     }).join('');
 
     // An enforcement action and the creator privating his own uploads are not the
