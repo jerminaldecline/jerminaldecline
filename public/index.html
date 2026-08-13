@@ -78,8 +78,74 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .util-social{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:background .12s,color .12s,border-color .12s}
 .util-social:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
-.util-social.kofi{width:auto;gap:0.4rem;padding:0 0.7rem;background:#f5a623;border-color:#f5a623;color:#0d0c0c;font-family:inherit;font-size:0.8rem;font-weight:800;text-decoration:none}
-.util-social.kofi:hover{background:#ffb43f;border-color:#ffb43f;color:#0d0c0c}
+/* Support button — the one warm, human thing on a page otherwise made of cold
+   analytics. Worth more than a flat fill, so the surface is built in layers:
+   a radial specular where light would strike a domed object, a body gradient
+   beneath it, a bright 1px top edge and a dark bottom edge for thickness, then
+   contact + ambient shadow to sit it above the bar. On hover a sheen sweeps
+   across it and steam rises off the cup — the payoff is deliberately held back
+   until someone reaches for it, so the resting header stays calm. */
+.util-social.kofi{position:relative;overflow:hidden;isolation:isolate;
+  width:auto;gap:0.5rem;padding:0 0.95rem;border-radius:9px;
+  background:
+    radial-gradient(130% 150% at 24% -20%,rgba(255,255,255,0.50) 0%,rgba(255,255,255,0.10) 42%,rgba(255,255,255,0) 62%),
+    linear-gradient(180deg,#f7bd6d 0%,#eaa953 48%,#d4913e 100%);
+  border-color:#b8792d;color:#2b1a06;
+  font-family:inherit;font-size:0.8rem;font-weight:800;letter-spacing:0.005em;text-decoration:none;
+  text-shadow:0 1px 0 rgba(255,255,255,0.28);
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.30),
+    0 3px 8px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.62),
+    inset 0 -1px 0 rgba(120,66,10,0.30);
+  transition:background .16s ease,border-color .16s ease,box-shadow .2s ease,transform .16s ease}
+
+/* Sheen. Sits above the background but below the label, and is parked off the
+   left edge until hover so it never flickers on load. */
+.util-social.kofi::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.55) 47%,transparent 64%);
+  transform:translateX(-130%);opacity:0}
+.util-social.kofi:hover::after{animation:kofiSheen .75s ease-out}
+@keyframes kofiSheen{
+  0%{transform:translateX(-130%);opacity:0}
+  18%{opacity:1}
+  100%{transform:translateX(130%);opacity:0}}
+
+.util-social.kofi:hover{
+  background:
+    radial-gradient(130% 150% at 24% -20%,rgba(255,255,255,0.58) 0%,rgba(255,255,255,0.14) 42%,rgba(255,255,255,0) 62%),
+    linear-gradient(180deg,#ffcb7f 0%,#f4b662 48%,#df9c46 100%);
+  border-color:#c9862f;color:#2b1a06;transform:translateY(-1.5px);
+  box-shadow:
+    0 2px 3px rgba(0,0,0,0.26),
+    0 9px 22px rgba(226,158,70,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.72),
+    inset 0 -1px 0 rgba(120,66,10,0.26)}
+.util-social.kofi:active{transform:translateY(0) scale(0.985);
+  background:linear-gradient(180deg,#d4913e 0%,#e5a34d 60%,#f0b262 100%);
+  box-shadow:0 1px 1px rgba(0,0,0,0.30),inset 0 2px 5px rgba(96,52,6,0.34)}
+.util-social.kofi:focus-visible{outline:2px solid #ffcb7f;outline-offset:2px}
+
+/* Steam only moves on hover — a permanently animating header is a distraction. */
+.kofi-ico{overflow:visible}
+.kofi-steam{opacity:0;transition:opacity .18s ease}
+.kofi-steam path{transform-origin:center bottom}
+.util-social.kofi:hover .kofi-steam{opacity:0.92}
+.util-social.kofi:hover .kofi-steam path{animation:kofiSteam 1.9s ease-in-out infinite}
+.util-social.kofi:hover .kofi-steam path:nth-child(2){animation-delay:.42s}
+
+@keyframes kofiSteam{
+  0%{opacity:0;transform:translateY(1.5px) scaleY(0.75)}
+  25%{opacity:1}
+  70%{opacity:0.85}
+  100%{opacity:0;transform:translateY(-2.5px) scaleY(1.1)}}
+
+@media(prefers-reduced-motion:reduce){
+  .util-social.kofi{transition:background .16s,border-color .16s}
+  .util-social.kofi:hover,.util-social.kofi:active{transform:none}
+  .util-social.kofi:hover::after{animation:none}
+  .util-social.kofi:hover .kofi-steam{opacity:0.7}
+  .util-social.kofi:hover .kofi-steam path{animation:none}}
 .kofi-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
 .tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
@@ -2480,7 +2546,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
     <div class="util-cluster">
       <a class="util-social kofi" href="https://ko-fi.com/jerminaldecline" target="_blank" rel="noopener" title="Support on Ko-fi" aria-label="Support on Ko-fi">
-        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M4 4h11v9a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V4z"/><path fill="none" stroke="currentColor" stroke-width="2" d="M15 6h2.4a2.5 2.5 0 0 1 0 5H15"/><rect fill="currentColor" x="3" y="19" width="13" height="2" rx="1"/></svg>
+        <svg class="kofi-ico" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+          <g class="kofi-steam" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <path d="M7.2 7c2.3-1.8-2.3-3.6 0-5.4"/>
+            <path d="M12.4 7c2.3-1.8-2.3-3.6 0-5.4"/>
+          </g>
+          <path fill="currentColor" d="M3.4 8.4h12.2v4.9a6.1 6.1 0 0 1-12.2 0z"/>
+          <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M16.1 10.2h1.3a3.1 3.1 0 0 1 0 6.2h-1"/>
+          <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M2.2 21.4h14.6"/>
+        </svg>
         <span class="kofi-label">Buy me a coffee</span>
       </a>
       <div class="util-stack">
