@@ -10,10 +10,17 @@
  * not stale) are left untouched, so a normal run makes just a handful of
  * requests. The Removed tab reads this side-file to label + sort by reason.
  *
- * Kept OUT of the hourly fetch-data.js on purpose: watch-page scraping is
+ * Kept OUT of fetch-data.js itself on purpose: watch-page scraping is
  * rate-limited and often bot-walled from datacenter IPs (GitHub Actions), so it
- * runs best-effort and never blocks the data build. Run it locally, or wire it
- * as a non-fatal step. Existing reasons persist when a run can't reach YouTube.
+ * must never block the data build. It runs instead as a separate non-fatal step
+ * in both the hourly update and the twice-daily audit; existing reasons persist
+ * when a run can't reach YouTube, and the next run retries what it missed.
+ *
+ * The hourly slot matters because the strike banner keys off the reason code,
+ * not the unavailable flag: until a removal is classified, a Community
+ * Guidelines strike is indistinguishable from a video the uploader made private
+ * and the banner cannot fire. On the twice-daily schedule alone that left a
+ * removal invisible for up to 12 hours.
  *
  * Usage:
  *   node scripts/resolve-removed-reasons.js            # incremental
@@ -81,7 +88,8 @@ async function main() {
   const removed = data.videos.filter(v => v.unavailable || v.unlisted);
   const removedIds = new Set(removed.map(v => v.id));
   // Prune reasons for videos no longer removed (reinstated / back to public).
-  for (const id of Object.keys(store.reasons)) if (!removedIds.has(id)) delete store.reasons[id];
+  let pruned = 0;
+  for (const id of Object.keys(store.reasons)) if (!removedIds.has(id)) { delete store.reasons[id]; pruned++; }
 
   const now = Date.now();
   const stale = e => {
@@ -113,11 +121,19 @@ async function main() {
     if (scraped % 20 === 0) console.log('  …scraped ' + scraped);
   }
 
-  store._generated = new Date().toISOString().slice(0, 10);
-  fs.writeFileSync(OUT, JSON.stringify(store, null, 1));
+  // Running hourly, a blind write would rewrite the file at every UTC midnight
+  // purely to bump _generated, committing a one-line diff carrying no new
+  // information. Nothing reads _generated on this file, so leave it alone unless
+  // a reason actually moved. `changed`/`pruned` already track exactly that.
+  const quiet = !changed && !pruned && fs.existsSync(OUT);
+  if (!quiet) {
+    store._generated = new Date().toISOString().slice(0, 10);
+    fs.writeFileSync(OUT, JSON.stringify(store, null, 1));
+  }
   const tally = {};
   Object.values(store.reasons).forEach(o => { tally[o.reason] = (tally[o.reason] || 0) + 1; });
-  console.log('removed-reasons.json: ' + Object.keys(store.reasons).length + ' entries (scraped ' + scraped + ', changed ' + changed + ')');
+  console.log('removed-reasons.json: ' + Object.keys(store.reasons).length + ' entries (scraped ' + scraped
+    + ', changed ' + changed + ', pruned ' + pruned + (quiet ? ') — unchanged, not rewritten' : ')'));
   console.log('tally: ' + JSON.stringify(tally));
 }
 
