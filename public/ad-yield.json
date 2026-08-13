@@ -1,12 +1,12 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-08-12",
+ "_generated": "2026-08-13",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-08-12",
-  "snapshots": 121
+  "to": "2026-08-13",
+  "snapshots": 123
  },
  "ageMinDays": 14,
  "sample": {
@@ -25,12 +25,14 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
-  "FiLs5ovIfts": 57,
-  "Sr0WmHdxJvs": 44,
-  "kT0UsZpuKaU": 3,
-  "n-I7Cp9iTTw": 9,
-  "3O6sdSffHzs": 38,
-  "aGDMKiNGFr8": 2,
+  "FiLs5ovIfts": 58,
+  "kT0UsZpuKaU": 4,
+  "Sr0WmHdxJvs": 45,
+  "3O6sdSffHzs": 39,
+  "aGDMKiNGFr8": 3,
+  "iTu_6j22RAM": 1,
+  "O_LjCrLlUAw": 1,
+  "xQCnmaq_L-4": 1,
   "tcevefZ9G18": 1,
   "7Mg87BPII_4": 8,
   "TYPV_Ej1ND4": 1,
