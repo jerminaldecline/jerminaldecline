@@ -3683,6 +3683,11 @@ let ovTopicsExpanded = false; // topic cards: top 6 collapsed, top 12 expanded
 // Remembers what render() last drew (a month-key string or an aggregate object)
 // so view toggles (topic axis) can re-render the same report.
 let ovCurrent = null;
+// Redraw the report exactly as it stands. Used by the side-data loader so the
+// highlight cards pick up their ad badges when ad-videos.json lands after paint.
+window.__ovRerender = function(){
+  if (ovCurrent != null && typeof render === 'function') { try { render(ovCurrent); } catch(e){} }
+};
 function ovSortVideos(arr){
   const { by, dir } = ovSort;
   const sign = dir === 'asc' ? 1 : -1;
@@ -3990,8 +3995,15 @@ function render(m){
     return `<span class="hl-topic"><span class="hl-topic-dot" style="background:${s.topicColor||'#888'}"></span>${escapeHtml(s.topic)}</span>`;
   };
   // Title row: video title on the left, topic chip pushed to the right.
+  // "Best performer" is a misleading label if the video was advertised into that
+  // position, so the highlight cards carry the same ad badge the video lists do.
+  // Read from the global rather than adVideoIds: that set lives in a later scope
+  // and lands after first paint (see the re-render in the loader).
+  const hlAdBadge = (s) => ((window.__adIdSet && window.__adIdSet.has(s.id))
+    ? ` <span class="promo-badge" tabindex="0" role="button" aria-label="Video promoted through paid advertisement" data-popover="Video promoted through paid advertisement (Google Ads Transparency Centre). Its figures are not purely organic.">ad <span class="promo-badge-info" aria-hidden="true">ⓘ</span></span>`
+    : '');
   const titleRow = (s, link) =>
-    `<a class="hl-title" href="${link}" target="_blank" rel="noopener">${escapeHtml(s.title)}${LINK_ICON}</a>`;
+    `<a class="hl-title" href="${link}" target="_blank" rel="noopener">${escapeHtml(s.title)}${LINK_ICON}</a>${hlAdBadge(s)}`;
   // Card-label row: the card heading on the left, topic chip on the right.
   const labelRow = (heading, s, topicOpts) =>
     `<div class="hl-labelrow"><div class="hl-label">${heading}</div>${topicTag(s, topicOpts)}</div>`;
@@ -10710,14 +10722,17 @@ function renderWindowList(startDate, endDate) {
         el.title = d.toLocaleString('en-GB');
       }
     }
-    // Off the critical path: ad badges + title history only affect the Videos
-    // tab, so first paint shouldn't block on ~700 KB of side data. Re-render
-    // the Videos tab (and tab badges) when they arrive, if it's active.
+    // Off the critical path: first paint shouldn't block on ~700 KB of side
+    // data. Re-render whichever tab is showing once it arrives — the Overview
+    // needs it too now that its highlight cards carry the ad badge, and without
+    // this a promoted "best performer" would silently render unbadged whenever
+    // the fetch lost the race with first paint.
     if (window.__loadVideosExtraData) {
       window.__loadVideosExtraData().then(() => {
         try {
           const t = (new URLSearchParams(location.search).get('tab')) || 'overview';
           if (t === 'videos' && typeof window.renderVideosTab === 'function') window.renderVideosTab();
+          if (t === 'overview' && typeof window.__ovRerender === 'function') window.__ovRerender();
           if (window.__updateVtabBadges) window.__updateVtabBadges();
           // Needs both data.json (for unavailableSince) and removed-reasons.json,
           // so it runs here, once the side data has landed.
