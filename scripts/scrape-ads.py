@@ -178,7 +178,15 @@ def resolve_creative_videos(creatives):
             cache = json.loads(CREATIVE_CACHE.read_text(encoding="utf-8"))
         except Exception:
             cache = {}
-    todo = [c for c in creatives if c["creative"] not in cache and c["preview"]]
+    # A cached None means "fetched once, found no video id" — a timeout, a slow
+    # render, a transient error. Treating that as final permanently blacklists the
+    # creative, because it is never fetched again: the unresolved count only ever
+    # grew (2 -> 3 -> 3 -> 4 over 11-14 Aug 2026) and it silently suppressed a real
+    # running ad (MCDONALDS BUSTED, live and visible in the wild, held back because
+    # its one resolution attempt had failed). Retry the Nones every run — there are
+    # only ever a handful, so the cost is a few requests, and a creative that
+    # genuinely has no YouTube id simply stays None.
+    todo = [c for c in creatives if cache.get(c["creative"]) is None and c["preview"]]
     log(f"resolving {len(todo)} new creatives to videos ({len(creatives) - len(todo)} cached)")
 
     yt = re.compile(r"(?:i\.ytimg\.com/vi/|youtube\.com/(?:watch\?v=|embed/)|youtu\.be/)"
