@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-13
+# Topic candidates — 2026-08-14
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,27 +6,27 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 120 baseline videos
+Pool: 17 recent videos, 124 baseline videos
 
 ### Cluster 1: `candace`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/120 videos (3%)
-- **Spike ratio:** 5.8x
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 4/124 videos (3%)
+- **Spike ratio:** 4.9x
 - **Related terms:** `candace`, `owens`, `candace owens`
 - **Sample recent videos:**
+  - 2026-08-13 — _I CAN'T BELIEVE IT_  
+    Candace Owens And Andrew Wilson Debate Just Became Must Watch
   - 2026-08-12 — _THEY GAVE UP_  
     He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
   - 2026-08-11 — _THEY FELL FOR IT_  
     Tim Pool Expertly Trolls Candace Owens And Her Fans Explode
-  - 2026-08-06 — _JOE ROGAN VS CANDACE OWENS_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Candace Refuses $300,000 Debate Then Gets Exposed 
 
 ### Cluster 2: `massive`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 5/120 videos (4%)
-- **Spike ratio:** 3.7x
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 5/124 videos (4%)
+- **Spike ratio:** 4.0x
 - **Related terms:** `massive`
 - **Sample recent videos:**
   - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
@@ -38,25 +38,53 @@ Pool: 18 recent videos, 120 baseline videos
 
 ## @JeremyHambly
 
-Pool: 11 recent videos, 68 baseline videos
+Pool: 11 recent videos, 69 baseline videos
 
-### Cluster 1: `candace`
+### Cluster 1: `main candace`
 
-- **Recent saturation:** 6/11 videos (**55%**)
-- **Baseline saturation:** 16/68 videos (24%)
-- **Spike ratio:** 2.3x
-- **Related terms:** `candace`, `owens`, `wilson`, `andrew`, `candace owens`, `andrew wilson`
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 1/69 videos (1%)
+- **Spike ratio:** 12.7x
+- **Related terms:** `main candace`
 - **Sample recent videos:**
+  - 2026-08-13 — _SHE'S FREAKING OUT_  
+    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
   - 2026-08-12 — _THIS WAS BRUTAL_  
     Candace Owens Posts Joe Rogan Message And Instantly Regrets
   - 2026-08-10 — _CANDACE OWENS FULL BLOWN MELTDOWN_  
     Candace Owens Threatens Police Report As Her Conspiracy Implodes
-  - 2026-08-10 — _THIS WAS GREAT_  
-    Candace Owens Gets A Painful Reality Check From Michael Knowles
+
+### Cluster 2: `wilson`
+
+- **Recent saturation:** 3/11 videos (**27%**)
+- **Baseline saturation:** 5/69 videos (7%)
+- **Spike ratio:** 3.5x
+- **Related terms:** `wilson`, `andrew`, `andrew wilson`
+- **Sample recent videos:**
+  - 2026-08-12 — _THIS WAS BRUTAL_  
+    Candace Owens Posts Joe Rogan Message And Instantly Regrets
   - 2026-08-08 — _I CAN'T BELIEVE IT!_  
     Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Owens And Andrew Wilson Finally Agree To Explo
   - 2026-08-07 — _THIS IS HER END_  
     Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Demands More Money Total Control Before Accept
+
+### Cluster 3: `main`
+
+- **Recent saturation:** 9/11 videos (**82%**)
+- **Baseline saturation:** 18/69 videos (26%)
+- **Spike ratio:** 3.1x
+- **Related terms:** `main`, `coffee main`
+- **Sample recent videos:**
+  - 2026-08-13 — _SHE'S FREAKING OUT_  
+    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
+  - 2026-08-12 — _THIS WAS BRUTAL_  
+    Candace Owens Posts Joe Rogan Message And Instantly Regrets
+  - 2026-08-12 — _SPOOKY NEW SCAM_  
+    Dangerous Best Buy Gift Card Scam Could Steal Your Identity
+  - 2026-08-11 — _JOE ROGAN HAS HAD ENOUGH_  
+    Joe Rogan Leaves Woke Gender Ideology With Nowhere To Hide
+  - 2026-08-11 — _MAMDANI EPICALLY FAILS_  
+    Mamdani Backs Down As Court Freezes His Massive Property Tax
 
 ---
 
