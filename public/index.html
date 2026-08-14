@@ -229,6 +229,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    wins first, so the basis is what has to give. */
 .strike-body{flex:1 1 0;min-width:0;color:var(--label)}
 .strike-head{font-weight:800;color:var(--text);margin-bottom:0.15rem}
+/* The timeframe qualifies the news, it isn't the news — kept legible but clearly
+   secondary so the reason it now carries stays the loudest thing in the banner. */
+.strike-when{font-weight:600;color:var(--text-muted)}
 .strike-list{margin:0.3rem 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0.25rem}
 /* One line per removal, but the REASON must never be what gets cut. It sits last,
    so a plain nowrap+ellipsis on the li ate it first ("(Community ..."), losing the
@@ -260,7 +263,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .strike-x{background:transparent;border:none;color:var(--text-dim);font-size:1.05rem;line-height:1;
   cursor:pointer;padding:0.2rem 0.3rem;border-radius:6px}
 .strike-x:hover{color:var(--text)}
-@media(max-width:680px){.strike-banner{flex-wrap:wrap}.strike-actions{width:100%;justify-content:flex-end}}
+/* On a phone a single nowrap line cut the title to about three words ("I Cannot
+   Even …"), which identifies nothing. There is vertical room here and only ever a
+   handful of rows, so let the row wrap and clamp it at two lines instead. */
+@media(max-width:680px){
+  .strike-banner{flex-wrap:wrap}
+  .strike-actions{width:100%;justify-content:flex-end}
+  .strike-list li{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;white-space:normal}
+  .strike-title{display:inline;overflow:visible;text-overflow:clip;min-width:0}
+}
 .report-head-main{min-width:0}
 .month-in-progress{display:inline-flex;align-items:center;gap:0.3rem;margin-left:0.6rem;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-2,#e0a458);vertical-align:middle;white-space:nowrap;animation:ipPulse 2.2s ease-in-out infinite}
 @keyframes ipPulse{0%,100%{opacity:1}50%{opacity:0.55}}
@@ -8724,12 +8736,17 @@ function niceDurationAxis(minSec, maxSec) {
   // Severity matters twice over: it picks the banner's tone, and it decides which
   // items survive the list cap. A bulk privating (148 in one day on 2026-07-28)
   // must not push a copyright strike off the visible list.
+  // `label` is the per-row tag, used only when a batch mixes reasons. `headline`
+  // is the same fact promoted into the heading, which is where it belongs when
+  // every video in the batch went the same way — the severity is the news, and as
+  // a dim parenthetical at the end of the row it was both the least visible thing
+  // in the banner and the first thing truncation ate.
   const STRIKE_REASONS = {
-    terminated: { label: 'channel terminated', rank: 0, strike: true },
-    copyright:  { label: 'a copyright claim',  rank: 1, strike: true },
-    guidelines: { label: 'Community Guidelines', rank: 2, strike: true },
-    deleted:    { label: 'deleted',            rank: 3, strike: false },
-    private:    { label: 'made private',       rank: 4, strike: false },
+    terminated: { label: 'channel terminated', headline: 'after a channel termination', rank: 0, strike: true },
+    copyright:  { label: 'a copyright claim',  headline: 'after a copyright claim',     rank: 1, strike: true },
+    guidelines: { label: 'Community Guidelines', headline: 'for violating Community Guidelines', rank: 2, strike: true },
+    deleted:    { label: 'deleted',            headline: '',                            rank: 3, strike: false },
+    private:    { label: 'made private',       headline: '',                            rank: 4, strike: false },
   };
   window.renderStrikeAlert = function renderStrikeAlert(){
     const box = document.getElementById('strikeBanner');
@@ -8794,6 +8811,13 @@ function niceDurationAxis(minSec, maxSec) {
     const rest = hits.filter(v => !(reasons[v.id].reason === 'terminated' && termCount[v.channelId]));
     const restRoom = Math.max(0, MAX_LIST - termChannels.length);
     const shown = rest.slice(0, restRoom);
+    // A batch is usually one video, or several taken the same way. When the reason
+    // is common to all of them it is stated once in the heading and the rows drop
+    // it — which is what frees the row's full width for the title. Only a genuinely
+    // mixed batch still needs a per-row tag.
+    const reasonSet = new Set(hits.map(v => (reasons[v.id] || {}).reason));
+    const soleHeadline = reasonSet.size === 1
+      ? (STRIKE_REASONS[[...reasonSet][0]] || {}).headline || '' : '';
     const items = termItems + shown.map(v => {
       const ch = chans[v.channelId] || {};
       const why = (STRIKE_REASONS[(reasons[v.id] || {}).reason] || {}).label || 'removal';
@@ -8806,7 +8830,7 @@ function niceDurationAxis(minSec, maxSec) {
       return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b>` +
         `<span class="strike-dash" aria-hidden="true">&nbsp;—&nbsp;</span>` +
         `<span class="strike-title">${escapeHtml(clean)}</span>` +
-        `<span class="strike-why">&nbsp;(${escapeHtml(why)})</span></li>`;
+        (soleHeadline ? '' : `<span class="strike-why">&nbsp;(${escapeHtml(why)})</span>`) + `</li>`;
     }).join('');
 
     // An enforcement action and the creator privating his own uploads are not the
@@ -8821,13 +8845,14 @@ function niceDurationAxis(minSec, maxSec) {
           ? `${(chans[termChannels[0]] || {}).handle || 'A channel'} has been terminated`
           : `${termChannels.length} channels have been terminated`)
       : anyStrike
-        ? (n === 1 ? 'A video was removed' : n + ' videos were removed')
+        ? (n === 1 ? 'A video was removed' : n + ' videos were removed') +
+          (soleHeadline ? ' ' + soleHeadline : '')
         : (n === 1 ? 'A video is no longer public' : n + ' videos are no longer public');
 
     box.innerHTML =
       `<span class="strike-icon" aria-hidden="true">${anyStrike ? '⚠' : '👁'}</span>` +
       `<div class="strike-body">` +
-        `<div class="strike-head">${head} in the last 24 hours</div>` +
+        `<div class="strike-head">${head}<span class="strike-when"> · last 24h</span></div>` +
         `<ul class="strike-list">${items}` +
           (rest.length > shown.length
             ? `<li class="strike-more">…and ${(rest.length - shown.length).toLocaleString()} more</li>` : '') +
