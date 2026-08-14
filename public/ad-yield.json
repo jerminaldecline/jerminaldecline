@@ -6,18 +6,18 @@
  "snapshotEra": {
   "from": "2026-06-11",
   "to": "2026-08-14",
-  "snapshots": 125
+  "snapshots": 126
  },
  "ageMinDays": 14,
  "sample": {
   "campaigns": 8,
   "campaignDays": 33,
-  "adViews": 151133
+  "adViews": 151212
  },
  "viewsPerCampaignDay": {
   "low": 1367,
-  "central": 4580,
-  "high": 11122
+  "central": 4582,
+  "high": 11128
  },
  "cpvUSD": {
   "low": 0.015,
@@ -28,6 +28,7 @@
   "kT0UsZpuKaU": 5,
   "aGDMKiNGFr8": 4,
   "iTu_6j22RAM": 2,
+  "EeVtP-LxWaI": 1,
   "O_LjCrLlUAw": 2,
   "Sr0WmHdxJvs": 45,
   "3O6sdSffHzs": 39,
@@ -145,6 +146,7 @@
   "xXVaYfbSwgA": 4,
   "ylmhShFD48Q": 4,
   "ZdOwygmc8jg": 4,
+  "qhSSU-cPFt4": 4,
   "pNP4B0PJk-Q": 4
  },
  "measurements": [
@@ -221,10 +223,10 @@
    "days": 4,
    "observedTo": "2026-08-14",
    "observedDays": 5,
-   "gain": 38680,
+   "gain": 38717,
    "baselinePerDay": 1,
-   "adViews": 38675,
-   "perDay": 9669
+   "adViews": 38712,
+   "perDay": 9678
   },
   {
    "id": "3O6sdSffHzs",
@@ -234,10 +236,10 @@
    "days": 4,
    "observedTo": "2026-08-14",
    "observedDays": 5,
-   "gain": 44487,
+   "gain": 44512,
    "baselinePerDay": 0,
-   "adViews": 44487,
-   "perDay": 11122
+   "adViews": 44512,
+   "perDay": 11128
   },
   {
    "id": "FiLs5ovIfts",
@@ -247,10 +249,10 @@
    "days": 4,
    "observedTo": "2026-08-14",
    "observedDays": 5,
-   "gain": 34071,
+   "gain": 34088,
    "baselinePerDay": 0,
-   "adViews": 34071,
-   "perDay": 8518
+   "adViews": 34088,
+   "perDay": 8522
   }
  ]
 }
