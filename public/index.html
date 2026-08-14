@@ -621,6 +621,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Active = feature ON (accent fill); inactive = muted outline. */
 .chart-ctrl-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .chart-ctrl-btn[hidden]{display:none}
+/* Format segment: three buttons welded into one control, so the choice reads as
+   one setting with three states rather than three independent toggles. */
+.chart-fmt-seg{display:inline-flex}
+.chart-fmt-seg[hidden]{display:none}
+.chart-fmt-seg .chart-ctrl-btn.seg{border-radius:0;margin-left:-1px}
+.chart-fmt-seg .chart-ctrl-btn.seg:first-child{border-radius:8px 0 0 8px;margin-left:0}
+.chart-fmt-seg .chart-ctrl-btn.seg:last-child{border-radius:0 8px 8px 0}
+.chart-fmt-seg .chart-ctrl-btn.seg[aria-pressed="true"]{position:relative;z-index:1}
 .chart-ctrl-swatch{display:inline-block;width:14px;height:3px;border-radius:2px;background:currentColor;opacity:0.8}
 .chart-wrap.labels-hidden .chart-pt-label{display:none}
 /* Mobile: the legend grows when Previous year is toggled on (it adds the
@@ -2698,7 +2706,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="trend-legend" id="trendLegend"></div>
         <div class="chart-controls-overlay">
           <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
-          <button type="button" class="chart-ctrl-btn" id="includeShortsToggle" aria-pressed="false" hidden title="Add Shorts views to the chart (off = long-form only)">Include Shorts</button>
+          <!-- Long-form / Shorts / Both. Replaces the old "Include Shorts"
+               toggle, which could only add Shorts to long-form and gave no way
+               to see the Shorts trend on its own — the thing @QuarteringLive is
+               now made entirely of. Three states, one control, matching the
+               format switch the Videos tab already uses. -->
+          <div class="chart-fmt-seg" id="chartFormatSeg" role="group" aria-label="Video format" hidden>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="long" aria-pressed="true" title="Long-form uploads only">Long-form</button>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="short" aria-pressed="false" title="Shorts only">Shorts</button>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="all" aria-pressed="false" title="Long-form and Shorts combined">Both</button>
+          </div>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
       </div>
@@ -5167,6 +5184,13 @@ function buildMonthlyData(scope){
     if (viewMode === 'long') {
       return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
     }
+    // Shorts-only. This branch was missing: setChartTitle has always labelled
+    // mode 'short' as "Shorts views by month", but without it the chart fell
+    // through to totals below — so the title would have said Shorts while the
+    // line plotted long-form + Shorts combined.
+    if (viewMode === 'short') {
+      return { views: summary.shortViews, count: summary.shorts.length, avg: summary.shortAvg, label: 'Short' };
+    }
     return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
   }
   function activeDisplayName() {
@@ -5399,7 +5423,7 @@ function renderTrendChart(yoy) {
   if (chartMetric === 'subs') {
     const pyc = document.getElementById('prevYearControl');
     if (pyc) pyc.hidden = true;
-    const isc = document.getElementById('includeShortsToggle');
+    const isc = document.getElementById('chartFormatSeg');
     if (isc) isc.hidden = true;
     return renderSubsChart();
   }
@@ -5421,10 +5445,15 @@ function renderTrendChart(yoy) {
       ctrl.hidden = !supports;
       ctrl.setAttribute('aria-pressed', String(showPrevYear));
     }
-    const shortsCtrl = document.getElementById('includeShortsToggle');
+    // The format segment applies to the plain Views metric only — the other
+    // metrics keep their long-form framing (see metricsFor).
+    const shortsCtrl = document.getElementById('chartFormatSeg');
     if (shortsCtrl) {
       shortsCtrl.hidden = chartMetric !== 'views';
-      shortsCtrl.setAttribute('aria-pressed', String(includeShorts));
+      const active = includeShorts ? 'all' : (viewMode === 'short' ? 'short' : 'long');
+      for (const b of shortsCtrl.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String(b.dataset.fmt === active));
+      }
     }
   })();
 
@@ -5539,7 +5568,26 @@ function renderTrendChart(yoy) {
   // In views+length mode, we suppress the YoY visual (deficit/surplus fills, prev-year line)
   // because two superimposed lines on dual axes plus the gap fill becomes noisy.
   // The view-history alone is the story; duration overlay is the story.
-  const effectiveYoy = yoy && !showDuration;
+  // A previous-year line needs enough year-ago months to read as a comparison.
+  // @QuarteringLive launched in July 2025, so across its 13-month window only
+  // the last two months have a year-ago counterpart — and the result was a
+  // two-point grey line appearing out of nowhere at the right edge, which looks
+  // far more like a projection than like last year's numbers. Below a third of
+  // the range (and at least 3 points) it is noise, so the line is suppressed and
+  // the legend entry with it.
+  const yoyCoverage = chartData.reduce((k, m) => k + (m.yoy ? 1 : 0), 0);
+  const yoyUsable = yoyCoverage >= 3 && yoyCoverage >= chartData.length / 3;
+  const effectiveYoy = yoy && !showDuration && yoyUsable;
+  // The subtitle is written before this point and advertises "year-over-year
+  // shading". Drop that clause when there is no comparison line to shade against,
+  // rather than describing something the chart does not contain.
+  if (!yoyUsable) {
+    const _sub = document.querySelector('#anChartTitle .an-chart-title-sub');
+    // Take the punctuation that introduced the clause with it — the Shorts-
+    // included subtitle joins it with an em dash, and stripping only the words
+    // left "long-form and Shorts —." hanging.
+    if (_sub) _sub.textContent = _sub.textContent.replace(/[\s,–—-]*with year-over-year shading/i, '');
+  }
 
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
@@ -8724,7 +8772,19 @@ function niceDurationAxis(minSec, maxSec) {
     // Rounding would consistently produce N+1; flooring gives the intuitive N.
     const days = Math.floor((end - start) / dayMs);
     if (days <= 32) return `${days} days`;
-    const months = Math.round(days / 30.4);
+    // Count CALENDAR months and separate a final in-progress one. The "Last 12
+    // months" preset spans 12 complete months plus the current partial month
+    // (which the views chart also plots, as its own in-progress point), and
+    // days/30.4 rounded that whole span to a flat "13 months" — contradicting
+    // the filter label and implying 13 months of completed earnings.
+    const sY = start.getUTCFullYear(), sM = start.getUTCMonth();
+    const eY = end.getUTCFullYear(), eM = end.getUTCMonth();
+    let months = (eY - sY) * 12 + (eM - sM) + 1;
+    const endKey = `${eY}-${String(eM + 1).padStart(2, '0')}`;
+    if (typeof CURRENT_MONTH_KEY !== 'undefined' && endKey === CURRENT_MONTH_KEY && months > 1) {
+      const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months - 1} months + ${MON[eM]} so far`;
+    }
     if (months <= 14) return `${months} months`;
     const years = (days / 365.25);
     return years < 2 ? `${years.toFixed(1)} years` : `${Math.round(years)} years`;
@@ -10721,13 +10781,25 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(next);
     });
   }
-  // Include-Shorts toggle (Views metric only; off = long-form, the default)
-  const shortsBtn = document.getElementById('includeShortsToggle');
-  if (shortsBtn) {
-    shortsBtn.addEventListener('click', () => {
-      const next = shortsBtn.getAttribute('aria-pressed') !== 'true';
-      shortsBtn.setAttribute('aria-pressed', String(next));
-      if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(next);
+  // Format segment (Views metric only; Long-form is the default).
+  // 'all' is the old Include-Shorts behaviour, kept as the third state so the
+  // combined view is still reachable; 'short' is new and drives viewMode, which
+  // metricsFor now honours.
+  const fmtSeg = document.getElementById('chartFormatSeg');
+  if (fmtSeg) {
+    fmtSeg.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chart-ctrl-btn.seg');
+      if (!btn) return;
+      const fmt = btn.dataset.fmt;
+      for (const b of fmtSeg.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      }
+      // Order matters: set the view mode first, then the combined flag, so the
+      // single re-render that setIncludeShorts triggers sees both.
+      if (typeof window.setAnalysisViewMode === 'function') {
+        window.setAnalysisViewMode(fmt === 'short' ? 'short' : 'long');
+      }
+      if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(fmt === 'all');
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
