@@ -1,0 +1,1676 @@
+{
+ "_note": "Long-form videos whose custom thumbnail was uploaded more than 2 days after the video went live — i.e. the thumbnail was changed after publication. Shorts are excluded: they carry no custom thumbnail, so this method cannot see changes to them.",
+ "_method": "i.ytimg.com mqdefault ETag = unix timestamp of the custom-thumbnail upload (HEAD request, no API quota)",
+ "_generated": "2026-08-14",
+ "_thresholdDays": 2,
+ "_sweepMin": 5,
+ "_longformChecked": 13207,
+ "_withCustomThumb": 12799,
+ "_changed": 345,
+ "_isolated": 73,
+ "sweeps": {
+  "2026-03-14": 5,
+  "2018-01-03": 98,
+  "2013-02-12": 18,
+  "2013-02-07": 20,
+  "2013-02-11": 19,
+  "2013-02-10": 16,
+  "2012-03-28": 5,
+  "2013-02-14": 42,
+  "2013-02-19": 49
+ },
+ "videos": {
+  "53uwX1h3KM8": {
+   "thumbSet": "2026-07-01T20:48:33.000Z",
+   "delayDays": 7
+  },
+  "sibQ08fChj0": {
+   "thumbSet": "2026-06-15T14:53:37.000Z",
+   "delayDays": 3
+  },
+  "ENBD5Prh1Lc": {
+   "thumbSet": "2026-06-17T16:11:13.000Z",
+   "delayDays": 7
+  },
+  "y_hkvJEDQqg": {
+   "thumbSet": "2026-06-08T22:01:03.000Z",
+   "delayDays": 4
+  },
+  "H8JrWlQ32u4": {
+   "thumbSet": "2026-06-08T22:00:50.000Z",
+   "delayDays": 4
+  },
+  "IPMipEFSMSU": {
+   "thumbSet": "2026-06-05T21:32:07.000Z",
+   "delayDays": 3
+  },
+  "RUYE_L8i890": {
+   "thumbSet": "2026-06-05T22:17:29.000Z",
+   "delayDays": 3
+  },
+  "y-Ar5edplFU": {
+   "thumbSet": "2026-04-02T12:58:20.000Z",
+   "delayDays": 15
+  },
+  "HBtx6wyTVjQ": {
+   "thumbSet": "2026-03-23T17:36:37.000Z",
+   "delayDays": 7
+  },
+  "QhIJROAlGAo": {
+   "thumbSet": "2026-03-19T01:06:33.000Z",
+   "delayDays": 7
+  },
+  "KoRshLK1YtU": {
+   "thumbSet": "2026-03-18T21:19:11.000Z",
+   "delayDays": 7
+  },
+  "W2pJquebIZA": {
+   "thumbSet": "2026-03-18T17:16:34.000Z",
+   "delayDays": 8
+  },
+  "sSVGQ-GQ6Q8": {
+   "thumbSet": "2026-03-17T16:21:53.000Z",
+   "delayDays": 7
+  },
+  "fdcm-moWitI": {
+   "thumbSet": "2026-03-20T05:23:46.000Z",
+   "delayDays": 10
+  },
+  "CVMQ2WaI1HY": {
+   "thumbSet": "2026-03-16T22:25:52.000Z",
+   "delayDays": 7
+  },
+  "FKq9SWSjB6U": {
+   "thumbSet": "2026-03-16T18:33:55.000Z",
+   "delayDays": 7
+  },
+  "dhOXEakOpaM": {
+   "thumbSet": "2026-03-16T16:06:35.000Z",
+   "delayDays": 7
+  },
+  "6-MQP5GEoFY": {
+   "thumbSet": "2026-03-15T19:38:52.000Z",
+   "delayDays": 7
+  },
+  "n-0JLKaK6fs": {
+   "thumbSet": "2026-03-14T23:34:28.000Z",
+   "delayDays": 7,
+   "sweep": "2026-03-14"
+  },
+  "UjzBIdbk2zY": {
+   "thumbSet": "2026-03-14T19:48:55.000Z",
+   "delayDays": 7,
+   "sweep": "2026-03-14"
+  },
+  "hvLAtst7SgU": {
+   "thumbSet": "2026-03-14T00:51:14.000Z",
+   "delayDays": 7,
+   "sweep": "2026-03-14"
+  },
+  "2bcKKs6vpGU": {
+   "thumbSet": "2026-03-14T20:11:31.000Z",
+   "delayDays": 8,
+   "sweep": "2026-03-14"
+  },
+  "DnVhe7yfKtI": {
+   "thumbSet": "2026-03-27T21:40:16.000Z",
+   "delayDays": 21
+  },
+  "2ZoM5cMXzcc": {
+   "thumbSet": "2026-03-14T23:48:03.000Z",
+   "delayDays": 8,
+   "sweep": "2026-03-14"
+  },
+  "qW783xSUS9M": {
+   "thumbSet": "2024-06-21T18:39:41.000Z",
+   "delayDays": 9
+  },
+  "JWZoNhkDLyQ": {
+   "thumbSet": "2024-06-19T23:20:05.000Z",
+   "delayDays": 33
+  },
+  "GrpNI9peI64": {
+   "thumbSet": "2024-06-20T01:38:44.000Z",
+   "delayDays": 78
+  },
+  "9fjk2K1rv-E": {
+   "thumbSet": "2024-06-20T01:58:18.000Z",
+   "delayDays": 79
+  },
+  "Zg_reOJaKVc": {
+   "thumbSet": "2024-06-20T01:59:07.000Z",
+   "delayDays": 85
+  },
+  "M-jXumuv28E": {
+   "thumbSet": "2024-02-06T00:13:29.000Z",
+   "delayDays": 4
+  },
+  "oocG1fD4BXg": {
+   "thumbSet": "2023-02-03T07:47:50.000Z",
+   "delayDays": 49
+  },
+  "40Y4V0cj6IY": {
+   "thumbSet": "2022-10-19T18:30:41.000Z",
+   "delayDays": 6
+  },
+  "tStV7uQKRa8": {
+   "thumbSet": "2020-06-14T05:30:50.000Z",
+   "delayDays": 9
+  },
+  "q9YgzO7TRBI": {
+   "thumbSet": "2020-10-25T09:37:32.000Z",
+   "delayDays": 226
+  },
+  "4gxylwkOnBw": {
+   "thumbSet": "2019-04-18T21:02:13.000Z",
+   "delayDays": 24
+  },
+  "ovNLe3eZKz8": {
+   "thumbSet": "2019-03-29T05:27:28.000Z",
+   "delayDays": 50
+  },
+  "OGGy9t3KzVA": {
+   "thumbSet": "2019-03-15T21:32:10.000Z",
+   "delayDays": 68
+  },
+  "0j0xVb9h4es": {
+   "thumbSet": "2019-03-15T05:45:32.000Z",
+   "delayDays": 84
+  },
+  "8bclEyFnox8": {
+   "thumbSet": "2019-03-14T00:47:37.000Z",
+   "delayDays": 160
+  },
+  "cd6rFw0y_-8": {
+   "thumbSet": "2019-03-31T00:40:44.000Z",
+   "delayDays": 199
+  },
+  "6dkRsyNavUw": {
+   "thumbSet": "2019-03-14T14:48:36.000Z",
+   "delayDays": 185
+  },
+  "-LB8dq5Dh2w": {
+   "thumbSet": "2019-03-14T15:55:45.000Z",
+   "delayDays": 234
+  },
+  "5MPm8SN9PP0": {
+   "thumbSet": "2019-02-22T12:38:34.000Z",
+   "delayDays": 255
+  },
+  "CrnchNAnBnY": {
+   "thumbSet": "2018-12-17T04:37:30.000Z",
+   "delayDays": 224
+  },
+  "h5YgYOnvz4o": {
+   "thumbSet": "2018-05-28T17:00:50.000Z",
+   "delayDays": 40
+  },
+  "5x1SrzDWD1A": {
+   "thumbSet": "2018-05-28T17:00:43.000Z",
+   "delayDays": 61
+  },
+  "746-z7dfPPY": {
+   "thumbSet": "2019-02-19T20:54:07.000Z",
+   "delayDays": 351
+  },
+  "oZvVp1Agg-Q": {
+   "thumbSet": "2019-02-22T02:07:51.000Z",
+   "delayDays": 360
+  },
+  "Xo6d5kB6PrE": {
+   "thumbSet": "2018-10-25T18:10:03.000Z",
+   "delayDays": 287
+  },
+  "mW__i06XtAQ": {
+   "thumbSet": "2018-01-03T12:12:06.000Z",
+   "delayDays": 6,
+   "sweep": "2018-01-03"
+  },
+  "03ucFqzmCzU": {
+   "thumbSet": "2018-01-03T12:11:48.000Z",
+   "delayDays": 5,
+   "sweep": "2018-01-03"
+  },
+  "YsTBNLiBFb0": {
+   "thumbSet": "2018-01-03T12:11:40.000Z",
+   "delayDays": 6,
+   "sweep": "2018-01-03"
+  },
+  "0HQMUw0SDZk": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 8,
+   "sweep": "2018-01-03"
+  },
+  "kUoORe7i8iY": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 12,
+   "sweep": "2018-01-03"
+  },
+  "5fu-SZ68H5U": {
+   "thumbSet": "2018-01-03T12:11:58.000Z",
+   "delayDays": 14,
+   "sweep": "2018-01-03"
+  },
+  "8Lh6zVXsVxc": {
+   "thumbSet": "2018-01-03T12:11:50.000Z",
+   "delayDays": 16,
+   "sweep": "2018-01-03"
+  },
+  "9glXUb9L89E": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 18,
+   "sweep": "2018-01-03"
+  },
+  "7UEmxTvH5mk": {
+   "thumbSet": "2018-01-03T12:11:47.000Z",
+   "delayDays": 20,
+   "sweep": "2018-01-03"
+  },
+  "BkeIZ64X4ac": {
+   "thumbSet": "2018-01-03T12:11:47.000Z",
+   "delayDays": 19,
+   "sweep": "2018-01-03"
+  },
+  "8q9EqIGgJq8": {
+   "thumbSet": "2018-01-03T12:11:43.000Z",
+   "delayDays": 21,
+   "sweep": "2018-01-03"
+  },
+  "UGFcLvDRJNQ": {
+   "thumbSet": "2018-01-03T12:11:56.000Z",
+   "delayDays": 24,
+   "sweep": "2018-01-03"
+  },
+  "zy39lvqEx54": {
+   "thumbSet": "2018-01-03T12:12:03.000Z",
+   "delayDays": 25,
+   "sweep": "2018-01-03"
+  },
+  "h3dATHNweCI": {
+   "thumbSet": "2018-01-03T12:11:33.000Z",
+   "delayDays": 26,
+   "sweep": "2018-01-03"
+  },
+  "NIh3ykLBzOM": {
+   "thumbSet": "2018-01-03T12:11:51.000Z",
+   "delayDays": 26,
+   "sweep": "2018-01-03"
+  },
+  "ARB5q5izTUM": {
+   "thumbSet": "2018-01-03T12:12:12.000Z",
+   "delayDays": 29,
+   "sweep": "2018-01-03"
+  },
+  "CxOFHYKHfHM": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 27,
+   "sweep": "2018-01-03"
+  },
+  "BZ8uGL--fdg": {
+   "thumbSet": "2018-01-03T12:11:41.000Z",
+   "delayDays": 32,
+   "sweep": "2018-01-03"
+  },
+  "_gP9nm8F9FU": {
+   "thumbSet": "2018-01-03T12:11:41.000Z",
+   "delayDays": 34,
+   "sweep": "2018-01-03"
+  },
+  "DmB7ZvAIa3w": {
+   "thumbSet": "2018-01-03T12:12:01.000Z",
+   "delayDays": 35,
+   "sweep": "2018-01-03"
+  },
+  "syi354YUE04": {
+   "thumbSet": "2018-01-03T12:11:35.000Z",
+   "delayDays": 34,
+   "sweep": "2018-01-03"
+  },
+  "R8euoMJetlY": {
+   "thumbSet": "2018-01-03T12:11:55.000Z",
+   "delayDays": 35,
+   "sweep": "2018-01-03"
+  },
+  "KmKn81z8KC0": {
+   "thumbSet": "2018-01-03T12:11:48.000Z",
+   "delayDays": 36,
+   "sweep": "2018-01-03"
+  },
+  "h1NQLAZkg-0": {
+   "thumbSet": "2018-01-03T12:11:40.000Z",
+   "delayDays": 39,
+   "sweep": "2018-01-03"
+  },
+  "bWSbWC-QfaY": {
+   "thumbSet": "2018-01-03T12:11:46.000Z",
+   "delayDays": 42,
+   "sweep": "2018-01-03"
+  },
+  "4wl4R7ih_9M": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 45,
+   "sweep": "2018-01-03"
+  },
+  "vLyaiVXSxVM": {
+   "thumbSet": "2018-01-03T12:11:34.000Z",
+   "delayDays": 47,
+   "sweep": "2018-01-03"
+  },
+  "LgTSZYLVLzU": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 48,
+   "sweep": "2018-01-03"
+  },
+  "cOZbffS2XeQ": {
+   "thumbSet": "2018-01-03T12:11:35.000Z",
+   "delayDays": 51,
+   "sweep": "2018-01-03"
+  },
+  "4p-cI82JKMM": {
+   "thumbSet": "2019-03-14T05:30:10.000Z",
+   "delayDays": 483
+  },
+  "BLs8ZifPBBE": {
+   "thumbSet": "2018-01-03T12:11:37.000Z",
+   "delayDays": 51,
+   "sweep": "2018-01-03"
+  },
+  "OyecgzD2hwQ": {
+   "thumbSet": "2018-01-03T12:12:02.000Z",
+   "delayDays": 49,
+   "sweep": "2018-01-03"
+  },
+  "fQDQXAPMxBU": {
+   "thumbSet": "2018-01-03T12:12:01.000Z",
+   "delayDays": 48,
+   "sweep": "2018-01-03"
+  },
+  "ueb6MNoQ6d4": {
+   "thumbSet": "2018-01-03T12:11:54.000Z",
+   "delayDays": 50,
+   "sweep": "2018-01-03"
+  },
+  "VxFEu7sjxmM": {
+   "thumbSet": "2018-01-03T12:11:52.000Z",
+   "delayDays": 53,
+   "sweep": "2018-01-03"
+  },
+  "1xnPnwI8ee4": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 54,
+   "sweep": "2018-01-03"
+  },
+  "TyTG_uRiW0o": {
+   "thumbSet": "2018-01-03T12:12:05.000Z",
+   "delayDays": 55,
+   "sweep": "2018-01-03"
+  },
+  "CtOv7QJvnxk": {
+   "thumbSet": "2018-01-03T12:11:38.000Z",
+   "delayDays": 58,
+   "sweep": "2018-01-03"
+  },
+  "AD7AWqGMexo": {
+   "thumbSet": "2018-01-03T12:12:01.000Z",
+   "delayDays": 61,
+   "sweep": "2018-01-03"
+  },
+  "qZIfsJcNPLY": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 62,
+   "sweep": "2018-01-03"
+  },
+  "w8TG6Qg_yRk": {
+   "thumbSet": "2018-01-03T12:11:46.000Z",
+   "delayDays": 63,
+   "sweep": "2018-01-03"
+  },
+  "7E2abdQ7TAk": {
+   "thumbSet": "2018-01-03T12:11:56.000Z",
+   "delayDays": 63,
+   "sweep": "2018-01-03"
+  },
+  "2dhxTqOIpdA": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 65,
+   "sweep": "2018-01-03"
+  },
+  "8iISTh9Mo-M": {
+   "thumbSet": "2018-01-03T12:11:39.000Z",
+   "delayDays": 67,
+   "sweep": "2018-01-03"
+  },
+  "880tW_PKswQ": {
+   "thumbSet": "2018-01-23T01:51:12.000Z",
+   "delayDays": 88
+  },
+  "Z-abRGc34_Y": {
+   "thumbSet": "2018-01-03T12:11:35.000Z",
+   "delayDays": 71,
+   "sweep": "2018-01-03"
+  },
+  "YNFvV7XmBy8": {
+   "thumbSet": "2018-01-03T12:11:58.000Z",
+   "delayDays": 72,
+   "sweep": "2018-01-03"
+  },
+  "uE8QU3kgTz8": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 76,
+   "sweep": "2018-01-03"
+  },
+  "4PDRDZOu7-Y": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 76,
+   "sweep": "2018-01-03"
+  },
+  "Iv0gvuylJ30": {
+   "thumbSet": "2018-01-03T12:11:46.000Z",
+   "delayDays": 78,
+   "sweep": "2018-01-03"
+  },
+  "mTgkrWZ8CQY": {
+   "thumbSet": "2018-01-03T12:11:50.000Z",
+   "delayDays": 75,
+   "sweep": "2018-01-03"
+  },
+  "K_i2ia0C-Ik": {
+   "thumbSet": "2018-01-03T12:11:49.000Z",
+   "delayDays": 79,
+   "sweep": "2018-01-03"
+  },
+  "TnVQAhDc8VY": {
+   "thumbSet": "2018-01-03T12:12:06.000Z",
+   "delayDays": 75,
+   "sweep": "2018-01-03"
+  },
+  "wFtHenpiylw": {
+   "thumbSet": "2018-01-03T12:11:54.000Z",
+   "delayDays": 81,
+   "sweep": "2018-01-03"
+  },
+  "LxaS85jA-0Y": {
+   "thumbSet": "2018-01-03T12:11:59.000Z",
+   "delayDays": 83,
+   "sweep": "2018-01-03"
+  },
+  "Ez4BIn4RBvY": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 81,
+   "sweep": "2018-01-03"
+  },
+  "YVhhvNrioM0": {
+   "thumbSet": "2018-01-03T12:11:46.000Z",
+   "delayDays": 84,
+   "sweep": "2018-01-03"
+  },
+  "VeYZXMpiwTA": {
+   "thumbSet": "2018-01-03T12:11:42.000Z",
+   "delayDays": 82,
+   "sweep": "2018-01-03"
+  },
+  "eBaFV0ynh9s": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 85,
+   "sweep": "2018-01-03"
+  },
+  "6KhExC6E-m0": {
+   "thumbSet": "2018-01-03T12:11:42.000Z",
+   "delayDays": 83,
+   "sweep": "2018-01-03"
+  },
+  "tor6io_W2JU": {
+   "thumbSet": "2019-04-22T21:22:48.000Z",
+   "delayDays": 560
+  },
+  "O6GxqjzZ-gI": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 89,
+   "sweep": "2018-01-03"
+  },
+  "DtyCXs7tNuY": {
+   "thumbSet": "2018-01-03T12:11:45.000Z",
+   "delayDays": 89,
+   "sweep": "2018-01-03"
+  },
+  "uyvmKfPoULU": {
+   "thumbSet": "2018-01-03T12:11:35.000Z",
+   "delayDays": 90,
+   "sweep": "2018-01-03"
+  },
+  "dlRZ5_YaKvo": {
+   "thumbSet": "2018-01-03T12:11:44.000Z",
+   "delayDays": 92,
+   "sweep": "2018-01-03"
+  },
+  "4h_YsT0KL0U": {
+   "thumbSet": "2019-02-17T02:16:25.000Z",
+   "delayDays": 504
+  },
+  "tl4jc12Z88Q": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 92,
+   "sweep": "2018-01-03"
+  },
+  "0P7ErotDqdM": {
+   "thumbSet": "2018-01-03T12:12:02.000Z",
+   "delayDays": 97,
+   "sweep": "2018-01-03"
+  },
+  "s7_UwsNF7ak": {
+   "thumbSet": "2018-01-03T12:12:06.000Z",
+   "delayDays": 90,
+   "sweep": "2018-01-03"
+  },
+  "Wci8ZjstlUQ": {
+   "thumbSet": "2018-01-03T12:12:05.000Z",
+   "delayDays": 98,
+   "sweep": "2018-01-03"
+  },
+  "pdLhC0MuoiM": {
+   "thumbSet": "2018-01-03T12:12:06.000Z",
+   "delayDays": 97,
+   "sweep": "2018-01-03"
+  },
+  "BKwhessqs8g": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 99,
+   "sweep": "2018-01-03"
+  },
+  "Q19F9odxmXI": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 102,
+   "sweep": "2018-01-03"
+  },
+  "C6f-b3oEVss": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 101,
+   "sweep": "2018-01-03"
+  },
+  "CZRfsP3bYh4": {
+   "thumbSet": "2018-01-03T12:11:45.000Z",
+   "delayDays": 103,
+   "sweep": "2018-01-03"
+  },
+  "2eG6ghZj03Y": {
+   "thumbSet": "2018-01-03T12:12:03.000Z",
+   "delayDays": 103,
+   "sweep": "2018-01-03"
+  },
+  "VC23MjLWqbA": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 104,
+   "sweep": "2018-01-03"
+  },
+  "eDwAZeKbiTY": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 105,
+   "sweep": "2018-01-03"
+  },
+  "zQmzdoTrtPM": {
+   "thumbSet": "2018-01-03T12:11:42.000Z",
+   "delayDays": 105,
+   "sweep": "2018-01-03"
+  },
+  "CHqHARPVRtk": {
+   "thumbSet": "2018-01-03T12:11:55.000Z",
+   "delayDays": 109,
+   "sweep": "2018-01-03"
+  },
+  "ORNUNmqozgo": {
+   "thumbSet": "2018-01-03T12:11:57.000Z",
+   "delayDays": 110,
+   "sweep": "2018-01-03"
+  },
+  "0G4xzYReA1Q": {
+   "thumbSet": "2018-01-03T12:11:43.000Z",
+   "delayDays": 109,
+   "sweep": "2018-01-03"
+  },
+  "vQJrEuBPRh0": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 111,
+   "sweep": "2018-01-03"
+  },
+  "D4_4QxJO7i0": {
+   "thumbSet": "2018-01-03T12:12:02.000Z",
+   "delayDays": 112,
+   "sweep": "2018-01-03"
+  },
+  "8fQZ8cLWMCk": {
+   "thumbSet": "2018-01-03T12:11:41.000Z",
+   "delayDays": 113,
+   "sweep": "2018-01-03"
+  },
+  "yjT_D-lXzb4": {
+   "thumbSet": "2018-01-03T12:11:58.000Z",
+   "delayDays": 117,
+   "sweep": "2018-01-03"
+  },
+  "Kx8mT3gPm18": {
+   "thumbSet": "2018-01-03T12:11:32.000Z",
+   "delayDays": 119,
+   "sweep": "2018-01-03"
+  },
+  "7SkjGkjexz8": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 120,
+   "sweep": "2018-01-03"
+  },
+  "HuTiiTjiN4c": {
+   "thumbSet": "2018-01-03T12:11:34.000Z",
+   "delayDays": 121,
+   "sweep": "2018-01-03"
+  },
+  "_LNXdHBcH3Q": {
+   "thumbSet": "2018-01-03T12:11:56.000Z",
+   "delayDays": 123,
+   "sweep": "2018-01-03"
+  },
+  "Ki-qLj9qvbM": {
+   "thumbSet": "2018-01-03T12:11:46.000Z",
+   "delayDays": 123,
+   "sweep": "2018-01-03"
+  },
+  "j9uoQHA5sAo": {
+   "thumbSet": "2018-01-03T12:11:59.000Z",
+   "delayDays": 124,
+   "sweep": "2018-01-03"
+  },
+  "4bfM2tcFgYE": {
+   "thumbSet": "2018-01-03T12:11:45.000Z",
+   "delayDays": 124,
+   "sweep": "2018-01-03"
+  },
+  "0PBhEBgChkc": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 125,
+   "sweep": "2018-01-03"
+  },
+  "k6DOWVjFVeM": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 125,
+   "sweep": "2018-01-03"
+  },
+  "y1JYOh2it8U": {
+   "thumbSet": "2018-01-03T12:11:49.000Z",
+   "delayDays": 131,
+   "sweep": "2018-01-03"
+  },
+  "rOIl2WlxTL8": {
+   "thumbSet": "2018-01-03T12:11:53.000Z",
+   "delayDays": 145,
+   "sweep": "2018-01-03"
+  },
+  "BkOcvJGQMUg": {
+   "thumbSet": "2018-01-03T12:11:47.000Z",
+   "delayDays": 145,
+   "sweep": "2018-01-03"
+  },
+  "FjjL-sGykMM": {
+   "thumbSet": "2018-01-03T12:11:36.000Z",
+   "delayDays": 150,
+   "sweep": "2018-01-03"
+  },
+  "mwJ7GcRGbyY": {
+   "thumbSet": "2018-01-03T12:12:00.000Z",
+   "delayDays": 154,
+   "sweep": "2018-01-03"
+  },
+  "-fo3pHhPviA": {
+   "thumbSet": "2018-01-03T12:11:44.000Z",
+   "delayDays": 161,
+   "sweep": "2018-01-03"
+  },
+  "m6tHdH63lFE": {
+   "thumbSet": "2018-01-03T12:11:41.000Z",
+   "delayDays": 160,
+   "sweep": "2018-01-03"
+  },
+  "8tS4MVcbfGY": {
+   "thumbSet": "2018-05-28T17:00:54.000Z",
+   "delayDays": 319
+  },
+  "YjNUmtU2HY0": {
+   "thumbSet": "2019-03-29T00:42:07.000Z",
+   "delayDays": 702
+  },
+  "67R4ISuU9rc": {
+   "thumbSet": "2015-09-12T21:18:55.000Z",
+   "delayDays": 17
+  },
+  "YsuUb8vcMqs": {
+   "thumbSet": "2015-03-21T16:48:01.000Z",
+   "delayDays": 12
+  },
+  "QLba4uEUGMU": {
+   "thumbSet": "2015-03-22T03:47:27.000Z",
+   "delayDays": 16
+  },
+  "6zRqNRqUmJc": {
+   "thumbSet": "2015-03-23T10:39:11.000Z",
+   "delayDays": 21
+  },
+  "yFJqsvAp96g": {
+   "thumbSet": "2015-03-22T22:04:02.000Z",
+   "delayDays": 25
+  },
+  "abA9zXqXyA0": {
+   "thumbSet": "2014-11-22T06:24:43.000Z",
+   "delayDays": 30
+  },
+  "kETRIOq1Dl0": {
+   "thumbSet": "2014-11-22T07:14:14.000Z",
+   "delayDays": 31
+  },
+  "BdMDW1wdsuk": {
+   "thumbSet": "2014-11-22T05:56:47.000Z",
+   "delayDays": 31
+  },
+  "22Zya5_2V_Y": {
+   "thumbSet": "2014-11-22T14:13:52.000Z",
+   "delayDays": 38
+  },
+  "AB3Y_lx8J7Q": {
+   "thumbSet": "2014-07-08T02:36:28.000Z",
+   "delayDays": 4
+  },
+  "9Xv4cFBreL4": {
+   "thumbSet": "2015-05-06T15:05:48.000Z",
+   "delayDays": 507
+  },
+  "8Znn9lUctBI": {
+   "thumbSet": "2015-05-05T22:11:26.000Z",
+   "delayDays": 603
+  },
+  "JC98Cy6z-ok": {
+   "thumbSet": "2023-05-16T16:03:30.000Z",
+   "delayDays": 3585
+  },
+  "LaBHMLxUZ6k": {
+   "thumbSet": "2013-04-29T23:05:54.000Z",
+   "delayDays": 3
+  },
+  "JDruxZHH8os": {
+   "thumbSet": "2013-02-12T19:12:34.000Z",
+   "delayDays": 6,
+   "sweep": "2013-02-12"
+  },
+  "wKyT5cE_Tw8": {
+   "thumbSet": "2013-02-07T22:37:33.000Z",
+   "delayDays": 14,
+   "sweep": "2013-02-07"
+  },
+  "ppM8woq7tdo": {
+   "thumbSet": "2013-02-07T22:38:09.000Z",
+   "delayDays": 20,
+   "sweep": "2013-02-07"
+  },
+  "H51g671hCLw": {
+   "thumbSet": "2013-02-07T22:38:58.000Z",
+   "delayDays": 24,
+   "sweep": "2013-02-07"
+  },
+  "U7SnIJQ1F98": {
+   "thumbSet": "2013-02-07T22:40:26.000Z",
+   "delayDays": 30,
+   "sweep": "2013-02-07"
+  },
+  "f-TT0tSU9po": {
+   "thumbSet": "2013-02-07T22:39:38.000Z",
+   "delayDays": 27,
+   "sweep": "2013-02-07"
+  },
+  "WVFSDSl3p9s": {
+   "thumbSet": "2013-02-07T22:41:03.000Z",
+   "delayDays": 33,
+   "sweep": "2013-02-07"
+  },
+  "32Rf0kDBa3c": {
+   "thumbSet": "2013-02-07T22:46:06.000Z",
+   "delayDays": 43,
+   "sweep": "2013-02-07"
+  },
+  "n_6b3zGggOM": {
+   "thumbSet": "2013-02-07T22:42:43.000Z",
+   "delayDays": 47,
+   "sweep": "2013-02-07"
+  },
+  "oanUA4lKLgs": {
+   "thumbSet": "2013-02-07T22:43:32.000Z",
+   "delayDays": 50,
+   "sweep": "2013-02-07"
+  },
+  "6KBkNDRpkog": {
+   "thumbSet": "2013-02-07T22:44:15.000Z",
+   "delayDays": 53,
+   "sweep": "2013-02-07"
+  },
+  "AdrAJflrFyA": {
+   "thumbSet": "2013-02-07T22:45:23.000Z",
+   "delayDays": 57,
+   "sweep": "2013-02-07"
+  },
+  "5IVaIMwWpew": {
+   "thumbSet": "2013-02-07T22:55:05.000Z",
+   "delayDays": 64,
+   "sweep": "2013-02-07"
+  },
+  "Qd6iEjZPu9g": {
+   "thumbSet": "2013-02-07T22:47:28.000Z",
+   "delayDays": 72,
+   "sweep": "2013-02-07"
+  },
+  "wUhD3nOS0N0": {
+   "thumbSet": "2013-02-07T22:49:34.000Z",
+   "delayDays": 78,
+   "sweep": "2013-02-07"
+  },
+  "dX26EXsfC2g": {
+   "thumbSet": "2013-02-07T22:48:04.000Z",
+   "delayDays": 85,
+   "sweep": "2013-02-07"
+  },
+  "WGjYDVnuLww": {
+   "thumbSet": "2013-02-07T22:50:27.000Z",
+   "delayDays": 92,
+   "sweep": "2013-02-07"
+  },
+  "xNKp87X_DoA": {
+   "thumbSet": "2013-02-07T22:53:57.000Z",
+   "delayDays": 96,
+   "sweep": "2013-02-07"
+  },
+  "-AWvbWS1K9U": {
+   "thumbSet": "2013-02-07T22:52:36.000Z",
+   "delayDays": 100,
+   "sweep": "2013-02-07"
+  },
+  "-UBHwLyQ2GA": {
+   "thumbSet": "2013-02-07T22:53:10.000Z",
+   "delayDays": 97,
+   "sweep": "2013-02-07"
+  },
+  "sjzAjNDOz4E": {
+   "thumbSet": "2013-02-07T22:51:28.000Z",
+   "delayDays": 96,
+   "sweep": "2013-02-07"
+  },
+  "f7_qyqGoK9g": {
+   "thumbSet": "2013-02-11T22:09:43.000Z",
+   "delayDays": 106,
+   "sweep": "2013-02-11"
+  },
+  "QPEb4uP-peQ": {
+   "thumbSet": "2012-10-29T01:16:57.000Z",
+   "delayDays": 4
+  },
+  "jBlcMSN6C44": {
+   "thumbSet": "2013-02-10T19:20:23.000Z",
+   "delayDays": 108,
+   "sweep": "2013-02-10"
+  },
+  "Bp46JW2GUOM": {
+   "thumbSet": "2013-02-10T19:21:31.000Z",
+   "delayDays": 109,
+   "sweep": "2013-02-10"
+  },
+  "x_mP3qPwpEQ": {
+   "thumbSet": "2012-10-29T01:17:08.000Z",
+   "delayDays": 6
+  },
+  "zQrgFgpQ8K8": {
+   "thumbSet": "2013-02-10T19:22:21.000Z",
+   "delayDays": 114,
+   "sweep": "2013-02-10"
+  },
+  "NUOARZkl8gs": {
+   "thumbSet": "2013-02-10T19:23:04.000Z",
+   "delayDays": 117,
+   "sweep": "2013-02-10"
+  },
+  "HTYhuho9R7Q": {
+   "thumbSet": "2013-02-10T19:23:49.000Z",
+   "delayDays": 119,
+   "sweep": "2013-02-10"
+  },
+  "3ocS0iwbgJ8": {
+   "thumbSet": "2013-02-10T19:24:34.000Z",
+   "delayDays": 123,
+   "sweep": "2013-02-10"
+  },
+  "cYvjuOnhFEw": {
+   "thumbSet": "2013-02-10T19:27:25.000Z",
+   "delayDays": 125,
+   "sweep": "2013-02-10"
+  },
+  "k0u91X-4WPE": {
+   "thumbSet": "2012-10-14T04:12:29.000Z",
+   "delayDays": 9
+  },
+  "o3rRXk3Lgkw": {
+   "thumbSet": "2013-02-10T19:28:25.000Z",
+   "delayDays": 131,
+   "sweep": "2013-02-10"
+  },
+  "BOnSrRQHwy0": {
+   "thumbSet": "2013-02-10T19:31:02.000Z",
+   "delayDays": 133,
+   "sweep": "2013-02-10"
+  },
+  "aS8aZJnTajk": {
+   "thumbSet": "2013-02-10T19:29:57.000Z",
+   "delayDays": 133,
+   "sweep": "2013-02-10"
+  },
+  "-VwI9GmUUyM": {
+   "thumbSet": "2013-02-10T19:32:12.000Z",
+   "delayDays": 133,
+   "sweep": "2013-02-10"
+  },
+  "jmqyKdTLgGs": {
+   "thumbSet": "2013-02-10T20:01:18.000Z",
+   "delayDays": 145,
+   "sweep": "2013-02-10"
+  },
+  "C5NGWi-ZjGc": {
+   "thumbSet": "2013-02-10T19:34:16.000Z",
+   "delayDays": 134,
+   "sweep": "2013-02-10"
+  },
+  "UlR0vXs5vBg": {
+   "thumbSet": "2013-02-10T20:02:01.000Z",
+   "delayDays": 184,
+   "sweep": "2013-02-10"
+  },
+  "8bI1OdV_eik": {
+   "thumbSet": "2013-02-11T21:50:29.000Z",
+   "delayDays": 186,
+   "sweep": "2013-02-11"
+  },
+  "NKk_T5vCmEw": {
+   "thumbSet": "2013-02-10T20:10:56.000Z",
+   "delayDays": 188,
+   "sweep": "2013-02-10"
+  },
+  "CVkE-9fGVqA": {
+   "thumbSet": "2013-02-11T21:54:16.000Z",
+   "delayDays": 245,
+   "sweep": "2013-02-11"
+  },
+  "tbFXXXutBEA": {
+   "thumbSet": "2013-02-11T21:51:30.000Z",
+   "delayDays": 234,
+   "sweep": "2013-02-11"
+  },
+  "MTIdDI4Nswc": {
+   "thumbSet": "2013-02-11T21:55:08.000Z",
+   "delayDays": 245,
+   "sweep": "2013-02-11"
+  },
+  "aRNTj3waeyk": {
+   "thumbSet": "2013-02-11T21:53:21.000Z",
+   "delayDays": 244,
+   "sweep": "2013-02-11"
+  },
+  "LvtQKoECqlw": {
+   "thumbSet": "2013-02-11T21:56:35.000Z",
+   "delayDays": 248,
+   "sweep": "2013-02-11"
+  },
+  "ZYIWVgQZEhA": {
+   "thumbSet": "2013-02-11T21:55:49.000Z",
+   "delayDays": 246,
+   "sweep": "2013-02-11"
+  },
+  "iutfl15ImAg": {
+   "thumbSet": "2013-02-11T21:59:06.000Z",
+   "delayDays": 249,
+   "sweep": "2013-02-11"
+  },
+  "4yauU9xw-2c": {
+   "thumbSet": "2013-02-11T21:57:19.000Z",
+   "delayDays": 249,
+   "sweep": "2013-02-11"
+  },
+  "NaI4iPWYGnA": {
+   "thumbSet": "2013-02-11T22:04:00.000Z",
+   "delayDays": 257,
+   "sweep": "2013-02-11"
+  },
+  "B4n2MqB1tWM": {
+   "thumbSet": "2013-02-11T22:03:14.000Z",
+   "delayDays": 255,
+   "sweep": "2013-02-11"
+  },
+  "U5dXfgR6Gsk": {
+   "thumbSet": "2013-02-11T22:01:15.000Z",
+   "delayDays": 258,
+   "sweep": "2013-02-11"
+  },
+  "CY4S9m35Uuk": {
+   "thumbSet": "2013-02-12T19:13:55.000Z",
+   "delayDays": 266,
+   "sweep": "2013-02-12"
+  },
+  "2NqjuP3PtV8": {
+   "thumbSet": "2013-02-11T22:05:19.000Z",
+   "delayDays": 273,
+   "sweep": "2013-02-11"
+  },
+  "3NBuSCK3tb8": {
+   "thumbSet": "2013-02-11T22:10:46.000Z",
+   "delayDays": 276,
+   "sweep": "2013-02-11"
+  },
+  "9cdwJAFlDOk": {
+   "thumbSet": "2013-02-11T22:08:20.000Z",
+   "delayDays": 279,
+   "sweep": "2013-02-11"
+  },
+  "IKFsc8NmviA": {
+   "thumbSet": "2013-02-11T22:06:24.000Z",
+   "delayDays": 278,
+   "sweep": "2013-02-11"
+  },
+  "7y9DKGcrvsc": {
+   "thumbSet": "2013-02-11T22:07:32.000Z",
+   "delayDays": 278,
+   "sweep": "2013-02-11"
+  },
+  "htmWKfp845o": {
+   "thumbSet": "2013-02-11T22:09:04.000Z",
+   "delayDays": 282,
+   "sweep": "2013-02-11"
+  },
+  "IkXmB3y0-mo": {
+   "thumbSet": "2013-02-12T19:14:42.000Z",
+   "delayDays": 288,
+   "sweep": "2013-02-12"
+  },
+  "d1Tm8S2G11g": {
+   "thumbSet": "2013-02-12T19:15:23.000Z",
+   "delayDays": 288,
+   "sweep": "2013-02-12"
+  },
+  "BHJA6zrrbQo": {
+   "thumbSet": "2013-02-12T19:16:03.000Z",
+   "delayDays": 289,
+   "sweep": "2013-02-12"
+  },
+  "McFlEjCFHBk": {
+   "thumbSet": "2013-02-12T19:16:36.000Z",
+   "delayDays": 289,
+   "sweep": "2013-02-12"
+  },
+  "LQrPoUDZvUk": {
+   "thumbSet": "2013-02-12T19:17:20.000Z",
+   "delayDays": 289,
+   "sweep": "2013-02-12"
+  },
+  "2Jg2Xr0LZ-I": {
+   "thumbSet": "2013-02-12T19:17:53.000Z",
+   "delayDays": 289,
+   "sweep": "2013-02-12"
+  },
+  "cLZQwxMsQ-4": {
+   "thumbSet": "2013-02-12T19:19:21.000Z",
+   "delayDays": 289,
+   "sweep": "2013-02-12"
+  },
+  "2PiG3od47G4": {
+   "thumbSet": "2013-02-12T19:20:36.000Z",
+   "delayDays": 298,
+   "sweep": "2013-02-12"
+  },
+  "T78erfUEblk": {
+   "thumbSet": "2013-02-12T19:20:03.000Z",
+   "delayDays": 296,
+   "sweep": "2013-02-12"
+  },
+  "yGNwN_I-rd0": {
+   "thumbSet": "2013-02-12T19:21:12.000Z",
+   "delayDays": 299,
+   "sweep": "2013-02-12"
+  },
+  "msw4lWkuoxo": {
+   "thumbSet": "2013-02-12T19:21:47.000Z",
+   "delayDays": 312,
+   "sweep": "2013-02-12"
+  },
+  "OeyLQyk6WFo": {
+   "thumbSet": "2013-02-12T19:25:54.000Z",
+   "delayDays": 321,
+   "sweep": "2013-02-12"
+  },
+  "zouVIcvEJYA": {
+   "thumbSet": "2013-02-12T19:25:14.000Z",
+   "delayDays": 319,
+   "sweep": "2013-02-12"
+  },
+  "weDe214OZUM": {
+   "thumbSet": "2013-02-12T19:24:20.000Z",
+   "delayDays": 319,
+   "sweep": "2013-02-12"
+  },
+  "aXgbessdow4": {
+   "thumbSet": "2013-02-12T19:22:21.000Z",
+   "delayDays": 312,
+   "sweep": "2013-02-12"
+  },
+  "Hvyt7xEub1k": {
+   "thumbSet": "2013-02-12T19:26:41.000Z",
+   "delayDays": 321,
+   "sweep": "2013-02-12"
+  },
+  "BybZi_kWve0": {
+   "thumbSet": "2013-02-10T19:32:58.000Z",
+   "delayDays": 134,
+   "sweep": "2013-02-10"
+  },
+  "XZOIeQD7RjE": {
+   "thumbSet": "2012-03-28T21:08:56.000Z",
+   "delayDays": 3,
+   "sweep": "2012-03-28"
+  },
+  "fT6qVXeD4sE": {
+   "thumbSet": "2012-03-28T21:09:53.000Z",
+   "delayDays": 21,
+   "sweep": "2012-03-28"
+  },
+  "N9L7hH3BC9g": {
+   "thumbSet": "2013-02-14T20:02:36.000Z",
+   "delayDays": 354,
+   "sweep": "2013-02-14"
+  },
+  "_dGxzwQbuYU": {
+   "thumbSet": "2013-02-14T20:03:21.000Z",
+   "delayDays": 361,
+   "sweep": "2013-02-14"
+  },
+  "1ww3X0fMUy8": {
+   "thumbSet": "2013-02-14T20:05:00.000Z",
+   "delayDays": 364,
+   "sweep": "2013-02-14"
+  },
+  "ro8-OkGJMgg": {
+   "thumbSet": "2013-02-14T20:06:28.000Z",
+   "delayDays": 366,
+   "sweep": "2013-02-14"
+  },
+  "6bRVuTOc258": {
+   "thumbSet": "2013-02-14T20:05:50.000Z",
+   "delayDays": 366,
+   "sweep": "2013-02-14"
+  },
+  "KYqDuezBH2I": {
+   "thumbSet": "2013-02-14T20:07:00.000Z",
+   "delayDays": 366,
+   "sweep": "2013-02-14"
+  },
+  "cFL7U4d2JvQ": {
+   "thumbSet": "2013-02-14T20:08:31.000Z",
+   "delayDays": 372,
+   "sweep": "2013-02-14"
+  },
+  "vc9MzqgaxIw": {
+   "thumbSet": "2013-02-14T20:07:41.000Z",
+   "delayDays": 370,
+   "sweep": "2013-02-14"
+  },
+  "6RweAvcKEos": {
+   "thumbSet": "2013-02-14T20:09:10.000Z",
+   "delayDays": 376,
+   "sweep": "2013-02-14"
+  },
+  "42RxEM3XUWM": {
+   "thumbSet": "2013-02-14T20:09:59.000Z",
+   "delayDays": 376,
+   "sweep": "2013-02-14"
+  },
+  "Ve30zHuzY3Q": {
+   "thumbSet": "2013-02-14T20:11:02.000Z",
+   "delayDays": 379,
+   "sweep": "2013-02-14"
+  },
+  "i3OkuKwAn10": {
+   "thumbSet": "2013-02-14T20:13:04.000Z",
+   "delayDays": 384,
+   "sweep": "2013-02-14"
+  },
+  "7KsLU-jMg08": {
+   "thumbSet": "2013-02-14T20:11:32.000Z",
+   "delayDays": 379,
+   "sweep": "2013-02-14"
+  },
+  "RSrXHVyTmhU": {
+   "thumbSet": "2013-02-14T20:15:18.000Z",
+   "delayDays": 384,
+   "sweep": "2013-02-14"
+  },
+  "bmfBhRbTWmc": {
+   "thumbSet": "2013-02-14T20:17:45.000Z",
+   "delayDays": 398,
+   "sweep": "2013-02-14"
+  },
+  "Dg1G9sSfVuU": {
+   "thumbSet": "2013-02-14T20:16:03.000Z",
+   "delayDays": 391,
+   "sweep": "2013-02-14"
+  },
+  "0XuagXCz5aA": {
+   "thumbSet": "2013-02-14T20:16:52.000Z",
+   "delayDays": 392,
+   "sweep": "2013-02-14"
+  },
+  "tIte5dM8dPI": {
+   "thumbSet": "2013-02-14T20:18:17.000Z",
+   "delayDays": 409,
+   "sweep": "2013-02-14"
+  },
+  "e8-1O0uK_LA": {
+   "thumbSet": "2013-02-14T20:18:52.000Z",
+   "delayDays": 412,
+   "sweep": "2013-02-14"
+  },
+  "ucgonPL6Fsk": {
+   "thumbSet": "2012-03-28T21:14:19.000Z",
+   "delayDays": 109,
+   "sweep": "2012-03-28"
+  },
+  "89YQZ5Cqn1c": {
+   "thumbSet": "2013-02-14T20:21:56.000Z",
+   "delayDays": 458,
+   "sweep": "2013-02-14"
+  },
+  "2wY5DYv5PdQ": {
+   "thumbSet": "2013-02-14T20:21:00.000Z",
+   "delayDays": 455,
+   "sweep": "2013-02-14"
+  },
+  "AP1n1ff_5qc": {
+   "thumbSet": "2013-02-14T20:19:34.000Z",
+   "delayDays": 445,
+   "sweep": "2013-02-14"
+  },
+  "F_f39E3VgHM": {
+   "thumbSet": "2012-03-28T21:18:38.000Z",
+   "delayDays": 139,
+   "sweep": "2012-03-28"
+  },
+  "Phqkqe-_Rsc": {
+   "thumbSet": "2013-02-14T20:23:13.000Z",
+   "delayDays": 470,
+   "sweep": "2013-02-14"
+  },
+  "TGE8AablBn8": {
+   "thumbSet": "2013-02-14T20:24:09.000Z",
+   "delayDays": 475,
+   "sweep": "2013-02-14"
+  },
+  "0XD1G_8TT0Q": {
+   "thumbSet": "2012-03-28T21:24:39.000Z",
+   "delayDays": 156,
+   "sweep": "2012-03-28"
+  },
+  "55aw2M66V_8": {
+   "thumbSet": "2013-02-14T20:34:09.000Z",
+   "delayDays": 483,
+   "sweep": "2013-02-14"
+  },
+  "iQd9emvLr58": {
+   "thumbSet": "2013-02-14T20:24:53.000Z",
+   "delayDays": 475,
+   "sweep": "2013-02-14"
+  },
+  "PBEswMplmV0": {
+   "thumbSet": "2013-02-14T20:34:58.000Z",
+   "delayDays": 483,
+   "sweep": "2013-02-14"
+  },
+  "epoQILp1qNQ": {
+   "thumbSet": "2013-02-14T20:35:41.000Z",
+   "delayDays": 491,
+   "sweep": "2013-02-14"
+  },
+  "Tq8CKHAuyQk": {
+   "thumbSet": "2013-02-14T20:36:58.000Z",
+   "delayDays": 493,
+   "sweep": "2013-02-14"
+  },
+  "zkUnpQViido": {
+   "thumbSet": "2013-02-14T20:38:22.000Z",
+   "delayDays": 500,
+   "sweep": "2013-02-14"
+  },
+  "5DTqnKuSBLs": {
+   "thumbSet": "2011-11-26T03:43:47.000Z",
+   "delayDays": 56
+  },
+  "coCl2CFdU14": {
+   "thumbSet": "2013-02-14T20:41:03.000Z",
+   "delayDays": 515,
+   "sweep": "2013-02-14"
+  },
+  "32w9EztOvCE": {
+   "thumbSet": "2013-02-14T20:40:17.000Z",
+   "delayDays": 508,
+   "sweep": "2013-02-14"
+  },
+  "-W8TMWyJe0c": {
+   "thumbSet": "2013-02-14T20:41:48.000Z",
+   "delayDays": 523,
+   "sweep": "2013-02-14"
+  },
+  "zsAuKjYM_mQ": {
+   "thumbSet": "2013-02-14T20:42:25.000Z",
+   "delayDays": 524,
+   "sweep": "2013-02-14"
+  },
+  "zS00Xr5k8PM": {
+   "thumbSet": "2013-02-14T20:43:18.000Z",
+   "delayDays": 530,
+   "sweep": "2013-02-14"
+  },
+  "VN7dduEbBNs": {
+   "thumbSet": "2013-02-14T20:44:21.000Z",
+   "delayDays": 532,
+   "sweep": "2013-02-14"
+  },
+  "KXo-cw7xxOI": {
+   "thumbSet": "2013-02-14T20:45:01.000Z",
+   "delayDays": 536,
+   "sweep": "2013-02-14"
+  },
+  "0xwpE03OycA": {
+   "thumbSet": "2013-02-14T20:45:38.000Z",
+   "delayDays": 540,
+   "sweep": "2013-02-14"
+  },
+  "K6BUJBuzC0o": {
+   "thumbSet": "2013-02-14T20:46:16.000Z",
+   "delayDays": 542,
+   "sweep": "2013-02-14"
+  },
+  "9RGwoDacW2A": {
+   "thumbSet": "2013-02-14T20:47:59.000Z",
+   "delayDays": 545,
+   "sweep": "2013-02-14"
+  },
+  "oMlDgeSwvwo": {
+   "thumbSet": "2013-02-14T20:49:21.000Z",
+   "delayDays": 550,
+   "sweep": "2013-02-14"
+  },
+  "cH8la8QDPrM": {
+   "thumbSet": "2013-02-19T02:44:59.000Z",
+   "delayDays": 558,
+   "sweep": "2013-02-19"
+  },
+  "vkgtM16HrAo": {
+   "thumbSet": "2013-02-14T20:48:41.000Z",
+   "delayDays": 546,
+   "sweep": "2013-02-14"
+  },
+  "mwoEEbFo_co": {
+   "thumbSet": "2013-02-19T02:45:32.000Z",
+   "delayDays": 561,
+   "sweep": "2013-02-19"
+  },
+  "wJLJFjePD3c": {
+   "thumbSet": "2013-02-19T02:46:51.000Z",
+   "delayDays": 580,
+   "sweep": "2013-02-19"
+  },
+  "k931LGZNVQA": {
+   "thumbSet": "2013-02-19T02:46:18.000Z",
+   "delayDays": 571,
+   "sweep": "2013-02-19"
+  },
+  "rj-EU6cOJiU": {
+   "thumbSet": "2013-02-19T02:45:52.000Z",
+   "delayDays": 561,
+   "sweep": "2013-02-19"
+  },
+  "P-itTI4qmfI": {
+   "thumbSet": "2013-02-19T02:47:17.000Z",
+   "delayDays": 585,
+   "sweep": "2013-02-19"
+  },
+  "-veqViFhmzY": {
+   "thumbSet": "2013-02-19T02:47:54.000Z",
+   "delayDays": 587,
+   "sweep": "2013-02-19"
+  },
+  "pbJHBliCBHw": {
+   "thumbSet": "2011-07-09T02:17:34.000Z",
+   "delayDays": 3
+  },
+  "yknbUcbWXgo": {
+   "thumbSet": "2013-02-19T02:48:39.000Z",
+   "delayDays": 599,
+   "sweep": "2013-02-19"
+  },
+  "ofZJpJJXh7A": {
+   "thumbSet": "2013-02-19T02:49:42.000Z",
+   "delayDays": 606,
+   "sweep": "2013-02-19"
+  },
+  "YGxZE_ltC30": {
+   "thumbSet": "2013-02-19T02:49:15.000Z",
+   "delayDays": 603,
+   "sweep": "2013-02-19"
+  },
+  "-J3MxpjjIIY": {
+   "thumbSet": "2013-02-19T02:50:43.000Z",
+   "delayDays": 617,
+   "sweep": "2013-02-19"
+  },
+  "MFxbbVEXE48": {
+   "thumbSet": "2013-02-19T02:50:22.000Z",
+   "delayDays": 615,
+   "sweep": "2013-02-19"
+  },
+  "ABwrfUB6x4c": {
+   "thumbSet": "2013-02-19T02:50:01.000Z",
+   "delayDays": 608,
+   "sweep": "2013-02-19"
+  },
+  "bz50Iwlww_Q": {
+   "thumbSet": "2013-02-19T02:48:54.000Z",
+   "delayDays": 601,
+   "sweep": "2013-02-19"
+  },
+  "jSuykPKr00g": {
+   "thumbSet": "2013-02-19T02:51:53.000Z",
+   "delayDays": 631,
+   "sweep": "2013-02-19"
+  },
+  "iZ98-hc0AIg": {
+   "thumbSet": "2013-02-19T02:51:28.000Z",
+   "delayDays": 624,
+   "sweep": "2013-02-19"
+  },
+  "i0lTyUcCFGU": {
+   "thumbSet": "2013-02-19T02:51:06.000Z",
+   "delayDays": 623,
+   "sweep": "2013-02-19"
+  },
+  "C3G_5EBgPXQ": {
+   "thumbSet": "2013-02-19T02:52:39.000Z",
+   "delayDays": 633,
+   "sweep": "2013-02-19"
+  },
+  "Om6u7EcsNj0": {
+   "thumbSet": "2013-02-19T02:53:01.000Z",
+   "delayDays": 635,
+   "sweep": "2013-02-19"
+  },
+  "4LyqKAIDxio": {
+   "thumbSet": "2013-02-19T02:53:43.000Z",
+   "delayDays": 638,
+   "sweep": "2013-02-19"
+  },
+  "NzzgP1dIqxA": {
+   "thumbSet": "2013-02-19T02:53:20.000Z",
+   "delayDays": 637,
+   "sweep": "2013-02-19"
+  },
+  "BjCLSOESnaM": {
+   "thumbSet": "2013-02-19T02:54:07.000Z",
+   "delayDays": 642,
+   "sweep": "2013-02-19"
+  },
+  "igzQ5UnK0Fc": {
+   "thumbSet": "2011-07-12T14:38:03.000Z",
+   "delayDays": 59
+  },
+  "XbDKqxz1Irw": {
+   "thumbSet": "2013-02-19T02:54:38.000Z",
+   "delayDays": 646,
+   "sweep": "2013-02-19"
+  },
+  "oti6nl5eHno": {
+   "thumbSet": "2013-02-19T02:55:05.000Z",
+   "delayDays": 649,
+   "sweep": "2013-02-19"
+  },
+  "PKnBmkixL44": {
+   "thumbSet": "2011-07-12T14:36:28.000Z",
+   "delayDays": 61
+  },
+  "zdUhLH7BS4E": {
+   "thumbSet": "2013-02-19T02:55:26.000Z",
+   "delayDays": 651,
+   "sweep": "2013-02-19"
+  },
+  "a3nvVfXZ5Hc": {
+   "thumbSet": "2013-02-19T02:56:34.000Z",
+   "delayDays": 654,
+   "sweep": "2013-02-19"
+  },
+  "PKRgn3JjKnk": {
+   "thumbSet": "2013-02-19T02:55:59.000Z",
+   "delayDays": 653,
+   "sweep": "2013-02-19"
+  },
+  "gWDb43LLA5g": {
+   "thumbSet": "2013-02-19T02:57:31.000Z",
+   "delayDays": 661,
+   "sweep": "2013-02-19"
+  },
+  "xf38gMtMHfI": {
+   "thumbSet": "2013-02-19T02:57:12.000Z",
+   "delayDays": 661,
+   "sweep": "2013-02-19"
+  },
+  "K93yVGcevd0": {
+   "thumbSet": "2013-02-19T02:57:49.000Z",
+   "delayDays": 661,
+   "sweep": "2013-02-19"
+  },
+  "UHjZ0vdu7NE": {
+   "thumbSet": "2013-02-19T02:59:06.000Z",
+   "delayDays": 663,
+   "sweep": "2013-02-19"
+  },
+  "7StsUUesEw8": {
+   "thumbSet": "2013-02-19T02:58:38.000Z",
+   "delayDays": 661,
+   "sweep": "2013-02-19"
+  },
+  "7iLOe__2bJE": {
+   "thumbSet": "2013-02-19T02:58:12.000Z",
+   "delayDays": 661,
+   "sweep": "2013-02-19"
+  },
+  "G8PxlZ_epkM": {
+   "thumbSet": "2013-02-19T03:00:13.000Z",
+   "delayDays": 671,
+   "sweep": "2013-02-19"
+  },
+  "1IxUWIjaBPc": {
+   "thumbSet": "2013-02-19T02:59:22.000Z",
+   "delayDays": 666,
+   "sweep": "2013-02-19"
+  },
+  "i_qPg9XZ_F8": {
+   "thumbSet": "2013-02-19T03:02:04.000Z",
+   "delayDays": 671,
+   "sweep": "2013-02-19"
+  },
+  "neh-uf9TMwA": {
+   "thumbSet": "2013-02-19T03:01:20.000Z",
+   "delayDays": 671,
+   "sweep": "2013-02-19"
+  },
+  "koMTqerlooA": {
+   "thumbSet": "2013-02-19T03:02:42.000Z",
+   "delayDays": 677,
+   "sweep": "2013-02-19"
+  },
+  "29j8bR835EQ": {
+   "thumbSet": "2013-02-19T03:03:19.000Z",
+   "delayDays": 683,
+   "sweep": "2013-02-19"
+  },
+  "_nUTE4jQ7Yg": {
+   "thumbSet": "2013-02-19T03:03:49.000Z",
+   "delayDays": 694,
+   "sweep": "2013-02-19"
+  },
+  "xVk4kVVJdds": {
+   "thumbSet": "2013-02-19T03:04:08.000Z",
+   "delayDays": 697,
+   "sweep": "2013-02-19"
+  },
+  "N6pUV7Gz21s": {
+   "thumbSet": "2013-02-19T03:05:03.000Z",
+   "delayDays": 700,
+   "sweep": "2013-02-19"
+  },
+  "X015LU32DnY": {
+   "thumbSet": "2013-02-19T03:04:44.000Z",
+   "delayDays": 698,
+   "sweep": "2013-02-19"
+  },
+  "Tt8PpP61_Ms": {
+   "thumbSet": "2013-02-19T03:05:58.000Z",
+   "delayDays": 706,
+   "sweep": "2013-02-19"
+  },
+  "VSPdfJw2rZE": {
+   "thumbSet": "2013-02-19T03:05:28.000Z",
+   "delayDays": 704,
+   "sweep": "2013-02-19"
+  },
+  "zeyrOBS0vro": {
+   "thumbSet": "2013-02-19T03:06:31.000Z",
+   "delayDays": 708,
+   "sweep": "2013-02-19"
+  },
+  "exSUlvH2OcY": {
+   "thumbSet": "2013-02-19T03:08:16.000Z",
+   "delayDays": 714,
+   "sweep": "2013-02-19"
+  },
+  "0izM6GR7kR0": {
+   "thumbSet": "2013-02-19T03:09:00.000Z",
+   "delayDays": 716,
+   "sweep": "2013-02-19"
+  },
+  "An2PJiWiiIs": {
+   "thumbSet": "2013-02-19T03:09:19.000Z",
+   "delayDays": 720,
+   "sweep": "2013-02-19"
+  },
+  "qT9nCrcM4sQ": {
+   "thumbSet": "2014-04-12T02:39:56.000Z",
+   "delayDays": 1219
+  },
+  "7OOmdIky6AE": {
+   "thumbSet": "2011-11-19T00:34:12.000Z",
+   "delayDays": 448
+  }
+ }
+}
