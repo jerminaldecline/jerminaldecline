@@ -857,6 +857,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-dot {fill: var(--surface); stroke-width: 2;}
 .chart-dot.curr {stroke: var(--accent);}
 .chart-dot.curr.in-progress {stroke-dasharray: 2 1.5; opacity: 0.7;}
+/* A month that published nothing. Hollow and unfilled, sitting on the baseline,
+   so it reads as an absence rather than as a measured low — a filled dot at zero
+   claims people watched nothing, which is a different (and untrue) statement. */
+.chart-dot.blank {fill: none; stroke: var(--text-dim); stroke-width: 1.4; stroke-dasharray: 2 1.6; opacity: 0.85;}
+.chart-dot.blank.inprogress-blank {stroke: var(--accent-2); opacity: 0.95;}
+.chart-tooltip-blank {color: var(--text-muted); font-style: italic;}
 .chart-dot.prev {stroke: var(--text-dim);}
 .chart-hit {fill: transparent; cursor: pointer;}
 .chart-tooltip {position: absolute;
@@ -4724,6 +4730,41 @@ function anSummarise(videos) {
   };
 }
 
+// Did this month publish anything the current chart mode measures?
+//
+// A views chart plotting 0 asserts "published, and nobody watched" — which has
+// never once happened here. What actually happened is "published nothing", and
+// the two must not look alike. Callers use this to break the line over such
+// months rather than dropping it to the axis. The rate line in the views+likes
+// chart has always done this ("lifts over gaps rather than dipping to 0%"); this
+// generalises the same rule.
+function anMonthHasUploads(m, mode){
+  const c = m && m.curr; if (!c) return false;
+  if (mode === 'short') return (c.shorts || []).length > 0;
+  if (mode === 'all')   return ((c.longForm || []).length + (c.shorts || []).length) > 0;
+  return (c.longForm || []).length > 0;
+}
+// Why a month is blank, for the tooltip. A channel that posted 32 Shorts and no
+// long-form is a different story from one that posted nothing at all, and the
+// chart should be able to say which.
+function anBlankReason(m, mode){
+  const c = m && m.curr; if (!c) return 'No uploads this month';
+  const nShort = (c.shorts || []).length;
+  if (mode === 'long' && nShort) return `No long-form this month — ${nShort} Short${nShort === 1 ? '' : 's'} posted`;
+  return 'No uploads this month';
+}
+// Build an SVG path that lifts over months with nothing to plot, starting a new
+// subpath after each gap so the line is never drawn through a blank month.
+function anGapPath(values, xFor, yFor, hasAt){
+  let out = '', pen = false;
+  for (let i = 0; i < values.length; i++) {
+    if (!hasAt(i) || values[i] == null) { pen = false; continue; }
+    out += `${pen ? 'L' : 'M'} ${xFor(i)} ${yFor(values[i])} `;
+    pen = true;
+  }
+  return out.trim();
+}
+
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
 // channel scope ('ALL' or channelId), across all available months.
@@ -4737,7 +4778,22 @@ function buildMonthlyData(scope){
     if (!byMonth.has(k)) byMonth.set(k, []);
     byMonth.get(k).push(v);
   }
-  const keys = [...byMonth.keys()].filter(k => k >= '2017-07').sort();
+  // Fill every month between the first and last upload, not just months that
+  // have one. Keying off uploads alone made the x-axis stop being a timeline: on
+  // @rcnightmare only 4 of the last 13 months carry uploads, so a four-month
+  // dormancy was drawn as one smooth segment from Dec to Apr with nothing on
+  // screen saying it happened. The synthesised months summarise to zeros and
+  // carry no videos, which is what lets the renderers break the line over them
+  // instead of plotting a 0 (see anMonthHasUploads).
+  const present = [...byMonth.keys()].filter(k => k >= '2017-07').sort();
+  if (!present.length) return [];
+  const stepMonth = k => {
+    const [yy, mm] = k.split('-').map(Number);
+    return mm === 12 ? `${yy + 1}-01` : `${yy}-${String(mm + 1).padStart(2, '0')}`;
+  };
+  const keys = [];
+  for (let k = present[0], last = present[present.length - 1], guard = 0;
+       k <= last && guard < 2000; k = stepMonth(k), guard++) keys.push(k);
   return keys.map(key => {
     const [y, mo] = key.split('-');
     const yoyKey = `${parseInt(y)-1}-${mo}`;
@@ -5528,7 +5584,11 @@ function renderTrendChart(yoy) {
   const yFor = v => P.top + (1 - v / yMax) * innerH;
 
   // Build path strings
-  const currPath = currValues.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i)} ${yFor(v)}`).join(' ');
+  // Months that published nothing the current mode measures are not zeros — the
+  // line lifts over them and a hollow marker sits on the axis instead.
+  const vMode = (chartMetric === 'views' && includeShorts) ? 'all' : viewMode;
+  const vHas = i => anMonthHasUploads(chartData[i], vMode);
+  const currPath = anGapPath(currValues, xFor, yFor, vHas);
 
   // Duration line (only when in views+length mode). Uses a separate Y scale
   // mapped to the same vertical extent so both lines share the plot area but
@@ -5708,10 +5768,22 @@ function renderTrendChart(yoy) {
       return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
     }).join('');
   }
+  // The in-progress month is plotted at index n but is not part of chartData, so
+  // every branch above skipped it and its point sat over blank axis. It is the
+  // month users look at first — label it.
+  if (inProgressMonth) {
+    const ipMon = inProgressMonth.label.split(' ')[0];
+    xLabels += `<text class="chart-axis-label x" x="${xFor(n)}" y="${H - 26}">${ipMon}</text>`;
+  }
 
   // Dots — every point is now a complete month, render uniformly
+  // Solid dot where something was published; hollow ring on the baseline where
+  // nothing was, so a blank month is visibly a different kind of thing from a
+  // low month rather than reading as a crash to zero.
   const currDots = currValues.map((v, i) =>
-    `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+    vHas(i)
+      ? `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+      : `<circle class="chart-dot blank" cx="${xFor(i)}" cy="${yFor(0)}" r="3.2"/>`
   ).join('');
   // Density-aware value labels on the views line. Always anchor the peak and the
   // latest complete month so those headline numbers are readable without hovering.
@@ -5719,9 +5791,13 @@ function renderTrendChart(yoy) {
   // Long timelines (> ~24 months): label only notable peaks/lows + latest, so the
   // chart isn't a smear. Short timelines: dense (every point at 12mo, strided at 24mo).
   const _vKeyMode = currValues.length > 30;
-  const _vAnchors = _vKeyMode ? findKeyPoints(currValues) : new Set(inProgressMonth ? [peakIdxLbl] : [peakIdxLbl, currValues.length - 1]);
+  // Mask blank months to null so no label is drawn over them. buildPointLabels
+  // skips nulls; left as 0 it printed a "0" above every dormant month, which is
+  // the precise claim this change exists to stop making.
+  const currLabelVals = currValues.map((v, i) => vHas(i) ? v : null);
+  const _vAnchors = _vKeyMode ? findKeyPoints(currLabelVals) : new Set(inProgressMonth ? [peakIdxLbl] : [peakIdxLbl, currValues.length - 1]);
   if (inProgressMonth) _vAnchors.delete(currValues.length - 1); // in-progress red label covers the tail
-  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [..._vAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _vKeyMode });
+  const currLabels = buildPointLabels(currLabelVals, xFor, yFor, fmtCompact, { anchors: [..._vAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _vKeyMode });
   const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
@@ -5775,10 +5851,15 @@ function renderTrendChart(yoy) {
     const ipMetrics = metricsFor(inProgressMonth.curr);
     const ipViews = ipMetrics.views;
     const ipY = yFor(ipViews);
-    // Connector for views line — dashed
+    // Connector for views line — dashed. Suppressed when either end published
+    // nothing: a dashed plunge from 58K to the axis reads as a collapse in
+    // progress, when the month simply has no long-form in it yet.
+    const ipHasUploads = anMonthHasUploads(inProgressMonth, vMode);
     const lastCompleteY = yFor(currValues[n - 1]);
     const lastCompleteX = xFor(n - 1);
-    const viewsConnector = `<path class="chart-line-inprogress" d="M ${lastCompleteX} ${lastCompleteY} L ${ipX} ${ipY}"/>`;
+    const viewsConnector = (ipHasUploads && vHas(n - 1))
+      ? `<path class="chart-line-inprogress" d="M ${lastCompleteX} ${lastCompleteY} L ${ipX} ${ipY}"/>`
+      : '';
 
     // Connector + dot for duration line if in views+length mode
     let durInProgressSvg = '';
@@ -5806,9 +5887,12 @@ function renderTrendChart(yoy) {
     inProgressSvg = `
       ${viewsConnector}
       ${durInProgressSvg}
-      <circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
-      <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>
-      <text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>
+      ${ipHasUploads
+        ? `<circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
+           <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>`
+        : `<circle class="chart-dot blank inprogress-blank" cx="${ipX}" cy="${yFor(0)}" r="3.6"/>`}
+      ${ipHasUploads ? `<text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>` : ''}
+      ${''}
     `;
     inProgressHits = `
       <rect class="chart-hit"
@@ -5858,7 +5942,21 @@ function renderTrendChart(yoy) {
     const yoyM = m.yoy ? metricsFor(m.yoy) : null;
     const xIdx = isInProgress ? n : idx;
     const cxPct = ((xFor(xIdx) / W) * 100);
-    const cyPct = ((yFor(curr.views) / H) * 100);
+    // A blank month has no value to point at, so anchor the tooltip on the
+    // baseline marker and say why it is blank rather than reporting "0 views",
+    // which would assert that people watched nothing rather than that nothing
+    // was posted.
+    const blankMonth = !anMonthHasUploads(m, vMode);
+    const cyPct = ((yFor(blankMonth ? 0 : curr.views) / H) * 100);
+    if (blankMonth) {
+      tooltip.innerHTML =
+        `<div class="chart-tooltip-title">${m.label}</div>` +
+        `<div class="chart-tooltip-row chart-tooltip-blank">${anBlankReason(m, vMode)}</div>`;
+      tooltip.style.display = 'block';
+      tooltip.style.left = cxPct + '%';
+      tooltip.style.top = cyPct + '%';
+      return;
+    }
     let deltaHtml = '';
     // Suppress YoY delta for the in-progress month — comparing partial-current
     // to full-previous-year is misleading without proportional adjustment.
