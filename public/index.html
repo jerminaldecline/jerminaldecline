@@ -331,6 +331,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .stat-row>.stat.stat-sm{grid-column:span 3}
 .stat-sub{font-size:0.72rem;color:var(--subtext);line-height:1.4;margin-top:0.2rem}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.15rem}
+/* No-data states for a month with Shorts but no long-form. Deliberately quiet —
+   recessed rather than alarming, because "he posted no long-form" is a fact
+   about the month, not a fault or an enforcement event. */
+.stat-nodata{background:transparent;border-style:dashed}
+.stat-nodata .stat-num{color:var(--text-dim)}
+.stat-nodata .stat-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.2rem;font-style:italic}
+.hl-nodata{border-style:dashed;background:transparent}
+.hl-nodata .hl-nodata-msg{font-size:0.84rem;color:var(--text-muted);line-height:1.5;margin-top:0.35rem;max-width:52ch}
 .stat-num{font-size:1.55rem;font-weight:800;letter-spacing:-0.01em;line-height:1.05}
 .stat-lbl{font-size:0.74rem;color:var(--label);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.1rem}
 .stat-deltas{display:flex;flex-wrap:wrap;gap:0.5rem;row-gap:0.3rem;margin-top:0.6rem}
@@ -613,6 +621,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Active = feature ON (accent fill); inactive = muted outline. */
 .chart-ctrl-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .chart-ctrl-btn[hidden]{display:none}
+/* Format segment: three buttons welded into one control, so the choice reads as
+   one setting with three states rather than three independent toggles. */
+.chart-fmt-seg{display:inline-flex}
+.chart-fmt-seg[hidden]{display:none}
+.chart-fmt-seg .chart-ctrl-btn.seg{border-radius:0;margin-left:-1px}
+.chart-fmt-seg .chart-ctrl-btn.seg:first-child{border-radius:8px 0 0 8px;margin-left:0}
+.chart-fmt-seg .chart-ctrl-btn.seg:last-child{border-radius:0 8px 8px 0}
+.chart-fmt-seg .chart-ctrl-btn.seg[aria-pressed="true"]{position:relative;z-index:1}
 .chart-ctrl-swatch{display:inline-block;width:14px;height:3px;border-radius:2px;background:currentColor;opacity:0.8}
 .chart-wrap.labels-hidden .chart-pt-label{display:none}
 /* Mobile: the legend grows when Previous year is toggled on (it adds the
@@ -849,6 +865,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-dot {fill: var(--surface); stroke-width: 2;}
 .chart-dot.curr {stroke: var(--accent);}
 .chart-dot.curr.in-progress {stroke-dasharray: 2 1.5; opacity: 0.7;}
+/* A month that published nothing. Hollow and unfilled, sitting on the baseline,
+   so it reads as an absence rather than as a measured low — a filled dot at zero
+   claims people watched nothing, which is a different (and untrue) statement. */
+.chart-dot.blank {fill: none; stroke: var(--text-dim); stroke-width: 1.4; stroke-dasharray: 2 1.6; opacity: 0.85;}
+.chart-dot.blank.inprogress-blank {stroke: var(--accent-2); opacity: 0.95;}
+.chart-tooltip-blank {color: var(--text-muted); font-style: italic;}
 .chart-dot.prev {stroke: var(--text-dim);}
 .chart-hit {fill: transparent; cursor: pointer;}
 .chart-tooltip {position: absolute;
@@ -2684,7 +2706,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="trend-legend" id="trendLegend"></div>
         <div class="chart-controls-overlay">
           <button type="button" class="chart-ctrl-btn" id="prevYearControl" aria-pressed="true" hidden title="Show or hide the previous-year comparison line"><span class="chart-ctrl-swatch prev"></span>Previous year</button>
-          <button type="button" class="chart-ctrl-btn" id="includeShortsToggle" aria-pressed="false" hidden title="Add Shorts views to the chart (off = long-form only)">Include Shorts</button>
+          <!-- Long-form / Shorts / Both. Replaces the old "Include Shorts"
+               toggle, which could only add Shorts to long-form and gave no way
+               to see the Shorts trend on its own — the thing @QuarteringLive is
+               now made entirely of. Three states, one control, matching the
+               format switch the Videos tab already uses. -->
+          <div class="chart-fmt-seg" id="chartFormatSeg" role="group" aria-label="Video format" hidden>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="long" aria-pressed="true" title="Long-form uploads only">Long-form</button>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="short" aria-pressed="false" title="Shorts only">Shorts</button>
+            <button type="button" class="chart-ctrl-btn seg" data-fmt="all" aria-pressed="false" title="Long-form and Shorts combined">Both</button>
+          </div>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
       </div>
@@ -3342,9 +3373,49 @@ async function loadAndCompute(){
     // months so aggregate figures use the IDENTICAL math (medians, best/worst,
     // topic counts) as a single month rather than re-summing rolled-up values.
     function computeStats(vs, sh){
+      // Declared up here, not beside its first long-form use: the shorts-only
+      // branch below returns before that point and needs it too, and a `const`
+      // referenced above its declaration is a temporal-dead-zone ReferenceError,
+      // not a hoisted no-op. That throw happened inside loadAndCompute() and was
+      // swallowed by init()'s catch, so the whole page silently rendered with no
+      // scopes and empty dropdowns.
+      const leanVid = v => ({
+        id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
+        d:v.durationSec||0, s:!!v.isShort, dt:ctDate(v.publishedAt),
+        tp: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
+        tpc: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
+        ch: handle[v.channelId]||'?'
+      });
       const shorts={n:sh.length, v:sh.reduce((s,x)=>s+(x.views||0),0), med:sh.length?median(sh.map(x=>x.views||0)):0, best:null};
       if(sh.length){ const b=[...sh].sort((a,b)=>(b.views||0)-(a.views||0))[0]; shorts.best=vstats(b); }
-      if(!vs.length){ return {shortsOnly:true, shorts}; }
+      // A month with Shorts but no long-form used to return this stub, which had
+      // none of the fields render() reads — so the month was simply hidden from
+      // the Overview. That silently erased real activity: @QuarteringLive posted
+      // 34 Shorts and gained subscribers in Aug 2026, and the site behaved as
+      // though the month did not exist. Return the FULL shape instead, so the
+      // month renders with its Shorts and subscriber data intact and the
+      // long-form cards show "no data" rather than vanishing.
+      //
+      // Totals are genuinely 0 (nothing long-form was posted). Averages, medians
+      // and rates are null, not 0 — the median of nothing is undefined, and a 0
+      // would render as a real reading and produce a bogus -100% delta.
+      if(!vs.length){
+        const shortsVlist = sh.map(leanVid);
+        return {
+          shortsOnly:true, shorts,
+          n:0, tot:0, comments:0, runtime:0,
+          med:null, lv:null, avglen:null,
+          lrevlo:0, lrevhi:0,
+          srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
+          srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
+          get revlo(){ return this.lrevlo + this.srevlo; },
+          get revhi(){ return this.lrevhi + this.srevhi; },
+          top:[], topvid:null, debate:null, worstvid:null, vlist:shortsVlist,
+          topicsByCount:[], topicsByViews:[], taggedCount:0, taggedViews:0,
+          themesByCount:[], themesByViews:[], themesTaggedCount:0, themesTaggedViews:0,
+          modesByCount:[], modesByViews:[], modesTaggedCount:0, modesTaggedViews:0
+        };
+      }
       const views=vs.map(v=>v.views||0);
       const lvs=vs.filter(v=>v.views>0&&v.likes!=null).map(v=>v.likes/v.views);
       const crs=vs.filter(v=>v.views>0&&v.comments!=null).map(v=>v.comments/v.views);
@@ -3355,13 +3426,6 @@ async function loadAndCompute(){
       // Overview topic cards can offer Subjects/Themes/Modes views.
       const thc={}; for(const v of vs){ const t=themesMap[v.id]; if(t){ if(!thc[t]) thc[t]={n:0,v:0}; thc[t].n++; thc[t].v+=(v.views||0); } }
       const mdc={}; for(const v of vs){ const t=modesMap[v.id]; if(t){ if(!mdc[t]) mdc[t]={n:0,v:0}; mdc[t].n++; mdc[t].v+=(v.views||0); } }
-      const leanVid = v => ({
-        id:v.id, t:v.title, v:v.views||0, l:v.likes||0, c:v.comments||0,
-        d:v.durationSec||0, s:!!v.isShort, dt:ctDate(v.publishedAt),
-        tp: tags[v.id] ? (tname[tags[v.id]]||tags[v.id]) : null,
-        tpc: tags[v.id] ? (tcolor[tags[v.id]]||'#888') : null,
-        ch: handle[v.channelId]||'?'
-      });
       const vlist = [...vs, ...sh].map(leanVid);
       const topicEntries = Object.entries(tc).map(([t,o])=>({
         id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v
@@ -3505,7 +3569,11 @@ let HANDLE_TO_ID = {}; // handle (e.g. '@TheQuartering') -> channelId; for Analy
 // Compact number formatter. K/M with one decimal, trailing ".0" stripped — so
 // round values stay clean (244K, 2M) while small thousands keep precision
 // (1426 → 1.4K, not 1K).
-const fmt = n => { const uk=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? (n/1000000).toFixed(2).replace(/\.?0+$/,'')+'M' : n>=1000 ? uk(n/1000,'K') : ''+n; };
+// null/undefined/NaN render as an em dash, never as the literal "null": a
+// shorts-only month has no long-form median, and `''+null` put the word "null"
+// in the Average views hero at full size. 0 is a real reading and still prints 0.
+const fmt = n => { if (n == null || (typeof n === 'number' && !isFinite(n))) return '—';
+  const uk=(v,s)=>{ const t=v.toFixed(1); return (t.endsWith('.0')?t.slice(0,-2):t)+s; }; return n>=1000000 ? (n/1000000).toFixed(2).replace(/\.?0+$/,'')+'M' : n>=1000 ? uk(n/1000,'K') : ''+n; };
 const fmtFull = n => n.toLocaleString();
 const money = n => '$'+n.toLocaleString();
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -3683,14 +3751,16 @@ const SCOPE_LABEL = {'ALL':'All channels'};
 function buildScopeLabels(){ CHANNELS.forEach(c=>SCOPE_LABEL[c]=c); }
 // months available in the current scope, trimmed to where TheQuartering era begins (2017-07)
 function availableMonths(){
-  return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07' && !SCOPES[scope][m].shortsOnly).sort().reverse();
+  // Shorts-only months are INCLUDED. They were excluded while computeStats
+  // returned a stub for them, but a channel that has switched to Shorts is still
+  // active — @QuarteringLive posted 34 Shorts and gained subscribers in Aug 2026
+  // — and hiding the month made the site look a month out of date. The long-form
+  // cards render as "no data" for those months instead.
+  return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07').sort().reverse();
 }
-// Same list, but keeping months that contain ONLY Shorts. The Overview report is
-// built around long-form, so a shorts-only month has no report to show and is
-// excluded above. The Videos tab has no such problem — it lists Shorts happily —
-// and excluding them there silently stranded the list on an older month:
-// @QuarteringLive posted 23 Shorts and no long-form in Aug 2026, and the tab kept
-// showing July while the dropdown still read August.
+// Retained as a distinct name for the Videos tab. Both lists are now identical;
+// kept separate so the two tabs' month lists can diverge again without one
+// silently changing the other.
 function availableMonthsForVideos(){
   return Object.keys(SCOPES[scope]||{}).filter(m=>/^\d{4}-\d{2}$/.test(m) && m>='2017-07').sort().reverse();
 }
@@ -3816,7 +3886,10 @@ function render(m){
   const revStr = money(d.revlo)+' – '+money(d.revhi);
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
-  const headSub = isAll ? 'Long-form across all channels' : 'Long-form performance';
+  // A shorts-only month has no long-form to report on, so "Long-form performance"
+  // would label the page as something it cannot be.
+  const headSub = d.shortsOnly ? 'Shorts only — no long-form this month'
+    : isAll ? 'Long-form across all channels' : 'Long-form performance';
   // The in-progress month is only partially complete, so its month-over-month /
   // year-over-year comparisons may not be meaningful yet. The deltas are still
   // shown, but a banner flags the caveat (see report HTML below).
@@ -3961,8 +4034,21 @@ function render(m){
     }
   }
   const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
-  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,p:null,y:null,goodUp:null,foot:subsFoot});
+  cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,selfNum:true,p:null,y:null,goodUp:null,foot:subsFoot});
   const cardHTML=cards.map(c=>{
+    // A null `cur` means the figure is undefined for this month, not zero — a
+    // median or a rate over no long-form uploads. Show an em dash and drop the
+    // comparisons: a delta against "undefined" is meaningless, and rendering
+    // c.num would print "null%".
+    //
+    // `selfNum` opts a card out. Subscribers-gained deliberately passes cur:null
+    // to suppress its MoM/YoY minis (that comparator can legitimately be 0 or
+    // negative) while carrying its real value in `num` — without this it got
+    // caught here and reported "no data" over perfectly good figures.
+    if (c.cur == null && !c.selfNum) {
+      return `<div class="stat stat-nodata"><div class="stat-num">—</div>` +
+             `<div class="stat-lbl">${c.lbl}</div><div class="stat-foot">no long-form this month</div></div>`;
+    }
     const mm=mini(lblMo,c.cur,c.p,c.goodUp,c.abs), my=mini(lblYr,c.cur,c.y,c.goodUp,c.abs);
     const deltas=(mm||my)?`<div class="stat-deltas">${mm}${my}</div>`:'';
     const linkAttrs = (c.goto && monthKey) ? ` data-goto-videos="${c.goto}" data-vid-month="${monthKey}" role="button" tabindex="0"` : '';
@@ -4226,7 +4312,18 @@ function render(m){
     </div>
     <div class="hero-rowlabel">Other stats</div>
     <div class="stat-row">${cardHTML}${funCardHTML}</div>
-    ${d.n >= 2 ? `<div class="highlights">${topHTML}${worstHTML}${debHTML}</div>` : ''}
+    ${d.n >= 2
+      ? `<div class="highlights">${topHTML}${worstHTML}${debHTML}</div>`
+      : (d.shortsOnly
+          // Best/worst/most-contentious all rank long-form, so a shorts-only
+          // month has nothing to put here. Say that once, rather than dropping
+          // the row silently (which reads as a rendering fault) or stamping out
+          // three identical empty boxes.
+          ? `<div class="highlights"><div class="hl hl-nodata">
+               <div><div class="hl-label">Video highlights</div>
+               <div class="hl-nodata-msg">No long-form uploads this month, so there is no best, worst or most-contentious video to rank. ${SD.n ? `The ${SD.n} Short${SD.n===1?'':'s'} posted this month ${SD.n===1?'is':'are'} covered above and in the Videos tab.` : ''}</div></div>
+             </div></div>`
+          : '')}
     <div class="lower">
       <div class="surface-panel"><div class="panel-head"><h3>Top topics — share of uploads</h3>${seeVidsLink('long')}</div>
         <div class="ctag-viewtabs ov-topic-tabs" role="tablist" aria-label="Topic axis">
@@ -4650,6 +4747,41 @@ function anSummarise(videos) {
   };
 }
 
+// Did this month publish anything the current chart mode measures?
+//
+// A views chart plotting 0 asserts "published, and nobody watched" — which has
+// never once happened here. What actually happened is "published nothing", and
+// the two must not look alike. Callers use this to break the line over such
+// months rather than dropping it to the axis. The rate line in the views+likes
+// chart has always done this ("lifts over gaps rather than dipping to 0%"); this
+// generalises the same rule.
+function anMonthHasUploads(m, mode){
+  const c = m && m.curr; if (!c) return false;
+  if (mode === 'short') return (c.shorts || []).length > 0;
+  if (mode === 'all')   return ((c.longForm || []).length + (c.shorts || []).length) > 0;
+  return (c.longForm || []).length > 0;
+}
+// Why a month is blank, for the tooltip. A channel that posted 32 Shorts and no
+// long-form is a different story from one that posted nothing at all, and the
+// chart should be able to say which.
+function anBlankReason(m, mode){
+  const c = m && m.curr; if (!c) return 'No uploads this month';
+  const nShort = (c.shorts || []).length;
+  if (mode === 'long' && nShort) return `No long-form this month — ${nShort} Short${nShort === 1 ? '' : 's'} posted`;
+  return 'No uploads this month';
+}
+// Build an SVG path that lifts over months with nothing to plot, starting a new
+// subpath after each gap so the line is never drawn through a blank month.
+function anGapPath(values, xFor, yFor, hasAt){
+  let out = '', pen = false;
+  for (let i = 0; i < values.length; i++) {
+    if (!hasAt(i) || values[i] == null) { pen = false; continue; }
+    out += `${pen ? 'L' : 'M'} ${xFor(i)} ${yFor(values[i])} `;
+    pen = true;
+  }
+  return out.trim();
+}
+
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
 // channel scope ('ALL' or channelId), across all available months.
@@ -4663,7 +4795,22 @@ function buildMonthlyData(scope){
     if (!byMonth.has(k)) byMonth.set(k, []);
     byMonth.get(k).push(v);
   }
-  const keys = [...byMonth.keys()].filter(k => k >= '2017-07').sort();
+  // Fill every month between the first and last upload, not just months that
+  // have one. Keying off uploads alone made the x-axis stop being a timeline: on
+  // @rcnightmare only 4 of the last 13 months carry uploads, so a four-month
+  // dormancy was drawn as one smooth segment from Dec to Apr with nothing on
+  // screen saying it happened. The synthesised months summarise to zeros and
+  // carry no videos, which is what lets the renderers break the line over them
+  // instead of plotting a 0 (see anMonthHasUploads).
+  const present = [...byMonth.keys()].filter(k => k >= '2017-07').sort();
+  if (!present.length) return [];
+  const stepMonth = k => {
+    const [yy, mm] = k.split('-').map(Number);
+    return mm === 12 ? `${yy + 1}-01` : `${yy}-${String(mm + 1).padStart(2, '0')}`;
+  };
+  const keys = [];
+  for (let k = present[0], last = present[present.length - 1], guard = 0;
+       k <= last && guard < 2000; k = stepMonth(k), guard++) keys.push(k);
   return keys.map(key => {
     const [y, mo] = key.split('-');
     const yoyKey = `${parseInt(y)-1}-${mo}`;
@@ -5037,6 +5184,13 @@ function buildMonthlyData(scope){
     if (viewMode === 'long') {
       return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
     }
+    // Shorts-only. This branch was missing: setChartTitle has always labelled
+    // mode 'short' as "Shorts views by month", but without it the chart fell
+    // through to totals below — so the title would have said Shorts while the
+    // line plotted long-form + Shorts combined.
+    if (viewMode === 'short') {
+      return { views: summary.shortViews, count: summary.shorts.length, avg: summary.shortAvg, label: 'Short' };
+    }
     return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
   }
   function activeDisplayName() {
@@ -5269,7 +5423,7 @@ function renderTrendChart(yoy) {
   if (chartMetric === 'subs') {
     const pyc = document.getElementById('prevYearControl');
     if (pyc) pyc.hidden = true;
-    const isc = document.getElementById('includeShortsToggle');
+    const isc = document.getElementById('chartFormatSeg');
     if (isc) isc.hidden = true;
     return renderSubsChart();
   }
@@ -5291,10 +5445,15 @@ function renderTrendChart(yoy) {
       ctrl.hidden = !supports;
       ctrl.setAttribute('aria-pressed', String(showPrevYear));
     }
-    const shortsCtrl = document.getElementById('includeShortsToggle');
+    // The format segment applies to the plain Views metric only — the other
+    // metrics keep their long-form framing (see metricsFor).
+    const shortsCtrl = document.getElementById('chartFormatSeg');
     if (shortsCtrl) {
       shortsCtrl.hidden = chartMetric !== 'views';
-      shortsCtrl.setAttribute('aria-pressed', String(includeShorts));
+      const active = includeShorts ? 'all' : (viewMode === 'short' ? 'short' : 'long');
+      for (const b of shortsCtrl.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String(b.dataset.fmt === active));
+      }
     }
   })();
 
@@ -5409,7 +5568,26 @@ function renderTrendChart(yoy) {
   // In views+length mode, we suppress the YoY visual (deficit/surplus fills, prev-year line)
   // because two superimposed lines on dual axes plus the gap fill becomes noisy.
   // The view-history alone is the story; duration overlay is the story.
-  const effectiveYoy = yoy && !showDuration;
+  // A previous-year line needs enough year-ago months to read as a comparison.
+  // @QuarteringLive launched in July 2025, so across its 13-month window only
+  // the last two months have a year-ago counterpart — and the result was a
+  // two-point grey line appearing out of nowhere at the right edge, which looks
+  // far more like a projection than like last year's numbers. Below a third of
+  // the range (and at least 3 points) it is noise, so the line is suppressed and
+  // the legend entry with it.
+  const yoyCoverage = chartData.reduce((k, m) => k + (m.yoy ? 1 : 0), 0);
+  const yoyUsable = yoyCoverage >= 3 && yoyCoverage >= chartData.length / 3;
+  const effectiveYoy = yoy && !showDuration && yoyUsable;
+  // The subtitle is written before this point and advertises "year-over-year
+  // shading". Drop that clause when there is no comparison line to shade against,
+  // rather than describing something the chart does not contain.
+  if (!yoyUsable) {
+    const _sub = document.querySelector('#anChartTitle .an-chart-title-sub');
+    // Take the punctuation that introduced the clause with it — the Shorts-
+    // included subtitle joins it with an em dash, and stripping only the words
+    // left "long-form and Shorts —." hanging.
+    if (_sub) _sub.textContent = _sub.textContent.replace(/[\s,–—-]*with year-over-year shading/i, '');
+  }
 
   let legendHtml = `
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
@@ -5454,7 +5632,11 @@ function renderTrendChart(yoy) {
   const yFor = v => P.top + (1 - v / yMax) * innerH;
 
   // Build path strings
-  const currPath = currValues.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i)} ${yFor(v)}`).join(' ');
+  // Months that published nothing the current mode measures are not zeros — the
+  // line lifts over them and a hollow marker sits on the axis instead.
+  const vMode = (chartMetric === 'views' && includeShorts) ? 'all' : viewMode;
+  const vHas = i => anMonthHasUploads(chartData[i], vMode);
+  const currPath = anGapPath(currValues, xFor, yFor, vHas);
 
   // Duration line (only when in views+length mode). Uses a separate Y scale
   // mapped to the same vertical extent so both lines share the plot area but
@@ -5634,10 +5816,22 @@ function renderTrendChart(yoy) {
       return `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}">${m.label.split(' ')[0]}</text>`;
     }).join('');
   }
+  // The in-progress month is plotted at index n but is not part of chartData, so
+  // every branch above skipped it and its point sat over blank axis. It is the
+  // month users look at first — label it.
+  if (inProgressMonth) {
+    const ipMon = inProgressMonth.label.split(' ')[0];
+    xLabels += `<text class="chart-axis-label x" x="${xFor(n)}" y="${H - 26}">${ipMon}</text>`;
+  }
 
   // Dots — every point is now a complete month, render uniformly
+  // Solid dot where something was published; hollow ring on the baseline where
+  // nothing was, so a blank month is visibly a different kind of thing from a
+  // low month rather than reading as a crash to zero.
   const currDots = currValues.map((v, i) =>
-    `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+    vHas(i)
+      ? `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
+      : `<circle class="chart-dot blank" cx="${xFor(i)}" cy="${yFor(0)}" r="3.2"/>`
   ).join('');
   // Density-aware value labels on the views line. Always anchor the peak and the
   // latest complete month so those headline numbers are readable without hovering.
@@ -5645,9 +5839,13 @@ function renderTrendChart(yoy) {
   // Long timelines (> ~24 months): label only notable peaks/lows + latest, so the
   // chart isn't a smear. Short timelines: dense (every point at 12mo, strided at 24mo).
   const _vKeyMode = currValues.length > 30;
-  const _vAnchors = _vKeyMode ? findKeyPoints(currValues) : new Set(inProgressMonth ? [peakIdxLbl] : [peakIdxLbl, currValues.length - 1]);
+  // Mask blank months to null so no label is drawn over them. buildPointLabels
+  // skips nulls; left as 0 it printed a "0" above every dormant month, which is
+  // the precise claim this change exists to stop making.
+  const currLabelVals = currValues.map((v, i) => vHas(i) ? v : null);
+  const _vAnchors = _vKeyMode ? findKeyPoints(currLabelVals) : new Set(inProgressMonth ? [peakIdxLbl] : [peakIdxLbl, currValues.length - 1]);
   if (inProgressMonth) _vAnchors.delete(currValues.length - 1); // in-progress red label covers the tail
-  const currLabels = buildPointLabels(currValues, xFor, yFor, fmtCompact, { anchors: [..._vAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _vKeyMode });
+  const currLabels = buildPointLabels(currLabelVals, xFor, yFor, fmtCompact, { anchors: [..._vAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _vKeyMode });
   const prevDots = effectiveYoy ? prevValues.map((v, i) =>
     v == null ? '' : `<circle class="chart-dot prev" cx="${xFor(i)}" cy="${yFor(v)}" r="3"/>`
   ).join('') : '';
@@ -5701,10 +5899,15 @@ function renderTrendChart(yoy) {
     const ipMetrics = metricsFor(inProgressMonth.curr);
     const ipViews = ipMetrics.views;
     const ipY = yFor(ipViews);
-    // Connector for views line — dashed
+    // Connector for views line — dashed. Suppressed when either end published
+    // nothing: a dashed plunge from 58K to the axis reads as a collapse in
+    // progress, when the month simply has no long-form in it yet.
+    const ipHasUploads = anMonthHasUploads(inProgressMonth, vMode);
     const lastCompleteY = yFor(currValues[n - 1]);
     const lastCompleteX = xFor(n - 1);
-    const viewsConnector = `<path class="chart-line-inprogress" d="M ${lastCompleteX} ${lastCompleteY} L ${ipX} ${ipY}"/>`;
+    const viewsConnector = (ipHasUploads && vHas(n - 1))
+      ? `<path class="chart-line-inprogress" d="M ${lastCompleteX} ${lastCompleteY} L ${ipX} ${ipY}"/>`
+      : '';
 
     // Connector + dot for duration line if in views+length mode
     let durInProgressSvg = '';
@@ -5732,9 +5935,12 @@ function renderTrendChart(yoy) {
     inProgressSvg = `
       ${viewsConnector}
       ${durInProgressSvg}
-      <circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
-      <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>
-      <text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>
+      ${ipHasUploads
+        ? `<circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
+           <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>`
+        : `<circle class="chart-dot blank inprogress-blank" cx="${ipX}" cy="${yFor(0)}" r="3.6"/>`}
+      ${ipHasUploads ? `<text class="chart-pt-label inprogress" x="${ipX.toFixed(1)}" y="${(ipY - 9).toFixed(1)}" text-anchor="${ipX > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipViews)}</text>` : ''}
+      ${''}
     `;
     inProgressHits = `
       <rect class="chart-hit"
@@ -5784,7 +5990,21 @@ function renderTrendChart(yoy) {
     const yoyM = m.yoy ? metricsFor(m.yoy) : null;
     const xIdx = isInProgress ? n : idx;
     const cxPct = ((xFor(xIdx) / W) * 100);
-    const cyPct = ((yFor(curr.views) / H) * 100);
+    // A blank month has no value to point at, so anchor the tooltip on the
+    // baseline marker and say why it is blank rather than reporting "0 views",
+    // which would assert that people watched nothing rather than that nothing
+    // was posted.
+    const blankMonth = !anMonthHasUploads(m, vMode);
+    const cyPct = ((yFor(blankMonth ? 0 : curr.views) / H) * 100);
+    if (blankMonth) {
+      tooltip.innerHTML =
+        `<div class="chart-tooltip-title">${m.label}</div>` +
+        `<div class="chart-tooltip-row chart-tooltip-blank">${anBlankReason(m, vMode)}</div>`;
+      tooltip.style.display = 'block';
+      tooltip.style.left = cxPct + '%';
+      tooltip.style.top = cyPct + '%';
+      return;
+    }
     let deltaHtml = '';
     // Suppress YoY delta for the in-progress month — comparing partial-current
     // to full-previous-year is misleading without proportional adjustment.
@@ -8552,7 +8772,19 @@ function niceDurationAxis(minSec, maxSec) {
     // Rounding would consistently produce N+1; flooring gives the intuitive N.
     const days = Math.floor((end - start) / dayMs);
     if (days <= 32) return `${days} days`;
-    const months = Math.round(days / 30.4);
+    // Count CALENDAR months and separate a final in-progress one. The "Last 12
+    // months" preset spans 12 complete months plus the current partial month
+    // (which the views chart also plots, as its own in-progress point), and
+    // days/30.4 rounded that whole span to a flat "13 months" — contradicting
+    // the filter label and implying 13 months of completed earnings.
+    const sY = start.getUTCFullYear(), sM = start.getUTCMonth();
+    const eY = end.getUTCFullYear(), eM = end.getUTCMonth();
+    let months = (eY - sY) * 12 + (eM - sM) + 1;
+    const endKey = `${eY}-${String(eM + 1).padStart(2, '0')}`;
+    if (typeof CURRENT_MONTH_KEY !== 'undefined' && endKey === CURRENT_MONTH_KEY && months > 1) {
+      const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months - 1} months + ${MON[eM]} so far`;
+    }
     if (months <= 14) return `${months} months`;
     const years = (days / 365.25);
     return years < 2 ? `${years.toFixed(1)} years` : `${Math.round(years)} years`;
@@ -10549,13 +10781,25 @@ function renderWindowList(startDate, endDate) {
       if (typeof window.setShowPrevYear === 'function') window.setShowPrevYear(next);
     });
   }
-  // Include-Shorts toggle (Views metric only; off = long-form, the default)
-  const shortsBtn = document.getElementById('includeShortsToggle');
-  if (shortsBtn) {
-    shortsBtn.addEventListener('click', () => {
-      const next = shortsBtn.getAttribute('aria-pressed') !== 'true';
-      shortsBtn.setAttribute('aria-pressed', String(next));
-      if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(next);
+  // Format segment (Views metric only; Long-form is the default).
+  // 'all' is the old Include-Shorts behaviour, kept as the third state so the
+  // combined view is still reachable; 'short' is new and drives viewMode, which
+  // metricsFor now honours.
+  const fmtSeg = document.getElementById('chartFormatSeg');
+  if (fmtSeg) {
+    fmtSeg.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chart-ctrl-btn.seg');
+      if (!btn) return;
+      const fmt = btn.dataset.fmt;
+      for (const b of fmtSeg.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      }
+      // Order matters: set the view mode first, then the combined flag, so the
+      // single re-render that setIncludeShorts triggers sees both.
+      if (typeof window.setAnalysisViewMode === 'function') {
+        window.setAnalysisViewMode(fmt === 'short' ? 'short' : 'long');
+      }
+      if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(fmt === 'all');
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
@@ -11921,7 +12165,7 @@ function renderWindowList(startDate, endDate) {
   function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
   function buildAds(){
     feat().innerHTML=
-      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours, so bars rise and fall within a run — a short one is overnight, not the campaign stopping.</div>`+
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when the viewing rose and fell around them — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours, so bars rise and fall within a run — a short one is overnight, not the campaign stopping.</div>`+
       `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
@@ -11947,13 +12191,40 @@ function renderWindowList(startDate, endDate) {
       return;
     }
     if(!A.sel||!rows.find(v=>v.id===A.sel))A.sel=rows[0].id;
+    // Two different counts, deliberately both shown.
+    //
+    // The ledger's `bursts` are VIEW BURSTS: build-ad-ledger.py never reads the
+    // Transparency Centre at all, it finds intervals running above the video's
+    // own dormant pace. `runs` in ad-campaigns.json is the number of distinct
+    // ads Google lists. They diverge whenever ads overlap \u2014 ASMONGOLD BAN
+    // BACKFIRES ran a second creative entirely inside the first's window, so the
+    // views show one continuous burst while the Centre shows two ads. Labelling
+    // that "1 paid run" contradicted the ad panel and hid the more interesting
+    // fact: a second ad that moved nothing measurable.
+    const adCount = (id) => {
+      const c = ((window.__adCampaigns || {}).videos || {})[id];
+      return c && c.runs ? c.runs : null;
+    };
     l.innerHTML=rows.map((m,i)=>{
       const confirmed=m.adViews>0;
+      const nAds=adCount(m.id), nB=m.bursts.length;
+      const runsLabel = nAds
+        ? `${nAds} ad${nAds===1?"":"s"}` + (nAds!==nB ? ` \u00b7 ${nB} detectable burst${nB===1?"":"s"}` : "")
+        // No creative record: the video is a confirmed past advertiser whose ads
+        // have aged out of the Transparency Centre (~10 months of retention), so
+        // the ad count is unknown. Report the bursts, which is what we measured,
+        // rather than implying a campaign count we cannot see.
+        : `${nB} view burst${nB===1?"":"s"}`;
+      const runsTitle = !nAds
+        ? `This video is a confirmed advertiser, but its ads are no longer listed in Google's Transparency Centre, so the number of ads is unknown. ${nB} period${nB===1?"":"s"} of raised viewing ${nB===1?"was":"were"} measured.`
+        : nAds!==nB
+          ? `Google lists ${nAds} ads for this video; the view data shows ${nB} period${nB===1?"":"s"} of raised viewing. Ads running at the same time, or over an already-busy stretch, leave no separate trace.`
+          : 'Ads Google lists for this video, and the periods of raised viewing they line up with.';
       const win=confirmed?(m.firstBurst===m.lastBurst?niceDate(m.firstBurst):niceDate(m.firstBurst)+" \u2192 "+niceDate(m.lastBurst)):"launch window only";
       const tag=confirmed?'<span class="vv-mtag vv-mtag-promoted">Confirmed ads</span>':'<span class="vv-mtag vv-mtag-promoted">Launch ads</span>';
       return `<div class="vv-mrow${m.id===A.sel?' sel':''}" data-aid="${m.id}"><span class="vv-mrank">${i+1}</span>`+
         `<img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async">`+
-        `<span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.bursts.length} paid run${m.bursts.length===1?"":"s"} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
+        `<span class="vv-mtitle"><b>${esc(m.title)}</b><span title="${esc(runsTitle)}">${runsLabel} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
         `<span class="vv-mgain"><b>${confirmed?"+"+fmt(m.adViews):fmt(m.entangledViews)}</b><span>${confirmed?"ad-driven views":"entangled views"}</span></span>${tag}</div>`;
     }).join("");
     renderAchart();
@@ -11985,7 +12256,7 @@ function renderWindowList(startDate, endDate) {
     // started and stopped; and the overnight dip now reads as short bars between
     // tall ones rather than as a line that looks like the campaign paused.
     const bars=velBars(vel,xFor,yFor,dates);
-    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven). Short bars inside a run are overnight, not the campaign stopping.";
+    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the periods of raised viewing that the ads line up with (amber = launch-window promotion, not claimed as ad-driven). Short bars inside a band are overnight, not the campaign stopping. Ads running at the same time share one band.";
     document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${bars}</svg>`+(runsCap?`<div class="vv-runs">${runsCap}</div>`:"");
     const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
     document.getElementById("vvAdetail").innerHTML=
