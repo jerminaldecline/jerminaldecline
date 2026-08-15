@@ -61,6 +61,12 @@ for f in files:
     for v in d["videos"]:
         meta[v["id"]] = v
 dates = [lab(t) for t, _, _ in snaps]
+# Machine-readable twin of `dates`. The display labels ("Aug13 AM") carry no year,
+# so the page cannot line a campaign window up against the axis from them. The
+# chart needs that to shade WHEN THE ADS RAN as distinct from when the views
+# moved — on ASMONGOLD BAN BACKFIRES the ads ran five days and the views moved on
+# one, which the burst shading alone could never show.
+iso_dates = [t[:10] for t, _, _ in snaps]
 
 def _load(name, fb):
     try: return json.load(open(os.path.join(PUBLIC, name), encoding="utf-8"))
@@ -139,6 +145,7 @@ OUT = {
     "trackingStart": "2026-06-11",
     "asOf": snaps[-1][0][:10],
     "dates": dates,
+    "isoDates": iso_dates,
     "totals": {
         "adViews": sum(r["adViews"] for r in LEDGER),
         "entangledViews": sum(r["entangledViews"] for r in LEDGER),
