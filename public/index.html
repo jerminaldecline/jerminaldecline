@@ -12165,7 +12165,7 @@ function renderWindowList(startDate, endDate) {
   function adRows(){ if(!ADATA)return[]; return ADATA.videos.filter(v=>S.key==="ALL"||v.channelId===S.key); }
   function buildAds(){
     feat().innerHTML=
-      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when each paid run started and stopped — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours, so bars rise and fall within a run — a short one is overnight, not the campaign stopping.</div>`+
+      `<div class="vv-sub">The permanent record of paid promotion. Every confirmed ad video keeps its history here even after a campaign ends: how many views the ads bought, and exactly when the viewing rose and fell around them — shaded on the chart. Always the complete record, whatever the time filter is set to. Ad delivery pulses with the audience's waking hours, so bars rise and fall within a run — a short one is overnight, not the campaign stopping.</div>`+
       `<div class="vv-verdict" id="vvAtotals"></div>`+
       `<div class="vv-mlist" id="vvAlist"><div class="vv-loading">Loading…</div></div>`+
       `<div class="vv-charth" id="vvAcharth"></div>`+
@@ -12191,13 +12191,40 @@ function renderWindowList(startDate, endDate) {
       return;
     }
     if(!A.sel||!rows.find(v=>v.id===A.sel))A.sel=rows[0].id;
+    // Two different counts, deliberately both shown.
+    //
+    // The ledger's `bursts` are VIEW BURSTS: build-ad-ledger.py never reads the
+    // Transparency Centre at all, it finds intervals running above the video's
+    // own dormant pace. `runs` in ad-campaigns.json is the number of distinct
+    // ads Google lists. They diverge whenever ads overlap \u2014 ASMONGOLD BAN
+    // BACKFIRES ran a second creative entirely inside the first's window, so the
+    // views show one continuous burst while the Centre shows two ads. Labelling
+    // that "1 paid run" contradicted the ad panel and hid the more interesting
+    // fact: a second ad that moved nothing measurable.
+    const adCount = (id) => {
+      const c = ((window.__adCampaigns || {}).videos || {})[id];
+      return c && c.runs ? c.runs : null;
+    };
     l.innerHTML=rows.map((m,i)=>{
       const confirmed=m.adViews>0;
+      const nAds=adCount(m.id), nB=m.bursts.length;
+      const runsLabel = nAds
+        ? `${nAds} ad${nAds===1?"":"s"}` + (nAds!==nB ? ` \u00b7 ${nB} detectable burst${nB===1?"":"s"}` : "")
+        // No creative record: the video is a confirmed past advertiser whose ads
+        // have aged out of the Transparency Centre (~10 months of retention), so
+        // the ad count is unknown. Report the bursts, which is what we measured,
+        // rather than implying a campaign count we cannot see.
+        : `${nB} view burst${nB===1?"":"s"}`;
+      const runsTitle = !nAds
+        ? `This video is a confirmed advertiser, but its ads are no longer listed in Google's Transparency Centre, so the number of ads is unknown. ${nB} period${nB===1?"":"s"} of raised viewing ${nB===1?"was":"were"} measured.`
+        : nAds!==nB
+          ? `Google lists ${nAds} ads for this video; the view data shows ${nB} period${nB===1?"":"s"} of raised viewing. Ads running at the same time, or over an already-busy stretch, leave no separate trace.`
+          : 'Ads Google lists for this video, and the periods of raised viewing they line up with.';
       const win=confirmed?(m.firstBurst===m.lastBurst?niceDate(m.firstBurst):niceDate(m.firstBurst)+" \u2192 "+niceDate(m.lastBurst)):"launch window only";
       const tag=confirmed?'<span class="vv-mtag vv-mtag-promoted">Confirmed ads</span>':'<span class="vv-mtag vv-mtag-promoted">Launch ads</span>';
       return `<div class="vv-mrow${m.id===A.sel?' sel':''}" data-aid="${m.id}"><span class="vv-mrank">${i+1}</span>`+
         `<img class="vv-mthumb" src="https://i.ytimg.com/vi/${m.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async">`+
-        `<span class="vv-mtitle"><b>${esc(m.title)}</b><span>${m.bursts.length} paid run${m.bursts.length===1?"":"s"} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
+        `<span class="vv-mtitle"><b>${esc(m.title)}</b><span title="${esc(runsTitle)}">${runsLabel} \u00b7 ${win}${S.key==="ALL"?" \u00b7 "+esc(m.channel||""):""}</span></span>`+
         `<span class="vv-mgain"><b>${confirmed?"+"+fmt(m.adViews):fmt(m.entangledViews)}</b><span>${confirmed?"ad-driven views":"entangled views"}</span></span>${tag}</div>`;
     }).join("");
     renderAchart();
@@ -12229,7 +12256,7 @@ function renderWindowList(startDate, endDate) {
     // started and stopped; and the overnight dip now reads as short bars between
     // tall ones rather than as a line that looks like the campaign paused.
     const bars=velBars(vel,xFor,yFor,dates);
-    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the paid runs (amber = launch-window promotion, not claimed as ad-driven). Short bars inside a run are overnight, not the campaign stopping.";
+    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands mark the periods of raised viewing that the ads line up with (amber = launch-window promotion, not claimed as ad-driven). Short bars inside a band are overnight, not the campaign stopping. Ads running at the same time share one band.";
     document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${bands}${grid}${xlab}${bars}</svg>`+(runsCap?`<div class="vv-runs">${runsCap}</div>`:"");
     const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
     document.getElementById("vvAdetail").innerHTML=
