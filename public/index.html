@@ -12260,14 +12260,30 @@ function renderWindowList(startDate, endDate) {
       const w=(((window.__adCampaigns||{}).videos||{})[m.id]||{}).windows||[];
       if(!w.length) return;
       const winCol = m.adViews>0 ? "var(--down)" : "var(--accent-2)";
-      // Interval i spans iso[i] -> iso[i+1], so a date maps to the first interval
-      // whose END is on or after it.
+      // Interval i spans iso[i] -> iso[i+1] and is PLOTTED under the label for its
+      // END (xlab uses dates[i+1]), so both ends of a window map on the end date.
+      // They previously used opposite conventions — start for one, end for the
+      // other — which stretched every band an interval too far right.
       const idxFrom=d=>{for(let i=0;i<iso.length-1;i++) if(iso[i+1]>=d) return i; return -1;};
-      const idxTo=d=>{for(let i=iso.length-2;i>=0;i--) if(iso[i]<=d) return i; return -1;};
+      const idxTo=d=>{for(let i=iso.length-2;i>=0;i--) if(iso[i+1]<=d) return i; return -1;};
+      // A band must never start before the video existed. Snapshots are twice
+      // daily and an ad window is a whole calendar day, so a video published at
+      // 16:33 on the 10th maps to an interval beginning on the 9th — drawing the
+      // campaign as though it ran before the upload. Clamp to the first interval
+      // this video actually has data for.
+      let firstData=0; while(firstData<vel.length&&vel[firstData]==null) firstData++;
       const seen=new Set(); const drawn=[];
       w.forEach(win=>{
-        const a=idxFrom(win[0]), b=idxTo(win[1]);
-        if(a<0||b<0||b<a) return;                         // window predates the snapshot era
+        let a=idxFrom(win[0]), b=idxTo(win[1]);
+        if(a<0||b<0) return;                              // window predates the snapshot era
+        // Clamp BOTH ends forward to the first interval this video has data for,
+        // rather than dropping the window when it lands entirely before it. A
+        // video uploaded at 16:33 and advertised the same day has its earliest
+        // observable effect in the following interval — shade that, don't pretend
+        // the campaign is unrecorded. Dropping it made the panel fall through to
+        // burst shading captioned "ad dates no longer listed", which was false.
+        a=Math.max(a,firstData); b=Math.max(b,firstData);
+        if(b<a||a>=vel.length) return;
         drawn.push(win);
         const key=a+":"+b; if(seen.has(key)) return;      // identical windows draw once
         seen.add(key);
@@ -12294,6 +12310,7 @@ function renderWindowList(startDate, endDate) {
     // spiked on launch 8–9 Aug, and was advertised 10–13 Aug, so the "views
     // moved" box sat entirely outside the "ads ran" box. That reads as a
     // contradiction, and the burst was never the thing being asked about.
+    const hasWindows = !!((((window.__adCampaigns||{}).videos||{})[m.id]||{}).windows||[]).length;
     let bands="", runsCap="";
     (adWin?[]:(m.bursts||[])).forEach((b,bi)=>{
       const x0=xFor(Math.max(0,b.iv0))-3, x1=xFor(Math.min(vel.length-1,b.iv1))+3;
@@ -12302,7 +12319,7 @@ function renderWindowList(startDate, endDate) {
       bands+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${col}" opacity="0.13"/>`;
       bands+=`<circle cx="${cx.toFixed(1)}" cy="${MP.top+10}" r="7.5" fill="${col}"/><text x="${cx.toFixed(1)}" y="${MP.top+13.5}" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">${bi+1}</text>`;
       const range=b.from===b.to?niceDate(b.from):niceDate(b.from)+"\u2013"+niceDate(b.to);
-      runsCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${col}">${bi+1}</span>${range} \u00b7 +${fmt(b.views)} (ad dates no longer listed)</span>`;
+      runsCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${col}">${bi+1}</span>${range} \u00b7 +${fmt(b.views)}${hasWindows?"":" (ad dates no longer listed)"}</span>`;
     });
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
