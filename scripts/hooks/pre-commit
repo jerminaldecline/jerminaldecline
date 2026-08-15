@@ -1,0 +1,47 @@
+#!/bin/sh
+# Guard against the two ways UI work has nearly been lost in this repo.
+#
+# The deploy rule is: UI changes are made on `staging` and promoted to `main` by
+# taking staging's index.html wholesale. Nothing enforced that, and drifting onto
+# main is easy — the promote itself ends with the repo checked out on main, so the
+# NEXT session starts there by default.
+#
+# What actually went wrong (2026-08-15): index.html was edited on main, and
+# copying that file across to staging would have silently reverted four commits
+# of staging work, because main's copy predated them. It was caught by reading a
+# diff stat. This hook removes the reliance on noticing.
+#
+# Bypass for a genuine promote:  JD_PROMOTE=1 git commit ...
+# (scripts/promote-to-live.sh sets it for you.)
+#
+# Installed via:  git config core.hooksPath scripts/hooks
+
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+[ "$branch" = "main" ] || exit 0
+[ -n "$JD_PROMOTE" ] && exit 0
+
+staged_ui=$(git diff --cached --name-only | grep -E '^public/index\.html$' || true)
+[ -z "$staged_ui" ] && exit 0
+
+cat >&2 <<'MSG'
+
+  BLOCKED: public/index.html is staged on `main`.
+
+  UI changes belong on `staging`, then get promoted. Committing them straight to
+  main skips review and — worse — leaves main's copy ahead of staging, so the
+  next promote silently reverts whatever staging had.
+
+  To move this work to staging instead:
+
+      cp public/index.html /tmp/wip.html
+      git checkout -- public/index.html
+      git checkout staging && git pull --rebase origin staging
+      cp /tmp/wip.html public/index.html
+      git diff --stat          # sanity-check: should be small and additive
+
+  To promote staging to live (the only legitimate index.html commit on main):
+
+      ./scripts/promote-to-live.sh
+
+MSG
+exit 1
