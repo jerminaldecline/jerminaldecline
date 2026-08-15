@@ -12259,6 +12259,7 @@ function renderWindowList(startDate, endDate) {
       if(!iso||!iso.length) return;                       // older ledger build
       const w=(((window.__adCampaigns||{}).videos||{})[m.id]||{}).windows||[];
       if(!w.length) return;
+      const winCol = m.adViews>0 ? "var(--down)" : "var(--accent-2)";
       // Interval i spans iso[i] -> iso[i+1], so a date maps to the first interval
       // whose END is on or after it.
       const idxFrom=d=>{for(let i=0;i<iso.length-1;i++) if(iso[i+1]>=d) return i; return -1;};
@@ -12270,32 +12271,38 @@ function renderWindowList(startDate, endDate) {
         drawn.push(win);
         const key=a+":"+b; if(seen.has(key)) return;      // identical windows draw once
         seen.add(key);
-        const x0=xFor(Math.max(0,a)), x1=xFor(Math.min(vel.length-1,b));
-        adWin+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(4,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>`;
+        // The ad window IS the band now — solid fill and a numbered marker, the
+        // treatment the burst used to get. A reader is here for "when was this
+        // advertised"; the bars already show where the views went.
+        const x0=xFor(Math.max(0,a))-3, x1=xFor(Math.min(vel.length-1,b))+3;
+        const cx=Math.max(MP.left+9,Math.min(MW-MP.right-9,(x0+x1)/2));
+        const n=seen.size;
+        adWin+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${winCol}" opacity="0.13"/>`;
+        adWin+=`<circle cx="${cx.toFixed(1)}" cy="${MP.top+10}" r="7.5" fill="${winCol}"/><text x="${cx.toFixed(1)}" y="${MP.top+13.5}" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">${n}</text>`;
+        const range=win[0]===win[1]?niceDate(win[0]):niceDate(win[0])+"–"+niceDate(win[1]);
+        const dys=Math.round((Date.parse(win[1])-Date.parse(win[0]))/86400000)+1;
+        adCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${winCol}">${n}</span>${range} · ${dys} day${dys===1?"":"s"} advertised</span>`;
       });
-      if(adWin){
-        // Describe only what is ON the chart. Some of his videos have been
-        // advertised since long before snapshots began (Apr, for one that the
-        // chart starts in June) and captioning the full span claimed a range the
-        // outline does not cover.
-        const days=drawn.reduce((s,x)=>s+Math.round((Date.parse(x[1])-Date.parse(x[0]))/86400000)+1,0);
-        const span=drawn.length===1
-          ? (drawn[0][0]===drawn[0][1]?niceDate(drawn[0][0]):niceDate(drawn[0][0])+"–"+niceDate(drawn[0][1]))
-          : niceDate(drawn.map(x=>x[0]).sort()[0])+"–"+niceDate(drawn.map(x=>x[1]).sort().pop());
-        const earlier=w.length-drawn.length;
-        adCap=`<span class="vv-run"><span class="vv-run-n vv-run-ad">ad</span>${drawn.length} ad${drawn.length===1?"":"s"} ran ${span} · ${days} ad-day${days===1?"":"s"}`+
-          (earlier?` (+${earlier} before this chart starts)`:"")+`</span>`;
-      }
+      // Ads that ran before snapshots began have no band to draw, so they are
+      // counted rather than captioned with a range the chart does not cover.
+      const earlier=w.length-drawn.length;
+      if(earlier>0) adCap+=`<span class="vv-run vv-run-note">+${earlier} earlier ad${earlier===1?"":"s"}, before this chart starts</span>`;
     })();
+    // Burst shading is now a FALLBACK, drawn only when no ad window survives.
+    // Showing both put two rectangles on the chart measuring different things,
+    // and they could fail to overlap at all: ASMONGOLD BANNED published 7 Aug,
+    // spiked on launch 8–9 Aug, and was advertised 10–13 Aug, so the "views
+    // moved" box sat entirely outside the "ads ran" box. That reads as a
+    // contradiction, and the burst was never the thing being asked about.
     let bands="", runsCap="";
-    (m.bursts||[]).forEach((b,bi)=>{
+    (adWin?[]:(m.bursts||[])).forEach((b,bi)=>{
       const x0=xFor(Math.max(0,b.iv0))-3, x1=xFor(Math.min(vel.length-1,b.iv1))+3;
       const col=b.entangled?"var(--accent-2)":"var(--down)";
       const cx=Math.max(MP.left+9,Math.min(MW-MP.right-9,(x0+x1)/2));
       bands+=`<rect x="${x0.toFixed(1)}" y="${MP.top}" width="${Math.max(6,x1-x0).toFixed(1)}" height="${(MH-MP.top-MP.bottom).toFixed(1)}" fill="${col}" opacity="0.13"/>`;
       bands+=`<circle cx="${cx.toFixed(1)}" cy="${MP.top+10}" r="7.5" fill="${col}"/><text x="${cx.toFixed(1)}" y="${MP.top+13.5}" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">${bi+1}</text>`;
       const range=b.from===b.to?niceDate(b.from):niceDate(b.from)+"\u2013"+niceDate(b.to);
-      runsCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${col}">${bi+1}</span>${range} \u00b7 +${fmt(b.views)}${b.entangled?" (launch \u2014 not claimed)":""}</span>`;
+      runsCap+=`<span class="vv-run"><span class="vv-run-n" style="background:${col}">${bi+1}</span>${range} \u00b7 +${fmt(b.views)} (ad dates no longer listed)</span>`;
     });
     let grid="";for(let t=0;t<=4;t++){const val=yMax*t/4,y=yFor(val);grid+=`<line class="vv-gl" x1="${MP.left}" y1="${y.toFixed(1)}" x2="${MW-MP.right}" y2="${y.toFixed(1)}"/><text class="vv-ax y" x="${MP.left-8}" y="${(y+4).toFixed(1)}">${fmt(val)}</text>`;}
     let xlab="",stride=Math.ceil(vel.length/8);
@@ -12306,7 +12313,7 @@ function renderWindowList(startDate, endDate) {
     // started and stopped; and the overnight dip now reads as short bars between
     // tall ones rather than as a line that looks like the campaign paused.
     const bars=velBars(vel,xFor,yFor,dates);
-    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 the dashed outline is when the ads actually ran, from Google’s records; the solid band inside it is when the viewing actually rose (amber = launch-window promotion, not claimed as ad-driven). The two often differ — a campaign can run for days and move the numbers on one. Short bars inside a band are overnight, not the campaign stopping.";
+    document.getElementById("vvAcharth").textContent="Views gained between checks \u2014 shaded bands are when the ads ran, from Google’s records (amber = launch-window promotion, not claimed as ad-driven). Compare the bars against the band: a campaign can run for days and move the numbers on one, or barely at all. Short bars inside a band are overnight, not the campaign stopping.";
     document.getElementById("vvAchart").innerHTML=`<svg viewBox="0 0 ${MW} ${MH}" role="img">${adWin}${bands}${grid}${xlab}${bars}</svg>`+((adCap||runsCap)?`<div class="vv-runs">${adCap}${runsCap}</div>`:"");
     const link="https://www.youtube.com/watch?v="+m.id, thumb="https://i.ytimg.com/vi/"+m.id+"/mqdefault.jpg";
     document.getElementById("vvAdetail").innerHTML=
