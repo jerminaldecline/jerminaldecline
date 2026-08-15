@@ -25,7 +25,19 @@ REPO = os.path.dirname(HERE)
 PUBLIC = os.path.join(REPO, "public")
 SNAP = os.environ.get("SNAPSHOTS_DIR") or os.path.join(os.path.dirname(REPO), "jerminaldecline-snapshots", "snapshots")
 
-ENTANGLE_DAYS = 14        # bursts starting within this of publish: launch/paid entangled
+# Bursts starting within this many days of publish are treated as launch traffic
+# and never claimed as ad-driven, because organic and paid are inseparable there.
+#
+# MEASURED, not guessed. Across 83 TheQuartering long-form videos whose entire
+# launch was captured by snapshots, the median video reaches (as a share of its
+# day-21 total): 41.6% at 12h, 71.8% at 24h, 91.7% at 48h, 96.0% at 3d, 99.5% at
+# 7d. So the launch IS the first two to three days, and by day 3 there is only 4%
+# left to come — a burst after that cannot be launch decay.
+#
+# The old value of 14 was far too wide. It costs nothing today (every entangled
+# burst on record starts on day 1, so 3 and 14 classify identically), but it would
+# have refused to claim an ad run on day 5 against a video already 98.8% finished.
+ENTANGLE_DAYS = 3
 MIN_BURST_VIEWS = 200     # an interval must gain at least this ...
 MIN_BURST_RATE = 300.0    # ... at at least this views/day pace ...
 BASE_MULT = 3.0           # ... and at least this multiple of the dormant baseline rate

@@ -7353,7 +7353,19 @@ function renderSubsChart() {
   const curKey = CURRENT_MONTH_KEY;   // Central-time, matches anMonthKey grouping
 
   const S = (typeof SUBS_GAINED !== 'undefined' && SUBS_GAINED && SUBS_GAINED[sc]) || {};
-  const keys = monthlyData.map(m => m.key).filter(k => k in S);
+  // Subscriber months come from the subscriber data itself, NOT from monthlyData.
+  //
+  // monthlyData is built from uploads and stops at a channel's last one, so a
+  // dormant channel could never intersect the subscriber era: @rcnightmare and
+  // @UnsleevedMedia last posted in May, subscriber tracking starts in June, and
+  // both charts reported "No subscriber data in this window" while holding three
+  // months of it. The message then blamed the time filter, which no setting could
+  // fix. Whether he uploaded has no bearing on whether his subscriber count moved.
+  //
+  // The window is deliberately not applied: tracking is only three months old, so
+  // every preset would show the same three bars. Revisit when the series is long
+  // enough for windowing to mean anything.
+  const keys = Object.keys(S).filter(k => /^\d{4}-\d{2}$/.test(k)).sort();
   const multiYear = new Set(keys.map(k => k.slice(0, 4))).size > 1;
   const points = keys.map(k => ({
     key: k,
@@ -7365,8 +7377,8 @@ function renderSubsChart() {
   if (!points.length) {
     legend.innerHTML = '';
     svg.innerHTML = `
-      <text x="360" y="128" text-anchor="middle" class="chart-empty-title">No subscriber data in this window</text>
-      <text x="360" y="156" text-anchor="middle" class="chart-empty-sub">Subscriber tracking began 1 June 2026 — pick a window that includes it.</text>`;
+      <text x="360" y="128" text-anchor="middle" class="chart-empty-title">No subscriber data for this channel</text>
+      <text x="360" y="156" text-anchor="middle" class="chart-empty-sub">Subscriber tracking began 1 June 2026. This channel has no readings yet.</text>`;
     return;
   }
 
@@ -7441,11 +7453,17 @@ function renderSubsChart() {
     hovers += `<rect class="chart-hit" x="${(x - barSlot / 2).toFixed(1)}" y="${P.top}" width="${barSlot.toFixed(1)}" height="${innerH}" data-idx="${i}" />`;
   }
 
-  // Site attribution — same pattern as the other charts.
+  // Site attribution — same pattern as the other charts, but dated from the
+  // SUBSCRIBER months actually plotted. The shared date inputs describe the
+  // upload window, which for a dormant channel is a different period entirely:
+  // @UnsleevedMedia stamped "2025-08-01 – 2026-05-31" beneath bars covering
+  // June to August.
   const channelName = activeDisplayName();
-  const startEl = document.getElementById('startDate');
-  const endEl = document.getElementById('endDate');
-  const dateRange = startEl && endEl ? `${startEl.value} – ${endEl.value}` : '';
+  const _lastKey = keys[keys.length - 1];
+  const _lastDay = _lastKey ? new Date(+_lastKey.slice(0, 4), +_lastKey.slice(5, 7), 0).getDate() : 1;
+  const dateRange = keys.length
+    ? `${keys[0]}-01 – ${_lastKey}-${String(_lastDay).padStart(2, '0')}`
+    : '';
   const isNarrow = window.matchMedia('(max-width: 540px)').matches;
   const attributionText = isNarrow
     ? `${channelName} · jerminaldecline.com`
