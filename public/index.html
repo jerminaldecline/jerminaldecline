@@ -12193,7 +12193,7 @@ function renderWindowList(startDate, endDate) {
       `<div class="vv-charth" id="vvAcharth"></div>`+
       `<div class="vv-chart" id="vvAchart"></div>`+
       `<div class="vv-detail" id="vvAdetail"></div>`+
-      `<div class="vv-foot">Ad-driven views = views gained above the video's dormant baseline during a burst that began at least 14 days after upload (an aged, flat video only moves when pushed). Amber marks launch-window promotion — paid and organic traffic can't be separated there, so those views are never claimed as ad-driven. Only campaigns since ${niceDate(DATA.trackingStart)} are visible — that's when tracking began.</div>`;
+      `<div class="vv-foot">Ad-driven views = views gained above the video's dormant baseline during a burst that began at least 3 days after upload — by then the median video already has 96% of its views, so it only moves when pushed. Amber marks launch-window promotion — paid and organic traffic can't be separated there, so those views are never claimed as ad-driven. Only campaigns since ${niceDate(DATA.trackingStart)} are visible — that's when tracking began.</div>`;
     if(ADATA){renderAds();return;}
     fetch("ad-ledger.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{ADATA=j;renderAds();})
       .catch(err=>{const l=document.getElementById("vvAlist");if(l)l.innerHTML='<div class="vv-empty">Could not load the ad ledger.</div>';console.warn("ad-ledger",err);});

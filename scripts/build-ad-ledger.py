@@ -151,8 +151,8 @@ LEDGER.sort(key=lambda r: -r["adViews"])
 OUT = {
     "_doc": ("Permanent ledger of confirmed ad-driven views for videos in ad-videos.json. "
              "adViews = views gained above the video's dormant baseline during burst periods "
-             "starting >=14 days after publish (aged+flat => attributable to paid promotion). "
-             "entangledViews = burst gains within 14 days of publish (launch and paid traffic "
+             "starting >=3 days after publish (by then a video has ~96% of its views, so a later burst is attributable to paid promotion). "
+             "entangledViews = burst gains within 3 days of publish (launch and paid traffic "
              "inseparable; NOT claimed as ad-driven). Only campaigns since trackingStart are visible."),
     "trackingStart": "2026-06-11",
     "asOf": snaps[-1][0][:10],
