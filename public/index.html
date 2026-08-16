@@ -4258,7 +4258,7 @@ function render(m){
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It refines as the month fills in, and reads low early on because recent uploads are still gaining views." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
       <div class="hero-card avg-card">
