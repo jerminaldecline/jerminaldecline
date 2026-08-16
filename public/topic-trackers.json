@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-15T04:55:45.779Z",
+  "lastUpdated": "2026-08-16T04:59:33.283Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -9,12 +9,12 @@
         "coffee second"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.875,
-        "baselineSaturation": 0.254,
-        "spikeRatio": 3.44,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 31,
-        "detectedAt": "2026-08-15T04:55:45.779Z"
+        "recentSaturation": 0.8667,
+        "baselineSaturation": 0.2355,
+        "spikeRatio": 3.68,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 28,
+        "detectedAt": "2026-08-16T04:59:33.283Z"
       }
     },
     {
@@ -24,12 +24,12 @@
         "main candace"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3,
-        "baselineSaturation": 0.0221,
-        "spikeRatio": 13.6,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0076,
+        "spikeRatio": 44,
         "recentVideoCount": 3,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-08-15T04:55:45.779Z"
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-16T04:59:33.283Z"
       }
     },
     {
@@ -40,12 +40,12 @@
         "coffee main"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9,
-        "baselineSaturation": 0.2279,
-        "spikeRatio": 3.95,
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1894,
+        "spikeRatio": 5.28,
         "recentVideoCount": 9,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-08-15T04:55:45.779Z"
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-08-16T04:59:33.283Z"
       }
     }
   ]

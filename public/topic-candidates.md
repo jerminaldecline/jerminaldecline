@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-15
+# Topic candidates — 2026-08-16
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,16 +6,16 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 16 recent videos, 123 baseline videos
+Pool: 15 recent videos, 120 baseline videos
 
 ### Cluster 1: `candace`
 
-- **Recent saturation:** 4/16 videos (**25%**)
-- **Baseline saturation:** 4/123 videos (3%)
-- **Spike ratio:** 6.9x
+- **Recent saturation:** 4/15 videos (**27%**)
+- **Baseline saturation:** 4/120 videos (3%)
+- **Spike ratio:** 7.2x
 - **Related terms:** `candace`, `owens`, `candace owens`
 - **Sample recent videos:**
-  - 2026-08-14 — _MOST SAVAGE MOMENTS_  
+  - 2026-08-14 — _CANDACE OWENS VS ANDREW DEBATE WENT VERY POORLY FOR ONE.._  
     Candace Owens debated Andrew Wilson over her various Charlie Kirk, Erika Kirk and more theories
   - 2026-08-13 — _I CAN'T BELIEVE IT_  
     Candace Owens And Andrew Wilson Debate Just Became Must Watch
@@ -26,9 +26,9 @@ Pool: 16 recent videos, 123 baseline videos
 
 ### Cluster 2: `massive`
 
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 5/123 videos (4%)
-- **Spike ratio:** 4.2x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 5/120 videos (4%)
+- **Spike ratio:** 4.4x
 - **Related terms:** `massive`
 - **Sample recent videos:**
   - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
@@ -40,9 +40,9 @@ Pool: 16 recent videos, 123 baseline videos
 
 ### Cluster 3: `second`
 
-- **Recent saturation:** 14/16 videos (**88%**)
-- **Baseline saturation:** 31/123 videos (25%)
-- **Spike ratio:** 3.4x
+- **Recent saturation:** 13/15 videos (**87%**)
+- **Baseline saturation:** 28/120 videos (23%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `second`, `coffee second`
 - **Sample recent videos:**
   - 2026-08-13 — _MCDONALDS BUSTED_  
@@ -58,13 +58,13 @@ Pool: 16 recent videos, 123 baseline videos
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 67 baseline videos
+Pool: 9 recent videos, 65 baseline videos
 
 ### Cluster 1: `main candace`
 
-- **Recent saturation:** 3/10 videos (**30%**)
-- **Baseline saturation:** 1/67 videos (1%)
-- **Spike ratio:** 13.6x
+- **Recent saturation:** 3/9 videos (**33%**)
+- **Baseline saturation:** 0/65 videos (0%)
+- **Spike ratio:** 44.0x
 - **Related terms:** `main candace`
 - **Sample recent videos:**
   - 2026-08-13 — _SHE'S FREAKING OUT_  
@@ -76,9 +76,9 @@ Pool: 10 recent videos, 67 baseline videos
 
 ### Cluster 2: `main`
 
-- **Recent saturation:** 9/10 videos (**90%**)
-- **Baseline saturation:** 15/67 videos (22%)
-- **Spike ratio:** 3.9x
+- **Recent saturation:** 9/9 videos (**100%**)
+- **Baseline saturation:** 12/65 videos (18%)
+- **Spike ratio:** 5.3x
 - **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
   - 2026-08-13 — _SHE'S FREAKING OUT_  
