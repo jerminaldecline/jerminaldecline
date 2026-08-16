@@ -1,18 +1,18 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-08-15",
+ "_generated": "2026-08-16",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-08-15",
-  "snapshots": 127
+  "to": "2026-08-16",
+  "snapshots": 129
  },
  "ageMinDays": 14,
  "sample": {
   "campaigns": 8,
   "campaignDays": 33,
-  "adViews": 151206
+  "adViews": 151204
  },
  "viewsPerCampaignDay": {
   "low": 1367,
@@ -25,12 +25,12 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
-  "kT0UsZpuKaU": 6,
-  "O_LjCrLlUAw": 4,
-  "aGDMKiNGFr8": 6,
+  "kT0UsZpuKaU": 7,
+  "Sr0WmHdxJvs": 46,
+  "O_LjCrLlUAw": 7,
+  "aGDMKiNGFr8": 7,
   "EeVtP-LxWaI": 2,
   "iTu_6j22RAM": 3,
-  "Sr0WmHdxJvs": 45,
   "3O6sdSffHzs": 39,
   "FiLs5ovIfts": 58,
   "xQCnmaq_L-4": 1,
@@ -223,10 +223,10 @@
    "days": 4,
    "observedTo": "2026-08-15",
    "observedDays": 6,
-   "gain": 38716,
+   "gain": 38714,
    "baselinePerDay": 1,
-   "adViews": 38710,
-   "perDay": 9678
+   "adViews": 38708,
+   "perDay": 9677
   },
   {
    "id": "3O6sdSffHzs",
