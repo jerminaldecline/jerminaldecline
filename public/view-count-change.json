@@ -1,23 +1,11 @@
 {
   "_note": "YouTube's 24 Aug 2026 view-counting change. From that date a view counts the moment a video begins to play, with no minimum watch time, across VOD/Shorts/Live. Long-form previously needed roughly 30 seconds of watch time; Shorts already counted this way (since 31 Mar 2025), which is why Shorts serve as the control group when measuring the step. Every view figure on this site that spans 24 Aug 2026 is therefore a blend of two different metrics.",
   "_method": "Measured, not assumed. scripts/measure-viewcount-change.js compares the daily view accrual of the DORMANT, NEVER-ADVERTISED back catalogue (flat decay: nothing about an old video changes on that date except how its views are counted) for 14 days either side of the change. Shorts run the same comparison as a control and should show no step. Their ratio cancels any channel-wide drift.",
-  "effectiveDate": "2026-08-01",
+  "effectiveDate": "2026-08-24",
   "sourceUrl": "https://x.com/TeamYouTube/status/2089382301960388854",
   "sourceLabel": "TeamYouTube",
-  "status": "measured",
-  "measured": {
-    "measuredOn": "2026-09-07",
-    "windowDays": 14,
-    "longFormPrePerDay": 1102,
-    "longFormPostPerDay": 1378,
-    "shortsPrePerDay": 8579,
-    "shortsPostPerDay": 8611,
-    "rawRatio": 1.2505,
-    "controlRatio": 1.0037,
-    "factor": 1.2459,
-    "playsBelowOldBar": 0.1974,
-    "confident": true
-  },
+  "status": "pending",
+  "measured": null,
   "expected": {
     "note": "Prior from the Shorts precedent of 31 Mar 2025, when creators saw public view counts rise 20-30% on identical content.",
     "low": 1.2,
@@ -34,6 +22,21 @@
     "videosLongForm": 9449,
     "videosShorts": 1492
   },
-  "_TESTDATA": true,
-  "_TESTDATA_note": "FABRICATED so the notice can be previewed before 24 Aug 2026. The real file has effectiveDate 2026-08-24, status pending, measured null. Restore with: git checkout origin/main -- public/view-count-change.json"
+  "debutCurve": {
+    "referenceHour": 18,
+    "before": {
+      "n": 15,
+      "viewsAt18h": 33119,
+      "shape": {
+        "1": 0.1452,
+        "2": 0.2441,
+        "4": 0.4289,
+        "6": 0.5955,
+        "8": 0.7589,
+        "12": 0.9093,
+        "18": 1
+      }
+    },
+    "after": null
+  }
 }
