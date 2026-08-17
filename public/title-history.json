@@ -1,8 +1,8 @@
 {
-  "_generated": "2026-08-17T18:52:22.252Z",
+  "_generated": "2026-08-17T19:35:15.258Z",
   "_videosTracked": 15961,
-  "_videosRetitled": 91,
-  "_totalChanges": 95,
+  "_videosRetitled": 92,
+  "_totalChanges": 96,
   "videos": {
     "KCivmZhC554": {
       "first": "This Cat Is A Regular #meme #funny #turkey #animals",
@@ -80467,8 +80467,15 @@
     },
     "5il1Mf41Eck": {
       "first": "THIS IS ROCK BOTTOM",
-      "current": "THIS IS ROCK BOTTOM",
-      "changes": []
+      "current": "IT JUST GOT WORSE",
+      "changes": [
+        {
+          "from": "THIS IS ROCK BOTTOM",
+          "to": "IT JUST GOT WORSE",
+          "at": "2026-08-17T19:35:14.976Z",
+          "via": "incremental"
+        }
+      ]
     }
   }
 }
