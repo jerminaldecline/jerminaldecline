@@ -25,7 +25,10 @@ git fetch -q origin
 # pushes the rest by hand, so stop here and make the cleanup explicit.
 marked=$(git ls-tree -r --name-only origin/staging -- public scripts | while read -r f; do
   git show "origin/staging:$f" 2>/dev/null | grep -Elq '"_TESTDATA"[[:space:]]*:' 2>/dev/null && echo "$f"
-done)
+# `|| true` is load-bearing: under `set -e` the while loop exits non-zero when the
+# LAST file has no match, which killed the whole script before it printed a
+# single line — every promote failing silently with exit 1.
+done || true)
 if [ -n "$marked" ]; then
   echo >&2
   echo >&2 "  ABORT: staging is carrying fabricated test data:"
