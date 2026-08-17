@@ -2529,6 +2529,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
+/* Metric-break notice. Recessive by design: it qualifies the numbers, it is not
+   news in itself, and it shows on several panels at once. */
+.vcc-note{font-size:0.74rem;color:var(--text-dim);line-height:1.45;margin-top:0.45rem;
+  padding-left:0.6rem;border-left:2px solid var(--accent-2)}
+.vcc-note a{color:var(--accent);text-decoration:none;font-weight:700;white-space:nowrap}
+.vcc-note a:hover{text-decoration:underline}
 @media(max-width:680px){
   .an-chart-title-main{font-size:0.98rem}
   .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
@@ -4232,6 +4238,7 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
+    ${vccNote('report')}
     ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
@@ -4780,6 +4787,28 @@ function anGapPath(values, xFor, yFor, hasAt){
     pen = true;
   }
   return out.trim();
+}
+
+// YouTube's 24 Aug 2026 view-counting change: from that date a view counts from
+// the first frame with no minimum watch time, where long-form previously needed
+// roughly 30 seconds. Any view figure spanning the date mixes two metrics.
+//
+// Deliberately ONE sentence and a link. This appears on several panels at once,
+// so anything longer would shout over the numbers it is qualifying; the detail
+// lives behind the source link and in view-count-change.json.
+function vccActive(){
+  const c = window.__vcc; if (!c || !c.effectiveDate) return null;
+  const today = (typeof ctDate === 'function') ? ctDate(new Date().toISOString()) : new Date().toISOString().slice(0,10);
+  return today >= c.effectiveDate ? c : null;   // silent until the day it lands
+}
+function vccNote(kind){
+  const c = vccActive(); if (!c) return '';
+  const f = c.measured && c.measured.confident ? c.measured.factor : null;
+  const when = 'From 24 Aug 2026';
+  const body = kind === 'revenue'
+    ? `${when} YouTube counts a view from the first frame, which inflates view counts but not payouts, so estimates after that date run high${f ? ` by roughly ${Math.round((f-1)*100)}%` : ''}.`
+    : `${when} YouTube counts a view from the first frame, so figures either side of that date are not directly comparable${f ? ` — the step measured here is ${Math.round((f-1)*100)}%` : ''}.`;
+  return `<div class="vcc-note">${body} <a href="${escapeHtml(c.sourceUrl)}" target="_blank" rel="noopener">${escapeHtml(c.sourceLabel||'source')} ↗</a></div>`;
 }
 
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
@@ -5390,7 +5419,10 @@ function setChartTitle(metric, mode) {
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
-  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
+  // Only the view-based metrics are affected by the counting change; video
+  // lengths and tag blocks are not measured in views.
+  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1 };
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccMetrics[metric] ? vccNote('chart') : '');
 }
 
 function renderTrendChart(yoy) {
@@ -8860,7 +8892,7 @@ function niceDurationAxis(minSec, maxSec) {
     <button type="button" class="revenue-panel-toggle" aria-expanded="${revenuePanelExpanded}" id="revenuePanelToggle">
       <div class="revenue-panel-header">
         <div class="revenue-panel-header-left">
-          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
+          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>${vccNote('revenue')}
           <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Three scenarios available — including one built from the creator's own stated figures. Expand to switch.">${summary}</span>
         </div>
         <span class="revenue-panel-caret" aria-hidden="true"></span>
@@ -9158,6 +9190,7 @@ function niceDurationAxis(minSec, maxSec) {
     await Promise.all([
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
+      fetch('view-count-change.json').then(async r => { if (r.ok){ window.__vcc = await r.json(); } }).catch(e => console.warn('view-count-change', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),

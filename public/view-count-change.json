@@ -1,0 +1,25 @@
+{
+  "_note": "YouTube's 24 Aug 2026 view-counting change. From that date a view counts the moment a video begins to play, with no minimum watch time, across VOD/Shorts/Live. Long-form previously needed roughly 30 seconds of watch time; Shorts already counted this way (since 31 Mar 2025), which is why Shorts serve as the control group when measuring the step. Every view figure on this site that spans 24 Aug 2026 is therefore a blend of two different metrics.",
+  "_method": "Measured, not assumed. scripts/measure-viewcount-change.js compares the daily view accrual of the DORMANT, NEVER-ADVERTISED back catalogue (flat decay: nothing about an old video changes on that date except how its views are counted) for 14 days either side of the change. Shorts run the same comparison as a control and should show no step. Their ratio cancels any channel-wide drift.",
+  "effectiveDate": "2026-08-24",
+  "sourceUrl": "https://x.com/TeamYouTube/status/2089382301960388854",
+  "sourceLabel": "TeamYouTube",
+  "status": "pending",
+  "measured": null,
+  "expected": {
+    "note": "Prior from the Shorts precedent of 31 Mar 2025, when creators saw public view counts rise 20-30% on identical content.",
+    "low": 1.20,
+    "high": 1.30
+  },
+  "monetisation": {
+    "note": "YouTube states earnings and YPP eligibility are unaffected, because payouts continue to use 'engaged views' (the old watch-time bar). Revenue estimates on this site multiply views by an RPM, so once views inflate the estimate overstates unless it is divided back down by the measured factor.",
+    "affectsEarnings": false
+  },
+  "noiseFloor": {
+    "note": "Measured 2026-08-17 on the control group, so we know what size of step is real. Day-to-day swing in the dormant, never-advertised catalogue.",
+    "longFormDailyMedian": 1102,
+    "longFormDailySwing": 0.17,
+    "videosLongForm": 9449,
+    "videosShorts": 1492
+  }
+}
