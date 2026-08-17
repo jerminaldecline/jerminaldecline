@@ -1,23 +1,23 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-08-13",
+ "_generated": "2026-08-17",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-08-13",
-  "snapshots": 123
+  "to": "2026-08-17",
+  "snapshots": 132
  },
  "ageMinDays": 14,
  "sample": {
-  "campaigns": 5,
-  "campaignDays": 21,
-  "adViews": 33900
+  "campaigns": 8,
+  "campaignDays": 33,
+  "adViews": 151204
  },
  "viewsPerCampaignDay": {
   "low": 1367,
-  "central": 1614,
-  "high": 2452
+  "central": 4582,
+  "high": 11127
  },
  "cpvUSD": {
   "low": 0.015,
@@ -25,13 +25,14 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
-  "FiLs5ovIfts": 58,
-  "kT0UsZpuKaU": 4,
-  "Sr0WmHdxJvs": 45,
+  "kT0UsZpuKaU": 8,
+  "Sr0WmHdxJvs": 47,
+  "O_LjCrLlUAw": 7,
+  "EeVtP-LxWaI": 2,
+  "iTu_6j22RAM": 3,
+  "aGDMKiNGFr8": 5,
   "3O6sdSffHzs": 39,
-  "aGDMKiNGFr8": 3,
-  "iTu_6j22RAM": 1,
-  "O_LjCrLlUAw": 1,
+  "FiLs5ovIfts": 58,
   "xQCnmaq_L-4": 1,
   "tcevefZ9G18": 1,
   "7Mg87BPII_4": 8,
@@ -145,6 +146,7 @@
   "xXVaYfbSwgA": 4,
   "ylmhShFD48Q": 4,
   "ZdOwygmc8jg": 4,
+  "qhSSU-cPFt4": 4,
   "pNP4B0PJk-Q": 4
  },
  "measurements": [
@@ -175,19 +177,6 @@
    "perDay": 2452
   },
   {
-   "id": "FiLs5ovIfts",
-   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-06-28",
-   "to": "2026-07-02",
-   "days": 5,
-   "observedTo": "2026-07-04",
-   "observedDays": 7,
-   "gain": 6837,
-   "baselinePerDay": 0,
-   "adViews": 6837,
-   "perDay": 1367
-  },
-  {
    "id": "Sr0WmHdxJvs",
    "title": "Movie Theatre Black Fatigue Backfire!",
    "from": "2026-06-28",
@@ -212,6 +201,58 @@
    "baselinePerDay": 1,
    "adViews": 7928,
    "perDay": 1586
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-06-28",
+   "to": "2026-07-02",
+   "days": 5,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 6837,
+   "baselinePerDay": 0,
+   "adViews": 6837,
+   "perDay": 1367
+  },
+  {
+   "id": "Sr0WmHdxJvs",
+   "title": "Movie Theatre Black Fatigue Backfire!",
+   "from": "2026-08-10",
+   "to": "2026-08-13",
+   "days": 4,
+   "observedTo": "2026-08-15",
+   "observedDays": 6,
+   "gain": 38714,
+   "baselinePerDay": 1,
+   "adViews": 38708,
+   "perDay": 9677
+  },
+  {
+   "id": "3O6sdSffHzs",
+   "title": "Walmart Will Be DESTROYED By This",
+   "from": "2026-08-10",
+   "to": "2026-08-13",
+   "days": 4,
+   "observedTo": "2026-08-15",
+   "observedDays": 6,
+   "gain": 44509,
+   "baselinePerDay": 0,
+   "adViews": 44509,
+   "perDay": 11127
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-08-10",
+   "to": "2026-08-13",
+   "days": 4,
+   "observedTo": "2026-08-15",
+   "observedDays": 6,
+   "gain": 34087,
+   "baselinePerDay": 0,
+   "adViews": 34087,
+   "perDay": 8522
   }
  ]
 }

@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-13
+# Topic candidates — 2026-08-17
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,27 +6,29 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 120 baseline videos
+Pool: 15 recent videos, 117 baseline videos
 
 ### Cluster 1: `candace`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/120 videos (3%)
-- **Spike ratio:** 5.8x
+- **Recent saturation:** 4/15 videos (**27%**)
+- **Baseline saturation:** 4/117 videos (3%)
+- **Spike ratio:** 7.0x
 - **Related terms:** `candace`, `owens`, `candace owens`
 - **Sample recent videos:**
+  - 2026-08-14 — _CANDACE OWENS VS ANDREW DEBATE WENT VERY POORLY FOR ONE.._  
+    Candace Owens debated Andrew Wilson over her various Charlie Kirk, Erika Kirk and more theories
+  - 2026-08-13 — _I CAN'T BELIEVE IT_  
+    Candace Owens And Andrew Wilson Debate Just Became Must Watch
   - 2026-08-12 — _THEY GAVE UP_  
     He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
   - 2026-08-11 — _THEY FELL FOR IT_  
     Tim Pool Expertly Trolls Candace Owens And Her Fans Explode
-  - 2026-08-06 — _JOE ROGAN VS CANDACE OWENS_  
-    Support The Show By Trying Our Coffee: https://coffeebrandcoffee.com/ Candace Refuses $300,000 Debate Then Gets Exposed 
 
 ### Cluster 2: `massive`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 5/120 videos (4%)
-- **Spike ratio:** 3.7x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 5/117 videos (4%)
+- **Spike ratio:** 4.3x
 - **Related terms:** `massive`
 - **Sample recent videos:**
   - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
@@ -36,27 +38,59 @@ Pool: 18 recent videos, 120 baseline videos
   - 2026-08-10 — _IT KEEPS GETTING WORSE_  
     Massive Food Recall Hits Walmart Target And Whole Foods Nationwide
 
+### Cluster 3: `second`
+
+- **Recent saturation:** 13/15 videos (**87%**)
+- **Baseline saturation:** 25/117 videos (21%)
+- **Spike ratio:** 4.0x
+- **Related terms:** `second`, `coffee second`
+- **Sample recent videos:**
+  - 2026-08-13 — _MCDONALDS BUSTED_  
+    McDonald’s Built A 515 Page Customer Dossier And It’s Terrifying
+  - 2026-08-13 — _SHE ATTACKED AGAIN_  
+    WNBA Task Force Meets But Still Cannot Define A Woman
+  - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
+    Stephanie White Preaches Love Then Tells Angry Critics Go Hell
+  - 2026-08-12 — _THEY'RE COVERING IT UP_  
+    Horror At Minnesota Daycare Leaves Mother And Child Dead Today
+  - 2026-08-12 — _THEY GAVE UP_  
+    He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
+
 ## @JeremyHambly
 
-Pool: 11 recent videos, 68 baseline videos
+Pool: 9 recent videos, 62 baseline videos
 
-### Cluster 1: `candace`
+### Cluster 1: `main candace`
 
-- **Recent saturation:** 6/11 videos (**55%**)
-- **Baseline saturation:** 16/68 videos (24%)
-- **Spike ratio:** 2.3x
-- **Related terms:** `candace`, `owens`, `wilson`, `andrew`, `candace owens`, `andrew wilson`
+- **Recent saturation:** 3/9 videos (**33%**)
+- **Baseline saturation:** 0/62 videos (0%)
+- **Spike ratio:** 42.0x
+- **Related terms:** `main candace`
 - **Sample recent videos:**
+  - 2026-08-13 — _SHE'S FREAKING OUT_  
+    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
   - 2026-08-12 — _THIS WAS BRUTAL_  
     Candace Owens Posts Joe Rogan Message And Instantly Regrets
   - 2026-08-10 — _CANDACE OWENS FULL BLOWN MELTDOWN_  
     Candace Owens Threatens Police Report As Her Conspiracy Implodes
-  - 2026-08-10 — _THIS WAS GREAT_  
-    Candace Owens Gets A Painful Reality Check From Michael Knowles
-  - 2026-08-08 — _I CAN'T BELIEVE IT!_  
-    Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Owens And Andrew Wilson Finally Agree To Explo
-  - 2026-08-07 — _THIS IS HER END_  
-    Support The Show & Try Our Coffee: https://coffeebrandcoffee.com/ Candace Demands More Money Total Control Before Accept
+
+### Cluster 2: `main`
+
+- **Recent saturation:** 9/9 videos (**100%**)
+- **Baseline saturation:** 11/62 videos (18%)
+- **Spike ratio:** 5.5x
+- **Related terms:** `main`, `coffee main`
+- **Sample recent videos:**
+  - 2026-08-13 — _SHE'S FREAKING OUT_  
+    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
+  - 2026-08-12 — _THIS WAS BRUTAL_  
+    Candace Owens Posts Joe Rogan Message And Instantly Regrets
+  - 2026-08-12 — _SPOOKY NEW SCAM_  
+    Dangerous Best Buy Gift Card Scam Could Steal Your Identity
+  - 2026-08-11 — _JOE ROGAN HAS HAD ENOUGH_  
+    Joe Rogan Leaves Woke Gender Ideology With Nowhere To Hide
+  - 2026-08-11 — _MAMDANI EPICALLY FAILS_  
+    Mamdani Backs Down As Court Freezes His Massive Property Tax
 
 ---
 

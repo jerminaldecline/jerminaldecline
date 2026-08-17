@@ -1,24 +1,51 @@
 {
-  "lastUpdated": "2026-08-13T05:54:28.497Z",
+  "lastUpdated": "2026-08-17T05:07:17.494Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "candace",
+      "channelHandle": "@TheQuartering",
+      "termId": "second",
       "keywords": [
-        "wilson",
-        "andrew wilson",
-        "andrew",
-        "candace",
-        "owens",
-        "candace owens"
+        "second",
+        "coffee second"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5455,
-        "baselineSaturation": 0.2391,
-        "spikeRatio": 2.28,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-08-13T05:54:28.497Z"
+        "recentSaturation": 0.8667,
+        "baselineSaturation": 0.2161,
+        "spikeRatio": 4.01,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-08-17T05:07:17.494Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "main candace",
+      "keywords": [
+        "main candace"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0079,
+        "spikeRatio": 42,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-17T05:07:17.494Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "main",
+      "keywords": [
+        "main",
+        "coffee main"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1825,
+        "spikeRatio": 5.48,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-08-17T05:07:17.494Z"
       }
     }
   ]

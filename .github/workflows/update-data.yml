@@ -58,15 +58,32 @@ jobs:
             node scripts/fetch-data.js
           fi
 
+      # The fetcher only learns that a video is GONE; the reason comes from the
+      # watch page. The strike banner keys off that reason code, so a removal
+      # with no entry yet cannot raise a banner however serious it was — it just
+      # reads "Deleted or private". On the audit's twice-daily schedule alone,
+      # a Community Guidelines strike found at 20:55 UTC stayed invisible until
+      # 02:00 (2026-08-13), and one found just after 02:00 waited until 14:00.
+      #
+      # Incremental by default: it re-scrapes nothing already classified, so the
+      # usual hourly cost is zero requests and it only reaches YouTube on the
+      # rare hour a removal is actually detected. Best-effort — datacenter IPs
+      # get bot-walled, and the audit re-runs it anyway, so a failure here must
+      # never fail an otherwise good data update.
+      - name: Resolve removed-video reasons (best-effort)
+        continue-on-error: true
+        run: node scripts/resolve-removed-reasons.js
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Stage the channel data, the descriptions side-file, and the
-          # title-change ledger. The fetcher writes all three alongside
-          # data.json; without staging each explicitly they'd be silently
-          # dropped when the workflow runner is torn down.
-          git add public/data.json public/descriptions.json public/title-history.json
+          # Stage the channel data, the descriptions side-file, the title-change
+          # ledger, and the removal-reason side-file. The fetcher writes the
+          # first three alongside data.json and the resolver step writes the
+          # fourth; without staging each explicitly they'd be silently dropped
+          # when the workflow runner is torn down.
+          git add public/data.json public/descriptions.json public/title-history.json public/removed-reasons.json
           if git diff --staged --quiet; then
             echo "No data changes to commit."
             exit 0

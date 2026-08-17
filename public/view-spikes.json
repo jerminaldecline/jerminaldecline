@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-13-AM",
-    "snapshots": 123
+    "to": "2026-08-17-PM",
+    "snapshots": 132
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -16,26 +16,26 @@
     {
       "id": "3O6sdSffHzs",
       "title": "Walmart Will Be DESTROYED By This",
-      "estPromotedViews": 30945,
-      "spikeStartDate": "2026-08-10-AM"
-    },
-    {
-      "id": "Sr0WmHdxJvs",
-      "title": "Movie Theatre Black Fatigue Backfire!",
-      "estPromotedViews": 29725,
+      "estPromotedViews": 44486,
       "spikeStartDate": "2026-08-10-AM"
     },
     {
       "id": "FiLs5ovIfts",
       "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-      "estPromotedViews": 24896,
+      "estPromotedViews": 34071,
       "spikeStartDate": "2026-08-10-AM"
     },
     {
       "id": "n-I7Cp9iTTw",
       "title": "WALMART FATIGUE GOES NUCLEAR",
-      "estPromotedViews": 19127,
+      "estPromotedViews": 19828,
       "spikeStartDate": "2026-08-10-AM"
+    },
+    {
+      "id": "Sr0WmHdxJvs",
+      "title": "Movie Theatre Black Fatigue Backfire!",
+      "estPromotedViews": 11347,
+      "spikeStartDate": "2026-08-16-PM"
     },
     {
       "id": "7Mg87BPII_4",
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 40,
+      "baselinePerDay": 6,
       "peakPerDay": 1268,
-      "ratio": 31.7,
+      "ratio": 211.3,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2445,
+      "estPromotedViews": 2564,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -191,6 +191,42 @@
         [
           "2026-08-13-AM",
           32111
+        ],
+        [
+          "2026-08-13-PM",
+          32115
+        ],
+        [
+          "2026-08-14-AM",
+          32117
+        ],
+        [
+          "2026-08-14-PM",
+          32104
+        ],
+        [
+          "2026-08-15-AM",
+          32108
+        ],
+        [
+          "2026-08-15-PM",
+          32110
+        ],
+        [
+          "2026-08-16-AM",
+          32114
+        ],
+        [
+          "2026-08-16-PM",
+          32114
+        ],
+        [
+          "2026-08-17-AM",
+          32115
+        ],
+        [
+          "2026-08-17-PM",
+          32117
         ]
       ]
     },
@@ -201,13 +237,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 46,
+      "baselinePerDay": 16,
       "peakPerDay": 774,
-      "ratio": 16.8,
+      "ratio": 48.4,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1593,
+      "estPromotedViews": 1683,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -318,6 +354,42 @@
         [
           "2026-08-13-AM",
           72250
+        ],
+        [
+          "2026-08-13-PM",
+          72261
+        ],
+        [
+          "2026-08-14-AM",
+          72253
+        ],
+        [
+          "2026-08-14-PM",
+          72258
+        ],
+        [
+          "2026-08-15-AM",
+          72266
+        ],
+        [
+          "2026-08-15-PM",
+          72271
+        ],
+        [
+          "2026-08-16-AM",
+          72288
+        ],
+        [
+          "2026-08-16-PM",
+          72295
+        ],
+        [
+          "2026-08-17-AM",
+          72304
+        ],
+        [
+          "2026-08-17-PM",
+          72312
         ]
       ]
     }
