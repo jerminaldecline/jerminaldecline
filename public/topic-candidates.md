@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-16
+# Topic candidates — 2026-08-17
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 120 baseline videos
+Pool: 15 recent videos, 117 baseline videos
 
 ### Cluster 1: `candace`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 4/120 videos (3%)
-- **Spike ratio:** 7.2x
+- **Baseline saturation:** 4/117 videos (3%)
+- **Spike ratio:** 7.0x
 - **Related terms:** `candace`, `owens`, `candace owens`
 - **Sample recent videos:**
   - 2026-08-14 — _CANDACE OWENS VS ANDREW DEBATE WENT VERY POORLY FOR ONE.._  
@@ -27,8 +27,8 @@ Pool: 15 recent videos, 120 baseline videos
 ### Cluster 2: `massive`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 5/120 videos (4%)
-- **Spike ratio:** 4.4x
+- **Baseline saturation:** 5/117 videos (4%)
+- **Spike ratio:** 4.3x
 - **Related terms:** `massive`
 - **Sample recent videos:**
   - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
@@ -41,8 +41,8 @@ Pool: 15 recent videos, 120 baseline videos
 ### Cluster 3: `second`
 
 - **Recent saturation:** 13/15 videos (**87%**)
-- **Baseline saturation:** 28/120 videos (23%)
-- **Spike ratio:** 3.7x
+- **Baseline saturation:** 25/117 videos (21%)
+- **Spike ratio:** 4.0x
 - **Related terms:** `second`, `coffee second`
 - **Sample recent videos:**
   - 2026-08-13 — _MCDONALDS BUSTED_  
@@ -58,13 +58,13 @@ Pool: 15 recent videos, 120 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 65 baseline videos
+Pool: 9 recent videos, 62 baseline videos
 
 ### Cluster 1: `main candace`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/65 videos (0%)
-- **Spike ratio:** 44.0x
+- **Baseline saturation:** 0/62 videos (0%)
+- **Spike ratio:** 42.0x
 - **Related terms:** `main candace`
 - **Sample recent videos:**
   - 2026-08-13 — _SHE'S FREAKING OUT_  
@@ -77,8 +77,8 @@ Pool: 9 recent videos, 65 baseline videos
 ### Cluster 2: `main`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 12/65 videos (18%)
-- **Spike ratio:** 5.3x
+- **Baseline saturation:** 11/62 videos (18%)
+- **Spike ratio:** 5.5x
 - **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
   - 2026-08-13 — _SHE'S FREAKING OUT_  
