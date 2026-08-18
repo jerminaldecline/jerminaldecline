@@ -32,16 +32,16 @@ README says:
 
 | Repo | Local path | Role |
 |---|---|---|
-| `jerminaldecline` | `d:\Personal\Code Repos\jerminaldecline` | **The working clone.** Site, scripts, all data. |
-| `jerminaldecline-snapshots` | `d:\Personal\Code Repos\jerminaldecline-snapshots` | Public. The **only** per-video time series. 133 snapshots + 156 debut samples. |
-| `jerminaldecline-transcripts` | `d:\Personal\Code Repos\jerminaldecline-transcripts` | Private. 15,183 transcripts + `index.json` status map. |
+| `jerminaldecline` | `<repos>\jerminaldecline` | **The working clone.** Site, scripts, all data. |
+| `jerminaldecline-snapshots` | `<repos>\jerminaldecline-snapshots` | Public. The **only** per-video time series. 133 snapshots + 156 debut samples. |
+| `jerminaldecline-transcripts` | `<repos>\jerminaldecline-transcripts` | Private. 15,183 transcripts + `index.json` status map. |
 
 ### Not in git — and this matters
 
 | Thing | Path | Why it matters |
 |---|---|---|
-| **Local runner** | `C:\Users\bradw\OneDrive\Desktop\Project FIles\Transcripts\transcript-runner` | Runs LLM tagging, transcripts, creator tags. **No version control.** Contains `_canon-fix/` (the tagger entity-split fix). |
-| **Second clone** | `C:\Users\bradw\OneDrive\Desktop\Project FIles\jerminaldecline` | The runner's push target (`JD_MAIN_REPO` default). Sits on `main`. |
+| **Local runner** | `<runner>` | Runs LLM tagging, transcripts, creator tags. **No version control.** Contains `_canon-fix/` (the tagger entity-split fix). |
+| **Second clone** | `<second-clone>` | The runner's push target (`JD_MAIN_REPO` default). Sits on `main`. |
 | **`CLAUDE.md`** | repo root | Accurate, and **untracked** — exists only on this machine. |
 
 ### Scheduled tasks (Windows Task Scheduler, local machine)
@@ -218,7 +218,7 @@ commented out) and `backfill-transcripts.yml` (manual, already run) are
 `reposts.json` records his Shorts traced back to an original source — via a
 surviving platform watermark, community credit in the comments, or manual
 tracing. Produced out of the `content-theft-tracker` project
-(`d:\Personal\Code Repos\content-theft-tracker`), which is **not under version
+(`<repos>\content-theft-tracker`), which is **not under version
 control**.
 
 Note `creator` is the account the clip was taken *from*: a watermark proves

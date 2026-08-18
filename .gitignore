@@ -6,3 +6,6 @@ node_modules/
 # Python bytecode cache, created whenever the scrapers are run locally.
 __pycache__/
 *.pyc
+
+# Real local paths — the repo is public, keep machine paths out of it.
+PATHS.local.md

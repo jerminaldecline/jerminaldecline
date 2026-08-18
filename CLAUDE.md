@@ -81,7 +81,9 @@ Secrets: `YOUTUBE_API_KEY`, `SNAPSHOTS_REPO_TOKEN`, `TRANSCRIPTS_REPO_TOKEN`.
 - `build-ad-ledger.py` uses `utcfromtimestamp()`, deprecated in the Python 3.12 CI pins.
 - `measure-*.js` write `public/view-count-change.json`, which only exists on `staging` —
   running from a `main` checkout throws on the initial read.
-- `scripts/run-scrape-ads.cmd:6` hardcodes `C:\Users\bradw\...` — committed username.
+- `scripts/run-scrape-ads.cmd:6` resolves Python via `%LOCALAPPDATA%`. It previously
+  hardcoded a user-profile path, publishing the local account name to a public repo.
+  Keep local paths out of tracked files — the real ones live in `PATHS.local.md`.
 - `scripts/filler-tally.js:16` hardcodes `C:/tmp/transcripts-repo/transcripts`, no env override.
 - `public/reposts.json` is hand-maintained. No watermark scanner exists here — that lives
   in `../content-theft-tracker`.
