@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-17-PM",
-    "snapshots": 132
+    "to": "2026-08-18-AM",
+    "snapshots": 133
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -34,7 +34,7 @@
     {
       "id": "Sr0WmHdxJvs",
       "title": "Movie Theatre Black Fatigue Backfire!",
-      "estPromotedViews": 11347,
+      "estPromotedViews": 16084,
       "spikeStartDate": "2026-08-16-PM"
     },
     {
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 6,
+      "baselinePerDay": 5,
       "peakPerDay": 1268,
-      "ratio": 211.3,
+      "ratio": 253.6,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2564,
+      "estPromotedViews": 2568,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -227,6 +227,10 @@
         [
           "2026-08-17-PM",
           32117
+        ],
+        [
+          "2026-08-18-AM",
+          32119
         ]
       ]
     },
@@ -237,13 +241,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 16,
+      "baselinePerDay": 17,
       "peakPerDay": 774,
-      "ratio": 48.4,
+      "ratio": 45.5,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1683,
+      "estPromotedViews": 1680,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -390,6 +394,10 @@
         [
           "2026-08-17-PM",
           72312
+        ],
+        [
+          "2026-08-18-AM",
+          72321
         ]
       ]
     }
