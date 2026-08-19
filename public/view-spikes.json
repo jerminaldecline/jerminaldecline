@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-18-AM",
-    "snapshots": 133
+    "to": "2026-08-19-AM",
+    "snapshots": 135
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -26,16 +26,16 @@
       "spikeStartDate": "2026-08-10-AM"
     },
     {
+      "id": "Sr0WmHdxJvs",
+      "title": "Movie Theatre Black Fatigue Backfire!",
+      "estPromotedViews": 29833,
+      "spikeStartDate": "2026-08-16-PM"
+    },
+    {
       "id": "n-I7Cp9iTTw",
       "title": "WALMART FATIGUE GOES NUCLEAR",
       "estPromotedViews": 19828,
       "spikeStartDate": "2026-08-10-AM"
-    },
-    {
-      "id": "Sr0WmHdxJvs",
-      "title": "Movie Theatre Black Fatigue Backfire!",
-      "estPromotedViews": 16084,
-      "spikeStartDate": "2026-08-16-PM"
     },
     {
       "id": "7Mg87BPII_4",
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 5,
+      "baselinePerDay": 4,
       "peakPerDay": 1268,
-      "ratio": 253.6,
+      "ratio": 317,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2568,
+      "estPromotedViews": 2571,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -231,6 +231,14 @@
         [
           "2026-08-18-AM",
           32119
+        ],
+        [
+          "2026-08-18-PM",
+          32120
+        ],
+        [
+          "2026-08-19-AM",
+          32122
         ]
       ]
     },
@@ -241,13 +249,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 17,
+      "baselinePerDay": 16,
       "peakPerDay": 774,
-      "ratio": 45.5,
+      "ratio": 48.4,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1680,
+      "estPromotedViews": 1683,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -398,6 +406,14 @@
         [
           "2026-08-18-AM",
           72321
+        ],
+        [
+          "2026-08-18-PM",
+          72325
+        ],
+        [
+          "2026-08-19-AM",
+          72335
         ]
       ]
     }
