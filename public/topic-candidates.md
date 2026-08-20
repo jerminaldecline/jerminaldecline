@@ -1,66 +1,48 @@
-# Topic candidates — 2026-08-19
+# Topic candidates — 2026-08-20
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @TheQuartering
-
-Pool: 14 recent videos, 119 baseline videos
-
-### Cluster 1: `candace`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 5/119 videos (4%)
-- **Spike ratio:** 4.7x
-- **Related terms:** `candace`, `owens`, `candace owens`
-- **Sample recent videos:**
-  - 2026-08-14 — _CANDACE OWENS VS ANDREW DEBATE WENT VERY POORLY FOR ONE.._  
-    Candace Owens debated Andrew Wilson over her various Charlie Kirk, Erika Kirk and more theories
-  - 2026-08-13 — _I CAN'T BELIEVE IT_  
-    Candace Owens And Andrew Wilson Debate Just Became Must Watch
-  - 2026-08-12 — _THEY GAVE UP_  
-    He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
-
-### Cluster 2: `second`
-
-- **Recent saturation:** 11/14 videos (**79%**)
-- **Baseline saturation:** 28/119 videos (24%)
-- **Spike ratio:** 3.3x
-- **Related terms:** `second`, `coffee second`
-- **Sample recent videos:**
-  - 2026-08-18 — _TIKTOK BUSTED_  
-    TikTok Busted Deleting Viral Videos Critical Of Radical Islam Online
-  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
-    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
-  - 2026-08-18 — _CONFRONTING ALEX JONES_  
-    Jeremy Debates Alex Jones Over Israel And Charlie Kirk Assassination
-  - 2026-08-17 — _THIS IS TERRIFYING_  
-    DFW Airport Retreats After Texas Investigates Religious Foot Washing Plan
-  - 2026-08-17 — _ILHAN OMAR CHEATED_  
-    Ilhan Omar Renewed Scrutiny As Marriage Fraud Crackdown Explodes
-
 ## @JeremyHambly
 
-Pool: 7 recent videos, 65 baseline videos
+Pool: 8 recent videos, 67 baseline videos
 
 ### Cluster 1: `main`
 
-- **Recent saturation:** 6/7 videos (**86%**)
-- **Baseline saturation:** 14/65 videos (22%)
-- **Spike ratio:** 3.9x
-- **Related terms:** `main`, `coffee main`, `main candace`
+- **Recent saturation:** 7/8 videos (**88%**)
+- **Baseline saturation:** 16/67 videos (24%)
+- **Spike ratio:** 3.6x
+- **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
+  - 2026-08-19 — _IT HAPPENED AGAIN_  
+    Gunman Shoots Five Then Hides Inside University Dormitory Closet
+  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
+    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
+  - 2026-08-19 — _HE'S GOING TO FRY_  
+    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
   - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
     Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
   - 2026-08-17 — _AOC IS SCARY_  
     AOC Hits Rock Bottom And Blames Everyone For Her Backlash
-  - 2026-08-17 — _IT JUST GOT WORSE_  
-    Candace Owens Superfan Falls For Ridiculous Andrew Wilson Spy Hoax
-  - 2026-08-13 — _SHE'S FREAKING OUT_  
-    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
-  - 2026-08-12 — _THIS WAS BRUTAL_  
-    Candace Owens Posts Joe Rogan Message And Instantly Regrets
+
+## @TheQuartering
+
+Pool: 14 recent videos, 121 baseline videos
+
+### Cluster 1: `tim`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 1/121 videos (1%)
+- **Spike ratio:** 17.4x
+- **Related terms:** `tim`, `pool`, `tim pool`
+- **Sample recent videos:**
+  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
+    Tim Pool Fires Back After Robert Barnes Questions His Business
+  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
+    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
+  - 2026-08-17 — _TIM POOL EXPLODED!_  
+    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
 
 ---
 

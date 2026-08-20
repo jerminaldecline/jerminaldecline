@@ -1,37 +1,20 @@
 {
-  "lastUpdated": "2026-08-19T05:01:43.851Z",
+  "lastUpdated": "2026-08-20T05:03:25.393Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "second",
-      "keywords": [
-        "second",
-        "coffee second"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.7857,
-        "baselineSaturation": 0.2375,
-        "spikeRatio": 3.31,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 28,
-        "detectedAt": "2026-08-19T05:01:43.851Z"
-      }
-    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "main",
       "keywords": [
-        "main candace",
         "main",
         "coffee main"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8571,
-        "baselineSaturation": 0.2197,
-        "spikeRatio": 3.9,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-08-19T05:01:43.851Z"
+        "recentSaturation": 0.875,
+        "baselineSaturation": 0.2426,
+        "spikeRatio": 3.61,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-08-20T05:03:25.393Z"
       }
     }
   ]
