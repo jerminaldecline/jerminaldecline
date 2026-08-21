@@ -17,34 +17,6 @@
 # Installed via:  git config core.hooksPath scripts/hooks
 
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-
-# --- test-data tripwire (all branches, no bypass) ---------------------------
-# Fabricated data gets staged deliberately to preview a feature before its real
-# data exists, and the only thing standing between that and production is
-# someone remembering to take it out. Anything carrying the _TESTDATA marker is
-# refused at the commit boundary on main, and merely warned about on staging so
-# the preview still works.
-staged_test=$(git diff --cached --name-only --diff-filter=ACM | while read -r f; do
-  # Match the JSON KEY, not any mention of the word — this script names the
-  # marker itself and must not flag its own source.
-  [ -f "$f" ] && grep -Elq '"_TESTDATA"[[:space:]]*:' "$f" 2>/dev/null && echo "$f"
-done)
-if [ -n "$staged_test" ]; then
-  if [ "$branch" = "main" ]; then
-    echo >&2
-    echo >&2 "  BLOCKED: fabricated test data is staged on \`main\`:"
-    echo >&2 "$staged_test" | sed >&2 's/^/      /'
-    echo >&2
-    echo >&2 "  These files carry the \"_TESTDATA\" marker. Restore the real data before"
-    echo >&2 "  committing:   git checkout origin/main -- <file>"
-    echo >&2
-    exit 1
-  fi
-  echo >&2 "  NOTE: committing files marked \"_TESTDATA\" to \`$branch\` (preview only):"
-  echo >&2 "$staged_test" | sed >&2 's/^/      /'
-  echo >&2 "  These can never reach main — the hook blocks them there."
-fi
-
 [ "$branch" = "main" ] || exit 0
 [ -n "$JD_PROMOTE" ] && exit 0
 

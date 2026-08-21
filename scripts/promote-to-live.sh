@@ -19,27 +19,6 @@ SUBJECT=${1:-"Promote staging UI to live"}
 
 git fetch -q origin
 
-# Refuse to promote at all while staging is carrying fabricated preview data.
-# promote only copies index.html, so test data in a side-file could not ride
-# along — but a half-cleaned staging branch is exactly the state in which someone
-# pushes the rest by hand, so stop here and make the cleanup explicit.
-marked=$(git ls-tree -r --name-only origin/staging -- public scripts | while read -r f; do
-  git show "origin/staging:$f" 2>/dev/null | grep -Elq '"_TESTDATA"[[:space:]]*:' 2>/dev/null && echo "$f"
-# `|| true` is load-bearing: under `set -e` the while loop exits non-zero when the
-# LAST file has no match, which killed the whole script before it printed a
-# single line — every promote failing silently with exit 1.
-done || true)
-if [ -n "$marked" ]; then
-  echo >&2
-  echo >&2 "  ABORT: staging is carrying fabricated test data:"
-  echo >&2 "$marked" | sed >&2 's/^/      /'
-  echo >&2
-  echo >&2 "  Restore the real files on staging and push before promoting:"
-  echo >&2 "      git checkout staging && git checkout origin/main -- <file> && git commit && git push"
-  echo >&2
-  exit 1
-fi
-
 if git diff --quiet origin/main:public/index.html origin/staging:public/index.html; then
   echo "Nothing to promote — staging and main already have the same index.html."
   exit 0

@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-17
+# Topic candidates — 2026-08-21
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,91 +6,59 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 117 baseline videos
+Pool: 14 recent videos, 124 baseline videos
 
-### Cluster 1: `candace`
+### Cluster 1: `tim`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 4/117 videos (3%)
-- **Spike ratio:** 7.0x
-- **Related terms:** `candace`, `owens`, `candace owens`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 1/124 videos (1%)
+- **Spike ratio:** 17.9x
+- **Related terms:** `tim`, `pool`, `tim pool`
 - **Sample recent videos:**
-  - 2026-08-14 — _CANDACE OWENS VS ANDREW DEBATE WENT VERY POORLY FOR ONE.._  
-    Candace Owens debated Andrew Wilson over her various Charlie Kirk, Erika Kirk and more theories
-  - 2026-08-13 — _I CAN'T BELIEVE IT_  
-    Candace Owens And Andrew Wilson Debate Just Became Must Watch
-  - 2026-08-12 — _THEY GAVE UP_  
-    He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
-  - 2026-08-11 — _THEY FELL FOR IT_  
-    Tim Pool Expertly Trolls Candace Owens And Her Fans Explode
+  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
+    Tim Pool Fires Back After Robert Barnes Questions His Business
+  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
+    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
+  - 2026-08-17 — _TIM POOL EXPLODED!_  
+    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
 
-### Cluster 2: `massive`
+### Cluster 2: `trial`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 5/117 videos (4%)
-- **Spike ratio:** 4.3x
-- **Related terms:** `massive`
+- **Recent saturation:** 4/14 videos (**29%**)
+- **Baseline saturation:** 3/124 videos (2%)
+- **Spike ratio:** 10.2x
+- **Related terms:** `trial`
 - **Sample recent videos:**
-  - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
-    Stephanie White Preaches Love Then Tells Angry Critics Go Hell
-  - 2026-08-11 — _MASSIVE INDIAN INVASION_  
-    Massive Indian Fraud Pipeline Funds Illegal Cross Border Smuggling
-  - 2026-08-10 — _IT KEEPS GETTING WORSE_  
-    Massive Food Recall Hits Walmart Target And Whole Foods Nationwide
-
-### Cluster 3: `second`
-
-- **Recent saturation:** 13/15 videos (**87%**)
-- **Baseline saturation:** 25/117 videos (21%)
-- **Spike ratio:** 4.0x
-- **Related terms:** `second`, `coffee second`
-- **Sample recent videos:**
-  - 2026-08-13 — _MCDONALDS BUSTED_  
-    McDonald’s Built A 515 Page Customer Dossier And It’s Terrifying
-  - 2026-08-13 — _SHE ATTACKED AGAIN_  
-    WNBA Task Force Meets But Still Cannot Define A Woman
-  - 2026-08-12 — _SHE COMPLETELY MELTED DOWN_  
-    Stephanie White Preaches Love Then Tells Angry Critics Go Hell
-  - 2026-08-12 — _THEY'RE COVERING IT UP_  
-    Horror At Minnesota Daycare Leaves Mother And Child Dead Today
-  - 2026-08-12 — _THEY GAVE UP_  
-    He Just Confessed, Tyler Robinson Filing Sends Candace Owens Raging
+  - 2026-08-20 — _WOMEN ARE BROKEN_  
+    Women Rally Behind Mother Who Admitted Strangling Her Three Children
+  - 2026-08-20 — _IT JUST GOT WORSE_  
+    These Bombshell Text Messages Could Destroy Karmelo Anthony
+  - 2026-08-19 — _GRANDMAS FATIGUE GOES NUCLEAR_  
+    Grandma Pulls Gun On Shoplifter While Politicians Excuse Retail Theft
+  - 2026-08-19 — _THIS IS VERY BAD_  
+    Karmelo Anthony Wins New Judge And Demands Entirely New Trial
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 62 baseline videos
+Pool: 7 recent videos, 68 baseline videos
 
-### Cluster 1: `main candace`
+### Cluster 1: `main`
 
-- **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/62 videos (0%)
-- **Spike ratio:** 42.0x
-- **Related terms:** `main candace`
-- **Sample recent videos:**
-  - 2026-08-13 — _SHE'S FREAKING OUT_  
-    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
-  - 2026-08-12 — _THIS WAS BRUTAL_  
-    Candace Owens Posts Joe Rogan Message And Instantly Regrets
-  - 2026-08-10 — _CANDACE OWENS FULL BLOWN MELTDOWN_  
-    Candace Owens Threatens Police Report As Her Conspiracy Implodes
-
-### Cluster 2: `main`
-
-- **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 11/62 videos (18%)
-- **Spike ratio:** 5.5x
+- **Recent saturation:** 6/7 videos (**86%**)
+- **Baseline saturation:** 17/68 videos (25%)
+- **Spike ratio:** 3.4x
 - **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
-  - 2026-08-13 — _SHE'S FREAKING OUT_  
-    Candace Owens Vanishes As Fresh Lawsuit Filings Blow Up Everything
-  - 2026-08-12 — _THIS WAS BRUTAL_  
-    Candace Owens Posts Joe Rogan Message And Instantly Regrets
-  - 2026-08-12 — _SPOOKY NEW SCAM_  
-    Dangerous Best Buy Gift Card Scam Could Steal Your Identity
-  - 2026-08-11 — _JOE ROGAN HAS HAD ENOUGH_  
-    Joe Rogan Leaves Woke Gender Ideology With Nowhere To Hide
-  - 2026-08-11 — _MAMDANI EPICALLY FAILS_  
-    Mamdani Backs Down As Court Freezes His Massive Property Tax
+  - 2026-08-19 — _IT HAPPENED AGAIN_  
+    Gunman Shoots Five Then Hides Inside University Dormitory Closet
+  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
+    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
+  - 2026-08-19 — _HE'S GOING TO FRY_  
+    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
+  - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
+    Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
+  - 2026-08-17 — _AOC IS SCARY_  
+    AOC Hits Rock Bottom And Blames Everyone For Her Backlash
 
 ---
 

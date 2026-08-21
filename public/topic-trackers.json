@@ -1,37 +1,6 @@
 {
-  "lastUpdated": "2026-08-17T05:07:17.494Z",
+  "lastUpdated": "2026-08-21T05:03:14.640Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "second",
-      "keywords": [
-        "second",
-        "coffee second"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.2161,
-        "spikeRatio": 4.01,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 25,
-        "detectedAt": "2026-08-17T05:07:17.494Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "main candace",
-      "keywords": [
-        "main candace"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0079,
-        "spikeRatio": 42,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-08-17T05:07:17.494Z"
-      }
-    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "main",
@@ -40,12 +9,12 @@
         "coffee main"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1825,
-        "spikeRatio": 5.48,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-08-17T05:07:17.494Z"
+        "recentSaturation": 0.8571,
+        "baselineSaturation": 0.2536,
+        "spikeRatio": 3.38,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-08-21T05:03:14.640Z"
       }
     }
   ]

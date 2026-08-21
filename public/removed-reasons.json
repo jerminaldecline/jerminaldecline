@@ -1,7 +1,7 @@
 {
  "_note": "Resolved unavailability reason per removed video, from YouTube watch-page playabilityStatus.",
  "_method": "watch-page playabilityStatus scrape",
- "_generated": "2026-08-13",
+ "_generated": "2026-08-19",
  "reasons": {
   "tM97PVvD2KA": {
    "reason": "private"
@@ -503,14 +503,18 @@
    "reason": "private",
    "checked": "2026-07-30T17:41:45.496Z"
   },
-  "L8sXkBjK1LQ": {
-   "reason": "copyright",
-   "checked": "2026-08-04T16:11:28.900Z",
-   "detail": "Charles Ross"
-  },
   "hfHrW_ntb3I": {
    "reason": "guidelines",
    "checked": "2026-08-13T22:53:07.240Z"
+  },
+  "3_KabLseCXw": {
+   "reason": "unlisted",
+   "checked": "2026-08-18T15:39:56.394Z"
+  },
+  "8a1kWPVJo-U": {
+   "reason": "copyright",
+   "checked": "2026-08-19T10:38:29.600Z",
+   "detail": "Korey Batey"
   }
  }
 }

@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-17-PM",
-    "snapshots": 132
+    "to": "2026-08-21-AM",
+    "snapshots": 139
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -20,6 +20,12 @@
       "spikeStartDate": "2026-08-10-AM"
     },
     {
+      "id": "Sr0WmHdxJvs",
+      "title": "Movie Theatre Black Fatigue Backfire!",
+      "estPromotedViews": 42108,
+      "spikeStartDate": "2026-08-16-PM"
+    },
+    {
       "id": "FiLs5ovIfts",
       "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
       "estPromotedViews": 34071,
@@ -30,12 +36,6 @@
       "title": "WALMART FATIGUE GOES NUCLEAR",
       "estPromotedViews": 19828,
       "spikeStartDate": "2026-08-10-AM"
-    },
-    {
-      "id": "Sr0WmHdxJvs",
-      "title": "Movie Theatre Black Fatigue Backfire!",
-      "estPromotedViews": 11347,
-      "spikeStartDate": "2026-08-16-PM"
     },
     {
       "id": "7Mg87BPII_4",
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 6,
+      "baselinePerDay": 4,
       "peakPerDay": 1268,
-      "ratio": 211.3,
+      "ratio": 317,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2564,
+      "estPromotedViews": 2571,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -227,6 +227,34 @@
         [
           "2026-08-17-PM",
           32117
+        ],
+        [
+          "2026-08-18-AM",
+          32119
+        ],
+        [
+          "2026-08-18-PM",
+          32120
+        ],
+        [
+          "2026-08-19-AM",
+          32122
+        ],
+        [
+          "2026-08-19-PM",
+          32123
+        ],
+        [
+          "2026-08-20-AM",
+          32123
+        ],
+        [
+          "2026-08-20-PM",
+          32125
+        ],
+        [
+          "2026-08-21-AM",
+          32129
         ]
       ]
     },
@@ -390,6 +418,34 @@
         [
           "2026-08-17-PM",
           72312
+        ],
+        [
+          "2026-08-18-AM",
+          72321
+        ],
+        [
+          "2026-08-18-PM",
+          72325
+        ],
+        [
+          "2026-08-19-AM",
+          72335
+        ],
+        [
+          "2026-08-19-PM",
+          72343
+        ],
+        [
+          "2026-08-20-AM",
+          72350
+        ],
+        [
+          "2026-08-20-PM",
+          72355
+        ],
+        [
+          "2026-08-21-AM",
+          72364
         ]
       ]
     }
