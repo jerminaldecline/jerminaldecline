@@ -1,18 +1,52 @@
-# Topic candidates — 2026-08-20
+# Topic candidates — 2026-08-21
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @TheQuartering
+
+Pool: 14 recent videos, 124 baseline videos
+
+### Cluster 1: `tim`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 1/124 videos (1%)
+- **Spike ratio:** 17.9x
+- **Related terms:** `tim`, `pool`, `tim pool`
+- **Sample recent videos:**
+  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
+    Tim Pool Fires Back After Robert Barnes Questions His Business
+  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
+    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
+  - 2026-08-17 — _TIM POOL EXPLODED!_  
+    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
+
+### Cluster 2: `trial`
+
+- **Recent saturation:** 4/14 videos (**29%**)
+- **Baseline saturation:** 3/124 videos (2%)
+- **Spike ratio:** 10.2x
+- **Related terms:** `trial`
+- **Sample recent videos:**
+  - 2026-08-20 — _WOMEN ARE BROKEN_  
+    Women Rally Behind Mother Who Admitted Strangling Her Three Children
+  - 2026-08-20 — _IT JUST GOT WORSE_  
+    These Bombshell Text Messages Could Destroy Karmelo Anthony
+  - 2026-08-19 — _GRANDMAS FATIGUE GOES NUCLEAR_  
+    Grandma Pulls Gun On Shoplifter While Politicians Excuse Retail Theft
+  - 2026-08-19 — _THIS IS VERY BAD_  
+    Karmelo Anthony Wins New Judge And Demands Entirely New Trial
+
 ## @JeremyHambly
 
-Pool: 8 recent videos, 67 baseline videos
+Pool: 7 recent videos, 68 baseline videos
 
 ### Cluster 1: `main`
 
-- **Recent saturation:** 7/8 videos (**88%**)
-- **Baseline saturation:** 16/67 videos (24%)
-- **Spike ratio:** 3.6x
+- **Recent saturation:** 6/7 videos (**86%**)
+- **Baseline saturation:** 17/68 videos (25%)
+- **Spike ratio:** 3.4x
 - **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
   - 2026-08-19 — _IT HAPPENED AGAIN_  
@@ -25,24 +59,6 @@ Pool: 8 recent videos, 67 baseline videos
     Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
   - 2026-08-17 — _AOC IS SCARY_  
     AOC Hits Rock Bottom And Blames Everyone For Her Backlash
-
-## @TheQuartering
-
-Pool: 14 recent videos, 121 baseline videos
-
-### Cluster 1: `tim`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 1/121 videos (1%)
-- **Spike ratio:** 17.4x
-- **Related terms:** `tim`, `pool`, `tim pool`
-- **Sample recent videos:**
-  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
-    Tim Pool Fires Back After Robert Barnes Questions His Business
-  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
-    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
-  - 2026-08-17 — _TIM POOL EXPLODED!_  
-    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
 
 ---
 
