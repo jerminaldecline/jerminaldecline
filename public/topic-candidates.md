@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-22
+# Topic candidates — 2026-08-23
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 122 baseline videos
+Pool: 15 recent videos, 119 baseline videos
 
 ### Cluster 1: `visit`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 7/122 videos (6%)
-- **Spike ratio:** 4.4x
+- **Baseline saturation:** 6/119 videos (5%)
+- **Spike ratio:** 4.9x
 - **Related terms:** `visit`, `download`, `invite`, `you`, `trust`, `start`, `conversation`, `belongs`
 - **Sample recent videos:**
   - 2026-08-21 — _Karmelo Anthony Re-Trial EXPLODES With Brutal New Evidence Today_  
@@ -27,8 +27,8 @@ Pool: 15 recent videos, 122 baseline videos
 ### Cluster 2: `tim`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/122 videos (1%)
-- **Spike ratio:** 16.4x
+- **Baseline saturation:** 1/119 videos (1%)
+- **Spike ratio:** 16.0x
 - **Related terms:** `tim`, `pool`, `tim pool`
 - **Sample recent videos:**
   - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
@@ -41,8 +41,8 @@ Pool: 15 recent videos, 122 baseline videos
 ### Cluster 3: `trial`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 9.4x
+- **Baseline saturation:** 3/119 videos (3%)
+- **Spike ratio:** 9.1x
 - **Related terms:** `trial`
 - **Sample recent videos:**
   - 2026-08-20 — _WOMEN ARE BROKEN_  
@@ -56,13 +56,13 @@ Pool: 15 recent videos, 122 baseline videos
 
 ## @JeremyHambly
 
-Pool: 7 recent videos, 65 baseline videos
+Pool: 7 recent videos, 62 baseline videos
 
 ### Cluster 1: `main`
 
 - **Recent saturation:** 6/7 videos (**86%**)
-- **Baseline saturation:** 16/65 videos (25%)
-- **Spike ratio:** 3.4x
+- **Baseline saturation:** 15/62 videos (24%)
+- **Spike ratio:** 3.5x
 - **Related terms:** `main`, `coffee main`
 - **Sample recent videos:**
   - 2026-08-19 — _IT HAPPENED AGAIN_  
