@@ -4814,7 +4814,7 @@ function vccNote(kind){
     ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
     : lead + ', so figures either side of that date are not directly comparable.';
   return '<div class="vcc-note">' + body +
-    ' <a href="https://x.com/TeamYouTube/status/2089382301960388854" target="_blank" rel="noopener">TeamYouTube \u2197</a></div>';
+    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
 }
 
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
@@ -5425,10 +5425,15 @@ function setChartTitle(metric, mode) {
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
-  // Only view-based metrics are affected by the counting change; runtime and tag
-  // charts are not measured in views.
+  // The note belongs on a chart only when BOTH hold:
+  //   - the metric is measured in views (runtime and tag charts are not), and
+  //   - long-form is actually in the series.
+  // Shorts have counted from the first frame since 31 Mar 2025, so nothing
+  // changed for them on 24 Aug 2026. On a Shorts-only view the note would be
+  // flatly wrong, so 'short' is excluded while 'long' and 'all' keep it.
   const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1 };
-  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccMetrics[metric] ? vccNote('chart') : '');
+  const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote('chart') : '');
 }
 
 function renderTrendChart(yoy) {
