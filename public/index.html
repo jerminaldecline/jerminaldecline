@@ -12742,7 +12742,16 @@ function renderWindowList(startDate, endDate) {
   function dvData(){ return window.__dvData||null; }
   function dvMonths(){ const d=dvData(); if(!d||!d.days) return []; const s=new Set(); for(const k in d.days) s.add(k.slice(0,7)); return [...s].sort(); }
   function dvNiceMax(peak){ if(peak<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(peak))); const n=peak/pow; const m=[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(s=>n<=s+1e-9)||10; return m*pow; }
-  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n); return a>=1e6?(n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M":a>=1e3?Math.round(n/1e3)+"k":""+n; }
+  // Keep one decimal between 1k and 10k. Rounding to whole thousands there
+  // throws away a whole digit and makes the tiles read as an arithmetic error:
+  // 63,157 over 48 days is 1,316/day, which rendered as "63k over 48 days"
+  // beside "1k/day". The M branch already keeps two decimals for the same
+  // reason; the k branch was the odd one out.
+  function dvFmt(n){ n=Math.round(n||0); const a=Math.abs(n);
+    if(a>=1e6) return (n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M";
+    if(a>=1e4) return Math.round(n/1e3)+"k";
+    if(a>=1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"k";
+    return ""+n; }
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
   // Raw four buckets per day (toggles applied at render time, not here).
