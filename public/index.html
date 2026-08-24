@@ -2529,6 +2529,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-chart-title{margin:0.1rem 0 0.7rem}
 .an-chart-title-main{font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
 .an-chart-title-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
+/* Notice for YouTube's 24 Aug 2026 view-counting change. Recessive by design:
+   it qualifies the numbers, it is not news in itself, and it appears on several
+   panels at once, so anything louder would shout over the figures it explains. */
+.vcc-note{font-size:0.74rem;color:var(--text-dim);line-height:1.45;margin-top:0.45rem;
+  padding-left:0.6rem;border-left:2px solid var(--accent-2)}
+.vcc-note a{color:var(--accent);text-decoration:none;font-weight:700;white-space:nowrap}
+.vcc-note a:hover{text-decoration:underline}
 @media(max-width:680px){
   .an-chart-title-main{font-size:0.98rem}
   .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
@@ -4232,6 +4239,7 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
+    ${vccNote('report')}
     ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
@@ -4780,6 +4788,33 @@ function anGapPath(values, xFor, yFor, hasAt){
     pen = true;
   }
   return out.trim();
+}
+
+// YouTube's view-counting change, 24 Aug 2026. From that date a view counts the
+// moment a video starts playing, with no minimum watch time; long-form
+// previously needed roughly 30 seconds. Shorts already worked this way (since
+// 31 Mar 2025). So any view figure spanning the date mixes two different
+// metrics, and this says so wherever that matters.
+//
+// SELF-CONTAINED ON PURPOSE. The date is hardcoded and the wording is fixed.
+// There is no data file behind it and no way to interpolate a measured
+// percentage, because quantifying the step is separate work that is not in this
+// repo. That also means promoting index.html on its own ships a complete,
+// working feature rather than one silently missing its config.
+//
+// Deliberately ONE sentence and a source link.
+const VCC_DATE = '2026-08-24';
+function vccNote(kind){
+  const today = (typeof ctDate === 'function')
+    ? ctDate(new Date().toISOString())
+    : new Date().toISOString().slice(0, 10);
+  if (today < VCC_DATE) return '';                 // renders nothing until the day it lands
+  const lead = 'From 24 Aug 2026 YouTube counts a view from the first frame rather than after about 30 seconds';
+  const body = kind === 'revenue'
+    ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
+    : lead + ', so figures either side of that date are not directly comparable.';
+  return '<div class="vcc-note">' + body +
+    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
 }
 
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
@@ -5390,7 +5425,15 @@ function setChartTitle(metric, mode) {
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
-  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>`;
+  // The note belongs on a chart only when BOTH hold:
+  //   - the metric is measured in views (runtime and tag charts are not), and
+  //   - long-form is actually in the series.
+  // Shorts have counted from the first frame since 31 Mar 2025, so nothing
+  // changed for them on 24 Aug 2026. On a Shorts-only view the note would be
+  // flatly wrong, so 'short' is excluded while 'long' and 'all' keep it.
+  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1 };
+  const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote('chart') : '');
 }
 
 function renderTrendChart(yoy) {
@@ -8860,7 +8903,7 @@ function niceDurationAxis(minSec, maxSec) {
     <button type="button" class="revenue-panel-toggle" aria-expanded="${revenuePanelExpanded}" id="revenuePanelToggle">
       <div class="revenue-panel-header">
         <div class="revenue-panel-header-left">
-          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>
+          <span class="revenue-panel-eyebrow">Estimated YouTube ad revenue</span>${vccNote('revenue')}
           <span class="revenue-panel-summary" title="Creator revenue after YouTube's 45% cut. Three scenarios available — including one built from the creator's own stated figures. Expand to switch.">${summary}</span>
         </div>
         <span class="revenue-panel-caret" aria-hidden="true"></span>
