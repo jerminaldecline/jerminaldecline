@@ -12760,10 +12760,33 @@ function renderWindowList(startDate, endDate) {
     return out;
   }
   // Full series: every day with data, in date order, spanning all months.
+  // A channel that launched after the archive began has no meaningful history
+  // before its first upload - those days are not "zero views", the channel did
+  // not exist. Returns YYYY-MM-DD of the first upload, or null for ALL / unknown.
+  function dvChannelStart(ch){
+    if(!ch || ch==="ALL") return null;
+    const ds=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null;
+    if(!ds||!ds.videos) return null;
+    let min=null;
+    for(const v of ds.videos){
+      if(v.channelId!==ch) continue;
+      const p=(v.publishedAt||"").slice(0,10);
+      if(p && (min===null || p<min)) min=p;
+    }
+    return min;
+  }
+  // The first date worth plotting: the later of the archive start and the
+  // channel's own start.
+  function dvEffFrom(ch, archiveFrom){
+    const s=dvChannelStart(ch);
+    return (s && s>archiveFrom) ? s : archiveFrom;
+  }
   function dvSeriesAll(ch){
     const d=dvData(), out=[]; if(!d||!d.days) return out;
     const dates=Object.keys(d.days).sort(); let prevMo=null;
+    const start=dvChannelStart(ch);           // null for ALL, or a channel older than the archive
     for(const ds of dates){
+      if(start && ds<start) continue;         // channel did not exist yet
       const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch);
       const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
       out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
@@ -12797,6 +12820,11 @@ function renderWindowList(startDate, endDate) {
     const showNav=!isOv, floorMonth=isOv?"2026-07":null;   // overview: July onward, no nav
     let minKey=months[0]; const maxKey=months[months.length-1];
     if(floorMonth && minKey<floorMonth) minKey=floorMonth;
+    // Same rule for the month nav: a channel-scoped view should not let you page
+    // back into months before that channel had uploaded anything.
+    const chStart=dvChannelStart(ch);
+    if(chStart && chStart.slice(0,7)>minKey) minKey=chStart.slice(0,7);
+    if(!isOv && maxKey<minKey){ host.innerHTML='<div class="vempty">No daily-view data for this channel yet.</div>'; return; }
     if(isOv && maxKey<minKey){ if(card) card.hidden=true; return; }   // no data in the July+ window yet
     const st=isOv?(window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true}))
                  :(window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false,showOld:true}));
@@ -12872,9 +12900,13 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(oldInfo)+'" data-popover="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
-    const years=[...new Set(months.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
+    // Offer only months inside [minKey, maxKey]. minKey is already clamped to the
+    // channel's first upload, so a channel that launched mid-archive cannot be
+    // paged back into months before it existed.
+    const navMonths=months.filter(m=>m>=minKey&&m<=maxKey);
+    const years=[...new Set(navMonths.map(m=>+m.slice(0,4)))].sort((a,b)=>b-a);
     let yearOpts=""; years.forEach(y=>{ yearOpts+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>'; });
-    const monthsInYear=months.filter(m=>+m.slice(0,4)===selY).map(m=>+m.slice(5,7));
+    const monthsInYear=navMonths.filter(m=>+m.slice(0,4)===selY).map(m=>+m.slice(5,7));
     let monOpts=""; monthsInYear.forEach(mm=>{ monOpts+='<option value="'+mm+'"'+(mm===selM?' selected':'')+'>'+MONL[mm-1]+'</option>'; });
     const dis=st.full?' disabled':'';
     const nav=showNav?('<div class="uc-nav"><select class="uc-sel" aria-label="Year"'+dis+' onchange="__dvSetYear(this.value,\'main\')">'+yearOpts+'</select><select class="uc-sel" aria-label="Month"'+dis+' onchange="__dvSetMonthNum(this.value,\'main\')">'+monOpts+'</select>'+
@@ -12896,8 +12928,8 @@ function renderWindowList(startDate, endDate) {
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
       '<div class="uc-botzone">'+remNote+'<div class="uc-summary">'+summary+'</div></div>'+
-      (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
-      '<p class="uc-foot dv-fn">History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
+      (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate(dvEffFrom(ch,(d._range&&d._range.from)||"2026-06-11"),MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
+      '<p class="uc-foot dv-fn">'+(dvChannelStart(ch)&&dvChannelStart(ch)>((d._range&&d._range.from)||"2026-06-11")?esc(chName)+' launched '+dvNiceDate(dvChannelStart(ch),MONF)+', so the series starts there. ':'')+'History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
     if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
