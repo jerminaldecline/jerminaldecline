@@ -3130,6 +3130,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-xr .uc-dnum{display:block;font-family:var(--uc-mono);font-size:10px;color:var(--text-muted);font-weight:600}
     .dv-host .uc-xr.wknd .uc-dow,.dv-host .uc-xr.wknd .uc-dnum{color:color-mix(in srgb,var(--down) 70%,var(--text-dim))}
     .dv-host .uc-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    /* All-days mode adds a "Last 7 days" tile. Explicit modifier rather than
+       auto-fit so the 3-tile layout is byte-identical to before. */
+    .dv-host .uc-summary.four{grid-template-columns:repeat(4,1fr)}
+    @media(max-width:980px){.dv-host .uc-summary.four{grid-template-columns:repeat(2,1fr)}}
     .dv-host .uc-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
     .dv-host .uc-tile .uc-k{font-size:11px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
     .dv-host .uc-tile .uc-k .uc-chip{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
@@ -12889,12 +12893,27 @@ function renderWindowList(startDate, endDate) {
     const totPW=inD.reduce((s,x)=>s+selPW(x),0);
     const avgNew=totNew/nDays, avgOld=totOld/nDays, avg=tot/nDays;
     const pctNew=tot>0?Math.round(totNew/tot*100):0;
+    // Recent run rate. Uses the last 7 days that actually carry data, so a
+    // channel whose series ends mid-week is not divided by a phantom 7.
+    const _l7=inD.slice(-7), n7=_l7.length;
+    const tot7=_l7.reduce((s,x)=>s+selNew(x)+selOld(x),0), avg7=n7?tot7/n7:0;
+    // Against the series average, not the previous 7 days: the comparison that
+    // matters is "is the present typical of the run", and a week-on-week delta
+    // on a noisy daily series mostly measures which videos happened to land.
+    const d7=avg>0?(avg7/avg-1):0;
+    const d7Txt=(!n7||avg<=0)?'':(Math.abs(d7)<0.05?'about the series average'
+      :(d7>0?'\u25b2 ':'\u25bc ')+Math.round(Math.abs(d7)*100)+'% vs the series average');
     // "Final week of the previous month" — a recency slice of the prior-months
     // bucket (data._pw). Only meaningful in single-month mode.
     const dvHasPW=!!(dvData()&&dvData()._pw), MONF3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const _selMnum=+st.month.slice(5,7), _prevMonName=MONF3[(_selMnum===1?11:_selMnum-2)];
-    const oldInfo=((dvHasPW&&!st.full&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
-    const newInfo='Views gained during the month itself — not these videos’ lifetime total, which keeps rising afterward.';
+    const oldInfo=st.full
+      ? 'Views earned by videos published in an earlier month — the back catalogue still ticking over.'
+      : ((dvHasPW&&totOld>0)?(dvFmt(totPW)+' of this came from '+_prevMonName+'’s final week. '):'')+'These views are also counted under their own months.';
+    const last7Info='Views per day across the most recent 7 days of the series, on the same format and prior-months toggles as the chart. Compared with the average over the whole series, so it shows whether the channel is running hot or cold right now.';
+    const newInfo=st.full
+      ? 'Views a video earned while still inside its own upload month — its launch traffic. Not lifetime totals, which keep rising afterwards.'
+      : 'Views gained during the month itself — not these videos’ lifetime total, which keeps rising afterward.';
     // Views excluded because the video has since been removed (privatised/deleted),
     // matching the current format + prior-months toggles so the note tracks the chart.
     let remViews=0; { const R=(d&&d.removed)||{};
@@ -12903,11 +12922,17 @@ function renderWindowList(startDate, endDate) {
         if(ch==="ALL"){ for(const id in rec) acc(rec[id]); } else acc(rec[ch]); } }
     const remNote=remViews>0?('<p class="uc-foot dv-remnote">Excludes <b>'+dvFmt(remViews)+'</b> views on videos he’s since removed'+(st.full?'':' this month')+'.</p>'):'';
     const chip=c=>'<span class="uc-chip" style="background:'+c+'"></span>';
-    const newLab=st.full?'Same-month uploads':'Views from this month', oldLab=st.full?'Prior-month uploads':'Views from prior months';
+    // In full-series mode the panel spans months, so "this month" is meaningless
+    // and "Same-month uploads" reads as a count of uploads rather than the view
+    // count it actually is. Across the whole series the split is really
+    // launch traffic vs back catalogue, so say that.
+    const newLab=st.full?'Launch-month views':'Views from this month', oldLab=st.full?'Back-catalogue views':'Views from prior months';
     const summary=
       '<div class="uc-tile"><div class="uc-k">'+chip('var(--text-muted)')+'<span>'+newLab+' <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(newInfo)+'" data-popover="'+esc(newInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgNew)+'<small>/day</small></div><div class="uc-note">'+pctNew+'% of views · <b>'+dvFmt(totNew)+'</b> total</div></div>'+
       '<div class="uc-tile"><div class="uc-k">'+chip('color-mix(in srgb,var(--text-muted) 42%,var(--surface))')+'<span>'+oldLab+' <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(oldInfo)+'" data-popover="'+esc(oldInfo)+'">i</span></span></div><div class="uc-v">'+dvFmt(avgOld)+'<small>/day</small></div><div class="uc-note">'+(tot>0?100-pctNew:0)+'% of views · <b>'+dvFmt(totOld)+'</b> total</div></div>'+
-      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>';
+      '<div class="uc-tile"><div class="uc-k">All views</div><div class="uc-v">'+dvFmt(avg)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot)+'</b> over '+nDays+' days</div></div>'+
+      // Full series only - see the note on the calc above.
+      ((st.full&&n7)?('<div class="uc-tile"><div class="uc-k"><span>Last 7 days <span class="uc-i" tabindex="0" role="button" aria-label="'+esc(last7Info)+'" data-popover="'+esc(last7Info)+'">i</span></span></div><div class="uc-v">'+dvFmt(avg7)+'<small>/day</small></div><div class="uc-note"><b>'+dvFmt(tot7)+'</b>'+(d7Txt?' \u00b7 '+d7Txt:'')+'</div></div>'):'');
     const selY=+st.month.slice(0,4), selM=+st.month.slice(5,7);
     // Offer only months inside [minKey, maxKey]. minKey is already clamped to the
     // channel's first upload, so a channel that launched mid-archive cannot be
@@ -12936,7 +12961,7 @@ function renderWindowList(startDate, endDate) {
       '</div>'+
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-botzone">'+remNote+'<div class="uc-summary">'+summary+'</div></div>'+
+      '<div class="uc-botzone">'+remNote+'<div class="uc-summary'+((st.full&&n7)?' four':'')+'">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate(dvEffFrom(ch,(d._range&&d._range.from)||"2026-06-11"),MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
       '<p class="uc-foot dv-fn">'+(dvChannelStart(ch)&&dvChannelStart(ch)>((d._range&&d._range.from)||"2026-06-11")?esc(chName)+' launched '+dvNiceDate(dvChannelStart(ch),MONF)+', so the series starts there. ':'')+'History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
