@@ -1,18 +1,40 @@
-# Topic candidates — 2026-08-23
+# Topic candidates — 2026-08-24
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @JeremyHambly
+
+Pool: 8 recent videos, 60 baseline videos
+
+### Cluster 1: `main`
+
+- **Recent saturation:** 6/8 videos (**75%**)
+- **Baseline saturation:** 13/60 videos (22%)
+- **Spike ratio:** 3.4x
+- **Related terms:** `main`, `coffee main`
+- **Sample recent videos:**
+  - 2026-08-19 — _IT HAPPENED AGAIN_  
+    Gunman Shoots Five Then Hides Inside University Dormitory Closet
+  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
+    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
+  - 2026-08-19 — _HE'S GOING TO FRY_  
+    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
+  - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
+    Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
+  - 2026-08-17 — _AOC IS SCARY_  
+    AOC Hits Rock Bottom And Blames Everyone For Her Backlash
+
 ## @TheQuartering
 
-Pool: 15 recent videos, 119 baseline videos
+Pool: 15 recent videos, 116 baseline videos
 
 ### Cluster 1: `visit`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 6/119 videos (5%)
-- **Spike ratio:** 4.9x
+- **Baseline saturation:** 5/116 videos (4%)
+- **Spike ratio:** 5.7x
 - **Related terms:** `visit`, `download`, `invite`, `you`, `trust`, `start`, `conversation`, `belongs`
 - **Sample recent videos:**
   - 2026-08-21 — _Karmelo Anthony Re-Trial EXPLODES With Brutal New Evidence Today_  
@@ -27,8 +49,8 @@ Pool: 15 recent videos, 119 baseline videos
 ### Cluster 2: `tim`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/119 videos (1%)
-- **Spike ratio:** 16.0x
+- **Baseline saturation:** 1/116 videos (1%)
+- **Spike ratio:** 15.6x
 - **Related terms:** `tim`, `pool`, `tim pool`
 - **Sample recent videos:**
   - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
@@ -41,8 +63,8 @@ Pool: 15 recent videos, 119 baseline videos
 ### Cluster 3: `trial`
 
 - **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 3/119 videos (3%)
-- **Spike ratio:** 9.1x
+- **Baseline saturation:** 3/116 videos (3%)
+- **Spike ratio:** 8.9x
 - **Related terms:** `trial`
 - **Sample recent videos:**
   - 2026-08-20 — _WOMEN ARE BROKEN_  
@@ -53,28 +75,6 @@ Pool: 15 recent videos, 119 baseline videos
     Grandma Pulls Gun On Shoplifter While Politicians Excuse Retail Theft
   - 2026-08-19 — _THIS IS VERY BAD_  
     Karmelo Anthony Wins New Judge And Demands Entirely New Trial
-
-## @JeremyHambly
-
-Pool: 7 recent videos, 62 baseline videos
-
-### Cluster 1: `main`
-
-- **Recent saturation:** 6/7 videos (**86%**)
-- **Baseline saturation:** 15/62 videos (24%)
-- **Spike ratio:** 3.5x
-- **Related terms:** `main`, `coffee main`
-- **Sample recent videos:**
-  - 2026-08-19 — _IT HAPPENED AGAIN_  
-    Gunman Shoots Five Then Hides Inside University Dormitory Closet
-  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
-    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
-  - 2026-08-19 — _HE'S GOING TO FRY_  
-    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
-  - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
-    Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
-  - 2026-08-17 — _AOC IS SCARY_  
-    AOC Hits Rock Bottom And Blames Everyone For Her Backlash
 
 ---
 
