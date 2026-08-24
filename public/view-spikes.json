@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-23-AM",
-    "snapshots": 143
+    "to": "2026-08-24-AM",
+    "snapshots": 145
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -34,7 +34,7 @@
     {
       "id": "n-I7Cp9iTTw",
       "title": "WALMART FATIGUE GOES NUCLEAR",
-      "estPromotedViews": 19828,
+      "estPromotedViews": 19832,
       "spikeStartDate": "2026-08-10-AM"
     },
     {
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 4,
+      "baselinePerDay": 3,
       "peakPerDay": 1268,
-      "ratio": 317,
+      "ratio": 422.7,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2571,
+      "estPromotedViews": 2575,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -271,6 +271,14 @@
         [
           "2026-08-23-AM",
           32139
+        ],
+        [
+          "2026-08-23-PM",
+          32140
+        ],
+        [
+          "2026-08-24-AM",
+          32141
         ]
       ]
     },
@@ -478,6 +486,14 @@
         [
           "2026-08-23-AM",
           72391
+        ],
+        [
+          "2026-08-23-PM",
+          72395
+        ],
+        [
+          "2026-08-24-AM",
+          72395
         ]
       ]
     }
