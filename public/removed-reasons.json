@@ -1,7 +1,7 @@
 {
  "_note": "Resolved unavailability reason per removed video, from YouTube watch-page playabilityStatus.",
  "_method": "watch-page playabilityStatus scrape",
- "_generated": "2026-08-19",
+ "_generated": "2026-08-25",
  "reasons": {
   "tM97PVvD2KA": {
    "reason": "private"
@@ -515,6 +515,10 @@
    "reason": "copyright",
    "checked": "2026-08-19T10:38:29.600Z",
    "detail": "Korey Batey"
+  },
+  "19uMUwYYNgs": {
+   "reason": "unlisted",
+   "checked": "2026-08-25T01:46:16.766Z"
   }
  }
 }
