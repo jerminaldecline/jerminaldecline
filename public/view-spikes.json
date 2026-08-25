@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-24-AM",
-    "snapshots": 145
+    "to": "2026-08-25-AM",
+    "snapshots": 147
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -34,7 +34,7 @@
     {
       "id": "n-I7Cp9iTTw",
       "title": "WALMART FATIGUE GOES NUCLEAR",
-      "estPromotedViews": 19832,
+      "estPromotedViews": 19835,
       "spikeStartDate": "2026-08-10-AM"
     },
     {
@@ -58,13 +58,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 3,
+      "baselinePerDay": 2,
       "peakPerDay": 1268,
-      "ratio": 422.7,
+      "ratio": 634,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2575,
+      "estPromotedViews": 2578,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -279,6 +279,14 @@
         [
           "2026-08-24-AM",
           32141
+        ],
+        [
+          "2026-08-24-PM",
+          32141
+        ],
+        [
+          "2026-08-25-AM",
+          32144
         ]
       ]
     },
@@ -289,13 +297,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 14,
+      "baselinePerDay": 12,
       "peakPerDay": 774,
-      "ratio": 55.3,
+      "ratio": 64.5,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1689,
+      "estPromotedViews": 1695,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -494,6 +502,14 @@
         [
           "2026-08-24-AM",
           72395
+        ],
+        [
+          "2026-08-24-PM",
+          72398
+        ],
+        [
+          "2026-08-25-AM",
+          72402
         ]
       ]
     }
