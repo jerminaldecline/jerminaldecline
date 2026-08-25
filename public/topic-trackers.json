@@ -1,20 +1,69 @@
 {
-  "lastUpdated": "2026-08-24T05:10:26.291Z",
+  "lastUpdated": "2026-08-25T05:03:47.723Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "main",
+      "channelHandle": "@TheQuartering",
+      "termId": "free",
       "keywords": [
-        "main",
-        "coffee main"
+        "sign",
+        "interest",
+        "poker",
+        "tourney",
+        "sign interest",
+        "interest free",
+        "free poker",
+        "poker tourney",
+        "free"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.75,
-        "baselineSaturation": 0.2213,
-        "spikeRatio": 3.39,
-        "recentVideoCount": 6,
+        "recentSaturation": 0.5625,
+        "baselineSaturation": 0.1144,
+        "spikeRatio": 4.92,
+        "recentVideoCount": 9,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-08-24T05:10:26.291Z"
+        "detectedAt": "2026-08-25T05:03:47.723Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trial",
+      "keywords": [
+        "trial",
+        "karmelo",
+        "karmelo anthony",
+        "anthony",
+        "murder"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4375,
+        "baselineSaturation": 0.1229,
+        "spikeRatio": 3.56,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-08-25T05:03:47.723Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "interest",
+      "keywords": [
+        "interest",
+        "sign",
+        "poker",
+        "tourney",
+        "sign interest",
+        "interest free",
+        "free poker",
+        "poker tourney",
+        "free"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5714,
+        "baselineSaturation": 0.0391,
+        "spikeRatio": 14.63,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-08-25T05:03:47.723Z"
       }
     }
   ]

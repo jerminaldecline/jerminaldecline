@@ -1,80 +1,98 @@
-# Topic candidates — 2026-08-24
+# Topic candidates — 2026-08-25
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @JeremyHambly
-
-Pool: 8 recent videos, 60 baseline videos
-
-### Cluster 1: `main`
-
-- **Recent saturation:** 6/8 videos (**75%**)
-- **Baseline saturation:** 13/60 videos (22%)
-- **Spike ratio:** 3.4x
-- **Related terms:** `main`, `coffee main`
-- **Sample recent videos:**
-  - 2026-08-19 — _IT HAPPENED AGAIN_  
-    Gunman Shoots Five Then Hides Inside University Dormitory Closet
-  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
-    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
-  - 2026-08-19 — _HE'S GOING TO FRY_  
-    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
-  - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
-    Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
-  - 2026-08-17 — _AOC IS SCARY_  
-    AOC Hits Rock Bottom And Blames Everyone For Her Backlash
-
 ## @TheQuartering
 
-Pool: 15 recent videos, 116 baseline videos
+Pool: 16 recent videos, 117 baseline videos
 
-### Cluster 1: `visit`
+### Cluster 1: `free`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 5/116 videos (4%)
-- **Spike ratio:** 5.7x
+- **Recent saturation:** 9/16 videos (**56%**)
+- **Baseline saturation:** 13/117 videos (11%)
+- **Spike ratio:** 4.9x
+- **Related terms:** `free`, `sign`, `interest`, `poker`, `tourney`, `sign interest`, `interest free`, `free poker`
+- **Sample recent videos:**
+  - 2026-08-24 — _HE'S BANNED FROM HOLLYWOOD_  
+    Mark Ruffalo Picks A Career Ending Fight With Hollywood’s Boss
+  - 2026-08-24 — _Ilhan Omar Is Done!_  
+    Trump Reveals ICE Investigation Into Ilhan Omar Is Still Ongoing
+  - 2026-08-24 — _THIS IS DISGUSTING_  
+    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
+  - 2026-08-24 — _TIM POOL IN TROUBLE AGAIN_  
+    Poker Pros Roast Tim Pool Over His Wild Winning Claims
+  - 2026-08-24 — _KARMELO ANTHONY SUFFERS HUMILATED DEFEAT_  
+    Karmelo Anthony Melts Down After Judge Denies His New Trial
+
+### Cluster 2: `visit`
+
+- **Recent saturation:** 4/16 videos (**25%**)
+- **Baseline saturation:** 0/117 videos (0%)
+- **Spike ratio:** 59.0x
 - **Related terms:** `visit`, `download`, `invite`, `you`, `trust`, `start`, `conversation`, `belongs`
 - **Sample recent videos:**
+  - 2026-08-24 — _THIS IS DISGUSTING_  
+    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
   - 2026-08-21 — _Karmelo Anthony Re-Trial EXPLODES With Brutal New Evidence Today_  
     Visit http://keet.io/thequartering - Download it free, invite one person you trust, and start a conversation that belong
   - 2026-08-20 — _IT JUST GOT WORSE_  
     These Bombshell Text Messages Could Destroy Karmelo Anthony
   - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
     Tim Pool Fires Back After Robert Barnes Questions His Business
-  - 2026-08-19 — _THIS IS VERY BAD_  
-    Karmelo Anthony Wins New Judge And Demands Entirely New Trial
-
-### Cluster 2: `tim`
-
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/116 videos (1%)
-- **Spike ratio:** 15.6x
-- **Related terms:** `tim`, `pool`, `tim pool`
-- **Sample recent videos:**
-  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
-    Tim Pool Fires Back After Robert Barnes Questions His Business
-  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
-    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
-  - 2026-08-17 — _TIM POOL EXPLODED!_  
-    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
 
 ### Cluster 3: `trial`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 3/116 videos (3%)
-- **Spike ratio:** 8.9x
-- **Related terms:** `trial`
+- **Recent saturation:** 7/16 videos (**44%**)
+- **Baseline saturation:** 14/117 videos (12%)
+- **Spike ratio:** 3.6x
+- **Related terms:** `trial`, `karmelo`, `anthony`, `murder`, `karmelo anthony`
 - **Sample recent videos:**
+  - 2026-08-24 — _THIS IS DISGUSTING_  
+    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
+  - 2026-08-24 — _KARMELO ANTHONY SUFFERS HUMILATED DEFEAT_  
+    Karmelo Anthony Melts Down After Judge Denies His New Trial
+  - 2026-08-21 — _Karmelo Anthony Re-Trial EXPLODES With Brutal New Evidence Today_  
+    Visit http://keet.io/thequartering - Download it free, invite one person you trust, and start a conversation that belong
   - 2026-08-20 — _WOMEN ARE BROKEN_  
     Women Rally Behind Mother Who Admitted Strangling Her Three Children
   - 2026-08-20 — _IT JUST GOT WORSE_  
     These Bombshell Text Messages Could Destroy Karmelo Anthony
-  - 2026-08-19 — _GRANDMAS FATIGUE GOES NUCLEAR_  
-    Grandma Pulls Gun On Shoplifter While Politicians Excuse Retail Theft
-  - 2026-08-19 — _THIS IS VERY BAD_  
-    Karmelo Anthony Wins New Judge And Demands Entirely New Trial
+
+### Cluster 4: `tim`
+
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 2/117 videos (2%)
+- **Spike ratio:** 8.8x
+- **Related terms:** `tim`, `pool`, `tim pool`
+- **Sample recent videos:**
+  - 2026-08-24 — _TIM POOL IN TROUBLE AGAIN_  
+    Poker Pros Roast Tim Pool Over His Wild Winning Claims
+  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
+    Tim Pool Fires Back After Robert Barnes Questions His Business
+  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
+    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
+
+## @JeremyHambly
+
+Pool: 7 recent videos, 63 baseline videos
+
+### Cluster 1: `interest`
+
+- **Recent saturation:** 4/7 videos (**57%**)
+- **Baseline saturation:** 2/63 videos (3%)
+- **Spike ratio:** 14.6x
+- **Related terms:** `interest`, `sign`, `poker`, `tourney`, `free`, `sign interest`, `interest free`, `free poker`
+- **Sample recent videos:**
+  - 2026-08-24 — _SHE'S IN FULL BLOWN PANIC_  
+    Candace Owens Gets Caught Lying About Israeli Phones At UVU
+  - 2026-08-24 — _HE'S FINALLY GONE TOO FAR_  
+    Hasan Piker Hits New Low With Sick Charlie Kirk Performance
+  - 2026-08-24 — _THEY'RE COLLAPSING_  
+    The WNBA Just Made Its Sophie Cunningham Obsession Even Creepier
+  - 2026-08-23 — _ANNOUCEMENT: SPECIAL EVENT!_  
+    Trying To Gauge Interest: Let Me Know If You're Interested: https://thequartering.com/poker
 
 ---
 
