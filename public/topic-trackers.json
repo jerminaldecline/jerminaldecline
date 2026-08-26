@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-25T05:03:47.723Z",
+  "lastUpdated": "2026-08-26T05:04:07.476Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -16,12 +16,12 @@
         "free"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5625,
-        "baselineSaturation": 0.1144,
-        "spikeRatio": 4.92,
-        "recentVideoCount": 9,
+        "recentSaturation": 0.5882,
+        "baselineSaturation": 0.1125,
+        "spikeRatio": 5.23,
+        "recentVideoCount": 10,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-08-25T05:03:47.723Z"
+        "detectedAt": "2026-08-26T05:04:07.476Z"
       }
     },
     {
@@ -29,18 +29,19 @@
       "termId": "trial",
       "keywords": [
         "trial",
+        "judge",
         "karmelo",
         "karmelo anthony",
         "anthony",
         "murder"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4375,
-        "baselineSaturation": 0.1229,
-        "spikeRatio": 3.56,
-        "recentVideoCount": 7,
+        "recentSaturation": 0.4706,
+        "baselineSaturation": 0.1208,
+        "spikeRatio": 3.89,
+        "recentVideoCount": 8,
         "baselineVideoCount": 14,
-        "detectedAt": "2026-08-25T05:03:47.723Z"
+        "detectedAt": "2026-08-26T05:04:07.476Z"
       }
     },
     {
@@ -58,12 +59,42 @@
         "free"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5714,
+        "recentSaturation": 0.6667,
         "baselineSaturation": 0.0391,
-        "spikeRatio": 14.63,
-        "recentVideoCount": 4,
+        "spikeRatio": 17.07,
+        "recentVideoCount": 6,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-08-25T05:03:47.723Z"
+        "detectedAt": "2026-08-26T05:04:07.476Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "its",
+      "keywords": [
+        "its"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0234,
+        "spikeRatio": 14.22,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-08-26T05:04:07.476Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "claim",
+      "keywords": [
+        "claim"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0234,
+        "spikeRatio": 14.22,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-08-26T05:04:07.476Z"
       }
     }
   ]
