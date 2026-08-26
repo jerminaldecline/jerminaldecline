@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-25-AM",
-    "snapshots": 147
+    "to": "2026-08-26-AM",
+    "snapshots": 149
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -287,6 +287,14 @@
         [
           "2026-08-25-AM",
           32144
+        ],
+        [
+          "2026-08-25-PM",
+          32144
+        ],
+        [
+          "2026-08-26-AM",
+          32145
         ]
       ]
     },
@@ -297,13 +305,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 12,
+      "baselinePerDay": 10,
       "peakPerDay": 774,
-      "ratio": 64.5,
+      "ratio": 77.4,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1695,
+      "estPromotedViews": 1701,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -510,6 +518,14 @@
         [
           "2026-08-25-AM",
           72402
+        ],
+        [
+          "2026-08-25-PM",
+          72406
+        ],
+        [
+          "2026-08-26-AM",
+          72410
         ]
       ]
     }
