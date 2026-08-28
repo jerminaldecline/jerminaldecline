@@ -1,3 +1,24 @@
+# RENAMED 2026-08-28 (was update-data.yml). Not cosmetic - it is the fix.
+#
+# GitHub keys a workflow's schedule registration to its FILE PATH. After the
+# Actions incidents of 26 Aug 2026 this workflow's registration was left stuck:
+# scheduled runs simply stopped being created - not queued, not cancelled, not
+# failed, just never born - while workflow_dispatch worked instantly every time.
+# Four consecutive slots (14:07, 16:07, 18:07, 20:07 on the 28th) produced
+# nothing. GitHub's documented remedy is to push a commit to the default branch
+# to resync; that was done, touching this very file, and did not take.
+#
+# Renaming the file makes GitHub register a NEW workflow with a fresh schedule,
+# which is the only lever available from outside that can clear the stuck state.
+#
+# It is not a frequency problem: daily-audit (2x/day) and detect-topic-candidates
+# (1x/day) share this repo, account, secrets and runner and never missed once
+# through the whole episode. Both were idle during the incident windows; this one
+# runs constantly and was almost certainly mid-registration when it broke.
+#
+# The cron is DELIBERATELY unchanged from the 2-hourly set on 28 Aug, so that if
+# runs resume the rename is the only variable that moved.
+
 name: Update channel data
 
 on:
