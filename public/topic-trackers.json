@@ -1,47 +1,6 @@
 {
-  "lastUpdated": "2026-08-27T15:23:04.234Z",
+  "lastUpdated": "2026-08-28T16:48:06.388Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "free",
-      "keywords": [
-        "sign",
-        "interest",
-        "poker",
-        "tourney",
-        "sign interest",
-        "interest free",
-        "free poker",
-        "poker tourney",
-        "free"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.6667,
-        "baselineSaturation": 0.126,
-        "spikeRatio": 5.29,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-08-27T15:23:04.234Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "trial",
-      "keywords": [
-        "trial",
-        "karmelo",
-        "karmelo anthony",
-        "anthony"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3889,
-        "baselineSaturation": 0.0854,
-        "spikeRatio": 4.56,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-08-27T15:23:04.234Z"
-      }
-    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "interest",
@@ -60,9 +19,32 @@
         "recentSaturation": 1,
         "baselineSaturation": 0.0373,
         "spikeRatio": 26.8,
-        "recentVideoCount": 7,
+        "recentVideoCount": 9,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-08-27T15:23:04.234Z"
+        "detectedAt": "2026-08-28T16:48:06.388Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "free",
+      "keywords": [
+        "sign",
+        "interest",
+        "poker",
+        "tourney",
+        "sign interest",
+        "interest free",
+        "free poker",
+        "poker tourney",
+        "free"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.7647,
+        "baselineSaturation": 0.131,
+        "spikeRatio": 5.84,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-08-28T16:48:06.388Z"
       }
     }
   ]
