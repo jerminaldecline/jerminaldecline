@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-08-28-AM",
-    "snapshots": 153
+    "to": "2026-08-29-AM",
+    "snapshots": 155
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -311,6 +311,14 @@
         [
           "2026-08-28-AM",
           32144
+        ],
+        [
+          "2026-08-28-PM",
+          32146
+        ],
+        [
+          "2026-08-29-AM",
+          32149
         ]
       ]
     },
@@ -321,13 +329,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-30T23:00:10.000Z",
       "ageDaysAtSpike": 7,
-      "baselinePerDay": 9,
+      "baselinePerDay": 8,
       "peakPerDay": 774,
-      "ratio": 86,
+      "ratio": 96.8,
       "spikeStartDate": "2026-08-06-AM",
       "elevatedSnapshots": 6,
       "status": "sustained",
-      "estPromotedViews": 1704,
+      "estPromotedViews": 1707,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -558,6 +566,125 @@
         [
           "2026-08-28-AM",
           72422
+        ],
+        [
+          "2026-08-28-PM",
+          72422
+        ],
+        [
+          "2026-08-29-AM",
+          72425
+        ]
+      ]
+    },
+    {
+      "id": "Q7UGlhOH_yo",
+      "title": "THIS IS TERRIFYING",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "channel": "TheQuartering",
+      "publishedAt": "2026-08-17T23:56:48.000Z",
+      "ageDaysAtSpike": 7.5,
+      "baselinePerDay": 80,
+      "peakPerDay": 1118,
+      "ratio": 14,
+      "spikeStartDate": "2026-08-24-PM",
+      "elevatedSnapshots": 1,
+      "status": "emerging",
+      "estPromotedViews": 519,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-08-18-AM",
+          3848
+        ],
+        [
+          "2026-08-18-PM",
+          19719
+        ],
+        [
+          "2026-08-19-AM",
+          33938
+        ],
+        [
+          "2026-08-19-PM",
+          35327
+        ],
+        [
+          "2026-08-20-AM",
+          40492
+        ],
+        [
+          "2026-08-20-PM",
+          41339
+        ],
+        [
+          "2026-08-21-AM",
+          42129
+        ],
+        [
+          "2026-08-21-PM",
+          42453
+        ],
+        [
+          "2026-08-22-AM",
+          42845
+        ],
+        [
+          "2026-08-22-PM",
+          43003
+        ],
+        [
+          "2026-08-23-AM",
+          42915
+        ],
+        [
+          "2026-08-23-PM",
+          43209
+        ],
+        [
+          "2026-08-24-AM",
+          44362
+        ],
+        [
+          "2026-08-24-PM",
+          44581
+        ],
+        [
+          "2026-08-25-AM",
+          45140
+        ],
+        [
+          "2026-08-25-PM",
+          45335
+        ],
+        [
+          "2026-08-26-AM",
+          45439
+        ],
+        [
+          "2026-08-26-PM",
+          45499
+        ],
+        [
+          "2026-08-27-AM",
+          45539
+        ],
+        [
+          "2026-08-27-PM",
+          45555
+        ],
+        [
+          "2026-08-28-AM",
+          45576
+        ],
+        [
+          "2026-08-28-PM",
+          45586
+        ],
+        [
+          "2026-08-29-AM",
+          45610
         ]
       ]
     }
