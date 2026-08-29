@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-28T16:48:06.388Z",
+  "lastUpdated": "2026-08-29T11:17:00.713Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
@@ -17,11 +17,33 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.0373,
-        "spikeRatio": 26.8,
-        "recentVideoCount": 9,
+        "baselineSaturation": 0.0379,
+        "spikeRatio": 26.4,
+        "recentVideoCount": 10,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-08-28T16:48:06.388Z"
+        "detectedAt": "2026-08-29T11:17:00.713Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "kona",
+      "keywords": [
+        "kona",
+        "save",
+        "pure",
+        "coffee kona",
+        "kona save",
+        "save pure",
+        "pure kona",
+        "kona sign"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.0076,
+        "spikeRatio": 39.6,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-08-29T11:17:00.713Z"
       }
     },
     {
@@ -36,15 +58,18 @@
         "interest free",
         "free poker",
         "poker tourney",
-        "free"
+        "kona",
+        "save",
+        "pure",
+        "coffee kona"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7647,
-        "baselineSaturation": 0.131,
+        "recentSaturation": 0.8235,
+        "baselineSaturation": 0.1411,
         "spikeRatio": 5.84,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-08-28T16:48:06.388Z"
+        "recentVideoCount": 14,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-08-29T11:17:00.713Z"
       }
     }
   ]
