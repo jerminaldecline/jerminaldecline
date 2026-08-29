@@ -2532,10 +2532,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Notice for YouTube's 24 Aug 2026 view-counting change. Recessive by design:
    it qualifies the numbers, it is not news in itself, and it appears on several
    panels at once, so anything louder would shout over the figures it explains. */
-.vcc-note{font-size:0.74rem;color:var(--text-dim);line-height:1.45;margin-top:0.45rem;
-  padding-left:0.6rem;border-left:2px solid var(--accent-2)}
-.vcc-note a{color:var(--accent);text-decoration:none;font-weight:700;white-space:nowrap}
+.vcc-note{font-size:0.75rem;color:var(--text-dim);line-height:1.5;margin:0.8rem 0 1.15rem;
+  padding-left:1.4rem;position:relative;max-width:104ch}
+.vcc-note::before{content:"\24D8";position:absolute;left:0;top:-0.05rem;
+  color:var(--text-muted);font-size:0.95rem;line-height:1.4}
+.vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
+/* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
+   the top margin in and let it run the full width there. */
+.revenue-panel-header-left .vcc-note{margin-top:0.5rem;max-width:none}
 @media(max-width:680px){
   .an-chart-title-main{font-size:0.98rem}
   .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
@@ -4243,8 +4248,8 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${vccNote('report')}
     ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
+    ${vccNote('report')}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
