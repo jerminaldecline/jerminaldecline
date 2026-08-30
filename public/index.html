@@ -4701,6 +4701,45 @@ const AN_RPM_SELF = {
 };
 const AN_MID_ROLL_THRESHOLD_SEC = 480;
 
+// ---- view-counting change: recover payable ("engaged") views -------------
+// From 2026-08-24 YouTube counts a view from the first frame, where long-form
+// previously needed roughly 30 seconds. Payouts did NOT change - YPP still
+// pays on engaged views - so multiplying inflated public views by an RPM
+// overstates earnings from that date on. Dividing long-form views by the
+// inflation factor J recovers the payable count.
+//
+// DELIBERATELY INERT: [1, 1] applies no correction at all. The measured read
+// as of 2026-08-30 is 1.17-1.31x, but from n=3 phase legs on a capture clock
+// that scripts/measure-viewcount-change.py itself flags DEGRADED. A caveat
+// that is wrong stays visible; a divisor that is wrong disappears into every
+// downstream figure. Update both numbers together once --clock reports steady
+// and 14 clean days have accrued.
+const VCC_FROM = Date.parse('2026-08-24T00:00:00Z');
+const VCC_FACTOR = { low: 1.0, high: 1.0 };
+// Measured accrual curve, n=83 fully-captured long-form launches: share of the
+// day-21 total reached by each age. Used to work out how much of a video's
+// traffic arrived AFTER the change rather than assuming whole months.
+const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
+function vccExposure(publishedAt){
+  const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
+  if (!(days > 0)) return 1;            // published on/after the change: all of it
+  if (days >= 21) return 0;             // settled long before: none of it
+  let acc = 1;
+  for (let i = 1; i < VCC_CURVE.length; i++){
+    const [d0,a0] = VCC_CURVE[i-1], [d1,a1] = VCC_CURVE[i];
+    if (days <= d1){ acc = a0 + (a1-a0)*((days-d0)/(d1-d0)); break; }
+  }
+  return 1 - acc;                        // the share still to arrive at the change
+}
+// Payable long-form views for one RPM bound. `which` picks which end of the
+// factor band to divide by - 'high' for the LOW revenue bound, so factor
+// uncertainty widens the range instead of collapsing to a point estimate.
+function vccPayable(list, which){
+  const J = VCC_FACTOR[which];
+  if (J === 1) return list.reduce((s,v) => s + (v.views||0), 0);
+  return list.reduce((s,v) => s + (v.views||0) / (1 + (J-1)*vccExposure(v.publishedAt)), 0);
+}
+
 function anSummarise(videos) {
   const longForm = videos.filter(v => !v.isShort && !v.unavailable);
   const shorts = videos.filter(v => v.isShort && !v.unavailable);
@@ -4723,16 +4762,23 @@ function anSummarise(videos) {
     const vmid = Math.floor(viewVals.length / 2);
     longViewsMedian = viewVals.length % 2 ? viewVals[vmid] : (viewVals[vmid - 1] + viewVals[vmid]) / 2;
   }
-  const midRollViews = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC).reduce((s, v) => s + v.views, 0);
+  const midRollList = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC);
+  const shortLongList = longForm.filter(v => (v.durationSec || 0) < AN_MID_ROLL_THRESHOLD_SEC);
+  const midRollViews = midRollList.reduce((s, v) => s + v.views, 0);
   const shortLongViews = longViews - midRollViews;
-  const revLow = (midRollViews/1000)*AN_RPM.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
-  const revHigh = (midRollViews/1000)*AN_RPM.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM.longFormShort.high + (shortViews/1000)*AN_RPM.shorts.high;
+  // Payable equivalents. Shorts are passed through untouched - they already
+  // counted from the first frame before this change, so their RPM band needs
+  // no correction.
+  const mrPayLo = vccPayable(midRollList, 'high'),   mrPayHi = vccPayable(midRollList, 'low');
+  const slPayLo = vccPayable(shortLongList, 'high'), slPayHi = vccPayable(shortLongList, 'low');
+  const revLow = (mrPayLo/1000)*AN_RPM.longFormMidRoll.low + (slPayLo/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
+  const revHigh = (mrPayHi/1000)*AN_RPM.longFormMidRoll.high + (slPayHi/1000)*AN_RPM.longFormShort.high + (shortViews/1000)*AN_RPM.shorts.high;
   const revMid = (revLow + revHigh) / 2;
-  const revPessLow = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
-  const revPessHigh = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
+  const revPessLow = (mrPayLo/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (slPayLo/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
+  const revPessHigh = (mrPayHi/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (slPayHi/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
   const revPessMid = (revPessLow + revPessHigh) / 2;
-  const revSelfLow = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.low + (shortViews/1000)*AN_RPM_SELF.shorts.low;
-  const revSelfHigh = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.high + (shortViews/1000)*AN_RPM_SELF.shorts.high;
+  const revSelfLow = (mrPayLo/1000)*AN_RPM_SELF.longFormMidRoll.low + (slPayLo/1000)*AN_RPM_SELF.longFormShort.low + (shortViews/1000)*AN_RPM_SELF.shorts.low;
+  const revSelfHigh = (mrPayHi/1000)*AN_RPM_SELF.longFormMidRoll.high + (slPayHi/1000)*AN_RPM_SELF.longFormShort.high + (shortViews/1000)*AN_RPM_SELF.shorts.high;
   const revSelfMid = (revSelfLow + revSelfHigh) / 2;
   const minLikeRateAgeMs = 3 * 86400 * 1000;
   const nowTs = Date.now();
