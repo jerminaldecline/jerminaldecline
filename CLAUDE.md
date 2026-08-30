@@ -28,12 +28,33 @@ Ads Transparency Center (Playwright) ──→ scrape-ads.py ──→ detect-sp
 
 - **Six channels are tracked**, not five. See `scripts/fetch-data.js:41`:
   `@TheQuartering, @JeremyHambly, @UnSleevedMedia, @rcnightmare, @QuarteringLive, @QuarteringVlogs`.
-- **`update-data.yml` runs hourly** (`cron: '7 * * * *'`), changed 2026-07-16 from five
-  scattered crons. README says 4×/day, MAINTENANCE.md says 4×, FILES.md says 5× and lists
-  the dead cron times. All wrong.
+- **The data workflow is `update-channel-data.yml`, every 2 hours** (`cron: '7 */2 * * *'`).
+  It was `update-data.yml` at hourly until 2026-08-28. Renamed that day to force a fresh
+  schedule registration after GitHub's 26 Aug Actions incidents left the old one stuck
+  producing zero scheduled runs — not queued, not failed, never created. README/
+  MAINTENANCE/FILES all still say 4-5×/day. All wrong.
 - **`daily-audit.yml` runs twice daily** (02:00 and 14:00) despite the name.
 - **README.md is historical and disowned** by FILES.md. MAINTENANCE.md is the source of truth.
 - FILES.md has a corrupted markdown table around lines 106–108.
+
+## The 60-day refresh window — read this before measuring anything
+
+`fetch-data.js` refreshes only the last `RECENT_WINDOW_DAYS = 60` days of uploads on a
+normal run. **Every older video is re-enriched solely by `--audit`**, which runs twice a
+day. So the dormant back catalogue's stored view counts do not move between audits, no
+matter how many snapshots are taken.
+
+Snapshots are written by the update workflow on a *different* schedule. Differencing two
+snapshots over old videos therefore measures **how many audits fell between them**, not a
+rate. This is invisible while both schedules are steady and roughly aligned, and it
+fabricated a convincing 1.75× "step" on 2026-08-28 when GitHub's scheduler drift broke
+that alignment.
+
+Anything measuring the back catalogue must difference at **audit boundaries** and match
+**diurnal phase** (the 14:30→3:00 leg runs ~1.3× the 03:00→14:30 leg). See
+`scripts/measure-viewcount-change.py`, and its `--clock` mode for schedule health — the
+original failure was silent, with nothing anywhere reporting that the capture clock had
+drifted.
 
 ## Branch discipline — enforced in code, don't work around it
 
@@ -50,7 +71,7 @@ onto main, because staging deliberately lags main on scripts and data.
 
 | Workflow | Schedule |
 |---|---|
-| `update-data.yml` | hourly, `7 * * * *` |
+| `update-channel-data.yml` | every 2h, `7 */2 * * *` (renamed from `update-data.yml` 2026-08-28) |
 | `daily-audit.yml` | `0 2 * * *` and `0 14 * * *` |
 | `detect-topic-candidates.yml` | `30 4 * * *` |
 | `fetch-transcripts.yml` | dormant — YouTube blocks GitHub IP ranges |
@@ -79,8 +100,6 @@ Secrets: `YOUTUBE_API_KEY`, `SNAPSHOTS_REPO_TOKEN`, `TRANSCRIPTS_REPO_TOKEN`.
 - `detect-spikes.js` derives `newsLikely` from `topic-tags.json`, stale since 2026-06-20
   and superseded by `topic-tags-llm.json`.
 - `build-ad-ledger.py` uses `utcfromtimestamp()`, deprecated in the Python 3.12 CI pins.
-- `measure-*.js` write `public/view-count-change.json`, which only exists on `staging` —
-  running from a `main` checkout throws on the initial read.
 - `scripts/run-scrape-ads.cmd:6` resolves Python via `%LOCALAPPDATA%`. It previously
   hardcoded a user-profile path, publishing the local account name to a public repo.
   Keep local paths out of tracked files — the real ones live in `PATHS.local.md`.
