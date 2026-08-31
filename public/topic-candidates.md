@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-30
+# Topic candidates — 2026-08-31
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 120 baseline videos
+Pool: 18 recent videos, 117 baseline videos
 
 ### Cluster 1: `free`
 
 - **Recent saturation:** 15/18 videos (**83%**)
-- **Baseline saturation:** 16/120 videos (13%)
-- **Spike ratio:** 6.1x
+- **Baseline saturation:** 15/117 videos (13%)
+- **Spike ratio:** 6.3x
 - **Related terms:** `free`, `sign`, `interest`, `poker`, `tourney`, `kona`, `save`, `pure`
 - **Sample recent videos:**
   - 2026-08-29 — _BENNY JOHNSON MASSIVE WIN!_  
@@ -29,8 +29,8 @@ Pool: 18 recent videos, 120 baseline videos
 ### Cluster 2: `lindsay`
 
 - **Recent saturation:** 5/18 videos (**28%**)
-- **Baseline saturation:** 1/120 videos (1%)
-- **Spike ratio:** 22.4x
+- **Baseline saturation:** 1/117 videos (1%)
+- **Spike ratio:** 21.9x
 - **Related terms:** `lindsay`, `clancy`, `jury`, `lindsay clancy`, `clancy jury`
 - **Sample recent videos:**
   - 2026-08-28 — _LINDSAY CLANCY JURY DISMISSED! THIS IS BAD_  
@@ -47,8 +47,8 @@ Pool: 18 recent videos, 120 baseline videos
 ### Cluster 3: `you`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/120 videos (3%)
-- **Spike ratio:** 5.8x
+- **Baseline saturation:** 3/117 videos (3%)
+- **Spike ratio:** 5.6x
 - **Related terms:** `you`
 - **Sample recent videos:**
   - 2026-08-26 — _Black Fatigue Goes NUCLEAR_  
@@ -61,8 +61,8 @@ Pool: 18 recent videos, 120 baseline videos
 ### Cluster 4: `family`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/120 videos (3%)
-- **Spike ratio:** 4.5x
+- **Baseline saturation:** 4/117 videos (3%)
+- **Spike ratio:** 4.4x
 - **Related terms:** `family`
 - **Sample recent videos:**
   - 2026-08-29 — _BENNY JOHNSON MASSIVE WIN!_  
@@ -75,8 +75,8 @@ Pool: 18 recent videos, 120 baseline videos
 ### Cluster 5: `its`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/120 videos (3%)
-- **Spike ratio:** 4.5x
+- **Baseline saturation:** 4/117 videos (3%)
+- **Spike ratio:** 4.4x
 - **Related terms:** `its`
 - **Sample recent videos:**
   - 2026-08-26 — _Best Buy MELTDOWN Goes Viral_  
@@ -89,8 +89,8 @@ Pool: 18 recent videos, 120 baseline videos
 ### Cluster 6: `trial`
 
 - **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 7/120 videos (6%)
-- **Spike ratio:** 3.6x
+- **Baseline saturation:** 7/117 videos (6%)
+- **Spike ratio:** 3.5x
 - **Related terms:** `trial`
 - **Sample recent videos:**
   - 2026-08-26 — _Best Buy MELTDOWN Goes Viral_  
@@ -104,14 +104,14 @@ Pool: 18 recent videos, 120 baseline videos
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 65 baseline videos
+Pool: 9 recent videos, 64 baseline videos
 
-### Cluster 1: `interest`
+### Cluster 1: `sign`
 
-- **Recent saturation:** 10/10 videos (**100%**)
-- **Baseline saturation:** 2/65 videos (3%)
-- **Spike ratio:** 26.4x
-- **Related terms:** `interest`, `sign`, `poker`, `tourney`, `free`, `sign interest`, `interest free`, `free poker`
+- **Recent saturation:** 9/9 videos (**100%**)
+- **Baseline saturation:** 2/64 videos (3%)
+- **Spike ratio:** 26.0x
+- **Related terms:** `sign`, `poker`, `tourney`, `interest`, `free`, `sign interest`, `interest free`, `free poker`
 - **Sample recent videos:**
   - 2026-08-28 — _Milo Yiannopoulos ARRESTED By ICE & Deported!_  
     DHS Announces Milo Yiannopoulos Arrest After He Overstayed His Visa
@@ -126,9 +126,9 @@ Pool: 10 recent videos, 65 baseline videos
 
 ### Cluster 2: `kona`
 
-- **Recent saturation:** 3/10 videos (**30%**)
-- **Baseline saturation:** 0/65 videos (0%)
-- **Spike ratio:** 39.6x
+- **Recent saturation:** 3/9 videos (**33%**)
+- **Baseline saturation:** 0/64 videos (0%)
+- **Spike ratio:** 43.3x
 - **Related terms:** `kona`, `save`, `pure`, `coffee kona`, `kona save`, `save pure`, `pure kona`, `kona sign`
 - **Sample recent videos:**
   - 2026-08-28 — _Milo Yiannopoulos ARRESTED By ICE & Deported!_  

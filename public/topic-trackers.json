@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-30T10:02:05.638Z",
+  "lastUpdated": "2026-08-31T11:01:45.057Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -20,18 +20,17 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1364,
-        "spikeRatio": 6.11,
+        "baselineSaturation": 0.1314,
+        "spikeRatio": 6.34,
         "recentVideoCount": 15,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-08-30T10:02:05.638Z"
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-08-31T11:01:45.057Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "interest",
+      "termId": "sign",
       "keywords": [
-        "interest",
         "sign",
         "poker",
         "tourney",
@@ -39,15 +38,16 @@
         "interest free",
         "free poker",
         "poker tourney",
+        "interest",
         "free"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.0379,
-        "spikeRatio": 26.4,
-        "recentVideoCount": 10,
+        "baselineSaturation": 0.0385,
+        "spikeRatio": 26,
+        "recentVideoCount": 9,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-08-30T10:02:05.638Z"
+        "detectedAt": "2026-08-31T11:01:45.057Z"
       }
     },
     {
@@ -64,12 +64,12 @@
         "kona sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3,
-        "baselineSaturation": 0.0076,
-        "spikeRatio": 39.6,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0077,
+        "spikeRatio": 43.33,
         "recentVideoCount": 3,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-08-30T10:02:05.638Z"
+        "detectedAt": "2026-08-31T11:01:45.057Z"
       }
     }
   ]
