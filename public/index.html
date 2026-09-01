@@ -291,18 +291,16 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
 .hero.cols4{grid-template-columns:repeat(4,1fr)}
 .hero.cols4 .hero-num.rev{font-size:1.6rem;letter-spacing:-0.02em}
-.hero-rowlabel{font-size:0.86rem;font-weight:900;text-transform:uppercase;letter-spacing:0.09em;color:var(--text);margin:0.2rem 0 0.6rem 0.15rem}
+.hero-rowlabel{font-size:0.86rem;font-weight:900;text-transform:uppercase;letter-spacing:0.09em;color:var(--text);margin:0.2rem 0 0.6rem 0.15rem;
+  display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap}
+/* The label is uppercase, 900 weight and widely tracked; none of that should
+   reach the control sitting next to it. */
+.hero-rowlabel .basis-row{margin-top:0;letter-spacing:normal;font-weight:400}
 /* Average-views mean/median toggle: variants swapped via #report[data-avg] (no re-render). */
 #report .js-mean{display:none}
 #report[data-avg="mean"] .js-med{display:none}
 #report[data-avg="mean"] span.js-mean{display:inline}
 #report[data-avg="mean"] .deltas.js-mean{display:flex}
-/* Reported/engaged swap on the Total views card. Same mechanism as the
-   mean/median swap above: both variants render, CSS picks one. */
-#report .js-eng{display:none}
-#report[data-vbasis="engaged"] .js-rep{display:none}
-#report[data-vbasis="engaged"] span.js-eng{display:inline}
-#report[data-vbasis="engaged"] .deltas.js-eng{display:flex}
 .basis-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.45rem}
 .basis-row .avg-toggle{margin-top:0}
 .basis-row .info-icon{color:var(--text-dim);border-color:var(--border)}
@@ -3978,13 +3976,18 @@ window.__setAvgMetric = function(useMean){
 // the pre-rendered variants, so switching basis never re-renders the report.
 // The choice persists across month changes; on a month with nothing to adjust
 // both variants hold the same number, so it simply has no visible effect.
+// Sync the buttons only. Split out from __setViewBasis because the post-render
+// restore hook has to reassert the pressed state WITHOUT re-rendering - calling
+// the setter there would recurse through render() forever.
+window.__syncBasisButtons = function(){
+  var on = !!window.__viewEngaged;
+  var btns = document.querySelectorAll('.basis-row button[data-vopt]');
+  for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-vopt')==='engaged')===on ? 'true' : 'false'); }
+};
 window.__setViewBasis = function(useEngaged){
-  useEngaged = !!useEngaged;
-  window.__viewEngaged = useEngaged;
-  var r = document.getElementById('report');
-  if (r) r.setAttribute('data-vbasis', useEngaged ? 'engaged' : 'reported');
-  var btns = document.querySelectorAll('.avg-toggle button[data-vopt]');
-  for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-vopt')==='engaged')===useEngaged ? 'true' : 'false'); }
+  window.__viewEngaged = !!useEngaged;
+  if (typeof ovCurrent !== 'undefined' && ovCurrent != null) render(ovCurrent);
+  window.__syncBasisButtons();
 };
 function render(m){
   ovCurrent = m;
@@ -4078,11 +4081,15 @@ function render(m){
   // Typical-upload reach: the Average views hero's median as a share of the
   // subscriber base at the period's end. Only shown when subs data exists
   // and the period actually has long-form uploads (d.med can be null).
-  const medSubsStr = (subsTot && d.med != null) ? (() => {
-    const pc = d.med / subsTot * 100;
+  // Share of the subscriber base one upload reaches. Four callers now - median
+  // and mean, each on either counting basis - so it is a helper, not copies.
+  const subsPctStr = (n) => (subsTot && n != null && n > 0) ? (() => {
+    const pc = n / subsTot * 100;
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
+  const medSubsStr = subsPctStr(d.med);
+  const medSubsStrEng = subsPctStr(d.engagedMed);
   // Mean (arithmetic average) counterparts to the medians, for the Average-views toggle.
   const lfMean = (d.n && d.tot!=null) ? Math.round(d.tot/d.n) : 0;
   const lfMeanPrev = (p&&p.n&&p.tot!=null) ? p.tot/p.n : null;
@@ -4093,14 +4100,19 @@ function render(m){
   // True when this period straddles the counting change, so its headline is on
   // the new basis while the months it is compared against are on the old one.
   const vccAdj = !!(d.engaged != null && d.tot && d.engaged < d.tot*0.995);
+  // The live basis. Only meaningful where the two differ, so an engaged
+  // selection carried in from another month is ignored rather than showing a
+  // caption on a period that has nothing to adjust.
+  const useEng = vccAdj && !!window.__viewEngaged;
+  const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
+  // Sits on the row label, not on a card: it governs Total views AND Average
+  // views, and hanging it off one of them implied it only applied there.
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
-  const meanSubsStr = (subsTot && lfMean) ? (() => {
-    const pc = lfMean / subsTot * 100;
-    const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
-    return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
-  })() : '';
+  const meanSubsStr = subsPctStr(lfMean);
+  const meanSubsStrEng = subsPctStr(lfMeanEng);
   // Projection for the in-progress month (long-form Total views): current total +
   // expected-remaining-uploads × current avg views/upload. Gated to >=5 uploads
   // (below that it's pure noise) and flagged by confidence until ~a third of the
@@ -4381,24 +4393,25 @@ function render(m){
         </div>` : ''}
       </div>`;
     })()}
-    <div class="hero-rowlabel">Long-form</div>
+    <div class="hero-rowlabel">Long-form${basisToggle}</div>
     <div class="hero cols4">
       <div class="hero-card">
         <div class="hero-label">Total views</div>
-        <div class="hero-num"><span class="js-rep" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</span><span class="js-eng" title="${fmtFull(totEng)} engaged views">${fmt(totEng)}</span></div>
-        ${vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : ``}
-        <div class="hero-sub"><span class="js-rep">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</span><span class="js-eng">${totSubsStrEng?totSubsStrEng.replace(/^ · /,''):''}</span></div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num"><span class="js-rep">↗ ~${fmt(projTot)} projected</span><span class="js-eng">↗ ~${fmt(projTotEng)} projected</span></span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
-        ${heroDeltas(d.tot,p&&p.tot,y&&y.tot,null,'js-rep',vccAdj?'reported':null)}
-        ${heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,'js-eng',vccAdj?'engaged':null)}
+        <div class="hero-num" title="${fmtFull(useEng?totEng:d.tot)}${useEng?' engaged':''} views">${fmt(useEng?totEng:d.tot)}</div>
+        <div class="hero-sub">${(v => v?v.replace(/^ · /,''):'')(useEng?totSubsStrEng:totSubsStr)}</div>
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(useEng?projTotEng:projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
+        ${useEng ? heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,null,basisTag)
+                 : heroDeltas(d.tot,p&&p.tot,y&&y.tot,null,null,basisTag)}
       </div>
       <div class="hero-card avg-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Two ways to average the month's long-form views. Median (default) is the typical upload — one viral hit or dead month can't skew it. Mean is total views ÷ uploads, so mean × uploads = total views. The % is that figure as a share of the subscriber base (subs tracked June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
-        <div class="hero-num"><span class="js-med">${fmt(d.med)}</span><span class="js-mean">${fmt(lfMean)}</span></div>
+        <div class="hero-num"><span class="js-med">${fmt(useEng?d.engagedMed:d.med)}</span><span class="js-mean">${fmt(useEng?lfMeanEng:lfMean)}</span></div>
         <div class="avg-toggle" role="group" aria-label="Average type"><button type="button" data-avgopt="median" aria-pressed="true" onclick="__setAvgMetric(false)">median</button><button type="button" data-avgopt="mean" aria-pressed="false" onclick="__setAvgMetric(true)">mean</button></div>
-        <div class="hero-sub">per long-form upload<span class="js-med">${medSubsStr}</span><span class="js-mean">${meanSubsStr}</span></div>
-        ${heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',vccAdj?'engaged':null)}
-        ${heroDeltas(lfMeanEng,lfMeanEngPrev,lfMeanEngYoy,null,'js-mean',vccAdj?'engaged':null)}
+        <div class="hero-sub">per long-form upload<span class="js-med">${useEng?medSubsStrEng:medSubsStr}</span><span class="js-mean">${useEng?meanSubsStrEng:meanSubsStr}</span></div>
+        ${useEng ? heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',basisTag)
+                 : heroDeltas(d.med,p&&p.med,y&&y.med,null,'js-med',basisTag)}
+        ${useEng ? heroDeltas(lfMeanEng,lfMeanEngPrev,lfMeanEngYoy,null,'js-mean',basisTag)
+                 : heroDeltas(lfMean,lfMeanPrev,lfMeanYoy,null,'js-mean',basisTag)}
       </div>
       <div class="hero-card">
         <div class="hero-label">Uploads ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
@@ -4559,7 +4572,7 @@ function render(m){
   if (window.__syncMoodButtons) window.__syncMoodButtons();
   // Re-apply the persisted mean/median choice to the freshly rendered report.
   if (window.__setAvgMetric) window.__setAvgMetric(!!window.__avgMean);
-  if (window.__setViewBasis) window.__setViewBasis(!!window.__viewEngaged);
+  if (window.__syncBasisButtons) window.__syncBasisButtons();
   // Month quick-jump (Last complete month / Month in progress) — wire + reflect active.
   (function(){
     const months2 = availableMonths();
