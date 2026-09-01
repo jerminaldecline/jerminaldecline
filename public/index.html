@@ -302,9 +302,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 #report .js-eng{display:none}
 #report[data-vbasis="engaged"] .js-rep{display:none}
 #report[data-vbasis="engaged"] span.js-eng{display:inline}
+#report[data-vbasis="engaged"] .deltas.js-eng{display:flex}
 .basis-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.45rem}
 .basis-row .avg-toggle{margin-top:0}
 .basis-row .info-icon{color:var(--text-dim);border-color:var(--border)}
+/* The reported-basis comparison spans the counting change, so it is not a
+   valid like-for-like read. Amber rather than dim: it is a caveat on the
+   number above it, not a footnote. */
+/* Doubled class, not for weight alone: .delta-basis is defined LATER in this
+   sheet, so a single-class selector here loses on source order and the amber
+   silently never applies. */
+.delta-basis.delta-basis-warn{color:var(--accent-2)}
+.delta-basis.delta-basis-warn .info-icon{color:var(--accent-2);border-color:var(--accent-2)}
 .avg-toggle{display:inline-flex;gap:2px;margin-top:0.45rem;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:2px;align-self:flex-start}
 .avg-toggle button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:2px 8px;border-radius:5px;cursor:pointer;transition:background .12s,color .12s}
 .avg-toggle button[aria-pressed="true"]{background:var(--brand);color:#fff}
@@ -3336,7 +3345,8 @@ const VCC_MID = 2.15;
 // reached by each age. Used to work out how much of a video's traffic arrived
 // AFTER the change rather than assuming whole months.
 const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
-const VCC_DELTA_NOTE = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="These comparisons use estimated engaged views on both sides, so they are like-for-like with months before the counting change. The headline above is the figure YouTube reports, which is not comparable across 27 Aug 2026 - dividing the two headlines directly would give a different number." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides of this comparison use estimated engaged views, so it is a valid read against months before the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="This compares reported views across 27 Aug 2026, when YouTube began counting a view from the first frame instead of after about 30 seconds. The two sides were counted by different rules, so the change flatters the newer month. Switch to engaged for a comparable read." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
 function vccExposure(publishedAt){
   const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
   if (!(days > 0)) return 1;
@@ -4172,7 +4182,7 @@ function render(m){
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv,abs,xcls,adj)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${adj?VCC_DELTA_NOTE:''}</div>`:''; };
+  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -4376,15 +4386,16 @@ function render(m){
         ${vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : ``}
         <div class="hero-sub"><span class="js-rep">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</span><span class="js-eng">${totSubsStrEng?totSubsStrEng.replace(/^ · /,''):''}</span></div>
         ${projTot ? `<div class="hero-proj"><span class="hero-proj-num"><span class="js-rep">↗ ~${fmt(projTot)} projected</span><span class="js-eng">↗ ~${fmt(projTotEng)} projected</span></span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
-        ${heroDeltas(d.engaged,p&&p.engaged,y&&y.engaged,null,null,vccAdj)}
+        ${heroDeltas(d.tot,p&&p.tot,y&&y.tot,null,'js-rep',vccAdj?'reported':null)}
+        ${heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,'js-eng',vccAdj?'engaged':null)}
       </div>
       <div class="hero-card avg-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Two ways to average the month's long-form views. Median (default) is the typical upload — one viral hit or dead month can't skew it. Mean is total views ÷ uploads, so mean × uploads = total views. The % is that figure as a share of the subscriber base (subs tracked June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
         <div class="hero-num"><span class="js-med">${fmt(d.med)}</span><span class="js-mean">${fmt(lfMean)}</span></div>
         <div class="avg-toggle" role="group" aria-label="Average type"><button type="button" data-avgopt="median" aria-pressed="true" onclick="__setAvgMetric(false)">median</button><button type="button" data-avgopt="mean" aria-pressed="false" onclick="__setAvgMetric(true)">mean</button></div>
         <div class="hero-sub">per long-form upload<span class="js-med">${medSubsStr}</span><span class="js-mean">${meanSubsStr}</span></div>
-        ${heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',vccAdj)}
-        ${heroDeltas(lfMeanEng,lfMeanEngPrev,lfMeanEngYoy,null,'js-mean',vccAdj)}
+        ${heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',vccAdj?'engaged':null)}
+        ${heroDeltas(lfMeanEng,lfMeanEngPrev,lfMeanEngYoy,null,'js-mean',vccAdj?'engaged':null)}
       </div>
       <div class="hero-card">
         <div class="hero-label">Uploads ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
