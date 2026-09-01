@@ -671,6 +671,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     height: 3px;
     border-radius: 2px;
     background: var(--accent);}
+.chart-vcc-break {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7;}
+.trend-legend-swatch.vcc-break {background: none; height: 0; align-self: center;
+  border-top: 2px dashed var(--accent-2);}
 .trend-legend-swatch.prev {background: var(--text-dim);
     height: 0;
     border-top: 2px dashed var(--text-dim);}
@@ -4941,7 +4944,7 @@ function anGapPath(values, xFor, yFor, hasAt){
 //
 // Deliberately ONE sentence and a source link.
 const VCC_DATE = '2026-08-24';
-function vccNote(kind){
+function vccNote(kind, hasRule){
   const today = (typeof ctDate === 'function')
     ? ctDate(new Date().toISOString())
     : new Date().toISOString().slice(0, 10);
@@ -4949,10 +4952,29 @@ function vccNote(kind){
   const lead = '<strong>Views before and after 24 Aug 2026 are not comparable.</strong> YouTube now counts a view from the first frame rather than after about 30 seconds';
   const body = kind === 'revenue'
     ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
+    : kind === 'rate'
+    ? lead + '. Views are the divisor here, so the fall from that date is mostly the larger divisor rather than a drop in engagement - measured at roughly half, it accounts for most of the decline shown.'
     : lead + ', so figures either side of that date are not directly comparable.';
-  return '<div class="vcc-note">' + body +
+  // Only claim the dashed line exists on charts that actually draw one - the
+  // scatter plots take the note but have no month axis to mark.
+  const rule = hasRule ? ' The dashed line marks the month it lands in.' : '';
+  return '<div class="vcc-note">' + body + rule +
     ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
 }
+
+// Vertical rule marking where the counting change lands on a monthly chart.
+// Drawn on Aug 2026, the first month it touches - the effect is partial there
+// (it starts on the 27th) and total from September onward.
+const VCC_BREAK_MONTH = '2026-08';
+function vccHasBreak(chartData){ return chartData.some(m => m.key === VCC_BREAK_MONTH); }
+function vccBreakRule(chartData, xFor, P, innerH){
+  const i = chartData.findIndex(m => m.key === VCC_BREAK_MONTH);
+  if (i < 0) return '';
+  const x = xFor(i);
+  return `<line class="chart-vcc-break" x1="${x}" y1="${P.top}" x2="${x}" y2="${P.top + innerH}" />`;
+}
+const VCC_BREAK_LEGEND =
+  '<span class="trend-legend-item"><span class="trend-legend-swatch vcc-break"></span> Counting change (27 Aug 2026)</span>';
 
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
@@ -5568,9 +5590,18 @@ function setChartTitle(metric, mode) {
   // Shorts have counted from the first frame since 31 Mar 2025, so nothing
   // changed for them on 24 Aug 2026. On a Shorts-only view the note would be
   // flatly wrong, so 'short' is excluded while 'long' and 'all' keep it.
-  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1 };
+  // Every metric with views in it, including the ones where views are the
+  // DENOMINATOR - those were missing, and they are the ones that mislead most.
+  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+                        like_rate:1, engagement_variance:1, all_videos:1, tag_blocks:1 };
+  // Rate metrics need different wording: the line falls because the divisor
+  // grew, which reads as an engagement collapse if left unexplained.
+  const _vccRateMetrics = { like_rate:1, engagement_variance:1, views_likes:1 };
+  // Which of them plot months on the x axis, and so can carry the rule.
+  const _vccRuleMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+                            like_rate:1, engagement_variance:1, tag_blocks:1 };
   const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
-  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote('chart') : '');
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote(_vccRateMetrics[metric] ? 'rate' : 'chart', !!_vccRuleMetrics[metric]) : '');
 }
 
 function renderTrendChart(yoy) {
@@ -6135,6 +6166,7 @@ function renderTrendChart(yoy) {
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${xLabels}
     ${durLabelsSvg}
     ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
@@ -6273,6 +6305,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 
   legend.innerHTML = `
     <span class="trend-legend-item"><span class="trend-legend-swatch likerate"></span> Long-form like rate (likes ÷ views)</span>
+    ${vccHasBreak(chartData) ? VCC_BREAK_LEGEND : ''}
   `;
 
   // Layout — same dimensions as the views chart for visual consistency.
@@ -6410,6 +6443,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     <path class="chart-line-likerate" d="${linePath}" />
     ${ipConnector}
     ${ipDot}
@@ -6586,6 +6620,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${linePath}" />
     ${ipConnector}
@@ -6840,6 +6875,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     <path class="chart-line-curr" d="${viewsPath}" />
     <path class="chart-line-likerate" d="${ratePath}" />
     ${viewsDots}
@@ -7213,6 +7249,7 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${areas}
     ${vLines}
     ${yLabels}
@@ -7465,6 +7502,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${noDataMarks}
     ${bars}
     ${ipBar}
