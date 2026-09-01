@@ -2532,10 +2532,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Notice for YouTube's 24 Aug 2026 view-counting change. Recessive by design:
    it qualifies the numbers, it is not news in itself, and it appears on several
    panels at once, so anything louder would shout over the figures it explains. */
-.vcc-note{font-size:0.75rem;color:var(--text-dim);line-height:1.5;margin:0.8rem 0 1.15rem;
-  padding-left:1.4rem;position:relative;max-width:104ch}
-.vcc-note::before{content:"\24D8";position:absolute;left:0;top:-0.05rem;
-  color:var(--text-muted);font-size:0.95rem;line-height:1.4}
+/* Same card treatment as .partial-banner. These are siblings - both qualify the
+   numbers below - and the earlier attempt at making this one a quiet footnote
+   under-sold it: with views roughly doubling, it is not a marginal caveat. */
+.vcc-note{background:var(--surface-2);border:1px solid var(--border);
+  border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;
+  margin:0.8rem 0 1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
+.vcc-note strong{color:var(--text)}
+/* Engaged-view line on the Total views card: same weight as the projection line
+   it sits beside, so the two read as a pair of qualifiers on the headline. */
+.hero-engaged{font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-top:0.5rem;
+  display:flex;align-items:center;gap:0.35rem;line-height:1.3;flex-wrap:wrap}
+.hero-engaged .info-icon{color:var(--text-dim);border-color:var(--border)}
 .vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
 /* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
@@ -3288,6 +3296,60 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* ---------- data layer: fetch live JSON, compute per-scope/per-month ---------- */
 const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.07] };
+// ---- view-counting change: recover payable ("engaged") views ---------------
+// From 2026-08-24 YouTube counts a view from the first frame; long-form
+// previously needed roughly 30 seconds. Payouts did NOT change - YPP still pays
+// on engaged views - so public view counts overstate reach and earnings from
+// that date. Dividing long-form views by J recovers the engaged-view count.
+//
+// J = 2.15, MEASURED (2026-09-01), not assumed. Method: like rate per 1000
+// views, compared at MATCHED AGE, long-form only, never-advertised.
+//   pre-change (94 videos)  86.6 likes/1k at 48h
+//   post-change (6 videos)  40.1 likes/1k at 48h
+// A like is a deliberate act, so the change altered the denominator and not the
+// numerator; the ratio of ratios is the inflation. Four age slices agree:
+// 2.29x at 12h, 2.17x at 24h, 2.16x at 48h, 2.17x at 72h. Age is not a
+// confound here - pre-change videos read 85.5 at 3d and 85.4 at 14d, i.e. flat.
+// Corroborated independently: deflating August's post-onset views gives 3.17M
+// against the ~3.1M the month was tracking to before the spike.
+//
+// ONSET IS 27 AUG, NOT THE ANNOUNCED 24TH. Videos published 24-26 Aug show a
+// pre-change like rate (96.0 / 89.0 / 82.7 at 12h/24h/48h), indistinguishable
+// from baseline; only from the 27th does it halve. The user-facing notice still
+// cites 24 Aug because that is the date YouTube announced and the source link
+// says so - but the arithmetic uses the date the data actually breaks.
+//
+// n=6 post-change videos. Widen or revisit as more accumulate.
+const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
+const VCC_FACTOR = { low: 2.00, high: 2.30 };
+const VCC_MID = 2.15;
+// Measured accrual curve, n=83 long-form launches: share of the day-21 total
+// reached by each age. Used to work out how much of a video's traffic arrived
+// AFTER the change rather than assuming whole months.
+const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
+function vccExposure(publishedAt){
+  const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
+  if (!(days > 0)) return 1;
+  if (days >= 21) return 0;
+  let acc = 1;
+  for (let i = 1; i < VCC_CURVE.length; i++){
+    const [d0,a0] = VCC_CURVE[i-1], [d1,a1] = VCC_CURVE[i];
+    if (days <= d1){ acc = a0 + (a1-a0)*((days-d0)/(d1-d0)); break; }
+  }
+  return 1 - acc;
+}
+// Engaged (payable) views for one long-form video at a given factor.
+function vccEngagedOne(v, J){
+  const n = v.views || 0;
+  if (!(J > 1)) return n;
+  return n / (1 + (J-1)*vccExposure(v.publishedAt));
+}
+function vccPayable(list, which){
+  const J = VCC_FACTOR[which];
+  if (J === 1) return list.reduce((s,v) => s + (v.views||0), 0);
+  return list.reduce((s,v) => s + vccEngagedOne(v, J), 0);
+}
+
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
@@ -3477,6 +3539,9 @@ async function loadAndCompute(){
       if(worstCand.length){ worstvid=vstats(worstCand[0]); const medV=median(views); worstvid.vsmed = medV>0?Math.round(worstvid.views/medV*100):null; }
       return {
         n:vs.length, tot:views.reduce((a,b)=>a+b,0), med:Math.round(median(views)),
+        // Engaged (old-rule) equivalent of tot. Per video, because the deflator
+        // applies to views ACCRUED after the change, not to whole months.
+        engaged: Math.round(vs.reduce((s,v)=>s+vccEngagedOne(v, VCC_MID),0)),
         lv: lvs.length?Math.round(median(lvs)*1000)/10:0,
         comments: vs.reduce((s,v)=>s+(v.comments||0),0),
         avglen: durs.length?Math.round(median(durs)/60*10)/10:0,
@@ -4275,6 +4340,7 @@ function render(m){
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
         <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
+        ${(d.engaged && d.tot && d.engaged < d.tot*0.995) ? `<div class="hero-engaged">\u2248 ${fmt(d.engaged)} engaged <span class="info-icon" data-popover="Estimated views under YouTube's previous counting rule, which needed about 30 seconds of watch time. From 27 Aug 2026 a view counts from the first frame, so recent totals are not comparable with earlier months. Measured at ${VCC_MID}\u00d7 from like-rate at matched age (a like is a deliberate act, so the change moved the denominator and not the numerator). Payouts still use engaged views, so this is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">\u24d8</span></div>` : ``}
         ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
         ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
       </div>
@@ -4701,36 +4767,6 @@ const AN_RPM_SELF = {
 };
 const AN_MID_ROLL_THRESHOLD_SEC = 480;
 
-// ---- view-counting change: recover payable ("engaged") views -------------
-// From 2026-08-24 YouTube counts a view from the first frame, where long-form
-// previously needed roughly 30 seconds. Payouts did NOT change - YPP still
-// pays on engaged views - so multiplying inflated public views by an RPM
-// overstates earnings from that date on. Dividing long-form views by the
-// inflation factor J recovers the payable count.
-//
-// DELIBERATELY INERT: [1, 1] applies no correction at all. The measured read
-// as of 2026-08-30 is 1.17-1.31x, but from n=3 phase legs on a capture clock
-// that scripts/measure-viewcount-change.py itself flags DEGRADED. A caveat
-// that is wrong stays visible; a divisor that is wrong disappears into every
-// downstream figure. Update both numbers together once --clock reports steady
-// and 14 clean days have accrued.
-const VCC_FROM = Date.parse('2026-08-24T00:00:00Z');
-const VCC_FACTOR = { low: 1.0, high: 1.0 };
-// Measured accrual curve, n=83 fully-captured long-form launches: share of the
-// day-21 total reached by each age. Used to work out how much of a video's
-// traffic arrived AFTER the change rather than assuming whole months.
-const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
-function vccExposure(publishedAt){
-  const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
-  if (!(days > 0)) return 1;            // published on/after the change: all of it
-  if (days >= 21) return 0;             // settled long before: none of it
-  let acc = 1;
-  for (let i = 1; i < VCC_CURVE.length; i++){
-    const [d0,a0] = VCC_CURVE[i-1], [d1,a1] = VCC_CURVE[i];
-    if (days <= d1){ acc = a0 + (a1-a0)*((days-d0)/(d1-d0)); break; }
-  }
-  return 1 - acc;                        // the share still to arrive at the change
-}
 // Payable long-form views for one RPM bound. `which` picks which end of the
 // factor band to divide by - 'high' for the LOW revenue bound, so factor
 // uncertainty widens the range instead of collapsing to a point estimate.
@@ -4864,7 +4900,7 @@ function vccNote(kind){
     ? ctDate(new Date().toISOString())
     : new Date().toISOString().slice(0, 10);
   if (today < VCC_DATE) return '';                 // renders nothing until the day it lands
-  const lead = 'From 24 Aug 2026 YouTube counts a view from the first frame rather than after about 30 seconds';
+  const lead = '<strong>Views before and after 24 Aug 2026 are not comparable.</strong> YouTube now counts a view from the first frame rather than after about 30 seconds';
   const body = kind === 'revenue'
     ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
     : lead + ', so figures either side of that date are not directly comparable.';
