@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-21
+# Topic candidates — 2026-09-01
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,59 +6,91 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 124 baseline videos
+Pool: 18 recent videos, 120 baseline videos
 
-### Cluster 1: `tim`
+### Cluster 1: `free`
 
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 1/124 videos (1%)
-- **Spike ratio:** 17.9x
-- **Related terms:** `tim`, `pool`, `tim pool`
+- **Recent saturation:** 15/18 videos (**83%**)
+- **Baseline saturation:** 21/120 videos (18%)
+- **Spike ratio:** 4.7x
+- **Related terms:** `free`, `sign`, `interest`, `poker`, `tourney`, `kona`, `save`, `pure`
 - **Sample recent videos:**
-  - 2026-08-19 — _ANGRY RANT: TIM POOL NONSENSE_  
-    Tim Pool Fires Back After Robert Barnes Questions His Business
-  - 2026-08-18 — _Tim Pool Goes NUCLEAR_  
-    Alex Jones Suddenly Attacks Tim Pool Over Secret Israel Meetings
-  - 2026-08-17 — _TIM POOL EXPLODED!_  
-    The REAL Reason Tim Pool stormed out of a Jubilee debate as it went viral all over social media over the weekend.
+  - 2026-08-31 — _Tyler Robinson BOMBSHELL New Evidence!_  
+    Tyler Robinson Fights Death Penalty As Digital Evidence Takes Spotlight
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
+  - 2026-08-31 — _Girl Scouts BUSTED Pushing DANGEROUS Ideology_  
+    Girl Scouts Responds After Islamic Faith Awards Ignite Massive Backlash
+  - 2026-08-31 — _Lindsay Clancy Jury TAINTED Judge MUST Act Now_  
+    Lindsay Clancy Jury Faces Scrutiny While Her Lawyer Blasts Critics
+  - 2026-08-31 — _Lindsay Clancy Jury SPIRALS & It's Bad_  
+    The Chilling Case Casting A Shadow Over Lindsay Clancy’s Trial
 
-### Cluster 2: `trial`
+### Cluster 2: `clancy case`
 
-- **Recent saturation:** 4/14 videos (**29%**)
-- **Baseline saturation:** 3/124 videos (2%)
-- **Spike ratio:** 10.2x
-- **Related terms:** `trial`
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 5/120 videos (4%)
+- **Spike ratio:** 3.7x
+- **Related terms:** `case`, `clancy case`
 - **Sample recent videos:**
-  - 2026-08-20 — _WOMEN ARE BROKEN_  
-    Women Rally Behind Mother Who Admitted Strangling Her Three Children
-  - 2026-08-20 — _IT JUST GOT WORSE_  
-    These Bombshell Text Messages Could Destroy Karmelo Anthony
-  - 2026-08-19 — _GRANDMAS FATIGUE GOES NUCLEAR_  
-    Grandma Pulls Gun On Shoplifter While Politicians Excuse Retail Theft
-  - 2026-08-19 — _THIS IS VERY BAD_  
-    Karmelo Anthony Wins New Judge And Demands Entirely New Trial
+  - 2026-08-31 — _Lindsay Clancy Jury SPIRALS & It's Bad_  
+    The Chilling Case Casting A Shadow Over Lindsay Clancy’s Trial
+  - 2026-08-28 — _LINDSAY CLANCY JURY MAKES DEMAND_  
+    Lindsay Clancy Jury Demands To See Pills And Knife Again
+  - 2026-08-27 — _LINDSAY CLANCY IS GOING TO WALK_  
+    She Could Walk Free As Lindsay Clancy Jury Deliberations Begin
+
+### Cluster 3: `again`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 1/120 videos (1%)
+- **Spike ratio:** 13.4x
+- **Related terms:** `again`
+- **Sample recent videos:**
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
+  - 2026-08-28 — _LINDSAY CLANCY JURY MAKES DEMAND_  
+    Lindsay Clancy Jury Demands To See Pills And Knife Again
+  - 2026-08-26 — _Golf Ad TRIGGERS Unhinged Meltdown_  
+    Apparently Golf Has Gone Woke Over One Staged Advertisement Again
+
+### Cluster 4: `without`
+
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 4/120 videos (3%)
+- **Spike ratio:** 6.0x
+- **Related terms:** `without`, `day`
+- **Sample recent videos:**
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
+  - 2026-08-28 — _LINDSAY CLANCY JURY DISMISSED! THIS IS BAD_  
+    Lindsay Clancy Jury Ends Second Day Without Reaching Any Verdict
+  - 2026-08-26 — _Black Fatigue Goes NUCLEAR_  
+    Gary Mayor Blames Race After Power Crews Get Shot At
+  - 2026-08-26 — _Best Buy MELTDOWN Goes Viral_  
+    Best Buy Is In Huge Trouble As Electronics Sales Slow
 
 ## @JeremyHambly
 
-Pool: 7 recent videos, 68 baseline videos
+Pool: 9 recent videos, 65 baseline videos
 
-### Cluster 1: `main`
+### Cluster 1: `sign`
 
-- **Recent saturation:** 6/7 videos (**86%**)
-- **Baseline saturation:** 17/68 videos (25%)
-- **Spike ratio:** 3.4x
-- **Related terms:** `main`, `coffee main`
+- **Recent saturation:** 9/9 videos (**100%**)
+- **Baseline saturation:** 5/65 videos (8%)
+- **Spike ratio:** 12.0x
+- **Related terms:** `sign`, `poker`, `tourney`, `interest`, `free`, `kona`, `save`, `pure`
 - **Sample recent videos:**
-  - 2026-08-19 — _IT HAPPENED AGAIN_  
-    Gunman Shoots Five Then Hides Inside University Dormitory Closet
-  - 2026-08-19 — _KAMALA HARRIS FACES BRUTAL NEW HUMILIATION_  
-    Democrats Rig 2028 Primary Calendar To Rescue Kamala Harris Again
-  - 2026-08-19 — _HE'S GOING TO FRY_  
-    Tyler Robinson’s Practice Targets Could Keep Death Penalty Alive Today
-  - 2026-08-18 — _HASAN PIKER IN TROUBLE_  
-    Hasan Piker Threatens Lawsuits Against Everyone Sharing His Words
-  - 2026-08-17 — _AOC IS SCARY_  
-    AOC Hits Rock Bottom And Blames Everyone For Her Backlash
+  - 2026-08-31 — _HASAN PIKER IS POISON_  
+    Hasan Calls Himself A Chad And Gets Instantly Roasted Instead
+  - 2026-08-31 — _CANDACE OWENS BIGGEST LIE REVEALED_  
+    Candace Owens Faces Fresh Pushback Over Explosive Tyler Robinson Claims
+  - 2026-08-31 — _GTA 6 SCREWS OVER CREATORS & WOKE CONCERNS_  
+    GTA 6 Copyright Chaos Explodes As Twitch Targets XQc’s Stream
+  - 2026-08-28 — _Milo Yiannopoulos ARRESTED By ICE & Deported!_  
+    DHS Announces Milo Yiannopoulos Arrest After He Overstayed His Visa
+  - 2026-08-27 — _HE'S GUNNA REGRET THIS_  
+    Jelly Roll Tells Angry Trump Fans To Stop Listening Forever
 
 ---
 

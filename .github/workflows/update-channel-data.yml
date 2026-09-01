@@ -1,16 +1,52 @@
+# RENAMED 2026-08-28 (was update-data.yml). Not cosmetic - it is the fix.
+#
+# GitHub keys a workflow's schedule registration to its FILE PATH. After the
+# Actions incidents of 26 Aug 2026 this workflow's registration was left stuck:
+# scheduled runs simply stopped being created - not queued, not cancelled, not
+# failed, just never born - while workflow_dispatch worked instantly every time.
+# Four consecutive slots (14:07, 16:07, 18:07, 20:07 on the 28th) produced
+# nothing. GitHub's documented remedy is to push a commit to the default branch
+# to resync; that was done, touching this very file, and did not take.
+#
+# Renaming the file makes GitHub register a NEW workflow with a fresh schedule,
+# which is the only lever available from outside that can clear the stuck state.
+#
+# It is not a frequency problem: daily-audit (2x/day) and detect-topic-candidates
+# (1x/day) share this repo, account, secrets and runner and never missed once
+# through the whole episode. Both were idle during the incident windows; this one
+# runs constantly and was almost certainly mid-registration when it broke.
+#
+# The cron is DELIBERATELY unchanged from the 2-hourly set on 28 Aug, so that if
+# runs resume the rename is the only variable that moved.
+
 name: Update channel data
 
 on:
   schedule:
-    # Hourly (2026-07-16): deleted-video tracking and retitle detection can
-    # miss changes that happen between scans, so the blind window is now ~1h
-    # for anything inside the 60-day incremental window. Quota cost ~65
-    # units/run -> ~1,600/day of the 10,000 daily budget; Actions minutes are
-    # free (public repo). The snapshot step is idempotent on AM/PM halves, so
-    # this still produces exactly two snapshots a day; a single hourly cron
-    # also bunches less under GitHub's flaky scheduler than several scattered
-    # ones, which means fewer spurious concurrency-cancellation emails.
-    - cron: '7 * * * *'
+    # Every 2 hours (2026-08-28), down from hourly. GitHub was silently dropping
+    # most of the hourly triggers: 22/24 fired on 25 Aug, then 2/24 on the 27th
+    # and 1/24 by midday on the 28th, leaving the site 7+ hours stale with no
+    # error anywhere - every run that did fire succeeded, and GitHub reported
+    # "All Systems Operational" throughout.
+    #
+    # It is specific to THIS workflow's frequency, not the repo or the account:
+    # over the same six days daily-audit (2x/day) fired 2/2 every day and
+    # detect-topic-candidates (1x/day) fired 1/1 every day, without a single
+    # miss. Scheduled workflows are best-effort and GitHub deprioritises
+    # frequent crons on public repos, so asking for 24 and getting 2 is worse
+    # than asking for 12 and getting 12.
+    #
+    # What this costs: the blind window for deleted-video and retitle detection
+    # doubles to ~2h, which delays the strike banner by up to an hour more (the
+    # banner keys off the removal REASON, resolved in this same job). The debut
+    # sampler also halves its resolution - ~12 readings a day through a new
+    # video's first day instead of ~24 - which coarsens the 1h and 2h marks on
+    # the accrual curve.
+    #
+    # Quota cost ~65 units/run -> ~800/day of the 10,000 budget. The snapshot
+    # step is idempotent per AM/PM half, so this still produces exactly two
+    # snapshots a day.
+    - cron: '7 */2 * * *'
   workflow_dispatch:  # allows manual runs from the Actions tab
     inputs:
       backfill:
