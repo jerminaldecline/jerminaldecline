@@ -1,58 +1,9 @@
 {
-  "lastUpdated": "2026-08-31T11:01:45.057Z",
+  "lastUpdated": "2026-09-01T09:31:26.101Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "free",
-      "keywords": [
-        "sign",
-        "interest",
-        "poker",
-        "tourney",
-        "sign interest",
-        "interest free",
-        "free poker",
-        "poker tourney",
-        "kona",
-        "save",
-        "pure",
-        "coffee kona"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1314,
-        "spikeRatio": 6.34,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-08-31T11:01:45.057Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "sign",
-      "keywords": [
-        "sign",
-        "poker",
-        "tourney",
-        "sign interest",
-        "interest free",
-        "free poker",
-        "poker tourney",
-        "interest",
-        "free"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.0385,
-        "spikeRatio": 26,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-08-31T11:01:45.057Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "kona",
       "keywords": [
         "kona",
         "save",
@@ -61,15 +12,45 @@
         "kona save",
         "save pure",
         "pure kona",
-        "kona sign"
+        "kona sign",
+        "jury",
+        "clancy jury",
+        "tourney lindsay",
+        "sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0077,
-        "spikeRatio": 43.33,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-08-31T11:01:45.057Z"
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.1777,
+        "spikeRatio": 4.69,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 21,
+        "detectedAt": "2026-09-01T09:31:26.101Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "sign",
+      "keywords": [
+        "kona",
+        "save",
+        "pure",
+        "coffee kona",
+        "kona save",
+        "save pure",
+        "pure kona",
+        "kona sign",
+        "sign",
+        "poker",
+        "tourney",
+        "sign interest"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.0833,
+        "spikeRatio": 12,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-09-01T09:31:26.101Z"
       }
     }
   ]

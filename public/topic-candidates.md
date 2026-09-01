@@ -1,4 +1,4 @@
-# Topic candidates — 2026-08-31
+# Topic candidates — 2026-09-01
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,137 +6,91 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 117 baseline videos
+Pool: 18 recent videos, 120 baseline videos
 
 ### Cluster 1: `free`
 
 - **Recent saturation:** 15/18 videos (**83%**)
-- **Baseline saturation:** 15/117 videos (13%)
-- **Spike ratio:** 6.3x
+- **Baseline saturation:** 21/120 videos (18%)
+- **Spike ratio:** 4.7x
 - **Related terms:** `free`, `sign`, `interest`, `poker`, `tourney`, `kona`, `save`, `pure`
 - **Sample recent videos:**
-  - 2026-08-29 — _BENNY JOHNSON MASSIVE WIN!_  
-    Man Who Threatened Benny Johnson’s Family Is Sentenced To Prison
-  - 2026-08-28 — _LINDSAY CLANCY JURY DISMISSED! THIS IS BAD_  
-    Lindsay Clancy Jury Ends Second Day Without Reaching Any Verdict
+  - 2026-08-31 — _Tyler Robinson BOMBSHELL New Evidence!_  
+    Tyler Robinson Fights Death Penalty As Digital Evidence Takes Spotlight
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
+  - 2026-08-31 — _Girl Scouts BUSTED Pushing DANGEROUS Ideology_  
+    Girl Scouts Responds After Islamic Faith Awards Ignite Massive Backlash
+  - 2026-08-31 — _Lindsay Clancy Jury TAINTED Judge MUST Act Now_  
+    Lindsay Clancy Jury Faces Scrutiny While Her Lawyer Blasts Critics
+  - 2026-08-31 — _Lindsay Clancy Jury SPIRALS & It's Bad_  
+    The Chilling Case Casting A Shadow Over Lindsay Clancy’s Trial
+
+### Cluster 2: `clancy case`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 5/120 videos (4%)
+- **Spike ratio:** 3.7x
+- **Related terms:** `case`, `clancy case`
+- **Sample recent videos:**
+  - 2026-08-31 — _Lindsay Clancy Jury SPIRALS & It's Bad_  
+    The Chilling Case Casting A Shadow Over Lindsay Clancy’s Trial
   - 2026-08-28 — _LINDSAY CLANCY JURY MAKES DEMAND_  
     Lindsay Clancy Jury Demands To See Pills And Knife Again
-  - 2026-08-27 — _1 HOUR LIMIT COMING YOUTUBE & FACEBOOK_  
-    Meta Wants Your Face To Protect Children From Social Media
   - 2026-08-27 — _LINDSAY CLANCY IS GOING TO WALK_  
     She Could Walk Free As Lindsay Clancy Jury Deliberations Begin
 
-### Cluster 2: `lindsay`
+### Cluster 3: `again`
 
-- **Recent saturation:** 5/18 videos (**28%**)
-- **Baseline saturation:** 1/117 videos (1%)
-- **Spike ratio:** 21.9x
-- **Related terms:** `lindsay`, `clancy`, `jury`, `lindsay clancy`, `clancy jury`
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 1/120 videos (1%)
+- **Spike ratio:** 13.4x
+- **Related terms:** `again`
 - **Sample recent videos:**
-  - 2026-08-28 — _LINDSAY CLANCY JURY DISMISSED! THIS IS BAD_  
-    Lindsay Clancy Jury Ends Second Day Without Reaching Any Verdict
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
   - 2026-08-28 — _LINDSAY CLANCY JURY MAKES DEMAND_  
     Lindsay Clancy Jury Demands To See Pills And Knife Again
-  - 2026-08-27 — _LINDSAY CLANCY IS GOING TO WALK_  
-    She Could Walk Free As Lindsay Clancy Jury Deliberations Begin
-  - 2026-08-27 — _Lindsay Clancey BOMBSHELL In Court Today_  
-    Men Dump Lindsay Clancy Supporters And The Internet Celebrates It
-  - 2026-08-24 — _THIS IS DISGUSTING_  
-    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
+  - 2026-08-26 — _Golf Ad TRIGGERS Unhinged Meltdown_  
+    Apparently Golf Has Gone Woke Over One Staged Advertisement Again
 
-### Cluster 3: `you`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/117 videos (3%)
-- **Spike ratio:** 5.6x
-- **Related terms:** `you`
-- **Sample recent videos:**
-  - 2026-08-26 — _Black Fatigue Goes NUCLEAR_  
-    Gary Mayor Blames Race After Power Crews Get Shot At
-  - 2026-08-25 — _Dolly Parton Dies_  
-    Country Music Legend Dolly Parton Has Sadly Died At Eighty
-  - 2026-08-24 — _THIS IS DISGUSTING_  
-    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
-
-### Cluster 4: `family`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/117 videos (3%)
-- **Spike ratio:** 4.4x
-- **Related terms:** `family`
-- **Sample recent videos:**
-  - 2026-08-29 — _BENNY JOHNSON MASSIVE WIN!_  
-    Man Who Threatened Benny Johnson’s Family Is Sentenced To Prison
-  - 2026-08-25 — _Dolly Parton Dies_  
-    Country Music Legend Dolly Parton Has Sadly Died At Eighty
-  - 2026-08-24 — _HE'S BANNED FROM HOLLYWOOD_  
-    Mark Ruffalo Picks A Career Ending Fight With Hollywood’s Boss
-
-### Cluster 5: `its`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 4/117 videos (3%)
-- **Spike ratio:** 4.4x
-- **Related terms:** `its`
-- **Sample recent videos:**
-  - 2026-08-26 — _Best Buy MELTDOWN Goes Viral_  
-    Best Buy Is In Huge Trouble As Electronics Sales Slow
-  - 2026-08-26 — _I WAS TERRIFIED_  
-    Costco Nearly Killed My Dog And Nobody Is Taking Responsibility
-  - 2026-08-24 — _HE'S BANNED FROM HOLLYWOOD_  
-    Mark Ruffalo Picks A Career Ending Fight With Hollywood’s Boss
-
-### Cluster 6: `trial`
+### Cluster 4: `without`
 
 - **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 7/117 videos (6%)
-- **Spike ratio:** 3.5x
-- **Related terms:** `trial`
+- **Baseline saturation:** 4/120 videos (3%)
+- **Spike ratio:** 6.0x
+- **Related terms:** `without`, `day`
 - **Sample recent videos:**
+  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
+    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
+  - 2026-08-28 — _LINDSAY CLANCY JURY DISMISSED! THIS IS BAD_  
+    Lindsay Clancy Jury Ends Second Day Without Reaching Any Verdict
+  - 2026-08-26 — _Black Fatigue Goes NUCLEAR_  
+    Gary Mayor Blames Race After Power Crews Get Shot At
   - 2026-08-26 — _Best Buy MELTDOWN Goes Viral_  
     Best Buy Is In Huge Trouble As Electronics Sales Slow
-  - 2026-08-25 — _BRUTAL TRUTH REVEALED_  
-    Austin Metcalf’s Father Breaks Silence After Karmelo Loses New Trial
-  - 2026-08-24 — _THIS IS DISGUSTING_  
-    Experts Debate Whether Lindsay Clancy Was Too Sick For Guilt
-  - 2026-08-24 — _KARMELO ANTHONY SUFFERS HUMILATED DEFEAT_  
-    Karmelo Anthony Melts Down After Judge Denies His New Trial
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 64 baseline videos
+Pool: 9 recent videos, 65 baseline videos
 
 ### Cluster 1: `sign`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 2/64 videos (3%)
-- **Spike ratio:** 26.0x
-- **Related terms:** `sign`, `poker`, `tourney`, `interest`, `free`, `sign interest`, `interest free`, `free poker`
+- **Baseline saturation:** 5/65 videos (8%)
+- **Spike ratio:** 12.0x
+- **Related terms:** `sign`, `poker`, `tourney`, `interest`, `free`, `kona`, `save`, `pure`
 - **Sample recent videos:**
+  - 2026-08-31 — _HASAN PIKER IS POISON_  
+    Hasan Calls Himself A Chad And Gets Instantly Roasted Instead
+  - 2026-08-31 — _CANDACE OWENS BIGGEST LIE REVEALED_  
+    Candace Owens Faces Fresh Pushback Over Explosive Tyler Robinson Claims
+  - 2026-08-31 — _GTA 6 SCREWS OVER CREATORS & WOKE CONCERNS_  
+    GTA 6 Copyright Chaos Explodes As Twitch Targets XQc’s Stream
   - 2026-08-28 — _Milo Yiannopoulos ARRESTED By ICE & Deported!_  
     DHS Announces Milo Yiannopoulos Arrest After He Overstayed His Visa
   - 2026-08-27 — _HE'S GUNNA REGRET THIS_  
     Jelly Roll Tells Angry Trump Fans To Stop Listening Forever
-  - 2026-08-27 — _AI PET FEEDS STARVES PETS & EXPOSES CAMERAS TO WORLD_  
-    Smart Pet Feeder Outage Leaves Cats And Dogs Going Hungry
-  - 2026-08-26 — _DEPORT THEM ALL NOW!_  
-    Christian Arrested After Muslim Protesters Attack Him In Minneapolis Chaos
-  - 2026-08-25 — _THIS IS INSANE_  
-    Target Pulls Halloween Costume After Internet Claims It Resembles Blackface
-
-### Cluster 2: `kona`
-
-- **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/64 videos (0%)
-- **Spike ratio:** 43.3x
-- **Related terms:** `kona`, `save`, `pure`, `coffee kona`, `kona save`, `save pure`, `pure kona`, `kona sign`
-- **Sample recent videos:**
-  - 2026-08-28 — _Milo Yiannopoulos ARRESTED By ICE & Deported!_  
-    DHS Announces Milo Yiannopoulos Arrest After He Overstayed His Visa
-  - 2026-08-27 — _HE'S GUNNA REGRET THIS_  
-    Jelly Roll Tells Angry Trump Fans To Stop Listening Forever
-  - 2026-08-27 — _AI PET FEEDS STARVES PETS & EXPOSES CAMERAS TO WORLD_  
-    Smart Pet Feeder Outage Leaves Cats And Dogs Going Hungry
 
 ---
 
