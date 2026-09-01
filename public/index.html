@@ -3342,6 +3342,9 @@ const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.
 const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
 const VCC_FACTOR = { low: 2.00, high: 2.30 };
 const VCC_MID = 2.15;
+// Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
+// daily-views.json without re-parsing a timestamp per day.
+const VCC_ONSET_DAY = '2026-08-27';
 // Measured accrual curve, n=83 long-form launches: share of the day-21 total
 // reached by each age. Used to work out how much of a video's traffic arrived
 // AFTER the change rather than assuming whole months.
@@ -3987,6 +3990,9 @@ window.__syncBasisButtons = function(){
 window.__setViewBasis = function(useEngaged){
   window.__viewEngaged = !!useEngaged;
   if (typeof ovCurrent !== 'undefined' && ovCurrent != null) render(ovCurrent);
+  // Daily views reads the same flag, so keep it in step rather than letting the
+  // two controls drift apart.
+  if (typeof window.__dvRerenderAll === 'function') window.__dvRerenderAll();
   window.__syncBasisButtons();
 };
 function render(m){
@@ -12943,14 +12949,22 @@ function renderWindowList(startDate, endDate) {
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
   // Raw four buckets per day (toggles applied at render time, not here).
-  function dvRoll(rec, ch){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
-    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
+  // ds is the day being rolled up. On the engaged basis every long-form gain on
+  // or after the onset is divided by the factor; a day's delta sits entirely on
+  // one side of the change, so no accrual curve is needed here. Indices 1/3/5 are
+  // the long-form slots of [newShort,newLong,oldShort,oldLong,prevWeekShort,
+  // prevWeekLong]; 0/2/4 are Shorts and are never deflated.
+  function dvRoll(rec, ch, ds){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
+    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); }
+    if (window.__viewEngaged && ds && ds >= VCC_ONSET_DAY) {
+      lfNew /= VCC_MID; lfOld /= VCC_MID; lfPW /= VCC_MID;
+    } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
   function dvCompute(ch, monthKey){
     const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
     const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
     for(let day=1;day<=dim;day++){
       const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch);
+      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
       out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
     }
@@ -12984,7 +12998,7 @@ function renderWindowList(startDate, endDate) {
     const start=dvChannelStart(ch);           // null for ALL, or a channel older than the archive
     for(const ds of dates){
       if(start && ds<start) continue;         // channel did not exist yet
-      const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch);
+      const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
       out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
       prevMo=M;
@@ -13135,6 +13149,7 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
+      (dvHasVcc()?('<button type="button" class="uc-tog dv-engtog" onclick="__dvToggleBasis(\''+scope+'\')" aria-pressed="'+(window.__viewEngaged?'true':'false')+'" title="Show long-form gains under the pre-27-Aug counting rule"><span class="uc-tdot"></span>Engaged</button>'):'')+
       '<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>'+
       '</div></div>'+
       '<div class="uc-legend">'+
@@ -13160,6 +13175,21 @@ function renderWindowList(startDate, endDate) {
   window.__dvToggleLong=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.lf=!st.lf; renderDailyViews(scope); };
   window.__dvToggleFull=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.full=!st.full; renderDailyViews(scope); };
   window.__dvToggleOld=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.showOld=!st.showOld; renderDailyViews(scope); };
+  // Only offer the basis control once the archive actually spans the onset -
+  // before that the two bases are identical and the button would do nothing.
+  function dvHasVcc(){ const d=dvData(); if(!d||!d.days) return false;
+    for(const k in d.days){ if(k>=VCC_ONSET_DAY) return true; } return false; }
+  // Shares window.__viewEngaged with the Overview control, so the site has ONE
+  // counting basis rather than per-chart ones that can disagree with each other.
+  window.__dvToggleBasis=function(scope){ scope=scope||'main';
+    window.__viewEngaged=!window.__viewEngaged;
+    try{ renderDailyViews('main'); }catch(e){}
+    try{ renderDailyViews('ov'); }catch(e){}
+    if (typeof ovCurrent !== 'undefined' && ovCurrent != null && typeof render === 'function') render(ovCurrent);
+    if (window.__syncBasisButtons) window.__syncBasisButtons();
+  };
+  window.__dvRerenderAll=function(){ try{ renderDailyViews('main'); }catch(e){}
+    try{ renderDailyViews('ov'); }catch(e){} };
   window.__dvRerenderIfActive=function(){ if(active==="dailyviews") renderDailyViews('main'); };
   window.__dvRenderOverview=function(){ renderDailyViews('ov'); };
   function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
