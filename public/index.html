@@ -13149,7 +13149,11 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
-      (dvHasVcc()?('<button type="button" class="uc-tog dv-engtog" onclick="__dvToggleBasis(\''+scope+'\')" aria-pressed="'+(window.__viewEngaged?'true':'false')+'" title="Show long-form gains under the pre-27-Aug counting rule"><span class="uc-tdot"></span>Engaged</button>'):'')+
+      // Videos tab only. On the Overview the Long-form row label already
+      // carries REPORTED/ENGAGED and drives this chart, so a second control
+      // here is a duplicate - and a fourth button wraps .uc-controls onto its
+      // own line, which pushes this chart down out of line with Uploads beside it.
+      ((!isOv && dvHasVcc())?('<button type="button" class="uc-tog dv-engtog" onclick="__dvToggleBasis(\''+scope+'\')" aria-pressed="'+(window.__viewEngaged?'true':'false')+'" title="Show long-form gains under the pre-27-Aug counting rule"><span class="uc-tdot"></span>Engaged</button>'):'')+
       '<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>'+
       '</div></div>'+
       '<div class="uc-legend">'+
