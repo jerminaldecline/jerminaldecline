@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-09-01T09:31:26.101Z",
+  "lastUpdated": "2026-09-02T08:55:26.812Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "free",
+      "termId": "kona",
       "keywords": [
         "kona",
         "save",
@@ -15,21 +15,21 @@
         "kona sign",
         "jury",
         "clancy jury",
-        "tourney lindsay",
-        "sign"
+        "lindsay",
+        "clancy"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8333,
-        "baselineSaturation": 0.1777,
-        "spikeRatio": 4.69,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 21,
-        "detectedAt": "2026-09-01T09:31:26.101Z"
+        "recentSaturation": 0.8889,
+        "baselineSaturation": 0.1911,
+        "spikeRatio": 4.65,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 23,
+        "detectedAt": "2026-09-02T08:55:26.812Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "sign",
+      "termId": "kona",
       "keywords": [
         "kona",
         "save",
@@ -46,11 +46,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.0833,
-        "spikeRatio": 12,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-09-01T09:31:26.101Z"
+        "baselineSaturation": 0.1103,
+        "spikeRatio": 9.07,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-09-02T08:55:26.812Z"
       }
     }
   ]
