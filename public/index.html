@@ -2753,6 +2753,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
             <button type="button" class="chart-ctrl-btn seg" data-fmt="short" aria-pressed="false" title="Shorts only">Shorts</button>
             <button type="button" class="chart-ctrl-btn seg" data-fmt="all" aria-pressed="false" title="Long-form and Shorts combined">Both</button>
           </div>
+          <!-- Counting basis. Shown only on metrics where reported and engaged are
+               both real quantities, and only when the visible range spans the
+               change - see VCC_BASIS_METRICS. -->
+          <div class="chart-fmt-seg" id="chartBasisSeg" role="group" aria-label="Counting basis" hidden>
+            <button type="button" class="chart-ctrl-btn seg" data-basis="reported" aria-pressed="true" title="Views as YouTube reports them">Reported</button>
+            <button type="button" class="chart-ctrl-btn seg" data-basis="engaged" aria-pressed="false" title="Views under the pre-27-Aug counting rule, which needed about 30 seconds of watch time">Engaged</button>
+          </div>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
       </div>
@@ -3990,9 +3997,10 @@ window.__syncBasisButtons = function(){
 window.__setViewBasis = function(useEngaged){
   window.__viewEngaged = !!useEngaged;
   if (typeof ovCurrent !== 'undefined' && ovCurrent != null) render(ovCurrent);
-  // Daily views reads the same flag, so keep it in step rather than letting the
-  // two controls drift apart.
+  // Daily views and the Analysis charts read the same flag, so keep them in
+  // step rather than letting the controls drift apart.
   if (typeof window.__dvRerenderAll === 'function') window.__dvRerenderAll();
+  if (typeof window.renderAnalysisChart === 'function') { try { window.renderAnalysisChart(); } catch (e) {} }
   window.__syncBasisButtons();
 };
 function render(m){
@@ -4866,6 +4874,15 @@ function anSummarise(videos) {
     const vmid = Math.floor(viewVals.length / 2);
     longViewsMedian = viewVals.length % 2 ? viewVals[vmid] : (viewVals[vmid - 1] + viewVals[vmid]) / 2;
   }
+  // Engaged (old-rule) twins of the long-form magnitudes, for the basis toggle.
+  // Shorts get none: they have counted from the first frame since Mar 2025.
+  const longViewsEngaged = longForm.reduce((s, v) => s + vccEngagedOne(v, VCC_MID), 0);
+  const engVals = longForm.map(v => vccEngagedOne(v, VCC_MID)).sort((a, b) => a - b);
+  let longViewsMedianEngaged = 0;
+  if (engVals.length) {
+    const emid = Math.floor(engVals.length / 2);
+    longViewsMedianEngaged = engVals.length % 2 ? engVals[emid] : (engVals[emid - 1] + engVals[emid]) / 2;
+  }
   const midRollList = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC);
   const shortLongList = longForm.filter(v => (v.durationSec || 0) < AN_MID_ROLL_THRESHOLD_SEC);
   const midRollViews = midRollList.reduce((s, v) => s + v.views, 0);
@@ -4907,6 +4924,8 @@ function anSummarise(videos) {
     shortLikeRate: shortViews ? shortLikes / shortViews : 0,
     longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
     medianDuration, longViewsMedian, longFormDurations: durations.length, longFormTotalSeconds,
+    longViewsEngaged, longViewsMedianEngaged,
+    longAvgEngaged: longForm.length ? longViewsEngaged / longForm.length : 0,
     revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid, revSelfLow, revSelfHigh, revSelfMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
@@ -5387,15 +5406,28 @@ function buildMonthlyData(scope){
     const [, mo] = String(key).split('-').map(Number);
     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
   }
+  // Metrics where reported and engaged are BOTH real quantities. Rate metrics
+  // are excluded on purpose: J was derived from the like rate, so deflating
+  // views there closes the very gap it came from and the line goes flat by
+  // identity. Counts (tag blocks, uploads) and subscribers are untouched by the
+  // counting change at all.
+  const VCC_BASIS_METRICS = { views:1, views_length:1, median_views:1 };
+  function vccBasisApplies(){ return !!VCC_BASIS_METRICS[chartMetric]; }
   function metricsFor(summary) {
     if (!summary) return null;
+    // Long-form only - Shorts are never deflated, so a combined total deflates
+    // its long-form half and leaves the Shorts half alone.
+    const _eng = !!window.__viewEngaged && vccBasisApplies();
+    const _lv = _eng ? (summary.longViewsEngaged != null ? summary.longViewsEngaged : summary.longViews) : summary.longViews;
+    const _la = _eng ? (summary.longAvgEngaged != null ? summary.longAvgEngaged : summary.longAvg) : summary.longAvg;
     // "Include Shorts" applies only to the plain Views metric — every other
     // consumer of this helper keeps its long-form framing.
     if (chartMetric === 'views' && includeShorts) {
-      return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+      const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
+      return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
     }
     if (viewMode === 'long') {
-      return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
+      return { views: _lv, count: summary.longForm.length, avg: _la, label: 'long-form' };
     }
     // Shorts-only. This branch was missing: setChartTitle has always labelled
     // mode 'short' as "Shorts views by month", but without it the chart fell
@@ -5404,7 +5436,8 @@ function buildMonthlyData(scope){
     if (viewMode === 'short') {
       return { views: summary.shortViews, count: summary.shorts.length, avg: summary.shortAvg, label: 'Short' };
     }
-    return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+    const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
+    return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
   }
   function activeDisplayName() {
     if (ANALYTICS_CHANNEL === 'ALL') return 'Quartering universe';
@@ -5611,14 +5644,16 @@ function setChartTitle(metric, mode) {
   // flatly wrong, so 'short' is excluded while 'long' and 'all' keep it.
   // Every metric with views in it, including the ones where views are the
   // DENOMINATOR - those were missing, and they are the ones that mislead most.
+  // tag_blocks is deliberately absent: it plots how many VIDEOS use a tag set,
+  // not views, so the counting change cannot touch it.
   const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
-                        like_rate:1, engagement_variance:1, all_videos:1, tag_blocks:1 };
+                        like_rate:1, engagement_variance:1, all_videos:1 };
   // Rate metrics need different wording: the line falls because the divisor
   // grew, which reads as an engagement collapse if left unexplained.
   const _vccRateMetrics = { like_rate:1, engagement_variance:1, views_likes:1 };
   // Which of them plot months on the x axis, and so can carry the rule.
   const _vccRuleMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
-                            like_rate:1, engagement_variance:1, tag_blocks:1 };
+                            like_rate:1, engagement_variance:1 };
   const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote(_vccRateMetrics[metric] ? 'rate' : 'chart', !!_vccRuleMetrics[metric]) : '');
 }
@@ -5677,6 +5712,19 @@ function renderTrendChart(yoy) {
     }
     // The format segment applies to the plain Views metric only — the other
     // metrics keep their long-form framing (see metricsFor).
+    // Counting basis: only where both bases are real, only when the visible
+    // range actually reaches the change, and never on Shorts-only - Shorts have
+    // counted from the first frame since Mar 2025 and have nothing to deflate.
+    const basisCtrl = document.getElementById('chartBasisSeg');
+    if (basisCtrl) {
+      const spans = chartData.some(m => m.key >= VCC_BREAK_MONTH)
+        || !!(inProgressMonth && inProgressMonth.key >= VCC_BREAK_MONTH);
+      basisCtrl.hidden = !(vccBasisApplies() && spans && viewMode !== 'short');
+      const on = !!window.__viewEngaged;
+      for (const b of basisCtrl.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String((b.dataset.basis === 'engaged') === on));
+      }
+    }
     const shortsCtrl = document.getElementById('chartFormatSeg');
     if (shortsCtrl) {
       shortsCtrl.hidden = chartMetric !== 'views';
@@ -6508,6 +6556,11 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 // the typical-upload story. 0-based Y axis (views are counts) so the decline
 // reads honestly. Single channel, long-form. Mirrors renderLikeRateChart.
 function renderMedianViewsChart(chartData, inProgressMonth) {
+  // Median per upload on whichever basis is live. Falls back to the reported
+  // figure if the engaged twin is missing, so an older cached dataset still
+  // renders rather than plotting undefined.
+  const _medOf = sm => (sm ? ((window.__viewEngaged && sm.longViewsMedianEngaged != null)
+    ? sm.longViewsMedianEngaged : sm.longViewsMedian) : 0) || 0;
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
@@ -6527,11 +6580,11 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   if (n < 2) { svg.innerHTML = ''; return; }
 
-  const meds = chartData.map(m => ({ key: m.key, med: m.curr.longViewsMedian || 0 }));
-  const ipMed = inProgressMonth ? (inProgressMonth.curr.longViewsMedian || 0) : null;
+  const meds = chartData.map(m => ({ key: m.key, med: _medOf(m.curr) || 0 }));
+  const ipMed = inProgressMonth ? (_medOf(inProgressMonth.curr) || 0) : null;
   // Previous-year median per month (toggleable comparison line)
-  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && m.yoy.longViewsMedian > 0) ? m.yoy.longViewsMedian : null) : [];
-  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && inProgressMonth.yoy.longViewsMedian > 0) ? inProgressMonth.yoy.longViewsMedian : null;
+  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && _medOf(m.yoy) > 0) ? _medOf(m.yoy) : null) : [];
+  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && _medOf(inProgressMonth.yoy) > 0) ? _medOf(inProgressMonth.yoy) : null;
 
   const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
   if (allMeds.length < 2) { svg.innerHTML = ''; return; }
@@ -6661,13 +6714,13 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
       const bbox = rect.getBoundingClientRect();
       const wrap = wrapEl.getBoundingClientRect();
       tooltip.style.display = 'block';
-      const med = m.curr.longViewsMedian || 0;
+      const med = _medOf(m.curr) || 0;
       const uploads = (m.curr.longForm && m.curr.longForm.length) || 0;
       tooltip.innerHTML = `
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
         <div class="tooltip-row"><strong>${fmt(med)}</strong> average views</div>
         <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
-        ${showPrevYear && m.yoy && m.yoy.longViewsMedian > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(m.yoy.longViewsMedian)}</div>` : ''}
+        ${showPrevYear && m.yoy && _medOf(m.yoy) > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(_medOf(m.yoy))}</div>` : ''}
       `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
       const tipWidth = tooltip.offsetWidth || 200;
@@ -7268,7 +7321,6 @@ function renderTagBlocksChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
-    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${areas}
     ${vLines}
     ${yLabels}
@@ -11055,6 +11107,17 @@ function renderWindowList(startDate, endDate) {
         window.setAnalysisViewMode(fmt === 'short' ? 'short' : 'long');
       }
       if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(fmt === 'all');
+    });
+  }
+  // Counting-basis segment. Routes through __setViewBasis rather than setting
+  // the flag itself, so the Overview cards and Daily views stay in step - the
+  // site has one basis, not one per tab.
+  const basisSeg = document.getElementById('chartBasisSeg');
+  if (basisSeg) {
+    basisSeg.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chart-ctrl-btn.seg');
+      if (!btn) return;
+      if (typeof window.__setViewBasis === 'function') window.__setViewBasis(btn.dataset.basis === 'engaged');
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
