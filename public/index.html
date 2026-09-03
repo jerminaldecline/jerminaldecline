@@ -9260,6 +9260,27 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoIds = new Set();
   let adVideoData = null;
   let titleHistoryData = null;
+  // A stored title is not always a name. Three uploads have been renamed to a
+  // bare "DELETE" and then unlisted, made private, or in one July case simply
+  // left public under that name - it is his marker for retiring a Short, not
+  // something a reader should see as the video's title. Where the current title
+  // is only that marker, fall back to what the video was actually called.
+  //
+  // Deliberately narrow: an exact bare "delete", not a prefix or a contains.
+  // A real upload called "Delete Your Account" must keep its own name.
+  const DELETION_MARKER_RE = /^\s*delete\s*$/i;
+  function isDeletionMarker(t){ return DELETION_MARKER_RE.test(String(t || '')); }
+  function originalTitleIfMarker(v){
+    if (!v || !isDeletionMarker(v.title)) return null;
+    const th = titleHistoryData && titleHistoryData[v.id];
+    return (th && th.first && !isDeletionMarker(th.first)) ? th.first : null;
+  }
+  // The name to show. Falls through to the stored title when history has not
+  // loaded yet (3.4 MB, so it lands after the small files) or has no record.
+  function displayTitle(v){ return originalTitleIfMarker(v) || (v && v.title) || ''; }
+  // The Removed tab renders from its own IIFE and has no access to
+  // titleHistoryData, so share the resolver rather than duplicating the rule.
+  window.__displayTitle = displayTitle;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, density: 'detailed', longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
@@ -9364,12 +9385,22 @@ function niceDurationAxis(minSec, maxSec) {
       // banner. Stripped wherever they sit, not just at the end: some titles have
       // trailing junk after the tags ("…#Viral mp4") which defeats an end anchor.
       // Anything else he typed is left alone. Falls back if nothing survives.
-      const clean = String(v.title || '')
-        .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || v.title || 'Untitled';
+      const shownTitle = displayTitle(v);
+      const clean = String(shownTitle || '')
+        .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || shownTitle || 'Untitled';
+      // Say so when the name shown is not the name it carried when it went. The
+      // substitution is the informative choice, but it should not be a silent one.
+      // One parenthetical, not two. The retitle and the removal are one story:
+      // he marked it, then acted on it - reading as "(retitled X) (made private)"
+      // made two separate-looking events out of a single sequence.
+      const wasMarked = !!originalTitleIfMarker(v);
+      const tag = wasMarked
+        ? (soleHeadline ? 'retitled “DELETE” first' : 'retitled “DELETE”, then ' + why)
+        : (soleHeadline ? '' : why);
       return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b>` +
         `<span class="strike-dash" aria-hidden="true">&nbsp;—&nbsp;</span>` +
         `<span class="strike-title">${escapeHtml(clean)}</span>` +
-        (soleHeadline ? '' : `<span class="strike-why">&nbsp;(${escapeHtml(why)})</span>`) + `</li>`;
+        (tag ? `<span class="strike-why">&nbsp;(${escapeHtml(tag)})</span>` : '') + `</li>`;
     }).join('');
 
     // An enforcement action and the creator privating his own uploads are not the
@@ -9446,7 +9477,7 @@ function niceDurationAxis(minSec, maxSec) {
     // Parallel + no cache-busters (ETag revalidation handles freshness).
     await Promise.all([
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
-      fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
+      fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; if (typeof window.renderStrikeAlert === 'function') { try { window.renderStrikeAlert(); } catch(e){} } } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
@@ -9575,7 +9606,7 @@ function renderVideoRows(videos, emptyText) {
     return `
       <div class="video-row${adVideoIds.has(v.id) ? ' is-promoted' : ''}${topicColClass}">
         <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
-        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
+        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(displayTitle(v))}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -9593,7 +9624,7 @@ function filterVideos(list, query) {
   // videos even when the word isn't in the (often vague, clickbait) title.
   const topicName = id => ((ANALYTICS_TOPICS && id && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || '').toLowerCase();
   return list.filter(v => {
-    if (v.title.toLowerCase().includes(q)) return true;
+    if (displayTitle(v).toLowerCase().includes(q)) return true;
     const ct = ANALYTICS_CREATOR_TAGS && ANALYTICS_CREATOR_TAGS[v.id];
     if (ct && ct.some(t => t.toLowerCase().includes(q))) return true;
     if (topicName(ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]).includes(q)) return true;
@@ -9795,7 +9826,7 @@ function renderAdPanel() {
     if (!terms.length) return out;
     return out.filter(r => {
       const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
-      const hay = (r.v.title + ' ' + chan).toLowerCase();
+      const hay = (displayTitle(r.v) + ' ' + chan).toLowerCase();
       return terms.every(t => hay.includes(t));
     });
   }
@@ -9804,7 +9835,7 @@ function renderAdPanel() {
     const { col, dir } = promoPanelSort;
     const factor = dir === 'asc' ? 1 : -1;
     const keyFns = {
-      title: r => r.v.title.toLowerCase(),
+      title: r => displayTitle(r.v).toLowerCase(),
       date:  r => r.v.publishedAt,
       views: r => r.views,
       median: r => r.monthMedian,
@@ -12773,7 +12804,7 @@ function renderWindowList(startDate, endDate) {
       const meta=[fmt(v.views)+(v.unavailable?" last-known views":" views · still watchable via direct link"),(ch==="ALL"?chName(v.channelId):null),"posted "+nice(v.publishedAt),since?"detected "+nice(since):null,rz.detail?("claim by "+rz.detail):null].filter(Boolean).join(" · ");
       return '<a class="removed-row" href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'+
         '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')">'+
-        '<span class="rt"><b>'+esc(v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
+        '<span class="rt"><b>'+esc(window.__displayTitle?window.__displayTitle(v):v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
         '<span class="removed-when '+rz.cls+'"'+(rz.detail?' title="'+esc(rz.label+" — "+rz.detail)+'"':'')+'>'+esc(rz.label)+'</span></a>';
     }).join("")+'<div class="removed-foot">“Detected” is when our checks first caught the change, not when it happened. Recent videos are re-checked several times a day and the full back catalogue once a day, so detection trails the actual change by a few hours — at most about a day. Exception: unlisted-detection began 2 Jul ’26, so unlisted entries with that date may have been hidden any time before it.</div>';
   }
