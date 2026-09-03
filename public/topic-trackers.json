@@ -1,32 +1,6 @@
 {
-  "lastUpdated": "2026-09-02T08:55:26.812Z",
+  "lastUpdated": "2026-09-03T09:04:14.058Z",
   "trackers": [
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "kona",
-      "keywords": [
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona",
-        "kona sign",
-        "jury",
-        "clancy jury",
-        "lindsay",
-        "clancy"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8889,
-        "baselineSaturation": 0.1911,
-        "spikeRatio": 4.65,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 23,
-        "detectedAt": "2026-09-02T08:55:26.812Z"
-      }
-    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "kona",
@@ -46,11 +20,37 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1103,
-        "spikeRatio": 9.07,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-09-02T08:55:26.812Z"
+        "baselineSaturation": 0.1232,
+        "spikeRatio": 8.12,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-09-03T09:04:14.058Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "kona",
+      "keywords": [
+        "kona",
+        "save",
+        "pure",
+        "coffee kona",
+        "kona save",
+        "save pure",
+        "pure kona",
+        "kona sign",
+        "jury",
+        "clancy jury",
+        "clancy",
+        "lindsay"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.9412,
+        "baselineSaturation": 0.2087,
+        "spikeRatio": 4.51,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-09-03T09:04:14.058Z"
       }
     }
   ]
