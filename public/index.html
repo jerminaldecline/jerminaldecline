@@ -291,12 +291,27 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
 .hero.cols4{grid-template-columns:repeat(4,1fr)}
 .hero.cols4 .hero-num.rev{font-size:1.6rem;letter-spacing:-0.02em}
-.hero-rowlabel{font-size:0.86rem;font-weight:900;text-transform:uppercase;letter-spacing:0.09em;color:var(--text);margin:0.2rem 0 0.6rem 0.15rem}
+.hero-rowlabel{font-size:0.86rem;font-weight:900;text-transform:uppercase;letter-spacing:0.09em;color:var(--text);margin:0.2rem 0 0.6rem 0.15rem;
+  display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap}
+/* The label is uppercase, 900 weight and widely tracked; none of that should
+   reach the control sitting next to it. */
+.hero-rowlabel .basis-row{margin-top:0;letter-spacing:normal;font-weight:400}
 /* Average-views mean/median toggle: variants swapped via #report[data-avg] (no re-render). */
 #report .js-mean{display:none}
 #report[data-avg="mean"] .js-med{display:none}
 #report[data-avg="mean"] span.js-mean{display:inline}
 #report[data-avg="mean"] .deltas.js-mean{display:flex}
+.basis-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.45rem}
+.basis-row .avg-toggle{margin-top:0}
+.basis-row .info-icon{color:var(--text-dim);border-color:var(--border)}
+/* The reported-basis comparison spans the counting change, so it is not a
+   valid like-for-like read. Amber rather than dim: it is a caveat on the
+   number above it, not a footnote. */
+/* Doubled class, not for weight alone: .delta-basis is defined LATER in this
+   sheet, so a single-class selector here loses on source order and the amber
+   silently never applies. */
+.delta-basis.delta-basis-warn{color:var(--accent-2)}
+.delta-basis.delta-basis-warn .info-icon{color:var(--accent-2);border-color:var(--accent-2)}
 .avg-toggle{display:inline-flex;gap:2px;margin-top:0.45rem;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:2px;align-self:flex-start}
 .avg-toggle button{appearance:none;background:transparent;border:none;color:var(--text-muted);font:inherit;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:2px 8px;border-radius:5px;cursor:pointer;transition:background .12s,color .12s}
 .avg-toggle button[aria-pressed="true"]{background:var(--brand);color:#fff}
@@ -323,6 +338,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-numtag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--label);margin-left:0.35rem}
 .nowrap{white-space:nowrap}
 .deltas{display:flex;flex-wrap:wrap;gap:0.9rem;row-gap:0.3rem;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--border)}
+/* Caption for a delta computed on the engaged basis. flex-basis:100% puts it
+   on its own row deliberately - the alternative is a bare wrapped glyph that
+   reads as a rendering fault. */
+.delta-basis{flex-basis:100%;display:flex;align-items:center;gap:0.3rem;
+  font-size:0.68rem;color:var(--text-dim);margin-top:0.1rem}
+.delta-basis .info-icon{color:var(--text-dim);border-color:var(--border)}
 
 .stat-row{display:grid;grid-template-columns:repeat(12,1fr);gap:0.8rem;margin-bottom:1rem;align-items:stretch}
 .stat-row>.stat{grid-column:span 4}
@@ -648,6 +669,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     height: 3px;
     border-radius: 2px;
     background: var(--accent);}
+.chart-vcc-break {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7;}
+.trend-legend-swatch.vcc-break {background: none; height: 0; align-self: center;
+  border-top: 2px dashed var(--accent-2);}
 .trend-legend-swatch.prev {background: var(--text-dim);
     height: 0;
     border-top: 2px dashed var(--text-dim);}
@@ -2532,10 +2556,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Notice for YouTube's 24 Aug 2026 view-counting change. Recessive by design:
    it qualifies the numbers, it is not news in itself, and it appears on several
    panels at once, so anything louder would shout over the figures it explains. */
-.vcc-note{font-size:0.74rem;color:var(--text-dim);line-height:1.45;margin-top:0.45rem;
-  padding-left:0.6rem;border-left:2px solid var(--accent-2)}
-.vcc-note a{color:var(--accent);text-decoration:none;font-weight:700;white-space:nowrap}
+/* Same card treatment as .partial-banner. These are siblings - both qualify the
+   numbers below - and the earlier attempt at making this one a quiet footnote
+   under-sold it: with views roughly doubling, it is not a marginal caveat. */
+.vcc-note{background:var(--surface-2);border:1px solid var(--border);
+  border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;
+  margin:0.8rem 0 1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
+.vcc-note strong{color:var(--text)}
+.vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
+/* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
+   the top margin in and let it run the full width there. */
+.revenue-panel-header-left .vcc-note{margin-top:0.5rem;max-width:none}
 @media(max-width:680px){
   .an-chart-title-main{font-size:0.98rem}
   .an-chart-title-sub{font-size:0.76rem;line-height:1.4;margin-top:0.15rem}
@@ -2720,6 +2752,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
             <button type="button" class="chart-ctrl-btn seg" data-fmt="long" aria-pressed="true" title="Long-form uploads only">Long-form</button>
             <button type="button" class="chart-ctrl-btn seg" data-fmt="short" aria-pressed="false" title="Shorts only">Shorts</button>
             <button type="button" class="chart-ctrl-btn seg" data-fmt="all" aria-pressed="false" title="Long-form and Shorts combined">Both</button>
+          </div>
+          <!-- Counting basis. Shown only on metrics where reported and engaged are
+               both real quantities, and only when the visible range spans the
+               change - see VCC_BASIS_METRICS. -->
+          <div class="chart-fmt-seg" id="chartBasisSeg" role="group" aria-label="Counting basis" hidden>
+            <button type="button" class="chart-ctrl-btn seg" data-basis="reported" aria-pressed="true" title="Views as YouTube reports them">Reported</button>
+            <button type="button" class="chart-ctrl-btn seg" data-basis="engaged" aria-pressed="false" title="Views under the pre-27-Aug counting rule, which needed about 30 seconds of watch time">Engaged</button>
           </div>
           <button type="button" class="chart-ctrl-btn" id="anLabelsToggle" aria-pressed="true" title="Show or hide the value labels on data points">Labels</button>
         </div>
@@ -3283,6 +3322,60 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 
 /* ---------- data layer: fetch live JSON, compute per-scope/per-month ---------- */
 const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.07] };
+// ---- view-counting change: recover payable ("engaged") views ---------------
+// From 2026-08-24 YouTube counts a view from the first frame; long-form
+// previously needed roughly 30 seconds. Payouts did NOT change - YPP still pays
+// on engaged views - so public view counts overstate reach and earnings from
+// that date. Dividing long-form views by J recovers the engaged-view count.
+//
+// J = 2.15, MEASURED (2026-09-01), not assumed. Method: like rate per 1000
+// views, compared at MATCHED AGE, long-form only, never-advertised.
+//   pre-change (94 videos)  86.6 likes/1k at 48h
+//   post-change (6 videos)  40.1 likes/1k at 48h
+// A like is a deliberate act, so the change altered the denominator and not the
+// numerator; the ratio of ratios is the inflation. Four age slices agree:
+// 2.29x at 12h, 2.17x at 24h, 2.16x at 48h, 2.17x at 72h. Age is not a
+// confound here - pre-change videos read 85.5 at 3d and 85.4 at 14d, i.e. flat.
+// Corroborated independently: deflating August's post-onset views gives 3.17M
+// against the ~3.1M the month was tracking to before the spike.
+//
+// ONSET IS 27 AUG, NOT THE ANNOUNCED 24TH. Videos published 24-26 Aug show a
+// pre-change like rate (96.0 / 89.0 / 82.7 at 12h/24h/48h), indistinguishable
+// from baseline; only from the 27th does it halve. The user-facing notice still
+// cites 24 Aug because that is the date YouTube announced and the source link
+// says so - but the arithmetic uses the date the data actually breaks.
+//
+// n=6 post-change videos. Widen or revisit as more accumulate.
+const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
+const VCC_FACTOR = { low: 2.00, high: 2.30 };
+const VCC_MID = 2.15;
+// Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
+// daily-views.json without re-parsing a timestamp per day.
+const VCC_ONSET_DAY = '2026-08-27';
+// Measured accrual curve, n=83 long-form launches: share of the day-21 total
+// reached by each age. Used to work out how much of a video's traffic arrived
+// AFTER the change rather than assuming whole months.
+const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
+const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides of this comparison use estimated engaged views, so it is a valid read against months before the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="This compares reported views across 27 Aug 2026, when YouTube began counting a view from the first frame instead of after about 30 seconds. The two sides were counted by different rules, so the change flatters the newer month. Switch to engaged for a comparable read." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+function vccExposure(publishedAt){
+  const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
+  if (!(days > 0)) return 1;
+  if (days >= 21) return 0;
+  let acc = 1;
+  for (let i = 1; i < VCC_CURVE.length; i++){
+    const [d0,a0] = VCC_CURVE[i-1], [d1,a1] = VCC_CURVE[i];
+    if (days <= d1){ acc = a0 + (a1-a0)*((days-d0)/(d1-d0)); break; }
+  }
+  return 1 - acc;
+}
+// Engaged (payable) views for one long-form video at a given factor.
+function vccEngagedOne(v, J){
+  const n = v.views || 0;
+  if (!(J > 1)) return n;
+  return n / (1 + (J-1)*vccExposure(v.publishedAt));
+}
+
 function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return RPM.sub3; }
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
@@ -3417,7 +3510,7 @@ async function loadAndCompute(){
         return {
           shortsOnly:true, shorts,
           n:0, tot:0, comments:0, runtime:0,
-          med:null, lv:null, avglen:null,
+          med:null, lv:null, avglen:null, engaged:0, engagedMed:null,
           lrevlo:0, lrevhi:0,
           srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
           srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
@@ -3472,6 +3565,10 @@ async function loadAndCompute(){
       if(worstCand.length){ worstvid=vstats(worstCand[0]); const medV=median(views); worstvid.vsmed = medV>0?Math.round(worstvid.views/medV*100):null; }
       return {
         n:vs.length, tot:views.reduce((a,b)=>a+b,0), med:Math.round(median(views)),
+        // Engaged (old-rule) equivalent of tot. Per video, because the deflator
+        // applies to views ACCRUED after the change, not to whole months.
+        engaged: Math.round(vs.reduce((s,v)=>s+vccEngagedOne(v, VCC_MID),0)),
+        engagedMed: Math.round(median(vs.map(v=>vccEngagedOne(v, VCC_MID)))),
         lv: lvs.length?Math.round(median(lvs)*1000)/10:0,
         comments: vs.reduce((s,v)=>s+(v.comments||0),0),
         avglen: durs.length?Math.round(median(durs)/60*10)/10:0,
@@ -3481,8 +3578,8 @@ async function loadAndCompute(){
         // stays comparable (every month recomputes on the same model). The
         // l/s split feeds the hero card's breakdown line. Shorts use the same
         // $0.02–0.07 RPM band the Analysis revenue panel publishes.
-        lrevlo: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[0],0)),
-        lrevhi: Math.round(vs.reduce((s,v)=>s+(v.views/1000)*rpmFor(v.durationSec||600)[1],0)),
+        lrevlo: Math.round(vs.reduce((s,v)=>s+(vccEngagedOne(v,VCC_FACTOR.high)/1000)*rpmFor(v.durationSec||600)[0],0)),
+        lrevhi: Math.round(vs.reduce((s,v)=>s+(vccEngagedOne(v,VCC_FACTOR.low)/1000)*rpmFor(v.durationSec||600)[1],0)),
         srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
         srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
         get revlo(){ return this.lrevlo + this.srevlo; },
@@ -3883,6 +3980,29 @@ window.__setAvgMetric = function(useMean){
   var btns = document.querySelectorAll('.avg-toggle button[data-avgopt]');
   for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-avgopt')==='mean')===useMean ? 'true' : 'false'); }
 };
+
+// Reported/engaged toggle for the Total views card. Identical mechanism to the
+// mean/median toggle: flip an attribute on #report and let CSS choose between
+// the pre-rendered variants, so switching basis never re-renders the report.
+// The choice persists across month changes; on a month with nothing to adjust
+// both variants hold the same number, so it simply has no visible effect.
+// Sync the buttons only. Split out from __setViewBasis because the post-render
+// restore hook has to reassert the pressed state WITHOUT re-rendering - calling
+// the setter there would recurse through render() forever.
+window.__syncBasisButtons = function(){
+  var on = !!window.__viewEngaged;
+  var btns = document.querySelectorAll('.basis-row button[data-vopt]');
+  for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-vopt')==='engaged')===on ? 'true' : 'false'); }
+};
+window.__setViewBasis = function(useEngaged){
+  window.__viewEngaged = !!useEngaged;
+  if (typeof ovCurrent !== 'undefined' && ovCurrent != null) render(ovCurrent);
+  // Daily views and the Analysis charts read the same flag, so keep them in
+  // step rather than letting the controls drift apart.
+  if (typeof window.__dvRerenderAll === 'function') window.__dvRerenderAll();
+  if (typeof window.renderAnalysisChart === 'function') { try { window.renderAnalysisChart(); } catch (e) {} }
+  window.__syncBasisButtons();
+};
 function render(m){
   ovCurrent = m;
   const D=SCOPES[scope];
@@ -3968,26 +4088,45 @@ function render(m){
   // views divided by the subscriber count at its end (subs tracked June 2026
   // on, so older months just omit the segment).
   const totSubsStr = (subsTot && d.tot != null) ? ` · <span class="nowrap">≈${fmtRatio(d.tot / subsTot)} views per subscriber</span>` : '';
+  // Engaged twin of the above. d.engaged equals d.tot for any month wholly
+  // before the counting change, so this is a no-op outside the affected months.
+  const totEng = (d.engaged != null) ? d.engaged : d.tot;
+  const totSubsStrEng = (subsTot && totEng != null) ? ` · <span class="nowrap">≈${fmtRatio(totEng / subsTot)} views per subscriber</span>` : '';
   // Typical-upload reach: the Average views hero's median as a share of the
   // subscriber base at the period's end. Only shown when subs data exists
   // and the period actually has long-form uploads (d.med can be null).
-  const medSubsStr = (subsTot && d.med != null) ? (() => {
-    const pc = d.med / subsTot * 100;
+  // Share of the subscriber base one upload reaches. Four callers now - median
+  // and mean, each on either counting basis - so it is a helper, not copies.
+  const subsPctStr = (n) => (subsTot && n != null && n > 0) ? (() => {
+    const pc = n / subsTot * 100;
     const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
     return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
   })() : '';
+  const medSubsStr = subsPctStr(d.med);
+  const medSubsStrEng = subsPctStr(d.engagedMed);
   // Mean (arithmetic average) counterparts to the medians, for the Average-views toggle.
   const lfMean = (d.n && d.tot!=null) ? Math.round(d.tot/d.n) : 0;
   const lfMeanPrev = (p&&p.n&&p.tot!=null) ? p.tot/p.n : null;
   const lfMeanYoy = (y&&y.n&&y.tot!=null) ? y.tot/y.n : null;
+  const lfMeanEng = (d.n && d.engaged!=null) ? Math.round(d.engaged/d.n) : 0;
+  const lfMeanEngPrev = (p&&p.n&&p.engaged!=null) ? p.engaged/p.n : null;
+  const lfMeanEngYoy = (y&&y.n&&y.engaged!=null) ? y.engaged/y.n : null;
+  // True when this period straddles the counting change, so its headline is on
+  // the new basis while the months it is compared against are on the old one.
+  const vccAdj = !!(d.engaged != null && d.tot && d.engaged < d.tot*0.995);
+  // The live basis. Only meaningful where the two differ, so an engaged
+  // selection carried in from another month is ignored rather than showing a
+  // caption on a period that has nothing to adjust.
+  const useEng = vccAdj && !!window.__viewEngaged;
+  const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
+  // Sits on the row label, not on a card: it governs Total views AND Average
+  // views, and hanging it off one of them implied it only applied there.
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
-  const meanSubsStr = (subsTot && lfMean) ? (() => {
-    const pc = lfMean / subsTot * 100;
-    const t = pc >= 10 ? String(Math.round(pc)) : pc >= 0.1 ? pc.toFixed(1) : '<0.1';
-    return ` · <span class="nowrap">≈${t}% of the subscriber base</span>`;
-  })() : '';
+  const meanSubsStr = subsPctStr(lfMean);
+  const meanSubsStrEng = subsPctStr(lfMeanEng);
   // Projection for the in-progress month (long-form Total views): current total +
   // expected-remaining-uploads × current avg views/upload. Gated to >=5 uploads
   // (below that it's pure noise) and flagged by confidence until ~a third of the
@@ -4044,6 +4183,10 @@ function render(m){
       }
     }
   }
+  // Exact, not an approximation: projTot is linear in d.tot (it adds
+  // remaining * d.tot/d.n), so scaling by engaged/reported gives the
+  // projection the same arithmetic would produce from engaged views.
+  const projTotEng = (projTot && d.tot) ? Math.round(projTot * totEng / d.tot) : projTot;
   const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
   cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,selfNum:true,p:null,y:null,goodUp:null,foot:subsFoot});
   const cardHTML=cards.map(c=>{
@@ -4068,7 +4211,7 @@ function render(m){
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv,abs,xcls)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}</div>`:''; };
+  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -4243,8 +4386,8 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${vccNote('report')}
     ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
+    ${vccNote('report')}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
@@ -4264,22 +4407,25 @@ function render(m){
         </div>` : ''}
       </div>`;
     })()}
-    <div class="hero-rowlabel">Long-form</div>
+    <div class="hero-rowlabel">Long-form${basisToggle}</div>
     <div class="hero cols4">
       <div class="hero-card">
         <div class="hero-label">Total views</div>
-        <div class="hero-num" title="${fmtFull(d.tot)} views">${fmt(d.tot)}</div>
-        <div class="hero-sub">${totSubsStr?totSubsStr.replace(/^ · /,''):''}</div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
-        ${heroDeltas(d.tot,p&&p.tot,y&&y.tot)}
+        <div class="hero-num" title="${fmtFull(useEng?totEng:d.tot)}${useEng?' engaged':''} views">${fmt(useEng?totEng:d.tot)}</div>
+        <div class="hero-sub">${(v => v?v.replace(/^ · /,''):'')(useEng?totSubsStrEng:totSubsStr)}</div>
+        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(useEng?projTotEng:projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
+        ${useEng ? heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,null,basisTag)
+                 : heroDeltas(d.tot,p&&p.tot,y&&y.tot,null,null,basisTag)}
       </div>
       <div class="hero-card avg-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Two ways to average the month's long-form views. Median (default) is the typical upload — one viral hit or dead month can't skew it. Mean is total views ÷ uploads, so mean × uploads = total views. The % is that figure as a share of the subscriber base (subs tracked June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
-        <div class="hero-num"><span class="js-med">${fmt(d.med)}</span><span class="js-mean">${fmt(lfMean)}</span></div>
+        <div class="hero-num"><span class="js-med">${fmt(useEng?d.engagedMed:d.med)}</span><span class="js-mean">${fmt(useEng?lfMeanEng:lfMean)}</span></div>
         <div class="avg-toggle" role="group" aria-label="Average type"><button type="button" data-avgopt="median" aria-pressed="true" onclick="__setAvgMetric(false)">median</button><button type="button" data-avgopt="mean" aria-pressed="false" onclick="__setAvgMetric(true)">mean</button></div>
-        <div class="hero-sub">per long-form upload<span class="js-med">${medSubsStr}</span><span class="js-mean">${meanSubsStr}</span></div>
-        ${heroDeltas(d.med,p&&p.med,y&&y.med,null,'js-med')}
-        ${heroDeltas(lfMean,lfMeanPrev,lfMeanYoy,null,'js-mean')}
+        <div class="hero-sub">per long-form upload<span class="js-med">${useEng?medSubsStrEng:medSubsStr}</span><span class="js-mean">${useEng?meanSubsStrEng:meanSubsStr}</span></div>
+        ${useEng ? heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',basisTag)
+                 : heroDeltas(d.med,p&&p.med,y&&y.med,null,'js-med',basisTag)}
+        ${useEng ? heroDeltas(lfMeanEng,lfMeanEngPrev,lfMeanEngYoy,null,'js-mean',basisTag)
+                 : heroDeltas(lfMean,lfMeanPrev,lfMeanYoy,null,'js-mean',basisTag)}
       </div>
       <div class="hero-card">
         <div class="hero-label">Uploads ${mForLinks ? `<button type="button" class="hero-chart-link" data-goto-videos="long" data-vid-month="${mForLinks}">see all ${MONTHS[parseInt(mForLinks.split('-')[1],10)-1]}'s videos →</button>` : ''}</div>
@@ -4440,6 +4586,7 @@ function render(m){
   if (window.__syncMoodButtons) window.__syncMoodButtons();
   // Re-apply the persisted mean/median choice to the freshly rendered report.
   if (window.__setAvgMetric) window.__setAvgMetric(!!window.__avgMean);
+  if (window.__syncBasisButtons) window.__syncBasisButtons();
   // Month quick-jump (Last complete month / Month in progress) — wire + reflect active.
   (function(){
     const months2 = availableMonths();
@@ -4696,6 +4843,15 @@ const AN_RPM_SELF = {
 };
 const AN_MID_ROLL_THRESHOLD_SEC = 480;
 
+// Payable long-form views for one RPM bound. `which` picks which end of the
+// factor band to divide by - 'high' for the LOW revenue bound, so factor
+// uncertainty widens the range instead of collapsing to a point estimate.
+function vccPayable(list, which){
+  const J = VCC_FACTOR[which];
+  if (J === 1) return list.reduce((s,v) => s + (v.views||0), 0);
+  return list.reduce((s,v) => s + (v.views||0) / (1 + (J-1)*vccExposure(v.publishedAt)), 0);
+}
+
 function anSummarise(videos) {
   const longForm = videos.filter(v => !v.isShort && !v.unavailable);
   const shorts = videos.filter(v => v.isShort && !v.unavailable);
@@ -4718,16 +4874,32 @@ function anSummarise(videos) {
     const vmid = Math.floor(viewVals.length / 2);
     longViewsMedian = viewVals.length % 2 ? viewVals[vmid] : (viewVals[vmid - 1] + viewVals[vmid]) / 2;
   }
-  const midRollViews = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC).reduce((s, v) => s + v.views, 0);
+  // Engaged (old-rule) twins of the long-form magnitudes, for the basis toggle.
+  // Shorts get none: they have counted from the first frame since Mar 2025.
+  const longViewsEngaged = longForm.reduce((s, v) => s + vccEngagedOne(v, VCC_MID), 0);
+  const engVals = longForm.map(v => vccEngagedOne(v, VCC_MID)).sort((a, b) => a - b);
+  let longViewsMedianEngaged = 0;
+  if (engVals.length) {
+    const emid = Math.floor(engVals.length / 2);
+    longViewsMedianEngaged = engVals.length % 2 ? engVals[emid] : (engVals[emid - 1] + engVals[emid]) / 2;
+  }
+  const midRollList = longForm.filter(v => (v.durationSec || 0) >= AN_MID_ROLL_THRESHOLD_SEC);
+  const shortLongList = longForm.filter(v => (v.durationSec || 0) < AN_MID_ROLL_THRESHOLD_SEC);
+  const midRollViews = midRollList.reduce((s, v) => s + v.views, 0);
   const shortLongViews = longViews - midRollViews;
-  const revLow = (midRollViews/1000)*AN_RPM.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
-  const revHigh = (midRollViews/1000)*AN_RPM.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM.longFormShort.high + (shortViews/1000)*AN_RPM.shorts.high;
+  // Payable equivalents. Shorts are passed through untouched - they already
+  // counted from the first frame before this change, so their RPM band needs
+  // no correction.
+  const mrPayLo = vccPayable(midRollList, 'high'),   mrPayHi = vccPayable(midRollList, 'low');
+  const slPayLo = vccPayable(shortLongList, 'high'), slPayHi = vccPayable(shortLongList, 'low');
+  const revLow = (mrPayLo/1000)*AN_RPM.longFormMidRoll.low + (slPayLo/1000)*AN_RPM.longFormShort.low + (shortViews/1000)*AN_RPM.shorts.low;
+  const revHigh = (mrPayHi/1000)*AN_RPM.longFormMidRoll.high + (slPayHi/1000)*AN_RPM.longFormShort.high + (shortViews/1000)*AN_RPM.shorts.high;
   const revMid = (revLow + revHigh) / 2;
-  const revPessLow = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
-  const revPessHigh = (midRollViews/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
+  const revPessLow = (mrPayLo/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.low + (slPayLo/1000)*AN_RPM_PESSIMISTIC.longFormShort.low + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.low;
+  const revPessHigh = (mrPayHi/1000)*AN_RPM_PESSIMISTIC.longFormMidRoll.high + (slPayHi/1000)*AN_RPM_PESSIMISTIC.longFormShort.high + (shortViews/1000)*AN_RPM_PESSIMISTIC.shorts.high;
   const revPessMid = (revPessLow + revPessHigh) / 2;
-  const revSelfLow = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.low + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.low + (shortViews/1000)*AN_RPM_SELF.shorts.low;
-  const revSelfHigh = (midRollViews/1000)*AN_RPM_SELF.longFormMidRoll.high + (shortLongViews/1000)*AN_RPM_SELF.longFormShort.high + (shortViews/1000)*AN_RPM_SELF.shorts.high;
+  const revSelfLow = (mrPayLo/1000)*AN_RPM_SELF.longFormMidRoll.low + (slPayLo/1000)*AN_RPM_SELF.longFormShort.low + (shortViews/1000)*AN_RPM_SELF.shorts.low;
+  const revSelfHigh = (mrPayHi/1000)*AN_RPM_SELF.longFormMidRoll.high + (slPayHi/1000)*AN_RPM_SELF.longFormShort.high + (shortViews/1000)*AN_RPM_SELF.shorts.high;
   const revSelfMid = (revSelfLow + revSelfHigh) / 2;
   const minLikeRateAgeMs = 3 * 86400 * 1000;
   const nowTs = Date.now();
@@ -4752,6 +4924,8 @@ function anSummarise(videos) {
     shortLikeRate: shortViews ? shortLikes / shortViews : 0,
     longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
     medianDuration, longViewsMedian, longFormDurations: durations.length, longFormTotalSeconds,
+    longViewsEngaged, longViewsMedianEngaged,
+    longAvgEngaged: longForm.length ? longViewsEngaged / longForm.length : 0,
     revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid, revSelfLow, revSelfHigh, revSelfMid,
     totalViews() { return this.longViews + this.shortViews; },
     totalCount() { return this.longForm.length + this.shorts.length; },
@@ -4808,18 +4982,37 @@ function anGapPath(values, xFor, yFor, hasAt){
 //
 // Deliberately ONE sentence and a source link.
 const VCC_DATE = '2026-08-24';
-function vccNote(kind){
+function vccNote(kind, hasRule){
   const today = (typeof ctDate === 'function')
     ? ctDate(new Date().toISOString())
     : new Date().toISOString().slice(0, 10);
   if (today < VCC_DATE) return '';                 // renders nothing until the day it lands
-  const lead = 'From 24 Aug 2026 YouTube counts a view from the first frame rather than after about 30 seconds';
+  const lead = '<strong>Views before and after 24 Aug 2026 are not comparable.</strong> YouTube now counts a view from the first frame rather than after about 30 seconds';
   const body = kind === 'revenue'
     ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
+    : kind === 'rate'
+    ? lead + '. Views are the divisor here, so the fall from that date is mostly the larger divisor rather than a drop in engagement - measured at roughly half, it accounts for most of the decline shown.'
     : lead + ', so figures either side of that date are not directly comparable.';
-  return '<div class="vcc-note">' + body +
+  // Only claim the dashed line exists on charts that actually draw one - the
+  // scatter plots take the note but have no month axis to mark.
+  const rule = hasRule ? ' The dashed line marks the month it lands in.' : '';
+  return '<div class="vcc-note">' + body + rule +
     ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
 }
+
+// Vertical rule marking where the counting change lands on a monthly chart.
+// Drawn on Aug 2026, the first month it touches - the effect is partial there
+// (it starts on the 27th) and total from September onward.
+const VCC_BREAK_MONTH = '2026-08';
+function vccHasBreak(chartData){ return chartData.some(m => m.key === VCC_BREAK_MONTH); }
+function vccBreakRule(chartData, xFor, P, innerH){
+  const i = chartData.findIndex(m => m.key === VCC_BREAK_MONTH);
+  if (i < 0) return '';
+  const x = xFor(i);
+  return `<line class="chart-vcc-break" x1="${x}" y1="${P.top}" x2="${x}" y2="${P.top + innerH}" />`;
+}
+const VCC_BREAK_LEGEND =
+  '<span class="trend-legend-item"><span class="trend-legend-swatch vcc-break"></span> Counting change (27 Aug 2026)</span>';
 
 function anMonthKey(iso){ return ctMonth(iso); }   // Central-time month, matching the report cards + charts
 // Build the monthlyData[] array the old charts/video code expects, for a
@@ -5213,15 +5406,28 @@ function buildMonthlyData(scope){
     const [, mo] = String(key).split('-').map(Number);
     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo - 1];
   }
+  // Metrics where reported and engaged are BOTH real quantities. Rate metrics
+  // are excluded on purpose: J was derived from the like rate, so deflating
+  // views there closes the very gap it came from and the line goes flat by
+  // identity. Counts (tag blocks, uploads) and subscribers are untouched by the
+  // counting change at all.
+  const VCC_BASIS_METRICS = { views:1, views_length:1, median_views:1 };
+  function vccBasisApplies(){ return !!VCC_BASIS_METRICS[chartMetric]; }
   function metricsFor(summary) {
     if (!summary) return null;
+    // Long-form only - Shorts are never deflated, so a combined total deflates
+    // its long-form half and leaves the Shorts half alone.
+    const _eng = !!window.__viewEngaged && vccBasisApplies();
+    const _lv = _eng ? (summary.longViewsEngaged != null ? summary.longViewsEngaged : summary.longViews) : summary.longViews;
+    const _la = _eng ? (summary.longAvgEngaged != null ? summary.longAvgEngaged : summary.longAvg) : summary.longAvg;
     // "Include Shorts" applies only to the plain Views metric — every other
     // consumer of this helper keeps its long-form framing.
     if (chartMetric === 'views' && includeShorts) {
-      return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+      const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
+      return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
     }
     if (viewMode === 'long') {
-      return { views: summary.longViews, count: summary.longForm.length, avg: summary.longAvg, label: 'long-form' };
+      return { views: _lv, count: summary.longForm.length, avg: _la, label: 'long-form' };
     }
     // Shorts-only. This branch was missing: setChartTitle has always labelled
     // mode 'short' as "Shorts views by month", but without it the chart fell
@@ -5230,7 +5436,8 @@ function buildMonthlyData(scope){
     if (viewMode === 'short') {
       return { views: summary.shortViews, count: summary.shorts.length, avg: summary.shortAvg, label: 'Short' };
     }
-    return { views: summary.totalViews(), count: summary.totalCount(), avg: summary.totalAvg(), label: 'video' };
+    const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
+    return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
   }
   function activeDisplayName() {
     if (ANALYTICS_CHANNEL === 'ALL') return 'Quartering universe';
@@ -5435,9 +5642,20 @@ function setChartTitle(metric, mode) {
   // Shorts have counted from the first frame since 31 Mar 2025, so nothing
   // changed for them on 24 Aug 2026. On a Shorts-only view the note would be
   // flatly wrong, so 'short' is excluded while 'long' and 'all' keep it.
-  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1 };
+  // Every metric with views in it, including the ones where views are the
+  // DENOMINATOR - those were missing, and they are the ones that mislead most.
+  // tag_blocks is deliberately absent: it plots how many VIDEOS use a tag set,
+  // not views, so the counting change cannot touch it.
+  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+                        like_rate:1, engagement_variance:1, all_videos:1 };
+  // Rate metrics need different wording: the line falls because the divisor
+  // grew, which reads as an engagement collapse if left unexplained.
+  const _vccRateMetrics = { like_rate:1, engagement_variance:1, views_likes:1 };
+  // Which of them plot months on the x axis, and so can carry the rule.
+  const _vccRuleMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+                            like_rate:1, engagement_variance:1 };
   const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
-  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote('chart') : '');
+  el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote(_vccRateMetrics[metric] ? 'rate' : 'chart', !!_vccRuleMetrics[metric]) : '');
 }
 
 function renderTrendChart(yoy) {
@@ -5494,6 +5712,19 @@ function renderTrendChart(yoy) {
     }
     // The format segment applies to the plain Views metric only — the other
     // metrics keep their long-form framing (see metricsFor).
+    // Counting basis: only where both bases are real, only when the visible
+    // range actually reaches the change, and never on Shorts-only - Shorts have
+    // counted from the first frame since Mar 2025 and have nothing to deflate.
+    const basisCtrl = document.getElementById('chartBasisSeg');
+    if (basisCtrl) {
+      const spans = chartData.some(m => m.key >= VCC_BREAK_MONTH)
+        || !!(inProgressMonth && inProgressMonth.key >= VCC_BREAK_MONTH);
+      basisCtrl.hidden = !(vccBasisApplies() && spans && viewMode !== 'short');
+      const on = !!window.__viewEngaged;
+      for (const b of basisCtrl.querySelectorAll('.chart-ctrl-btn.seg')) {
+        b.setAttribute('aria-pressed', String((b.dataset.basis === 'engaged') === on));
+      }
+    }
     const shortsCtrl = document.getElementById('chartFormatSeg');
     if (shortsCtrl) {
       shortsCtrl.hidden = chartMetric !== 'views';
@@ -6002,6 +6233,7 @@ function renderTrendChart(yoy) {
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${xLabels}
     ${durLabelsSvg}
     ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
@@ -6140,6 +6372,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 
   legend.innerHTML = `
     <span class="trend-legend-item"><span class="trend-legend-swatch likerate"></span> Long-form like rate (likes ÷ views)</span>
+    ${vccHasBreak(chartData) ? VCC_BREAK_LEGEND : ''}
   `;
 
   // Layout — same dimensions as the views chart for visual consistency.
@@ -6277,6 +6510,7 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     <path class="chart-line-likerate" d="${linePath}" />
     ${ipConnector}
     ${ipDot}
@@ -6322,6 +6556,11 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 // the typical-upload story. 0-based Y axis (views are counts) so the decline
 // reads honestly. Single channel, long-form. Mirrors renderLikeRateChart.
 function renderMedianViewsChart(chartData, inProgressMonth) {
+  // Median per upload on whichever basis is live. Falls back to the reported
+  // figure if the engaged twin is missing, so an older cached dataset still
+  // renders rather than plotting undefined.
+  const _medOf = sm => (sm ? ((window.__viewEngaged && sm.longViewsMedianEngaged != null)
+    ? sm.longViewsMedianEngaged : sm.longViewsMedian) : 0) || 0;
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
@@ -6341,11 +6580,11 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   if (n < 2) { svg.innerHTML = ''; return; }
 
-  const meds = chartData.map(m => ({ key: m.key, med: m.curr.longViewsMedian || 0 }));
-  const ipMed = inProgressMonth ? (inProgressMonth.curr.longViewsMedian || 0) : null;
+  const meds = chartData.map(m => ({ key: m.key, med: _medOf(m.curr) || 0 }));
+  const ipMed = inProgressMonth ? (_medOf(inProgressMonth.curr) || 0) : null;
   // Previous-year median per month (toggleable comparison line)
-  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && m.yoy.longViewsMedian > 0) ? m.yoy.longViewsMedian : null) : [];
-  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && inProgressMonth.yoy.longViewsMedian > 0) ? inProgressMonth.yoy.longViewsMedian : null;
+  const prevMeds = showPrevYear ? chartData.map(m => (m.yoy && _medOf(m.yoy) > 0) ? _medOf(m.yoy) : null) : [];
+  const ipPrevMed = (showPrevYear && inProgressMonth && inProgressMonth.yoy && _medOf(inProgressMonth.yoy) > 0) ? _medOf(inProgressMonth.yoy) : null;
 
   const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
   if (allMeds.length < 2) { svg.innerHTML = ''; return; }
@@ -6453,6 +6692,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${linePath}" />
     ${ipConnector}
@@ -6474,13 +6714,13 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
       const bbox = rect.getBoundingClientRect();
       const wrap = wrapEl.getBoundingClientRect();
       tooltip.style.display = 'block';
-      const med = m.curr.longViewsMedian || 0;
+      const med = _medOf(m.curr) || 0;
       const uploads = (m.curr.longForm && m.curr.longForm.length) || 0;
       tooltip.innerHTML = `
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
         <div class="tooltip-row"><strong>${fmt(med)}</strong> average views</div>
         <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
-        ${showPrevYear && m.yoy && m.yoy.longViewsMedian > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(m.yoy.longViewsMedian)}</div>` : ''}
+        ${showPrevYear && m.yoy && _medOf(m.yoy) > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(_medOf(m.yoy))}</div>` : ''}
       `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
       const tipWidth = tooltip.offsetWidth || 200;
@@ -6707,6 +6947,7 @@ function renderViewsLikesChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     <path class="chart-line-curr" d="${viewsPath}" />
     <path class="chart-line-likerate" d="${ratePath}" />
     ${viewsDots}
@@ -7332,6 +7573,7 @@ function renderEngagementVarianceChart(chartData, inProgressMonth) {
 
   svg.innerHTML = `
     ${gridLines}
+    ${vccBreakRule(chartData, xFor, P, innerH)}
     ${noDataMarks}
     ${bars}
     ${ipBar}
@@ -9018,6 +9260,27 @@ function niceDurationAxis(minSec, maxSec) {
   let adVideoIds = new Set();
   let adVideoData = null;
   let titleHistoryData = null;
+  // A stored title is not always a name. Three uploads have been renamed to a
+  // bare "DELETE" and then unlisted, made private, or in one July case simply
+  // left public under that name - it is his marker for retiring a Short, not
+  // something a reader should see as the video's title. Where the current title
+  // is only that marker, fall back to what the video was actually called.
+  //
+  // Deliberately narrow: an exact bare "delete", not a prefix or a contains.
+  // A real upload called "Delete Your Account" must keep its own name.
+  const DELETION_MARKER_RE = /^\s*delete\s*$/i;
+  function isDeletionMarker(t){ return DELETION_MARKER_RE.test(String(t || '')); }
+  function originalTitleIfMarker(v){
+    if (!v || !isDeletionMarker(v.title)) return null;
+    const th = titleHistoryData && titleHistoryData[v.id];
+    return (th && th.first && !isDeletionMarker(th.first)) ? th.first : null;
+  }
+  // The name to show. Falls through to the stored title when history has not
+  // loaded yet (3.4 MB, so it lands after the small files) or has no record.
+  function displayTitle(v){ return originalTitleIfMarker(v) || (v && v.title) || ''; }
+  // The Removed tab renders from its own IIFE and has no access to
+  // titleHistoryData, so share the resolver rather than duplicating the rule.
+  window.__displayTitle = displayTitle;
   const VIDEO_BATCH = 50; // initial + per-click row count for incremental loading
   const windowListState = { sortBy: 'date', sortDir: 'desc', query: '', channelFilter: null, topicFilter: null, topicView: 'subject', creatorTagFilter: null, creatorBlockFilter: null, creatorTagView: 'tags', creatorTagsShown: 500, formatFilter: 'long', adOnly: false, renamedOnly: false, density: 'detailed', longShown: VIDEO_BATCH, shortShown: VIDEO_BATCH };
   window.__windowListState = windowListState;
@@ -9122,12 +9385,22 @@ function niceDurationAxis(minSec, maxSec) {
       // banner. Stripped wherever they sit, not just at the end: some titles have
       // trailing junk after the tags ("…#Viral mp4") which defeats an end anchor.
       // Anything else he typed is left alone. Falls back if nothing survives.
-      const clean = String(v.title || '')
-        .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || v.title || 'Untitled';
+      const shownTitle = displayTitle(v);
+      const clean = String(shownTitle || '')
+        .replace(/#[\wÀ-ɏ]+/gu, ' ').replace(/\s{2,}/g, ' ').trim() || shownTitle || 'Untitled';
+      // Say so when the name shown is not the name it carried when it went. The
+      // substitution is the informative choice, but it should not be a silent one.
+      // One parenthetical, not two. The retitle and the removal are one story:
+      // he marked it, then acted on it - reading as "(retitled X) (made private)"
+      // made two separate-looking events out of a single sequence.
+      const wasMarked = !!originalTitleIfMarker(v);
+      const tag = wasMarked
+        ? (soleHeadline ? 'retitled “DELETE” first' : 'retitled “DELETE”, then ' + why)
+        : (soleHeadline ? '' : why);
       return `<li><b>${escapeHtml(ch.handle || ch.title || 'Unknown channel')}</b>` +
         `<span class="strike-dash" aria-hidden="true">&nbsp;—&nbsp;</span>` +
         `<span class="strike-title">${escapeHtml(clean)}</span>` +
-        (soleHeadline ? '' : `<span class="strike-why">&nbsp;(${escapeHtml(why)})</span>`) + `</li>`;
+        (tag ? `<span class="strike-why">&nbsp;(${escapeHtml(tag)})</span>` : '') + `</li>`;
     }).join('');
 
     // An enforcement action and the creator privating his own uploads are not the
@@ -9204,7 +9477,7 @@ function niceDurationAxis(minSec, maxSec) {
     // Parallel + no cache-busters (ETag revalidation handles freshness).
     await Promise.all([
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
-      fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; } }).catch(e => console.warn('title-history', e)),
+      fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; if (typeof window.renderStrikeAlert === 'function') { try { window.renderStrikeAlert(); } catch(e){} } } }).catch(e => console.warn('title-history', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
@@ -9333,7 +9606,7 @@ function renderVideoRows(videos, emptyText) {
     return `
       <div class="video-row${adVideoIds.has(v.id) ? ' is-promoted' : ''}${topicColClass}">
         <div class="video-date">${fmtRowDate(v.publishedAt)}</div>
-        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(v.title)}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
+        <div class="video-title">${compact ? '' : `<a class="vrow-thumb" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy" decoding="async"></a>`}<div class="video-title-col"><div class="video-title-main">${adBadge}<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">${escapeHtml(displayTitle(v))}</a>${likeBadge}${renamedBadge}${creatorTagsBadge}</div>${titleSubtitle}${compact ? '' : renderVideoSummary(v)+renderTopicChips(v)}</div></div>
         <div class="video-duration">${formatDuration(v.durationSec)}</div>
         <div class="video-views">${fmt(v.views)}</div>
         <div class="video-likepct hide-mobile">${(v.views > 0 && v.likes != null) ? ((v.likes / v.views) * 100).toFixed(1) + '%' : '—'}</div>
@@ -9351,7 +9624,7 @@ function filterVideos(list, query) {
   // videos even when the word isn't in the (often vague, clickbait) title.
   const topicName = id => ((ANALYTICS_TOPICS && id && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || '').toLowerCase();
   return list.filter(v => {
-    if (v.title.toLowerCase().includes(q)) return true;
+    if (displayTitle(v).toLowerCase().includes(q)) return true;
     const ct = ANALYTICS_CREATOR_TAGS && ANALYTICS_CREATOR_TAGS[v.id];
     if (ct && ct.some(t => t.toLowerCase().includes(q))) return true;
     if (topicName(ANALYTICS_TOPIC_TAGS && ANALYTICS_TOPIC_TAGS[v.id]).includes(q)) return true;
@@ -9553,7 +9826,7 @@ function renderAdPanel() {
     if (!terms.length) return out;
     return out.filter(r => {
       const chan = (ANALYTICS_DATASET?.channels?.[r.v.channelId] || {}).title || '';
-      const hay = (r.v.title + ' ' + chan).toLowerCase();
+      const hay = (displayTitle(r.v) + ' ' + chan).toLowerCase();
       return terms.every(t => hay.includes(t));
     });
   }
@@ -9562,7 +9835,7 @@ function renderAdPanel() {
     const { col, dir } = promoPanelSort;
     const factor = dir === 'asc' ? 1 : -1;
     const keyFns = {
-      title: r => r.v.title.toLowerCase(),
+      title: r => displayTitle(r.v).toLowerCase(),
       date:  r => r.v.publishedAt,
       views: r => r.views,
       median: r => r.monthMedian,
@@ -10865,6 +11138,17 @@ function renderWindowList(startDate, endDate) {
         window.setAnalysisViewMode(fmt === 'short' ? 'short' : 'long');
       }
       if (typeof window.setIncludeShorts === 'function') window.setIncludeShorts(fmt === 'all');
+    });
+  }
+  // Counting-basis segment. Routes through __setViewBasis rather than setting
+  // the flag itself, so the Overview cards and Daily views stay in step - the
+  // site has one basis, not one per tab.
+  const basisSeg = document.getElementById('chartBasisSeg');
+  if (basisSeg) {
+    basisSeg.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chart-ctrl-btn.seg');
+      if (!btn) return;
+      if (typeof window.__setViewBasis === 'function') window.__setViewBasis(btn.dataset.basis === 'engaged');
     });
   }
   // Analysis channel dropdown — synced with the report's `scope` (single source of truth)
@@ -12520,7 +12804,7 @@ function renderWindowList(startDate, endDate) {
       const meta=[fmt(v.views)+(v.unavailable?" last-known views":" views · still watchable via direct link"),(ch==="ALL"?chName(v.channelId):null),"posted "+nice(v.publishedAt),since?"detected "+nice(since):null,rz.detail?("claim by "+rz.detail):null].filter(Boolean).join(" · ");
       return '<a class="removed-row" href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'+
         '<img class="removed-thumb" src="https://i.ytimg.com/vi/'+v.id+'/mqdefault.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute(\'src\')">'+
-        '<span class="rt"><b>'+esc(v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
+        '<span class="rt"><b>'+esc(window.__displayTitle?window.__displayTitle(v):v.title)+'</b><span><span class="removed-fmt'+(v.isShort?' short':'')+'">'+(v.isShort?'Short':'Long-form')+'</span>'+esc(meta)+'</span></span>'+
         '<span class="removed-when '+rz.cls+'"'+(rz.detail?' title="'+esc(rz.label+" — "+rz.detail)+'"':'')+'>'+esc(rz.label)+'</span></a>';
     }).join("")+'<div class="removed-foot">“Detected” is when our checks first caught the change, not when it happened. Recent videos are re-checked several times a day and the full back catalogue once a day, so detection trails the actual change by a few hours — at most about a day. Exception: unlisted-detection began 2 Jul ’26, so unlisted entries with that date may have been hidden any time before it.</div>';
   }
@@ -12759,14 +13043,22 @@ function renderWindowList(startDate, endDate) {
   function dvFmtFull(n){ return Math.round(n||0).toLocaleString(); }
   function dvNiceDate(iso,MONF){ const p=String(iso).split("-"); return p.length<3?iso:(+p[2])+" "+MONF[(+p[1])-1]+" "+p[0]; }
   // Raw four buckets per day (toggles applied at render time, not here).
-  function dvRoll(rec, ch){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
-    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
+  // ds is the day being rolled up. On the engaged basis every long-form gain on
+  // or after the onset is divided by the factor; a day's delta sits entirely on
+  // one side of the change, so no accrual curve is needed here. Indices 1/3/5 are
+  // the long-form slots of [newShort,newLong,oldShort,oldLong,prevWeekShort,
+  // prevWeekLong]; 0/2/4 are Shorts and are never deflated.
+  function dvRoll(rec, ch, ds){ let shNew=0,lfNew=0,shOld=0,lfOld=0,shPW=0,lfPW=0; const add=a=>{ if(!a) return; shNew+=a[0]; lfNew+=a[1]; shOld+=a[2]; lfOld+=a[3]; shPW+=a[4]||0; lfPW+=a[5]||0; };
+    if(rec){ if(ch==="ALL"){ for(const id in rec) add(rec[id]); } else add(rec[ch]); }
+    if (window.__viewEngaged && ds && ds >= VCC_ONSET_DAY) {
+      lfNew /= VCC_MID; lfOld /= VCC_MID; lfPW /= VCC_MID;
+    } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
   function dvCompute(ch, monthKey){
     const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
     const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
     for(let day=1;day<=dim;day++){
       const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch);
+      const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
       out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
     }
@@ -12800,7 +13092,7 @@ function renderWindowList(startDate, endDate) {
     const start=dvChannelStart(ch);           // null for ALL, or a channel older than the archive
     for(const ds of dates){
       if(start && ds<start) continue;         // channel did not exist yet
-      const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch);
+      const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
       out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
       prevMo=M;
@@ -12951,6 +13243,11 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__dvToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Count long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__dvToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Count Shorts"><span class="uc-tdot"></span>Shorts</button>'+
+      // Videos tab only. On the Overview the Long-form row label already
+      // carries REPORTED/ENGAGED and drives this chart, so a second control
+      // here is a duplicate - and a fourth button wraps .uc-controls onto its
+      // own line, which pushes this chart down out of line with Uploads beside it.
+      ((!isOv && dvHasVcc())?('<button type="button" class="uc-tog dv-engtog" onclick="__dvToggleBasis(\''+scope+'\')" aria-pressed="'+(window.__viewEngaged?'true':'false')+'" title="Show long-form gains under the pre-27-Aug counting rule"><span class="uc-tdot"></span>Engaged</button>'):'')+
       '<button type="button" class="uc-tog dv-oldtog" onclick="__dvToggleOld(\''+scope+'\')" aria-pressed="'+(st.showOld?'true':'false')+'" title="Show or hide views on prior-month uploads"><span class="uc-tdot"></span>Prior months</button>'+
       '</div></div>'+
       '<div class="uc-legend">'+
@@ -12976,6 +13273,21 @@ function renderWindowList(startDate, endDate) {
   window.__dvToggleLong=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.lf=!st.lf; renderDailyViews(scope); };
   window.__dvToggleFull=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.full=!st.full; renderDailyViews(scope); };
   window.__dvToggleOld=function(scope){ scope=scope||'main'; const st=_dvst(scope); st.showOld=!st.showOld; renderDailyViews(scope); };
+  // Only offer the basis control once the archive actually spans the onset -
+  // before that the two bases are identical and the button would do nothing.
+  function dvHasVcc(){ const d=dvData(); if(!d||!d.days) return false;
+    for(const k in d.days){ if(k>=VCC_ONSET_DAY) return true; } return false; }
+  // Shares window.__viewEngaged with the Overview control, so the site has ONE
+  // counting basis rather than per-chart ones that can disagree with each other.
+  window.__dvToggleBasis=function(scope){ scope=scope||'main';
+    window.__viewEngaged=!window.__viewEngaged;
+    try{ renderDailyViews('main'); }catch(e){}
+    try{ renderDailyViews('ov'); }catch(e){}
+    if (typeof ovCurrent !== 'undefined' && ovCurrent != null && typeof render === 'function') render(ovCurrent);
+    if (window.__syncBasisButtons) window.__syncBasisButtons();
+  };
+  window.__dvRerenderAll=function(){ try{ renderDailyViews('main'); }catch(e){}
+    try{ renderDailyViews('ov'); }catch(e){} };
   window.__dvRerenderIfActive=function(){ if(active==="dailyviews") renderDailyViews('main'); };
   window.__dvRenderOverview=function(){ renderDailyViews('ov'); };
   function __dvEnsureTip(){ let t=byId("dvTip"); if(!t){t=document.createElement("div");t.id="dvTip";t.setAttribute("role","status");document.body.appendChild(t);} return t; }
