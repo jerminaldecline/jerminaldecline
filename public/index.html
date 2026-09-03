@@ -791,6 +791,17 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .cc-endlabel.v {fill: var(--accent);}
 .cc-endlabel.l {fill: var(--up);}
 .cc-ratio {font-size: 12px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.02em;}
+.cc-dot-dist {opacity: 0.8;}
+.cc-dot-before {fill: var(--text-dim);}
+.cc-dot-after {fill: var(--accent-2);}
+.cc-divider {stroke: var(--border); stroke-width: 1;}
+.cc-section {font-size: 11px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase;}
+.cc-thr {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.8;}
+.cc-thr-label {font-size: 10px; font-weight: 700; fill: var(--accent-2);}
+.cc-row-label {font-size: 11px; font-weight: 700; fill: var(--text-muted);}
+.cc-row-axis {stroke: var(--border); stroke-width: 1;}
+.cc-count {font-size: 11px; font-weight: 800; fill: var(--text-muted);}
+.cc-strip-note {font-size: 10px; fill: var(--text-dim);}
 .trend-legend-swatch.ccviews {background: var(--accent);}
 .trend-legend-swatch.cclikes {background: var(--up);}
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
@@ -5820,6 +5831,11 @@ function renderTrendChart(yoy) {
   // hidden chart area and looks broken for a reason unrelated to it.
   const _cw = document.getElementById('chartWrap');
   if (_cw && _cw.style.display === 'none') _cw.style.display = '';
+  // The benchmark chart draws a distribution strip under the lines and needs a
+  // taller box. Reset here for every other metric, next to the wrap reset, so a
+  // renderer that grows the viewBox cannot leave the next chart stretched.
+  const _sv = document.getElementById('trendChart');
+  if (_sv && chartMetric !== 'counting_change') _sv.setAttribute('viewBox', '0 0 720 280');
 
   // The benchmark chart. Takes no chartData - it reads its own precomputed
   // series - so it is dispatched before the monthly-data guards below.
@@ -6519,7 +6535,56 @@ function renderCountingChangeChart() {
       '" width="' + (innerW / S.length) + '" height="' + innerH + '" data-idx="' + i + '" fill="transparent" />';
   }).join('');
 
-  svg.innerHTML = gridLines + baseLine + breakRule +
+  // ---- distribution strip -------------------------------------------------
+  // The lines show WHEN it happened. This shows how completely it separated:
+  // one upload per dot, placed by its like rate. Before and after barely
+  // overlap, which is a harder thing to argue with than a median.
+  const D = ch.dist;
+  let strip = '';
+  const STRIP_TOP = 316;
+  if (D && D.pre && D.post && D.pre.length && D.post.length) {
+    const allR = D.pre.concat(D.post);
+    const rMax = Math.max.apply(null, allR) * 1.06;
+    const sx = function (r) { return P.left + (r / rMax) * innerW; };
+    const rows = [
+      { label: 'Before 27 Aug', vals: D.pre,  y: STRIP_TOP + 26, low: D.lowPre,  cls: 'cc-dot-before' },
+      { label: 'After',         vals: D.post, y: STRIP_TOP + 74, low: D.lowPost, cls: 'cc-dot-after' },
+    ];
+    const thr = ch.lowRatePct;
+    // A rule between the two panels: they are one argument but different units,
+    // and without it the dots read as part of the line chart's y axis.
+    strip += '<line class="cc-divider" x1="' + P.left + '" y1="' + (STRIP_TOP - 22) +
+             '" x2="' + (P.left + innerW) + '" y2="' + (STRIP_TOP - 22) + '" />';
+    strip += '<text class="cc-section" x="' + P.left + '" y="' + (STRIP_TOP - 4) +
+             '">Like rate per upload, one dot each</text>';
+    strip += '<line class="cc-thr" x1="' + sx(thr) + '" y1="' + (STRIP_TOP + 6) +
+             '" x2="' + sx(thr) + '" y2="' + (STRIP_TOP + 92) + '" />';
+    strip += '<text class="cc-thr-label" x="' + (sx(thr) + 6) + '" y="' + (STRIP_TOP + 14) + '">' +
+             thr + '% like rate</text>';
+    for (const row of rows) {
+      strip += '<text class="cc-row-label" x="' + P.left + '" y="' + (row.y - 13) + '">' +
+               row.label + '</text>';
+      strip += '<line class="cc-row-axis" x1="' + P.left + '" y1="' + row.y +
+               '" x2="' + (P.left + innerW) + '" y2="' + row.y + '" />';
+      // Deterministic vertical jitter so overlapping uploads stay countable
+      // without the layout changing between renders.
+      strip += row.vals.map(function (r, i) {
+        const jitter = ((i % 5) - 2) * 2.6;
+        return '<circle class="' + row.cls + ' cc-dot-dist" cx="' + sx(r) + '" cy="' + (row.y + jitter) + '" r="3" />';
+      }).join('');
+      strip += '<text class="cc-count" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 4) + '">' +
+               row.low + '/' + row.vals.length + '</text>';
+    }
+    const xt = [0, 5, 10, 15, 20].filter(function (t) { return t <= rMax; });
+    strip += xt.map(function (t) {
+      return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 108) +
+             '" text-anchor="middle">' + t + '%</text>';
+    }).join('');
+  }
+
+  svg.setAttribute('viewBox', '0 0 720 ' + (D && D.pre && D.pre.length ? 430 : 280));
+
+  svg.innerHTML = strip + gridLines + baseLine + breakRule +
     '<path class="cc-likes" d="' + pathOf('likes') + '" />' +
     '<path class="cc-views" d="' + pathOf('views') + '" />' +
     dotsOf('likes', 'cc-dot-likes') + dotsOf('views', 'cc-dot-views') +
