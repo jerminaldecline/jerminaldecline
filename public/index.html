@@ -779,6 +779,19 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-weight: 600;
     letter-spacing: 0.02em;}
 .chart-line-curr {fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+/* Counting-change benchmark. Views takes the accent because it is the series
+   that moves; likes is deliberately quieter - it is the control, and the whole
+   point is that it does NOT move. */
+.cc-views {fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+.cc-likes {fill: none; stroke: var(--up); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+.cc-dot-views {fill: var(--accent);}
+.cc-dot-likes {fill: var(--up);}
+.cc-base {stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 3;}
+.cc-endlabel {font-size: 11px; font-weight: 800; letter-spacing: 0.02em;}
+.cc-endlabel.v {fill: var(--accent);}
+.cc-endlabel.l {fill: var(--up);}
+.trend-legend-swatch.ccviews {background: var(--accent);}
+.trend-legend-swatch.cclikes {background: var(--up);}
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
 /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
@@ -2563,6 +2576,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;
   margin:0.8rem 0 1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
 .vcc-note strong{color:var(--text)}
+/* Same weight as the YouTube Help link beside it - both are routes out of the
+   note, one to the announcement and one to our own evidence. */
+.vcc-how{appearance:none;background:none;border:none;padding:0;font:inherit;
+  color:var(--accent);font-weight:700;cursor:pointer;text-decoration:underline;
+  text-underline-offset:2px}
+.vcc-how:hover{color:var(--text)}
+.vcc-sep{color:var(--text-dim);padding:0 0.15rem}
 .vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
 /* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
@@ -2724,6 +2744,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
         <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
+        <button type="button" class="an-metric-btn" data-metric="counting_change" role="tab">Counting change</button>
       </div>
       <label class="an-metric-select-wrap" for="anMetricSelect"><span class="an-metric-select-lbl">Chart</span>
         <select id="anMetricSelect" class="an-mobile-sel" aria-label="Chart metric">
@@ -2735,6 +2756,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <option value="engagement_variance">Engagement variance</option>
           <option value="all_videos">Video lengths</option>
           <option value="tag_blocks">Tag blocks</option>
+                  <option value="counting_change">Counting change</option>
         </select>
       </label>
       </div>
@@ -4996,8 +5018,11 @@ function vccNote(kind, hasRule){
   // Only claim the dashed line exists on charts that actually draw one - the
   // scatter plots take the note but have no month axis to mark.
   const rule = hasRule ? ' The dashed line marks the month it lands in.' : '';
+  // YouTube's announcement first, then our own evidence - what changed, then
+  // how we sized it. Separated, or the two links read as one run-on string.
+  const how = ' <span class="vcc-sep">\u00b7</span> <button type="button" class="vcc-how" data-goto-benchmark>How we measured it \u2192</button>';
   return '<div class="vcc-note">' + body + rule +
-    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
+    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a>' + how + '</div>';
 }
 
 // Vertical rule marking where the counting change lands on a monthly chart.
@@ -5633,6 +5658,8 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
+    counting_change: ['How we measured the counting change',
+      'Views and likes per upload, both read at the same age and indexed to the pre-change normal. They track until 27 Aug, then only views moves.'],
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
@@ -5646,6 +5673,8 @@ function setChartTitle(metric, mode) {
   // DENOMINATOR - those were missing, and they are the ones that mislead most.
   // tag_blocks is deliberately absent: it plots how many VIDEOS use a tag set,
   // not views, so the counting change cannot touch it.
+  // counting_change is absent on purpose: that chart IS the explanation, so
+  // captioning it with a warning about the thing it explains reads as a loop.
   const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
                         like_rate:1, engagement_variance:1, all_videos:1 };
   // Rate metrics need different wording: the line falls because the divisor
@@ -5785,6 +5814,12 @@ function renderTrendChart(yoy) {
   // renderLikeRateChart function are kept in place so the mode can be
   // restored from a URL param or programmatic state without code changes
   // if we ever want it back. Currently unreachable from the chart toggle.
+  // The benchmark chart. Takes no chartData - it reads its own precomputed
+  // series - so it is dispatched before the monthly-data guards below.
+  if (chartMetric === 'counting_change') {
+    return renderCountingChangeChart();
+  }
+
   const isLikeRateMode = chartMetric === 'like_rate'
     && viewMode === 'long'
     && ANALYTICS_CHANNEL !== 'ALL';
@@ -6364,6 +6399,117 @@ function renderTrendChart(yoy) {
 // changed alongside the audience size. A flat like rate while views collapse
 // means the remaining audience is still as engaged (loyalty held); a falling
 // rate means the audience cooled too (engagement collapsed with attention).
+// The benchmark behind the factor, drawn as the argument rather than stated as a
+// number. Views and likes per upload, both read at a matched 24h age, indexed to
+// the pre-change median. A more popular video lifts BOTH lines, so only a change
+// in what COUNTS as a view can separate them - and they run together for eleven
+// buckets before splitting on 27 Aug.
+//
+// Reads counting-change.json (built by scripts/build-counting-change.js) rather
+// than monthlyData: this needs a matched-age read per upload, which the monthly
+// aggregates cannot give.
+// The series is fetched with the other side files, so it can land after the
+// chart has already painted an empty state. Only redraw if it is on screen.
+function chartMetricIsCC(){
+  try { return typeof chartMetric !== 'undefined' && chartMetric === 'counting_change'; }
+  catch (e) { return false; }
+}
+window.chartMetricIsCC = chartMetricIsCC;
+function renderCountingChangeChart() {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  const cc = window.__countingChange;
+  const handle = (typeof scope !== 'undefined' && scope !== 'ALL') ? scope : '@TheQuartering';
+  const ch = cc && cc.channels && (cc.channels[handle] || cc.channels['@TheQuartering']);
+  if (!ch || !ch.series || ch.series.length < 3) {
+    svg.innerHTML = '';
+    legend.innerHTML = '<span class="trend-legend-item">Benchmark data not loaded yet.</span>';
+    return;
+  }
+  const S = ch.series;
+  legend.innerHTML =
+    '<span class="trend-legend-item"><span class="trend-legend-swatch ccviews"></span> Views per upload</span>' +
+    '<span class="trend-legend-item"><span class="trend-legend-swatch cclikes"></span> Likes per upload</span>' +
+    VCC_BREAK_LEGEND;
+
+  const W = 720, H = 280;
+  const P = { top: 22, right: 58, bottom: 48, left: 48 };
+  const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
+  const top = Math.max.apply(null, S.map(function (p) { return Math.max(p.views, p.likes); }).concat([100])) * 1.12;
+  const xFor = function (i) { return P.left + (S.length === 1 ? innerW / 2 : (i / (S.length - 1)) * innerW); };
+  const yFor = function (v) { return P.top + innerH - (v / top) * innerH; };
+
+  const ticks = [0, 50, 100, 150, 200, 250].filter(function (t) { return t <= top; });
+  const gridLines = ticks.map(function (t) {
+    return '<line class="chart-grid" x1="' + P.left + '" y1="' + yFor(t) + '" x2="' + (P.left + innerW) + '" y2="' + yFor(t) + '" />';
+  }).join('');
+  const yLabels = ticks.map(function (t) {
+    return '<text class="chart-axis-label y" x="' + (P.left - 10) + '" y="' + (yFor(t) + 4) + '" text-anchor="end">' + t + '</text>';
+  }).join('');
+  // The 100 line is the pre-change normal, so it is drawn rather than left to
+  // the reader to infer from the axis.
+  const baseLine = '<line class="cc-base" x1="' + P.left + '" y1="' + yFor(100) + '" x2="' + (P.left + innerW) + '" y2="' + yFor(100) + '" />';
+
+  const pathOf = function (key) {
+    return S.map(function (p, i) { return (i ? 'L' : 'M') + xFor(i) + ' ' + yFor(p[key]); }).join(' ');
+  };
+  const dotsOf = function (key, cls) {
+    return S.map(function (p, i) { return '<circle class="' + cls + '" cx="' + xFor(i) + '" cy="' + yFor(p[key]) + '" r="3.5" />'; }).join('');
+  };
+
+  // The onset is a bucket boundary by construction, so the rule sits midway
+  // between the last pre-change bucket and the first post-change one.
+  let breakRule = '';
+  const firstPost = S.findIndex(function (p) { return p.from >= cc.onset; });
+  if (firstPost > 0) {
+    const bx = (xFor(firstPost - 1) + xFor(firstPost)) / 2;
+    breakRule = '<line class="chart-vcc-break" x1="' + bx + '" y1="' + P.top + '" x2="' + bx + '" y2="' + (P.top + innerH) + '" />';
+  }
+  const xLabels = S.map(function (p, i) {
+    if (i % 2 !== 0 && i !== S.length - 1) return '';
+    const lab = monthShort(p.from.slice(0, 7)) + ' ' + (+p.from.slice(8, 10));
+    return '<text class="chart-axis-label x" x="' + xFor(i) + '" y="' + (H - 26) + '" text-anchor="middle">' + lab + '</text>';
+  }).join('');
+  const last = S.length - 1;
+  const endLabels =
+    '<text class="cc-endlabel v" x="' + (xFor(last) + 8) + '" y="' + (yFor(S[last].views) + 4) + '">views</text>' +
+    '<text class="cc-endlabel l" x="' + (xFor(last) + 8) + '" y="' + (yFor(S[last].likes) + 4) + '">likes</text>';
+  const hovers = S.map(function (p, i) {
+    return '<rect class="chart-hit" x="' + (xFor(i) - innerW / (S.length * 2)) + '" y="' + P.top +
+      '" width="' + (innerW / S.length) + '" height="' + innerH + '" data-idx="' + i + '" fill="transparent" />';
+  }).join('');
+
+  svg.innerHTML = gridLines + baseLine + breakRule +
+    '<path class="cc-likes" d="' + pathOf('likes') + '" />' +
+    '<path class="cc-views" d="' + pathOf('views') + '" />' +
+    dotsOf('likes', 'cc-dot-likes') + dotsOf('views', 'cc-dot-views') +
+    endLabels + xLabels + yLabels + hovers;
+
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(function (rect) {
+    rect.addEventListener('mouseenter', function () {
+      const p = S[Number(rect.getAttribute('data-idx'))];
+      if (!p || !tooltip) return;
+      const b = rect.getBoundingClientRect(), wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      tooltip.innerHTML =
+        '<div class="tooltip-month">from ' + escapeHtml(p.from) +
+          (p.from >= cc.onset ? ' <span class="tooltip-tag">after the change</span>' : '') + '</div>' +
+        '<div class="tooltip-row"><strong>' + p.views + '</strong> views index</div>' +
+        '<div class="tooltip-row"><strong>' + p.likes + '</strong> likes index</div>' +
+        '<div class="tooltip-row tooltip-detail">' + p.n + ' upload' + (p.n === 1 ? '' : 's') +
+          ', each read at ' + cc.ageHours + 'h old</div>';
+      const desired = b.left - wrap.left + b.width / 2;
+      const tipW = tooltip.offsetWidth || 200;
+      tooltip.style.left = Math.max(0, Math.min(desired - tipW / 2, wrap.width - tipW)) + 'px';
+      tooltip.style.top = (b.top - wrap.top - 10) + 'px';
+    });
+    rect.addEventListener('mouseleave', function () { if (tooltip) tooltip.style.display = 'none'; });
+  });
+}
+
 function renderLikeRateChart(chartData, inProgressMonth) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
@@ -9478,6 +9624,7 @@ function niceDurationAxis(minSec, maxSec) {
     await Promise.all([
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; if (typeof window.renderStrikeAlert === 'function') { try { window.renderStrikeAlert(); } catch(e){} } } }).catch(e => console.warn('title-history', e)),
+      fetch('counting-change.json').then(async r => { if (r.ok){ window.__countingChange = await r.json(); if (typeof window.renderAnalysisChart === 'function' && typeof chartMetricIsCC === 'function' && chartMetricIsCC()) { try { window.renderAnalysisChart(); } catch(e){} } } }).catch(e => console.warn('counting-change', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
@@ -11019,6 +11166,16 @@ function renderWindowList(startDate, endDate) {
   // Goto-analysis links (mini-trend "Open full chart") — carry the mini-trend's
   // channel + period selection through so the full chart shows the same data.
   document.addEventListener('click', (e) => {
+    // Counting-change notice "How we measured it" → Analysis tab, benchmark chart
+    if (e.target.closest('[data-goto-benchmark]')) {
+      show('analysis');
+      setTimeout(() => {
+        if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric('counting_change');
+        const wrap = document.getElementById('chartWrap');
+        if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 120);
+      return;
+    }
     // Revenue card "full chart →" → Analysis tab, expand the revenue panel
     if (e.target.closest('[data-goto-revenue]')) {
       show('analysis');
