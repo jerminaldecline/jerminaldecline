@@ -3356,8 +3356,8 @@ const VCC_ONSET_DAY = '2026-08-27';
 // reached by each age. Used to work out how much of a video's traffic arrived
 // AFTER the change rather than assuming whole months.
 const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
-const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides of this comparison use estimated engaged views, so it is a valid read against months before the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
-const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="This compares reported views across 27 Aug 2026, when YouTube began counting a view from the first frame instead of after about 30 seconds. The two sides were counted by different rules, so the change flatters the newer month. Switch to engaged for a comparable read." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides use engaged views, so this compares like with like across the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="These two months were counted by different rules, so the newer one is flattered. Switch to engaged for a fair comparison." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
 function vccExposure(publishedAt){
   const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
   if (!(days > 0)) return 1;
@@ -4121,7 +4121,7 @@ function render(m){
   const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
-  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}. It's also what YouTube pays on." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
