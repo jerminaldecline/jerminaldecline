@@ -5814,6 +5814,12 @@ function renderTrendChart(yoy) {
   // renderLikeRateChart function are kept in place so the mode can be
   // restored from a URL param or programmatic state without code changes
   // if we ever want it back. Currently unreachable from the chart toggle.
+  // Any renderer may hide the chart wrap for an empty state, so clear that here
+  // rather than in each of them - otherwise the next metric selected inherits a
+  // hidden chart area and looks broken for a reason unrelated to it.
+  const _cw = document.getElementById('chartWrap');
+  if (_cw && _cw.style.display === 'none') _cw.style.display = '';
+
   // The benchmark chart. Takes no chartData - it reads its own precomputed
   // series - so it is dispatched before the monthly-data guards below.
   if (chartMetric === 'counting_change') {
@@ -6423,9 +6429,14 @@ function renderCountingChangeChart() {
   const cc = window.__countingChange;
   const handle = (typeof scope !== 'undefined' && scope !== 'ALL') ? scope : '@TheQuartering';
   const ch = cc && cc.channels && (cc.channels[handle] || cc.channels['@TheQuartering']);
+  const wrapEmpty = document.getElementById('chartWrap');
   if (!ch || !ch.series || ch.series.length < 3) {
+    // Clearing the SVG is not enough - it keeps its box and leaves a 400px void
+    // under the title, which reads as a broken chart rather than a missing file.
     svg.innerHTML = '';
-    legend.innerHTML = '<span class="trend-legend-item">Benchmark data not loaded yet.</span>';
+    if (wrapEmpty) wrapEmpty.style.display = 'none';
+    legend.innerHTML = '<span class="trend-legend-item">Benchmark data unavailable '
+      + '(counting-change.json did not load).</span>';
     return;
   }
   const S = ch.series;
