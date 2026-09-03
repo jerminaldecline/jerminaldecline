@@ -39,6 +39,11 @@ const OUT = path.join(PUB, 'counting-change.json');
 
 const ONSET = '2026-08-27';   // where the data breaks, not YouTube's announced 24th
 const AGE_H = 24;             // matched age every upload is read at
+// Like-rate threshold for the distribution view, in percent. Chosen by maximum
+// separation rather than by taste: below 6.5% sits 1 of 168 pre-change uploads
+// and 22 of 24 post-change ones. A rounder 4% would catch only 5 of the 24 and
+// understate the split; 8% starts pulling in real pre-change videos.
+const LOW_RATE_PCT = 6.5;
 const FROM  = '2026-07-05';   // as far back as the archive supports this read
 const CHANNELS = { '@TheQuartering': 'UCfwE_ODI1YTbdjkzuSi1Nag',
                    '@JeremyHambly':  'UCEOtZuVe8emWLKRzJIkzVow' };
@@ -138,7 +143,12 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
       likes: Math.round(100 * med(bucket.map(p => p.lk)) / baseL) });
   }
 
+  // Per-upload like rates, for the distribution strip. Two small arrays rather
+  // than a histogram, so the chart can bin them however it likes later.
+  const rate = p => 100 * p.lk / p.vw;
+  const distPre = pre.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   const post = pts.filter(p => p.d >= ONSET);
+  const distPost = post.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   // Median of the PER-VIDEO rates, not a ratio of aggregate medians. This is the
   // same statistic the site's factor is measured with, and mixing the two would
   // publish a headline number that disagrees with the one in the tooltip.
@@ -147,6 +157,10 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   const rateAfter = rateOf(post);
   out.channels[handle] = {
     n: pts.length, nPost: post.length,
+    lowRatePct: LOW_RATE_PCT,
+    dist: { pre: distPre, post: distPost,
+            lowPre: distPre.filter(r => r < LOW_RATE_PCT).length,
+            lowPost: distPost.filter(r => r < LOW_RATE_PCT).length },
     rateBefore: +rateBefore.toFixed(1), rateAfter: +rateAfter.toFixed(1),
     factor: +(rateBefore / rateAfter).toFixed(2),
     series,
@@ -158,4 +172,6 @@ console.log('Wrote %s', path.relative(process.cwd(), OUT));
 for (const [h, c] of Object.entries(out.channels)) {
   console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx',
     h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor);
+  console.log('      below %s%%: %d of %d before, %d of %d after',
+    c.lowRatePct, c.dist.lowPre, c.dist.pre.length, c.dist.lowPost, c.dist.post.length);
 }
