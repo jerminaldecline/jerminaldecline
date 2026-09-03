@@ -790,6 +790,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .cc-endlabel {font-size: 11px; font-weight: 800; letter-spacing: 0.02em;}
 .cc-endlabel.v {fill: var(--accent);}
 .cc-endlabel.l {fill: var(--up);}
+.cc-ratio {font-size: 12px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.02em;}
 .trend-legend-swatch.ccviews {background: var(--accent);}
 .trend-legend-swatch.cclikes {background: var(--up);}
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
@@ -5659,7 +5660,7 @@ function setChartTitle(metric, mode) {
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
     counting_change: ['How we measured the counting change',
-      'Views and likes per upload, both read at the same age and indexed to the pre-change normal. They track until 27 Aug, then only views moves.'],
+      'Both read at the same age and indexed to the pre-change normal. They track until 27 Aug, then views steps clear and stays clear. Log scale, so a constant gap is a constant ratio.'],
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
@@ -6448,11 +6449,24 @@ function renderCountingChangeChart() {
   const W = 720, H = 280;
   const P = { top: 22, right: 58, bottom: 48, left: 48 };
   const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
-  const top = Math.max.apply(null, S.map(function (p) { return Math.max(p.views, p.likes); }).concat([100])) * 1.12;
+  // LOG scale, and this is the whole point of the chart rather than a detail.
+  // These are two indexed series, so what matters is the RATIO between them, not
+  // the arithmetic gap. On a linear axis a constant ratio LOOKS like convergence
+  // whenever both series fall - which is exactly what happens here: views go
+  // 220 -> 169 and likes 100 -> 75, the gap narrows from 120 to 94 points, and
+  // the eye reads the effect as fading. It is not: the ratio is 2.20 then 2.25,
+  // slightly wider. On a log axis a constant ratio is a constant vertical
+  // distance, so parallel lines mean the effect is holding and the reader can
+  // see that without doing arithmetic.
+  const allVals = S.map(function (p) { return Math.max(p.views, p.likes); })
+    .concat(S.map(function (p) { return Math.min(p.views, p.likes); })).concat([100]);
+  const hi = Math.max.apply(null, allVals) * 1.15;
+  const lo = Math.min.apply(null, allVals) / 1.15;
+  const lg = Math.log;
   const xFor = function (i) { return P.left + (S.length === 1 ? innerW / 2 : (i / (S.length - 1)) * innerW); };
-  const yFor = function (v) { return P.top + innerH - (v / top) * innerH; };
+  const yFor = function (v) { return P.top + innerH - ((lg(v) - lg(lo)) / (lg(hi) - lg(lo))) * innerH; };
 
-  const ticks = [0, 50, 100, 150, 200, 250].filter(function (t) { return t <= top; });
+  const ticks = [40, 50, 75, 100, 150, 200, 300].filter(function (t) { return t >= lo && t <= hi; });
   const gridLines = ticks.map(function (t) {
     return '<line class="chart-grid" x1="' + P.left + '" y1="' + yFor(t) + '" x2="' + (P.left + innerW) + '" y2="' + yFor(t) + '" />';
   }).join('');
@@ -6483,6 +6497,19 @@ function renderCountingChangeChart() {
     const lab = monthShort(p.from.slice(0, 7)) + ' ' + (+p.from.slice(8, 10));
     return '<text class="chart-axis-label x" x="' + xFor(i) + '" y="' + (H - 26) + '" text-anchor="middle">' + lab + '</text>';
   }).join('');
+  // The separation, stated. It is the whole output of the chart, and reading it
+  // off two log axes by eye is not something to ask of anyone.
+  let ratioLabel = '';
+  if (firstPost > 0) {
+    const post = S.slice(firstPost).filter(function (p) { return p.likes > 0; });
+    if (post.length) {
+      const r = post.reduce(function (a, p) { return a + p.views / p.likes; }, 0) / post.length;
+      const mx = (xFor(firstPost) + xFor(S.length - 1)) / 2;
+      const my = (yFor(post[post.length - 1].views) + yFor(post[post.length - 1].likes)) / 2;
+      ratioLabel = '<text class="cc-ratio" x="' + mx + '" y="' + my + '" text-anchor="middle">'
+        + r.toFixed(2) + '× apart</text>';
+    }
+  }
   const last = S.length - 1;
   const endLabels =
     '<text class="cc-endlabel v" x="' + (xFor(last) + 8) + '" y="' + (yFor(S[last].views) + 4) + '">views</text>' +
@@ -6496,7 +6523,7 @@ function renderCountingChangeChart() {
     '<path class="cc-likes" d="' + pathOf('likes') + '" />' +
     '<path class="cc-views" d="' + pathOf('views') + '" />' +
     dotsOf('likes', 'cc-dot-likes') + dotsOf('views', 'cc-dot-views') +
-    endLabels + xLabels + yLabels + hovers;
+    ratioLabel + endLabels + xLabels + yLabels + hovers;
 
   const wrapEl = document.getElementById('chartWrap');
   svg.querySelectorAll('.chart-hit').forEach(function (rect) {
