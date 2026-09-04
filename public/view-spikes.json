@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-01-AM",
-    "snapshots": 161
+    "to": "2026-09-04-AM",
+    "snapshots": 167
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -48,6 +48,12 @@
       "title": "Never EAT McDonalds Again!",
       "estPromotedViews": 2505,
       "spikeStartDate": "2026-06-27-PM"
+    },
+    {
+      "id": "aGDMKiNGFr8",
+      "title": "ASMONGOLD BAN BACKFIRES",
+      "estPromotedViews": 1339,
+      "spikeStartDate": "2026-08-19-PM"
     }
   ],
   "spikes": [
@@ -59,12 +65,12 @@
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 33.5,
       "baselinePerDay": 94,
-      "peakPerDay": 3866,
-      "ratio": 41.1,
+      "peakPerDay": 15608,
+      "ratio": 166,
       "spikeStartDate": "2026-08-30-PM",
-      "elevatedSnapshots": 3,
+      "elevatedSnapshots": 9,
       "status": "sustained",
-      "estPromotedViews": 2709,
+      "estPromotedViews": 33017,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -343,6 +349,30 @@
         [
           "2026-09-01-AM",
           306824
+        ],
+        [
+          "2026-09-01-PM",
+          308881
+        ],
+        [
+          "2026-09-02-AM",
+          311786
+        ],
+        [
+          "2026-09-02-PM",
+          317071
+        ],
+        [
+          "2026-09-03-AM",
+          322594
+        ],
+        [
+          "2026-09-03-PM",
+          330398
+        ],
+        [
+          "2026-09-04-AM",
+          337414
         ]
       ]
     },
@@ -638,6 +668,30 @@
         [
           "2026-09-01-AM",
           32153
+        ],
+        [
+          "2026-09-01-PM",
+          32154
+        ],
+        [
+          "2026-09-02-AM",
+          32156
+        ],
+        [
+          "2026-09-02-PM",
+          32157
+        ],
+        [
+          "2026-09-03-AM",
+          32158
+        ],
+        [
+          "2026-09-03-PM",
+          32159
+        ],
+        [
+          "2026-09-04-AM",
+          32163
         ]
       ]
     },
@@ -917,6 +971,157 @@
         [
           "2026-09-01-AM",
           72442
+        ],
+        [
+          "2026-09-01-PM",
+          72445
+        ],
+        [
+          "2026-09-02-AM",
+          72448
+        ],
+        [
+          "2026-09-02-PM",
+          72453
+        ],
+        [
+          "2026-09-03-AM",
+          72457
+        ],
+        [
+          "2026-09-03-PM",
+          72467
+        ],
+        [
+          "2026-09-04-AM",
+          72471
+        ]
+      ]
+    },
+    {
+      "id": "r2UB4LDCyvs",
+      "title": "IT HAPPENED AGAIN...",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "channel": "TheQuartering",
+      "publishedAt": "2026-08-21T20:25:41.000Z",
+      "ageDaysAtSpike": 11.5,
+      "baselinePerDay": 134,
+      "peakPerDay": 904,
+      "ratio": 6.7,
+      "spikeStartDate": "2026-09-01-PM",
+      "elevatedSnapshots": 2,
+      "status": "sustained",
+      "estPromotedViews": 744,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-08-22-AM",
+          11072
+        ],
+        [
+          "2026-08-22-PM",
+          17623
+        ],
+        [
+          "2026-08-23-AM",
+          20952
+        ],
+        [
+          "2026-08-23-PM",
+          21861
+        ],
+        [
+          "2026-08-24-AM",
+          22781
+        ],
+        [
+          "2026-08-24-PM",
+          23304
+        ],
+        [
+          "2026-08-25-AM",
+          24023
+        ],
+        [
+          "2026-08-25-PM",
+          24053
+        ],
+        [
+          "2026-08-26-AM",
+          24377
+        ],
+        [
+          "2026-08-26-PM",
+          24379
+        ],
+        [
+          "2026-08-27-AM",
+          24506
+        ],
+        [
+          "2026-08-27-PM",
+          24587
+        ],
+        [
+          "2026-08-28-AM",
+          24654
+        ],
+        [
+          "2026-08-28-PM",
+          24683
+        ],
+        [
+          "2026-08-29-AM",
+          24767
+        ],
+        [
+          "2026-08-29-PM",
+          24799
+        ],
+        [
+          "2026-08-30-AM",
+          24817
+        ],
+        [
+          "2026-08-30-PM",
+          24847
+        ],
+        [
+          "2026-08-31-AM",
+          24919
+        ],
+        [
+          "2026-08-31-PM",
+          25016
+        ],
+        [
+          "2026-09-01-AM",
+          25528
+        ],
+        [
+          "2026-09-01-PM",
+          25794
+        ],
+        [
+          "2026-09-02-AM",
+          26220
+        ],
+        [
+          "2026-09-02-PM",
+          26672
+        ],
+        [
+          "2026-09-03-AM",
+          26915
+        ],
+        [
+          "2026-09-03-PM",
+          27206
+        ],
+        [
+          "2026-09-04-AM",
+          27605
         ]
       ]
     },
@@ -927,13 +1132,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 56,
+      "baselinePerDay": 53,
       "peakPerDay": 1236,
-      "ratio": 22.1,
+      "ratio": 23.3,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 590,
+      "estPromotedViews": 592,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -1140,6 +1345,30 @@
         [
           "2026-09-01-AM",
           102640
+        ],
+        [
+          "2026-09-01-PM",
+          102664
+        ],
+        [
+          "2026-09-02-AM",
+          102678
+        ],
+        [
+          "2026-09-02-PM",
+          102725
+        ],
+        [
+          "2026-09-03-AM",
+          102773
+        ],
+        [
+          "2026-09-03-PM",
+          102795
+        ],
+        [
+          "2026-09-04-AM",
+          102921
         ]
       ]
     }
