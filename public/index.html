@@ -797,6 +797,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .cc-divider {stroke: var(--border); stroke-width: 1;}
 .cc-section {font-size: 11px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase;}
 .cc-thr {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.8;}
+.cc-zone {fill: var(--accent-2); opacity: 0.11;}
+.cc-row-n {font-size: 9px; fill: var(--text-dim);}
+.cc-zone-label {font-size: 10px; font-weight: 700; fill: var(--accent-2); opacity: 0.85;}
+.cc-count-sub {font-size: 9px; fill: var(--text-dim);}
+.cc-axis-title {font-size: 10px; fill: var(--text-dim);}
 .cc-thr-label {font-size: 10px; font-weight: 700; fill: var(--accent-2);}
 .cc-row-label {font-size: 11px; font-weight: 700; fill: var(--text-muted);}
 .cc-row-axis {stroke: var(--border); stroke-width: 1;}
@@ -6550,10 +6555,14 @@ function renderCountingChangeChart() {
   if (D && D.pre && D.post && D.pre.length && D.post.length) {
     const allR = D.pre.concat(D.post);
     const rMax = Math.max.apply(null, allR) * 1.06;
-    const sx = function (r) { return P.left + (r / rMax) * innerW; };
+    // Left gutter for the row labels. Putting them above each row overlapped the
+    // zone caption and made them look like part of the shaded band.
+    const GUT = 104;
+    const sx0 = P.left + GUT, sw = innerW - GUT;
+    const sx = function (r) { return sx0 + (r / rMax) * sw; };
     const rows = [
-      { label: 'Before 27 Aug', vals: D.pre,  y: STRIP_TOP + 26, low: D.lowPre,  cls: 'cc-dot-before' },
-      { label: 'After',         vals: D.post, y: STRIP_TOP + 74, low: D.lowPost, cls: 'cc-dot-after' },
+      { label: 'Before 27 Aug', vals: D.pre,  y: STRIP_TOP + 30, low: D.lowPre,  cls: 'cc-dot-before' },
+      { label: 'After 27 Aug',  vals: D.post, y: STRIP_TOP + 80, low: D.lowPost, cls: 'cc-dot-after' },
     ];
     const thr = ch.lowRatePct;
     // A rule between the two panels: they are one argument but different units,
@@ -6561,24 +6570,33 @@ function renderCountingChangeChart() {
     strip += '<line class="cc-divider" x1="' + P.left + '" y1="' + (STRIP_TOP - 22) +
              '" x2="' + (P.left + innerW) + '" y2="' + (STRIP_TOP - 22) + '" />';
     strip += '<text class="cc-section" x="' + P.left + '" y="' + (STRIP_TOP - 4) +
-             '">Like rate per upload, one dot each</text>';
+             '">Like rate per upload at 24h old, one dot each</text>';
+    // Shade the zone below the threshold across both rows. Without it a reader
+    // has to work out from the counts which side of the line matters; with it,
+    // "before, one dot in the shaded band; after, all of them" is just visible.
+    strip += '<rect class="cc-zone" x="' + sx0 + '" y="' + (STRIP_TOP + 18) +
+             '" width="' + (sx(thr) - sx0) + '" height="' + 84 + '" />';
+    strip += '<text class="cc-zone-label" x="' + (sx0 + 6) + '" y="' + (STRIP_TOP + 12) +
+             '">Below ' + thr + '% like rate</text>';
     strip += '<line class="cc-thr" x1="' + sx(thr) + '" y1="' + (STRIP_TOP + 6) +
              '" x2="' + sx(thr) + '" y2="' + (STRIP_TOP + 92) + '" />';
-    strip += '<text class="cc-thr-label" x="' + (sx(thr) + 6) + '" y="' + (STRIP_TOP + 14) + '">' +
-             thr + '% like rate</text>';
     for (const row of rows) {
-      strip += '<text class="cc-row-label" x="' + P.left + '" y="' + (row.y - 13) + '">' +
+      strip += '<text class="cc-row-label" x="' + P.left + '" y="' + (row.y + 4) + '">' +
                row.label + '</text>';
-      strip += '<line class="cc-row-axis" x1="' + P.left + '" y1="' + row.y +
-               '" x2="' + (P.left + innerW) + '" y2="' + row.y + '" />';
+      strip += '<text class="cc-row-n" x="' + P.left + '" y="' + (row.y + 17) + '">' +
+               row.vals.length + ' uploads</text>';
+      strip += '<line class="cc-row-axis" x1="' + sx0 + '" y1="' + row.y +
+               '" x2="' + (sx0 + sw) + '" y2="' + row.y + '" />';
       // Deterministic vertical jitter so overlapping uploads stay countable
       // without the layout changing between renders.
       strip += row.vals.map(function (r, i) {
         const jitter = ((i % 5) - 2) * 2.6;
         return '<circle class="' + row.cls + ' cc-dot-dist" cx="' + sx(r) + '" cy="' + (row.y + jitter) + '" r="3" />';
       }).join('');
-      strip += '<text class="cc-count" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 4) + '">' +
-               row.low + '/' + row.vals.length + '</text>';
+      strip += '<text class="cc-count" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 1) + '">' +
+               row.low + ' of ' + row.vals.length + '</text>';
+      strip += '<text class="cc-count-sub" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 13) + '">'
+               + 'in the band</text>';
     }
     // Sample size and interval, stated on the chart rather than left to the
     // tooltip. Anyone who has scrolled this far is checking the working, and
@@ -6591,7 +6609,7 @@ function renderCountingChangeChart() {
       + ' pooled across both channels (n=' + pooledPost + ')</text>';
     const xt = [0, 5, 10, 15, 20].filter(function (t) { return t <= rMax; });
     strip += xt.map(function (t) {
-      return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 108) +
+      return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 114) +
              '" text-anchor="middle">' + t + '%</text>';
     }).join('');
   }
