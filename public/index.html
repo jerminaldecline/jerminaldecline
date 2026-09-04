@@ -802,6 +802,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .cc-row-axis {stroke: var(--border); stroke-width: 1;}
 .cc-count {font-size: 11px; font-weight: 800; fill: var(--text-muted);}
 .cc-strip-note {font-size: 10px; fill: var(--text-dim);}
+.cc-foot {font-size: 10px; fill: var(--text-dim);}
 .trend-legend-swatch.ccviews {background: var(--accent);}
 .trend-legend-swatch.cclikes {background: var(--up);}
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
@@ -3381,7 +3382,11 @@ const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.
 //
 // n=6 post-change videos. Widen or revisit as more accumulate.
 const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
-const VCC_FACTOR = { low: 2.00, high: 2.30 };
+// The measured 95% interval, not a hand-picked band. Bootstrapped from the
+// per-video like rates, pooled across both channels, n=24 post-change uploads.
+// It was 2.00-2.30 before the interval existed, which quietly claimed more
+// precision than the measurement supports.
+const VCC_FACTOR = { low: 1.91, high: 2.35 };
 const VCC_MID = 2.15;
 // Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
 // daily-views.json without re-parsing a timestamp per day.
@@ -4155,7 +4160,7 @@ function render(m){
   const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
-  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}. It's also what YouTube pays on." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}, give or take 10%. It's an estimate, and it's also what YouTube pays on." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
@@ -6575,6 +6580,15 @@ function renderCountingChangeChart() {
       strip += '<text class="cc-count" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 4) + '">' +
                row.low + '/' + row.vals.length + '</text>';
     }
+    // Sample size and interval, stated on the chart rather than left to the
+    // tooltip. Anyone who has scrolled this far is checking the working, and
+    // "2.15x" without an n or a range invites more confidence than it has earned.
+    let pooledPost = 0;
+    for (const k in cc.channels) pooledPost += (cc.channels[k].dist || {post: []}).post.length;
+    strip += '<text class="cc-foot" x="' + P.left + '" y="' + (STRIP_TOP + 130) + '">'
+      + 'Factor ' + ch.factor + '× here from ' + D.post.length + ' post-change uploads · '
+      + 'site uses ' + VCC_MID + '×, 95% interval ' + VCC_FACTOR.low + '–' + VCC_FACTOR.high
+      + ' pooled across both channels (n=' + pooledPost + ')</text>';
     const xt = [0, 5, 10, 15, 20].filter(function (t) { return t <= rMax; });
     strip += xt.map(function (t) {
       return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 108) +
@@ -6582,7 +6596,7 @@ function renderCountingChangeChart() {
     }).join('');
   }
 
-  svg.setAttribute('viewBox', '0 0 720 ' + (D && D.pre && D.pre.length ? 430 : 280));
+  svg.setAttribute('viewBox', '0 0 720 ' + (D && D.pre && D.pre.length ? 452 : 280));
 
   svg.innerHTML = strip + gridLines + baseLine + breakRule +
     '<path class="cc-likes" d="' + pathOf('likes') + '" />' +
