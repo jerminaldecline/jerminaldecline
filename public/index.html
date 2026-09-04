@@ -779,6 +779,32 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     font-weight: 600;
     letter-spacing: 0.02em;}
 .chart-line-curr {fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+/* Counting-change benchmark. Views takes the accent because it is the series
+   that moves; likes is deliberately quieter - it is the control, and the whole
+   point is that it does NOT move. */
+.cc-views {fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+.cc-likes {fill: none; stroke: var(--up); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round;}
+.cc-dot-views {fill: var(--accent);}
+.cc-dot-likes {fill: var(--up);}
+.cc-base {stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 3;}
+.cc-endlabel {font-size: 11px; font-weight: 800; letter-spacing: 0.02em;}
+.cc-endlabel.v {fill: var(--accent);}
+.cc-endlabel.l {fill: var(--up);}
+.cc-ratio {font-size: 12px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.02em;}
+.cc-dot-dist {opacity: 0.8;}
+.cc-dot-before {fill: var(--text-dim);}
+.cc-dot-after {fill: var(--accent-2);}
+.cc-divider {stroke: var(--border); stroke-width: 1;}
+.cc-section {font-size: 11px; font-weight: 800; fill: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase;}
+.cc-thr {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.8;}
+.cc-thr-label {font-size: 10px; font-weight: 700; fill: var(--accent-2);}
+.cc-row-label {font-size: 11px; font-weight: 700; fill: var(--text-muted);}
+.cc-row-axis {stroke: var(--border); stroke-width: 1;}
+.cc-count {font-size: 11px; font-weight: 800; fill: var(--text-muted);}
+.cc-strip-note {font-size: 10px; fill: var(--text-dim);}
+.cc-foot {font-size: 10px; fill: var(--text-dim);}
+.trend-legend-swatch.ccviews {background: var(--accent);}
+.trend-legend-swatch.cclikes {background: var(--up);}
 .chart-line-prev {fill: none; stroke: var(--text-dim); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round;}
 /* Duration line — distinct colour with a dashed pattern so it doesn't get confused
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
@@ -2563,6 +2589,13 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   border-left:3px solid var(--accent-2);border-radius:8px;padding:0.55rem 0.85rem;
   margin:0.8rem 0 1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.45}
 .vcc-note strong{color:var(--text)}
+/* Same weight as the YouTube Help link beside it - both are routes out of the
+   note, one to the announcement and one to our own evidence. */
+.vcc-how{appearance:none;background:none;border:none;padding:0;font:inherit;
+  color:var(--accent);font-weight:700;cursor:pointer;text-decoration:underline;
+  text-underline-offset:2px}
+.vcc-how:hover{color:var(--text)}
+.vcc-sep{color:var(--text-dim);padding:0 0.15rem}
 .vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
 /* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
@@ -2724,6 +2757,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
         <button type="button" class="an-metric-btn" data-metric="tag_blocks" role="tab">Tag blocks</button>
+        <button type="button" class="an-metric-btn" data-metric="counting_change" role="tab">Counting change</button>
       </div>
       <label class="an-metric-select-wrap" for="anMetricSelect"><span class="an-metric-select-lbl">Chart</span>
         <select id="anMetricSelect" class="an-mobile-sel" aria-label="Chart metric">
@@ -2735,6 +2769,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <option value="engagement_variance">Engagement variance</option>
           <option value="all_videos">Video lengths</option>
           <option value="tag_blocks">Tag blocks</option>
+                  <option value="counting_change">Counting change</option>
         </select>
       </label>
       </div>
@@ -3347,7 +3382,11 @@ const RPM = { l8:[0.85,1.28], l38:[0.50,1.00], sub3:[0.30,0.60], shorts:[0.02,0.
 //
 // n=6 post-change videos. Widen or revisit as more accumulate.
 const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
-const VCC_FACTOR = { low: 2.00, high: 2.30 };
+// The measured 95% interval, not a hand-picked band. Bootstrapped from the
+// per-video like rates, pooled across both channels, n=24 post-change uploads.
+// It was 2.00-2.30 before the interval existed, which quietly claimed more
+// precision than the measurement supports.
+const VCC_FACTOR = { low: 1.91, high: 2.35 };
 const VCC_MID = 2.15;
 // Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
 // daily-views.json without re-parsing a timestamp per day.
@@ -3356,8 +3395,8 @@ const VCC_ONSET_DAY = '2026-08-27';
 // reached by each age. Used to work out how much of a video's traffic arrived
 // AFTER the change rather than assuming whole months.
 const VCC_CURVE = [[0,0],[0.5,0.416],[1,0.718],[2,0.917],[3,0.96],[7,0.995],[14,0.999],[21,1]];
-const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides of this comparison use estimated engaged views, so it is a valid read against months before the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
-const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="This compares reported views across 27 Aug 2026, when YouTube began counting a view from the first frame instead of after about 30 seconds. The two sides were counted by different rules, so the change flatters the newer month. Switch to engaged for a comparable read." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_ENG = '<span class="delta-basis">like-for-like <span class="info-icon" data-popover="Both sides use engaged views, so this compares like with like across the counting change." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
+const VCC_NOTE_REP = '<span class="delta-basis delta-basis-warn">not like-for-like <span class="info-icon" data-popover="These two months were counted by different rules, so the newer one is flattered. Switch to engaged for a fair comparison." tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>';
 function vccExposure(publishedAt){
   const days = (VCC_FROM - Date.parse(publishedAt)) / 86400000;
   if (!(days > 0)) return 1;
@@ -4121,7 +4160,7 @@ function render(m){
   const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
-  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="Reported is the number YouTube publishes. Engaged is the comparable figure - the count under the previous rule, which needed about 30 seconds of watch time, where from 27 Aug 2026 a view counts from the first frame. Estimated at ${VCC_MID}× from like rate at matched age: a like is a deliberate act, so the change moved the denominator and not the numerator. Payouts still use engaged views, so that is the figure earnings track." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}, give or take 10%. It's an estimate, and it's also what YouTube pays on." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
@@ -4996,8 +5035,11 @@ function vccNote(kind, hasRule){
   // Only claim the dashed line exists on charts that actually draw one - the
   // scatter plots take the note but have no month axis to mark.
   const rule = hasRule ? ' The dashed line marks the month it lands in.' : '';
+  // YouTube's announcement first, then our own evidence - what changed, then
+  // how we sized it. Separated, or the two links read as one run-on string.
+  const how = ' <span class="vcc-sep">\u00b7</span> <button type="button" class="vcc-how" data-goto-benchmark>How we measured it \u2192</button>';
   return '<div class="vcc-note">' + body + rule +
-    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a></div>';
+    ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a>' + how + '</div>';
 }
 
 // Vertical rule marking where the counting change lands on a monthly chart.
@@ -5633,6 +5675,8 @@ function setChartTitle(metric, mode) {
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
     like_rate: ['Long-form like rate', 'Likes \u00f7 views across each month, long-form only.'],
+    counting_change: ['How we measured the counting change',
+      'Both read at the same age and indexed to the pre-change normal. They track until 27 Aug, then views steps clear and stays clear. Log scale, so a constant gap is a constant ratio.'],
     tag_blocks: ['Creator tags over time', "Each month's long-form uploads by tag type: blocks the creator reused, tags YouTube auto-added, and genuine per-video tags. <span class='info-icon' tabindex='0' role='button' aria-label='About creator tags' data-popover='YouTube lets creators attach hidden keyword tags to each video to help it surface in search. The mix shows how deliberately — or not — the channel tagged its videos over time.'>ⓘ</span>"]
   };
   const [t, s] = T[metric] || T.views;
@@ -5646,6 +5690,8 @@ function setChartTitle(metric, mode) {
   // DENOMINATOR - those were missing, and they are the ones that mislead most.
   // tag_blocks is deliberately absent: it plots how many VIDEOS use a tag set,
   // not views, so the counting change cannot touch it.
+  // counting_change is absent on purpose: that chart IS the explanation, so
+  // captioning it with a warning about the thing it explains reads as a loop.
   const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
                         like_rate:1, engagement_variance:1, all_videos:1 };
   // Rate metrics need different wording: the line falls because the divisor
@@ -5785,6 +5831,23 @@ function renderTrendChart(yoy) {
   // renderLikeRateChart function are kept in place so the mode can be
   // restored from a URL param or programmatic state without code changes
   // if we ever want it back. Currently unreachable from the chart toggle.
+  // Any renderer may hide the chart wrap for an empty state, so clear that here
+  // rather than in each of them - otherwise the next metric selected inherits a
+  // hidden chart area and looks broken for a reason unrelated to it.
+  const _cw = document.getElementById('chartWrap');
+  if (_cw && _cw.style.display === 'none') _cw.style.display = '';
+  // The benchmark chart draws a distribution strip under the lines and needs a
+  // taller box. Reset here for every other metric, next to the wrap reset, so a
+  // renderer that grows the viewBox cannot leave the next chart stretched.
+  const _sv = document.getElementById('trendChart');
+  if (_sv && chartMetric !== 'counting_change') _sv.setAttribute('viewBox', '0 0 720 280');
+
+  // The benchmark chart. Takes no chartData - it reads its own precomputed
+  // series - so it is dispatched before the monthly-data guards below.
+  if (chartMetric === 'counting_change') {
+    return renderCountingChangeChart();
+  }
+
   const isLikeRateMode = chartMetric === 'like_rate'
     && viewMode === 'long'
     && ANALYTICS_CHANNEL !== 'ALL';
@@ -6364,6 +6427,206 @@ function renderTrendChart(yoy) {
 // changed alongside the audience size. A flat like rate while views collapse
 // means the remaining audience is still as engaged (loyalty held); a falling
 // rate means the audience cooled too (engagement collapsed with attention).
+// The benchmark behind the factor, drawn as the argument rather than stated as a
+// number. Views and likes per upload, both read at a matched 24h age, indexed to
+// the pre-change median. A more popular video lifts BOTH lines, so only a change
+// in what COUNTS as a view can separate them - and they run together for eleven
+// buckets before splitting on 27 Aug.
+//
+// Reads counting-change.json (built by scripts/build-counting-change.js) rather
+// than monthlyData: this needs a matched-age read per upload, which the monthly
+// aggregates cannot give.
+// The series is fetched with the other side files, so it can land after the
+// chart has already painted an empty state. Only redraw if it is on screen.
+function chartMetricIsCC(){
+  try { return typeof chartMetric !== 'undefined' && chartMetric === 'counting_change'; }
+  catch (e) { return false; }
+}
+window.chartMetricIsCC = chartMetricIsCC;
+function renderCountingChangeChart() {
+  const svg = document.getElementById('trendChart');
+  const legend = document.getElementById('trendLegend');
+  const tooltip = document.getElementById('chartTooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  const cc = window.__countingChange;
+  const handle = (typeof scope !== 'undefined' && scope !== 'ALL') ? scope : '@TheQuartering';
+  const ch = cc && cc.channels && (cc.channels[handle] || cc.channels['@TheQuartering']);
+  const wrapEmpty = document.getElementById('chartWrap');
+  if (!ch || !ch.series || ch.series.length < 3) {
+    // Clearing the SVG is not enough - it keeps its box and leaves a 400px void
+    // under the title, which reads as a broken chart rather than a missing file.
+    svg.innerHTML = '';
+    if (wrapEmpty) wrapEmpty.style.display = 'none';
+    legend.innerHTML = '<span class="trend-legend-item">Benchmark data unavailable '
+      + '(counting-change.json did not load).</span>';
+    return;
+  }
+  const S = ch.series;
+  legend.innerHTML =
+    '<span class="trend-legend-item"><span class="trend-legend-swatch ccviews"></span> Views per upload</span>' +
+    '<span class="trend-legend-item"><span class="trend-legend-swatch cclikes"></span> Likes per upload</span>' +
+    VCC_BREAK_LEGEND;
+
+  const W = 720, H = 280;
+  const P = { top: 22, right: 58, bottom: 48, left: 48 };
+  const innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
+  // LOG scale, and this is the whole point of the chart rather than a detail.
+  // These are two indexed series, so what matters is the RATIO between them, not
+  // the arithmetic gap. On a linear axis a constant ratio LOOKS like convergence
+  // whenever both series fall - which is exactly what happens here: views go
+  // 220 -> 169 and likes 100 -> 75, the gap narrows from 120 to 94 points, and
+  // the eye reads the effect as fading. It is not: the ratio is 2.20 then 2.25,
+  // slightly wider. On a log axis a constant ratio is a constant vertical
+  // distance, so parallel lines mean the effect is holding and the reader can
+  // see that without doing arithmetic.
+  const allVals = S.map(function (p) { return Math.max(p.views, p.likes); })
+    .concat(S.map(function (p) { return Math.min(p.views, p.likes); })).concat([100]);
+  const hi = Math.max.apply(null, allVals) * 1.15;
+  const lo = Math.min.apply(null, allVals) / 1.15;
+  const lg = Math.log;
+  const xFor = function (i) { return P.left + (S.length === 1 ? innerW / 2 : (i / (S.length - 1)) * innerW); };
+  const yFor = function (v) { return P.top + innerH - ((lg(v) - lg(lo)) / (lg(hi) - lg(lo))) * innerH; };
+
+  const ticks = [40, 50, 75, 100, 150, 200, 300].filter(function (t) { return t >= lo && t <= hi; });
+  const gridLines = ticks.map(function (t) {
+    return '<line class="chart-grid" x1="' + P.left + '" y1="' + yFor(t) + '" x2="' + (P.left + innerW) + '" y2="' + yFor(t) + '" />';
+  }).join('');
+  const yLabels = ticks.map(function (t) {
+    return '<text class="chart-axis-label y" x="' + (P.left - 10) + '" y="' + (yFor(t) + 4) + '" text-anchor="end">' + t + '</text>';
+  }).join('');
+  // The 100 line is the pre-change normal, so it is drawn rather than left to
+  // the reader to infer from the axis.
+  const baseLine = '<line class="cc-base" x1="' + P.left + '" y1="' + yFor(100) + '" x2="' + (P.left + innerW) + '" y2="' + yFor(100) + '" />';
+
+  const pathOf = function (key) {
+    return S.map(function (p, i) { return (i ? 'L' : 'M') + xFor(i) + ' ' + yFor(p[key]); }).join(' ');
+  };
+  const dotsOf = function (key, cls) {
+    return S.map(function (p, i) { return '<circle class="' + cls + '" cx="' + xFor(i) + '" cy="' + yFor(p[key]) + '" r="3.5" />'; }).join('');
+  };
+
+  // The onset is a bucket boundary by construction, so the rule sits midway
+  // between the last pre-change bucket and the first post-change one.
+  let breakRule = '';
+  const firstPost = S.findIndex(function (p) { return p.from >= cc.onset; });
+  if (firstPost > 0) {
+    const bx = (xFor(firstPost - 1) + xFor(firstPost)) / 2;
+    breakRule = '<line class="chart-vcc-break" x1="' + bx + '" y1="' + P.top + '" x2="' + bx + '" y2="' + (P.top + innerH) + '" />';
+  }
+  const xLabels = S.map(function (p, i) {
+    if (i % 2 !== 0 && i !== S.length - 1) return '';
+    const lab = monthShort(p.from.slice(0, 7)) + ' ' + (+p.from.slice(8, 10));
+    return '<text class="chart-axis-label x" x="' + xFor(i) + '" y="' + (H - 26) + '" text-anchor="middle">' + lab + '</text>';
+  }).join('');
+  // The separation, stated. It is the whole output of the chart, and reading it
+  // off two log axes by eye is not something to ask of anyone.
+  let ratioLabel = '';
+  if (firstPost > 0) {
+    const post = S.slice(firstPost).filter(function (p) { return p.likes > 0; });
+    if (post.length) {
+      const r = post.reduce(function (a, p) { return a + p.views / p.likes; }, 0) / post.length;
+      const mx = (xFor(firstPost) + xFor(S.length - 1)) / 2;
+      const my = (yFor(post[post.length - 1].views) + yFor(post[post.length - 1].likes)) / 2;
+      ratioLabel = '<text class="cc-ratio" x="' + mx + '" y="' + my + '" text-anchor="middle">'
+        + r.toFixed(2) + '× apart</text>';
+    }
+  }
+  const last = S.length - 1;
+  const endLabels =
+    '<text class="cc-endlabel v" x="' + (xFor(last) + 8) + '" y="' + (yFor(S[last].views) + 4) + '">views</text>' +
+    '<text class="cc-endlabel l" x="' + (xFor(last) + 8) + '" y="' + (yFor(S[last].likes) + 4) + '">likes</text>';
+  const hovers = S.map(function (p, i) {
+    return '<rect class="chart-hit" x="' + (xFor(i) - innerW / (S.length * 2)) + '" y="' + P.top +
+      '" width="' + (innerW / S.length) + '" height="' + innerH + '" data-idx="' + i + '" fill="transparent" />';
+  }).join('');
+
+  // ---- distribution strip -------------------------------------------------
+  // The lines show WHEN it happened. This shows how completely it separated:
+  // one upload per dot, placed by its like rate. Before and after barely
+  // overlap, which is a harder thing to argue with than a median.
+  const D = ch.dist;
+  let strip = '';
+  const STRIP_TOP = 316;
+  if (D && D.pre && D.post && D.pre.length && D.post.length) {
+    const allR = D.pre.concat(D.post);
+    const rMax = Math.max.apply(null, allR) * 1.06;
+    const sx = function (r) { return P.left + (r / rMax) * innerW; };
+    const rows = [
+      { label: 'Before 27 Aug', vals: D.pre,  y: STRIP_TOP + 26, low: D.lowPre,  cls: 'cc-dot-before' },
+      { label: 'After',         vals: D.post, y: STRIP_TOP + 74, low: D.lowPost, cls: 'cc-dot-after' },
+    ];
+    const thr = ch.lowRatePct;
+    // A rule between the two panels: they are one argument but different units,
+    // and without it the dots read as part of the line chart's y axis.
+    strip += '<line class="cc-divider" x1="' + P.left + '" y1="' + (STRIP_TOP - 22) +
+             '" x2="' + (P.left + innerW) + '" y2="' + (STRIP_TOP - 22) + '" />';
+    strip += '<text class="cc-section" x="' + P.left + '" y="' + (STRIP_TOP - 4) +
+             '">Like rate per upload, one dot each</text>';
+    strip += '<line class="cc-thr" x1="' + sx(thr) + '" y1="' + (STRIP_TOP + 6) +
+             '" x2="' + sx(thr) + '" y2="' + (STRIP_TOP + 92) + '" />';
+    strip += '<text class="cc-thr-label" x="' + (sx(thr) + 6) + '" y="' + (STRIP_TOP + 14) + '">' +
+             thr + '% like rate</text>';
+    for (const row of rows) {
+      strip += '<text class="cc-row-label" x="' + P.left + '" y="' + (row.y - 13) + '">' +
+               row.label + '</text>';
+      strip += '<line class="cc-row-axis" x1="' + P.left + '" y1="' + row.y +
+               '" x2="' + (P.left + innerW) + '" y2="' + row.y + '" />';
+      // Deterministic vertical jitter so overlapping uploads stay countable
+      // without the layout changing between renders.
+      strip += row.vals.map(function (r, i) {
+        const jitter = ((i % 5) - 2) * 2.6;
+        return '<circle class="' + row.cls + ' cc-dot-dist" cx="' + sx(r) + '" cy="' + (row.y + jitter) + '" r="3" />';
+      }).join('');
+      strip += '<text class="cc-count" x="' + (P.left + innerW + 6) + '" y="' + (row.y + 4) + '">' +
+               row.low + '/' + row.vals.length + '</text>';
+    }
+    // Sample size and interval, stated on the chart rather than left to the
+    // tooltip. Anyone who has scrolled this far is checking the working, and
+    // "2.15x" without an n or a range invites more confidence than it has earned.
+    let pooledPost = 0;
+    for (const k in cc.channels) pooledPost += (cc.channels[k].dist || {post: []}).post.length;
+    strip += '<text class="cc-foot" x="' + P.left + '" y="' + (STRIP_TOP + 130) + '">'
+      + 'Factor ' + ch.factor + '× here from ' + D.post.length + ' post-change uploads · '
+      + 'site uses ' + VCC_MID + '×, 95% interval ' + VCC_FACTOR.low + '–' + VCC_FACTOR.high
+      + ' pooled across both channels (n=' + pooledPost + ')</text>';
+    const xt = [0, 5, 10, 15, 20].filter(function (t) { return t <= rMax; });
+    strip += xt.map(function (t) {
+      return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 108) +
+             '" text-anchor="middle">' + t + '%</text>';
+    }).join('');
+  }
+
+  svg.setAttribute('viewBox', '0 0 720 ' + (D && D.pre && D.pre.length ? 452 : 280));
+
+  svg.innerHTML = strip + gridLines + baseLine + breakRule +
+    '<path class="cc-likes" d="' + pathOf('likes') + '" />' +
+    '<path class="cc-views" d="' + pathOf('views') + '" />' +
+    dotsOf('likes', 'cc-dot-likes') + dotsOf('views', 'cc-dot-views') +
+    ratioLabel + endLabels + xLabels + yLabels + hovers;
+
+  const wrapEl = document.getElementById('chartWrap');
+  svg.querySelectorAll('.chart-hit').forEach(function (rect) {
+    rect.addEventListener('mouseenter', function () {
+      const p = S[Number(rect.getAttribute('data-idx'))];
+      if (!p || !tooltip) return;
+      const b = rect.getBoundingClientRect(), wrap = wrapEl.getBoundingClientRect();
+      tooltip.style.display = 'block';
+      tooltip.innerHTML =
+        '<div class="tooltip-month">from ' + escapeHtml(p.from) +
+          (p.from >= cc.onset ? ' <span class="tooltip-tag">after the change</span>' : '') + '</div>' +
+        '<div class="tooltip-row"><strong>' + p.views + '</strong> views index</div>' +
+        '<div class="tooltip-row"><strong>' + p.likes + '</strong> likes index</div>' +
+        '<div class="tooltip-row tooltip-detail">' + p.n + ' upload' + (p.n === 1 ? '' : 's') +
+          ', each read at ' + cc.ageHours + 'h old</div>';
+      const desired = b.left - wrap.left + b.width / 2;
+      const tipW = tooltip.offsetWidth || 200;
+      tooltip.style.left = Math.max(0, Math.min(desired - tipW / 2, wrap.width - tipW)) + 'px';
+      tooltip.style.top = (b.top - wrap.top - 10) + 'px';
+    });
+    rect.addEventListener('mouseleave', function () { if (tooltip) tooltip.style.display = 'none'; });
+  });
+}
+
 function renderLikeRateChart(chartData, inProgressMonth) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
@@ -9478,6 +9741,7 @@ function niceDurationAxis(minSec, maxSec) {
     await Promise.all([
       fetch('ad-videos.json').then(async r => { if (r.ok){ adVideoData = await r.json(); adVideoIds = new Set(); for (const channelKey of Object.keys(adVideoData.channels || {})) { for (const vid of (adVideoData.channels[channelKey].videoIds || [])) { adVideoIds.add(vid); } } window.__adIdSet = adVideoIds; } }).catch(e => console.warn('ad-videos', e)),
       fetch('title-history.json').then(async r => { if (r.ok){ const raw = await r.json(); titleHistoryData = raw.videos || raw.titles || raw; if (typeof window.renderStrikeAlert === 'function') { try { window.renderStrikeAlert(); } catch(e){} } } }).catch(e => console.warn('title-history', e)),
+      fetch('counting-change.json').then(async r => { if (r.ok){ window.__countingChange = await r.json(); if (typeof window.renderAnalysisChart === 'function' && typeof chartMetricIsCC === 'function' && chartMetricIsCC()) { try { window.renderAnalysisChart(); } catch(e){} } } }).catch(e => console.warn('counting-change', e)),
       fetch('reposts.json').then(async r => { if (r.ok){ window.__repostsData = await r.json(); if (typeof window.__updateVtabBadges === 'function') window.__updateVtabBadges(); } }).catch(e => console.warn('reposts', e)),
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
@@ -11019,6 +11283,16 @@ function renderWindowList(startDate, endDate) {
   // Goto-analysis links (mini-trend "Open full chart") — carry the mini-trend's
   // channel + period selection through so the full chart shows the same data.
   document.addEventListener('click', (e) => {
+    // Counting-change notice "How we measured it" → Analysis tab, benchmark chart
+    if (e.target.closest('[data-goto-benchmark]')) {
+      show('analysis');
+      setTimeout(() => {
+        if (typeof window.setAnalysisMetric === 'function') window.setAnalysisMetric('counting_change');
+        const wrap = document.getElementById('chartWrap');
+        if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 120);
+      return;
+    }
     // Revenue card "full chart →" → Analysis tab, expand the revenue panel
     if (e.target.closest('[data-goto-revenue]')) {
       show('analysis');
