@@ -2601,6 +2601,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   text-underline-offset:2px}
 .vcc-how:hover{color:var(--text)}
 .vcc-sep{color:var(--text-dim);padding:0 0.15rem}
+.vcc-tail{white-space:nowrap}
 .vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
 /* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
@@ -5030,8 +5031,11 @@ function vccNote(kind, hasRule){
   const today = (typeof ctDate === 'function')
     ? ctDate(new Date().toISOString())
     : new Date().toISOString().slice(0, 10);
-  if (today < VCC_DATE) return '';                 // renders nothing until the day it lands
-  const lead = '<strong>Views before and after 24 Aug 2026 are not comparable.</strong> YouTube now counts a view from the first frame rather than after about 30 seconds';
+  // Gated on the ANNOUNCED date, not the measured one: the note belongs up from
+  // the day the change was public, even though the data does not move for three
+  // more days. VCC_FROM is the date the arithmetic uses.
+  if (today < VCC_DATE) return '';
+  const lead = '<strong>Views before and after 27 Aug 2026 are not comparable.</strong> YouTube now counts a view from the first frame rather than after about 30 seconds';
   const body = kind === 'revenue'
     ? lead + ', which inflates view counts but not payouts, so estimates after that date run high.'
     : kind === 'rate'
@@ -5040,10 +5044,15 @@ function vccNote(kind, hasRule){
   // Only claim the dashed line exists on charts that actually draw one - the
   // scatter plots take the note but have no month axis to mark.
   const rule = hasRule ? ' The dashed line marks the month it lands in.' : '';
+  // Both dates are real and they are not the same date. YouTube announced the
+  // 24th; uploads on the 24th, 25th and 26th still behave normally and the break
+  // is total from the 27th, so the 27th is what every figure on the site uses.
+  // Saying only one of them left the notice and the charts contradicting.
+  const dates = ' Announced for 24 Aug, but our uploads only shift on the 27th, so that is the date used here.';
   // YouTube's announcement first, then our own evidence - what changed, then
   // how we sized it. Separated, or the two links read as one run-on string.
-  const how = ' <span class="vcc-sep">\u00b7</span> <button type="button" class="vcc-how" data-goto-benchmark>How we measured it \u2192</button>';
-  return '<div class="vcc-note">' + body + rule +
+  const how = ' <span class="vcc-tail"><span class="vcc-sep">\u00b7</span> <button type="button" class="vcc-how" data-goto-benchmark>How we measured it \u2192</button></span>';
+  return '<div class="vcc-note">' + body + rule + dates +
     ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a>' + how + '</div>';
 }
 
