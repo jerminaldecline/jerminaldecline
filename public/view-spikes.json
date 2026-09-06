@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-05-AM",
-    "snapshots": 169
+    "to": "2026-09-06-AM",
+    "snapshots": 171
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1351,
+      "estPromotedViews": 1386,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 34.5,
-      "baselinePerDay": 97,
+      "baselinePerDay": 100,
       "peakPerDay": 15608,
-      "ratio": 160.9,
+      "ratio": 156.1,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 9,
+      "elevatedSnapshots": 11,
       "status": "sustained",
-      "estPromotedViews": 39867,
+      "estPromotedViews": 46203,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -381,6 +381,14 @@
         [
           "2026-09-05-AM",
           345194
+        ],
+        [
+          "2026-09-05-PM",
+          346935
+        ],
+        [
+          "2026-09-06-AM",
+          351644
         ]
       ]
     },
@@ -708,6 +716,14 @@
         [
           "2026-09-05-AM",
           32163
+        ],
+        [
+          "2026-09-05-PM",
+          32163
+        ],
+        [
+          "2026-09-06-AM",
+          32163
         ]
       ]
     },
@@ -1019,6 +1035,14 @@
         [
           "2026-09-05-AM",
           72485
+        ],
+        [
+          "2026-09-05-PM",
+          72490
+        ],
+        [
+          "2026-09-06-AM",
+          72497
         ]
       ]
     },
@@ -1274,6 +1298,14 @@
         [
           "2026-09-05-AM",
           103043
+        ],
+        [
+          "2026-09-05-PM",
+          103081
+        ],
+        [
+          "2026-09-06-AM",
+          103153
         ]
       ]
     }

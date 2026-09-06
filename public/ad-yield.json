@@ -1,12 +1,12 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-09-05",
+ "_generated": "2026-09-06",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-09-05",
-  "snapshots": 169
+  "to": "2026-09-06",
+  "snapshots": 171
  },
  "ageMinDays": 14,
  "sample": {
