@@ -3,12 +3,13 @@
  "onset": "2026-08-27",
  "ageHours": 24,
  "from": "2026-07-05",
- "generated": "2026-09-07T10:06:55Z",
+ "generated": "2026-09-07T18:18:30Z",
  "channels": {
   "@TheQuartering": {
-   "n": 143,
-   "nPost": 25,
+   "n": 144,
+   "nPost": 26,
    "lowRatePct": 6.5,
+   "postViews": 1737097,
    "dist": {
     "pre": [
      4.72,
@@ -131,6 +132,7 @@
      4.17,
      4.21,
      4.46,
+     4.46,
      4.65,
      4.75,
      4.76,
@@ -146,11 +148,11 @@
      6.01
     ],
     "lowPre": 1,
-    "lowPost": 25
+    "lowPost": 26
    },
    "rateBefore": 89.5,
-   "rateAfter": 46.5,
-   "factor": 1.92,
+   "rateAfter": 45.6,
+   "factor": 1.96,
    "series": [
     {
      "from": "2026-07-05",
@@ -232,16 +234,17 @@
     },
     {
      "from": "2026-09-03",
-     "n": 7,
-     "views": 212,
-     "likes": 113
+     "n": 8,
+     "views": 207,
+     "likes": 108
     }
    ]
   },
   "@JeremyHambly": {
-   "n": 85,
-   "nPost": 17,
+   "n": 86,
+   "nPost": 18,
    "lowRatePct": 6.5,
+   "postViews": 257357,
    "dist": {
     "pre": [
      9.91,
@@ -312,6 +315,7 @@
      4.51,
      4.8,
      4.9,
+     4.92,
      5.21,
      5.3,
      6.33,
@@ -327,10 +331,10 @@
      8.36
     ],
     "lowPre": 0,
-    "lowPost": 10
+    "lowPost": 11
    },
    "rateBefore": 125.6,
-   "rateAfter": 64.9,
+   "rateAfter": 64.6,
    "factor": 1.94,
    "series": [
     {
@@ -407,11 +411,17 @@
     },
     {
      "from": "2026-09-03",
-     "n": 5,
-     "views": 121,
-     "likes": 64
+     "n": 6,
+     "views": 131,
+     "likes": 67
     }
    ]
   }
+ },
+ "site": {
+  "factor": 1.96,
+  "low": 1.83,
+  "high": 2.17,
+  "nPost": 44
  }
 }

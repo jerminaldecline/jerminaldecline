@@ -148,6 +148,7 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   const rate = p => 100 * p.lk / p.vw;
   const distPre = pre.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   const post = pts.filter(p => p.d >= ONSET);
+  const postViews = post.reduce((a, p) => a + p.vw, 0);
   const distPost = post.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   // Median of the PER-VIDEO rates, not a ratio of aggregate medians. This is the
   // same statistic the site's factor is measured with, and mixing the two would
@@ -158,6 +159,7 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   out.channels[handle] = {
     n: pts.length, nPost: post.length,
     lowRatePct: LOW_RATE_PCT,
+    postViews: Math.round(postViews),
     dist: { pre: distPre, post: distPost,
             lowPre: distPre.filter(r => r < LOW_RATE_PCT).length,
             lowPost: distPost.filter(r => r < LOW_RATE_PCT).length },
@@ -167,8 +169,48 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   };
 }
 
+// ---- the single number the site should divide by -------------------------
+// View-weighted across channels, because it deflates view TOTALS and one
+// channel supplies most of them. Bootstrapped for the interval so a re-measure
+// is one command rather than a command plus a separate analysis.
+const chans = Object.values(out.channels);
+if (chans.length) {
+  const wsum = chans.reduce((a, c) => a + c.postViews, 0) || 1;
+  const factor = chans.reduce((a, c) => a + c.postViews * c.factor, 0) / wsum;
+
+  // Resample uploads within each channel, recombine at the same weights.
+  let seed = 20260907;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const medOf = a => { const q = [...a].sort((x, y) => x - y), n = q.length;
+    return n ? (n % 2 ? q[(n - 1) / 2] : (q[n / 2 - 1] + q[n / 2]) / 2) : NaN; };
+  const boot = [];
+  for (let b = 0; b < 4000; b++) {
+    let num = 0;
+    for (const c of chans) {
+      const pre = Array.from({ length: c.dist.pre.length }, () => pick(c.dist.pre));
+      const po  = Array.from({ length: c.dist.post.length }, () => pick(c.dist.post));
+      const mp = medOf(po);
+      num += c.postViews * (mp > 0 ? medOf(pre) / mp : c.factor);
+    }
+    boot.push(num / wsum);
+  }
+  boot.sort((a, b) => a - b);
+  out.site = {
+    factor: +factor.toFixed(2),
+    low: +boot[Math.floor(boot.length * 0.025)].toFixed(2),
+    high: +boot[Math.floor(boot.length * 0.975)].toFixed(2),
+    nPost: chans.reduce((a, c) => a + c.nPost, 0),
+  };
+}
+
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
 console.log('Wrote %s', path.relative(process.cwd(), OUT));
+if (out.site) {
+  console.log('  SITE FACTOR %s  (95%% %s-%s, n=%d post-change uploads)',
+    out.site.factor, out.site.low, out.site.high, out.site.nPost);
+  console.log('    -> set VCC_MID and VCC_FACTOR in public/index.html to match\n');
+}
 for (const [h, c] of Object.entries(out.channels)) {
   console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx',
     h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor);
