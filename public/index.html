@@ -3392,7 +3392,7 @@ const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
 // per-video like rates, pooled across both channels, n=24 post-change uploads.
 // It was 2.00-2.30 before the interval existed, which quietly claimed more
 // precision than the measurement supports.
-const VCC_FACTOR = { low: 1.84, high: 2.15 };
+const VCC_FACTOR = { low: 1.83, high: 2.17 };
 // 1.97, re-measured 2026-09-07 on 44 post-change uploads across both channels,
 // view-weighted. Was 2.15 when it was fitted on 24. The drop is real rather than
 // drift in the estimate: the first three days after the onset ran at about 2.2
@@ -3401,7 +3401,7 @@ const VCC_FACTOR = { low: 1.84, high: 2.15 };
 //
 // One factor for a moving effect is a compromise. It slightly under-deflates
 // 27-29 Aug and slightly over-deflates September, both well inside the interval.
-const VCC_MID = 1.97;
+const VCC_MID = 1.96;
 // Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
 // daily-views.json without re-parsing a timestamp per day.
 const VCC_ONSET_DAY = '2026-08-27';
@@ -6618,12 +6618,15 @@ function renderCountingChangeChart() {
     // Sample size and interval, stated on the chart rather than left to the
     // tooltip. Anyone who has scrolled this far is checking the working, and
     // "2.15x" without an n or a range invites more confidence than it has earned.
-    let pooledPost = 0;
-    for (const k in cc.channels) pooledPost += (cc.channels[k].dist || {post: []}).post.length;
+    // One figure, taken from the data file's own derived value where present, so
+    // the chart cannot disagree with the constants the cards divide by. Quoting a
+    // per-channel factor next to a site constant next to an interval was three
+    // numbers for one idea and reconciled to nothing.
+    const S = cc.site || { factor: VCC_MID, low: VCC_FACTOR.low, high: VCC_FACTOR.high,
+                           nPost: D.post.length };
     strip += '<text class="cc-foot" x="' + P.left + '" y="' + (STRIP_TOP + 130) + '">'
-      + 'Factor ' + ch.factor + '× here from ' + D.post.length + ' post-change uploads · '
-      + 'site uses ' + VCC_MID + '×, 95% interval ' + VCC_FACTOR.low + '–' + VCC_FACTOR.high
-      + ' pooled across both channels (n=' + pooledPost + ')</text>';
+      + 'Factor ' + S.factor + '× · 95% interval ' + S.low + '–' + S.high
+      + ' · measured on ' + S.nPost + ' post-change uploads across both channels</text>';
     const xt = [0, 5, 10, 15, 20].filter(function (t) { return t <= rMax; });
     strip += xt.map(function (t) {
       return '<text class="chart-axis-label x" x="' + sx(t) + '" y="' + (STRIP_TOP + 114) +
