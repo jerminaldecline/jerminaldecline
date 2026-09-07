@@ -3392,8 +3392,16 @@ const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
 // per-video like rates, pooled across both channels, n=24 post-change uploads.
 // It was 2.00-2.30 before the interval existed, which quietly claimed more
 // precision than the measurement supports.
-const VCC_FACTOR = { low: 1.91, high: 2.35 };
-const VCC_MID = 2.15;
+const VCC_FACTOR = { low: 1.84, high: 2.15 };
+// 1.97, re-measured 2026-09-07 on 44 post-change uploads across both channels,
+// view-weighted. Was 2.15 when it was fitted on 24. The drop is real rather than
+// drift in the estimate: the first three days after the onset ran at about 2.2
+// and it has settled near 1.9, and the early-vs-late difference now excludes
+// zero (0.36, CI 0.19-0.54) where a week ago it spanned it.
+//
+// One factor for a moving effect is a compromise. It slightly under-deflates
+// 27-29 Aug and slightly over-deflates September, both well inside the interval.
+const VCC_MID = 1.97;
 // Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
 // daily-views.json without re-parsing a timestamp per day.
 const VCC_ONSET_DAY = '2026-08-27';

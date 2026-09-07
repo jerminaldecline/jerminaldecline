@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-01-AM",
-    "snapshots": 161
+    "to": "2026-09-06-AM",
+    "snapshots": 171
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -48,6 +48,12 @@
       "title": "Never EAT McDonalds Again!",
       "estPromotedViews": 2505,
       "spikeStartDate": "2026-06-27-PM"
+    },
+    {
+      "id": "aGDMKiNGFr8",
+      "title": "ASMONGOLD BAN BACKFIRES",
+      "estPromotedViews": 1386,
+      "spikeStartDate": "2026-08-19-PM"
     }
   ],
   "spikes": [
@@ -57,14 +63,14 @@
       "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
-      "ageDaysAtSpike": 33.5,
-      "baselinePerDay": 94,
-      "peakPerDay": 3866,
-      "ratio": 41.1,
-      "spikeStartDate": "2026-08-30-PM",
-      "elevatedSnapshots": 3,
+      "ageDaysAtSpike": 34.5,
+      "baselinePerDay": 100,
+      "peakPerDay": 15608,
+      "ratio": 156.1,
+      "spikeStartDate": "2026-08-31-PM",
+      "elevatedSnapshots": 11,
       "status": "sustained",
-      "estPromotedViews": 2709,
+      "estPromotedViews": 46203,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -343,6 +349,46 @@
         [
           "2026-09-01-AM",
           306824
+        ],
+        [
+          "2026-09-01-PM",
+          308881
+        ],
+        [
+          "2026-09-02-AM",
+          311786
+        ],
+        [
+          "2026-09-02-PM",
+          317071
+        ],
+        [
+          "2026-09-03-AM",
+          322594
+        ],
+        [
+          "2026-09-03-PM",
+          330398
+        ],
+        [
+          "2026-09-04-AM",
+          337414
+        ],
+        [
+          "2026-09-04-PM",
+          341447
+        ],
+        [
+          "2026-09-05-AM",
+          345194
+        ],
+        [
+          "2026-09-05-PM",
+          346935
+        ],
+        [
+          "2026-09-06-AM",
+          351644
         ]
       ]
     },
@@ -638,6 +684,46 @@
         [
           "2026-09-01-AM",
           32153
+        ],
+        [
+          "2026-09-01-PM",
+          32154
+        ],
+        [
+          "2026-09-02-AM",
+          32156
+        ],
+        [
+          "2026-09-02-PM",
+          32157
+        ],
+        [
+          "2026-09-03-AM",
+          32158
+        ],
+        [
+          "2026-09-03-PM",
+          32159
+        ],
+        [
+          "2026-09-04-AM",
+          32163
+        ],
+        [
+          "2026-09-04-PM",
+          32163
+        ],
+        [
+          "2026-09-05-AM",
+          32163
+        ],
+        [
+          "2026-09-05-PM",
+          32163
+        ],
+        [
+          "2026-09-06-AM",
+          32163
         ]
       ]
     },
@@ -917,6 +1003,46 @@
         [
           "2026-09-01-AM",
           72442
+        ],
+        [
+          "2026-09-01-PM",
+          72445
+        ],
+        [
+          "2026-09-02-AM",
+          72448
+        ],
+        [
+          "2026-09-02-PM",
+          72453
+        ],
+        [
+          "2026-09-03-AM",
+          72457
+        ],
+        [
+          "2026-09-03-PM",
+          72467
+        ],
+        [
+          "2026-09-04-AM",
+          72471
+        ],
+        [
+          "2026-09-04-PM",
+          72478
+        ],
+        [
+          "2026-09-05-AM",
+          72485
+        ],
+        [
+          "2026-09-05-PM",
+          72490
+        ],
+        [
+          "2026-09-06-AM",
+          72497
         ]
       ]
     },
@@ -1140,6 +1266,46 @@
         [
           "2026-09-01-AM",
           102640
+        ],
+        [
+          "2026-09-01-PM",
+          102664
+        ],
+        [
+          "2026-09-02-AM",
+          102678
+        ],
+        [
+          "2026-09-02-PM",
+          102725
+        ],
+        [
+          "2026-09-03-AM",
+          102773
+        ],
+        [
+          "2026-09-03-PM",
+          102795
+        ],
+        [
+          "2026-09-04-AM",
+          102921
+        ],
+        [
+          "2026-09-04-PM",
+          102971
+        ],
+        [
+          "2026-09-05-AM",
+          103043
+        ],
+        [
+          "2026-09-05-PM",
+          103081
+        ],
+        [
+          "2026-09-06-AM",
+          103153
         ]
       ]
     }

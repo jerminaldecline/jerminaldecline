@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-03T09:04:14.058Z",
+  "lastUpdated": "2026-09-07T09:33:07.995Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
@@ -20,11 +20,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1232,
-        "spikeRatio": 8.12,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-09-03T09:04:14.058Z"
+        "baselineSaturation": 0.1769,
+        "spikeRatio": 5.65,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-09-07T09:33:07.995Z"
       }
     },
     {
@@ -39,18 +39,35 @@
         "save pure",
         "pure kona",
         "kona sign",
-        "jury",
-        "clancy jury",
         "clancy",
-        "lindsay"
+        "lindsay",
+        "lindsay clancy",
+        "sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9412,
-        "baselineSaturation": 0.2087,
-        "spikeRatio": 4.51,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-09-03T09:04:14.058Z"
+        "recentSaturation": 0.95,
+        "baselineSaturation": 0.25,
+        "spikeRatio": 3.8,
+        "recentVideoCount": 19,
+        "baselineVideoCount": 30,
+        "detectedAt": "2026-09-07T09:33:07.995Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "tourney lindsay",
+      "keywords": [
+        "clancy trial",
+        "tourney lindsay",
+        "trial"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.35,
+        "baselineSaturation": 0.0943,
+        "spikeRatio": 3.71,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-09-07T09:33:07.995Z"
       }
     }
   ]
