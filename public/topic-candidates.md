@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-06
+# Topic candidates — 2026-09-07
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,12 +6,12 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 15 recent videos, 65 baseline videos
+Pool: 15 recent videos, 64 baseline videos
 
 ### Cluster 1: `kona`
 
 - **Recent saturation:** 15/15 videos (**100%**)
-- **Baseline saturation:** 11/65 videos (17%)
+- **Baseline saturation:** 11/64 videos (17%)
 - **Spike ratio:** 5.7x
 - **Related terms:** `kona`, `save`, `pure`, `sign`, `poker`, `tourney`, `interest`, `free`
 - **Sample recent videos:**
@@ -29,8 +29,8 @@ Pool: 15 recent videos, 65 baseline videos
 ### Cluster 2: `tourney candace`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/65 videos (2%)
-- **Spike ratio:** 8.8x
+- **Baseline saturation:** 1/64 videos (2%)
+- **Spike ratio:** 8.7x
 - **Related terms:** `tourney candace`
 - **Sample recent videos:**
   - 2026-09-03 — _Candace Owens Hits ROCK BOTTOM_  
@@ -43,8 +43,8 @@ Pool: 15 recent videos, 65 baseline videos
 ### Cluster 3: `another`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 3/65 videos (5%)
-- **Spike ratio:** 3.8x
+- **Baseline saturation:** 3/64 videos (5%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `another`
 - **Sample recent videos:**
   - 2026-09-03 — _Candace Owens Hits ROCK BOTTOM_  
@@ -56,13 +56,13 @@ Pool: 15 recent videos, 65 baseline videos
 
 ## @TheQuartering
 
-Pool: 20 recent videos, 124 baseline videos
+Pool: 20 recent videos, 121 baseline videos
 
 ### Cluster 1: `courtroom`
 
 - **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 0/124 videos (0%)
-- **Spike ratio:** 50.0x
+- **Baseline saturation:** 0/121 videos (0%)
+- **Spike ratio:** 48.8x
 - **Related terms:** `courtroom`
 - **Sample recent videos:**
   - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
@@ -77,8 +77,8 @@ Pool: 20 recent videos, 124 baseline videos
 ### Cluster 2: `kona`
 
 - **Recent saturation:** 19/20 videos (**95%**)
-- **Baseline saturation:** 30/124 videos (24%)
-- **Spike ratio:** 3.9x
+- **Baseline saturation:** 30/121 videos (25%)
+- **Spike ratio:** 3.8x
 - **Related terms:** `kona`, `save`, `pure`, `free`, `sign`, `interest`, `poker`, `tourney`
 - **Sample recent videos:**
   - 2026-09-05 — _Lindsay Clancy Jury ERUPTS With RAGE As Another Mom Commits Same Crime_  
@@ -94,10 +94,10 @@ Pool: 20 recent videos, 124 baseline videos
 
 ### Cluster 3: `tourney lindsay`
 
-- **Recent saturation:** 6/20 videos (**30%**)
-- **Baseline saturation:** 3/124 videos (2%)
-- **Spike ratio:** 10.7x
-- **Related terms:** `tourney lindsay`, `clancy trial`
+- **Recent saturation:** 7/20 videos (**35%**)
+- **Baseline saturation:** 11/121 videos (9%)
+- **Spike ratio:** 3.7x
+- **Related terms:** `trial`, `tourney lindsay`, `clancy trial`
 - **Sample recent videos:**
   - 2026-09-04 — _Lindsay Clancy BACK TO JAIL! Supporters RAGE Outside Court_  
     Lindsay Clancy Loses Last-Second Move As Supporters Exit Court Dejected
@@ -105,16 +105,16 @@ Pool: 20 recent videos, 124 baseline videos
     Lindsay Clancy Makes Desperate Last Plea As Courtroom Chaos Erupts
   - 2026-09-04 — _Lindsay Clancy  MELTDOWN In Court One LONE Male Juror REFUSES To Fold & MISTRIAL Her Lawyer ERUPTS_  
     Reported Lone Male Juror Holds Line As Clancy Trial Deadlocks
+  - 2026-09-03 — _Another SHOOTER At Charlie Kirk Anniversary At Same College_  
+    UVU Shooting Threat Sparks Panic Nearly One Year After Kirk
   - 2026-09-02 — _Lindsay Clancy Jury ATTACKED Deranged Woman Arrested!_  
     Clancy Trial Chaos Explodes As Alleged Juror Intimidator Gets Arrested
-  - 2026-08-31 — _Lindsay Clancy Jury TAINTED Judge MUST Act Now_  
-    Lindsay Clancy Jury Faces Scrutiny While Her Lawyer Blasts Critics
 
 ### Cluster 4: `tyler`
 
 - **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 1/124 videos (1%)
-- **Spike ratio:** 12.5x
+- **Baseline saturation:** 1/121 videos (1%)
+- **Spike ratio:** 12.2x
 - **Related terms:** `tyler`, `robinson`, `tyler robinson`
 - **Sample recent videos:**
   - 2026-09-02 — _Death Penalty CONFIRMED In Tyler Robinson Case As Erika Kirk Speaks Out_  
@@ -127,8 +127,8 @@ Pool: 20 recent videos, 124 baseline videos
 ### Cluster 5: `chaos`
 
 - **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 2/124 videos (2%)
-- **Spike ratio:** 10.0x
+- **Baseline saturation:** 2/121 videos (2%)
+- **Spike ratio:** 9.8x
 - **Related terms:** `chaos`
 - **Sample recent videos:**
   - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
@@ -143,8 +143,8 @@ Pool: 20 recent videos, 124 baseline videos
 ### Cluster 6: `jury`
 
 - **Recent saturation:** 5/20 videos (**25%**)
-- **Baseline saturation:** 3/124 videos (2%)
-- **Spike ratio:** 8.9x
+- **Baseline saturation:** 3/121 videos (2%)
+- **Spike ratio:** 8.7x
 - **Related terms:** `jury`, `clancy jury`
 - **Sample recent videos:**
   - 2026-09-03 — _Tainted Jury Betrays Us THIS IS A TRAGEDY_  
