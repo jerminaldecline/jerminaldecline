@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-07
+# Topic candidates — 2026-09-08
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,15 +6,17 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 15 recent videos, 64 baseline videos
+Pool: 13 recent videos, 66 baseline videos
 
 ### Cluster 1: `kona`
 
-- **Recent saturation:** 15/15 videos (**100%**)
-- **Baseline saturation:** 11/64 videos (17%)
-- **Spike ratio:** 5.7x
+- **Recent saturation:** 13/13 videos (**100%**)
+- **Baseline saturation:** 14/66 videos (21%)
+- **Spike ratio:** 4.6x
 - **Related terms:** `kona`, `save`, `pure`, `sign`, `poker`, `tourney`, `interest`, `free`
 - **Sample recent videos:**
+  - 2026-09-07 — _Candace Owens BOMBSHELL It's All Falling Apart_  
+    Candace Owens Accused Of Profiting While Source Fights Lawsuit Alone
   - 2026-09-05 — _Wheel Of Fortune PREDATOR Caught In The Act!_  
     Wheel Of Fortune Fires Announcer After Shocking Airplane Photo Scandal
   - 2026-09-04 — _Unhinged Cop Shoots BABY DONKEY & Gets Suspended!_  
@@ -23,28 +25,26 @@ Pool: 15 recent videos, 64 baseline videos
     Cathy Engelbert OUT As WNBA Commissioner Caitlin Clark CHAOS
   - 2026-09-03 — _Zoran Mamdani HUMILIATED Again As Policies Collapse_  
     Zohran Mamdani Accuses Trump Of Defunding Police After His Past
-  - 2026-09-03 — _Candace Owens Hits ROCK BOTTOM_  
-    Candace Owens Mocks Matt Walsh Over Tyler Robinson Case Outrage
 
 ### Cluster 2: `tourney candace`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/64 videos (2%)
-- **Spike ratio:** 8.7x
+- **Recent saturation:** 3/13 videos (**23%**)
+- **Baseline saturation:** 2/66 videos (3%)
+- **Spike ratio:** 6.2x
 - **Related terms:** `tourney candace`
 - **Sample recent videos:**
+  - 2026-09-07 — _Candace Owens BOMBSHELL It's All Falling Apart_  
+    Candace Owens Accused Of Profiting While Source Fights Lawsuit Alone
   - 2026-09-03 — _Candace Owens Hits ROCK BOTTOM_  
     Candace Owens Mocks Matt Walsh Over Tyler Robinson Case Outrage
   - 2026-09-02 — _Candace Owens RAGES At Matt Walsh_  
     Candace Owens Drags Matt Walsh Into Explosive Charlie Kirk Drama
-  - 2026-08-31 — _CANDACE OWENS BIGGEST LIE REVEALED_  
-    Candace Owens Faces Fresh Pushback Over Explosive Tyler Robinson Claims
 
 ### Cluster 3: `another`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 3/64 videos (5%)
-- **Spike ratio:** 3.7x
+- **Recent saturation:** 3/13 videos (**23%**)
+- **Baseline saturation:** 3/66 videos (5%)
+- **Spike ratio:** 4.4x
 - **Related terms:** `another`
 - **Sample recent videos:**
   - 2026-09-03 — _Candace Owens Hits ROCK BOTTOM_  
@@ -56,13 +56,13 @@ Pool: 15 recent videos, 64 baseline videos
 
 ## @TheQuartering
 
-Pool: 20 recent videos, 121 baseline videos
+Pool: 17 recent videos, 123 baseline videos
 
 ### Cluster 1: `courtroom`
 
-- **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 0/121 videos (0%)
-- **Spike ratio:** 48.8x
+- **Recent saturation:** 4/17 videos (**24%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 58.4x
 - **Related terms:** `courtroom`
 - **Sample recent videos:**
   - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
@@ -74,89 +74,57 @@ Pool: 20 recent videos, 121 baseline videos
   - 2026-09-01 — _Tyler Robinson CRUSHED In Court Today!_  
     Tyler Robinson Defense Gets Crushed In Major Courtroom Media Fight
 
-### Cluster 2: `kona`
+### Cluster 2: `chaos`
 
-- **Recent saturation:** 19/20 videos (**95%**)
-- **Baseline saturation:** 30/121 videos (25%)
-- **Spike ratio:** 3.8x
-- **Related terms:** `kona`, `save`, `pure`, `free`, `sign`, `interest`, `poker`, `tourney`
+- **Recent saturation:** 6/17 videos (**35%**)
+- **Baseline saturation:** 7/123 videos (6%)
+- **Spike ratio:** 5.8x
+- **Related terms:** `chaos`, `clancy trial`, `tourney lindsay`
 - **Sample recent videos:**
+  - 2026-09-04 — _Lindsay Clancy BACK TO JAIL! Supporters RAGE Outside Court_  
+    Lindsay Clancy Loses Last-Second Move As Supporters Exit Court Dejected
+  - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
+    Lindsay Clancy Makes Desperate Last Plea As Courtroom Chaos Erupts
+  - 2026-09-04 — _Lindsay Clancy  MELTDOWN In Court One LONE Male Juror REFUSES To Fold & MISTRIAL Her Lawyer ERUPTS_  
+    Reported Lone Male Juror Holds Line As Clancy Trial Deadlocks
+  - 2026-09-02 — _500 THUGS Storm Burger King & No Charges_  
+    Five Hundred Teens Storm Grocery Store In Terrifying Viral Takeover
+  - 2026-09-02 — _Lindsay Clancy Jury ATTACKED Deranged Woman Arrested!_  
+    Clancy Trial Chaos Explodes As Alleged Juror Intimidator Gets Arrested
+
+### Cluster 3: `kona`
+
+- **Recent saturation:** 15/17 videos (**88%**)
+- **Baseline saturation:** 19/123 videos (15%)
+- **Spike ratio:** 5.6x
+- **Related terms:** `kona`, `save`, `pure`, `clancy`, `sign`, `interest`, `poker`, `tourney`
+- **Sample recent videos:**
+  - 2026-09-07 — _Psycho Moms Hit ROCK Bottom Over Lindsay Clancy_  
+    TikTok Moms Face Outrage Over Sick Lindsay Clancy Support Videos
+  - 2026-09-07 — _Lindsay Clancy Case Just Got WAY WORSE_  
+    Lindsay Clancy Fundraiser Surges After Jury Fails To Reach Verdict
   - 2026-09-05 — _Lindsay Clancy Jury ERUPTS With RAGE As Another Mom Commits Same Crime_  
     Lindsay Clancy Copycat Fears Explode After Illinois Mother Faces Murder
   - 2026-09-04 — _Lindsay Clancy BACK TO JAIL! Supporters RAGE Outside Court_  
     Lindsay Clancy Loses Last-Second Move As Supporters Exit Court Dejected
   - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
     Lindsay Clancy Makes Desperate Last Plea As Courtroom Chaos Erupts
-  - 2026-09-04 — _Lindsay Clancy  MELTDOWN In Court One LONE Male Juror REFUSES To Fold & MISTRIAL Her Lawyer ERUPTS_  
-    Reported Lone Male Juror Holds Line As Clancy Trial Deadlocks
-  - 2026-09-03 — _Joe Rogan DESTROYS Lindsay Clancy Supporters_  
-    Joe Rogan Says Lindsay Clancy Supporters Are Out Of Their Minds
 
-### Cluster 3: `tourney lindsay`
+### Cluster 4: `jury`
 
-- **Recent saturation:** 7/20 videos (**35%**)
-- **Baseline saturation:** 11/121 videos (9%)
-- **Spike ratio:** 3.7x
-- **Related terms:** `trial`, `tourney lindsay`, `clancy trial`
-- **Sample recent videos:**
-  - 2026-09-04 — _Lindsay Clancy BACK TO JAIL! Supporters RAGE Outside Court_  
-    Lindsay Clancy Loses Last-Second Move As Supporters Exit Court Dejected
-  - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
-    Lindsay Clancy Makes Desperate Last Plea As Courtroom Chaos Erupts
-  - 2026-09-04 — _Lindsay Clancy  MELTDOWN In Court One LONE Male Juror REFUSES To Fold & MISTRIAL Her Lawyer ERUPTS_  
-    Reported Lone Male Juror Holds Line As Clancy Trial Deadlocks
-  - 2026-09-03 — _Another SHOOTER At Charlie Kirk Anniversary At Same College_  
-    UVU Shooting Threat Sparks Panic Nearly One Year After Kirk
-  - 2026-09-02 — _Lindsay Clancy Jury ATTACKED Deranged Woman Arrested!_  
-    Clancy Trial Chaos Explodes As Alleged Juror Intimidator Gets Arrested
-
-### Cluster 4: `tyler`
-
-- **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 1/121 videos (1%)
-- **Spike ratio:** 12.2x
-- **Related terms:** `tyler`, `robinson`, `tyler robinson`
-- **Sample recent videos:**
-  - 2026-09-02 — _Death Penalty CONFIRMED In Tyler Robinson Case As Erika Kirk Speaks Out_  
-    The Death Penalty is CONFIRMED on the table for Tyler Robinson as he LOSES every appeal
-  - 2026-09-01 — _Tyler Robinson CRUSHED In Court Today!_  
-    Tyler Robinson Defense Gets Crushed In Major Courtroom Media Fight
-  - 2026-08-31 — _Tyler Robinson BOMBSHELL New Evidence!_  
-    Tyler Robinson Fights Death Penalty As Digital Evidence Takes Spotlight
-
-### Cluster 5: `chaos`
-
-- **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 2/121 videos (2%)
-- **Spike ratio:** 9.8x
-- **Related terms:** `chaos`
-- **Sample recent videos:**
-  - 2026-09-04 — _Lindsay Clancy DESPERATE Last Plea & Chaos ERUPTS In Court_  
-    Lindsay Clancy Makes Desperate Last Plea As Courtroom Chaos Erupts
-  - 2026-09-02 — _500 THUGS Storm Burger King & No Charges_  
-    Five Hundred Teens Storm Grocery Store In Terrifying Viral Takeover
-  - 2026-09-02 — _Lindsay Clancy Jury ATTACKED Deranged Woman Arrested!_  
-    Clancy Trial Chaos Explodes As Alleged Juror Intimidator Gets Arrested
-  - 2026-09-01 — _Lindsay Clancy Jury BLASTED By Judge After Complaining_  
-    Lindsay Clancy Jury Faces Chaos As Sequestration Questions Keep Exploding
-
-### Cluster 6: `jury`
-
-- **Recent saturation:** 5/20 videos (**25%**)
-- **Baseline saturation:** 3/121 videos (2%)
-- **Spike ratio:** 8.7x
+- **Recent saturation:** 4/17 videos (**24%**)
+- **Baseline saturation:** 5/123 videos (4%)
+- **Spike ratio:** 5.3x
 - **Related terms:** `jury`, `clancy jury`
 - **Sample recent videos:**
+  - 2026-09-07 — _Lindsay Clancy Case Just Got WAY WORSE_  
+    Lindsay Clancy Fundraiser Surges After Jury Fails To Reach Verdict
   - 2026-09-03 — _Tainted Jury Betrays Us THIS IS A TRAGEDY_  
     Judge Sends Deadlocked Lindsay Clancy Jury Back For Sixth Day
   - 2026-09-01 — _Massive Mistakes Pile Up THIS IS A JOKE!_  
     Lindsay Clancy Jury Deadlocks Then Demands To Leave Court Early
   - 2026-09-01 — _Lindsay Clancy Jury BLASTED By Judge After Complaining_  
     Lindsay Clancy Jury Faces Chaos As Sequestration Questions Keep Exploding
-  - 2026-08-31 — _Lindsay Clancy Jury Gives Up! She's Rolling Free_  
-    Lindsay Clancy Jury Sent Home Again Without Delivering Any Verdict
-  - 2026-08-31 — _Lindsay Clancy Jury TAINTED Judge MUST Act Now_  
-    Lindsay Clancy Jury Faces Scrutiny While Her Lawyer Blasts Critics
 
 ---
 

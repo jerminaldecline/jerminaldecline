@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-07T09:33:07.995Z",
+  "lastUpdated": "2026-09-08T08:58:03.362Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
@@ -20,11 +20,28 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1769,
-        "spikeRatio": 5.65,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-09-07T09:33:07.995Z"
+        "baselineSaturation": 0.2164,
+        "spikeRatio": 4.62,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-09-08T08:58:03.362Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "chaos",
+      "keywords": [
+        "chaos",
+        "clancy trial",
+        "tourney lindsay"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3529,
+        "baselineSaturation": 0.0605,
+        "spikeRatio": 5.84,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-09-08T08:58:03.362Z"
       }
     },
     {
@@ -38,36 +55,19 @@
         "kona save",
         "save pure",
         "pure kona",
-        "kona sign",
         "clancy",
         "lindsay",
         "lindsay clancy",
+        "kona sign",
         "sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.95,
-        "baselineSaturation": 0.25,
-        "spikeRatio": 3.8,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 30,
-        "detectedAt": "2026-09-07T09:33:07.995Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "tourney lindsay",
-      "keywords": [
-        "clancy trial",
-        "tourney lindsay",
-        "trial"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.35,
-        "baselineSaturation": 0.0943,
-        "spikeRatio": 3.71,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-09-07T09:33:07.995Z"
+        "recentSaturation": 0.8824,
+        "baselineSaturation": 0.1573,
+        "spikeRatio": 5.61,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-09-08T08:58:03.362Z"
       }
     }
   ]
