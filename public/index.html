@@ -3702,11 +3702,19 @@ async function loadAndCompute(){
     const beforePeak=ms.filter(m=>m<pk);
     for(let i=beforePeak.length-1;i>=0;i--){ if(S[beforePeak[i]].tot<=S[low].tot){ lastSeen=beforePeak[i]; break; } }
     const latest=ms[ms.length-1];
+    // Engaged twins so the strip can follow the basis toggle. Peak and low are
+    // pre-change months whose engaged equals reported, so in practice only the
+    // latest month moves - but computing all three keeps it correct if a future
+    // peak or trough lands after the onset.
+    const E = m => (S[m].engaged != null ? S[m].engaged : S[m].tot);
     peaks[sc]={ peakMonth:pk, peakViews:S[pk].tot, lowMonth:low, lowViews:S[low].tot,
       pctFromPeak: S[pk].tot>0 ? Math.round((S[low].tot-S[pk].tot)/S[pk].tot*100) : 0,
       lastSeenMonth:lastSeen,
       latestMonth:latest, latestViews:S[latest].tot,
       pctFromPeakLatest: S[pk].tot>0 ? Math.round((S[latest].tot-S[pk].tot)/S[pk].tot*100) : 0,
+      peakViewsEng:E(pk), lowViewsEng:E(low), latestViewsEng:E(latest),
+      pctFromPeakEng: E(pk)>0 ? Math.round((E(low)-E(pk))/E(pk)*100) : 0,
+      pctFromPeakLatestEng: E(pk)>0 ? Math.round((E(latest)-E(pk))/E(pk)*100) : 0,
       series: ms.map(m=>({ m, v: S[m].tot||0 })) };
   }
 
@@ -4099,7 +4107,15 @@ function render(m){
   // Long-form + Shorts uploads now render as hero cards in the two format rows above.
   // Like rate is itself a %, so show its change in percentage POINTS (cur-prev),
   // not a relative % of a % (which would be ambiguous). e.g. 8.4% → 7.9% = ▼ 0.5 pts.
-  cards.push({num:d.lv+'%',lbl:'Like rate (long-form)',cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
+  // Deliberately NOT deflated, unlike every other views figure here. The factor
+  // was derived FROM the like rate, so dividing views by it forces likes/engaged
+  // back to the pre-change level by construction - the line would be flat by
+  // identity rather than by evidence, and would hide a real engagement change if
+  // one ever happened. It stays on reported views and carries the caveat instead.
+  const lvNote = (d.engaged != null && d.tot && d.engaged < d.tot*0.995)
+    ? ' <span class="info-icon" data-popover="Views are the divisor here, so this falls when the count of views rises. Since 27 Aug 2026 a view counts from the first frame rather than after about 30 seconds, and most of the drop from that date is the larger divisor rather than fewer people liking. This figure is left on reported views on purpose: correcting it with our factor would be circular, because the factor was measured from this very rate." tabindex="0" role="button" aria-label="About like rate">\u24d8</span>'
+    : '';
+  cards.push({num:d.lv+'%',lbl:'Like rate (long-form)'+lvNote,cur:d.lv,p:p&&p.lv,y:y&&y.lv,goodUp:true,abs:{unit:' pts',dec:1,pct:false}});
   cards.push({num:fmt(d.comments),lbl:'Comments (long-form)',cur:d.comments,p:p&&p.comments,y:y&&y.comments,goodUp:true});
   // Runtime/length: absolute change only (the % is redundant next to "+4.3h").
   cards.push({num:d.runtime+' h',lbl:'Total runtime (long-form)',cur:d.runtime,p:p&&p.runtime,y:y&&y.runtime,goodUp:null,abs:{unit:'h',dec:1,pct:false}});
@@ -4466,17 +4482,17 @@ function render(m){
       return `<div class="peak-headline">
         <div class="peak-item">
           <div class="peak-label">All-time peak <span class="peak-when">— ${monthName(pk.peakMonth)}</span></div>
-          <div class="peak-val"><span class="peak-num">${fmt(pk.peakViews)}</span> long-form views</div>
+          <div class="peak-val"><span class="peak-num">${fmt(useEng&&pk.peakViewsEng!=null?pk.peakViewsEng:pk.peakViews)}</span> long-form views</div>
         </div>
         <div class="peak-item">
           <div class="peak-label">Lowest since peak <span class="peak-when">— ${monthName(pk.lowMonth)}</span></div>
-          <div class="peak-val"><span class="peak-num">${fmt(pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeak)}% from peak</span></div>
+          <div class="peak-val"><span class="peak-num">${fmt(useEng&&pk.lowViewsEng!=null?pk.lowViewsEng:pk.lowViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(useEng&&pk.pctFromPeakEng!=null?pk.pctFromPeakEng:pk.pctFromPeak)}% from peak</span></div>
           ${pk.lastSeenMonth ? `<div class="peak-sub">Last seen at this level: <strong>${monthName(pk.lastSeenMonth)}</strong> · ${yearsAgoStr(pk.lastSeenMonth)}</div>` : ''}
         </div>
         ${pk.latestMonth && pk.latestMonth !== pk.lowMonth ? `
         <div class="peak-item">
           <div class="peak-label">Latest complete month <span class="peak-when">— ${monthName(pk.latestMonth)}</span></div>
-          <div class="peak-val"><span class="peak-num">${fmt(pk.latestViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(pk.pctFromPeakLatest)}% from peak</span></div>
+          <div class="peak-val"><span class="peak-num">${fmt(useEng&&pk.latestViewsEng!=null?pk.latestViewsEng:pk.latestViews)}</span> long-form views <span class="peak-delta">▼ ${Math.abs(useEng&&pk.pctFromPeakLatestEng!=null?pk.pctFromPeakLatestEng:pk.pctFromPeakLatest)}% from peak</span></div>
         </div>` : ''}
       </div>`;
     })()}
