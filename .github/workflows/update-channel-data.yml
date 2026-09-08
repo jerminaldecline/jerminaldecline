@@ -18,6 +18,16 @@
 #
 # The cron is DELIBERATELY unchanged from the 2-hourly set on 28 Aug, so that if
 # runs resume the rename is the only variable that moved.
+#
+# OUTCOME (2026-09-08): the rename did restart runs (0 -> ~5/day) but delivery
+# never recovered - 4-6 of the 12 two-hourly slots a day, each 10-60+ min late.
+# The "siblings never missed" argument above was true but misleading: measured
+# properly they are 2.5-5 HOURS late too (daily-audit's 02:00 fires ~07:00),
+# their slots are just far enough apart that lateness cannot eat one. So this
+# is GitHub's scheduler lagging for the whole (public) repo, not a frequency
+# problem, and halving the cron gained nothing. The odd-hour dispatcher in
+# update-channel-data-offset.yml fills the holes; see its header for the real
+# fix if that is not enough.
 
 name: Update channel data
 

@@ -1,0 +1,85 @@
+# ODD-HOUR DISPATCHER for update-channel-data.yml (added 2026-09-08).
+#
+# Why this file exists
+# --------------------
+# GitHub's cron scheduler has run hours behind for this repository since the
+# Actions incidents of 26 Aug 2026, for EVERY scheduled workflow here, not just
+# the frequent one. Measured 3-8 Sep 2026:
+#
+#   daily-audit            '0 2'   fired 06:52-07:14   (~5h late)
+#                          '0 14'  fired 16:30-18:34   (2.5-4.5h late)
+#   detect-topic-candidates '30 4' fired 08:28-09:33   (4-5h late)
+#   update-channel-data    '7 */2' 4-6 of 12 slots/day, each 10-60+ min late
+#
+# The daily ones "never miss" only because their slots are 12-24h apart, so a
+# five-hour lag cannot swallow a slot. A 2-hourly cron under the same lag gets
+# its overdue slots coalesced into one run per catch-up, which is the ~5 runs a
+# day we have been getting - and why halving the cron from hourly on 28 Aug did
+# not raise the delivery rate at all (hourly gave 22/24 before the incident).
+#
+# Nothing inside the repo can fix the scheduler's lag. What a second file CAN
+# do is add a second, independent schedule registration (GitHub keys those to
+# the workflow file path), which in practice roughly doubles how often the
+# repository gets a data run. The real fix, if this is not enough, is an
+# external clock: a Cloudflare Worker cron trigger POSTing to
+#   /repos/{owner}/{repo}/actions/workflows/update-channel-data.yml/dispatches
+# every hour - Cloudflare fires within seconds. That needs a fine-grained PAT
+# with actions:write kept as a Worker secret, so it is a deliberate decision,
+# not something to slip in here.
+#
+# Why a dispatcher and not a copy of the job
+# ------------------------------------------
+# Copying the 260-line job means two files to keep in sync forever. This one
+# just asks GitHub to start the real workflow. The repository GITHUB_TOKEN can
+# do that: events it raises do not create workflow runs, "with the exception of
+# workflow_dispatch and repository_dispatch" (docs: Triggering a workflow).
+#
+# Why the guard
+# -------------
+# Both schedules are delivered late and independently, so an even-hour slot
+# and an odd-hour slot can land minutes apart. Without a check that would give
+# two data runs back to back - the same reading twice, and no shorter blind
+# window for deletions or retitles. So: do nothing if a data run is queued or
+# in progress, or if the newest one started under 30 minutes ago. The aim is
+# to fill multi-hour holes, not to hit :07 exactly.
+#
+# The cron is deliberately the mirror of update-channel-data.yml (odd hours at
+# :07 vs its even hours). If that file's cron changes, change this one to match.
+
+name: Update channel data (odd hours)
+
+on:
+  schedule:
+    - cron: '7 1-23/2 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch a data run unless one is fresh or already running
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TARGET: update-channel-data.yml
+          FRESH_MIN: 30
+        run: |
+          set -e
+          ACTIVE=$(gh run list --workflow="$TARGET" --limit 5 --json status \
+            --jq '[.[] | select(.status != "completed")] | length')
+          if [ "$ACTIVE" -gt 0 ]; then
+            echo "A data run is already queued or in progress - nothing to do."
+            exit 0
+          fi
+          NEWEST=$(gh run list --workflow="$TARGET" --limit 1 --json createdAt --jq '.[0].createdAt')
+          AGE_MIN=$(python3 -c "import sys, datetime; d = datetime.datetime.fromisoformat(sys.argv[1].replace('Z', '+00:00')); print(int((datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() // 60))" "$NEWEST")
+          echo "Newest data run started ${AGE_MIN} min ago (${NEWEST})."
+          if [ "$AGE_MIN" -lt "$FRESH_MIN" ]; then
+            echo "Fresh enough - skipping."
+            exit 0
+          fi
+          gh workflow run "$TARGET" --ref main
+          echo "Dispatched $TARGET."
