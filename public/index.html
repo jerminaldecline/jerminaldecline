@@ -3588,23 +3588,28 @@ async function loadAndCompute(){
       const crs=vs.filter(v=>v.views>0&&v.comments!=null).map(v=>v.comments/v.views);
       const medCr=median(crs);
       const durs=vs.filter(v=>v.durationSec).map(v=>v.durationSec);
-      const tc={}; for(const v of vs){ const t=tags[v.id]; if(t){ if(!tc[t]) tc[t]={n:0,v:0}; tc[t].n++; tc[t].v+=(v.views||0); } }
+      // Each axis carries an engaged tally beside the reported one. Without it
+      // the topic card keeps reporting raw views while the Total views card
+      // above it switches, and a single topic can read larger than the month.
+      const tc={}; for(const v of vs){ const t=tags[v.id]; if(t){ if(!tc[t]) tc[t]={n:0,v:0,e:0}; tc[t].n++; tc[t].v+=(v.views||0); tc[t].e+=vccEngagedOne(v, VCC_MID); } }
       // Parallel tallies for themes and modes (same shape as subjects) so the
       // Overview topic cards can offer Subjects/Themes/Modes views.
-      const thc={}; for(const v of vs){ const t=themesMap[v.id]; if(t){ if(!thc[t]) thc[t]={n:0,v:0}; thc[t].n++; thc[t].v+=(v.views||0); } }
-      const mdc={}; for(const v of vs){ const t=modesMap[v.id]; if(t){ if(!mdc[t]) mdc[t]={n:0,v:0}; mdc[t].n++; mdc[t].v+=(v.views||0); } }
+      const thc={}; for(const v of vs){ const t=themesMap[v.id]; if(t){ if(!thc[t]) thc[t]={n:0,v:0,e:0}; thc[t].n++; thc[t].v+=(v.views||0); thc[t].e+=vccEngagedOne(v, VCC_MID); } }
+      const mdc={}; for(const v of vs){ const t=modesMap[v.id]; if(t){ if(!mdc[t]) mdc[t]={n:0,v:0,e:0}; mdc[t].n++; mdc[t].v+=(v.views||0); mdc[t].e+=vccEngagedOne(v, VCC_MID); } }
       const vlist = [...vs, ...sh].map(leanVid);
       const topicEntries = Object.entries(tc).map(([t,o])=>({
-        id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v
+        id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v,
+        viewsEng: Math.round(o.e)
       }));
       const taggedCount = topicEntries.reduce((s,e)=>s+e.count,0);
       const taggedViews = topicEntries.reduce((s,e)=>s+e.views,0);
+      const taggedViewsEng = topicEntries.reduce((s,e)=>s+e.viewsEng,0);
       // Top 12 (not 6): the Overview card shows 6 collapsed and 12 expanded,
       // so the payload must carry the full dozen.
       const topicsByCount = [...topicEntries].sort((a,b)=>b.count-a.count).slice(0,12);
       const topicsByViews = [...topicEntries].sort((a,b)=>b.views-a.views).slice(0,12);
       // Theme + mode entry arrays (full, sorted; sliced at render time).
-      const mkEntries = (counts) => Object.entries(counts).map(([t,o])=>({ id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v }));
+      const mkEntries = (counts) => Object.entries(counts).map(([t,o])=>({ id:t, name:tname[t]||t, color:tcolor[t]||'#888', count:o.n, views:o.v, viewsEng: Math.round(o.e||0) }));
       const themeEntries = mkEntries(thc), modeEntries = mkEntries(mdc);
       const themesByCount = [...themeEntries].sort((a,b)=>b.count-a.count).slice(0,12);
       const themesByViews = [...themeEntries].sort((a,b)=>b.views-a.views).slice(0,12);
@@ -3646,7 +3651,7 @@ async function loadAndCompute(){
         get revlo(){ return this.lrevlo + this.srevlo; },
         get revhi(){ return this.lrevhi + this.srevhi; },
         top, topvid, debate, worstvid, shorts, vlist,
-        topicsByCount, topicsByViews, taggedCount, taggedViews,
+        topicsByCount, topicsByViews, taggedCount, taggedViews, taggedViewsEng,
         themesByCount, themesByViews, themesTaggedCount, themesTaggedViews,
         modesByCount, modesByViews, modesTaggedCount, modesTaggedViews
       };
@@ -4379,14 +4384,21 @@ function render(m){
       tCount = d.modesTaggedCount || 0; tViews = d.modesTaggedViews || 0;
     } else {
       byCount = d.topicsByCount || []; byViews = d.topicsByViews || [];
-      tCount = d.taggedCount || 0; tViews = d.taggedViews || 0;
+      tCount = d.taggedCount || 0;
+      tViews = (useEng && d.taggedViewsEng != null) ? d.taggedViewsEng : (d.taggedViews || 0);
     }
     if (!byCount.length) return { uploads: '<div class="empty">No tagged uploads in this period.</div>', views: '<div class="empty">No tagged uploads in this period.</div>' };
     // For subjects, the denominator is the full upload/view count (so "Other"
     // captures untagged output). For themes/modes, use the tagged totals as the
     // denominator so the bar reflects share among videos that carry that axis.
     const totCount = (view === 'subject') ? (d.n || tCount || byCount.reduce((s,t)=>s+t.count,0) || 1) : (tCount || byCount.reduce((s,t)=>s+t.count,0) || 1);
-    const totViews = (view === 'subject') ? (d.tot || tViews || byViews.reduce((s,t)=>s+t.views,0) || 1) : (tViews || byViews.reduce((s,t)=>s+t.views,0) || 1);
+    // Numerator and denominator move together, so the SHARES are unchanged on a
+    // month that is wholly post-onset - only the absolute figures move. On a
+    // month straddling the change the shares shift slightly, which is correct:
+    // uploads late in the month are deflated harder than those at the start.
+    const vOf = t => (useEng && t.viewsEng != null) ? t.viewsEng : t.views;
+    const monthViews = useEng ? (d.engaged != null ? d.engaged : d.tot) : d.tot;
+    const totViews = (view === 'subject') ? (monthViews || tViews || byViews.reduce((s,t)=>s+vOf(t),0) || 1) : (tViews || byViews.reduce((s,t)=>s+vOf(t),0) || 1);
     const OTHER_COLOR = 'var(--text-dim)';
     const TAIL_COLOR = 'var(--subtext)';
     // Build a single stacked bar + legend from the top topics (6 collapsed,
@@ -4422,7 +4434,7 @@ function render(m){
     };
     return {
       uploads: stacked(byCount, totCount, tCount, t=>t.count, 'videos', v=>String(v)),
-      views: stacked(byViews, totViews, tViews, t=>t.views, 'views', v=>fmt(v))
+      views: stacked(byViews, totViews, tViews, vOf, 'views', v=>fmt(v))
     };
   })();
 
