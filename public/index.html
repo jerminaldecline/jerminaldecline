@@ -304,7 +304,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 #report[data-avg="mean"] .js-med{display:none}
 #report[data-avg="mean"] span.js-mean{display:inline}
 #report[data-avg="mean"] .deltas.js-mean{display:flex}
-.basis-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.45rem}
+.basis-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.45rem;flex-wrap:wrap}
+/* The row label is uppercase and letter-spaced; the buttons must not inherit
+   that. Amber outline = "this is the counting-change control". */
+.basis-seg{border-radius:9px;box-shadow:0 0 0 1px var(--accent-2)}
+.basis-seg .chart-ctrl-btn{text-transform:none;letter-spacing:normal;font-size:0.78rem;padding:0.32rem 0.75rem}
+.basis-seg .chart-ctrl-btn[aria-pressed="false"]{color:var(--text)}
 .basis-row .avg-toggle{margin-top:0}
 .basis-row .info-icon{color:var(--text-dim);border-color:var(--border)}
 /* The reported-basis comparison spans the counting change, so it is not a
@@ -4068,7 +4073,7 @@ window.__setAvgMetric = function(useMean){
 // the setter there would recurse through render() forever.
 window.__syncBasisButtons = function(){
   var on = !!window.__viewEngaged;
-  var btns = document.querySelectorAll('.basis-row button[data-vopt]');
+  var btns = document.querySelectorAll('button[data-vopt]');
   for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-vopt')==='engaged')===on ? 'true' : 'false'); }
 };
 window.__setViewBasis = function(useEngaged){
@@ -4206,7 +4211,7 @@ function render(m){
   const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
-  const basisToggle = vccAdj ? `<div class="basis-row"><div class="avg-toggle" role="group" aria-label="Counting basis"><button type="button" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">reported</button><button type="button" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">engaged</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}, give or take 10%. It's an estimate. Our revenue figures use it because the RPM they rest on was measured before the change." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
+  const basisToggle = vccAdj ? `<div class="basis-row"><div class="chart-fmt-seg basis-seg" role="group" aria-label="Counting basis"><button type="button" class="chart-ctrl-btn seg" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">Reported views</button><button type="button" class="chart-ctrl-btn seg" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">Engaged views</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}, give or take 10%. It's an estimate. Our revenue figures use it because the RPM they rest on was measured before the change." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
   const shMean = (SD.n && SD.v!=null) ? Math.round(SD.v/SD.n) : 0;
   const shMeanPrev = (p&&p.shorts&&p.shorts.n) ? p.shorts.v/p.shorts.n : null;
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
