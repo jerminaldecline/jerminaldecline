@@ -1,10 +1,30 @@
 {
-  "lastUpdated": "2026-09-08T08:58:03.362Z",
+  "lastUpdated": "2026-09-09T09:04:18.138Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "kona",
+      "channelHandle": "@TheQuartering",
+      "termId": "trial",
       "keywords": [
+        "clancy trial",
+        "chaos",
+        "tourney lindsay",
+        "trial"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4706,
+        "baselineSaturation": 0.131,
+        "spikeRatio": 3.59,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-09-09T09:04:18.138Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "free",
+      "keywords": [
+        "kona sign",
+        "clancy",
         "kona",
         "save",
         "pure",
@@ -12,7 +32,57 @@
         "kona save",
         "save pure",
         "pure kona",
+        "lindsay",
+        "lindsay clancy",
+        "sign"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.2817,
+        "spikeRatio": 3.55,
+        "recentVideoCount": 17,
+        "baselineVideoCount": 35,
+        "detectedAt": "2026-09-09T09:04:18.138Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "back",
+      "keywords": [
+        "back",
+        "limited",
+        "edition",
+        "jack",
+        "o'lantern",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "jack o'lantern",
+        "o'lantern back",
+        "back stock"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0071,
+        "spikeRatio": 43.08,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-09-09T09:04:18.138Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "sign",
+      "keywords": [
         "kona sign",
+        "kona",
+        "save",
+        "pure",
+        "coffee kona",
+        "kona save",
+        "save pure",
+        "pure kona",
         "sign",
         "poker",
         "tourney",
@@ -20,54 +90,27 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2164,
-        "spikeRatio": 4.62,
+        "baselineSaturation": 0.25,
+        "spikeRatio": 4,
         "recentVideoCount": 13,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-09-08T08:58:03.362Z"
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-09-09T09:04:18.138Z"
       }
     },
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "chaos",
+      "channelHandle": "@JeremyHambly",
+      "termId": "facing",
       "keywords": [
-        "chaos",
-        "clancy trial",
-        "tourney lindsay"
+        "facing",
+        "another"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3529,
-        "baselineSaturation": 0.0605,
-        "spikeRatio": 5.84,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-09-08T08:58:03.362Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "kona",
-      "keywords": [
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona",
-        "clancy",
-        "lindsay",
-        "lindsay clancy",
-        "kona sign",
-        "sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8824,
-        "baselineSaturation": 0.1573,
-        "spikeRatio": 5.61,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-09-08T08:58:03.362Z"
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0929,
+        "spikeRatio": 3.31,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-09-09T09:04:18.138Z"
       }
     }
   ]
