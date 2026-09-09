@@ -299,6 +299,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* The label is uppercase, 900 weight and widely tracked; none of that should
    reach the control sitting next to it. */
 .hero-rowlabel .basis-row{margin-top:0;letter-spacing:normal;font-weight:400}
+/* Secondary switch next to the cards: a notch up from the in-card MEDIAN/MEAN
+   pill it was copied from, so it reads as a page-level control. */
+.hero-rowlabel .avg-toggle button{font-size:0.7rem;padding:3px 10px}
 /* Average-views mean/median toggle: variants swapped via #report[data-avg] (no re-render). */
 #report .js-mean{display:none}
 #report[data-avg="mean"] .js-med{display:none}
@@ -2607,6 +2610,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .vcc-tail{white-space:nowrap}
 .vcc-note a{color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
 .vcc-note a:hover{text-decoration:underline}
+/* The basis switch lives in the note because the note is what explains it. Full
+   control size, the same as the chart segments, not the 10px card pill: it
+   changes every view figure on the page and was too easy to miss down at the
+   row label, two rows below the text that gives it meaning. */
+.vcc-basis{display:flex;flex-wrap:wrap;align-items:center;gap:0.45rem 0.7rem;margin-top:0.6rem;padding-top:0.55rem;border-top:1px solid var(--border)}
+.vcc-basis-label{font-size:0.72rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.05em}
+.vcc-basis .chart-ctrl-btn{padding:0.32rem 0.8rem}
+.vcc-basis-hint{font-size:0.76rem;color:var(--text-muted)}
 /* In the revenue panel it sits under an eyebrow inside a tighter box, so pull
    the top margin in and let it run the full width there. */
 .revenue-panel-header-left .vcc-note{margin-top:0.5rem;max-width:none}
@@ -4068,7 +4079,7 @@ window.__setAvgMetric = function(useMean){
 // the setter there would recurse through render() forever.
 window.__syncBasisButtons = function(){
   var on = !!window.__viewEngaged;
-  var btns = document.querySelectorAll('.basis-row button[data-vopt]');
+  var btns = document.querySelectorAll('button[data-vopt]');
   for (var i=0;i<btns.length;i++){ btns[i].setAttribute('aria-pressed', (btns[i].getAttribute('data-vopt')==='engaged')===on ? 'true' : 'false'); }
 };
 window.__setViewBasis = function(useEngaged){
@@ -5099,13 +5110,30 @@ function vccNote(kind, hasRule){
   // YouTube's announcement first, then our own evidence - what changed, then
   // how we sized it. Separated, or the two links read as one run-on string.
   const how = ' <span class="vcc-tail"><span class="vcc-sep">\u00b7</span> <button type="button" class="vcc-how" data-goto-benchmark>How we measured it \u2192</button></span>';
+  // The Overview note is where the two counting bases get explained, so it is
+  // also where the reader should choose one. The small pill beside the
+  // LONG-FORM label stays as a secondary switch next to the cards it changes;
+  // both read and write the same flag and __syncBasisButtons keeps them in
+  // step. Report kind only: the chart variants have their own segmented
+  // control, and the revenue one sits inside a <button> and cannot hold one.
+  const eng = !!window.__viewEngaged;
+  const basis = kind === 'report'
+    ? '<div class="vcc-basis" role="group" aria-label="Counting basis">' +
+      '<span class="vcc-basis-label">Show views as</span>' +
+      '<span class="chart-fmt-seg">' +
+      '<button type="button" class="chart-ctrl-btn seg" data-vopt="reported" aria-pressed="' + (eng ? 'false' : 'true') + '" onclick="__setViewBasis(false)">Reported</button>' +
+      '<button type="button" class="chart-ctrl-btn seg" data-vopt="engaged" aria-pressed="' + (eng ? 'true' : 'false') + '" onclick="__setViewBasis(true)">Engaged</button>' +
+      '</span>' +
+      '<span class="vcc-basis-hint">engaged \u2248 reported \u00f7 ' + VCC_MID + ' after 27 Aug \u00b7 an estimate, give or take 10%</span>' +
+      '</div>'
+    : '';
   return '<div class="vcc-note">' + body + rule + dates +
     ' <a href="https://support.google.com/youtube/thread/433409976" target="_blank" rel="noopener">YouTube Help \u2197</a>'
     // The revenue variant sits inside the panel's toggle <button>. A nested
     // <button> is not just invalid, the parser actively closes the outer one at
     // it and the link ends up outside the note. That panel is already on the
     // Analysis tab, one metric away from the chart, so it simply gets no link.
-    + (kind === 'revenue' ? '' : how) + '</div>';
+    + (kind === 'revenue' ? '' : how) + basis + '</div>';
 }
 
 // Vertical rule marking where the counting change lands on a monthly chart.
