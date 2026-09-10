@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-09-AM",
-    "snapshots": 177
+    "to": "2026-09-10-AM",
+    "snapshots": 179
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1416,
+      "estPromotedViews": 1429,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 34.5,
-      "baselinePerDay": 105,
+      "baselinePerDay": 106,
       "peakPerDay": 26650,
-      "ratio": 253.8,
+      "ratio": 251.4,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 17,
+      "elevatedSnapshots": 19,
       "status": "sustained",
-      "estPromotedViews": 83064,
+      "estPromotedViews": 99982,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -413,6 +413,14 @@
         [
           "2026-09-09-AM",
           388847
+        ],
+        [
+          "2026-09-09-PM",
+          394420
+        ],
+        [
+          "2026-09-10-AM",
+          405880
         ]
       ]
     },
@@ -772,6 +780,14 @@
         [
           "2026-09-09-AM",
           32169
+        ],
+        [
+          "2026-09-09-PM",
+          32169
+        ],
+        [
+          "2026-09-10-AM",
+          32170
         ]
       ]
     },
@@ -1115,6 +1131,14 @@
         [
           "2026-09-09-AM",
           72531
+        ],
+        [
+          "2026-09-09-PM",
+          72536
+        ],
+        [
+          "2026-09-10-AM",
+          72546
         ]
       ]
     },
@@ -1125,13 +1149,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 44,
+      "baselinePerDay": 36,
       "peakPerDay": 1236,
-      "ratio": 28.1,
+      "ratio": 34.3,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 596,
+      "estPromotedViews": 600,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -1402,6 +1426,14 @@
         [
           "2026-09-09-AM",
           103201
+        ],
+        [
+          "2026-09-09-PM",
+          103207
+        ],
+        [
+          "2026-09-10-AM",
+          103209
         ]
       ]
     }
