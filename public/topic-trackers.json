@@ -1,6 +1,95 @@
 {
-  "lastUpdated": "2026-09-10T09:03:16.169Z",
+  "lastUpdated": "2026-09-11T09:00:43.493Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "sign",
+      "keywords": [
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "stock sign",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.3271,
+        "spikeRatio": 3.06,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 43,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "clancy trial",
+      "keywords": [
+        "holdout",
+        "lone",
+        "clancy trial"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0263,
+        "spikeRatio": 11.88,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "tourney lindsay",
+      "keywords": [
+        "publicly",
+        "tourney lindsay"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0489,
+        "spikeRatio": 6.39,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trial",
+      "keywords": [
+        "trial"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.094,
+        "spikeRatio": 3.33,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "kona sign",
+      "keywords": [
+        "kona sign"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.375,
+        "baselineSaturation": 0.1165,
+        "spikeRatio": 3.22,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "sign",
@@ -8,127 +97,23 @@
         "limited",
         "edition",
         "jack",
-        "o'lantern",
         "stock",
         "coffee limited",
         "limited edition",
         "edition jack",
-        "jack o'lantern",
-        "o'lantern back",
         "back stock",
-        "stock sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.2808,
-        "spikeRatio": 3.56,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "facing",
-      "keywords": [
-        "facing",
-        "another"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.089,
-        "spikeRatio": 4.32,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "kona sign",
-      "keywords": [
-        "kona sign",
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5385,
-        "baselineSaturation": 0.1712,
-        "spikeRatio": 3.14,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "free",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
+        "stock sign",
         "o'lantern",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
         "jack o'lantern",
-        "o'lantern back",
-        "back stock",
-        "stock sign"
+        "o'lantern back"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3062,
-        "spikeRatio": 3.27,
-        "recentVideoCount": 17,
-        "baselineVideoCount": 39,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "trial",
-      "keywords": [
-        "juror",
-        "clancy trial",
-        "trial"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3529,
-        "baselineSaturation": 0.0891,
-        "spikeRatio": 3.96,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "clancy",
-      "keywords": [
-        "clancy",
-        "kona sign",
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8235,
-        "baselineSaturation": 0.1512,
-        "spikeRatio": 5.45,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
+        "baselineSaturation": 0.3092,
+        "spikeRatio": 3.23,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 23,
+        "detectedAt": "2026-09-11T09:00:43.493Z"
       }
     }
   ]
