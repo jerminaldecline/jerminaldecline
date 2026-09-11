@@ -75,12 +75,14 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .check input{accent-color:var(--accent-fill);width:15px;height:15px}
 .check small{color:var(--text-dim);font-size:0.72rem}
 
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-bottom:1.2rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin-bottom:1.2rem}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0.95rem 1.1rem}
 .kpi-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.35rem}
 .kpi-num{font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums}
-.kpi-sub{font-size:0.76rem;color:var(--subtext);margin-top:0.35rem}
+.kpi-sub{font-size:0.76rem;color:var(--subtext);margin-top:0.35rem;line-height:1.35}
 .kpi-num.net{color:var(--up)}
+.dl{font-weight:800;white-space:nowrap}
+.dl.up{color:var(--up)} .dl.down{color:var(--down)} .dl.flat{color:var(--text-dim)}
 
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:1.2rem}
 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:0.6rem}
@@ -88,30 +90,52 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .panel-sub{font-size:0.82rem;color:var(--subtext);margin-top:0.2rem;line-height:1.35}
 .legend{display:flex;flex-wrap:wrap;gap:0.3rem 1rem;font-size:0.76rem;color:var(--text-muted);align-items:center}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:0.35rem;vertical-align:-2px}
-.legend i.line{height:2px;border-radius:1px;vertical-align:2px}
+.legend b{color:var(--text);font-weight:700}
 .chart{width:100%;height:auto;display:block}
 .chart text{font-family:inherit;font-size:11px;fill:var(--text-muted)}
+.chart .lane{font-size:9.5px;font-weight:800;letter-spacing:0.08em;fill:var(--text-dim)}
 .chart .grid{stroke:var(--grid);stroke-width:1}
 .chart .axis{stroke:var(--border);stroke-width:1}
 .chart .hit{fill:transparent}
 .chart .hit:hover{fill:var(--grid)}
-.chart .lbl-empty{fill:var(--text-dim);font-size:13px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media (max-width:720px){.two{grid-template-columns:1fr}}
 
+.share{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:0.3rem 0 0.4rem;background:var(--surface-2)}
+.share i{display:block;height:100%}
+.share-legend{display:flex;flex-wrap:wrap;gap:0.3rem 1rem;font-size:0.76rem;color:var(--text-muted);margin-bottom:0.9rem}
+.share-legend b{color:var(--text)}
+.top{display:grid;grid-template-columns:minmax(150px,1.3fr) 3fr auto auto;gap:0.4rem 0.8rem;align-items:center;font-size:0.82rem}
+.top-row{display:contents;cursor:pointer}
+.top-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-name small{color:var(--text-dim);font-size:0.7rem;margin-left:0.3rem}
+.top-row:hover .top-name{color:var(--accent)}
+.top-bar{height:12px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.top-bar i{display:block;height:100%;border-radius:6px}
+.top-units,.top-gross{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.top-gross{color:var(--subtext)}
+@media (max-width:560px){.top{grid-template-columns:minmax(110px,1fr) 2fr auto}.top-gross{display:none}.top-name{white-space:normal;line-height:1.2}}
+
+.filters{display:flex;flex-wrap:wrap;gap:0.5rem 0.9rem;align-items:center;margin:0.1rem 0 0.7rem}
+.chips{display:flex;flex-wrap:wrap;gap:0.35rem}
+.chips button{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font:inherit;font-size:0.74rem;font-weight:700;padding:0.25rem 0.65rem;border-radius:999px;cursor:pointer}
+.chips button:hover{color:var(--text)}
+.chips button[aria-pressed="true"]{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+.filters input{font:inherit;font-size:0.8rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);min-width:180px}
 .tbl-wrap{overflow-x:auto;margin:0 -0.2rem}
-table{border-collapse:collapse;width:100%;font-size:0.82rem;min-width:720px}
+table{border-collapse:collapse;width:100%;font-size:0.82rem;min-width:760px}
 th,td{padding:0.42rem 0.55rem;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;font-variant-numeric:tabular-nums}
-th{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:800;position:sticky;top:0;background:var(--surface)}
+th{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:800;position:sticky;top:0;background:var(--surface);z-index:2}
 th button{appearance:none;background:none;border:none;font:inherit;color:inherit;cursor:pointer;padding:0;text-transform:inherit;letter-spacing:inherit}
 th button[data-dir]::after{content:" \25B4";opacity:0.9}
 th button[data-dir="desc"]::after{content:" \25BE"}
-th:first-child,td:first-child{text-align:left}
-td.name{max-width:260px;white-space:normal;line-height:1.25}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1}
+th:first-child{z-index:3}
+td.name{max-width:250px;white-space:normal;line-height:1.25}
 td.name small{display:block;color:var(--text-dim);font-size:0.7rem}
 tr.row{cursor:pointer}
 tr.row:hover td{background:var(--surface-2)}
-tr.row.sel td{background:var(--accent-2-bg)}
+tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),var(--surface)}
 .fam{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:0.4rem;vertical-align:1px}
 .oos{color:var(--down);font-weight:700}
 .cap{color:var(--text-dim)}
@@ -131,6 +155,7 @@ tr.row.sel td{background:var(--accent-2-bg)}
 .pricelog li{break-inside:avoid;padding:0.3rem 0;border-bottom:1px solid var(--border);display:flex;gap:0.6rem;justify-content:space-between}
 .pricelog .d{color:var(--text-dim);font-variant-numeric:tabular-nums;flex:0 0 5.2rem}
 .pricelog .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pricelog .n small{color:var(--text-dim)}
 .pricelog .p{font-variant-numeric:tabular-nums;white-space:nowrap}
 .pricelog .p.dn{color:var(--up)}
 .pricelog .p.upp{color:var(--down)}
@@ -143,7 +168,6 @@ tr.row.sel td{background:var(--accent-2-bg)}
 .empty{color:var(--text-dim);font-size:0.85rem;padding:1.2rem 0;text-align:center}
 
 #tip{position:fixed;z-index:100;pointer-events:none;background:var(--tip-bg);color:#fff;font-size:0.76rem;line-height:1.35;padding:0.4rem 0.6rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.35);max-width:260px;display:none;white-space:pre-line}
-:root[data-theme="light"] #tip,:root:not([data-theme]) #tip{}
 @media (max-width:560px){body{padding:16px}.margin input[type=range]{width:120px}.kpi-num{font-size:1.5rem}}
 </style>
 </head>
@@ -185,6 +209,11 @@ tr.row.sel td{background:var(--accent-2-bg)}
         <button type="button" data-per="90" aria-pressed="false">90 days</button>
         <button type="button" data-per="0" aria-pressed="false">All</button>
       </div></div>
+    <div class="ctl"><span class="ctl-label">Bars</span>
+      <div class="seg" role="group" aria-label="Group bars by">
+        <button type="button" data-group="day" aria-pressed="true">Day</button>
+        <button type="button" data-group="week" aria-pressed="false">Week</button>
+      </div></div>
     <div class="ctl"><span class="ctl-label">Hypothetical margin</span>
       <div class="margin">
         <input type="range" id="marginRange" min="0" max="100" step="1" value="30" aria-label="Margin percent">
@@ -197,7 +226,7 @@ tr.row.sel td{background:var(--accent-2-bg)}
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Stock movements by day</div><div class="panel-sub" id="movSub"></div></div>
+      <div><div class="panel-title">Units sold and restocked</div><div class="panel-sub" id="movSub"></div></div>
       <div class="legend"><span><i style="background:var(--brand)"></i>Units sold</span><span><i style="background:var(--accent-2)"></i>Bulk drop</span><span><i style="background:var(--text-dim)"></i>Restocked</span></div>
     </div>
     <div id="movChart"></div>
@@ -205,10 +234,18 @@ tr.row.sel td{background:var(--accent-2-bg)}
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Estimated revenue by day</div><div class="panel-sub" id="revSub"></div></div>
+      <div><div class="panel-title">Estimated revenue</div><div class="panel-sub" id="revSub"></div></div>
       <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Gross at list price</span><span><i style="background:var(--up)"></i>Net at margin</span></div>
     </div>
     <div id="revChart"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div><div class="panel-title">What sold</div><div class="panel-sub" id="topSub"></div></div>
+    </div>
+    <div id="share"></div>
+    <div class="top" id="top"></div>
   </div>
 
   <div class="panel">
@@ -221,7 +258,18 @@ tr.row.sel td{background:var(--accent-2-bg)}
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Products</div><div class="panel-sub" id="tblSub">Click a row for its stock and price history.</div></div>
+      <div><div class="panel-title">Products</div><div class="panel-sub">Click a row for its stock and price history.</div></div>
+    </div>
+    <div class="filters">
+      <div class="chips" id="famChips">
+        <button type="button" data-fam="all" aria-pressed="true">All</button>
+        <button type="button" data-fam="K-Cups" aria-pressed="false">K-Cups</button>
+        <button type="button" data-fam="Ground" aria-pressed="false">Ground</button>
+        <button type="button" data-fam="Whole Bean" aria-pressed="false">Whole Bean</button>
+        <button type="button" data-fam="Other" aria-pressed="false">Other</button>
+      </div>
+      <div class="chips"><button type="button" id="oosChip" aria-pressed="false">Out of stock now</button></div>
+      <input type="search" id="q" placeholder="Filter by name" aria-label="Filter by name">
     </div>
     <div class="tbl-wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
     <div class="tfoot" id="tfoot"></div>
@@ -230,7 +278,7 @@ tr.row.sel td{background:var(--accent-2-bg)}
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Price changes</div><div class="panel-sub" id="plSub">Changes between consecutive in-stock readings, newest first.</div></div>
+      <div><div class="panel-title">Price changes</div><div class="panel-sub" id="plSub"></div></div>
     </div>
     <ul class="pricelog" id="pricelog"></ul>
   </div>
@@ -241,8 +289,9 @@ tr.row.sel td{background:var(--accent-2-bg)}
       <li><b>Stock</b> is read once a day. On Amazon it is the quantity the listing will let a cart take, which is Amazon's sellable count for that listing. On the Shopify store it is the exact count the cart reports, which stops at 80, so 80 means "at least 80".</li>
       <li><b>Units sold</b> is any fall in stock between two readings. The data cannot tell a retail sale from stock being moved to another channel or a wholesale order, so large single-day falls (40 or more units and at least half the stock) are shown separately as <b>bulk drops</b> and left out of sales unless you tick the box.</li>
       <li><b>Revenue</b> is units multiplied by the listing's usual in-stock price. <b>Net</b> is that figure multiplied by whatever margin you set above. Neither is a real figure from the business.</li>
-      <li>Restocks and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed.</li>
-      <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). About a third of Amazon listings show the 5 lb price while the 12 oz bag is out of stock; those reads are kept in the price history but do not affect valuations.</li>
+      <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
+      <li>Restocks and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group scan days by the week starting Monday.</li>
+      <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
     </ul>
   </div>
 </div>
@@ -254,9 +303,9 @@ tr.row.sel td{background:var(--accent-2-bg)}
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
-const BULK_MIN=40, BULK_SHARE=0.5;
-const state={channel:'amazon',period:30,margin:30,bulk:false,sort:{key:'sold',dir:'desc'},sel:null};
-let DATA=null, CH={};      // CH[channel] = {days, skus(with derived), cap}
+const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, MIN_RUN={amazon:3,shopify:1};
+const state={channel:'amazon',period:30,margin:30,bulk:false,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
 const fmtM=n=>'$'+Math.round(n).toLocaleString('en-US');
@@ -265,24 +314,25 @@ const fmtD=d=>{const p=d.split('-');return (+p[2])+' '+MONTHS[+p[1]-1]};
 const fmtDY=d=>{const p=d.split('-');return (+p[2])+' '+MONTHS[+p[1]-1]+' '+p[0]};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dayMs=864e5, toT=d=>Date.parse(d+'T00:00:00Z');
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const chName=c=>c==='amazon'?'Amazon':'Shopify';
 
 // ---- derive per-SKU daily movements once per channel -------------------------
 function deriveSku(s, days, cap){
   const n=days.length, sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0);
-  let pi=-1, pv=null, soldU=0,bulkU=0,restU=0, oosDays=0;
+  let pv=null;
   for(let i=0;i<n;i++){
     const v=s.stock[i]; if(v==null) continue;
-    if(v===0) oosDays++;
     const capped = cap!=null && v>=cap;
     if(pv!=null && !capped){
       const d=v-pv;
-      if(d<0){ const drop=-d; if(drop>=BULK_MIN && drop>=BULK_SHARE*pv){bulk[i]=drop;bulkU+=drop;} else {sold[i]=drop;soldU+=drop;} }
-      else if(d>0){ rest[i]=d; restU+=d; }
+      if(d<0){ const drop=-d; if(drop>=BULK_MIN && drop>=BULK_SHARE*pv) bulk[i]=drop; else sold[i]=drop; }
+      else if(d>0) rest[i]=d;
     }
-    pv = capped ? null : v; pi=i;   // never difference across a capped (floor) reading
+    pv = capped ? null : v;   // never difference across a capped (floor) reading
   }
   s.sold=sold; s.bulk=bulk; s.rest=rest;
-  s.last = lastKnown(s.stock);
+  s.last=lastKnown(s.stock);
   s.lastCapped = cap!=null && s.last!=null && s.last>=cap;
 }
 function lastKnown(a){ for(let i=a.length-1;i>=0;i--) if(a[i]!=null) return a[i]; return null; }
@@ -293,134 +343,159 @@ function prepChannel(name){
   const c=DATA[name]; if(!c) return null;
   const skus=c.skus.map(s=>Object.assign({channel:name},s));
   skus.forEach(s=>deriveSku(s,c.days,c.cap));
-  return {days:c.days, skus, cap:c.cap, scan:c.scan};
+  return {days:c.days, skus, cap:c.cap};
 }
 function prepBoth(){
   const a=CH.amazon, b=CH.shopify; if(!a||!b) return a||b;
   const days=[...new Set([...a.days,...b.days])].sort();
   const idx=new Map(days.map((d,i)=>[d,i]));
-  const realign=(s,src)=>{const o=Object.assign({},s); for(const k of ['stock','prices','sold','bulk','rest']){ if(!s[k]) continue; const arr=new Array(days.length).fill(k==='stock'||k==='prices'?null:0); src.days.forEach((d,i)=>{arr[idx.get(d)]=s[k][i]}); o[k]=arr;} return o;};
+  const realign=(s,src)=>{const o=Object.assign({},s); for(const k of ['stock','prices','compareAt','sold','bulk','rest']){ if(!s[k]) continue; const arr=new Array(days.length).fill(k==='sold'||k==='bulk'||k==='rest'?0:null); src.days.forEach((d,i)=>{arr[idx.get(d)]=s[k][i]}); o[k]=arr;} return o;};
   return {days, skus:[...a.skus.map(s=>realign(s,a)),...b.skus.map(s=>realign(s,b))], cap:null, both:true};
 }
 function cur(){ return state.channel==='both' ? CH.both : CH[state.channel]; }
 function capOf(s){ return s.channel==='shopify' ? DATA.shopify.cap : null; }
 
-// ---- period window -------------------------------------------------------------
-function window_(c){
+// ---- windows -------------------------------------------------------------------
+function windowFor(c){
   const n=c.days.length; if(!state.period) return [0,n-1];
   const cutoff=toT(c.days[n-1])-(state.period-1)*dayMs;
   let i0=0; while(i0<n-1 && toT(c.days[i0])<cutoff) i0++;
   return [i0,n-1];
 }
+// the same number of days immediately before the window; null when too thin to compare
+function prevWindow(c,i0){
+  if(!state.period||i0===0) return null;
+  const end=toT(c.days[i0])-dayMs, start=end-(state.period-1)*dayMs;
+  let a=-1,b=-1; for(let i=0;i<i0;i++){ const t=toT(c.days[i]); if(t>=start&&t<=end){ if(a<0)a=i; b=i; } }
+  if(a<0 || b-a+1 < state.period*0.5) return null;
+  return [a,b];
+}
 
-// ---- aggregate -----------------------------------------------------------------
-function aggregate(c){
-  const [i0,i1]=window_(c), days=c.days.slice(i0,i1+1), n=days.length;
+// ---- aggregate a window --------------------------------------------------------
+function aggregate(c,[i0,i1]){
+  const days=c.days.slice(i0,i1+1), n=days.length;
   const sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0), gross=new Array(n).fill(0), grossBulk=new Array(n).fill(0);
-  const byFam={}; FAM.forEach(f=>byFam[f[0]]=new Array(n).fill(0));
+  const byFam={}, famSold={}; FAM.forEach(f=>{byFam[f[0]]=new Array(n).fill(0); famSold[f[0]]=0;});
   let onHand=0,onHandVal=0,capped=0,inStock=0,oos=0,unknown=0;
+  const rows=[];
   for(const s of c.skus){
-    const p=s.price||0;
+    const p=s.price||0; let sl=0,bk=0,rs=0,oo=0;
     for(let i=0;i<n;i++){ const j=i0+i; sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; gross[i]+=s.sold[j]*p; grossBulk[i]+=s.bulk[j]*p;
+      sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; if(s.stock[j]===0) oo++;
       const v = s.stock[j]!=null ? s.stock[j] : lastKnownBefore(s.stock,j); if(v!=null) byFam[s.family][i]+=v; }
+    famSold[s.family]+=sl+(state.bulk?bk:0);
+    const first=firstKnownFrom(s.stock,i0), cap=capOf(s);
+    rows.push({s, name:s.name+(s.variant?' · '+s.variant:''), fam:s.family, size:s.size, price:s.price, channel:s.channel,
+      stock:s.last, capped:cap!=null&&s.last!=null&&s.last>=cap, delta:(first!=null&&s.last!=null)?s.last-first:null,
+      sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos:oo, gross:(sl+(state.bulk?bk:0))*p, series:s.stock.slice(i0,i1+1)});
     if(s.last==null){unknown++;continue;}
-    if(s.last>0){inStock++;} else oos++;
+    if(s.last>0) inStock++; else oos++;
     onHand+=s.last; onHandVal+=s.last*p; if(s.lastCapped) capped++;
   }
-  const sum=a=>a.reduce((x,y)=>x+y,0);
-  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,onHand,onHandVal,capped,inStock,oos,unknown,
-    soldU:sum(sold),bulkU:sum(bulk),restU:sum(rest),grossU:sum(gross),grossBulkU:sum(grossBulk)};
+  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,capped,inStock,oos,unknown,
+    soldU:sum(sold),bulkU:sum(bulk),restU:sum(rest),grossU:sum(gross),grossBulkU:sum(grossBulk),
+    units:sum(sold)+(state.bulk?sum(bulk):0), grossAll:sum(gross)+(state.bulk?sum(grossBulk):0)};
 }
+
+// ---- day / week grouping for the time charts -----------------------------------
+function weekStart(d){ const t=new Date(toT(d)); const dow=(t.getUTCDay()+6)%7; t.setUTCDate(t.getUTCDate()-dow); return t.toISOString().slice(0,10); }
+function effGroup(A){ return state.group==='auto' ? (A.days.length>WEEK_ABOVE?'week':'day') : state.group; }
+function series(A){
+  if(effGroup(A)!=='week') return A;
+  const keys=[], m=new Map();
+  A.days.forEach((d,i)=>{ const k=weekStart(d); if(!m.has(k)){ m.set(k,{n:0,sold:0,bulk:0,rest:0,gross:0,grossBulk:0}); keys.push(k);} const g=m.get(k); g.n++; g.sold+=A.sold[i]; g.bulk+=A.bulk[i]; g.rest+=A.rest[i]; g.gross+=A.gross[i]; g.grossBulk+=A.grossBulk[i]; });
+  const pick=k=>keys.map(x=>m.get(x)[k]);
+  return {weekly:true, days:keys, counts:pick('n'), sold:pick('sold'), bulk:pick('bulk'), rest:pick('rest'), gross:pick('gross'), grossBulk:pick('grossBulk')};
+}
+const when=(S,i)=> S.weekly ? `Week of ${fmtDY(S.days[i])} (${S.counts[i]} scan day${S.counts[i]===1?'':'s'})` : fmtDY(S.days[i]);
 
 // ---- SVG helpers ---------------------------------------------------------------
 function niceMax(v){ if(v<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p; const s=[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(x=>m<=x); return s*p; }
 function ticks(max,k){ const o=[]; for(let i=0;i<=k;i++) o.push(max*i/k); return o; }
-function xLabels(days, x, W){ const n=days.length, every=Math.max(1,Math.ceil(n/(W<480?4:W<700?6:9)));
+function xLabels(days, x, W, y){ const n=days.length, every=Math.max(1,Math.ceil(n/(W<480?4:W<700?6:9)));
   const idx=[]; for(let i=0;i<n;i+=every) idx.push(i);
-  if(idx[idx.length-1]!==n-1){ if(n-1-idx[idx.length-1] < every*0.6) idx[idx.length-1]=n-1; else idx.push(n-1); }
-  return idx.map(i=>`<text x="${x(i).toFixed(1)}" y="${'{H}'}" text-anchor="${i===n-1?'end':i===0?'start':'middle'}">${fmtD(days[i])}</text>`).join(''); }
+  if(idx[idx.length-1]!==n-1){ if(x(n-1)-x(idx[idx.length-1]) < 52) idx[idx.length-1]=n-1; else idx.push(n-1); }
+  return idx.map(i=>`<text x="${x(i).toFixed(1)}" y="${y}" text-anchor="${i===n-1?'end':i===0?'start':'middle'}">${fmtD(days[i])}</text>`).join(''); }
 function frame(W,H){ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">`; }
 // A 900-unit viewBox scaled onto a 330px phone shrinks 11px text to 4px. Measure
 // the container and draw at that width instead; re-rendered on resize.
 function cw(id,max){ const el=document.getElementById(id); const w=el?el.clientWidth:0; return Math.round(Math.max(300,Math.min(max,w||max))); }
+function hgrid(M,k,pl,W,pr,y0,sc,f){ let g=''; for(const t of ticks(M,k)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text x="${pl-6}" y="${(y+4).toFixed(1)}" text-anchor="end">${f(t)}</text>`; } return g; }
 
-function movementsChart(A){
-  const W=cw('movChart',900),H=W<600?220:260,pl=W<600?44:52,pr=12,pt=14,pb=26, n=A.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
-  const up=Math.max(...A.rest), dn=Math.max(...A.sold.map((v,i)=>v+A.bulk[i]));
-  const upM=niceMax(up), dnM=niceMax(dn), tot=upM+dnM||1, ih=H-pt-pb, sc=ih/tot, y0=pt+upM*sc;
+// Two lanes on one x-axis: sales on top with their own scale, restocks below with
+// theirs. A single diverging scale let one 1,200-unit restock squash a month of
+// 60-a-day sales into a few pixels.
+function movementsChart(S){
+  const n=S.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
+  const W=cw('movChart',900), narrow=W<600, pl=narrow?44:52, pr=12, pt=18, pb=26, gap=32, h2=narrow?52:66, h1=narrow?130:170, H=pt+h1+gap+h2+pb;
+  const y1=pt+h1, y2=pt+h1+gap+h2;
+  const M1=niceMax(Math.max(...S.sold.map((v,i)=>v+S.bulk[i]))), sc1=h1/M1;
+  const M2=niceMax(Math.max(...S.rest)), sc2=h2/M2;
   const step=(W-pl-pr)/n, bw=Math.max(2,step*0.72), x=i=>pl+i*step+step/2;
-  let g='';
-  for(const t of [upM, upM/2]) if(t>0){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">+${fmtU(t)}</text>`; }
-  for(const t of [dnM, dnM/2]) if(t>0){ const y=y0+t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">-${fmtU(t)}</text>`; }
-  g+=`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/><text x="${pl-6}" y="${y0+4}" text-anchor="end">0</text>`;
+  let g=`<text class="lane" x="${pl}" y="${pt-7}">SOLD</text><text class="lane" x="${pl}" y="${y1+gap-7}">RESTOCKED</text>`;
+  g+=hgrid(M1,narrow?2:4,pl,W,pr,y1,sc1,fmtU)+hgrid(M2,1,pl,W,pr,y2,sc2,fmtU);
   let bars='';
   for(let i=0;i<n;i++){
-    const xl=x(i)-bw/2;
-    if(A.rest[i]>0) bars+=`<rect x="${xl.toFixed(1)}" y="${(y0-A.rest[i]*sc).toFixed(1)}" width="${bw.toFixed(1)}" height="${(A.rest[i]*sc).toFixed(1)}" rx="1.5" fill="var(--text-dim)"/>`;
-    if(A.sold[i]>0) bars+=`<rect x="${xl.toFixed(1)}" y="${y0.toFixed(1)}" width="${bw.toFixed(1)}" height="${(A.sold[i]*sc).toFixed(1)}" rx="1.5" fill="var(--brand)"/>`;
-    if(A.bulk[i]>0) bars+=`<rect x="${xl.toFixed(1)}" y="${(y0+A.sold[i]*sc).toFixed(1)}" width="${bw.toFixed(1)}" height="${(A.bulk[i]*sc).toFixed(1)}" rx="1.5" fill="var(--accent-2)"/>`;
-    const tip=`${fmtDY(A.days[i])}\nSold: ${fmtU(A.sold[i])} units\nBulk drop: ${fmtU(A.bulk[i])}\nRestocked: ${fmtU(A.rest[i])}`;
-    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(tip)}"/>`;
+    const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1);
+    if(S.sold[i]>0) bars+=`<rect x="${xl}" y="${(y1-S.sold[i]*sc1).toFixed(1)}" width="${w}" height="${(S.sold[i]*sc1).toFixed(1)}" rx="1.5" fill="var(--brand)"/>`;
+    if(S.bulk[i]>0) bars+=`<rect x="${xl}" y="${(y1-(S.sold[i]+S.bulk[i])*sc1).toFixed(1)}" width="${w}" height="${(S.bulk[i]*sc1).toFixed(1)}" rx="1.5" fill="var(--accent-2)"/>`;
+    if(S.rest[i]>0) bars+=`<rect x="${xl}" y="${(y2-S.rest[i]*sc2).toFixed(1)}" width="${w}" height="${(S.rest[i]*sc2).toFixed(1)}" rx="1.5" fill="var(--text-dim)"/>`;
+    const tip=`${when(S,i)}\nSold: ${fmtU(S.sold[i])} units\nBulk drop: ${fmtU(S.bulk[i])}\nRestocked: ${fmtU(S.rest[i])}`;
+    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${H-pt-pb}" data-tip="${esc(tip)}"/>`;
   }
-  return frame(W,H)+g+bars+xLabels(A.days,x,W).replace(/\{H\}/g,H-8)+'</svg>';
+  return frame(W,H)+g+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y1}" y2="${y1}"/><line class="axis" x1="${pl}" x2="${W-pr}" y1="${y2}" y2="${y2}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
 }
 
-function revenueChart(A){
-  const W=cw('revChart',900),H=W<600?210:240,pl=W<600?48:56,pr=12,pt=14,pb=26, n=A.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
-  const inc=state.bulk, m=state.margin/100;
-  const gross=A.gross.map((v,i)=>v+(inc?A.grossBulk[i]:0));
-  const M=niceMax(Math.max(...gross)), ih=H-pt-pb, sc=ih/(M||1), y0=pt+ih;
+function revenueChart(S){
+  const n=S.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
+  const W=cw('revChart',900), narrow=W<600, H=narrow?210:240, pl=narrow?48:56, pr=12, pt=14, pb=26;
+  const inc=state.bulk, m=state.margin/100, gross=S.gross.map((v,i)=>v+(inc?S.grossBulk[i]:0));
+  const M=niceMax(Math.max(...gross)), ih=H-pt-pb, sc=ih/M, y0=pt+ih;
   const step=(W-pl-pr)/n, bw=Math.max(2,step*0.72), x=i=>pl+i*step+step/2;
-  let g='';
-  for(const t of ticks(M,4)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${fmtM(t)}</text>`; }
   let bars='';
   for(let i=0;i<n;i++){
-    const xl=x(i)-bw/2, gv=gross[i], nv=gv*m;
-    if(gv>0){ bars+=`<rect x="${xl.toFixed(1)}" y="${(y0-gv*sc).toFixed(1)}" width="${bw.toFixed(1)}" height="${(gv*sc).toFixed(1)}" rx="1.5" fill="var(--brand)" opacity="0.35"/>`;
-      if(nv>0) bars+=`<rect x="${xl.toFixed(1)}" y="${(y0-nv*sc).toFixed(1)}" width="${bw.toFixed(1)}" height="${(nv*sc).toFixed(1)}" rx="1.5" fill="var(--up)"/>`; }
-    const tip=`${fmtDY(A.days[i])}\nGross: ${fmtM(gv)}\nNet at ${state.margin}%: ${fmtM(nv)}`;
-    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(tip)}"/>`;
+    const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1), gv=gross[i], nv=gv*m;
+    if(gv>0){ bars+=`<rect x="${xl}" y="${(y0-gv*sc).toFixed(1)}" width="${w}" height="${(gv*sc).toFixed(1)}" rx="1.5" fill="var(--brand)" opacity="0.35"/>`;
+      if(nv>0) bars+=`<rect x="${xl}" y="${(y0-nv*sc).toFixed(1)}" width="${w}" height="${(nv*sc).toFixed(1)}" rx="1.5" fill="var(--up)"/>`; }
+    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nGross: ${fmtM(gv)}\nNet at ${state.margin}%: ${fmtM(nv)}`)}"/>`;
   }
-  return frame(W,H)+g+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+bars+xLabels(A.days,x,W).replace(/\{H\}/g,H-8)+'</svg>';
+  return frame(W,H)+hgrid(M,4,pl,W,pr,y0,sc,fmtM)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
 }
 
 function onHandChart(A){
-  const W=cw('ohChart',900),H=W<600?210:240,pl=W<600?48:56,pr=12,pt=14,pb=26, n=A.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
+  const n=A.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
+  const W=cw('ohChart',900), narrow=W<600, H=narrow?210:240, pl=narrow?48:56, pr=12, pt=14, pb=26;
   const fams=FAM.map(f=>f[0]).filter(f=>A.byFam[f].some(v=>v>0));
   const tot=A.days.map((_,i)=>fams.reduce((s,f)=>s+A.byFam[f][i],0));
-  const M=niceMax(Math.max(...tot)), ih=H-pt-pb, sc=ih/(M||1), y0=pt+ih;
+  const M=niceMax(Math.max(...tot)), ih=H-pt-pb, sc=ih/M, y0=pt+ih;
   const x=i=> n===1 ? (pl+W-pr)/2 : pl+i*(W-pl-pr)/(n-1);
-  let g='';
-  for(const t of ticks(M,4)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${fmtU(t)}</text>`; }
   let areas='', base=new Array(n).fill(0);
   for(const f of fams){
     const top=base.map((b,i)=>b+A.byFam[f][i]);
     const up=top.map((v,i)=>`${x(i).toFixed(1)},${(y0-v*sc).toFixed(1)}`).join(' ');
-    const dnp=base.map((v,i)=>`${x(i).toFixed(1)},${(y0-v*sc).toFixed(1)}`).reverse().join(' ');
-    areas+=`<polygon points="${up} ${dnp}" fill="${famColor(f)}" opacity="0.55"/><polyline points="${up}" fill="none" stroke="${famColor(f)}" stroke-width="1.5"/>`;
+    const dn=base.map((v,i)=>`${x(i).toFixed(1)},${(y0-v*sc).toFixed(1)}`).reverse().join(' ');
+    areas+=`<polygon points="${up} ${dn}" fill="${famColor(f)}" opacity="0.55"/><polyline points="${up}" fill="none" stroke="${famColor(f)}" stroke-width="1.5"/>`;
     base=top;
   }
   let hits=''; const step=(W-pl-pr)/Math.max(1,n-1);
   for(let i=0;i<n;i++){ const tip=`${fmtDY(A.days[i])}\nTotal: ${fmtU(tot[i])} units\n`+fams.map(f=>`${f}: ${fmtU(A.byFam[f][i])}`).join('\n');
     hits+=`<rect class="hit" x="${(x(i)-step/2).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(tip)}"/>`; }
-  document.getElementById('ohLegend').innerHTML=fams.map(f=>`<span><i style="background:${famColor(f)}"></i>${f}</span>`).join('');
-  return frame(W,H)+g+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+areas+hits+xLabels(A.days,x,W).replace(/\{H\}/g,H-8)+'</svg>';
+  document.getElementById('ohLegend').innerHTML=fams.map(f=>`<span><i style="background:${famColor(f)}"></i>${f} <b>${fmtU(A.byFam[f][n-1])}</b></span>`).join('');
+  return frame(W,H)+hgrid(M,4,pl,W,pr,y0,sc,fmtU)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+areas+hits+xLabels(A.days,x,W,H-8)+'</svg>';
 }
 
 function lineChart(days, vals, opts){
-  const dw=cw('detail',2000), W=dw>720?Math.min(440,Math.floor((dw-16)/2)):Math.max(300,dw), H=170,pl=opts.money?52:44,pr=10,pt=12,pb=24, n=days.length;
+  const dw=cw('detail',2000), W=dw>720?Math.min(440,Math.floor((dw-16)/2)):Math.max(300,dw), H=170, pl=opts.money?52:44, pr=10, pt=12, pb=24, n=days.length;
   const known=vals.filter(v=>v!=null); if(!known.length) return '<div class="empty">No readings.</div>';
-  const M=niceMax(Math.max(...known)), ih=H-pt-pb, sc=ih/(M||1), y0=pt+ih;
+  const M=niceMax(Math.max(...known)), ih=H-pt-pb, sc=ih/M, y0=pt+ih;
   const x=i=> n===1 ? (pl+W-pr)/2 : pl+i*(W-pl-pr)/(n-1);
-  const f=opts.money?fmtM:fmtU;
-  let g=''; for(const t of ticks(M,3)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-5}" y="${y+4}" text-anchor="end">${opts.money?'$'+(+t.toFixed(2)):fmtU(t)}</text>`; }
-  let segs=[], curSeg=[]; vals.forEach((v,i)=>{ if(v==null){ if(curSeg.length){segs.push(curSeg);curSeg=[];} } else curSeg.push(`${x(i).toFixed(1)},${(y0-v*sc).toFixed(1)}`); }); if(curSeg.length) segs.push(curSeg);
+  let segs=[], c=[]; vals.forEach((v,i)=>{ if(v==null){ if(c.length){segs.push(c);c=[];} } else c.push(`${x(i).toFixed(1)},${(y0-v*sc).toFixed(1)}`); }); if(c.length) segs.push(c);
   let path=segs.map(s=> s.length>1 ? `<polyline points="${s.join(' ')}" fill="none" stroke="${opts.color}" stroke-width="2" stroke-linejoin="round"/>` : `<circle cx="${s[0].split(',')[0]}" cy="${s[0].split(',')[1]}" r="3" fill="${opts.color}"/>`).join('');
   if(opts.cap!=null) vals.forEach((v,i)=>{ if(v!=null&&v>=opts.cap) path+=`<circle cx="${x(i).toFixed(1)}" cy="${(y0-v*sc).toFixed(1)}" r="3.5" fill="var(--surface)" stroke="${opts.color}" stroke-width="1.5"/>`; });
   let hits=''; const step=(W-pl-pr)/Math.max(1,n-1);
   for(let i=0;i<n;i++){ if(vals[i]==null) continue; const tip=`${fmtDY(days[i])}\n${opts.label}: ${opts.money?fmtP(vals[i]):fmtU(vals[i])+(opts.cap!=null&&vals[i]>=opts.cap?' (at least)':'')}`;
     hits+=`<rect class="hit" x="${(x(i)-step/2).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(tip)}"/>`; }
-  return frame(W,H)+g+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+path+hits+xLabels(days,x,W).replace(/\{H\}/g,H-8)+'</svg>';
+  return frame(W,H)+hgrid(M,3,pl,W,pr,y0,sc,opts.money?(t=>'$'+(+t.toFixed(2))):fmtU)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+path+hits+xLabels(days,x,W,H-8)+'</svg>';
 }
 
 function spark(vals){
@@ -431,109 +506,146 @@ function spark(vals){
 }
 
 // ---- render ---------------------------------------------------------------------
-function periodLabel(A){ return `${fmtD(A.days[0])} – ${fmtDY(A.days[A.days.length-1])} (${A.days.length} scan days)`; }
+function periodLabel(A,S){ return `${fmtD(A.days[0])} – ${fmtDY(A.days[A.days.length-1])} · ${A.days.length} scan days${S&&S.weekly?' · by week':''}`; }
+function deltaHtml(curV, prevV){
+  if(prevV==null) return '';
+  if(!(prevV>0)) return curV>0?`<span class="dl up">▲ new</span> vs prior ${state.period}d`:'';
+  const p=(curV-prevV)/prevV*100, a=Math.abs(p);
+  const cls=a<0.5?'flat':p>0?'up':'down', arrow=a<0.5?'■':p>0?'▲':'▼';
+  return `<span class="dl ${cls}">${arrow} ${a<10?a.toFixed(1):Math.round(a)}%</span> vs prior ${state.period}d`;
+}
 
-function renderKpis(c,A){
-  const inc=state.bulk, units=A.soldU+(inc?A.bulkU:0), gross=A.grossU+(inc?A.grossBulkU:0), net=gross*state.margin/100;
-  const oh = (A.capped?'≥':'')+fmtU(A.onHand);
+function renderKpis(c,A,P){
+  const nd=A.days.length, units=A.units, gross=A.grossAll, net=gross*state.margin/100;
+  const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
+  const j=(...xs)=>xs.filter(Boolean).join(' · ');
+  const oh=(A.capped?'≥':'')+fmtU(A.onHand);
   const tiles=[
-    ['Units sold', fmtU(units), inc?`incl. ${fmtU(A.bulkU)} in bulk drops`:`+ ${fmtU(A.bulkU)} in bulk drops, not counted`],
-    ['Gross at list', fmtM(gross), 'units × usual price'],
-    ['Net at '+state.margin+'%', fmtM(net), 'hypothetical', 'net'],
-    ['Restocked', fmtU(A.restU), 'units added between readings'],
-    ['On hand now', oh, 'units · '+fmtM(A.onHandVal)+' at list'+(A.capped?` · ${A.capped} at the 80 cap`:'')],
-    ['In stock', String(A.inStock), `of ${A.inStock+A.oos+A.unknown} listings · ${A.oos} out`+(A.unknown?` · ${A.unknown} unread`:'')],
+    ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`incl. ${fmtU(A.bulkU)} bulk`:`+ ${fmtU(A.bulkU)} in bulk drops, not counted`)],
+    ['Gross at list', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
+    ['Net at '+state.margin+'%', fmtM(net), j('hypothetical', P&&deltaHtml(net,P.grossAll*state.margin/100)), 'net'],
+    ['Restocked', fmtU(A.restU), j('units added', P&&deltaHtml(A.restU,P.restU))],
+    ['On hand now', oh, j('units', fmtM(A.onHandVal)+' at list', A.capped?`${A.capped} at the 80 cap`:'')],
+    ['In stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown} listings`, `${A.oos} out`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
 }
 
+function renderTop(c,A){
+  const total=A.units||0;
+  const fams=FAM.map(f=>f[0]).filter(f=>A.famSold[f]>0);
+  document.getElementById('share').innerHTML = total ? `<div class="share">${fams.map(f=>`<i style="width:${(A.famSold[f]/total*100).toFixed(2)}%;background:${famColor(f)}" data-tip="${esc(f+': '+fmtU(A.famSold[f])+' units ('+Math.round(A.famSold[f]/total*100)+'%)')}"></i>`).join('')}</div>
+    <div class="share-legend">${fams.map(f=>`<span><i class="fam" style="background:${famColor(f)}"></i>${f} <b>${Math.round(A.famSold[f]/total*100)}%</b> · ${fmtU(A.famSold[f])}</span>`).join('')}</div>` : '';
+  const list=A.rows.filter(r=>r.sold>0).sort((a,b)=>b.sold-a.sold).slice(0,10), max=list.length?list[0].sold:1;
+  document.getElementById('topSub').textContent = total ? `Share of units by family, then the ten listings that sold most in the period${state.bulk?' (bulk drops included)':''}.` : 'No units sold in this period.';
+  document.getElementById('top').innerHTML=list.map(r=>`<div class="top-row" data-id="${esc(r.s.channel+'|'+r.s.id)}" role="button" tabindex="0">
+      <span class="top-name" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size, c.both?chName(r.channel):null].filter(Boolean).join(' · '))}</small></span>
+      <span class="top-bar"><i style="width:${(r.sold/max*100).toFixed(1)}%;background:${famColor(r.fam)}"></i></span>
+      <span class="top-units">${fmtU(r.sold)}</span><span class="top-gross">${fmtM(r.gross)}</span></div>`).join('');
+}
+
 function renderTable(c,A){
-  const rows=c.skus.map(s=>{
-    const i0=A.i0,i1=A.i1, sl=s.sold.slice(i0,i1+1).reduce((a,b)=>a+b,0), bk=s.bulk.slice(i0,i1+1).reduce((a,b)=>a+b,0), rs=s.rest.slice(i0,i1+1).reduce((a,b)=>a+b,0);
-    const first=firstKnownFrom(s.stock,i0), last=s.last, oos=s.stock.slice(i0,i1+1).filter(v=>v===0).length;
-    const cap=capOf(s);
-    return {s, name:s.name+(s.variant?' · '+s.variant:''), fam:s.family, size:s.size, price:s.price, stock:last, capped:cap!=null&&last!=null&&last>=cap,
-      delta:(first!=null&&last!=null)?last-first:null, sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos, series:s.stock.slice(i0,i1+1)};
-  });
+  let rows=A.rows;
+  if(state.fam!=='all') rows=rows.filter(r=>r.fam===state.fam);
+  if(state.oos) rows=rows.filter(r=>r.stock===0);
+  if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(r=>r.name.toLowerCase().includes(q)||(r.s.id||'').toLowerCase().includes(q)); }
   const k=state.sort.key, dir=state.sort.dir==='asc'?1:-1;
-  rows.sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
+  rows=rows.slice().sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
   const cols=[['name','Product'],...(c.both?[['channel','Channel']]:[]),['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Bulk'],['rest','Restocked'],['oos','Days out'],['trend','Trend']];
   document.querySelector('#tbl thead').innerHTML='<tr>'+cols.map(([key,lab])=>`<th><button type="button" data-key="${key}" ${state.sort.key===key?`data-dir="${state.sort.dir}"`:''} ${key==='trend'?'disabled':''}>${lab}</button></th>`).join('')+'</tr>';
-  document.querySelector('#tbl tbody').innerHTML=rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
+  document.querySelector('#tbl tbody').innerHTML=rows.length?rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
     <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.channel==='amazon'?' · '+r.s.id:''}</small></td>
-    ${c.both?`<td>${r.s.channel==='amazon'?'Amazon':'Shopify'}</td>`:''}
+    ${c.both?`<td>${chName(r.channel)}</td>`:''}
     <td>${esc(r.size||'—')}</td><td>${fmtP(r.price)}</td>
     <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':(r.capped?'<span class="cap">≥</span>':'')+fmtU(r.stock)}</td>
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
     <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td><td>${r.oos||'—'}</td>
-    <td>${spark(r.series)}</td></tr>`).join('');
-  document.getElementById('tfoot').textContent=`${rows.length} listings. Sold and Bulk are units over the period; Change is stock now versus the first reading in the period. "?" means no usable reading in the period.`;
+    <td>${spark(r.series)}</td></tr>`).join(''):`<tr><td colspan="${cols.length}" class="empty" style="text-align:center">No listings match.</td></tr>`;
+  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold and Bulk are units over the period; Change is stock now versus the first reading in the period; Days out counts scan days at zero. "?" means no usable reading yet.`;
 }
 
-function renderDetail(c){
+function renderDetail(c,A){
   const el=document.getElementById('detail'); if(!state.sel){ el.hidden=true; el.innerHTML=''; return; }
-  const [ch,id]=state.sel.split('|'); const s=c.skus.find(x=>x.channel===ch&&x.id===id); if(!s){ el.hidden=true; return; }
-  const A=aggregate(c), i0=A.i0,i1=A.i1, days=c.days.slice(i0,i1+1), cap=capOf(s);
-  const sl=s.sold.slice(i0,i1+1).reduce((a,b)=>a+b,0), bk=s.bulk.slice(i0,i1+1).reduce((a,b)=>a+b,0), rs=s.rest.slice(i0,i1+1).reduce((a,b)=>a+b,0);
-  const gross=(sl+(state.bulk?bk:0))*(s.price||0);
+  const [ch,id]=state.sel.split('|'); const r=A.rows.find(x=>x.s.channel===ch&&x.s.id===id); if(!r){ el.hidden=true; return; }
+  const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${s.channel==='amazon'?'Amazon':'Shopify'} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(sl)}</b>${bk?`, bulk drops <b>${fmtU(bk)}</b>`:''}, restocked <b>${fmtU(rs)}</b> · gross <b>${fmtM(gross)}</b>, net at ${state.margin}% <b>${fmtM(gross*state.margin/100)}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, bulk drops <b>${fmtU(r.bulk)}</b>`:''}, restocked <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · gross <b>${fmtM(r.gross)}</b>, net at ${state.margin}% <b>${fmtM(r.gross*state.margin/100)}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
-    <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(i0,i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
-      <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(i0,i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
+    <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
+      <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
   document.getElementById('detailClose').onclick=()=>{state.sel=null; render();};
 }
 
+// Only a price that HOLDS counts as a change. Amazon's buy box shows another
+// size's price on many days, so single-day reads are flaps, not repricing.
 function renderPriceLog(c){
   const out=[];
   for(const s of c.skus){
-    let prev=null, prevDay=null;
+    const minRun=MIN_RUN[s.channel]||1, runs=[];
     for(let i=0;i<c.days.length;i++){
       const p=s.prices[i]; if(p==null) continue;
-      if(s.channel==='amazon' && !(s.stock[i]>0)) continue;     // the out-of-stock buy-box read is noise
-      if(prev!=null && Math.abs(p-prev)>=0.01) out.push({d:c.days[i],s,from:prev,to:p,sale:s.compareAt&&s.compareAt[i]});
-      prev=p; prevDay=c.days[i];
+      if(s.channel==='amazon' && !(s.stock[i]>0)) continue;
+      const last=runs[runs.length-1];
+      if(last && Math.abs(last.p-p)<0.005){ last.n++; last.sale=last.sale||!!(s.compareAt&&s.compareAt[i]); }
+      else runs.push({p, i, n:1, sale:!!(s.compareAt&&s.compareAt[i])});
+    }
+    for(let k=1;k<runs.length;k++){
+      const a=runs[k-1], b=runs[k];
+      if(a.n>=minRun && b.n>=minRun) out.push({d:c.days[b.i], s, from:a.p, to:b.p, held:b.n, sale:b.sale});
     }
   }
   out.sort((a,b)=>b.d.localeCompare(a.d));
   const el=document.getElementById('pricelog');
-  if(!out.length){ el.innerHTML='<li class="empty" style="display:block">No price changes recorded on this channel yet.</li>'; return; }
-  el.innerHTML=out.slice(0,60).map(e=>`<li><span class="d">${fmtDY(e.d)}</span><span class="n" title="${esc(e.s.name)}">${esc(e.s.name)}${e.s.variant?' · '+esc(e.s.variant):''}${c.both?' <small>('+(e.s.channel==='amazon'?'Amazon':'Shopify')+')</small>':''}</span><span class="p ${e.to<e.from?'dn':'upp'}">${fmtP(e.from)} → ${fmtP(e.to)}${e.sale?'<span class="sale">sale</span>':''}</span></li>`).join('');
-  document.getElementById('plSub').textContent=`Changes between consecutive in-stock readings, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.`;
+  document.getElementById('plSub').textContent = out.length ? `Repricings that held for at least ${state.channel==='shopify'?'one reading':'three in-stock readings'}, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.` : 'No sustained price changes recorded on this channel yet.';
+  el.innerHTML=out.slice(0,60).map(e=>`<li><span class="d">${fmtDY(e.d)}</span><span class="n" title="${esc(e.s.name)}">${esc(e.s.name)}${e.s.variant?' · '+esc(e.s.variant):''} <small>${esc([e.s.variant?null:e.s.family, e.s.variant?null:e.s.size, c.both?chName(e.s.channel):null].filter(Boolean).join(' · '))}</small></span><span class="p ${e.to<e.from?'dn':'upp'}">${fmtP(e.from)} → ${fmtP(e.to)}${e.sale?'<span class="sale">sale</span>':''}</span></li>`).join('');
 }
 
 function render(){
   const c=cur(); if(!c){ document.getElementById('kpis').innerHTML='<div class="empty">No data for this channel.</div>'; return; }
-  const A=aggregate(c);
-  renderKpis(c,A);
-  document.getElementById('movSub').textContent=periodLabel(A)+(c.both?' · Shopify readings begin 10 Aug 2026':'');
-  document.getElementById('movChart').innerHTML=movementsChart(A);
-  document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net at ${state.margin}%${state.bulk?', bulk drops included':', bulk drops excluded'}.`;
-  document.getElementById('revChart').innerHTML=revenueChart(A);
-  document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings at the cap count as 80':'')+'.';
+  const win=windowFor(c), A=aggregate(c,win), pw=prevWindow(c,win[0]), P=pw?aggregate(c,pw):null, S=series(A);
+  const eff=effGroup(A); document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.group===eff));
+  renderKpis(c,A,P);
+  document.getElementById('movSub').textContent=periodLabel(A,S)+(c.both?' · Shopify readings begin 10 Aug 2026':'');
+  document.getElementById('movChart').innerHTML=movementsChart(S);
+  document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net at ${state.margin}%${state.bulk?', bulk drops included':', bulk drops excluded'}${S.weekly?' · by week':''}.`;
+  document.getElementById('revChart').innerHTML=revenueChart(S);
+  renderTop(c,A);
+  document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings at the cap count as 80':'')+'. Legend shows the latest day.';
   document.getElementById('ohChart').innerHTML=onHandChart(A);
   renderTable(c,A);
-  renderDetail(c);
+  renderDetail(c,A);
   renderPriceLog(c);
 }
 
 // ---- wiring --------------------------------------------------------------------
+function press(sel, attr, val){ document.querySelectorAll(sel).forEach(x=>x.setAttribute('aria-pressed', x.dataset[attr]===val)); }
+function select(id){ state.sel=state.sel===id?null:id; render(); if(state.sel) document.getElementById('detail').scrollIntoView({block:'nearest',behavior:'smooth'}); }
 function wire(){
-  document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{ state.channel=b.dataset.ch; state.sel=null; document.querySelectorAll('[data-ch]').forEach(x=>x.setAttribute('aria-pressed',x===b)); render(); });
-  document.querySelectorAll('[data-per]').forEach(b=>b.onclick=()=>{ state.period=+b.dataset.per; document.querySelectorAll('[data-per]').forEach(x=>x.setAttribute('aria-pressed',x===b)); render(); });
+  document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{ state.channel=b.dataset.ch; state.sel=null; press('[data-ch]','ch',state.channel); render(); });
+  document.querySelectorAll('[data-per]').forEach(b=>b.onclick=()=>{ state.period=+b.dataset.per; press('[data-per]','per',b.dataset.per); render(); });
+  document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{ state.group=b.dataset.group; render(); });
+  document.querySelectorAll('[data-fam]').forEach(b=>b.onclick=()=>{ state.fam=b.dataset.fam; press('[data-fam]','fam',state.fam); render(); });
+  const oosChip=document.getElementById('oosChip'); oosChip.onclick=()=>{ state.oos=!state.oos; oosChip.setAttribute('aria-pressed',state.oos); render(); };
+  const q=document.getElementById('q'); let qt=null; q.oninput=()=>{ clearTimeout(qt); qt=setTimeout(()=>{ state.q=q.value.trim(); render(); },120); };
   const r=document.getElementById('marginRange'), nI=document.getElementById('marginNum');
   const setM=v=>{ v=Math.max(0,Math.min(100,Math.round(+v||0))); state.margin=v; r.value=v; nI.value=v; render(); };
   r.oninput=()=>setM(r.value); nI.onchange=()=>setM(nI.value);
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
   document.querySelector('#tbl thead').addEventListener('click',e=>{ const b=e.target.closest('button[data-key]'); if(!b||b.disabled) return; const k=b.dataset.key;
     if(state.sort.key===k) state.sort.dir=state.sort.dir==='asc'?'desc':'asc'; else state.sort={key:k,dir:k==='name'||k==='size'||k==='channel'?'asc':'desc'}; render(); });
-  document.querySelector('#tbl tbody').addEventListener('click',e=>{ const tr=e.target.closest('tr.row'); if(!tr) return; state.sel=state.sel===tr.dataset.id?null:tr.dataset.id; render(); if(state.sel) document.getElementById('detail').scrollIntoView({block:'nearest',behavior:'smooth'}); });
-  // tooltip
+  document.querySelector('#tbl tbody').addEventListener('click',e=>{ const tr=e.target.closest('tr.row'); if(tr) select(tr.dataset.id); });
+  const top=document.getElementById('top');
+  top.addEventListener('click',e=>{ const row=e.target.closest('.top-row'); if(row) select(row.dataset.id); });
+  top.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ const row=e.target.closest('.top-row'); if(row){ e.preventDefault(); select(row.dataset.id); } } });
+  // tooltip: hover on pointer devices, tap on touch
   const tip=document.getElementById('tip');
-  document.addEventListener('mousemove',e=>{ const t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){ tip.style.display='none'; return; }
+  const show=e=>{ const t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){ tip.style.display='none'; return; }
     tip.textContent=t.getAttribute('data-tip'); tip.style.display='block';
-    const w=tip.offsetWidth, h=tip.offsetHeight; let x=e.clientX+14, y=e.clientY+14; if(x+w>innerWidth-8) x=e.clientX-w-14; if(y+h>innerHeight-8) y=e.clientY-h-14; tip.style.left=x+'px'; tip.style.top=y+'px'; });
+    const w=tip.offsetWidth, h=tip.offsetHeight; let x=e.clientX+14, y=e.clientY+14; if(x+w>innerWidth-8) x=e.clientX-w-14; if(y+h>innerHeight-8) y=e.clientY-h-14; tip.style.left=Math.max(4,x)+'px'; tip.style.top=Math.max(4,y)+'px'; };
+  document.addEventListener('mousemove',show);
+  document.addEventListener('pointerdown',e=>{ if(e.pointerType!=='mouse') show(e); });
+  document.addEventListener('scroll',()=>{tip.style.display='none'},{passive:true});
   document.addEventListener('mouseleave',()=>{tip.style.display='none'});
   let rt=null; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if(DATA) render(); },150); });
   // theme
@@ -546,7 +658,7 @@ function wire(){
 
 fetch('coffee.json',{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }).then(d=>{
   DATA=d; CH.amazon=prepChannel('amazon'); CH.shopify=prepChannel('shopify'); CH.both=prepBoth();
-  if(!CH.amazon && CH.shopify){ state.channel='shopify'; document.querySelectorAll('[data-ch]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.ch==='shopify')); }
+  if(!CH.amazon && CH.shopify){ state.channel='shopify'; press('[data-ch]','ch','shopify'); }
   const g=d.generated?new Date(d.generated):null;
   const parts=[]; if(d.amazon) parts.push(`Amazon through ${fmtDY(d.amazon.days[d.amazon.days.length-1])} (${d.amazon.skus.length} listings)`); if(d.shopify) parts.push(`Shopify through ${fmtDY(d.shopify.days[d.shopify.days.length-1])} (${d.shopify.skus.length} variants)`);
   document.getElementById('fresh').textContent=parts.join(' · ')+(g?` · built ${g.toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}`:'');
