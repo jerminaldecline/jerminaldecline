@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-09-11T09:00:43.493Z",
+  "lastUpdated": "2026-09-12T08:44:23.514Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "sign",
+      "termId": "free",
       "keywords": [
         "limited",
         "edition",
@@ -20,74 +20,42 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3271,
-        "spikeRatio": 3.06,
+        "baselineSaturation": 0.3523,
+        "spikeRatio": 2.84,
         "recentVideoCount": 16,
-        "baselineVideoCount": 43,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
+        "baselineVideoCount": 46,
+        "detectedAt": "2026-09-12T08:44:23.514Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "clancy trial",
+      "termId": "clancy juror",
       "keywords": [
-        "holdout",
-        "lone",
-        "clancy trial"
+        "clancy juror"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0263,
-        "spikeRatio": 11.88,
+        "baselineSaturation": 0.0038,
+        "spikeRatio": 82.5,
         "recentVideoCount": 5,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-09-12T08:44:23.514Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "tourney lindsay",
+      "termId": "jury",
       "keywords": [
-        "publicly",
-        "tourney lindsay"
+        "juror lindsay",
+        "jury"
       ],
       "detectorMeta": {
         "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0489,
-        "spikeRatio": 6.39,
+        "baselineSaturation": 0.0644,
+        "spikeRatio": 4.85,
         "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "trial",
-      "keywords": [
-        "trial"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.094,
-        "spikeRatio": 3.33,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "kona sign",
-      "keywords": [
-        "kona sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.375,
-        "baselineSaturation": 0.1165,
-        "spikeRatio": 3.22,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-09-12T08:44:23.514Z"
       }
     },
     {
@@ -109,11 +77,26 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3092,
-        "spikeRatio": 3.23,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 23,
-        "detectedAt": "2026-09-11T09:00:43.493Z"
+        "baselineSaturation": 0.34,
+        "spikeRatio": 2.94,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-09-12T08:44:23.514Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "facing",
+      "keywords": [
+        "facing"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.06,
+        "spikeRatio": 5,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-09-12T08:44:23.514Z"
       }
     }
   ]
