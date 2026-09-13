@@ -289,7 +289,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   <div class="panel notes">
     <div class="panel-title" style="color:var(--text)">How to read this</div>
     <ul>
-      <li><b>Stock</b> is read once a day. On Amazon it is the quantity the listing will let a cart take, which is Amazon's sellable count for that listing. On the Shopify store it is the exact count the cart reports, which stops at 80, so 80 means "at least 80".</li>
+      <li><b>Stock</b> is the number of units a listing reports as available, read once a day. Shopify counts above 80 are shown as "at least 80".</li>
       <li><b>Units sold</b> is any fall in stock between two readings. A count going down cannot tell us whether a customer bought a bag or the owner moved a pallet, so when 40 or more units and at least half of a listing's stock vanish in a single day we call it a <b>big one-day drop</b>, show it in amber, and leave it out of sales unless you tick the box. Forty separate customers finding one listing on one day is much less likely than one pallet leaving.</li>
       <li><b>Revenue</b> is units multiplied by the listing's usual in-stock price. <b>Net</b> is that figure multiplied by whatever margin you set above. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
@@ -528,7 +528,7 @@ function renderKpis(c,A,P){
     ['Gross at list', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
     ['Net at '+state.margin+'%', fmtM(net), j('hypothetical', P&&deltaHtml(net,P.grossAll*state.margin/100)), 'net'],
     ['Restocked', fmtU(A.restU), j('units added', P&&deltaHtml(A.restU,P.restU))],
-    ['On hand now', oh, j('units', fmtM(A.onHandVal)+' at list', A.capped?`${A.capped} at the 80 cap`:'')],
+    ['On hand now', oh, j('units', fmtM(A.onHandVal)+' at list', A.capped?`${A.capped} shown as at least 80`:'')],
     ['In stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown} listings`, `${A.oos} out`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
@@ -614,7 +614,7 @@ function render(){
   document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net at ${state.margin}%${state.bulk?', big one-day drops included':', big one-day drops left out'}${S.weekly?' · by week':''}.`;
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderTop(c,A);
-  document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings at the cap count as 80':'')+'. Legend shows the latest day.';
+  document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings shown as at least 80 count as 80':'')+'. Legend shows the latest day.';
   document.getElementById('ohChart').innerHTML=onHandChart(A);
   renderTable(c,A);
   renderDetail(c,A);
