@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-10-AM",
-    "snapshots": 179
+    "to": "2026-09-13-AM",
+    "snapshots": 185
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1429,
+      "estPromotedViews": 1456,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 34.5,
-      "baselinePerDay": 106,
-      "peakPerDay": 26650,
-      "ratio": 251.4,
+      "baselinePerDay": 113,
+      "peakPerDay": 33956,
+      "ratio": 300.5,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 19,
+      "elevatedSnapshots": 25,
       "status": "sustained",
-      "estPromotedViews": 99982,
+      "estPromotedViews": 168937,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -421,6 +421,30 @@
         [
           "2026-09-10-AM",
           405880
+        ],
+        [
+          "2026-09-10-PM",
+          411893
+        ],
+        [
+          "2026-09-11-AM",
+          423876
+        ],
+        [
+          "2026-09-11-PM",
+          431786
+        ],
+        [
+          "2026-09-12-AM",
+          447165
+        ],
+        [
+          "2026-09-12-PM",
+          458262
+        ],
+        [
+          "2026-09-13-AM",
+          475240
         ]
       ]
     },
@@ -431,13 +455,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T20:59:06.000Z",
       "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 2,
+      "baselinePerDay": 0,
       "peakPerDay": 1268,
-      "ratio": 634,
+      "ratio": 1268,
       "spikeStartDate": "2026-08-05-PM",
       "elevatedSnapshots": 7,
       "status": "sustained",
-      "estPromotedViews": 2578,
+      "estPromotedViews": 2585,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -788,6 +812,30 @@
         [
           "2026-09-10-AM",
           32170
+        ],
+        [
+          "2026-09-10-PM",
+          32172
+        ],
+        [
+          "2026-09-11-AM",
+          32174
+        ],
+        [
+          "2026-09-11-PM",
+          32174
+        ],
+        [
+          "2026-09-12-AM",
+          32174
+        ],
+        [
+          "2026-09-12-PM",
+          32175
+        ],
+        [
+          "2026-09-13-AM",
+          32175
         ]
       ]
     },
@@ -1139,6 +1187,30 @@
         [
           "2026-09-10-AM",
           72546
+        ],
+        [
+          "2026-09-10-PM",
+          72561
+        ],
+        [
+          "2026-09-11-AM",
+          72577
+        ],
+        [
+          "2026-09-11-PM",
+          72585
+        ],
+        [
+          "2026-09-12-AM",
+          72595
+        ],
+        [
+          "2026-09-12-PM",
+          72603
+        ],
+        [
+          "2026-09-13-AM",
+          72624
         ]
       ]
     },
@@ -1149,13 +1221,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 36,
+      "baselinePerDay": 26,
       "peakPerDay": 1236,
-      "ratio": 34.3,
+      "ratio": 47.5,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 600,
+      "estPromotedViews": 605,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -1434,6 +1506,30 @@
         [
           "2026-09-10-AM",
           103209
+        ],
+        [
+          "2026-09-10-PM",
+          103221
+        ],
+        [
+          "2026-09-11-AM",
+          103231
+        ],
+        [
+          "2026-09-11-PM",
+          103237
+        ],
+        [
+          "2026-09-12-AM",
+          103247
+        ],
+        [
+          "2026-09-12-PM",
+          103255
+        ],
+        [
+          "2026-09-13-AM",
+          103269
         ]
       ]
     }

@@ -1,6 +1,63 @@
 {
-  "lastUpdated": "2026-09-10T09:03:16.169Z",
+  "lastUpdated": "2026-09-13T09:39:23.427Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "sign",
+      "keywords": [
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "stock sign",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.2731,
+        "spikeRatio": 3.66,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 35,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "clancy juror",
+      "keywords": [
+        "clancy juror"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0038,
+        "spikeRatio": 86.67,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "jury",
+      "keywords": [
+        "juror lindsay",
+        "jury"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0654,
+        "spikeRatio": 5.1,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "sign",
@@ -8,127 +65,38 @@
         "limited",
         "edition",
         "jack",
-        "o'lantern",
         "stock",
         "coffee limited",
         "limited edition",
         "edition jack",
-        "jack o'lantern",
-        "o'lantern back",
         "back stock",
-        "stock sign"
+        "stock sign",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2808,
-        "spikeRatio": 3.56,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
+        "baselineSaturation": 0.3533,
+        "spikeRatio": 2.83,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "facing",
       "keywords": [
-        "facing",
-        "another"
+        "facing"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.089,
-        "spikeRatio": 4.32,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "kona sign",
-      "keywords": [
-        "kona sign",
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5385,
-        "baselineSaturation": 0.1712,
-        "spikeRatio": 3.14,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "free",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
-        "o'lantern",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "jack o'lantern",
-        "o'lantern back",
-        "back stock",
-        "stock sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3062,
-        "spikeRatio": 3.27,
-        "recentVideoCount": 17,
-        "baselineVideoCount": 39,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "trial",
-      "keywords": [
-        "juror",
-        "clancy trial",
-        "trial"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3529,
-        "baselineSaturation": 0.0891,
-        "spikeRatio": 3.96,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "clancy",
-      "keywords": [
-        "clancy",
-        "kona sign",
-        "kona",
-        "save",
-        "pure",
-        "coffee kona",
-        "kona save",
-        "save pure",
-        "pure kona"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8235,
-        "baselineSaturation": 0.1512,
-        "spikeRatio": 5.45,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-09-10T09:03:16.169Z"
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.06,
+        "spikeRatio": 5.56,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     }
   ]
