@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-09-12T08:44:23.514Z",
+  "lastUpdated": "2026-09-13T09:39:23.427Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "free",
+      "termId": "sign",
       "keywords": [
         "limited",
         "edition",
@@ -20,11 +20,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.3523,
-        "spikeRatio": 2.84,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 46,
-        "detectedAt": "2026-09-12T08:44:23.514Z"
+        "baselineSaturation": 0.2731,
+        "spikeRatio": 3.66,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 35,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     },
     {
@@ -34,12 +34,12 @@
         "clancy juror"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3125,
+        "recentSaturation": 0.3333,
         "baselineSaturation": 0.0038,
-        "spikeRatio": 82.5,
+        "spikeRatio": 86.67,
         "recentVideoCount": 5,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-09-12T08:44:23.514Z"
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     },
     {
@@ -50,12 +50,12 @@
         "jury"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0644,
-        "spikeRatio": 4.85,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0654,
+        "spikeRatio": 5.1,
         "recentVideoCount": 5,
         "baselineVideoCount": 8,
-        "detectedAt": "2026-09-12T08:44:23.514Z"
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     },
     {
@@ -77,11 +77,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.34,
-        "spikeRatio": 2.94,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 25,
-        "detectedAt": "2026-09-12T08:44:23.514Z"
+        "baselineSaturation": 0.3533,
+        "spikeRatio": 2.83,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     },
     {
@@ -91,12 +91,12 @@
         "facing"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3,
+        "recentSaturation": 0.3333,
         "baselineSaturation": 0.06,
-        "spikeRatio": 5,
+        "spikeRatio": 5.56,
         "recentVideoCount": 3,
         "baselineVideoCount": 4,
-        "detectedAt": "2026-09-12T08:44:23.514Z"
+        "detectedAt": "2026-09-13T09:39:23.427Z"
       }
     }
   ]
