@@ -29,10 +29,9 @@ Cleaning rules, and why:
   * Size is not in the Amazon label (the same name is listed once per size), so
     it is inferred: K-Cups -> 12-pack, "Kona" -> 7oz, modal price >= $45 -> 5lb,
     else 12oz.
-  * Shopify stock comes from the cart clamp and CAPS AT 80 (the per-order limit),
-    so 80 means "at least 80". It is emitted as 80 with cap:80 in the channel
-    meta; the page treats a capped reading as a floor and never differences
-    across it. sold_out -> 0. untracked / rate_limited / clamp_unparsed -> null.
+  * Shopify counts stop at 80, so 80 means "at least 80". It is emitted as 80
+    with cap:80 in the channel meta; the page treats a capped reading as a
+    floor and never differences across it. sold_out -> 0; any other status -> null.
 
 Usage:
   python scripts/build-coffee.py            # write public/coffee.json, print a summary
@@ -132,7 +131,7 @@ def build_amazon():
             "lastReading": known[-1] if known else None,
         })
     skus.sort(key=lambda s: (s["family"], s["name"], s["size"]))
-    return {"days": days, "skus": skus, "cap": None, "scan": "daily ~09:30 UK, one read per listing"}
+    return {"days": days, "skus": skus, "cap": None}
 
 
 # --------------------------------------------------------------- Shopify ---
@@ -187,7 +186,7 @@ def build_shopify():
             "lastReading": known[-1] if known else None,
         })
     skus.sort(key=lambda s: (s["family"], s["name"], s["size"], s["variant"]))
-    return {"days": days, "skus": skus, "cap": SHOPIFY_CAP, "scan": "daily ~12:00 UK, exact count via cart limit (caps at 80)"}
+    return {"days": days, "skus": skus, "cap": SHOPIFY_CAP}
 
 
 # ------------------------------------------------------------------ main ---
