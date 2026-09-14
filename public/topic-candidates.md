@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-13
+# Topic candidates — 2026-09-14
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 129 baseline videos
+Pool: 15 recent videos, 126 baseline videos
 
 ### Cluster 1: `sign`
 
 - **Recent saturation:** 15/15 videos (**100%**)
-- **Baseline saturation:** 35/129 videos (27%)
-- **Spike ratio:** 3.7x
+- **Baseline saturation:** 35/126 videos (28%)
+- **Spike ratio:** 3.6x
 - **Related terms:** `sign`, `interest`, `poker`, `tourney`, `clancy`, `limited`, `edition`, `jack`
 - **Sample recent videos:**
   - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
@@ -22,15 +22,15 @@ Pool: 15 recent videos, 129 baseline videos
   - 2026-09-11 — _Lindsay Clancy HERO JUROR Identified! The Left Loses Their Minds_  
     Gayle King Stunned After Learning Clancy Holdout Juror Was Black
   - 2026-09-10 — _Lindsay Clancy HOLDOUT Destroys Rest Of Jury_  
-    Clancy Holdout��s Bizarre Jury-Room Demonstration Shocks Juror
+    Clancy Holdout’s Bizarre Jury-Room Demonstration Shocks Juror
   - 2026-09-10 — _Charlie Kirk Event MELTDOWN & SICKENING New Trend_  
     Charlie Kirk Memorial Sparks Campus Security Clampdown
 
 ### Cluster 2: `clancy juror`
 
 - **Recent saturation:** 5/15 videos (**33%**)
-- **Baseline saturation:** 0/129 videos (0%)
-- **Spike ratio:** 86.7x
+- **Baseline saturation:** 0/126 videos (0%)
+- **Spike ratio:** 84.7x
 - **Related terms:** `clancy juror`
 - **Sample recent videos:**
   - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
@@ -38,7 +38,7 @@ Pool: 15 recent videos, 129 baseline videos
   - 2026-09-11 — _Lindsay Clancy HERO JUROR Identified! The Left Loses Their Minds_  
     Gayle King Stunned After Learning Clancy Holdout Juror Was Black
   - 2026-09-10 — _Lindsay Clancy HOLDOUT Destroys Rest Of Jury_  
-    Clancy Holdout��s Bizarre Jury-Room Demonstration Shocks Juror
+    Clancy Holdout’s Bizarre Jury-Room Demonstration Shocks Juror
   - 2026-09-10 — _Lindsay Clancy MALE Juror RAGES In New Interview_  
     Clancy Juror Reveals What Happened Behind Closed Doors
   - 2026-09-09 — _Lindsay Clancy Jury SHOCKING Admission!_  
@@ -47,14 +47,14 @@ Pool: 15 recent videos, 129 baseline videos
 ### Cluster 3: `jury`
 
 - **Recent saturation:** 5/15 videos (**33%**)
-- **Baseline saturation:** 8/129 videos (6%)
-- **Spike ratio:** 5.1x
+- **Baseline saturation:** 8/126 videos (6%)
+- **Spike ratio:** 5.0x
 - **Related terms:** `jury`, `juror lindsay`
 - **Sample recent videos:**
   - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
     Lindsay Clancy Juror Reveals Explosive Details Behind Jury’s 11-1 Deadlock
   - 2026-09-10 — _Lindsay Clancy HOLDOUT Destroys Rest Of Jury_  
-    Clancy Holdout��s Bizarre Jury-Room Demonstration Shocks Juror
+    Clancy Holdout’s Bizarre Jury-Room Demonstration Shocks Juror
   - 2026-09-09 — _Lindsay Clancy Lone Juror Was Attacked!_  
     Lone Clancy Holdout Faced Pressure As Jurors Changed Votes
   - 2026-09-09 — _Lindsay Clancy Jury SHOCKING Admission!_  
@@ -65,22 +65,22 @@ Pool: 15 recent videos, 129 baseline videos
 ### Cluster 4: `clancy holdout`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/129 videos (1%)
-- **Spike ratio:** 17.3x
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 16.9x
 - **Related terms:** `holdout`, `lone`, `clancy holdout`
 - **Sample recent videos:**
   - 2026-09-11 — _Lindsay Clancy HERO JUROR Identified! The Left Loses Their Minds_  
     Gayle King Stunned After Learning Clancy Holdout Juror Was Black
   - 2026-09-10 — _Lindsay Clancy HOLDOUT Destroys Rest Of Jury_  
-    Clancy Holdout��s Bizarre Jury-Room Demonstration Shocks Juror
+    Clancy Holdout’s Bizarre Jury-Room Demonstration Shocks Juror
   - 2026-09-09 — _Lindsay Clancy Lone Juror Was Attacked!_  
     Lone Clancy Holdout Faced Pressure As Jurors Changed Votes
 
 ### Cluster 5: `explosive`
 
 - **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 3/129 videos (2%)
-- **Spike ratio:** 7.4x
+- **Baseline saturation:** 3/126 videos (2%)
+- **Spike ratio:** 7.3x
 - **Related terms:** `explosive`
 - **Sample recent videos:**
   - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
@@ -92,12 +92,12 @@ Pool: 15 recent videos, 129 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 74 baseline videos
+Pool: 9 recent videos, 73 baseline videos
 
 ### Cluster 1: `sign`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 26/74 videos (35%)
+- **Baseline saturation:** 26/73 videos (36%)
 - **Spike ratio:** 2.8x
 - **Related terms:** `sign`, `poker`, `tourney`, `interest`, `free`, `limited`, `edition`, `jack`
 - **Sample recent videos:**
@@ -115,8 +115,8 @@ Pool: 9 recent videos, 74 baseline videos
 ### Cluster 2: `facing`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 4/74 videos (5%)
-- **Spike ratio:** 5.6x
+- **Baseline saturation:** 4/73 videos (5%)
+- **Spike ratio:** 5.5x
 - **Related terms:** `facing`
 - **Sample recent videos:**
   - 2026-09-09 — _Woke Teachers SPIT On 9/11_  
