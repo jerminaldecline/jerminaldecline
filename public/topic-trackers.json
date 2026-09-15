@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-09-14T10:01:53.374Z",
+  "lastUpdated": "2026-09-15T09:31:17.712Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "sign",
+      "channelHandle": "@JeremyHambly",
+      "termId": "limited",
       "keywords": [
         "limited",
         "edition",
@@ -20,83 +20,105 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2795,
-        "spikeRatio": 3.58,
-        "recentVideoCount": 15,
-        "baselineVideoCount": 35,
-        "detectedAt": "2026-09-14T10:01:53.374Z"
+        "baselineSaturation": 0.3267,
+        "spikeRatio": 3.06,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 24,
+        "detectedAt": "2026-09-15T09:31:17.712Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "limited",
+      "keywords": [
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "stock sign",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.2897,
+        "spikeRatio": 3.45,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 36,
+        "detectedAt": "2026-09-15T09:31:17.712Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "clancy juror",
       "keywords": [
-        "clancy juror"
+        "clancy juror",
+        "lantern",
+        "jack lantern",
+        "lantern back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0039,
-        "spikeRatio": 84.67,
-        "recentVideoCount": 5,
+        "recentSaturation": 0.375,
+        "baselineSaturation": 0.004,
+        "spikeRatio": 94.5,
+        "recentVideoCount": 6,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-09-14T10:01:53.374Z"
+        "detectedAt": "2026-09-15T09:31:17.712Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "jury",
+      "termId": "clancy holdout",
+      "keywords": [
+        "clancy holdout",
+        "holdout",
+        "lone",
+        "clancy trial"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0437,
+        "spikeRatio": 7.16,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-09-15T09:31:17.712Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trial",
       "keywords": [
         "juror lindsay",
-        "jury"
+        "trial"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0669,
-        "spikeRatio": 4.98,
+        "recentSaturation": 0.375,
+        "baselineSaturation": 0.1151,
+        "spikeRatio": 3.26,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-09-15T09:31:17.712Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "publicly",
+      "keywords": [
+        "publicly",
+        "explosive"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0357,
+        "spikeRatio": 8.75,
         "recentVideoCount": 5,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-09-14T10:01:53.374Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "sign",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "stock sign",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3581,
-        "spikeRatio": 2.79,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-09-14T10:01:53.374Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "facing",
-      "keywords": [
-        "facing"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0608,
-        "spikeRatio": 5.48,
-        "recentVideoCount": 3,
         "baselineVideoCount": 4,
-        "detectedAt": "2026-09-14T10:01:53.374Z"
+        "detectedAt": "2026-09-15T09:31:17.712Z"
       }
     }
   ]
