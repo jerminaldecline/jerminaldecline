@@ -1,74 +1,27 @@
 {
-  "lastUpdated": "2026-09-15T09:31:17.712Z",
+  "lastUpdated": "2026-09-16T09:24:25.529Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "limited",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "stock sign",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.3267,
-        "spikeRatio": 3.06,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 24,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
-      }
-    },
-    {
       "channelHandle": "@TheQuartering",
-      "termId": "limited",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "stock sign",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.2897,
-        "spikeRatio": 3.45,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 36,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "clancy juror",
+      "termId": "clancy",
       "keywords": [
         "clancy juror",
         "lantern",
         "jack lantern",
-        "lantern back"
+        "lantern back",
+        "juror",
+        "stock sign",
+        "clancy",
+        "lindsay",
+        "lindsay clancy"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.375,
-        "baselineSaturation": 0.004,
-        "spikeRatio": 94.5,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
+        "recentSaturation": 0.9333,
+        "baselineSaturation": 0.1992,
+        "spikeRatio": 4.68,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-09-16T09:24:25.529Z"
       }
     },
     {
@@ -81,12 +34,12 @@
         "clancy trial"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0437,
-        "spikeRatio": 7.16,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.043,
+        "spikeRatio": 7.76,
         "recentVideoCount": 5,
         "baselineVideoCount": 5,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
+        "detectedAt": "2026-09-16T09:24:25.529Z"
       }
     },
     {
@@ -97,28 +50,79 @@
         "trial"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.375,
-        "baselineSaturation": 0.1151,
-        "spikeRatio": 3.26,
+        "recentSaturation": 0.4,
+        "baselineSaturation": 0.1211,
+        "spikeRatio": 3.3,
         "recentVideoCount": 6,
-        "baselineVideoCount": 14,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-09-16T09:24:25.529Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "publicly",
+      "termId": "limited",
       "keywords": [
-        "publicly",
-        "explosive"
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back",
+        "back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0357,
-        "spikeRatio": 8.75,
-        "recentVideoCount": 5,
+        "recentSaturation": 0.8667,
+        "baselineSaturation": 0.082,
+        "spikeRatio": 10.57,
+        "recentVideoCount": 13,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-09-16T09:24:25.529Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "limited",
+      "keywords": [
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back",
+        "back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.0577,
+        "spikeRatio": 17.33,
+        "recentVideoCount": 12,
         "baselineVideoCount": 4,
-        "detectedAt": "2026-09-15T09:31:17.712Z"
+        "detectedAt": "2026-09-16T09:24:25.529Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "backlash",
+      "keywords": [
+        "backlash"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0705,
+        "spikeRatio": 4.73,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-09-16T09:24:25.529Z"
       }
     }
   ]
