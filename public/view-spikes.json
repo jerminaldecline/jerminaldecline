@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-15-AM",
-    "snapshots": 189
+    "to": "2026-09-16-AM",
+    "snapshots": 191
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 34.5,
-      "baselinePerDay": 115,
+      "baselinePerDay": 116,
       "peakPerDay": 33956,
-      "ratio": 295.3,
+      "ratio": 292.7,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 29,
+      "elevatedSnapshots": 31,
       "status": "sustained",
-      "estPromotedViews": 222087,
+      "estPromotedViews": 232234,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -461,6 +461,14 @@
         [
           "2026-09-15-AM",
           528645
+        ],
+        [
+          "2026-09-15-PM",
+          531741
+        ],
+        [
+          "2026-09-16-AM",
+          538923
         ]
       ]
     },
@@ -868,6 +876,14 @@
         [
           "2026-09-15-AM",
           32175
+        ],
+        [
+          "2026-09-15-PM",
+          32177
+        ],
+        [
+          "2026-09-16-AM",
+          32177
         ]
       ]
     },
@@ -1259,6 +1275,14 @@
         [
           "2026-09-15-AM",
           72684
+        ],
+        [
+          "2026-09-15-PM",
+          72692
+        ],
+        [
+          "2026-09-16-AM",
+          72703
         ]
       ]
     },
@@ -2034,6 +2058,14 @@
         [
           "2026-09-15-AM",
           54623
+        ],
+        [
+          "2026-09-15-PM",
+          54725
+        ],
+        [
+          "2026-09-16-AM",
+          54791
         ]
       ]
     },
@@ -2369,6 +2401,268 @@
         [
           "2026-09-15-AM",
           103308
+        ],
+        [
+          "2026-09-15-PM",
+          103313
+        ],
+        [
+          "2026-09-16-AM",
+          103314
+        ]
+      ]
+    },
+    {
+      "id": "zjzsErLcspw",
+      "title": "HE'S FULL BLOWN PANICKING",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "publishedAt": "2026-09-02T18:07:52.000Z",
+      "ageDaysAtSpike": 10.5,
+      "baselinePerDay": 134,
+      "peakPerDay": 1320,
+      "ratio": 9.9,
+      "spikeStartDate": "2026-09-12-PM",
+      "elevatedSnapshots": 1,
+      "status": "emerging",
+      "estPromotedViews": 593,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-09-03-AM",
+          9446
+        ],
+        [
+          "2026-09-03-PM",
+          17052
+        ],
+        [
+          "2026-09-04-AM",
+          19911
+        ],
+        [
+          "2026-09-04-PM",
+          20748
+        ],
+        [
+          "2026-09-05-AM",
+          20644
+        ],
+        [
+          "2026-09-05-PM",
+          20711
+        ],
+        [
+          "2026-09-06-AM",
+          20860
+        ],
+        [
+          "2026-09-06-PM",
+          21239
+        ],
+        [
+          "2026-09-07-AM",
+          21435
+        ],
+        [
+          "2026-09-07-PM",
+          21637
+        ],
+        [
+          "2026-09-08-AM",
+          22323
+        ],
+        [
+          "2026-09-08-PM",
+          22541
+        ],
+        [
+          "2026-09-09-AM",
+          22728
+        ],
+        [
+          "2026-09-09-PM",
+          22890
+        ],
+        [
+          "2026-09-10-AM",
+          23043
+        ],
+        [
+          "2026-09-10-PM",
+          23117
+        ],
+        [
+          "2026-09-11-AM",
+          23294
+        ],
+        [
+          "2026-09-11-PM",
+          23510
+        ],
+        [
+          "2026-09-12-AM",
+          23626
+        ],
+        [
+          "2026-09-12-PM",
+          23744
+        ],
+        [
+          "2026-09-13-AM",
+          24404
+        ],
+        [
+          "2026-09-13-PM",
+          24460
+        ],
+        [
+          "2026-09-14-AM",
+          24648
+        ],
+        [
+          "2026-09-14-PM",
+          24689
+        ],
+        [
+          "2026-09-15-AM",
+          24745
+        ],
+        [
+          "2026-09-15-PM",
+          24753
+        ],
+        [
+          "2026-09-16-AM",
+          24771
+        ]
+      ]
+    },
+    {
+      "id": "kSDXV2IwSb0",
+      "title": "Candace Owens RAGES At Matt Walsh",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "publishedAt": "2026-09-02T22:30:24.000Z",
+      "ageDaysAtSpike": 8.5,
+      "baselinePerDay": 100,
+      "peakPerDay": 732,
+      "ratio": 7.3,
+      "spikeStartDate": "2026-09-10-PM",
+      "elevatedSnapshots": 2,
+      "status": "sustained",
+      "estPromotedViews": 577,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-09-03-AM",
+          1776
+        ],
+        [
+          "2026-09-03-PM",
+          16462
+        ],
+        [
+          "2026-09-04-AM",
+          18878
+        ],
+        [
+          "2026-09-04-PM",
+          19583
+        ],
+        [
+          "2026-09-05-AM",
+          19596
+        ],
+        [
+          "2026-09-05-PM",
+          19778
+        ],
+        [
+          "2026-09-06-AM",
+          20253
+        ],
+        [
+          "2026-09-06-PM",
+          21674
+        ],
+        [
+          "2026-09-07-AM",
+          26694
+        ],
+        [
+          "2026-09-07-PM",
+          27901
+        ],
+        [
+          "2026-09-08-AM",
+          30188
+        ],
+        [
+          "2026-09-08-PM",
+          30812
+        ],
+        [
+          "2026-09-09-AM",
+          31384
+        ],
+        [
+          "2026-09-09-PM",
+          31885
+        ],
+        [
+          "2026-09-10-AM",
+          32497
+        ],
+        [
+          "2026-09-10-PM",
+          32749
+        ],
+        [
+          "2026-09-11-AM",
+          33115
+        ],
+        [
+          "2026-09-11-PM",
+          33426
+        ],
+        [
+          "2026-09-12-AM",
+          33605
+        ],
+        [
+          "2026-09-12-PM",
+          33708
+        ],
+        [
+          "2026-09-13-AM",
+          33763
+        ],
+        [
+          "2026-09-13-PM",
+          33813
+        ],
+        [
+          "2026-09-14-AM",
+          33822
+        ],
+        [
+          "2026-09-14-PM",
+          33836
+        ],
+        [
+          "2026-09-15-AM",
+          33837
+        ],
+        [
+          "2026-09-15-PM",
+          33829
+        ],
+        [
+          "2026-09-16-AM",
+          33834
         ]
       ]
     }
