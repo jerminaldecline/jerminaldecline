@@ -1,91 +1,49 @@
 {
-  "lastUpdated": "2026-09-16T09:24:25.529Z",
+  "lastUpdated": "2026-09-17T09:34:16.563Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "stock sign",
+      "keywords": [
+        "lantern",
+        "jack lantern",
+        "lantern back",
+        "clancy juror",
+        "reveals",
+        "juror",
+        "stock sign",
+        "publicly"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.7333,
+        "baselineSaturation": 0.0878,
+        "spikeRatio": 8.35,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-09-17T09:34:16.563Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "clancy",
       "keywords": [
-        "clancy juror",
-        "lantern",
-        "jack lantern",
-        "lantern back",
-        "juror",
-        "stock sign",
-        "clancy",
-        "lindsay",
-        "lindsay clancy"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.9333,
-        "baselineSaturation": 0.1992,
-        "spikeRatio": 4.68,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 25,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "clancy holdout",
-      "keywords": [
         "clancy holdout",
         "holdout",
         "lone",
-        "clancy trial"
+        "reportedly",
+        "clancy"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.043,
-        "spikeRatio": 7.76,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.2176,
+        "spikeRatio": 3.68,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 28,
+        "detectedAt": "2026-09-17T09:34:16.563Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "trial",
-      "keywords": [
-        "juror lindsay",
-        "trial"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.4,
-        "baselineSaturation": 0.1211,
-        "spikeRatio": 3.3,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "limited",
-      "keywords": [
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back",
-        "back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8667,
-        "baselineSaturation": 0.082,
-        "spikeRatio": 10.57,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
       "termId": "limited",
       "keywords": [
         "limited",
@@ -103,26 +61,37 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.0577,
-        "spikeRatio": 17.33,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
+        "baselineSaturation": 0.2405,
+        "spikeRatio": 4.16,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 31,
+        "detectedAt": "2026-09-17T09:34:16.563Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "backlash",
+      "termId": "limited",
       "keywords": [
-        "backlash"
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "back",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0705,
-        "spikeRatio": 4.73,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-09-16T09:24:25.529Z"
+        "recentSaturation": 1,
+        "baselineSaturation": 0.0926,
+        "spikeRatio": 10.8,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-09-17T09:34:16.563Z"
       }
     }
   ]
