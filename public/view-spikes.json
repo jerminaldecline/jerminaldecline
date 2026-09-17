@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-16-AM",
-    "snapshots": 191
+    "to": "2026-09-17-AM",
+    "snapshots": 193
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1456,
+      "estPromotedViews": 1461,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -68,9 +68,9 @@
       "peakPerDay": 33956,
       "ratio": 292.7,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 31,
+      "elevatedSnapshots": 33,
       "status": "sustained",
-      "estPromotedViews": 232234,
+      "estPromotedViews": 239130,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -469,6 +469,14 @@
         [
           "2026-09-16-AM",
           538923
+        ],
+        [
+          "2026-09-16-PM",
+          542691
+        ],
+        [
+          "2026-09-17-AM",
+          545935
         ]
       ]
     },
@@ -884,6 +892,14 @@
         [
           "2026-09-16-AM",
           32177
+        ],
+        [
+          "2026-09-16-PM",
+          32178
+        ],
+        [
+          "2026-09-17-AM",
+          32180
         ]
       ]
     },
@@ -1283,6 +1299,14 @@
         [
           "2026-09-16-AM",
           72703
+        ],
+        [
+          "2026-09-16-PM",
+          72718
+        ],
+        [
+          "2026-09-17-AM",
+          72737
         ]
       ]
     },
@@ -2066,6 +2090,14 @@
         [
           "2026-09-16-AM",
           54791
+        ],
+        [
+          "2026-09-16-PM",
+          54834
+        ],
+        [
+          "2026-09-17-AM",
+          54865
         ]
       ]
     },
@@ -2409,6 +2441,14 @@
         [
           "2026-09-16-AM",
           103314
+        ],
+        [
+          "2026-09-16-PM",
+          103325
+        ],
+        [
+          "2026-09-17-AM",
+          103332
         ]
       ]
     },
@@ -2419,13 +2459,13 @@
       "channel": "Jeremy Hambly",
       "publishedAt": "2026-09-02T18:07:52.000Z",
       "ageDaysAtSpike": 10.5,
-      "baselinePerDay": 134,
+      "baselinePerDay": 112,
       "peakPerDay": 1320,
-      "ratio": 9.9,
+      "ratio": 11.8,
       "spikeStartDate": "2026-09-12-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 593,
+      "estPromotedViews": 604,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2536,133 +2576,14 @@
         [
           "2026-09-16-AM",
           24771
-        ]
-      ]
-    },
-    {
-      "id": "kSDXV2IwSb0",
-      "title": "Candace Owens RAGES At Matt Walsh",
-      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
-      "channel": "Jeremy Hambly",
-      "publishedAt": "2026-09-02T22:30:24.000Z",
-      "ageDaysAtSpike": 8.5,
-      "baselinePerDay": 100,
-      "peakPerDay": 732,
-      "ratio": 7.3,
-      "spikeStartDate": "2026-09-10-PM",
-      "elevatedSnapshots": 2,
-      "status": "sustained",
-      "estPromotedViews": 577,
-      "topic": null,
-      "newsLikely": false,
-      "series": [
-        [
-          "2026-09-03-AM",
-          1776
         ],
         [
-          "2026-09-03-PM",
-          16462
+          "2026-09-16-PM",
+          24795
         ],
         [
-          "2026-09-04-AM",
-          18878
-        ],
-        [
-          "2026-09-04-PM",
-          19583
-        ],
-        [
-          "2026-09-05-AM",
-          19596
-        ],
-        [
-          "2026-09-05-PM",
-          19778
-        ],
-        [
-          "2026-09-06-AM",
-          20253
-        ],
-        [
-          "2026-09-06-PM",
-          21674
-        ],
-        [
-          "2026-09-07-AM",
-          26694
-        ],
-        [
-          "2026-09-07-PM",
-          27901
-        ],
-        [
-          "2026-09-08-AM",
-          30188
-        ],
-        [
-          "2026-09-08-PM",
-          30812
-        ],
-        [
-          "2026-09-09-AM",
-          31384
-        ],
-        [
-          "2026-09-09-PM",
-          31885
-        ],
-        [
-          "2026-09-10-AM",
-          32497
-        ],
-        [
-          "2026-09-10-PM",
-          32749
-        ],
-        [
-          "2026-09-11-AM",
-          33115
-        ],
-        [
-          "2026-09-11-PM",
-          33426
-        ],
-        [
-          "2026-09-12-AM",
-          33605
-        ],
-        [
-          "2026-09-12-PM",
-          33708
-        ],
-        [
-          "2026-09-13-AM",
-          33763
-        ],
-        [
-          "2026-09-13-PM",
-          33813
-        ],
-        [
-          "2026-09-14-AM",
-          33822
-        ],
-        [
-          "2026-09-14-PM",
-          33836
-        ],
-        [
-          "2026-09-15-AM",
-          33837
-        ],
-        [
-          "2026-09-15-PM",
-          33829
-        ],
-        [
-          "2026-09-16-AM",
-          33834
+          "2026-09-17-AM",
+          24834
         ]
       ]
     }
