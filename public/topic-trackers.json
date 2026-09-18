@@ -1,51 +1,32 @@
 {
-  "lastUpdated": "2026-09-17T09:34:16.563Z",
+  "lastUpdated": "2026-09-18T09:06:30.678Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "stock sign",
+      "termId": "juror",
       "keywords": [
-        "lantern",
-        "jack lantern",
-        "lantern back",
-        "clancy juror",
-        "reveals",
-        "juror",
-        "stock sign",
-        "publicly"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.7333,
-        "baselineSaturation": 0.0878,
-        "spikeRatio": 8.35,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-09-17T09:34:16.563Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "clancy",
-      "keywords": [
+        "holdout juror",
         "clancy holdout",
         "holdout",
         "lone",
-        "reportedly",
-        "clancy"
+        "juror"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8,
-        "baselineSaturation": 0.2176,
-        "spikeRatio": 3.68,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 28,
-        "detectedAt": "2026-09-17T09:34:16.563Z"
+        "recentSaturation": 0.4,
+        "baselineSaturation": 0.0485,
+        "spikeRatio": 8.25,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-09-18T09:06:30.678Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "limited",
       "keywords": [
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back",
         "limited",
         "edition",
         "jack",
@@ -54,24 +35,24 @@
         "limited edition",
         "edition jack",
         "back stock",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back",
         "back"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2405,
-        "spikeRatio": 4.16,
+        "baselineSaturation": 0.2724,
+        "spikeRatio": 3.67,
         "recentVideoCount": 15,
-        "baselineVideoCount": 31,
-        "detectedAt": "2026-09-17T09:34:16.563Z"
+        "baselineVideoCount": 36,
+        "detectedAt": "2026-09-18T09:06:30.678Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "limited",
+      "termId": "o'lantern",
       "keywords": [
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back",
         "limited",
         "edition",
         "jack",
@@ -80,18 +61,15 @@
         "limited edition",
         "edition jack",
         "back stock",
-        "back",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
+        "back"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.0926,
-        "spikeRatio": 10.8,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-09-17T09:34:16.563Z"
+        "baselineSaturation": 0.1145,
+        "spikeRatio": 8.74,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-09-18T09:06:30.678Z"
       }
     }
   ]
