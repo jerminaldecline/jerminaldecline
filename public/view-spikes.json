@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-17-AM",
-    "snapshots": 193
+    "to": "2026-09-18-AM",
+    "snapshots": 195
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1461,
+      "estPromotedViews": 1466,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -68,9 +68,9 @@
       "peakPerDay": 33956,
       "ratio": 292.7,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 33,
+      "elevatedSnapshots": 35,
       "status": "sustained",
-      "estPromotedViews": 239130,
+      "estPromotedViews": 243089,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -477,6 +477,14 @@
         [
           "2026-09-17-AM",
           545935
+        ],
+        [
+          "2026-09-17-PM",
+          548261
+        ],
+        [
+          "2026-09-18-AM",
+          550010
         ]
       ]
     },
@@ -900,6 +908,14 @@
         [
           "2026-09-17-AM",
           32180
+        ],
+        [
+          "2026-09-17-PM",
+          32180
+        ],
+        [
+          "2026-09-18-AM",
+          32180
         ]
       ]
     },
@@ -1307,6 +1323,14 @@
         [
           "2026-09-17-AM",
           72737
+        ],
+        [
+          "2026-09-17-PM",
+          72749
+        ],
+        [
+          "2026-09-18-AM",
+          72760
         ]
       ]
     },
@@ -2098,6 +2122,157 @@
         [
           "2026-09-17-AM",
           54865
+        ],
+        [
+          "2026-09-17-PM",
+          54923
+        ],
+        [
+          "2026-09-18-AM",
+          54937
+        ]
+      ]
+    },
+    {
+      "id": "zjzsErLcspw",
+      "title": "HE'S FULL BLOWN PANICKING",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "channel": "Jeremy Hambly",
+      "publishedAt": "2026-09-02T18:07:52.000Z",
+      "ageDaysAtSpike": 10.5,
+      "baselinePerDay": 82,
+      "peakPerDay": 1320,
+      "ratio": 16.1,
+      "spikeStartDate": "2026-09-12-PM",
+      "elevatedSnapshots": 1,
+      "status": "emerging",
+      "estPromotedViews": 619,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-09-03-AM",
+          9446
+        ],
+        [
+          "2026-09-03-PM",
+          17052
+        ],
+        [
+          "2026-09-04-AM",
+          19911
+        ],
+        [
+          "2026-09-04-PM",
+          20748
+        ],
+        [
+          "2026-09-05-AM",
+          20644
+        ],
+        [
+          "2026-09-05-PM",
+          20711
+        ],
+        [
+          "2026-09-06-AM",
+          20860
+        ],
+        [
+          "2026-09-06-PM",
+          21239
+        ],
+        [
+          "2026-09-07-AM",
+          21435
+        ],
+        [
+          "2026-09-07-PM",
+          21637
+        ],
+        [
+          "2026-09-08-AM",
+          22323
+        ],
+        [
+          "2026-09-08-PM",
+          22541
+        ],
+        [
+          "2026-09-09-AM",
+          22728
+        ],
+        [
+          "2026-09-09-PM",
+          22890
+        ],
+        [
+          "2026-09-10-AM",
+          23043
+        ],
+        [
+          "2026-09-10-PM",
+          23117
+        ],
+        [
+          "2026-09-11-AM",
+          23294
+        ],
+        [
+          "2026-09-11-PM",
+          23510
+        ],
+        [
+          "2026-09-12-AM",
+          23626
+        ],
+        [
+          "2026-09-12-PM",
+          23744
+        ],
+        [
+          "2026-09-13-AM",
+          24404
+        ],
+        [
+          "2026-09-13-PM",
+          24460
+        ],
+        [
+          "2026-09-14-AM",
+          24648
+        ],
+        [
+          "2026-09-14-PM",
+          24689
+        ],
+        [
+          "2026-09-15-AM",
+          24745
+        ],
+        [
+          "2026-09-15-PM",
+          24753
+        ],
+        [
+          "2026-09-16-AM",
+          24771
+        ],
+        [
+          "2026-09-16-PM",
+          24795
+        ],
+        [
+          "2026-09-17-AM",
+          24834
+        ],
+        [
+          "2026-09-17-PM",
+          24849
+        ],
+        [
+          "2026-09-18-AM",
+          24853
         ]
       ]
     },
@@ -2108,13 +2283,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 24,
+      "baselinePerDay": 22,
       "peakPerDay": 1236,
-      "ratio": 51.5,
+      "ratio": 56.2,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 606,
+      "estPromotedViews": 607,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2449,141 +2624,14 @@
         [
           "2026-09-17-AM",
           103332
-        ]
-      ]
-    },
-    {
-      "id": "zjzsErLcspw",
-      "title": "HE'S FULL BLOWN PANICKING",
-      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
-      "channel": "Jeremy Hambly",
-      "publishedAt": "2026-09-02T18:07:52.000Z",
-      "ageDaysAtSpike": 10.5,
-      "baselinePerDay": 112,
-      "peakPerDay": 1320,
-      "ratio": 11.8,
-      "spikeStartDate": "2026-09-12-PM",
-      "elevatedSnapshots": 1,
-      "status": "emerging",
-      "estPromotedViews": 604,
-      "topic": null,
-      "newsLikely": false,
-      "series": [
-        [
-          "2026-09-03-AM",
-          9446
         ],
         [
-          "2026-09-03-PM",
-          17052
+          "2026-09-17-PM",
+          103336
         ],
         [
-          "2026-09-04-AM",
-          19911
-        ],
-        [
-          "2026-09-04-PM",
-          20748
-        ],
-        [
-          "2026-09-05-AM",
-          20644
-        ],
-        [
-          "2026-09-05-PM",
-          20711
-        ],
-        [
-          "2026-09-06-AM",
-          20860
-        ],
-        [
-          "2026-09-06-PM",
-          21239
-        ],
-        [
-          "2026-09-07-AM",
-          21435
-        ],
-        [
-          "2026-09-07-PM",
-          21637
-        ],
-        [
-          "2026-09-08-AM",
-          22323
-        ],
-        [
-          "2026-09-08-PM",
-          22541
-        ],
-        [
-          "2026-09-09-AM",
-          22728
-        ],
-        [
-          "2026-09-09-PM",
-          22890
-        ],
-        [
-          "2026-09-10-AM",
-          23043
-        ],
-        [
-          "2026-09-10-PM",
-          23117
-        ],
-        [
-          "2026-09-11-AM",
-          23294
-        ],
-        [
-          "2026-09-11-PM",
-          23510
-        ],
-        [
-          "2026-09-12-AM",
-          23626
-        ],
-        [
-          "2026-09-12-PM",
-          23744
-        ],
-        [
-          "2026-09-13-AM",
-          24404
-        ],
-        [
-          "2026-09-13-PM",
-          24460
-        ],
-        [
-          "2026-09-14-AM",
-          24648
-        ],
-        [
-          "2026-09-14-PM",
-          24689
-        ],
-        [
-          "2026-09-15-AM",
-          24745
-        ],
-        [
-          "2026-09-15-PM",
-          24753
-        ],
-        [
-          "2026-09-16-AM",
-          24771
-        ],
-        [
-          "2026-09-16-PM",
-          24795
-        ],
-        [
-          "2026-09-17-AM",
-          24834
+          "2026-09-18-AM",
+          103342
         ]
       ]
     }
