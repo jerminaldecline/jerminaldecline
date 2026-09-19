@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-18-AM",
-    "snapshots": 195
+    "to": "2026-09-19-AM",
+    "snapshots": 197
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 34.5,
-      "baselinePerDay": 116,
+      "baselinePerDay": 117,
       "peakPerDay": 33956,
-      "ratio": 292.7,
+      "ratio": 290.2,
       "spikeStartDate": "2026-08-31-PM",
-      "elevatedSnapshots": 35,
+      "elevatedSnapshots": 37,
       "status": "sustained",
-      "estPromotedViews": 243089,
+      "estPromotedViews": 245303,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -485,6 +485,14 @@
         [
           "2026-09-18-AM",
           550010
+        ],
+        [
+          "2026-09-18-PM",
+          550995
+        ],
+        [
+          "2026-09-19-AM",
+          552358
         ]
       ]
     },
@@ -916,6 +924,14 @@
         [
           "2026-09-18-AM",
           32180
+        ],
+        [
+          "2026-09-18-PM",
+          32180
+        ],
+        [
+          "2026-09-19-AM",
+          32181
         ]
       ]
     },
@@ -1331,6 +1347,14 @@
         [
           "2026-09-18-AM",
           72760
+        ],
+        [
+          "2026-09-18-PM",
+          72779
+        ],
+        [
+          "2026-09-19-AM",
+          72779
         ]
       ]
     },
@@ -2130,6 +2154,14 @@
         [
           "2026-09-18-AM",
           54937
+        ],
+        [
+          "2026-09-18-PM",
+          54990
+        ],
+        [
+          "2026-09-19-AM",
+          55019
         ]
       ]
     },
@@ -2140,13 +2172,13 @@
       "channel": "Jeremy Hambly",
       "publishedAt": "2026-09-02T18:07:52.000Z",
       "ageDaysAtSpike": 10.5,
-      "baselinePerDay": 82,
+      "baselinePerDay": 63,
       "peakPerDay": 1320,
-      "ratio": 16.1,
+      "ratio": 21,
       "spikeStartDate": "2026-09-12-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 619,
+      "estPromotedViews": 629,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2273,6 +2305,14 @@
         [
           "2026-09-18-AM",
           24853
+        ],
+        [
+          "2026-09-18-PM",
+          24862
+        ],
+        [
+          "2026-09-19-AM",
+          24865
         ]
       ]
     },
@@ -2632,6 +2672,14 @@
         [
           "2026-09-18-AM",
           103342
+        ],
+        [
+          "2026-09-18-PM",
+          103348
+        ],
+        [
+          "2026-09-19-AM",
+          103352
         ]
       ]
     }
