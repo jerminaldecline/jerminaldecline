@@ -1,20 +1,58 @@
-# Topic candidates — 2026-09-18
+# Topic candidates — 2026-09-19
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @JeremyHambly
+
+Pool: 13 recent videos, 79 baseline videos
+
+### Cluster 1: `o'lantern`
+
+- **Recent saturation:** 12/13 videos (**92%**)
+- **Baseline saturation:** 9/79 videos (11%)
+- **Spike ratio:** 7.8x
+- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
+- **Sample recent videos:**
+  - 2026-09-18 — _Lindsay Clancy BLASTED By Judge Judy_  
+    Judge Judy Shuts Down Reporter Over Lindsay Clancy Question
+  - 2026-09-18 — _Hasan Piker DESTROYS His Career_  
+    Hasan Piker’s Al-Qaeda Comparison Ignites Massive Backlash
+  - 2026-09-17 — _Lindsay Clancy HUSBAND SPEAKS_  
+    Lindsay Clancy’s Ex-Husband Gives Emotional First Interview
+  - 2026-09-16 — _Candace Owens LAWSUITS Incoming!_  
+    Erika Kirk Urged To Sue Candace Owens Into Oblivion
+  - 2026-09-16 — _War Over Lindsay Clancy Hero Juror Fundraiser_  
+    War Erupts Over Lindsay Clancy Holdout Juror Fundraiser
+
+### Cluster 2: `lindsay`
+
+- **Recent saturation:** 3/13 videos (**23%**)
+- **Baseline saturation:** 4/79 videos (5%)
+- **Spike ratio:** 4.1x
+- **Related terms:** `lindsay`, `clancy`, `lindsay clancy`
+- **Sample recent videos:**
+  - 2026-09-18 — _Lindsay Clancy BLASTED By Judge Judy_  
+    Judge Judy Shuts Down Reporter Over Lindsay Clancy Question
+  - 2026-09-17 — _Lindsay Clancy HUSBAND SPEAKS_  
+    Lindsay Clancy’s Ex-Husband Gives Emotional First Interview
+  - 2026-09-16 — _War Over Lindsay Clancy Hero Juror Fundraiser_  
+    War Erupts Over Lindsay Clancy Holdout Juror Fundraiser
+
 ## @TheQuartering
 
-Pool: 15 recent videos, 133 baseline videos
+Pool: 14 recent videos, 132 baseline videos
 
-### Cluster 1: `juror`
+### Cluster 1: `holdout`
 
-- **Recent saturation:** 6/15 videos (**40%**)
-- **Baseline saturation:** 6/133 videos (5%)
-- **Spike ratio:** 8.2x
-- **Related terms:** `juror`, `holdout`, `lone`, `holdout juror`, `clancy holdout`
+- **Recent saturation:** 5/14 videos (**36%**)
+- **Baseline saturation:** 8/132 videos (6%)
+- **Spike ratio:** 5.6x
+- **Related terms:** `holdout`, `juror`, `lone`, `holdout lindsay`, `lone holdout`
 - **Sample recent videos:**
+  - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
+    Lone Clancy Juror Issues Stark Warning To His Attackers
   - 2026-09-17 — _Lindsay Clancy HERO Juror DESTROYS Liberal Women_  
     Holdout Juror Says Eight Clancy Jurors Acted Like Activists From Day One
   - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
@@ -23,15 +61,45 @@ Pool: 15 recent videos, 133 baseline videos
     Bombshell Clancy Lawyer Messages Resurface After Juror Doxxing
   - 2026-09-14 — _Lindsay Clancy Hero Juror Home Attacked_  
     Clancy Holdout Doxxed As Supporters Target His Home
-  - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
-    Lindsay Clancy Juror Reveals Explosive Details Behind Jury’s 11-1 Deadlock
 
-### Cluster 2: `corie`
+### Cluster 2: `o'lantern`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 6/133 videos (5%)
-- **Spike ratio:** 5.5x
-- **Related terms:** `corie`, `illinois`, `walsh`, `she`, `corie walsh`
+- **Recent saturation:** 14/14 videos (**100%**)
+- **Baseline saturation:** 17/132 videos (13%)
+- **Spike ratio:** 7.6x
+- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
+- **Sample recent videos:**
+  - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
+    Joe Rogan BETRAYS Trump Supporters In Stunning Rant
+  - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
+    Lone Clancy Juror Issues Stark Warning To His Attackers
+  - 2026-09-17 — _Lindsay Clancy HERO Juror DESTROYS Liberal Women_  
+    Holdout Juror Says Eight Clancy Jurors Acted Like Activists From Day One
+  - 2026-09-17 — _South Park LIBERAL MELTDOWN Over Latest Episode_  
+    South Park Pulls Back From Trump Obsession, Returns To Local Satire
+  - 2026-09-17 — _Lindsay Clancy FIRES Lawyer As Massive Scandal Revealed_  
+    Lindsay Clancy FIRES Lawyer?! Karen Read Attorney Takes Over
+
+### Cluster 3: `murder trial`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 9/132 videos (7%)
+- **Spike ratio:** 3.0x
+- **Related terms:** `murder`, `murder trial`
+- **Sample recent videos:**
+  - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
+    Lone Clancy Juror Issues Stark Warning To His Attackers
+  - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
+    Lindsay Clancy Holdout Juror Finally Breaks His Silence
+  - 2026-09-15 — _Lindsay Clancy Faces BRUTAL New Demand!_  
+    Nancy Mace Calls For Lindsay Clancy’s Public Execution
+
+### Cluster 4: `she`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 3/132 videos (2%)
+- **Spike ratio:** 8.1x
+- **Related terms:** `she`
 - **Sample recent videos:**
   - 2026-09-16 — _Lindsay Clancy PSYCHO Superfan Busted_  
     Friend Reveals Disturbing Details About Accused Illinois Mother
@@ -39,46 +107,12 @@ Pool: 15 recent videos, 133 baseline videos
     McDonalds Made Me Do It! Lindsay Clancy Copycat Excuse Erupts
   - 2026-09-14 — _Psycho Liberals INSTANT Regret!_  
     She Celebrated Kirk’s Death And Immediately Lost Everything
-  - 2026-09-11 — _Lindsay Clancy COPYCAT Whose FAR WORSE Demands Immediate Release_  
-    This woman is far worse than Lindsay Clancy and is now demanding release
-
-### Cluster 3: `limited`
-
-- **Recent saturation:** 15/15 videos (**100%**)
-- **Baseline saturation:** 36/133 videos (27%)
-- **Spike ratio:** 3.7x
-- **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `o'lantern`, `clancy`, `lindsay`
-- **Sample recent videos:**
-  - 2026-09-17 — _Lindsay Clancy HERO Juror DESTROYS Liberal Women_  
-    Holdout Juror Says Eight Clancy Jurors Acted Like Activists From Day One
-  - 2026-09-17 — _South Park LIBERAL MELTDOWN Over Latest Episode_  
-    South Park Pulls Back From Trump Obsession, Returns To Local Satire
-  - 2026-09-17 — _Lindsay Clancy FIRES Lawyer As Massive Scandal Revealed_  
-    Lindsay Clancy FIRES Lawyer?! Karen Read Attorney Takes Over
-  - 2026-09-16 — _Lindsay Clancy PSYCHO Superfan Busted_  
-    Friend Reveals Disturbing Details About Accused Illinois Mother
-  - 2026-09-16 — _McDonalds Made Her Do It!_  
-    McDonalds Made Me Do It! Lindsay Clancy Copycat Excuse Erupts
-
-### Cluster 4: `murder trial`
-
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 8/133 videos (6%)
-- **Spike ratio:** 3.2x
-- **Related terms:** `murder`, `murder trial`
-- **Sample recent videos:**
-  - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
-    Lindsay Clancy Holdout Juror Finally Breaks His Silence
-  - 2026-09-15 — _Lindsay Clancy Faces BRUTAL New Demand!_  
-    Nancy Mace Calls For Lindsay Clancy’s Public Execution
-  - 2026-09-11 — _Lindsay Clancy KAREN Juror Accidently OUTS The Rest Of Jury_  
-    Lindsay Clancy Juror Reveals Explosive Details Behind Jury’s 11-1 Deadlock
 
 ### Cluster 5: `reportedly`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 3/133 videos (2%)
-- **Spike ratio:** 7.7x
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 3/132 videos (2%)
+- **Spike ratio:** 8.1x
 - **Related terms:** `reportedly`
 - **Sample recent videos:**
   - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
@@ -88,27 +122,19 @@ Pool: 15 recent videos, 133 baseline videos
   - 2026-09-14 — _Lindsay Clancy Hero Juror Home Attacked_  
     Clancy Holdout Doxxed As Supporters Target His Home
 
-## @JeremyHambly
+### Cluster 6: `trump`
 
-Pool: 10 recent videos, 82 baseline videos
-
-### Cluster 1: `o'lantern`
-
-- **Recent saturation:** 10/10 videos (**100%**)
-- **Baseline saturation:** 9/82 videos (11%)
-- **Spike ratio:** 8.7x
-- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 7/132 videos (5%)
+- **Spike ratio:** 3.8x
+- **Related terms:** `trump`
 - **Sample recent videos:**
-  - 2026-09-17 — _Lindsay Clancy HUSBAND SPEAKS_  
-    Lindsay Clancy’s Ex-Husband Gives Emotional First Interview
-  - 2026-09-16 — _Candace Owens LAWSUITS Incoming!_  
-    Erika Kirk Urged To Sue Candace Owens Into Oblivion
-  - 2026-09-16 — _War Over Lindsay Clancy Hero Juror Fundraiser_  
-    War Erupts Over Lindsay Clancy Holdout Juror Fundraiser
-  - 2026-09-15 — _Candace Owens New UNHINGED Demands_  
-    Candace Owens Hits A Pathetic New Low In Charlie Kirk Feud
-  - 2026-09-15 — _PewDiePie ENRAGES Entire Internet_  
-    PewDiePie Faces Backlash After Son Wears A Dress
+  - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
+    Joe Rogan BETRAYS Trump Supporters In Stunning Rant
+  - 2026-09-17 — _South Park LIBERAL MELTDOWN Over Latest Episode_  
+    South Park Pulls Back From Trump Obsession, Returns To Local Satire
+  - 2026-09-15 — _New Trump Assassin BOMBSHELL_  
+    Bombshell Thomas Crooks Records Reveal “Bob Dole” Alias
 
 ---
 
