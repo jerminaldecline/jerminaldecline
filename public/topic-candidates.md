@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-19
+# Topic candidates — 2026-09-20
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 13 recent videos, 79 baseline videos
+Pool: 13 recent videos, 76 baseline videos
 
 ### Cluster 1: `o'lantern`
 
 - **Recent saturation:** 12/13 videos (**92%**)
-- **Baseline saturation:** 9/79 videos (11%)
-- **Spike ratio:** 7.8x
+- **Baseline saturation:** 9/76 videos (12%)
+- **Spike ratio:** 7.5x
 - **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
 - **Sample recent videos:**
   - 2026-09-18 — _Lindsay Clancy BLASTED By Judge Judy_  
@@ -29,8 +29,8 @@ Pool: 13 recent videos, 79 baseline videos
 ### Cluster 2: `lindsay`
 
 - **Recent saturation:** 3/13 videos (**23%**)
-- **Baseline saturation:** 4/79 videos (5%)
-- **Spike ratio:** 4.1x
+- **Baseline saturation:** 4/76 videos (5%)
+- **Spike ratio:** 3.9x
 - **Related terms:** `lindsay`, `clancy`, `lindsay clancy`
 - **Sample recent videos:**
   - 2026-09-18 — _Lindsay Clancy BLASTED By Judge Judy_  
@@ -42,13 +42,13 @@ Pool: 13 recent videos, 79 baseline videos
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 132 baseline videos
+Pool: 14 recent videos, 129 baseline videos
 
 ### Cluster 1: `holdout`
 
 - **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 8/132 videos (6%)
-- **Spike ratio:** 5.6x
+- **Baseline saturation:** 8/129 videos (6%)
+- **Spike ratio:** 5.5x
 - **Related terms:** `holdout`, `juror`, `lone`, `holdout lindsay`, `lone holdout`
 - **Sample recent videos:**
   - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
@@ -65,8 +65,8 @@ Pool: 14 recent videos, 132 baseline videos
 ### Cluster 2: `o'lantern`
 
 - **Recent saturation:** 14/14 videos (**100%**)
-- **Baseline saturation:** 17/132 videos (13%)
-- **Spike ratio:** 7.6x
+- **Baseline saturation:** 17/129 videos (13%)
+- **Spike ratio:** 7.4x
 - **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
 - **Sample recent videos:**
   - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
@@ -80,39 +80,11 @@ Pool: 14 recent videos, 132 baseline videos
   - 2026-09-17 — _Lindsay Clancy FIRES Lawyer As Massive Scandal Revealed_  
     Lindsay Clancy FIRES Lawyer?! Karen Read Attorney Takes Over
 
-### Cluster 3: `murder trial`
+### Cluster 3: `reportedly`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 9/132 videos (7%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `murder`, `murder trial`
-- **Sample recent videos:**
-  - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
-    Lone Clancy Juror Issues Stark Warning To His Attackers
-  - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
-    Lindsay Clancy Holdout Juror Finally Breaks His Silence
-  - 2026-09-15 — _Lindsay Clancy Faces BRUTAL New Demand!_  
-    Nancy Mace Calls For Lindsay Clancy’s Public Execution
-
-### Cluster 4: `she`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 3/132 videos (2%)
-- **Spike ratio:** 8.1x
-- **Related terms:** `she`
-- **Sample recent videos:**
-  - 2026-09-16 — _Lindsay Clancy PSYCHO Superfan Busted_  
-    Friend Reveals Disturbing Details About Accused Illinois Mother
-  - 2026-09-16 — _McDonalds Made Her Do It!_  
-    McDonalds Made Me Do It! Lindsay Clancy Copycat Excuse Erupts
-  - 2026-09-14 — _Psycho Liberals INSTANT Regret!_  
-    She Celebrated Kirk’s Death And Immediately Lost Everything
-
-### Cluster 5: `reportedly`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 3/132 videos (2%)
-- **Spike ratio:** 8.1x
+- **Baseline saturation:** 2/129 videos (2%)
+- **Spike ratio:** 11.1x
 - **Related terms:** `reportedly`
 - **Sample recent videos:**
   - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
@@ -122,11 +94,39 @@ Pool: 14 recent videos, 132 baseline videos
   - 2026-09-14 — _Lindsay Clancy Hero Juror Home Attacked_  
     Clancy Holdout Doxxed As Supporters Target His Home
 
+### Cluster 4: `murder trial`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 3/129 videos (2%)
+- **Spike ratio:** 8.0x
+- **Related terms:** `murder trial`
+- **Sample recent videos:**
+  - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
+    Lone Clancy Juror Issues Stark Warning To His Attackers
+  - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
+    Lindsay Clancy Holdout Juror Finally Breaks His Silence
+  - 2026-09-15 — _Lindsay Clancy Faces BRUTAL New Demand!_  
+    Nancy Mace Calls For Lindsay Clancy’s Public Execution
+
+### Cluster 5: `she`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 3/129 videos (2%)
+- **Spike ratio:** 8.0x
+- **Related terms:** `she`
+- **Sample recent videos:**
+  - 2026-09-16 — _Lindsay Clancy PSYCHO Superfan Busted_  
+    Friend Reveals Disturbing Details About Accused Illinois Mother
+  - 2026-09-16 — _McDonalds Made Her Do It!_  
+    McDonalds Made Me Do It! Lindsay Clancy Copycat Excuse Erupts
+  - 2026-09-14 — _Psycho Liberals INSTANT Regret!_  
+    She Celebrated Kirk’s Death And Immediately Lost Everything
+
 ### Cluster 6: `trump`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 7/132 videos (5%)
-- **Spike ratio:** 3.8x
+- **Baseline saturation:** 7/129 videos (5%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `trump`
 - **Sample recent videos:**
   - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
