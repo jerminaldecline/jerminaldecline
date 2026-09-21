@@ -74,7 +74,16 @@ async function resolveOne(id) {
     try { ps = JSON.parse(m[1]).playabilityStatus || {}; } catch { return null; }
     const er = (ps.errorScreen && ps.errorScreen.playerErrorMessageRenderer) || {};
     const st = er.subreason || {};
-    const sub = st.runs ? st.runs.map(r => r.text || '').join('') : (st.simpleText || '');
+    const legacySub = st.runs ? st.runs.map(r => r.text || '').join('') : (st.simpleText || '');
+    // Since ~Aug 2026 YouTube renders the error screen as playerInterstitialRenderer
+    // and puts the explanation ("It was removed following a copyright removal
+    // request by X", "This video has been removed by the uploader") in
+    // interstitialViewModel.description, while `reason` is just "Video unavailable".
+    // Reading only the legacy renderer classified a copyright takedown as plain
+    // "unavailable" for two days (MzSFY1eLfmY, 14 Sep 2026) and no banner fired.
+    const iv = (((ps.errorScreen || {}).playerInterstitialRenderer || {}).content || {}).interstitialViewModel || {};
+    const ivText = [iv.title && iv.title.content, iv.description && iv.description.content].filter(Boolean).join(' ');
+    const sub = [legacySub, ivText].filter(Boolean).join(' ');
     return classify(ps.status || '', ps.reason || '', sub);
   }
   return null;
