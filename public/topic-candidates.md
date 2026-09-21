@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-20
+# Topic candidates — 2026-09-21
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -42,13 +42,13 @@ Pool: 13 recent videos, 76 baseline videos
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 129 baseline videos
+Pool: 14 recent videos, 126 baseline videos
 
 ### Cluster 1: `holdout`
 
 - **Recent saturation:** 5/14 videos (**36%**)
-- **Baseline saturation:** 8/129 videos (6%)
-- **Spike ratio:** 5.5x
+- **Baseline saturation:** 8/126 videos (6%)
+- **Spike ratio:** 5.3x
 - **Related terms:** `holdout`, `juror`, `lone`, `holdout lindsay`, `lone holdout`
 - **Sample recent videos:**
   - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
@@ -65,8 +65,8 @@ Pool: 14 recent videos, 129 baseline videos
 ### Cluster 2: `o'lantern`
 
 - **Recent saturation:** 14/14 videos (**100%**)
-- **Baseline saturation:** 17/129 videos (13%)
-- **Spike ratio:** 7.4x
+- **Baseline saturation:** 17/126 videos (13%)
+- **Spike ratio:** 7.3x
 - **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `stock`, `back`, `jack o'lantern`, `o'lantern back`
 - **Sample recent videos:**
   - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
@@ -83,8 +83,8 @@ Pool: 14 recent videos, 129 baseline videos
 ### Cluster 3: `reportedly`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 2/129 videos (2%)
-- **Spike ratio:** 11.1x
+- **Baseline saturation:** 2/126 videos (2%)
+- **Spike ratio:** 10.9x
 - **Related terms:** `reportedly`
 - **Sample recent videos:**
   - 2026-09-16 — _Lindsay Clancy HOLDOUT Speaks & He's The Lefts Worst Nightmare_  
@@ -97,8 +97,8 @@ Pool: 14 recent videos, 129 baseline videos
 ### Cluster 4: `murder trial`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 3/129 videos (2%)
-- **Spike ratio:** 8.0x
+- **Baseline saturation:** 3/126 videos (2%)
+- **Spike ratio:** 7.8x
 - **Related terms:** `murder trial`
 - **Sample recent videos:**
   - 2026-09-18 — _Lindsay Clancy HERO Juror STRIKES BACK_  
@@ -111,8 +111,8 @@ Pool: 14 recent videos, 129 baseline videos
 ### Cluster 5: `she`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 3/129 videos (2%)
-- **Spike ratio:** 8.0x
+- **Baseline saturation:** 3/126 videos (2%)
+- **Spike ratio:** 7.8x
 - **Related terms:** `she`
 - **Sample recent videos:**
   - 2026-09-16 — _Lindsay Clancy PSYCHO Superfan Busted_  
@@ -125,8 +125,8 @@ Pool: 14 recent videos, 129 baseline videos
 ### Cluster 6: `trump`
 
 - **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 7/129 videos (5%)
-- **Spike ratio:** 3.7x
+- **Baseline saturation:** 7/126 videos (6%)
+- **Spike ratio:** 3.6x
 - **Related terms:** `trump`
 - **Sample recent videos:**
   - 2026-09-18 — _Joe Rogan Goes MASK OFF & People Are ANGRY_  
