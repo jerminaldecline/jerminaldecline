@@ -541,9 +541,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    vary a lot in length, so flex left a ragged edge with "Tag blocks" stranded
    on its own line. Four columns split them evenly 4+4 (three when narrower).
    The "Chart:" label spans the full row so it doesn't consume a button cell. */
-.an-metric-toggle{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0.4rem;margin-bottom:1.1rem}
-.an-metric-toggle::before{content:"Chart:";grid-column:1/-1;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.1rem}
-@media(max-width:900px){.an-metric-toggle{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
+.an-metric-toggle .an-metric-btn{flex:1 1 190px;min-width:0}
+.an-metric-toggle::before{content:"Chart:";flex:0 0 100%;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.1rem}
+@media(max-width:900px){.an-metric-toggle .an-metric-btn{flex-basis:160px}}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
 .an-metric-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
 .an-metric-btn:active{transform:translateY(1px)}
@@ -6935,6 +6936,7 @@ const MEDIAN_LENGTH_SPEC = {
   fmt: v => formatDuration(v * 60), fmtTip: v => formatDuration(v * 60),
   legend: 'Median long-form upload length', tipLabel: 'median length',
   breakRule: false,           // runtime is unaffected by the view-counting change
+  zeroBase: false,            // plot the band the data lives in, not 0:00 upward
 };
 function renderMedianViewsChart(chartData, inProgressMonth, spec) {
   spec = spec || MEDIAN_VIEWS_SPEC;
@@ -6967,10 +6969,23 @@ function renderMedianViewsChart(chartData, inProgressMonth, spec) {
   const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
   if (allMeds.length < 2) { svg.innerHTML = ''; return; }
   const maxMed = Math.max(...allMeds);
-  const axis = tightNiceAxis(maxMed);
-  const yMax = axis.max;
-  const yStep = axis.step;
-  const yMin = 0;
+  let yMin = 0, yMax, yStep;
+  if (spec.zeroBase === false) {
+    // Runtime sits in a band (12-17 min here) and never nears zero; anchoring
+    // at 0:00 left two thirds of the plot empty. Pad the range and floor the
+    // minimum to a tick, as the like-rate axis does.
+    const minMed = Math.min(...allMeds);
+    const pad = Math.max(1, (maxMed - minMed) * 0.15);
+    // Pick the tick so the band gets 5-8 gridlines; tightNiceAxis is built for
+    // a zero-anchored axis and gave three lines here (10:00, 15:00, 20:00).
+    const span = (maxMed + pad) - Math.max(0, minMed - pad);
+    yStep = [0.25, 0.5, 1, 2, 2.5, 5, 10, 15, 30, 60].find(st => span / st <= 8) || 60;
+    yMax = Math.ceil((maxMed + pad) / yStep) * yStep;
+    yMin = Math.max(0, Math.floor((minMed - pad) / yStep) * yStep);
+  } else {
+    const axis = tightNiceAxis(maxMed);
+    yMax = axis.max; yStep = axis.step;
+  }
 
   const xFor = (i) => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
   const yFor = (v) => P.top + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
