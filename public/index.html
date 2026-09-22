@@ -541,9 +541,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    vary a lot in length, so flex left a ragged edge with "Tag blocks" stranded
    on its own line. Four columns split them evenly 4+4 (three when narrower).
    The "Chart:" label spans the full row so it doesn't consume a button cell. */
-.an-metric-toggle{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0.4rem;margin-bottom:1.1rem}
-.an-metric-toggle::before{content:"Chart:";grid-column:1/-1;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.1rem}
-@media(max-width:900px){.an-metric-toggle{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.an-metric-toggle{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem}
+.an-metric-toggle .an-metric-btn{flex:1 1 190px;min-width:0}
+.an-metric-toggle::before{content:"Chart:";flex:0 0 100%;color:var(--text-muted);font-size:0.74rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.1rem}
+@media(max-width:900px){.an-metric-toggle .an-metric-btn{flex-basis:160px}}
 .an-metric-btn{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.85rem;font-weight:700;padding:0.5rem 0.95rem;border-radius:8px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease,transform .08s ease}
 .an-metric-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
 .an-metric-btn:active{transform:translateY(1px)}
@@ -2767,6 +2768,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
         <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Average views</button>
+        <button type="button" class="an-metric-btn" data-metric="median_length" role="tab">Average length</button>
         <button type="button" class="an-metric-btn" data-metric="subs" role="tab">Subscribers</button>
         <button type="button" class="an-metric-btn" data-metric="engagement_variance" role="tab">Engagement variance</button>
         <button type="button" class="an-metric-btn" data-metric="all_videos" role="tab">Video lengths</button>
@@ -2779,6 +2781,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
           <option value="views_length">Views + length</option>
           <option value="views_likes">Views + likes</option>
           <option value="median_views">Average views</option>
+          <option value="median_length">Average length</option>
           <option value="subs">Subscribers</option>
           <option value="engagement_variance">Engagement variance</option>
           <option value="all_videos">Video lengths</option>
@@ -5652,8 +5655,13 @@ function buildMonthlyData(scope){
       if (maxX != null && x > maxX - 40) {
         // Near the right axis: right-align and pull well inside the plot edge so
         // the text fully clears the right-hand axis tick labels.
-        anchorAttr = ' text-anchor="end"';
+        anchorAttr = ' style="text-anchor:end"';   // inline: the class sets text-anchor in CSS, which beats the attribute
         x = maxX - 8;
+      } else if (opts.minX != null && x - String(fmtVal(v)).length * 3.2 < opts.minX - 4) {
+        // Near the left axis: a centred label wider than "65K" (m:ss runtimes,
+        // say) runs back over the y-axis tick labels. Left-align it at the point.
+        anchorAttr = ' style="text-anchor:start"';
+        x = opts.minX;
       }
       out += `<text class="${cls}"${anchorAttr} x="${x.toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
     }
@@ -5742,6 +5750,7 @@ function setChartTitle(metric, mode) {
     views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
     views_likes: ['Views vs. like rate', 'Monthly views against the like rate — did engagement hold as reach shrank?'],
     median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
+    median_length: ['Median upload length', "The typical long-form upload's runtime each month — median, so one marathon stream can't skew it."],
     subs: ['Subscriber gain', 'Net change in the subscriber counter each month. YouTube rounds public subscriber counts, so months where the counter never steps show as 0. Tracked since June 2026.'],
     engagement_variance: ['Share of high-engagement uploads', "How many of each month's videos beat the channel's all-time top-10% like rate."],
     all_videos: ['Upload length spread', 'Every long-form video plotted by its duration — how upload lengths cluster over time.'],
@@ -5822,7 +5831,7 @@ function renderTrendChart(yoy) {
   // reflows the surrounding layout.
   (function(){
     const ctrl = document.getElementById('prevYearControl');
-    const supports = (chartMetric === 'views' || chartMetric === 'median_views');
+    const supports = (chartMetric === 'views' || chartMetric === 'median_views' || chartMetric === 'median_length');
     if (ctrl) {
       ctrl.hidden = !supports;
       ctrl.setAttribute('aria-pressed', String(showPrevYear));
@@ -5865,6 +5874,7 @@ function renderTrendChart(yoy) {
     engagement_variance: 'Engagement variance',
     all_videos: 'Video lengths',
     median_views: 'Average views',
+    median_length: 'Average length',
     tag_blocks: 'Tag blocks'
   };
   if (ANALYTICS_CHANNEL === 'ALL' && SINGLE_CHANNEL_METRICS[chartMetric]) {
@@ -5934,6 +5944,15 @@ function renderTrendChart(yoy) {
     && ANALYTICS_CHANNEL !== 'ALL';
   if (isMedianViewsMode) {
     return renderMedianViewsChart(chartData, inProgressMonth);
+  }
+  // "Average length": the same single-line chart, plotting each month's MEDIAN
+  // long-form upload length. Views + length already overlays this on the views
+  // line; this is the runtime on its own. Minutes on the axis, m:ss on labels.
+  const isMedianLengthMode = chartMetric === 'median_length'
+    && viewMode === 'long'
+    && ANALYTICS_CHANNEL !== 'ALL';
+  if (isMedianLengthMode) {
+    return renderMedianViewsChart(chartData, inProgressMonth, MEDIAN_LENGTH_SPEC);
   }
 
   // "Views + like rate" mode: dual-axis chart with views (left axis, count)
@@ -6905,19 +6924,35 @@ function renderLikeRateChart(chartData, inProgressMonth) {
 // Median (not mean) keeps one viral video or a single dead month from distorting
 // the typical-upload story. 0-based Y axis (views are counts) so the decline
 // reads honestly. Single channel, long-form. Mirrors renderLikeRateChart.
-function renderMedianViewsChart(chartData, inProgressMonth) {
+// What the single-line "median per month" chart plots. Average views is the
+// default; Average length passes MEDIAN_LENGTH_SPEC. valueOf reads the month
+// summary, fmt labels the axis and points, fmtTip formats the tooltip figure.
+const MEDIAN_VIEWS_SPEC = {
   // Median per upload on whichever basis is live. Falls back to the reported
   // figure if the engaged twin is missing, so an older cached dataset still
   // renders rather than plotting undefined.
-  const _medOf = sm => (sm ? ((window.__viewEngaged && sm.longViewsMedianEngaged != null)
-    ? sm.longViewsMedianEngaged : sm.longViewsMedian) : 0) || 0;
+  valueOf: sm => (window.__viewEngaged && sm.longViewsMedianEngaged != null) ? sm.longViewsMedianEngaged : sm.longViewsMedian,
+  fmt: v => fmtCompact(v), fmtTip: v => fmt(v),
+  legend: 'Average long-form views per upload', tipLabel: 'average views',
+  breakRule: true,            // views count differently either side of 27 Aug 2026
+};
+const MEDIAN_LENGTH_SPEC = {
+  valueOf: sm => (sm.medianDuration || 0) / 60,   // minutes, so the axis steps land on whole minutes
+  fmt: v => formatDuration(v * 60), fmtTip: v => formatDuration(v * 60),
+  legend: 'Median long-form upload length', tipLabel: 'median length',
+  breakRule: false,           // runtime is unaffected by the view-counting change
+  zeroBase: false,            // plot the band the data lives in, not 0:00 upward
+};
+function renderMedianViewsChart(chartData, inProgressMonth, spec) {
+  spec = spec || MEDIAN_VIEWS_SPEC;
+  const _medOf = sm => (sm ? spec.valueOf(sm) : 0) || 0;
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
   if (tooltip) tooltip.style.display = 'none';
 
   legend.innerHTML = `
-    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Average long-form views per upload</span>
+    <span class="trend-legend-item"><span class="trend-legend-swatch"></span> ${spec.legend}</span>
     ${showPrevYear ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
   `;
 
@@ -6939,10 +6974,23 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   const allMeds = [...meds.map(r => r.med), ipMed, ...prevMeds, ipPrevMed].filter(v => v != null && v > 0);
   if (allMeds.length < 2) { svg.innerHTML = ''; return; }
   const maxMed = Math.max(...allMeds);
-  const axis = tightNiceAxis(maxMed);
-  const yMax = axis.max;
-  const yStep = axis.step;
-  const yMin = 0;
+  let yMin = 0, yMax, yStep;
+  if (spec.zeroBase === false) {
+    // Runtime sits in a band (12-17 min here) and never nears zero; anchoring
+    // at 0:00 left two thirds of the plot empty. Pad the range and floor the
+    // minimum to a tick, as the like-rate axis does.
+    const minMed = Math.min(...allMeds);
+    const pad = Math.max(1, (maxMed - minMed) * 0.15);
+    // Pick the tick so the band gets 5-8 gridlines; tightNiceAxis is built for
+    // a zero-anchored axis and gave three lines here (10:00, 15:00, 20:00).
+    const span = (maxMed + pad) - Math.max(0, minMed - pad);
+    yStep = [0.25, 0.5, 1, 2, 2.5, 5, 10, 15, 30, 60].find(st => span / st <= 8) || 60;
+    yMax = Math.ceil((maxMed + pad) / yStep) * yStep;
+    yMin = Math.max(0, Math.floor((minMed - pad) / yStep) * yStep);
+  } else {
+    const axis = tightNiceAxis(maxMed);
+    yMax = axis.max; yStep = axis.step;
+  }
 
   const xFor = (i) => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
   const yFor = (v) => P.top + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
@@ -6951,7 +6999,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   for (let v = yMin; v <= yMax + 0.001; v += yStep) {
     const y = yFor(v);
     gridLines += `<line class="chart-grid-line" x1="${P.left}" y1="${y}" x2="${W - P.right}" y2="${y}" />`;
-    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${fmtCompact(v)}</text>`;
+    yLabels += `<text class="chart-axis-label y" x="${P.left - 8}" y="${y + 4}" text-anchor="end">${spec.fmt(v)}</text>`;
   }
 
   const years = new Set(chartData.map(m => m.key.slice(0, 4)));
@@ -7028,7 +7076,7 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
     const lastX = xFor(lastValid);
     const lastY = yFor(meds[lastValid].med);
     ipConnector = `<path class="chart-line-inprogress" d="M ${lastX} ${lastY} L ${x} ${y}"/>`;
-    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${fmtCompact(ipMed)}</text>`;
+    ipDot = `<circle class="chart-dot-inprogress" cx="${x}" cy="${y}" r="4.5"/><circle class="chart-dot-inprogress-pulse" cx="${x}" cy="${y}" r="4.5"/><text class="chart-pt-label inprogress" x="${x.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${x > P.left + innerW - 30 ? 'end' : 'middle'}">${spec.fmt(ipMed)}</text>`;
     hovers += `<rect class="chart-hit" x="${x - wHover / 2}" y="${P.top}" width="${wHover}" height="${innerH}" data-idx="ip" />`;
   }
 
@@ -7038,11 +7086,11 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
   const _mKeyMode = medVals.length > 30;
   const _mAnchors = _mKeyMode ? findKeyPoints(medVals) : new Set(inProgressMonth ? [medPeakIdx] : [medPeakIdx, medVals.length - 1]);
   if (inProgressMonth) _mAnchors.delete(medVals.length - 1);
-  const medLabels = buildPointLabels(medVals, xFor, yFor, fmtCompact, { anchors: [..._mAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _mKeyMode });
+  const medLabels = buildPointLabels(medVals, xFor, yFor, spec.fmt, { anchors: [..._mAnchors], minX: P.left, maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _mKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
-    ${vccBreakRule(chartData, xFor, P, innerH)}
+    ${spec.breakRule ? vccBreakRule(chartData, xFor, P, innerH) : ''}
     ${prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : ''}
     <path class="chart-line-curr" d="${linePath}" />
     ${ipConnector}
@@ -7068,9 +7116,9 @@ function renderMedianViewsChart(chartData, inProgressMonth) {
       const uploads = (m.curr.longForm && m.curr.longForm.length) || 0;
       tooltip.innerHTML = `
         <div class="tooltip-month">${monthLabel(m.key)}${idx === 'ip' ? ' <span class="tooltip-tag">in progress</span>' : ''}</div>
-        <div class="tooltip-row"><strong>${fmt(med)}</strong> average views</div>
+        <div class="tooltip-row"><strong>${spec.fmtTip(med)}</strong> ${spec.tipLabel}</div>
         <div class="tooltip-row tooltip-detail">across ${uploads} long-form upload${uploads === 1 ? '' : 's'}</div>
-        ${showPrevYear && m.yoy && _medOf(m.yoy) > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(_medOf(m.yoy))}</div>` : ''}
+        ${showPrevYear && m.yoy && _medOf(m.yoy) > 0 ? `<div class="tooltip-row tooltip-detail">prev year: ${spec.fmtTip(_medOf(m.yoy))}</div>` : ''}
       `;
       const desired = bbox.left - wrap.left + bbox.width / 2;
       const tipWidth = tooltip.offsetWidth || 200;
@@ -8950,7 +8998,7 @@ function niceDurationAxis(minSec, maxSec) {
   window.setIncludeShorts = function(v){ includeShorts = !!v; window.renderAnalysisChart(); };
   window.__getShowPrevYear = function(){ return showPrevYear; };
   // expose metric/viewMode setters for the controls
-  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views','tag_blocks']);
+  const SINGLE_CHANNEL_ONLY = new Set(['views_length','views_likes','engagement_variance','all_videos','like_rate','median_views','median_length','tag_blocks']);
   window.setAnalysisMetric = function(m){
     chartMetric = m;
     // Per-channel-only metrics can't render on "All channels" — rather than show
