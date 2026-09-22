@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-21T10:07:10.328Z",
+  "lastUpdated": "2026-09-22T09:24:49.119Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
@@ -19,31 +19,12 @@
         "back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9231,
-        "baselineSaturation": 0.1234,
-        "spikeRatio": 7.48,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "holdout",
-      "keywords": [
-        "holdout lindsay",
-        "lone holdout",
-        "holdout",
-        "lone",
-        "juror"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0669,
-        "spikeRatio": 5.34,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
+        "recentSaturation": 0.9167,
+        "baselineSaturation": 0.1688,
+        "spikeRatio": 5.43,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-09-22T09:24:49.119Z"
       }
     },
     {
@@ -65,11 +46,30 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1378,
-        "spikeRatio": 7.26,
+        "baselineSaturation": 0.1535,
+        "spikeRatio": 6.51,
         "recentVideoCount": 14,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-09-22T09:24:49.119Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "lone",
+      "keywords": [
+        "lone holdout",
+        "lone",
+        "murder trial",
+        "holdout",
+        "juror"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.0984,
+        "spikeRatio": 3.63,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-09-22T09:24:49.119Z"
       }
     }
   ]
