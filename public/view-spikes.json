@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-09-21-AM",
-    "snapshots": 201
+    "to": "2026-09-22-AM",
+    "snapshots": 203
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -52,7 +52,7 @@
     {
       "id": "aGDMKiNGFr8",
       "title": "ASMONGOLD BAN BACKFIRES",
-      "estPromotedViews": 1471,
+      "estPromotedViews": 1479,
       "spikeStartDate": "2026-08-19-PM"
     }
   ],
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-21T20:25:41.000Z",
       "ageDaysAtSpike": 17.5,
-      "baselinePerDay": 60,
+      "baselinePerDay": 58,
       "peakPerDay": 962,
-      "ratio": 16,
+      "ratio": 16.6,
       "spikeStartDate": "2026-09-07-PM",
       "elevatedSnapshots": 15,
       "status": "sustained",
-      "estPromotedViews": 4156,
+      "estPromotedViews": 4171,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -317,6 +317,14 @@
         [
           "2026-09-21-AM",
           34321
+        ],
+        [
+          "2026-09-21-PM",
+          34320
+        ],
+        [
+          "2026-09-22-AM",
+          34339
         ]
       ]
     },
@@ -772,6 +780,14 @@
         [
           "2026-09-21-AM",
           32182
+        ],
+        [
+          "2026-09-21-PM",
+          32182
+        ],
+        [
+          "2026-09-22-AM",
+          32182
         ]
       ]
     },
@@ -1211,6 +1227,14 @@
         [
           "2026-09-21-AM",
           72777
+        ],
+        [
+          "2026-09-21-PM",
+          72773
+        ],
+        [
+          "2026-09-22-AM",
+          72775
         ]
       ]
     },
@@ -2034,6 +2058,14 @@
         [
           "2026-09-21-AM",
           55241
+        ],
+        [
+          "2026-09-21-PM",
+          55324
+        ],
+        [
+          "2026-09-22-AM",
+          55423
         ]
       ]
     },
@@ -2044,13 +2076,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 20,
+      "baselinePerDay": 15,
       "peakPerDay": 1236,
-      "ratio": 61.8,
+      "ratio": 82.4,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 608,
+      "estPromotedViews": 611,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2417,6 +2449,14 @@
         [
           "2026-09-21-AM",
           103368
+        ],
+        [
+          "2026-09-21-PM",
+          103368
+        ],
+        [
+          "2026-09-22-AM",
+          103375
         ]
       ]
     },
@@ -2427,9 +2467,9 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-07-28T18:40:18.000Z",
       "ageDaysAtSpike": 54.5,
-      "baselinePerDay": 117,
+      "baselinePerDay": 116,
       "peakPerDay": 1120,
-      "ratio": 9.6,
+      "ratio": 9.7,
       "spikeStartDate": "2026-09-20-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
@@ -2872,6 +2912,14 @@
         [
           "2026-09-21-AM",
           553628
+        ],
+        [
+          "2026-09-21-PM",
+          553641
+        ],
+        [
+          "2026-09-22-AM",
+          553928
         ]
       ]
     }
