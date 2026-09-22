@@ -5655,8 +5655,13 @@ function buildMonthlyData(scope){
       if (maxX != null && x > maxX - 40) {
         // Near the right axis: right-align and pull well inside the plot edge so
         // the text fully clears the right-hand axis tick labels.
-        anchorAttr = ' text-anchor="end"';
+        anchorAttr = ' style="text-anchor:end"';   // inline: the class sets text-anchor in CSS, which beats the attribute
         x = maxX - 8;
+      } else if (opts.minX != null && x - String(fmtVal(v)).length * 3.2 < opts.minX - 4) {
+        // Near the left axis: a centred label wider than "65K" (m:ss runtimes,
+        // say) runs back over the y-axis tick labels. Left-align it at the point.
+        anchorAttr = ' style="text-anchor:start"';
+        x = opts.minX;
       }
       out += `<text class="${cls}"${anchorAttr} x="${x.toFixed(1)}" y="${(yFor(v) + dy).toFixed(1)}">${fmtVal(v)}</text>`;
     }
@@ -7081,7 +7086,7 @@ function renderMedianViewsChart(chartData, inProgressMonth, spec) {
   const _mKeyMode = medVals.length > 30;
   const _mAnchors = _mKeyMode ? findKeyPoints(medVals) : new Set(inProgressMonth ? [medPeakIdx] : [medPeakIdx, medVals.length - 1]);
   if (inProgressMonth) _mAnchors.delete(medVals.length - 1);
-  const medLabels = buildPointLabels(medVals, xFor, yFor, spec.fmt, { anchors: [..._mAnchors], maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _mKeyMode });
+  const medLabels = buildPointLabels(medVals, xFor, yFor, spec.fmt, { anchors: [..._mAnchors], minX: P.left, maxX: P.left + innerW, skipLast: !!inProgressMonth, keyOnly: _mKeyMode });
 
   svg.innerHTML = `
     ${gridLines}
