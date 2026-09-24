@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-09-23T09:25:24.492Z",
+  "lastUpdated": "2026-09-24T09:25:34.418Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "limited",
+      "channelHandle": "@JeremyHambly",
+      "termId": "stock sign",
       "keywords": [
         "stock sign",
         "limited",
@@ -14,61 +14,75 @@
         "limited edition",
         "edition jack",
         "back stock",
+        "back",
         "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1758,
-        "spikeRatio": 5.69,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 22,
-        "detectedAt": "2026-09-23T09:25:24.492Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "o'lantern",
-      "keywords": [
-        "lindsay",
-        "lindsay clancy",
-        "clancy",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.6667,
-        "baselineSaturation": 0.1914,
-        "spikeRatio": 3.48,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 15,
-        "detectedAt": "2026-09-23T09:25:24.492Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "limited",
-      "keywords": [
-        "stock sign",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "back"
+        "jack o'lantern"
       ],
       "detectorMeta": {
         "recentSaturation": 0.9167,
-        "baselineSaturation": 0.2037,
-        "spikeRatio": 4.5,
+        "baselineSaturation": 0.2229,
+        "spikeRatio": 4.11,
         "recentVideoCount": 11,
+        "baselineVideoCount": 18,
+        "detectedAt": "2026-09-24T09:25:34.418Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "stock sign",
+      "keywords": [
+        "lantern",
+        "jack lantern",
+        "lantern back",
+        "stock sign",
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1977,
+        "spikeRatio": 5.06,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 25,
+        "detectedAt": "2026-09-24T09:25:34.418Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trump",
+      "keywords": [
+        "trump"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0504,
+        "spikeRatio": 6.2,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-09-24T09:25:34.418Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "o'lantern",
+      "keywords": [
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.625,
+        "baselineSaturation": 0.1279,
+        "spikeRatio": 4.89,
+        "recentVideoCount": 10,
         "baselineVideoCount": 16,
-        "detectedAt": "2026-09-23T09:25:24.492Z"
+        "detectedAt": "2026-09-24T09:25:34.418Z"
       }
     }
   ]
