@@ -1,30 +1,22 @@
 {
-  "lastUpdated": "2026-09-24T09:25:34.418Z",
+  "lastUpdated": "2026-09-25T09:43:24.226Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "stock sign",
+      "channelHandle": "@TheQuartering",
+      "termId": "o'lantern",
       "keywords": [
-        "stock sign",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "back",
+        "stunning",
         "o'lantern",
-        "jack o'lantern"
+        "jack o'lantern",
+        "o'lantern back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9167,
-        "baselineSaturation": 0.2229,
-        "spikeRatio": 4.11,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-09-24T09:25:34.418Z"
+        "recentSaturation": 0.5333,
+        "baselineSaturation": 0.1477,
+        "spikeRatio": 3.61,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-09-25T09:43:24.226Z"
       }
     },
     {
@@ -45,44 +37,36 @@
         "back stock"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1977,
-        "spikeRatio": 5.06,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 25,
-        "detectedAt": "2026-09-24T09:25:34.418Z"
+        "recentSaturation": 0.9333,
+        "baselineSaturation": 0.2159,
+        "spikeRatio": 4.32,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 28,
+        "detectedAt": "2026-09-25T09:43:24.226Z"
       }
     },
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "trump",
+      "channelHandle": "@JeremyHambly",
+      "termId": "stock sign",
       "keywords": [
-        "trump"
+        "stock sign",
+        "limited",
+        "edition",
+        "jack",
+        "stock",
+        "coffee limited",
+        "limited edition",
+        "edition jack",
+        "back stock",
+        "back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0504,
-        "spikeRatio": 6.2,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 6,
-        "detectedAt": "2026-09-24T09:25:34.418Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "o'lantern",
-      "keywords": [
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.625,
-        "baselineSaturation": 0.1279,
-        "spikeRatio": 4.89,
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.2321,
+        "spikeRatio": 3.59,
         "recentVideoCount": 10,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-09-24T09:25:34.418Z"
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-09-25T09:43:24.226Z"
       }
     }
   ]
