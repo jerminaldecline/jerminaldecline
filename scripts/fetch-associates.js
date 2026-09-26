@@ -96,7 +96,11 @@ async function enrich(ids) {
   const found = new Map();
   for (let i = 0; i < ids.length; i += 50) {
     const batch = ids.slice(i, i + 50);
-    const d = await get(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,status&id=${batch.join(',')}&key=${API_KEY}`);
+    // liveStreamingDetails is present on anything that went out live - stream
+    // recordings and premieres. Paramount Tactical has ~450 stream VODs of two
+    // hours and up against ~250 uploads, so they must be their own format or
+    // every long-form median and runtime is meaningless.
+    const d = await get(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,status,liveStreamingDetails&id=${batch.join(',')}&key=${API_KEY}`);
     for (const it of d.items || []) {
       if (it.status && it.status.privacyStatus === 'private') continue;   // reads as gone
       found.set(it.id, {
@@ -104,6 +108,7 @@ async function enrich(ids) {
         views: parseInt(it.statistics.viewCount || '0', 10),
         likes: it.statistics.likeCount != null ? parseInt(it.statistics.likeCount, 10) : null,
         comments: it.statistics.commentCount != null ? parseInt(it.statistics.commentCount, 10) : null,
+        isLive: !!(it.liveStreamingDetails && it.liveStreamingDetails.actualStartTime),
       });
     }
   }
@@ -140,7 +145,7 @@ async function main() {
       if (!d) { if (!v.unavailable) { v.unavailable = true; v.unavailableSince = new Date().toISOString(); gone++; } continue; }
       if (v.unavailable) { delete v.unavailable; delete v.unavailableSince; }
       Object.assign(v, d);
-      v.isShort = isLikelyShort(v.durationSec, v.publishedAt);
+      v.isShort = !v.isLive && isLikelyShort(v.durationSec, v.publishedAt);
     }
     console.log(`  listed ${listed.length}, refreshed ${targets.length}, newly unavailable ${gone}`);
 
