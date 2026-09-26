@@ -14068,7 +14068,7 @@ function renderWindowList(startDate, endDate) {
     } else if (!d.n && !d.ln) {
       h += `<div class="hero-rowlabel">Standouts</div><div class="highlights"><div class="hl hl-nodata"><div class="hl-nodata-msg">No uploads or streams in this period, so there is no best, worst or most-contentious video to rank.</div></div></div>`;
     }
-    h += `<div class="assoc-chart"><div class="assoc-chart-head"><div><div class="an-chart-title-main">Long-form views by month</div><div class="an-chart-title-sub">Total views on each month's ${hasLive ? (chartFmt === 'live' ? 'live streams' : chartFmt === 'uploads' ? 'long-form uploads' : 'long-form uploads and live streams') : 'long-form uploads'}, with the previous year for comparison. Views before and after 27 Aug 2026 are not comparable (YouTube's counting change); the dashed line marks the month.</div></div>
+    h += `<div class="assoc-chart"><div class="assoc-chart-head"><div><div class="an-chart-title-main">Long-form views by month</div><div class="an-chart-title-sub">${isAgg ? PRESETS[monthKey] : 'Last 12 months'}: total views on each month's ${hasLive ? (chartFmt === 'live' ? 'live streams' : chartFmt === 'uploads' ? 'long-form uploads' : 'long-form uploads and live streams') : 'long-form uploads'}, with the previous year for comparison. Views before and after 27 Aug 2026 are not comparable (YouTube's counting change); the dashed line marks the month.</div></div>
       ${hasLive ? `<div class="chart-fmt-seg" role="group" aria-label="Format"><button type="button" class="chart-ctrl-btn seg" data-afmt="uploads" aria-pressed="${chartFmt === 'uploads'}">Uploads</button><button type="button" class="chart-ctrl-btn seg" data-afmt="live" aria-pressed="${chartFmt === 'live'}">Live</button><button type="button" class="chart-ctrl-btn seg" data-afmt="both" aria-pressed="${chartFmt === 'both'}">Both</button></div>` : ''}</div>
       <div class="trend-legend" id="assocLegend"></div><div class="chart-wrap"><svg class="trend-chart" id="assocChart" viewBox="0 0 720 280" role="img" aria-label="Long-form views by month"></svg><div class="chart-tooltip" id="assocTip" style="display:none"></div></div></div>`;
     h += `<div class="assoc-note">Associates are tracked at overview depth only: channel stats and each video's views, likes, comments and length, refreshed with the network data. Nothing here is run through the topic tagger, the transcript archive, daily-view sampling, ad detection or the repost scan. Adding a channel is one line in the associates fetcher.</div>`;
@@ -14087,8 +14087,14 @@ function renderWindowList(startDate, endDate) {
 
   function drawChart(sums, ch) {
     const svg = $('assocChart'), legend = $('assocLegend'), tip = $('assocTip'); if (!svg) return;
+    // Window: a period preset spans its own range (YTD, 24 months, since peak,
+    // all time); a single month keeps the last twelve complete months. The
+    // in-progress month is drawn as the dashed tail point either way.
     const end = lastComplete();
-    const keys = []; for (let i = 11; i >= 0; i--) keys.push(shiftKey(end, -i));
+    const isAgg = !!PRESETS[monthKey];
+    let keys = [];
+    if (isAgg) { const range = presetMonths(monthKey, months(sums), sums) || []; keys = range.filter(k => k < thisMonth); }
+    if (keys.length < 2) { keys = []; for (let i = 11; i >= 0; i--) keys.push(shiftKey(end, -i)); }
     const val = sm => !sm ? null : chartFmt === 'live' ? sm.ltot : chartFmt === 'uploads' ? sm.tot : sm.tot + sm.ltot;
     const cnt = sm => !sm ? 0 : chartFmt === 'live' ? sm.ln : chartFmt === 'uploads' ? sm.n : sm.n + sm.ln;
     const cur = keys.map(k => val(sums[k]));
@@ -14105,9 +14111,16 @@ function renderWindowList(startDate, endDate) {
     const yFor = v => P.top + innerH - (v / yMax) * innerH;
     let grid = '';
     for (let i = 0; i <= 4; i++) { const v = yMax * i / 4, yy = yFor(v); grid += `<line class="chart-grid-line" x1="${P.left}" y1="${yy}" x2="${W - P.right}" y2="${yy}"/><text class="chart-axis-label y" x="${P.left - 8}" y="${yy + 4}" text-anchor="end">${fmtCompact(v)}</text>`; }
-    let xl = ''; const yearsSeen = new Set();
-    keys.forEach((k, i) => { const yr = k.slice(0, 4); const t = yearsSeen.has(yr) ? MN[+k.slice(5, 7) - 1] : `${MN[+k.slice(5, 7) - 1]} '${yr.slice(2)}`; yearsSeen.add(yr); xl += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${t}</text>`; });
-    if (ip != null) xl += `<text class="chart-axis-label x" x="${xFor(n)}" y="${H - 26}" text-anchor="middle">${MN[+thisMonth.slice(5, 7) - 1]}</text>`;
+    let xl = '';
+    const years = new Set(keys.map(k => k.slice(0, 4)));
+    if (years.size > 1 && n > 24) {
+      const first = new Map(); keys.forEach((k, i) => { const yr = k.slice(0, 4); if (!first.has(yr)) first.set(yr, i); });
+      for (const [yr, i] of first) xl += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${yr}</text>`;
+    } else {
+      const stride = n <= 13 ? 1 : Math.max(1, Math.ceil(n / 6)); const yearsSeen = new Set();
+      keys.forEach((k, i) => { if (i % stride !== 0 && i !== n - 1) return; const yr = k.slice(0, 4); const t = (years.size > 1 && !yearsSeen.has(yr)) ? `${MN[+k.slice(5, 7) - 1]} '${yr.slice(2)}` : MN[+k.slice(5, 7) - 1]; yearsSeen.add(yr); xl += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${t}</text>`; });
+      if (ip != null) xl += `<text class="chart-axis-label x" x="${xFor(n)}" y="${H - 26}" text-anchor="middle">${MN[+thisMonth.slice(5, 7) - 1]}</text>`;
+    }
     const pt = (arr, i) => `${xFor(i).toFixed(1)},${yFor(arr[i]).toFixed(1)}`;
     let curPath = '', prevPath = '', dots = '', pdots = '', started = false, pstarted = false;
     for (let i = 0; i < n; i++) {
@@ -14126,7 +14139,8 @@ function renderWindowList(startDate, endDate) {
     let ipMark = '';
     if (ip != null && cur[n - 1] != null) ipMark = `<path class="chart-line-inprogress" d="M${pt(cur, n - 1)} L${xFor(n).toFixed(1)},${yFor(ip).toFixed(1)}"/><circle class="chart-dot-inprogress" cx="${xFor(n).toFixed(1)}" cy="${yFor(ip).toFixed(1)}" r="4.5"/>`;
     let labels = '';
-    cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || i === n - 1 || i % 3 === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
+    const lstride = n <= 13 ? 3 : Math.max(3, Math.ceil(n / 8));
+    cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || i === n - 1 || i % lstride === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
     if (ip != null) labels += `<text class="chart-pt-label inprogress" x="${xFor(n).toFixed(1)}" y="${(yFor(ip) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(ip)}</text>`;
     const brk = (typeof vccBreakRule === 'function') ? vccBreakRule(keys.map(k => ({ key: k })), xFor, P, innerH) : '';
     let hits = ''; const wHover = innerW / Math.max(1, nTotal - 1);
