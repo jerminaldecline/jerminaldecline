@@ -2642,6 +2642,21 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .wordcloud-toggle-text{flex:1 1 auto;min-width:0}
 .wordcloud-toggle-text::before{display:none!important}
 .wordcloud-panel{border-left-color:var(--ac)!important}
+
+/* ---- Associates tab ---- */
+.assoc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin:0.2rem 0 1rem}
+.assoc-title{font-size:1.45rem;font-weight:900;letter-spacing:-0.02em;line-height:1.15}
+.assoc-wip{display:inline-block;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent-2-text);background:var(--accent-2-bg);border:1px solid var(--accent-2);border-radius:999px;padding:0.05rem 0.45rem;vertical-align:middle;margin-left:0.4rem}
+.assoc-sub{font-size:0.86rem;color:var(--subtext);margin-top:0.2rem;max-width:62ch}
+.assoc-controls{display:flex;gap:0.5rem;flex-wrap:wrap}
+.assoc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:0.4rem 1rem;font-size:0.82rem;color:var(--text-muted);margin:0 0 1rem}
+.assoc-meta b{color:var(--text)}
+.assoc-meta a{color:var(--accent);font-weight:700;text-decoration:none}
+.assoc-empty{color:var(--text-dim);font-size:0.9rem;padding:1.5rem 0;text-align:center}
+.assoc-chart{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;margin-top:1.2rem}
+.assoc-chart .an-chart-title-main{margin-bottom:0.15rem}
+.assoc-chart .chart-wrap{position:relative;margin-top:0.6rem}
+.assoc-note{font-size:0.78rem;color:var(--text-dim);margin-top:1.2rem;line-height:1.45}
 </style>
 </head>
 <body>
@@ -2722,6 +2737,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
     <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Charts &amp; Analysis</button>
     <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false">Videos</button>
+    <button class="ds-tab" role="tab" data-tab="associates" aria-selected="false">Associates</button>
   </nav>
   <div class="sticky-controls" id="stickyControls">
     <div class="bar-controls" data-for="overview" id="ovBarControls">
@@ -2889,6 +2905,22 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     </div>
   </section>
 
+  <!-- Associates: channels connected to the network, tracked at overview depth.
+       Reads associates.json (scripts/fetch-associates.js). No topics, transcripts,
+       daily views, ad or repost tracking - a card page plus the monthly views chart. -->
+  <section class="ds-tabpanel" data-panel="associates" id="panelAssociates" hidden>
+    <div class="assoc-head">
+      <div>
+        <div class="assoc-title">Associates <span class="assoc-wip">work in progress</span></div>
+        <div class="assoc-sub">Channels in Jeremy's orbit, tracked at overview depth. Same figures as the network overview, without the topic and transcript layers.</div>
+      </div>
+      <div class="assoc-controls">
+        <select id="assocSel" class="bar-sel" aria-label="Channel"></select>
+        <select id="assocMsel" class="bar-sel" aria-label="Month"></select>
+      </div>
+    </div>
+    <div id="assocBody"><div class="assoc-empty">Loading associates…</div></div>
+  </section>
   <section class="ds-tabpanel dv-host" data-panel="videos" id="panelVideos" hidden>
     <div class="insights" id="vInsights">
       <div class="vtabs" id="vtabs" role="tablist" aria-label="Video insights">
@@ -11396,7 +11428,7 @@ function renderWindowList(startDate, endDate) {
 
 
 (function tabShell(){
-  const TABS = ['overview','analysis','videos'];
+  const TABS = ['overview','analysis','videos','associates'];
   const tabs = document.querySelectorAll('.ds-tab');
   const panels = document.querySelectorAll('.ds-tabpanel');
   if (!tabs.length || !panels.length) return;
@@ -11407,6 +11439,9 @@ function renderWindowList(startDate, endDate) {
     document.querySelectorAll('#stickyControls .bar-controls').forEach(c => { c.hidden = c.dataset.for !== tab; });
     if (tab === 'analysis' && typeof window.renderAnalysisChart === 'function') {
       try { if (window.__populateAnChannel) window.__populateAnChannel(); window.renderAnalysisChart(); } catch(e){ console.error('analysis chart', e); }
+    }
+    if (tab === 'associates' && typeof window.renderAssociatesTab === 'function') {
+      try { window.renderAssociatesTab(); } catch(e){ console.error('associates', e); }
     }
     if (tab === 'videos' && typeof window.renderVideosTab === 'function') {
       try { if (window.__populateVidChannel) window.__populateVidChannel(); if (window.__syncVidWindow) window.__syncVidWindow(); window.renderVideosTab(); } catch(e){ console.error('videos tab', e); }
@@ -13819,4 +13854,217 @@ function renderWindowList(startDate, endDate) {
 })();
 </script>
 <button type="button" id="creatorTagsFloatCollapse" class="ctag-float-collapse" hidden aria-label="Collapse video tags">↑ Collapse tags</button>
+
+<script>
+// ---- Associates tab -------------------------------------------------------
+// A framework: any channel in associates.json renders here with the same
+// month summaries and cards as the network overview, plus the monthly views
+// chart from Charts & Analysis. Deliberately shallow - no topics, transcripts,
+// daily views, ad or repost tracking - so adding a channel costs one line in
+// scripts/fetch-associates.js and nothing else.
+(function(){
+  'use strict';
+  const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const $ = id => document.getElementById(id);
+  let DATA = null, loading = false, chanId = null, monthKey = null;
+  const sum = a => a.reduce((x, y) => x + y, 0);
+  const keyOf = iso => iso.slice(0, 7);
+  const shiftKey = (k, n) => { const y = +k.slice(0, 4), m = +k.slice(5, 7) - 1 + n; const d = new Date(Date.UTC(y + Math.floor(m / 12), ((m % 12) + 12) % 12, 1)); return d.toISOString().slice(0, 7); };
+  const label = k => MN[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4);
+  const short = k => MN[+k.slice(5, 7) - 1] + " '" + k.slice(2, 4);
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const thisMonth = new Date().toISOString().slice(0, 7);
+  // Axis formatter (the page's own fmtCompact is scoped inside the analysis code).
+  const fmtCompact = n => n >= 1e9 ? (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + 'B' : n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K' : Math.round(n).toString();
+
+  // Month summaries with the overview's definitions: median like rate per video,
+  // median length, runtime in hours; Shorts kept separate from long-form.
+  function summarise(videos) {
+    const by = {};
+    for (const v of videos) { if (v.unavailable || !v.publishedAt) continue; (by[keyOf(v.publishedAt)] = by[keyOf(v.publishedAt)] || []).push(v); }
+    const out = {};
+    for (const [k, vs] of Object.entries(by)) {
+      const lf = vs.filter(v => !v.isShort), sh = vs.filter(v => v.isShort);
+      const views = lf.map(v => v.views || 0), sviews = sh.map(v => v.views || 0);
+      const lvs = lf.filter(v => v.views > 0 && v.likes != null).map(v => v.likes / v.views);
+      const durs = lf.filter(v => v.durationSec > 0).map(v => v.durationSec);
+      const top = lf.slice().sort((a, b) => (b.views || 0) - (a.views || 0))[0] || null;
+      out[k] = {
+        n: lf.length, tot: sum(views), med: lf.length ? median(views) : null, mean: lf.length ? sum(views) / lf.length : null,
+        lv: lvs.length ? Math.round(median(lvs) * 1000) / 10 : null,
+        comments: sum(lf.map(v => v.comments || 0)),
+        runtime: Math.round(sum(durs) / 360) / 10,
+        avglen: durs.length ? Math.round(median(durs) / 60 * 10) / 10 : null,
+        sn: sh.length, stot: sum(sviews), smed: sh.length ? median(sviews) : null,
+        top,
+      };
+    }
+    return out;
+  }
+  // Subscriber change across a month from the daily channel snapshots (null
+  // until snapshots span the month - the counter YouTube shows is rounded).
+  function subsGained(ch, k) {
+    const snaps = (ch.snapshots || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+    const end = k + '-31', prevEnd = shiftKey(k, -1) + '-31';
+    const at = d => { let last = null; for (const s of snaps) { if (s.date <= d) last = s; else break; } return last; };
+    const a = at(prevEnd), b = at(end);
+    if (!a || !b || a.date === b.date) return null;
+    return b.subscriberCount - a.subscriberCount;
+  }
+
+  function months(sums) {
+    const ks = Object.keys(sums).sort();
+    if (!ks.length) return [];
+    const out = []; for (let k = ks[0]; k <= thisMonth; k = shiftKey(k, 1)) out.push(k);
+    return out;
+  }
+  function lastComplete() { return shiftKey(thisMonth, -1); }
+
+  function card(lbl, num, subtxt, deltas) {
+    return `<div class="hero-card"><div class="hero-label">${lbl}</div><div class="hero-num">${num}</div>${subtxt ? `<div class="hero-sub">${subtxt}</div>` : ''}${deltas || ''}</div>`;
+  }
+  function deltas(cur, p, y, lblMo, lblYr, goodUp, abs) {
+    const a = mini(lblMo, cur, p, goodUp, abs), b = mini(lblYr, cur, y, goodUp, abs);
+    return (a || b) ? `<div class="deltas">${a}${b}</div>` : '';
+  }
+  function stat(num, lbl, cur, p, y, lblMo, lblYr, goodUp, abs) {
+    const d = (cur == null) ? '' : (() => { const a = mini(lblMo, cur, p, goodUp, abs), b = mini(lblYr, cur, y, goodUp, abs); return (a || b) ? `<div class="stat-deltas">${a}${b}</div>` : ''; })();
+    return `<div class="stat"><div class="stat-num">${cur == null && num == null ? '\u2014' : num}</div><div class="stat-lbl">${lbl}</div>${d}</div>`;
+  }
+
+  function render() {
+    const body = $('assocBody');
+    if (!DATA) return;
+    const ch = DATA.channels[chanId]; if (!ch) { body.innerHTML = '<div class="assoc-empty">No channel selected.</div>'; return; }
+    const vids = DATA.videos.filter(v => v.channelId === chanId);
+    const sums = summarise(vids);
+    const ms = months(sums);
+    if (!monthKey || !ms.includes(monthKey)) monthKey = ms.includes(lastComplete()) ? lastComplete() : ms[ms.length - 1];
+    const sel = $('assocMsel');
+    sel.innerHTML = ms.slice().reverse().map(k => `<option value="${k}"${k === monthKey ? ' selected' : ''}>${label(k)}${k === thisMonth ? ' (in progress)' : ''}</option>`).join('');
+    const d = sums[monthKey] || { n: 0, tot: 0, med: null, mean: null, lv: null, comments: 0, runtime: 0, avglen: null, sn: 0, stot: 0, smed: null, top: null };
+    const pk = shiftKey(monthKey, -1), yk = shiftKey(monthKey, -12);
+    const p = sums[pk] || null, y = sums[yk] || null;
+    const lblMo = 'vs ' + MN[+pk.slice(5, 7) - 1], lblYr = 'vs ' + short(yk);
+    const inProg = monthKey === thisMonth;
+    const gained = subsGained(ch, monthKey);
+    const lf = vids.filter(v => !v.isShort && !v.unavailable).length, shn = vids.filter(v => v.isShort && !v.unavailable).length;
+    const gen = DATA._generated ? new Date(DATA._generated) : null;
+
+    let h = `<div class="assoc-meta"><b>${esc(ch.title)}</b><span><a href="${esc(ch.url)}" target="_blank" rel="noopener">${esc(ch.handle)} \u2197</a></span>
+      <span><b>${fmt(ch.subscriberCount)}</b> subscribers</span><span><b>${lf.toLocaleString()}</b> long-form \u00b7 <b>${shn.toLocaleString()}</b> Shorts</span>
+      <span><b>${fmt(ch.channelViews || sum(vids.map(v => v.views || 0)))}</b> lifetime views</span>${gen ? `<span>updated ${gen.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>` : ''}</div>`;
+    h += `<div class="hero-rowlabel">${label(monthKey)}${inProg ? ' \u00b7 in progress' : ''} \u2014 long-form</div><div class="hero cols4">`;
+    h += card('Total views', fmt(d.tot), d.n ? `across ${d.n} upload${d.n === 1 ? '' : 's'}` : 'no long-form uploads', deltas(d.tot, p && p.tot, y && y.tot, lblMo, lblYr, true));
+    h += card('Average views', d.med == null ? '\u2014' : fmt(d.med), d.med == null ? '' : `median per upload \u00b7 mean ${fmt(d.mean)}`, deltas(d.med, p && p.med, y && y.med, lblMo, lblYr, true));
+    h += card('Uploads', String(d.n), 'long-form videos', deltas(d.n, p && p.n, y && y.n, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
+    h += card('Top video', d.top ? fmt(d.top.views || 0) : '\u2014', d.top ? `<a href="https://www.youtube.com/watch?v=${esc(d.top.id)}" target="_blank" rel="noopener">${esc(d.top.title.slice(0, 60))}${d.top.title.length > 60 ? '\u2026' : ''}</a>` : 'no long-form uploads', '');
+    h += `</div>`;
+    h += `<div class="hero-rowlabel">Shorts</div><div class="hero cols4">`;
+    h += card('Total views', fmt(d.stot), d.sn ? `across ${d.sn} Short${d.sn === 1 ? '' : 's'}` : 'no Shorts', deltas(d.stot, p && p.stot, y && y.stot, lblMo, lblYr, true));
+    h += card('Average views', d.smed == null ? '\u2014' : fmt(d.smed), d.smed == null ? '' : 'median per Short', deltas(d.smed, p && p.smed, y && y.smed, lblMo, lblYr, true));
+    h += card('Uploads', String(d.sn), 'Shorts', deltas(d.sn, p && p.sn, y && y.sn, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
+    const share = (d.tot + d.stot) > 0 ? Math.round(d.stot / (d.tot + d.stot) * 100) : null;
+    const pshare = p && (p.tot + p.stot) > 0 ? Math.round(p.stot / (p.tot + p.stot) * 100) : null;
+    const yshare = y && (y.tot + y.stot) > 0 ? Math.round(y.stot / (y.tot + y.stot) * 100) : null;
+    h += card('Share of views', share == null ? '\u2014' : share + '%', share == null ? '' : "of the month's views came from Shorts", deltas(share, pshare, yshare, lblMo, lblYr, null, { unit: ' pts', dec: 0, pct: false }));
+    h += `</div>`;
+    h += `<div class="hero-rowlabel">Other stats</div><div class="stat-row">`;
+    h += stat(d.lv == null ? null : d.lv + '%', 'Like rate (long-form)', d.lv, p && p.lv, y && y.lv, lblMo, lblYr, true, { unit: ' pts', dec: 1, pct: false });
+    h += stat(fmt(d.comments), 'Comments (long-form)', d.comments, p && p.comments, y && y.comments, lblMo, lblYr, true);
+    h += stat(d.runtime + ' h', 'Total runtime (long-form)', d.runtime, p && p.runtime, y && y.runtime, lblMo, lblYr, null, { unit: 'h', dec: 1, pct: false });
+    h += stat(d.avglen == null ? null : d.avglen + ' min', 'Average video length (long-form)', d.avglen, p && p.avglen, y && y.avglen, lblMo, lblYr, null, { unit: 'm', dec: 1, pct: false });
+    h += stat(gained == null ? '\u2014' : (gained >= 0 ? '+' : '') + fmt(gained), 'Subscribers gained', null, null, null, lblMo, lblYr, true);
+    const vps = ch.subscriberCount ? Math.round(d.tot / ch.subscriberCount * 100) / 100 : null;
+    h += stat(vps == null ? null : '\u2248' + vps, 'Views per subscriber (long-form)', vps, null, null, lblMo, lblYr, true);
+    h += `</div>`;
+    h += `<div class="assoc-chart"><div class="an-chart-title-main">Long-form views by month</div><div class="an-chart-title-sub">Total views on each month's long-form uploads, with the previous year for comparison. Views before and after 27 Aug 2026 are not comparable (YouTube's counting change); the dashed line marks the month.</div>
+      <div class="trend-legend" id="assocLegend"></div><div class="chart-wrap"><svg class="trend-chart" id="assocChart" viewBox="0 0 720 280" role="img" aria-label="Long-form views by month"></svg><div class="chart-tooltip" id="assocTip" style="display:none"></div></div></div>`;
+    h += `<div class="assoc-note">Associates are tracked at overview depth only: channel stats and each video's views, likes, comments and length, refreshed with the network data. Nothing here is run through the topic tagger, the transcript archive, daily-view sampling, ad detection or the repost scan. Adding a channel is one line in the associates fetcher.</div>`;
+    body.innerHTML = h;
+    drawChart(sums, ch);
+  }
+
+  function drawChart(sums, ch) {
+    const svg = $('assocChart'), legend = $('assocLegend'), tip = $('assocTip'); if (!svg) return;
+    const end = lastComplete();
+    const keys = []; for (let i = 11; i >= 0; i--) keys.push(shiftKey(end, -i));
+    const cur = keys.map(k => (sums[k] ? sums[k].tot : null));
+    const prev = keys.map(k => (sums[shiftKey(k, -12)] ? sums[shiftKey(k, -12)].tot : null));
+    const ip = sums[thisMonth] ? sums[thisMonth].tot : null, ipPrev = sums[shiftKey(thisMonth, -12)] ? sums[shiftKey(thisMonth, -12)].tot : null;
+    const W = 720, H = 280, P = { top: 20, right: 24, bottom: 48, left: 60 }, innerW = W - P.left - P.right, innerH = H - P.top - P.bottom;
+    const n = keys.length, nTotal = n + (ip != null ? 1 : 0);
+    const all = [...cur, ...prev, ip, ipPrev].filter(v => v != null);
+    if (!all.length) { svg.innerHTML = ''; legend.innerHTML = ''; return; }
+    const rawMax = Math.max(1, ...all) * 1.08;
+    const pow = Math.pow(10, Math.floor(Math.log10(rawMax))), mm = rawMax / pow;
+    const yMax = ([1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(x => mm <= x) || 10) * pow;
+    const xFor = i => P.left + (nTotal === 1 ? innerW / 2 : (i / (nTotal - 1)) * innerW);
+    const yFor = v => P.top + innerH - (v / yMax) * innerH;
+    let grid = '';
+    for (let i = 0; i <= 4; i++) { const v = yMax * i / 4, yy = yFor(v); grid += `<line class="chart-grid-line" x1="${P.left}" y1="${yy}" x2="${W - P.right}" y2="${yy}"/><text class="chart-axis-label y" x="${P.left - 8}" y="${yy + 4}" text-anchor="end">${fmtCompact(v)}</text>`; }
+    let xl = ''; const yearsSeen = new Set();
+    keys.forEach((k, i) => { const yr = k.slice(0, 4); const t = yearsSeen.has(yr) ? MN[+k.slice(5, 7) - 1] : `${MN[+k.slice(5, 7) - 1]} '${yr.slice(2)}`; yearsSeen.add(yr); xl += `<text class="chart-axis-label x" x="${xFor(i)}" y="${H - 26}" text-anchor="middle">${t}</text>`; });
+    if (ip != null) xl += `<text class="chart-axis-label x" x="${xFor(n)}" y="${H - 26}" text-anchor="middle">${MN[+thisMonth.slice(5, 7) - 1]}</text>`;
+    const pt = (arr, i) => `${xFor(i).toFixed(1)},${yFor(arr[i]).toFixed(1)}`;
+    let curPath = '', prevPath = '', dots = '', pdots = '', started = false, pstarted = false;
+    for (let i = 0; i < n; i++) {
+      if (cur[i] != null) { curPath += (started ? 'L' : 'M') + pt(cur, i); dots += `<circle class="chart-dot curr" cx="${xFor(i).toFixed(1)}" cy="${yFor(cur[i]).toFixed(1)}" r="3.5"/>`; started = true; } else started = false;
+      if (prev[i] != null) { prevPath += (pstarted ? 'L' : 'M') + pt(prev, i); pdots += `<circle class="chart-dot prev" cx="${xFor(i).toFixed(1)}" cy="${yFor(prev[i]).toFixed(1)}" r="3"/>`; pstarted = true; } else pstarted = false;
+    }
+    if (ipPrev != null && pstarted) { prevPath += 'L' + `${xFor(n).toFixed(1)},${yFor(ipPrev).toFixed(1)}`; pdots += `<circle class="chart-dot prev" cx="${xFor(n).toFixed(1)}" cy="${yFor(ipPrev).toFixed(1)}" r="3"/>`; }
+    // Year-over-year shading between the two lines, coloured by which is on top.
+    let red = '', green = '';
+    for (let i = 1; i < n; i++) {
+      if (cur[i] == null || cur[i - 1] == null || prev[i] == null || prev[i - 1] == null) continue;
+      const poly = `M${pt(cur, i - 1)} L${pt(cur, i)} L${pt(prev, i)} L${pt(prev, i - 1)} Z`;
+      const deficit = (cur[i] + cur[i - 1]) < (prev[i] + prev[i - 1]);
+      if (deficit) red += poly + ' '; else green += poly + ' ';
+    }
+    let ipMark = '';
+    if (ip != null && cur[n - 1] != null) ipMark = `<path class="chart-line-inprogress" d="M${pt(cur, n - 1)} L${xFor(n).toFixed(1)},${yFor(ip).toFixed(1)}"/><circle class="chart-dot-inprogress" cx="${xFor(n).toFixed(1)}" cy="${yFor(ip).toFixed(1)}" r="4.5"/>`;
+    let labels = '';
+    cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || i === n - 1 || i % 3 === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
+    if (ip != null) labels += `<text class="chart-pt-label inprogress" x="${xFor(n).toFixed(1)}" y="${(yFor(ip) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(ip)}</text>`;
+    const brk = (typeof vccBreakRule === 'function') ? vccBreakRule(keys.map(k => ({ key: k })), xFor, P, innerH) : '';
+    let hits = ''; const wHover = innerW / Math.max(1, nTotal - 1);
+    for (let i = 0; i < nTotal; i++) hits += `<rect class="chart-hit" x="${(xFor(i) - wHover / 2).toFixed(1)}" y="${P.top}" width="${wHover.toFixed(1)}" height="${innerH}" data-i="${i}"/>`;
+    svg.innerHTML = grid + brk + (red ? `<path class="chart-gap deficit" d="${red}"/>` : '') + (green ? `<path class="chart-gap surplus" d="${green}"/>` : '') +
+      (prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : '') + `<path class="chart-line-curr" d="${curPath}"/>` + ipMark + pdots + dots + labels + xl + hits;
+    legend.innerHTML = `<span class="trend-legend-item"><span class="trend-legend-swatch"></span> Long-form views</span><span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>` +
+      (red ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap deficit"></span> YoY deficit</span>' : '') + (green ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap surplus"></span> YoY surplus</span>' : '');
+    const wrap = svg.parentElement;
+    svg.querySelectorAll('.chart-hit').forEach(r => {
+      r.addEventListener('mouseenter', () => {
+        const i = +r.getAttribute('data-i'); const k = i < n ? keys[i] : thisMonth; const v = i < n ? cur[i] : ip; const pv = i < n ? prev[i] : ipPrev; const sm = sums[k];
+        if (v == null) { tip.style.display = 'none'; return; }
+        tip.innerHTML = `<div class="tooltip-month">${label(k)}${i >= n ? ' <span class="tooltip-tag">in progress</span>' : ''}</div><div class="tooltip-row"><strong>${fmt(v)}</strong> long-form views</div><div class="tooltip-row tooltip-detail">across ${sm ? sm.n : 0} upload${sm && sm.n === 1 ? '' : 's'}</div>${pv != null ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(pv)}</div>` : ''}`;
+        tip.style.display = 'block';
+        const b = r.getBoundingClientRect(), wb = wrap.getBoundingClientRect();
+        const half = (tip.offsetWidth || 200) / 2; const x = Math.max(half + 8, Math.min(wb.width - half - 8, b.left - wb.left + b.width / 2));
+        tip.style.left = x + 'px'; tip.style.top = (b.top - wb.top - 8) + 'px';
+      });
+      r.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+    });
+  }
+
+  function populate() {
+    const sel = $('assocSel'); const ids = Object.keys(DATA.channels);
+    sel.innerHTML = ids.map(id => `<option value="${id}">${esc(DATA.channels[id].title)}</option>`).join('');
+    if (!chanId || !DATA.channels[chanId]) chanId = ids[0] || null;
+    sel.value = chanId;
+  }
+  function wire() {
+    $('assocSel').addEventListener('change', e => { chanId = e.target.value; monthKey = null; render(); });
+    $('assocMsel').addEventListener('change', e => { monthKey = e.target.value; render(); });
+  }
+  window.renderAssociatesTab = function () {
+    if (DATA) { render(); return; }
+    if (loading) return; loading = true;
+    fetch('associates.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(j => { DATA = j; populate(); wire(); render(); })
+      .catch(e => { $('assocBody').innerHTML = `<div class="assoc-empty">Associates data is not available yet (${esc(e.message)}).</div>`; loading = false; });
+  };
+})();
+</script>
 </body></html>
