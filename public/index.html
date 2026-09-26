@@ -13889,7 +13889,13 @@ function renderWindowList(startDate, endDate) {
     const by = {};
     for (const v of videos) { if (v.unavailable || !v.publishedAt) continue; (by[keyOf(v.publishedAt)] = by[keyOf(v.publishedAt)] || []).push(v); }
     const out = {};
-    for (const [k, vs] of Object.entries(by)) {
+    for (const [k, vs] of Object.entries(by)) out[k] = summariseList(vs);
+    return out;
+  }
+  // One summary for any list of videos: a month, or a pooled period preset -
+  // the same computation either way, as the Overview does for its presets.
+  function summariseList(vs) {
+    {
       // Three formats. Long-form here means regular uploads; stream recordings
       // (hours long, flagged isLive) get their own row so they cannot distort
       // median length, runtime or average views. Shorts as on the Overview.
@@ -13910,7 +13916,7 @@ function renderWindowList(startDate, endDate) {
       const medCr = crs.length ? median(crs) : 0;
       const debC = ranked.filter(v => (v.views || 0) >= 3000 && v.comments && dayOld(v)).map(v => [v.comments / v.views, v]).sort((a, b) => b[0] - a[0]);
       const debate = debC.length ? { v: debC[0][1], crate: Math.round(debC[0][0] * 1000) / 10, mult: medCr > 0 ? Math.round(debC[0][0] / medCr * 10) / 10 : null } : null;
-      out[k] = {
+      return {
         n: lf.length, tot: sum(views), med: lf.length ? median(views) : null, mean: lf.length ? sum(views) / lf.length : null,
         lv: lvs.length ? Math.round(median(lvs) * 1000) / 10 : null,
         comments: sum(lf.map(v => v.comments || 0)),
@@ -13921,13 +13927,25 @@ function renderWindowList(startDate, endDate) {
         top, worst, worstVsMed: (worst && medAll > 0) ? Math.round((worst.views || 0) / medAll * 100) : null, debate,
       };
     }
-    return out;
+  }
+  // Period presets, same ids and labels as the Overview's dropdown.
+  const PRESETS = { ytd: 'Year to date', '12m': 'Last 12 months', '24m': 'Last 24 months', 'since-peak': 'Since peak', all: 'All time' };
+  function presetMonths(preset, ms, sums) {
+    if (!ms.length) return [];
+    let cutoff = null;
+    if (preset === 'ytd') cutoff = thisMonth.slice(0, 4) + '-01';
+    else if (preset === '12m') cutoff = shiftKey(thisMonth, -11);
+    else if (preset === '24m') cutoff = shiftKey(thisMonth, -23);
+    else if (preset === 'all') cutoff = '0000-00';
+    else if (preset === 'since-peak') { let pk = null, pv = -1; for (const k of ms) { const v = sums[k] ? sums[k].tot + (sums[k].ltot || 0) : 0; if (v > pv) { pv = v; pk = k; } } cutoff = pk || ms[0]; }
+    else return null;
+    return ms.filter(k => k >= cutoff);
   }
   // Subscriber change across a month from the daily channel snapshots (null
   // until snapshots span the month - the counter YouTube shows is rounded).
-  function subsGained(ch, k) {
+  function subsGained(ch, k, firstK) {
     const snaps = (ch.snapshots || []).slice().sort((a, b) => a.date.localeCompare(b.date));
-    const end = k + '-31', prevEnd = shiftKey(k, -1) + '-31';
+    const end = k + '-31', prevEnd = shiftKey(firstK || k, -1) + '-31';
     const at = d => { let last = null; for (const s of snaps) { if (s.date <= d) last = s; else break; } return last; };
     const a = at(prevEnd), b = at(end);
     if (!a || !b || a.date === b.date) return null;
@@ -13961,15 +13979,34 @@ function renderWindowList(startDate, endDate) {
     const vids = DATA.videos.filter(v => v.channelId === chanId);
     const sums = summarise(vids);
     const ms = months(sums);
-    if (!monthKey || !ms.includes(monthKey)) monthKey = ms.includes(lastComplete()) ? lastComplete() : ms[ms.length - 1];
+    if (!monthKey || (!ms.includes(monthKey) && !PRESETS[monthKey])) monthKey = ms.includes(lastComplete()) ? lastComplete() : ms[ms.length - 1];
+    // Dropdown as on the Overview: presets, a rule, then the months newest-first.
     const sel = $('assocMsel');
-    sel.innerHTML = ms.slice().reverse().map(k => `<option value="${k}"${k === monthKey ? ' selected' : ''}>${label(k)}${k === thisMonth ? ' (in progress)' : ''}</option>`).join('');
-    const d = sums[monthKey] || { n: 0, tot: 0, med: null, mean: null, lv: null, comments: 0, runtime: 0, avglen: null, sn: 0, stot: 0, smed: null, ln: 0, ltot: 0, lmed: null, lhours: 0, top: null, worst: null, worstVsMed: null, debate: null };
-    const pk = shiftKey(monthKey, -1), yk = shiftKey(monthKey, -12);
-    const p = sums[pk] || null, y = sums[yk] || null;
-    const lblMo = 'vs ' + MN[+pk.slice(5, 7) - 1], lblYr = 'vs ' + short(yk);
-    const inProg = monthKey === thisMonth;
-    const gained = subsGained(ch, monthKey);
+    const mName = k => (typeof monthName === 'function') ? monthName(k) : label(k);
+    sel.innerHTML = Object.entries(PRESETS).map(([v, l]) => `<option value="${v}"${v === monthKey ? ' selected' : ''}>${l === 'Year to date' ? 'YTD' : l}</option>`).join('')
+      + (ms.length ? `<option disabled>\u2500\u2500\u2500\u2500\u2500\u2500</option>` : '')
+      + ms.slice().reverse().map(k => `<option value="${k}"${k === monthKey ? ' selected' : ''}>${mName(k)}</option>`).join('');
+    const EMPTY = { n: 0, tot: 0, med: null, mean: null, lv: null, comments: 0, runtime: 0, avglen: null, sn: 0, stot: 0, smed: null, ln: 0, ltot: 0, lmed: null, lhours: 0, top: null, worst: null, worstVsMed: null, debate: null };
+    const isAgg = !!PRESETS[monthKey];
+    let d, p = null, y = null, lblMo = '', lblYr = '', inProg = false, gained = null, headLabel;
+    if (isAgg) {
+      // A preset pools the range's videos through the same computation; there
+      // is no previous-period comparator, as on the Overview.
+      const range = presetMonths(monthKey, ms, sums) || [];
+      const inRange = new Set(range);
+      d = range.length ? summariseList(vids.filter(v => !v.unavailable && v.publishedAt && inRange.has(keyOf(v.publishedAt)))) : EMPTY;
+      const first = range[0], last = range[range.length - 1];
+      headLabel = PRESETS[monthKey] + (range.length ? ` \u00b7 ${short(first)} \u2013 ${short(last)}` : '');
+      gained = range.length ? subsGained(ch, last, first) : null;
+    } else {
+      d = sums[monthKey] || EMPTY;
+      const pk = shiftKey(monthKey, -1), yk = shiftKey(monthKey, -12);
+      p = sums[pk] || null; y = sums[yk] || null;
+      lblMo = 'vs ' + MN[+pk.slice(5, 7) - 1]; lblYr = 'vs ' + short(yk);
+      inProg = monthKey === thisMonth;
+      gained = subsGained(ch, monthKey);
+      headLabel = label(monthKey) + (inProg ? ' \u00b7 in progress' : '');
+    }
     const lf = vids.filter(v => !v.isShort && !v.isLive && !v.unavailable).length, shn = vids.filter(v => v.isShort && !v.unavailable).length, lvn = vids.filter(v => v.isLive && !v.unavailable).length;
     const hasLive = vids.some(v => v.isLive);
     const gen = DATA._generated ? new Date(DATA._generated) : null;
@@ -13977,7 +14014,7 @@ function renderWindowList(startDate, endDate) {
     let h = `<div class="assoc-meta"><b>${esc(ch.title)}</b><span><a href="${esc(ch.url)}" target="_blank" rel="noopener">${esc(ch.handle)} \u2197</a></span>
       <span><b>${fmt(ch.subscriberCount)}</b> subscribers</span><span><b>${lf.toLocaleString()}</b> uploads${hasLive ? ` \u00b7 <b>${lvn.toLocaleString()}</b> live streams` : ''} \u00b7 <b>${shn.toLocaleString()}</b> Shorts</span>
       <span><b>${fmt(ch.channelViews || sum(vids.map(v => v.views || 0)))}</b> lifetime views</span>${gen ? `<span>updated ${gen.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>` : ''}</div>`;
-    h += `<div class="hero-rowlabel">${label(monthKey)}${inProg ? ' \u00b7 in progress' : ''} \u2014 ${hasLive ? 'long-form uploads' : 'long-form'}</div><div class="hero cols4">`;
+    h += `<div class="hero-rowlabel">${headLabel} \u2014 ${hasLive ? 'long-form uploads' : 'long-form'}</div><div class="hero cols4">`;
     h += card('Total views', fmt(d.tot), d.n ? `across ${d.n} upload${d.n === 1 ? '' : 's'}` : 'no long-form uploads', deltas(d.tot, p && p.tot, y && y.tot, lblMo, lblYr, true));
     h += card('Average views', d.med == null ? '\u2014' : fmt(d.med), d.med == null ? '' : `median per upload \u00b7 mean ${fmt(d.mean)}`, deltas(d.med, p && p.med, y && y.med, lblMo, lblYr, true));
     h += card('Uploads', String(d.n), 'long-form videos', deltas(d.n, p && p.n, y && y.n, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
@@ -14023,12 +14060,13 @@ function renderWindowList(startDate, endDate) {
     const hlCard = (cls, heading, v, note) => `<div class="hl${cls ? ' ' + cls : ''}"><div><div class="hl-labelrow"><div class="hl-label">${heading}</div><span class="assoc-kind">${kind(v)}</span></div><a class="hl-title" href="${ytl(v.id)}" target="_blank" rel="noopener">${esc(v.title)}${typeof LINK_ICON !== 'undefined' ? LINK_ICON : ''}</a><div class="hl-note">${note}</div></div>${hlStats(v)}</div>`;
     if (d.top || d.debate || d.worst) {
       h += `<div class="hero-rowlabel">Standouts</div><div class="highlights">`;
-      if (d.top) h += hlCard('', 'Best performer', d.top, "The month's most-watched " + kind(d.top) + '.');
-      if (d.worst && !(d.top && d.worst.id === d.top.id)) h += hlCard('worst', 'Worst performer', d.worst, "The month's least-watched " + kind(d.worst) + (d.worstVsMed != null ? ` \u2014 ${d.worstVsMed}% of the month's median.` : '.'));
+      const per = isAgg ? "The period's" : "The month's";
+      if (d.top) h += hlCard('', 'Best performer', d.top, per + ' most-watched ' + kind(d.top) + '.');
+      if (d.worst && !(d.top && d.worst.id === d.top.id)) h += hlCard('worst', 'Worst performer', d.worst, per + ' least-watched ' + kind(d.worst) + (d.worstVsMed != null ? ` \u2014 ${d.worstVsMed}% of the ${isAgg ? "period's" : "month's"} median.` : '.'));
       if (d.debate) h += hlCard('debate', 'Most contentious', d.debate.v, `${d.debate.crate}% of viewers commented${d.debate.mult ? ` \u2014 ${d.debate.mult}\u00d7 usual rate` : ''}.`);
       h += `</div>`;
     } else if (!d.n && !d.ln) {
-      h += `<div class="hero-rowlabel">Standouts</div><div class="highlights"><div class="hl hl-nodata"><div class="hl-nodata-msg">No uploads or streams this month, so there is no best, worst or most-contentious video to rank.</div></div></div>`;
+      h += `<div class="hero-rowlabel">Standouts</div><div class="highlights"><div class="hl hl-nodata"><div class="hl-nodata-msg">No uploads or streams in this period, so there is no best, worst or most-contentious video to rank.</div></div></div>`;
     }
     h += `<div class="assoc-chart"><div class="assoc-chart-head"><div><div class="an-chart-title-main">Long-form views by month</div><div class="an-chart-title-sub">Total views on each month's ${hasLive ? (chartFmt === 'live' ? 'live streams' : chartFmt === 'uploads' ? 'long-form uploads' : 'long-form uploads and live streams') : 'long-form uploads'}, with the previous year for comparison. Views before and after 27 Aug 2026 are not comparable (YouTube's counting change); the dashed line marks the month.</div></div>
       ${hasLive ? `<div class="chart-fmt-seg" role="group" aria-label="Format"><button type="button" class="chart-ctrl-btn seg" data-afmt="uploads" aria-pressed="${chartFmt === 'uploads'}">Uploads</button><button type="button" class="chart-ctrl-btn seg" data-afmt="live" aria-pressed="${chartFmt === 'live'}">Live</button><button type="button" class="chart-ctrl-btn seg" data-afmt="both" aria-pressed="${chartFmt === 'both'}">Both</button></div>` : ''}</div>
