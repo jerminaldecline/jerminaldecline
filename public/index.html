@@ -14140,7 +14140,7 @@ function renderWindowList(startDate, endDate) {
     if (ip != null && cur[n - 1] != null) ipMark = `<path class="chart-line-inprogress" d="M${pt(cur, n - 1)} L${xFor(n).toFixed(1)},${yFor(ip).toFixed(1)}"/><circle class="chart-dot-inprogress" cx="${xFor(n).toFixed(1)}" cy="${yFor(ip).toFixed(1)}" r="4.5"/>`;
     let labels = '';
     const lstride = n <= 13 ? 3 : Math.max(3, Math.ceil(n / 8));
-    cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || i === n - 1 || i % lstride === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
+    cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || (i === n - 1 && ip == null) || i % lstride === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
     if (ip != null) labels += `<text class="chart-pt-label inprogress" x="${xFor(n).toFixed(1)}" y="${(yFor(ip) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(ip)}</text>`;
     const brk = (typeof vccBreakRule === 'function') ? vccBreakRule(keys.map(k => ({ key: k })), xFor, P, innerH) : '';
     let hits = ''; const wHover = innerW / Math.max(1, nTotal - 1);
