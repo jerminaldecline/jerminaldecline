@@ -192,10 +192,25 @@ jobs:
           mkdir -p /tmp/snapshots/debut
           node scripts/sample-debut.js --out /tmp/snapshots/debut || echo "::warning::debut sample failed — snapshot unaffected"
 
+          # Associates (public/associates.json, channels in Jeremy's orbit) get the
+          # same two readings into their OWN folders: a twice-daily full dump and
+          # the hourly debut sample. Separate folders because the network
+          # builders glob snapshots/ and debut/ and must never meet a second file
+          # per half. Nothing reads these yet - they accumulate the history a
+          # Daily views panel on the Associates tab will need (from 2026-09-26).
+          if [ -f public/associates.json ]; then
+            mkdir -p /tmp/snapshots/associates /tmp/snapshots/debut-associates
+            if [ ! -f "/tmp/snapshots/associates/${SNAPSHOT_FILE}" ]; then
+              gzip -c public/associates.json > "/tmp/snapshots/associates/${SNAPSHOT_FILE}"
+              echo "Wrote associates snapshot ${SNAPSHOT_FILE}."
+            fi
+            node scripts/sample-debut.js --data public/associates.json --out /tmp/snapshots/debut-associates || echo "::warning::associates debut sample failed — snapshot unaffected"
+          fi
+
           cd /tmp/snapshots
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A snapshots debut
+          git add -A snapshots debut associates debut-associates
           if git diff --staged --quiet; then
             echo "Nothing new to commit."
             exit 0
