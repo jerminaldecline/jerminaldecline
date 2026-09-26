@@ -13995,9 +13995,12 @@ function renderWindowList(startDate, endDate) {
     h += card('Total views', fmt(d.stot), d.sn ? `across ${d.sn} Short${d.sn === 1 ? '' : 's'}` : 'no Shorts', deltas(d.stot, p && p.stot, y && y.stot, lblMo, lblYr, true));
     h += card('Average views', d.smed == null ? '\u2014' : fmt(d.smed), d.smed == null ? '' : 'median per Short', deltas(d.smed, p && p.smed, y && y.smed, lblMo, lblYr, true));
     h += card('Uploads', String(d.sn), 'Shorts', deltas(d.sn, p && p.sn, y && y.sn, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
-    const share = (d.tot + d.stot) > 0 ? Math.round(d.stot / (d.tot + d.stot) * 100) : null;
-    const pshare = p && (p.tot + p.stot) > 0 ? Math.round(p.stot / (p.tot + p.stot) * 100) : null;
-    const yshare = y && (y.tot + y.stot) > 0 ? Math.round(y.stot / (y.tot + y.stot) * 100) : null;
+    // Share of ALL the month's views (uploads + streams + Shorts), so this and
+    // the live-stream share in Other stats describe the same pie.
+    const allOf = x => x ? x.tot + x.stot + (x.ltot || 0) : 0;
+    const share = allOf(d) > 0 ? Math.round(d.stot / allOf(d) * 100) : null;
+    const pshare = p && allOf(p) > 0 ? Math.round(p.stot / allOf(p) * 100) : null;
+    const yshare = y && allOf(y) > 0 ? Math.round(y.stot / allOf(y) * 100) : null;
     h += card('Share of views', share == null ? '\u2014' : share + '%', share == null ? '' : "of the month's views came from Shorts", deltas(share, pshare, yshare, lblMo, lblYr, null, { unit: ' pts', dec: 0, pct: false }));
     h += `</div>`;
     h += `<div class="hero-rowlabel">Other stats</div><div class="stat-row">`;
@@ -14008,7 +14011,7 @@ function renderWindowList(startDate, endDate) {
     h += stat(gained == null ? '\u2014' : (gained >= 0 ? '+' : '') + fmt(gained), 'Subscribers gained', null, null, null, lblMo, lblYr, true);
     const vps = ch.subscriberCount ? Math.round(d.tot / ch.subscriberCount * 100) / 100 : null;
     h += stat(vps == null ? null : '\u2248' + vps, 'Views per subscriber (' + upl + ')', vps, null, null, lblMo, lblYr, true);
-    const mshare = (d.tot + d.stot + d.ltot) > 0 && hasLive ? Math.round(d.ltot / (d.tot + d.stot + d.ltot) * 100) : null;
+    const mshare = allOf(d) > 0 && hasLive ? Math.round(d.ltot / allOf(d) * 100) : null;
     h += stat(mshare == null ? null : mshare + '%', "Live streams' share of the month's views", mshare, null, null, lblMo, lblYr, null);
     h += `</div>`;
     // Highlights: best, worst and most contentious, as on the Overview, ranked
