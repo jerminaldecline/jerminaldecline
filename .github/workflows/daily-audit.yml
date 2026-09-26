@@ -39,6 +39,14 @@ jobs:
       # by reading each watch page's playabilityStatus. Best-effort: YouTube
       # frequently bot-walls datacenter IPs, so this must never fail the build —
       # on a blocked run the existing removed-reasons.json simply persists.
+      # Associates: channels in Jeremy's orbit tracked at overview depth (see the
+      # script header). Best-effort - a hiccup here must never fail the data run.
+      - name: Fetch associates (full refresh)
+        continue-on-error: true
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/fetch-associates.js --audit
+
       - name: Resolve removed-video reasons (best-effort)
         continue-on-error: true
         run: node scripts/resolve-removed-reasons.js
@@ -50,7 +58,7 @@ jobs:
           # Audit also refreshes descriptions and titles on older videos, so
           # stage those side-files alongside data.json (the title-change ledger
           # is where re-titles of aged-out videos get recorded).
-          git add public/data.json public/descriptions.json public/title-history.json public/removed-reasons.json
+          git add public/data.json public/descriptions.json public/title-history.json public/removed-reasons.json public/associates.json
           if git diff --staged --quiet; then
             echo "Audit found no changes."
             exit 0
