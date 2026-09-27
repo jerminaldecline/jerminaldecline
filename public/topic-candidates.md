@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-26
+# Topic candidates — 2026-09-27
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 129 baseline videos
+Pool: 16 recent videos, 126 baseline videos
 
 ### Cluster 1: `interview`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 1/129 videos (1%)
-- **Spike ratio:** 17.3x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 15.9x
 - **Related terms:** `interview`
 - **Sample recent videos:**
   - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
@@ -24,11 +24,13 @@ Pool: 15 recent videos, 129 baseline videos
 
 ### Cluster 2: `stock sign`
 
-- **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 30/129 videos (23%)
+- **Recent saturation:** 13/16 videos (**81%**)
+- **Baseline saturation:** 30/126 videos (24%)
 - **Spike ratio:** 3.4x
 - **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
 - **Sample recent videos:**
+  - 2026-09-26 — _Karen Liberal DESTROYED At Airport By Nick Shirley_  
+    Nick Shirley Confronts Airport Critic Who Refuses To Explain Himself
   - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
     Sunny Hostin Reveals She Was Holdout Juror In Notorious Murder Trial
   - 2026-09-23 — _Brutal News For Men_  
@@ -37,14 +39,12 @@ Pool: 15 recent videos, 129 baseline videos
     Bill Burr Hits ROCK BOTTOM Defending Luigi Mangione Narrative
   - 2026-09-23 — _Donald Trump Now OWNS Hollywood & The Meltdown Is Amazing_  
     Trump Ally Takes Over CNN As Woke Hollywood MELTS DOWN
-  - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
-    Lindsay Clancy Supporter FLIPS After Patrick’s Devastating Interview
 
 ### Cluster 3: `reveals`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 4/129 videos (3%)
-- **Spike ratio:** 5.8x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 4/126 videos (3%)
+- **Spike ratio:** 5.3x
 - **Related terms:** `reveals`
 - **Sample recent videos:**
   - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
@@ -56,9 +56,9 @@ Pool: 15 recent videos, 129 baseline videos
 
 ### Cluster 4: `she`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 6/129 videos (5%)
-- **Spike ratio:** 4.0x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 6/126 videos (5%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `she`
 - **Sample recent videos:**
   - 2026-09-25 — _She BAKED Her Baby & Walked!_  
@@ -70,9 +70,9 @@ Pool: 15 recent videos, 129 baseline videos
 
 ### Cluster 5: `trump`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 8/129 videos (6%)
-- **Spike ratio:** 3.1x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 7/126 videos (6%)
+- **Spike ratio:** 3.2x
 - **Related terms:** `trump`
 - **Sample recent videos:**
   - 2026-09-23 — _Donald Trump Now OWNS Hollywood & The Meltdown Is Amazing_  
@@ -84,13 +84,13 @@ Pool: 15 recent videos, 129 baseline videos
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 83 baseline videos
+Pool: 10 recent videos, 80 baseline videos
 
 ### Cluster 1: `stock sign`
 
 - **Recent saturation:** 8/10 videos (**80%**)
-- **Baseline saturation:** 21/83 videos (25%)
-- **Spike ratio:** 3.1x
+- **Baseline saturation:** 21/80 videos (26%)
+- **Spike ratio:** 3.0x
 - **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
 - **Sample recent videos:**
   - 2026-09-23 — _Candace Owens EXPOSED Again!_  

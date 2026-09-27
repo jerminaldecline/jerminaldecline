@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-26T09:27:09.110Z",
+  "lastUpdated": "2026-09-27T10:07:12.274Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -19,12 +19,12 @@
         "back stock"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8,
-        "baselineSaturation": 0.2346,
-        "spikeRatio": 3.41,
-        "recentVideoCount": 12,
+        "recentSaturation": 0.8125,
+        "baselineSaturation": 0.2402,
+        "spikeRatio": 3.38,
+        "recentVideoCount": 13,
         "baselineVideoCount": 30,
-        "detectedAt": "2026-09-26T09:27:09.110Z"
+        "detectedAt": "2026-09-27T10:07:12.274Z"
       }
     },
     {
@@ -46,11 +46,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8,
-        "baselineSaturation": 0.256,
-        "spikeRatio": 3.13,
+        "baselineSaturation": 0.2654,
+        "spikeRatio": 3.01,
         "recentVideoCount": 8,
         "baselineVideoCount": 21,
-        "detectedAt": "2026-09-26T09:27:09.110Z"
+        "detectedAt": "2026-09-27T10:07:12.274Z"
       }
     }
   ]
