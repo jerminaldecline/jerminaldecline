@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-27
+# Topic candidates — 2026-09-28
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 16 recent videos, 126 baseline videos
+Pool: 16 recent videos, 123 baseline videos
 
 ### Cluster 1: `interview`
 
 - **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 1/126 videos (1%)
-- **Spike ratio:** 15.9x
+- **Baseline saturation:** 1/123 videos (1%)
+- **Spike ratio:** 15.5x
 - **Related terms:** `interview`
 - **Sample recent videos:**
   - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
@@ -25,8 +25,8 @@ Pool: 16 recent videos, 126 baseline videos
 ### Cluster 2: `stock sign`
 
 - **Recent saturation:** 13/16 videos (**81%**)
-- **Baseline saturation:** 30/126 videos (24%)
-- **Spike ratio:** 3.4x
+- **Baseline saturation:** 30/123 videos (24%)
+- **Spike ratio:** 3.3x
 - **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
 - **Sample recent videos:**
   - 2026-09-26 — _Karen Liberal DESTROYED At Airport By Nick Shirley_  
@@ -43,8 +43,8 @@ Pool: 16 recent videos, 126 baseline videos
 ### Cluster 3: `reveals`
 
 - **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 4/126 videos (3%)
-- **Spike ratio:** 5.3x
+- **Baseline saturation:** 4/123 videos (3%)
+- **Spike ratio:** 5.2x
 - **Related terms:** `reveals`
 - **Sample recent videos:**
   - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
@@ -57,8 +57,8 @@ Pool: 16 recent videos, 126 baseline videos
 ### Cluster 4: `she`
 
 - **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 6/126 videos (5%)
-- **Spike ratio:** 3.7x
+- **Baseline saturation:** 6/123 videos (5%)
+- **Spike ratio:** 3.6x
 - **Related terms:** `she`
 - **Sample recent videos:**
   - 2026-09-25 — _She BAKED Her Baby & Walked!_  
@@ -71,8 +71,8 @@ Pool: 16 recent videos, 126 baseline videos
 ### Cluster 5: `trump`
 
 - **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 7/126 videos (6%)
-- **Spike ratio:** 3.2x
+- **Baseline saturation:** 7/123 videos (6%)
+- **Spike ratio:** 3.1x
 - **Related terms:** `trump`
 - **Sample recent videos:**
   - 2026-09-23 — _Donald Trump Now OWNS Hollywood & The Meltdown Is Amazing_  
@@ -84,14 +84,14 @@ Pool: 16 recent videos, 126 baseline videos
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 80 baseline videos
+Pool: 10 recent videos, 77 baseline videos
 
 ### Cluster 1: `stock sign`
 
 - **Recent saturation:** 8/10 videos (**80%**)
-- **Baseline saturation:** 21/80 videos (26%)
+- **Baseline saturation:** 20/77 videos (26%)
 - **Spike ratio:** 3.0x
-- **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
+- **Related terms:** `limited`, `edition`, `jack`, `stock`, `lantern`, `stock sign`, `coffee limited`, `limited edition`
 - **Sample recent videos:**
   - 2026-09-23 — _Candace Owens EXPOSED Again!_  
     Candace Owens’ Lies EXPOSED Again By Andrew Wilson
