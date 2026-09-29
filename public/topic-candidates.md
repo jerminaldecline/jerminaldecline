@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-28
+# Topic candidates — 2026-09-29
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -8,53 +8,39 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 Pool: 16 recent videos, 123 baseline videos
 
-### Cluster 1: `interview`
+### Cluster 1: `join`
 
 - **Recent saturation:** 3/16 videos (**19%**)
 - **Baseline saturation:** 1/123 videos (1%)
 - **Spike ratio:** 15.5x
-- **Related terms:** `interview`
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
-  - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
-    Lindsay Clancy Supporter FLIPS After Patrick’s Devastating Interview
-  - 2026-09-22 — _Lindsay Clancy KNEW What She Did & Was Proud_  
-    Stunning Lindsay Clancy Revelation Ignites New Insanity Debate
-  - 2026-09-21 — _Lindsay Clancy DESTROYED In Brutal New Interview_  
-    Lindsay Clancy DESTROYED By Husband’s Heartbreaking Interview
+  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
+    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
+  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
+    McDonalds PANICS After Customers Completely Abandon Them
+  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
+    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
 
 ### Cluster 2: `stock sign`
 
 - **Recent saturation:** 13/16 videos (**81%**)
-- **Baseline saturation:** 30/123 videos (24%)
-- **Spike ratio:** 3.3x
+- **Baseline saturation:** 33/123 videos (27%)
+- **Spike ratio:** 3.0x
 - **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
 - **Sample recent videos:**
+  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
+    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
+  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
+    McDonalds PANICS After Customers Completely Abandon Them
+  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
+    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
   - 2026-09-26 — _Karen Liberal DESTROYED At Airport By Nick Shirley_  
     Nick Shirley Confronts Airport Critic Who Refuses To Explain Himself
   - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
     Sunny Hostin Reveals She Was Holdout Juror In Notorious Murder Trial
-  - 2026-09-23 — _Brutal News For Men_  
-    Men Are SCREWED As Women Take Nearly Every New US Job
-  - 2026-09-23 — _Bill Burr Just DESTROYED His Career_  
-    Bill Burr Hits ROCK BOTTOM Defending Luigi Mangione Narrative
-  - 2026-09-23 — _Donald Trump Now OWNS Hollywood & The Meltdown Is Amazing_  
-    Trump Ally Takes Over CNN As Woke Hollywood MELTS DOWN
 
-### Cluster 3: `reveals`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 4/123 videos (3%)
-- **Spike ratio:** 5.2x
-- **Related terms:** `reveals`
-- **Sample recent videos:**
-  - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
-    Sunny Hostin Reveals She Was Holdout Juror In Notorious Murder Trial
-  - 2026-09-22 — _THEY NEVER LEARN_  
-    Race Grifters DESTROYED As Grand Jury Reveals The Truth
-  - 2026-09-21 — _Lone Juror UNDER INVESTIGATION By Lindsay Clancy Lawyer_  
-    Lone Clancy Holdout Reveals What REALLY Happened In Deliberations
-
-### Cluster 4: `she`
+### Cluster 3: `she`
 
 - **Recent saturation:** 3/16 videos (**19%**)
 - **Baseline saturation:** 6/123 videos (5%)
@@ -68,35 +54,35 @@ Pool: 16 recent videos, 123 baseline videos
   - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
     Lindsay Clancy Supporter FLIPS After Patrick’s Devastating Interview
 
-### Cluster 5: `trump`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 7/123 videos (6%)
-- **Spike ratio:** 3.1x
-- **Related terms:** `trump`
-- **Sample recent videos:**
-  - 2026-09-23 — _Donald Trump Now OWNS Hollywood & The Meltdown Is Amazing_  
-    Trump Ally Takes Over CNN As Woke Hollywood MELTS DOWN
-  - 2026-09-22 — _THIS IS EPIC_  
-    Trump Launches His Own 24/7 TV Channel After Media Blackout
-  - 2026-09-21 — _Donald Trump GOES NUCLEAR & Full Scale Meltdown Ensues_  
-    Trump Goes NUCLEAR As Every Major TV Network Cuts Coverage
-
 ## @JeremyHambly
 
-Pool: 10 recent videos, 77 baseline videos
+Pool: 10 recent videos, 79 baseline videos
 
 ### Cluster 1: `stock sign`
 
 - **Recent saturation:** 8/10 videos (**80%**)
-- **Baseline saturation:** 20/77 videos (26%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `limited`, `edition`, `jack`, `stock`, `lantern`, `stock sign`, `coffee limited`, `limited edition`
+- **Baseline saturation:** 18/79 videos (23%)
+- **Spike ratio:** 3.5x
+- **Related terms:** `join`, `server`, `stock sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
+  - 2026-09-28 — _They Won't Stop!_  
+    Another Trans Killer Gets 50 YEARS After Horrific Double Murder
+  - 2026-09-28 — _Asmongold BUSTS Blizzard_  
+    Asmongold EXPOSES Blizzard Dev After WoW Ban Disaster
+  - 2026-09-28 — _Candace Owens In Crisis Mode!_  
+    Candace Owens’ Own Allies EXPOSED In Brutal Weekend Collapse
   - 2026-09-23 — _Candace Owens EXPOSED Again!_  
     Candace Owens’ Lies EXPOSED Again By Andrew Wilson
   - 2026-09-23 — _Woke MELTDOWN Over Halo Studio SHUT DOWN_  
     Halo Is DEAD! Activision Takes Over After Brutal Xbox Layoffs
+
+### Cluster 2: `lantern`
+
+- **Recent saturation:** 3/10 videos (**30%**)
+- **Baseline saturation:** 2/79 videos (3%)
+- **Spike ratio:** 9.6x
+- **Related terms:** `lantern`, `jack lantern`, `lantern back`
+- **Sample recent videos:**
   - 2026-09-22 — _Candace Owens BUSTED In OBVIOUS Lie_  
     Candace Owens Accused Of A MAJOR Lie Over TPUSA School Event
   - 2026-09-22 — _Carrot Top DARK TURN In The Case_  

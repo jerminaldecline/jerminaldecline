@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-28T11:07:23.788Z",
+  "lastUpdated": "2026-09-29T10:49:33.070Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -20,37 +20,48 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8125,
-        "baselineSaturation": 0.246,
-        "spikeRatio": 3.3,
+        "baselineSaturation": 0.2702,
+        "spikeRatio": 3.01,
         "recentVideoCount": 13,
-        "baselineVideoCount": 30,
-        "detectedAt": "2026-09-28T11:07:23.788Z"
+        "baselineVideoCount": 33,
+        "detectedAt": "2026-09-29T10:49:33.070Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "stock sign",
       "keywords": [
-        "lantern",
-        "jack lantern",
-        "lantern back",
-        "stock sign",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock"
+        "join",
+        "server",
+        "join our",
+        "our server",
+        "server our",
+        "stock sign"
       ],
       "detectorMeta": {
         "recentSaturation": 0.8,
-        "baselineSaturation": 0.2628,
-        "spikeRatio": 3.04,
+        "baselineSaturation": 0.2313,
+        "spikeRatio": 3.46,
         "recentVideoCount": 8,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-09-28T11:07:23.788Z"
+        "baselineVideoCount": 18,
+        "detectedAt": "2026-09-29T10:49:33.070Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "lantern",
+      "keywords": [
+        "lantern",
+        "jack lantern",
+        "lantern back"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.0313,
+        "spikeRatio": 9.6,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-09-29T10:49:33.070Z"
       }
     }
   ]
