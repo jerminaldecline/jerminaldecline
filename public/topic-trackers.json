@@ -1,34 +1,47 @@
 {
-  "lastUpdated": "2026-09-29T10:49:33.070Z",
+  "lastUpdated": "2026-09-30T10:37:26.491Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "stock sign",
+      "channelHandle": "@JeremyHambly",
+      "termId": "o'lantern",
       "keywords": [
-        "lantern",
-        "jack lantern",
-        "lantern back",
-        "stock sign",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock"
+        "brutal",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back",
+        "stock sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8125,
-        "baselineSaturation": 0.2702,
-        "spikeRatio": 3.01,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 33,
-        "detectedAt": "2026-09-29T10:49:33.070Z"
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.3272,
+        "spikeRatio": 2.45,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-09-30T10:37:26.491Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
+      "termId": "join",
+      "keywords": [
+        "join",
+        "server",
+        "join our",
+        "our server",
+        "server our",
+        "tourney candace"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.6,
+        "baselineSaturation": 0.1049,
+        "spikeRatio": 5.72,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-09-30T10:37:26.491Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
       "termId": "stock sign",
       "keywords": [
         "join",
@@ -36,32 +49,18 @@
         "join our",
         "our server",
         "server our",
-        "stock sign"
+        "stock sign",
+        "o'lantern",
+        "jack o'lantern",
+        "o'lantern back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8,
-        "baselineSaturation": 0.2313,
-        "spikeRatio": 3.46,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 18,
-        "detectedAt": "2026-09-29T10:49:33.070Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "lantern",
-      "keywords": [
-        "lantern",
-        "jack lantern",
-        "lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3,
-        "baselineSaturation": 0.0313,
-        "spikeRatio": 9.6,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-09-29T10:49:33.070Z"
+        "recentSaturation": 0.7857,
+        "baselineSaturation": 0.2659,
+        "spikeRatio": 2.96,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 33,
+        "detectedAt": "2026-09-30T10:37:26.491Z"
       }
     }
   ]

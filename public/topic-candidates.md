@@ -1,94 +1,84 @@
-# Topic candidates — 2026-09-29
+# Topic candidates — 2026-09-30
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @TheQuartering
-
-Pool: 16 recent videos, 123 baseline videos
-
-### Cluster 1: `join`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 1/123 videos (1%)
-- **Spike ratio:** 15.5x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
-  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
-    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
-  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
-    McDonalds PANICS After Customers Completely Abandon Them
-  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
-    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
-
-### Cluster 2: `stock sign`
-
-- **Recent saturation:** 13/16 videos (**81%**)
-- **Baseline saturation:** 33/123 videos (27%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `limited`, `edition`, `jack`, `stock`, `back`, `lantern`, `stock sign`, `coffee limited`
-- **Sample recent videos:**
-  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
-    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
-  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
-    McDonalds PANICS After Customers Completely Abandon Them
-  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
-    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
-  - 2026-09-26 — _Karen Liberal DESTROYED At Airport By Nick Shirley_  
-    Nick Shirley Confronts Airport Critic Who Refuses To Explain Himself
-  - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
-    Sunny Hostin Reveals She Was Holdout Juror In Notorious Murder Trial
-
-### Cluster 3: `she`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 6/123 videos (5%)
-- **Spike ratio:** 3.6x
-- **Related terms:** `she`
-- **Sample recent videos:**
-  - 2026-09-25 — _She BAKED Her Baby & Walked!_  
-    We Do Not Live In A Fair World.
-  - 2026-09-24 — _Lindsay Clancy INSANE TWIST On The View! These People Are NUTS!_  
-    Sunny Hostin Reveals She Was Holdout Juror In Notorious Murder Trial
-  - 2026-09-22 — _Lindsay Clancy Supporters TURN ON HER!_  
-    Lindsay Clancy Supporter FLIPS After Patrick’s Devastating Interview
-
 ## @JeremyHambly
 
-Pool: 10 recent videos, 79 baseline videos
+Pool: 10 recent videos, 80 baseline videos
 
-### Cluster 1: `stock sign`
+### Cluster 1: `o'lantern`
 
 - **Recent saturation:** 8/10 videos (**80%**)
-- **Baseline saturation:** 18/79 videos (23%)
-- **Spike ratio:** 3.5x
-- **Related terms:** `join`, `server`, `stock sign`, `join our`, `our server`, `server our`
+- **Baseline saturation:** 26/80 videos (33%)
+- **Spike ratio:** 2.4x
+- **Related terms:** `o'lantern`, `brutal`, `jack o'lantern`, `o'lantern back`, `stock sign`
 - **Sample recent videos:**
+  - 2026-09-29 — _Candace Owens BOMBSHELL_  
+    Candace Owens BOMBSHELL Raises Massive Questions
+  - 2026-09-29 — _Candace Owens SUED Again_  
+    Candace Owens Hit With MASSIVE New Defamation Lawsuit
+  - 2026-09-29 — _Judge Judy DESTROYS The Woke Left_  
+    Judge Judy DESTROYS Liberals In Brutal America-First Rant
+  - 2026-09-28 — _They Won't Stop!_  
+    Another Trans Killer Gets 50 YEARS After Horrific Double Murder
+  - 2026-09-28 — _Asmongold BUSTS Blizzard_  
+    Asmongold EXPOSES Blizzard Dev After WoW Ban Disaster
+
+### Cluster 2: `join`
+
+- **Recent saturation:** 6/10 videos (**60%**)
+- **Baseline saturation:** 8/80 videos (10%)
+- **Spike ratio:** 5.7x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `tourney candace`
+- **Sample recent videos:**
+  - 2026-09-29 — _Candace Owens BOMBSHELL_  
+    Candace Owens BOMBSHELL Raises Massive Questions
+  - 2026-09-29 — _Candace Owens SUED Again_  
+    Candace Owens Hit With MASSIVE New Defamation Lawsuit
   - 2026-09-28 — _They Won't Stop!_  
     Another Trans Killer Gets 50 YEARS After Horrific Double Murder
   - 2026-09-28 — _Asmongold BUSTS Blizzard_  
     Asmongold EXPOSES Blizzard Dev After WoW Ban Disaster
   - 2026-09-28 — _Candace Owens In Crisis Mode!_  
     Candace Owens’ Own Allies EXPOSED In Brutal Weekend Collapse
-  - 2026-09-23 — _Candace Owens EXPOSED Again!_  
-    Candace Owens’ Lies EXPOSED Again By Andrew Wilson
-  - 2026-09-23 — _Woke MELTDOWN Over Halo Studio SHUT DOWN_  
-    Halo Is DEAD! Activision Takes Over After Brutal Xbox Layoffs
 
-### Cluster 2: `lantern`
+## @TheQuartering
 
-- **Recent saturation:** 3/10 videos (**30%**)
-- **Baseline saturation:** 2/79 videos (3%)
-- **Spike ratio:** 9.6x
-- **Related terms:** `lantern`, `jack lantern`, `lantern back`
+Pool: 14 recent videos, 125 baseline videos
+
+### Cluster 1: `stock sign`
+
+- **Recent saturation:** 11/14 videos (**79%**)
+- **Baseline saturation:** 33/125 videos (26%)
+- **Spike ratio:** 3.0x
+- **Related terms:** `o'lantern`, `join`, `server`, `stock sign`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`
 - **Sample recent videos:**
-  - 2026-09-22 — _Candace Owens BUSTED In OBVIOUS Lie_  
-    Candace Owens Accused Of A MAJOR Lie Over TPUSA School Event
-  - 2026-09-22 — _Carrot Top DARK TURN In The Case_  
-    It Got WAY WORSE For Carrot Top Before His Hospitalization
-  - 2026-09-22 — _Looksmaxer Clavicular CHARGED With Horrible Crime_  
-    This Is INSANE! Clavicular Faces His Most Serious Charges Yet
+  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
+    Massive Walmart SNAP Scandal EXPOSED By Government Report
+  - 2026-09-29 — _Lindsay Clancy OUTBURST In Court Today As Defense PANICS_  
+    Lindsay Clancy Lawyer Has Complete MELTDOWN In Court
+  - 2026-09-29 — _Mr Belding Has Died & The Tributes Are Heartwarming RIP Dennis Haskins_  
+    This One Hurts… Saved By The Bell Legend Dead At 75
+  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
+    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
+  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
+    McDonalds PANICS After Customers Completely Abandon Them
+
+### Cluster 2: `exposed`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 6/125 videos (5%)
+- **Spike ratio:** 4.2x
+- **Related terms:** `exposed`
+- **Sample recent videos:**
+  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
+    Massive Walmart SNAP Scandal EXPOSED By Government Report
+  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
+    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
+  - 2026-09-24 — _Anti-Woke South Park DESTROYS Modern South Park & Goes Viral!_  
+    Stop leaving yourself vulnerable to data breaches. Go to my sponsor https://aura.com/thequartering to get a 14-day free 
 
 ---
 
