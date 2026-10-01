@@ -1,75 +1,47 @@
 {
-  "lastUpdated": "2026-09-21T10:07:10.328Z",
+  "lastUpdated": "2026-10-01T11:05:12.000Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "o'lantern",
+      "termId": "server",
       "keywords": [
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "back"
+        "server",
+        "our server",
+        "server our",
+        "join",
+        "join our",
+        "tourney candace"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9231,
-        "baselineSaturation": 0.1234,
-        "spikeRatio": 7.48,
-        "recentVideoCount": 12,
+        "recentSaturation": 0.7,
+        "baselineSaturation": 0.1145,
+        "spikeRatio": 6.12,
+        "recentVideoCount": 7,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "holdout",
-      "keywords": [
-        "holdout lindsay",
-        "lone holdout",
-        "holdout",
-        "lone",
-        "juror"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3571,
-        "baselineSaturation": 0.0669,
-        "spikeRatio": 5.34,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
+        "detectedAt": "2026-10-01T11:05:12.000Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
       "termId": "o'lantern",
       "keywords": [
+        "join",
+        "server",
+        "join our",
+        "our server",
+        "server our",
         "o'lantern",
         "jack o'lantern",
         "o'lantern back",
-        "limited",
-        "edition",
-        "jack",
-        "stock",
-        "coffee limited",
-        "limited edition",
-        "edition jack",
-        "back stock",
-        "back"
+        "stock sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1378,
-        "spikeRatio": 7.26,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-09-21T10:07:10.328Z"
+        "recentSaturation": 0.8,
+        "baselineSaturation": 0.2852,
+        "spikeRatio": 2.81,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 36,
+        "detectedAt": "2026-10-01T11:05:12.000Z"
       }
     }
   ]
