@@ -1,11 +1,35 @@
 {
-  "lastUpdated": "2026-09-30T10:37:26.491Z",
+  "lastUpdated": "2026-10-01T11:05:12.000Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
+      "termId": "server",
+      "keywords": [
+        "server",
+        "our server",
+        "server our",
+        "join",
+        "join our",
+        "tourney candace"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.7,
+        "baselineSaturation": 0.1145,
+        "spikeRatio": 6.12,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-10-01T11:05:12.000Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
       "termId": "o'lantern",
       "keywords": [
-        "brutal",
+        "join",
+        "server",
+        "join our",
+        "our server",
+        "server our",
         "o'lantern",
         "jack o'lantern",
         "o'lantern back",
@@ -13,54 +37,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.8,
-        "baselineSaturation": 0.3272,
-        "spikeRatio": 2.45,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-09-30T10:37:26.491Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "join",
-      "keywords": [
-        "join",
-        "server",
-        "join our",
-        "our server",
-        "server our",
-        "tourney candace"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.6,
-        "baselineSaturation": 0.1049,
-        "spikeRatio": 5.72,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-09-30T10:37:26.491Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "stock sign",
-      "keywords": [
-        "join",
-        "server",
-        "join our",
-        "our server",
-        "server our",
-        "stock sign",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.7857,
-        "baselineSaturation": 0.2659,
-        "spikeRatio": 2.96,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 33,
-        "detectedAt": "2026-09-30T10:37:26.491Z"
+        "baselineSaturation": 0.2852,
+        "spikeRatio": 2.81,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 36,
+        "detectedAt": "2026-10-01T11:05:12.000Z"
       }
     }
   ]

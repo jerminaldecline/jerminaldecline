@@ -1,4 +1,4 @@
-# Topic candidates — 2026-09-30
+# Topic candidates — 2026-10-01
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,71 +6,67 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 80 baseline videos
+Pool: 10 recent videos, 82 baseline videos
 
-### Cluster 1: `o'lantern`
+### Cluster 1: `server`
 
-- **Recent saturation:** 8/10 videos (**80%**)
-- **Baseline saturation:** 26/80 videos (33%)
-- **Spike ratio:** 2.4x
-- **Related terms:** `o'lantern`, `brutal`, `jack o'lantern`, `o'lantern back`, `stock sign`
+- **Recent saturation:** 7/10 videos (**70%**)
+- **Baseline saturation:** 9/82 videos (11%)
+- **Spike ratio:** 6.1x
+- **Related terms:** `server`, `join`, `our server`, `server our`, `join our`, `tourney candace`
 - **Sample recent videos:**
-  - 2026-09-29 — _Candace Owens BOMBSHELL_  
-    Candace Owens BOMBSHELL Raises Massive Questions
-  - 2026-09-29 — _Candace Owens SUED Again_  
-    Candace Owens Hit With MASSIVE New Defamation Lawsuit
-  - 2026-09-29 — _Judge Judy DESTROYS The Woke Left_  
-    Judge Judy DESTROYS Liberals In Brutal America-First Rant
-  - 2026-09-28 — _They Won't Stop!_  
-    Another Trans Killer Gets 50 YEARS After Horrific Double Murder
-  - 2026-09-28 — _Asmongold BUSTS Blizzard_  
-    Asmongold EXPOSES Blizzard Dev After WoW Ban Disaster
-
-### Cluster 2: `join`
-
-- **Recent saturation:** 6/10 videos (**60%**)
-- **Baseline saturation:** 8/80 videos (10%)
-- **Spike ratio:** 5.7x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `tourney candace`
-- **Sample recent videos:**
+  - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
+    Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
+  - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
+    Nolan Wells Campaign Sparks Massive Backlash
   - 2026-09-29 — _Candace Owens BOMBSHELL_  
     Candace Owens BOMBSHELL Raises Massive Questions
   - 2026-09-29 — _Candace Owens SUED Again_  
     Candace Owens Hit With MASSIVE New Defamation Lawsuit
   - 2026-09-28 — _They Won't Stop!_  
     Another Trans Killer Gets 50 YEARS After Horrific Double Murder
-  - 2026-09-28 — _Asmongold BUSTS Blizzard_  
-    Asmongold EXPOSES Blizzard Dev After WoW Ban Disaster
-  - 2026-09-28 — _Candace Owens In Crisis Mode!_  
-    Candace Owens’ Own Allies EXPOSED In Brutal Weekend Collapse
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 125 baseline videos
+Pool: 15 recent videos, 127 baseline videos
 
-### Cluster 1: `stock sign`
+### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 11/14 videos (**79%**)
-- **Baseline saturation:** 33/125 videos (26%)
-- **Spike ratio:** 3.0x
-- **Related terms:** `o'lantern`, `join`, `server`, `stock sign`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`
+- **Recent saturation:** 12/15 videos (**80%**)
+- **Baseline saturation:** 36/127 videos (28%)
+- **Spike ratio:** 2.8x
+- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `stock sign`, `join our`, `our server`
 - **Sample recent videos:**
+  - 2026-09-30 — _Female KILLER SAVED By Female Judges_  
+    Female Killer SAVED One Hour Before Her Execution
+  - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
+    Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
+  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
+    Lindsay Clancy Copycat Horror—It Happened Again
+  - 2026-09-30 — _TERROR IN THE SKIES!_  
+    Pilot Tries To HIJACK Passenger Jet And Crash It
   - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
     Massive Walmart SNAP Scandal EXPOSED By Government Report
-  - 2026-09-29 — _Lindsay Clancy OUTBURST In Court Today As Defense PANICS_  
-    Lindsay Clancy Lawyer Has Complete MELTDOWN In Court
-  - 2026-09-29 — _Mr Belding Has Died & The Tributes Are Heartwarming RIP Dennis Haskins_  
-    This One Hurts… Saved By The Bell Legend Dead At 75
-  - 2026-09-28 — _Lone Juror STRIKES BACK Against Lindsay Clancy!_  
-    Lindsay Clancy BACK IN COURT As Lone Juror War Explodes
-  - 2026-09-28 — _McDonalds ADMITS What DESTROYED Their Business_  
-    McDonalds PANICS After Customers Completely Abandon Them
 
-### Cluster 2: `exposed`
+### Cluster 2: `mother`
 
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 6/125 videos (5%)
-- **Spike ratio:** 4.2x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 6/127 videos (5%)
+- **Spike ratio:** 3.9x
+- **Related terms:** `mother`
+- **Sample recent videos:**
+  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
+    Lindsay Clancy Copycat Horror—It Happened Again
+  - 2026-09-25 — _She BAKED Her Baby & Walked!_  
+    We Do Not Live In A Fair World.
+  - 2026-09-25 — _Karmelo Anthony ATTACKED In Prison Grifters Pounce!_  
+    Viral Claim Karmelo Anthony Was Stabbed In Prison Appears False
+
+### Cluster 3: `exposed`
+
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 6/127 videos (5%)
+- **Spike ratio:** 3.9x
 - **Related terms:** `exposed`
 - **Sample recent videos:**
   - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
