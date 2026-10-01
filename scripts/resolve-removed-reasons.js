@@ -34,6 +34,14 @@ const DATA = path.join(__dirname, '..', 'public', 'data.json');
 const OUT = path.join(__dirname, '..', 'public', 'removed-reasons.json');
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121 Safari/537.36';
 const args = process.argv.slice(2);
+// Hard budget. On 2026-10-01 a bot-walled session (every fetch a 429, 20s
+// sleeps, no request timeout) kept this step alive for hours inside the
+// daily audit, and because the audit holds the main-data-push concurrency
+// group, every hourly data run queued behind it. This script is best-effort:
+// past the deadline it writes what it has and exits cleanly.
+const DEADLINE_MS = (Number(args[args.indexOf('--minutes') + 1]) || 8) * 60 * 1000;
+const T0 = Date.now();
+const outOfTime = () => Date.now() - T0 > DEADLINE_MS;
 const REFRESH_DAYS = args.includes('--all') ? 0 : (args.includes('--refresh') ? Number(args[args.indexOf('--refresh') + 1]) || 7 : Infinity);
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -62,8 +70,9 @@ async function resolveOne(id) {
     try {
       const res = await fetch('https://www.youtube.com/watch?v=' + id, {
         headers: { 'User-Agent': UA, 'Accept-Language': 'en-US,en;q=0.9' },
+        signal: AbortSignal.timeout(20000),
       });
-      if (res.status === 429) { await sleep(20000); continue; }
+      if (res.status === 429) { if (outOfTime()) return null; await sleep(20000); continue; }
       html = await res.text();
     } catch (e) {
       await sleep(3000); continue;
@@ -117,6 +126,7 @@ async function main() {
     }
     const prev = store.reasons[v.id];
     if (prev && prev.reason && prev.reason !== 'unavailable' && !stale(prev)) continue; // already known & fresh
+    if (outOfTime()) { console.log(`  time budget spent after ${scraped} scrapes - keeping the rest for the next run`); break; }
     const r = await resolveOne(v.id);
     scraped++;
     await sleep(1400);

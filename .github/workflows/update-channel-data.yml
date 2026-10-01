@@ -126,6 +126,7 @@ jobs:
       # never fail an otherwise good data update.
       - name: Resolve removed-video reasons (best-effort)
         continue-on-error: true
+        timeout-minutes: 12   # the script budgets 8 min itself; this is the backstop
         run: node scripts/resolve-removed-reasons.js
 
       - name: Commit updated data
