@@ -1,58 +1,36 @@
-# Topic candidates — 2026-10-01
+# Topic candidates — 2026-10-02
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @JeremyHambly
-
-Pool: 10 recent videos, 82 baseline videos
-
-### Cluster 1: `server`
-
-- **Recent saturation:** 7/10 videos (**70%**)
-- **Baseline saturation:** 9/82 videos (11%)
-- **Spike ratio:** 6.1x
-- **Related terms:** `server`, `join`, `our server`, `server our`, `join our`, `tourney candace`
-- **Sample recent videos:**
-  - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
-    Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
-  - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
-    Nolan Wells Campaign Sparks Massive Backlash
-  - 2026-09-29 — _Candace Owens BOMBSHELL_  
-    Candace Owens BOMBSHELL Raises Massive Questions
-  - 2026-09-29 — _Candace Owens SUED Again_  
-    Candace Owens Hit With MASSIVE New Defamation Lawsuit
-  - 2026-09-28 — _They Won't Stop!_  
-    Another Trans Killer Gets 50 YEARS After Horrific Double Murder
-
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 16 recent videos, 129 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 36/127 videos (28%)
-- **Spike ratio:** 2.8x
-- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `stock sign`, `join our`, `our server`
+- **Recent saturation:** 14/16 videos (**88%**)
+- **Baseline saturation:** 37/129 videos (29%)
+- **Spike ratio:** 3.0x
+- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `join`, `server`, `jack o'lantern`, `o'lantern back`
 - **Sample recent videos:**
+  - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
+    Karen Kills Puppy In Absolutely Evil Attack
+  - 2026-10-01 — _Big Announcement_  
+    They’re MELTING DOWN Over Me Going On Timcast
+  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
+    Death Row Killer SURVIVES Two Lethal Injections
   - 2026-09-30 — _Female KILLER SAVED By Female Judges_  
     Female Killer SAVED One Hour Before Her Execution
   - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
     Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
-  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
-    Lindsay Clancy Copycat Horror—It Happened Again
-  - 2026-09-30 — _TERROR IN THE SKIES!_  
-    Pilot Tries To HIJACK Passenger Jet And Crash It
-  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
-    Massive Walmart SNAP Scandal EXPOSED By Government Report
 
 ### Cluster 2: `mother`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 6/127 videos (5%)
-- **Spike ratio:** 3.9x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 6/129 videos (5%)
+- **Spike ratio:** 3.8x
 - **Related terms:** `mother`
 - **Sample recent videos:**
   - 2026-09-30 — _Another Lindsay Clancy Copycat_  
@@ -64,17 +42,39 @@ Pool: 15 recent videos, 127 baseline videos
 
 ### Cluster 3: `exposed`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 6/127 videos (5%)
-- **Spike ratio:** 3.9x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 7/129 videos (5%)
+- **Spike ratio:** 3.3x
 - **Related terms:** `exposed`
 - **Sample recent videos:**
+  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
+    Death Row Killer SURVIVES Two Lethal Injections
   - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
     Massive Walmart SNAP Scandal EXPOSED By Government Report
   - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
     Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
-  - 2026-09-24 — _Anti-Woke South Park DESTROYS Modern South Park & Goes Viral!_  
-    Stop leaving yourself vulnerable to data breaches. Go to my sponsor https://aura.com/thequartering to get a 14-day free 
+
+## @JeremyHambly
+
+Pool: 9 recent videos, 83 baseline videos
+
+### Cluster 1: `o'lantern`
+
+- **Recent saturation:** 8/9 videos (**89%**)
+- **Baseline saturation:** 37/83 videos (45%)
+- **Spike ratio:** 2.0x
+- **Related terms:** `o'lantern`, `server`, `join`, `massive`, `jack o'lantern`, `o'lantern back`, `stock sign`, `our server`
+- **Sample recent videos:**
+  - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
+    Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
+  - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
+    Nolan Wells Campaign Sparks Massive Backlash
+  - 2026-09-29 — _Candace Owens BOMBSHELL_  
+    Candace Owens BOMBSHELL Raises Massive Questions
+  - 2026-09-29 — _Candace Owens SUED Again_  
+    Candace Owens Hit With MASSIVE New Defamation Lawsuit
+  - 2026-09-29 — _Judge Judy DESTROYS The Woke Left_  
+    Judge Judy DESTROYS Liberals In Brutal America-First Rant
 
 ---
 
