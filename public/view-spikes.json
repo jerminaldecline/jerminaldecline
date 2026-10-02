@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-10-01-PM",
-    "snapshots": 222
+    "to": "2026-10-02-AM",
+    "snapshots": 223
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -961,6 +961,10 @@
         [
           "2026-10-01-PM",
           296314
+        ],
+        [
+          "2026-10-02-AM",
+          296314
         ]
       ]
     },
@@ -971,13 +975,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-21T20:25:41.000Z",
       "ageDaysAtSpike": 17.5,
-      "baselinePerDay": 19,
+      "baselinePerDay": 18,
       "peakPerDay": 962,
-      "ratio": 50.6,
+      "ratio": 53.4,
       "spikeStartDate": "2026-09-07-PM",
       "elevatedSnapshots": 15,
       "status": "sustained",
-      "estPromotedViews": 4464,
+      "estPromotedViews": 4471,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -1307,6 +1311,10 @@
         ],
         [
           "2026-10-01-PM",
+          34451
+        ],
+        [
+          "2026-10-02-AM",
           34451
         ]
       ]
@@ -1847,6 +1855,10 @@
         [
           "2026-10-01-PM",
           32187
+        ],
+        [
+          "2026-10-02-AM",
+          32187
         ]
       ]
     },
@@ -1857,13 +1869,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-09-03T22:29:49.000Z",
       "ageDaysAtSpike": 17.5,
-      "baselinePerDay": 58,
+      "baselinePerDay": 56,
       "peakPerDay": 1472,
-      "ratio": 25.4,
+      "ratio": 26.3,
       "spikeStartDate": "2026-09-20-PM",
       "elevatedSnapshots": 4,
       "status": "sustained",
-      "estPromotedViews": 1780,
+      "estPromotedViews": 1784,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2090,6 +2102,10 @@
         [
           "2026-10-01-PM",
           173303
+        ],
+        [
+          "2026-10-02-AM",
+          173307
         ]
       ]
     },
@@ -2613,6 +2629,10 @@
         [
           "2026-10-01-PM",
           72786
+        ],
+        [
+          "2026-10-02-AM",
+          72786
         ]
       ]
     },
@@ -2768,6 +2788,10 @@
         [
           "2026-10-01-PM",
           215114
+        ],
+        [
+          "2026-10-02-AM",
+          215129
         ]
       ]
     },
@@ -3675,6 +3699,10 @@
         [
           "2026-10-01-PM",
           56846
+        ],
+        [
+          "2026-10-02-AM",
+          56846
         ]
       ]
     },
@@ -3685,13 +3713,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 10,
+      "baselinePerDay": 9,
       "peakPerDay": 1236,
-      "ratio": 123.6,
+      "ratio": 137.3,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
-      "estPromotedViews": 613,
+      "estPromotedViews": 614,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -4142,6 +4170,10 @@
         [
           "2026-10-01-PM",
           103415
+        ],
+        [
+          "2026-10-02-AM",
+          103417
         ]
       ]
     },
@@ -4457,6 +4489,10 @@
         [
           "2026-10-01-PM",
           53547
+        ],
+        [
+          "2026-10-02-AM",
+          53555
         ]
       ]
     },
@@ -5363,6 +5399,10 @@
         ],
         [
           "2026-10-01-PM",
+          203576
+        ],
+        [
+          "2026-10-02-AM",
           203576
         ]
       ]
