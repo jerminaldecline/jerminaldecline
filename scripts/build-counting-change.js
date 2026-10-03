@@ -167,6 +167,64 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
     factor: +(rateBefore / rateAfter).toFixed(2),
     series,
   };
+
+  // ---- the same question asked other ways ---------------------------------
+  // A bootstrap interval only covers "which videos happened to be published".
+  // It says nothing about the choices made in the analysis itself: which
+  // average, what age to read at, how much history counts as the baseline,
+  // whether to allow for a gradual drift in how often people like. Each check
+  // below changes exactly one of those and re-measures. The published range is
+  // then widened to contain every one of them (see the site section).
+  //
+  // Why this exists: a deep check on 2026-10-04 found the like rate wanders by
+  // about 12% from month to month in ordinary times, so a comparison confined
+  // to the weeks nearest the change, or one that allows a drift, reads a little
+  // lower (1.94-2.03) than the full before-and-after figure (2.07). None of
+  // them is distinguishable from it statistically, but an honest range should
+  // cover them.
+  {
+    const rk = p => 1000 * p.lk / p.vw;
+    const fac = (a, b) => (a.length >= 15 && b.length >= 15) ? med(a.map(rk)) / med(b.map(rk)) : null;
+    const dn = d => Date.parse(d + 'T00:00:00Z') / 864e5, on = dn(ONSET);
+    const mean = a => a.reduce((t, x) => t + x, 0) / a.length;
+    const sum = (a, k) => a.reduce((t, p) => t + p[k], 0);
+    const near = W => fac(pre.filter(p => dn(p.d) >= on - 3 - W), post.filter(p => dn(p.d) < on + W));
+    const atAge = H => {
+      const o = [];
+      for (const [id, m] of meta) {
+        if (m.channelId !== cid) continue;
+        const r = at(id, H);
+        if (r && r.views > 500) o.push({ d: m.publishedAt.slice(0, 10), vw: r.views, lk: r.likes });
+      }
+      return fac(o.filter(p => p.d < '2026-08-24'), o.filter(p => p.d >= ONSET));
+    };
+    // One gradual drift in the like rate throughout, plus a step at the change.
+    const drift = () => {
+      const all = pre.concat(post);
+      const X = all.map(p => [1, dn(p.d) - on, p.d >= ONSET ? 1 : 0]), y = all.map(p => Math.log(rk(p)));
+      const A = [0, 1, 2].map(a => [0, 1, 2].map(b => X.reduce((t, r) => t + r[a] * r[b], 0))
+        .concat([X.reduce((t, r, i) => t + r[a] * y[i], 0)]));
+      for (let c = 0; c < 3; c++) {
+        let p = c;
+        for (let r = c + 1; r < 3; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+        [A[c], A[p]] = [A[p], A[c]];
+        for (let r = 0; r < 3; r++) if (r !== c) { const f = A[r][c] / A[c][c]; for (let j = c; j < 4; j++) A[r][j] -= f * A[c][j]; }
+      }
+      return Math.exp(-A[2][3] / A[2][2]);
+    };
+    const enough = pre.length >= 15 && post.length >= 15;
+    out.channels[handle].checks = [
+      ['the average video rather than the middle one', enough ? Math.exp(mean(pre.map(p => Math.log(rk(p)))) - mean(post.map(p => Math.log(rk(p))))) : null],
+      ['all likes divided by all views', enough ? (sum(pre, 'lk') / sum(pre, 'vw')) / (sum(post, 'lk') / sum(post, 'vw')) : null],
+      ['only the two weeks either side of the change', near(14)],
+      ['only the four weeks either side of the change', near(28)],
+      ['only the last 30 days as the baseline', fac(pre.filter(p => dn(p.d) >= on - 33), post)],
+      ['allowing for a gradual drift in how often people like', enough ? drift() : null],
+      ['reading each video at 12 hours old', atAge(12)],
+      ['reading each video at 48 hours old', atAge(48)],
+      ['reading each video at 72 hours old', atAge(72)],
+    ].filter(k => k[1] != null && isFinite(k[1])).map(k => ({ label: k[0], factor: +k[1].toFixed(2) }));
+  }
 }
 
 // ---- the number the site divides by ----------------------------------------
@@ -209,8 +267,15 @@ if (chans.length) {
       pooledBoot[b] += c.postViews * f / wsum;
     }
     arr.sort((x, y) => x - y);
-    c.low = +arr[Math.floor(B * 0.025)].toFixed(2);
-    c.high = +arr[Math.floor(B * 0.975)].toFixed(2);
+    // sampleLow/High: the bootstrapped 95% interval on its own.
+    // low/high: that interval widened to take in every alternative method, so
+    // the published range answers "what could the figure be" and not only
+    // "how much would it move with a different draw of videos".
+    c.sampleLow = +arr[Math.floor(B * 0.025)].toFixed(2);
+    c.sampleHigh = +arr[Math.floor(B * 0.975)].toFixed(2);
+    const alt = (c.checks || []).map(k => k.factor);
+    c.low = +Math.min(c.sampleLow, ...alt).toFixed(2);
+    c.high = +Math.max(c.sampleHigh, ...alt).toFixed(2);
   }
   pooledBoot.sort((x, y) => x - y);
   out.pooled = {
@@ -221,14 +286,19 @@ if (chans.length) {
   };
   const bmHandle = out.channels[BENCHMARK] ? BENCHMARK : Object.keys(out.channels)[0];
   const bm = out.channels[bmHandle];
-  out.site = { channel: bmHandle, factor: bm.factor, low: bm.low, high: bm.high, nPost: bm.nPost };
+  const alts = (bm.checks || []).map(k => k.factor);
+  out.site = { channel: bmHandle, factor: bm.factor, low: bm.low, high: bm.high, nPost: bm.nPost,
+    sampleLow: bm.sampleLow, sampleHigh: bm.sampleHigh,
+    checks: alts.length ? { n: alts.length, min: Math.min(...alts), max: Math.max(...alts) } : null };
 }
 
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
 console.log('Wrote %s', path.relative(process.cwd(), OUT));
 if (out.site) {
-  console.log('  SITE FACTOR %s  (95%% %s-%s, n=%d post-change uploads, benchmark %s)',
+  console.log('  SITE FACTOR %s  (range %s-%s, n=%d post-change uploads, benchmark %s)',
     out.site.factor, out.site.low, out.site.high, out.site.nPost, out.site.channel);
+  console.log('    sampling interval alone: %s-%s', out.site.sampleLow, out.site.sampleHigh);
+  for (const k of (out.channels[out.site.channel].checks || [])) console.log('    %s  %s', k.factor.toFixed(2), k.label);
   console.log('  pooled across channels, for reference: %s  (95%% %s-%s, n=%d)',
     out.pooled.factor, out.pooled.low, out.pooled.high, out.pooled.nPost);
   console.log('    -> set VCC_MID and VCC_FACTOR in public/index.html to match\n');
