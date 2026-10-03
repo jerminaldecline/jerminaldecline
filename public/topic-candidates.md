@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-02
+# Topic candidates — 2026-10-03
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 16 recent videos, 129 baseline videos
+Pool: 15 recent videos, 127 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 14/16 videos (**88%**)
-- **Baseline saturation:** 37/129 videos (29%)
-- **Spike ratio:** 3.0x
+- **Recent saturation:** 14/15 videos (**93%**)
+- **Baseline saturation:** 37/127 videos (29%)
+- **Spike ratio:** 3.2x
 - **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `join`, `server`, `jack o'lantern`, `o'lantern back`
 - **Sample recent videos:**
   - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
@@ -26,25 +26,11 @@ Pool: 16 recent videos, 129 baseline videos
   - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
     Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
 
-### Cluster 2: `mother`
+### Cluster 2: `exposed`
 
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 6/129 videos (5%)
-- **Spike ratio:** 3.8x
-- **Related terms:** `mother`
-- **Sample recent videos:**
-  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
-    Lindsay Clancy Copycat Horror—It Happened Again
-  - 2026-09-25 — _She BAKED Her Baby & Walked!_  
-    We Do Not Live In A Fair World.
-  - 2026-09-25 — _Karmelo Anthony ATTACKED In Prison Grifters Pounce!_  
-    Viral Claim Karmelo Anthony Was Stabbed In Prison Appears False
-
-### Cluster 3: `exposed`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 7/129 videos (5%)
-- **Spike ratio:** 3.3x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 7/127 videos (6%)
+- **Spike ratio:** 3.4x
 - **Related terms:** `exposed`
 - **Sample recent videos:**
   - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
@@ -56,13 +42,13 @@ Pool: 16 recent videos, 129 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 83 baseline videos
+Pool: 8 recent videos, 81 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 8/9 videos (**89%**)
-- **Baseline saturation:** 37/83 videos (45%)
-- **Spike ratio:** 2.0x
+- **Recent saturation:** 8/8 videos (**100%**)
+- **Baseline saturation:** 37/81 videos (46%)
+- **Spike ratio:** 2.2x
 - **Related terms:** `o'lantern`, `server`, `join`, `massive`, `jack o'lantern`, `o'lantern back`, `stock sign`, `our server`
 - **Sample recent videos:**
   - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
