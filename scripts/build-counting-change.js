@@ -169,51 +169,73 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   };
 }
 
-// ---- the single number the site should divide by -------------------------
-// View-weighted across channels, because it deflates view TOTALS and one
-// channel supplies most of them. Bootstrapped for the interval so a re-measure
-// is one command rather than a command plus a separate analysis.
+// ---- the number the site divides by ----------------------------------------
+// BENCHMARK CHANNEL, not a pooled figure (changed 2026-10-03). The site's factor
+// is the main channel's own measurement: one channel, one calculation, nothing
+// to weight and nothing to explain about weighting. The other channel is
+// reported beside it as an independent check - the rule change was
+// platform-wide, so a second audience landing on the same multiple is the
+// evidence that the factor measures the rule and not the channel.
+//
+// Pooling them view-weighted (the previous method) gave 2.10 against 2.08 on the
+// day this changed, so the choice moves no figure by more than 1%. `pooled`
+// keeps that number on file so the two can always be compared.
+//
+// Every channel gets its own bootstrapped 95% interval, resampling uploads
+// within the channel, so the page can draw the two side by side.
+//
+// SHIPS WITH THE PAGE. index.html prints `site` in its caption and divides by
+// the constants VCC_MID / VCC_FACTOR, which must be set to match. Committing
+// this file without the page that reads it makes the two disagree.
+const BENCHMARK = '@TheQuartering';
 const chans = Object.values(out.channels);
 if (chans.length) {
-  const wsum = chans.reduce((a, c) => a + c.postViews, 0) || 1;
-  const factor = chans.reduce((a, c) => a + c.postViews * c.factor, 0) / wsum;
-
-  // Resample uploads within each channel, recombine at the same weights.
   let seed = 20260907;
   const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
   const pick = a => a[Math.floor(rnd() * a.length)];
   const medOf = a => { const q = [...a].sort((x, y) => x - y), n = q.length;
     return n ? (n % 2 ? q[(n - 1) / 2] : (q[n / 2 - 1] + q[n / 2]) / 2) : NaN; };
-  const boot = [];
-  for (let b = 0; b < 4000; b++) {
-    let num = 0;
-    for (const c of chans) {
+  const B = 4000;
+  const wsum = chans.reduce((a, c) => a + c.postViews, 0) || 1;
+  const pooledBoot = new Array(B).fill(0);
+  for (const c of chans) {
+    const arr = [];
+    for (let b = 0; b < B; b++) {
       const pre = Array.from({ length: c.dist.pre.length }, () => pick(c.dist.pre));
       const po  = Array.from({ length: c.dist.post.length }, () => pick(c.dist.post));
       const mp = medOf(po);
-      num += c.postViews * (mp > 0 ? medOf(pre) / mp : c.factor);
+      const f = mp > 0 ? medOf(pre) / mp : c.factor;
+      arr.push(f);
+      pooledBoot[b] += c.postViews * f / wsum;
     }
-    boot.push(num / wsum);
+    arr.sort((x, y) => x - y);
+    c.low = +arr[Math.floor(B * 0.025)].toFixed(2);
+    c.high = +arr[Math.floor(B * 0.975)].toFixed(2);
   }
-  boot.sort((a, b) => a - b);
-  out.site = {
-    factor: +factor.toFixed(2),
-    low: +boot[Math.floor(boot.length * 0.025)].toFixed(2),
-    high: +boot[Math.floor(boot.length * 0.975)].toFixed(2),
+  pooledBoot.sort((x, y) => x - y);
+  out.pooled = {
+    factor: +(chans.reduce((a, c) => a + c.postViews * c.factor, 0) / wsum).toFixed(2),
+    low: +pooledBoot[Math.floor(B * 0.025)].toFixed(2),
+    high: +pooledBoot[Math.floor(B * 0.975)].toFixed(2),
     nPost: chans.reduce((a, c) => a + c.nPost, 0),
   };
+  const bmHandle = out.channels[BENCHMARK] ? BENCHMARK : Object.keys(out.channels)[0];
+  const bm = out.channels[bmHandle];
+  out.site = { channel: bmHandle, factor: bm.factor, low: bm.low, high: bm.high, nPost: bm.nPost };
 }
 
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
 console.log('Wrote %s', path.relative(process.cwd(), OUT));
 if (out.site) {
-  console.log('  SITE FACTOR %s  (95%% %s-%s, n=%d post-change uploads)',
-    out.site.factor, out.site.low, out.site.high, out.site.nPost);
+  console.log('  SITE FACTOR %s  (95%% %s-%s, n=%d post-change uploads, benchmark %s)',
+    out.site.factor, out.site.low, out.site.high, out.site.nPost, out.site.channel);
+  console.log('  pooled across channels, for reference: %s  (95%% %s-%s, n=%d)',
+    out.pooled.factor, out.pooled.low, out.pooled.high, out.pooled.nPost);
   console.log('    -> set VCC_MID and VCC_FACTOR in public/index.html to match\n');
 }
 for (const [h, c] of Object.entries(out.channels)) {
-  console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx',
-    h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor);
+  console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx  (95%% %s-%s)',
+    h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor, c.low, c.high);
   console.log('      below %s%%: %d of %d before, %d of %d after',
     c.lowRatePct, c.dist.lowPre, c.dist.pre.length, c.dist.lowPost, c.dist.post.length);
 }
