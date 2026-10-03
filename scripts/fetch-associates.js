@@ -92,16 +92,17 @@ async function listUploads(playlistId, sinceDate, channelId) {
 
 // videos.list in batches of 50. Returns a Map id -> details; ids absent from
 // the response are gone (deleted/private) and the caller marks them.
-async function enrich(ids) {
+async function enrich(ids, believedLive) {
   const found = new Map();
-  for (let i = 0; i < ids.length; i += 50) {
-    const batch = ids.slice(i, i + 50);
+  const answered = new Set();   // every id the API returned, private ones included
+  const ask = async batch => {
     // liveStreamingDetails is present on anything that went out live - stream
     // recordings and premieres. Paramount Tactical has ~450 stream VODs of two
     // hours and up against ~250 uploads, so they must be their own format or
     // every long-form median and runtime is meaningless.
     const d = await get(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,status,liveStreamingDetails&id=${batch.join(',')}&key=${API_KEY}`);
     for (const it of d.items || []) {
+      answered.add(it.id);
       if (it.status && it.status.privacyStatus === 'private') continue;   // reads as gone
       found.set(it.id, {
         durationSec: parseDuration(it.contentDetails.duration),
@@ -111,6 +112,19 @@ async function enrich(ids) {
         isLive: !!(it.liveStreamingDetails && it.liveStreamingDetails.actualStartTime),
       });
     }
+  };
+  for (let i = 0; i < ids.length; i += 50) await ask(ids.slice(i, i + 50));
+  // Absence from the response is how a removal is detected, but the API also
+  // answers 200 with no items at all now and then: on 2026-10-03 that flagged 221
+  // public videos as removed on the main site. So a video we believed live is
+  // only treated as gone once it has also been absent from three follow-up asks.
+  let missing = believedLive ? ids.filter(id => believedLive.has(id) && !answered.has(id)) : [];
+  for (let attempt = 1; missing.length && attempt <= 3; attempt++) {
+    await new Promise(r => setTimeout(r, 2000 * attempt));
+    const before = missing.length;
+    for (let i = 0; i < missing.length; i += 50) await ask(missing.slice(i, i + 50));
+    missing = missing.filter(id => !answered.has(id));
+    if (missing.length < before) console.log(`  API answered short: ${before - missing.length} of ${before} absent videos came back on recheck ${attempt}`);
   }
   return found;
 }
@@ -138,7 +152,7 @@ async function main() {
     // 2. refresh stats: in-window videos every run, the whole catalogue on --audit
     const mine = [...byId.values()].filter(v => v.channelId === ch.id);
     const targets = mine.filter(v => AUDIT || firstRun || v.publishedAt >= since || !v.durationSec);
-    const details = await enrich(targets.map(v => v.id));
+    const details = await enrich(targets.map(v => v.id), new Set(targets.filter(v => !v.unavailable).map(v => v.id)));
     let gone = 0;
     for (const v of targets) {
       const d = details.get(v.id);
