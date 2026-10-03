@@ -340,6 +340,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
 .hero-num.rev{font-size:2.05rem}  /* revenue is a range string, so a touch smaller to fit */
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
+/* The range an engaged estimate could sit in. Deliberately quiet: it qualifies
+   the number above it and should never compete with it. */
+.hero-range{font-size:0.85rem;color:var(--subtext);margin-top:0.45rem;display:flex;align-items:center;gap:0.4rem;font-variant-numeric:tabular-nums;line-height:1.2}
+.hero-range b{color:var(--label);font-weight:700;white-space:nowrap}
+.hero-range .info-icon{color:var(--text-dim);border-color:var(--border)}
 /* Secondary headline figure (Shorts views on the Total views card): clearly
    subordinate to the main long-form number, but heavier than sub-text. */
 .hero-num2{font-size:1.55rem;font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-top:0.4rem;color:var(--text)}
@@ -679,6 +684,12 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     border-radius: 2px;
     background: var(--accent);}
 .chart-vcc-break {stroke: var(--accent-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7;}
+/* Range whisker on an engaged month: same hue as the line it belongs to, lighter. */
+.chart-range line {stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; opacity: 0.6;}
+.trend-legend-swatch.range {width: 9px; height: 13px; background: none; border-radius: 0; opacity: 0.6;
+  border-top: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent);
+  background-image: linear-gradient(var(--accent), var(--accent)); background-size: 1.5px 100%; background-position: center; background-repeat: no-repeat;}
+.chart-tooltip-range {color: var(--text-muted); font-size: 0.78rem; padding-left: 1rem;}
 .trend-legend-swatch.vcc-break {background: none; height: 0; align-self: center;
   border-top: 2px dashed var(--accent-2);}
 .trend-legend-swatch.prev {background: var(--text-dim);
@@ -3511,7 +3522,15 @@ const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
 // PINNED 2026-10-03 after five weeks of post-change uploads, and meant to stay
 // put. Benchmark: TheQuartering alone, 84 post-change uploads against 106
 // before, median like rate 89.5 -> 43.2 per 1,000 views at 24h old = 2.07. The
-// interval is the bootstrapped 95% range of that one channel's figure.
+// range is NOT just the sampling interval. A deep check on 2026-10-04 re-derived
+// the figure from the raw archive and re-measured it nine other ways (other
+// averages, read ages of 12-72h, only the weeks nearest the change, a drift
+// term). Those give 1.94-2.14; the bootstrapped 95% interval is 1.97-2.24. The
+// range below is the envelope of both, so it covers the choices made in the
+// analysis as well as the luck of which videos were published. The same check
+// found the step survives fake change dates (largest false step 1.08), a
+// shuffle test (0 of 20,000 matched it), outlier trimming, a change in how
+// densely new uploads were sampled, and a second channel.
 //
 // History, because the number has moved and the reasons matter: 2.15 on 6
 // uploads (1 Sep), 1.96 on 44 across both channels view-weighted (7 Sep), then
@@ -3526,7 +3545,7 @@ const VCC_FROM = Date.parse('2026-08-27T00:00:00Z');
 //
 // These must match `site` in counting-change.json: the explainer prints the
 // file's working next to the figure every card divides by.
-const VCC_FACTOR = { low: 1.97, high: 2.24 };
+const VCC_FACTOR = { low: 1.94, high: 2.24 };
 const VCC_MID = 2.07;
 // Day form of VCC_FROM, for comparing against the YYYY-MM-DD keys in
 // daily-views.json without re-parsing a timestamp per day.
@@ -3690,6 +3709,7 @@ async function loadAndCompute(){
           shortsOnly:true, shorts,
           n:0, tot:0, comments:0, runtime:0,
           med:null, lv:null, avglen:null, engaged:0, engagedMed:null,
+          engagedLo:0, engagedHi:0, engagedMedLo:null, engagedMedHi:null,
           lrevlo:0, lrevhi:0,
           srevlo: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[0],0)),
           srevhi: Math.round(sh.reduce((s,v)=>s+((v.views||0)/1000)*RPM.shorts[1],0)),
@@ -3753,6 +3773,12 @@ async function loadAndCompute(){
         // applies to views ACCRUED after the change, not to whole months.
         engaged: Math.round(vs.reduce((s,v)=>s+vccEngagedOne(v, VCC_MID),0)),
         engagedMed: Math.round(median(vs.map(v=>vccEngagedOne(v, VCC_MID)))),
+        // The same two figures at each end of the factor's range. A bigger factor
+        // means fewer engaged views, so the HIGH factor gives the LOW bound.
+        engagedLo: Math.round(vs.reduce((s,v)=>s+vccEngagedOne(v, VCC_FACTOR.high),0)),
+        engagedHi: Math.round(vs.reduce((s,v)=>s+vccEngagedOne(v, VCC_FACTOR.low),0)),
+        engagedMedLo: Math.round(median(vs.map(v=>vccEngagedOne(v, VCC_FACTOR.high)))),
+        engagedMedHi: Math.round(median(vs.map(v=>vccEngagedOne(v, VCC_FACTOR.low)))),
         lv: lvs.length?Math.round(median(lvs)*1000)/10:0,
         comments: vs.reduce((s,v)=>s+(v.comments||0),0),
         avglen: durs.length?Math.round(median(durs)/60*10)/10:0,
@@ -4319,6 +4345,19 @@ function render(m){
   // caption on a period that has nothing to adjust.
   const useEng = vccAdj && !!window.__viewEngaged;
   const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
+  // An engaged figure is an estimate, so it is shown with the range it could
+  // sit in: the same views divided by each end of the factor's range. One quiet
+  // line under the number, and nothing at all on periods the change never
+  // touched or while the reported basis is selected.
+  const rngOk = (lo, hi) => lo != null && hi != null && hi > lo * 1.005;
+  const rngTxt = (lo, hi) => `likely <b>${fmt(lo)} \u2013 ${fmt(hi)}</b>`;
+  const rangeInfo = `<span class="info-icon" data-popover="Engaged views are an estimate. Views counted since 27 Aug are divided by ${VCC_MID.toFixed(2)}, our measurement of how much the counting change inflated them. The true figure could be anywhere from ${VCC_FACTOR.low.toFixed(2)} to ${VCC_FACTOR.high.toFixed(2)}, which puts this number somewhere in the range shown." tabindex="0" role="button" aria-label="About this range">\u24d8</span>`;
+  const rangeTot = (useEng && rngOk(d.engagedLo, d.engagedHi))
+    ? `<div class="hero-range">${rngTxt(d.engagedLo, d.engagedHi)}${rangeInfo}</div>` : '';
+  const lfMeanEngLo = (d.n && d.engagedLo != null) ? Math.round(d.engagedLo / d.n) : null;
+  const lfMeanEngHi = (d.n && d.engagedHi != null) ? Math.round(d.engagedHi / d.n) : null;
+  const rangeAvg = (useEng && rngOk(d.engagedMedLo, d.engagedMedHi))
+    ? `<div class="hero-range"><span class="js-med">${rngTxt(d.engagedMedLo, d.engagedMedHi)}</span><span class="js-mean">${rngOk(lfMeanEngLo, lfMeanEngHi) ? rngTxt(lfMeanEngLo, lfMeanEngHi) : ''}</span></div>` : '';
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
   const basisToggle = vccAdj ? `<div class="basis-row"><div class="chart-fmt-seg basis-seg" role="group" aria-label="Counting basis"><button type="button" class="chart-ctrl-btn seg" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">Reported views</button><button type="button" class="chart-ctrl-btn seg" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">Engaged views</button></div><span class="info-icon" data-popover="YouTube used to need about 30 seconds to count a view; now it counts from the first frame. Liking still takes a deliberate tap, and the like rate halved overnight - people didn't stop liking, views just got cheaper. So we divide by ${VCC_MID}, give or take 10%. It's an estimate. Our revenue figures use it because the RPM they rest on was measured before the change." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
@@ -4619,6 +4658,7 @@ function render(m){
       <div class="hero-card">
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(useEng?totEng:d.tot)}${useEng?' engaged':''} views">${fmt(useEng?totEng:d.tot)}</div>
+        ${rangeTot}
         <div class="hero-sub">${(v => v?v.replace(/^ · /,''):'')(useEng?totSubsStrEng:totSubsStr)}</div>
         ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(useEng?projTotEng:projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
         ${useEng ? heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,null,basisTag)
@@ -4627,6 +4667,7 @@ function render(m){
       <div class="hero-card avg-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Two ways to average the month's long-form views. Median (default) is the typical upload — one viral hit or dead month can't skew it. Mean is total views ÷ uploads, so mean × uploads = total views. The % is that figure as a share of the subscriber base (subs tracked June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
         <div class="hero-num"><span class="js-med">${fmt(useEng?d.engagedMed:d.med)}</span><span class="js-mean">${fmt(useEng?lfMeanEng:lfMean)}</span></div>
+        ${rangeAvg}
         <div class="avg-toggle" role="group" aria-label="Average type"><button type="button" data-avgopt="median" aria-pressed="true" onclick="__setAvgMetric(false)">median</button><button type="button" data-avgopt="mean" aria-pressed="false" onclick="__setAvgMetric(true)">mean</button></div>
         <div class="hero-sub">per long-form upload<span class="js-med">${useEng?medSubsStrEng:medSubsStr}</span><span class="js-mean">${useEng?meanSubsStrEng:meanSubsStr}</span></div>
         ${useEng ? heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',basisTag)
@@ -5084,6 +5125,9 @@ function anSummarise(videos) {
   // Engaged (old-rule) twins of the long-form magnitudes, for the basis toggle.
   // Shorts get none: they have counted from the first frame since Mar 2025.
   const longViewsEngaged = longForm.reduce((s, v) => s + vccEngagedOne(v, VCC_MID), 0);
+  // The same total at each end of the factor's range (high factor = low bound).
+  const longViewsEngagedLo = longForm.reduce((s, v) => s + vccEngagedOne(v, VCC_FACTOR.high), 0);
+  const longViewsEngagedHi = longForm.reduce((s, v) => s + vccEngagedOne(v, VCC_FACTOR.low), 0);
   const engVals = longForm.map(v => vccEngagedOne(v, VCC_MID)).sort((a, b) => a - b);
   let longViewsMedianEngaged = 0;
   if (engVals.length) {
@@ -5131,7 +5175,7 @@ function anSummarise(videos) {
     shortLikeRate: shortViews ? shortLikes / shortViews : 0,
     longLikeRateMedian, longLikeRateSampleSize: eligibleRates.length,
     medianDuration, longViewsMedian, longFormDurations: durations.length, longFormTotalSeconds,
-    longViewsEngaged, longViewsMedianEngaged,
+    longViewsEngaged, longViewsMedianEngaged, longViewsEngagedLo, longViewsEngagedHi,
     longAvgEngaged: longForm.length ? longViewsEngaged / longForm.length : 0,
     revLow, revHigh, revMid, revPessLow, revPessHigh, revPessMid, revSelfLow, revSelfHigh, revSelfMid,
     totalViews() { return this.longViews + this.shortViews; },
@@ -5643,14 +5687,20 @@ function buildMonthlyData(scope){
     const _eng = !!window.__viewEngaged && vccBasisApplies();
     const _lv = _eng ? (summary.longViewsEngaged != null ? summary.longViewsEngaged : summary.longViews) : summary.longViews;
     const _la = _eng ? (summary.longAvgEngaged != null ? summary.longAvgEngaged : summary.longAvg) : summary.longAvg;
+    // The engaged range for the month: null unless the engaged basis is on and
+    // the month actually carries post-change views.
+    const _rng = (_eng && summary.longViewsEngagedLo != null && summary.longViewsEngagedHi > summary.longViewsEngagedLo * 1.005)
+      ? [summary.longViewsEngagedLo, summary.longViewsEngagedHi] : null;
     // "Include Shorts" applies only to the plain Views metric — every other
     // consumer of this helper keeps its long-form framing.
     if (chartMetric === 'views' && includeShorts) {
       const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
-      return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
+      return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video',
+               lo: _rng ? _rng[0] + summary.shortViews : null, hi: _rng ? _rng[1] + summary.shortViews : null };
     }
     if (viewMode === 'long') {
-      return { views: _lv, count: summary.longForm.length, avg: _la, label: 'long-form' };
+      return { views: _lv, count: summary.longForm.length, avg: _la, label: 'long-form',
+               lo: _rng ? _rng[0] : null, hi: _rng ? _rng[1] : null };
     }
     // Shorts-only. This branch was missing: setChartTitle has always labelled
     // mode 'short' as "Shorts views by month", but without it the chart fell
@@ -6369,7 +6419,25 @@ function renderTrendChart(yoy) {
   // Solid dot where something was published; hollow ring on the baseline where
   // nothing was, so a blank month is visibly a different kind of thing from a
   // low month rather than reading as a crash to zero.
-  const currDots = currValues.map((v, i) =>
+  // Engaged basis: each affected month carries the range its estimate could sit
+  // in, as a whisker behind the dot. Months before the change have none.
+  //
+  // Drawn only when it is tall enough to read. On a full-history axis the range
+  // is a few pixels high and a whisker that small looks like a rendering fault,
+  // not information; the tooltip carries the exact figures at every scale.
+  const RANGE_MIN_PX = 9;
+  const rangeMark = (x, lo, hi) => {
+    const y1 = Math.max(P.top, yFor(hi)), y2 = yFor(lo);
+    if (y2 - y1 < RANGE_MIN_PX) return '';
+    return `<g class="chart-range"><line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/><line x1="${x - 4}" y1="${y1}" x2="${x + 4}" y2="${y1}"/><line x1="${x - 4}" y1="${y2}" x2="${x + 4}" y2="${y2}"/></g>`;
+  };
+  const addRangeLegend = () => {
+    if (legend.querySelector('.trend-legend-swatch.range')) return;
+    legend.insertAdjacentHTML('beforeend', '<span class="trend-legend-item"><span class="trend-legend-swatch range"></span> Likely range of the engaged estimate</span>');
+  };
+  const currRangeSvg = chartData.map((m, i) => { const c = metricsFor(m.curr); return (c && c.lo != null && vHas(i)) ? rangeMark(xFor(i), c.lo, c.hi) : ''; }).join('');
+  if (currRangeSvg) addRangeLegend();
+  const currDots = currRangeSvg + currValues.map((v, i) =>
     vHas(i)
       ? `<circle class="chart-dot curr" cx="${xFor(i)}" cy="${yFor(v)}" r="3.5"/>`
       : `<circle class="chart-dot blank" cx="${xFor(i)}" cy="${yFor(0)}" r="3.2"/>`
@@ -6473,9 +6541,13 @@ function renderTrendChart(yoy) {
       }
     }
 
+    const _ipC = metricsFor(inProgressMonth.curr);
+    const ipRangeSvg = (ipHasUploads && _ipC && _ipC.lo != null) ? rangeMark(ipX, _ipC.lo, _ipC.hi) : '';
+    if (ipRangeSvg) addRangeLegend();
     inProgressSvg = `
       ${viewsConnector}
       ${durInProgressSvg}
+      ${ipRangeSvg}
       ${ipHasUploads
         ? `<circle class="chart-dot-inprogress" cx="${ipX}" cy="${ipY}" r="4.5"/>
            <circle class="chart-dot-inprogress-pulse" cx="${ipX}" cy="${ipY}" r="4.5"/>`
@@ -6585,6 +6657,7 @@ function renderTrendChart(yoy) {
     tooltip.innerHTML = `
       <div class="chart-tooltip-month">${m.label}${isInProgress ? ' <span class="chart-tooltip-inprogress-tag">live</span>' : ''}</div>
       <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
+      ${curr.lo != null ? `<div class="chart-tooltip-row chart-tooltip-range">likely ${fmt(curr.lo)} \u2013 ${fmt(curr.hi)}</div>` : ''}
       ${!isInProgress && effectiveYoy && yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
       ${durationHtml}
       ${inProgressCaveat}
@@ -6751,14 +6824,18 @@ function renderCountingChangeChart() {
       + Math.round(chk.rateAfter) + '.</p>'
       + '<div class="ccx-chart" data-ccx="ranges"></div>'
       + '<p class="ccx-note">Each bar is the range the true figure most likely sits in. The two bars overlap, '
-      + 'so the channels agree.</p>');
+      + 'so the channels agree.'
+      + ((cc.site && cc.site.checks) ? ' We also re-ran the measurement ' + cc.site.checks.n + ' other ways, and every one landed between '
+        + cc.site.checks.min.toFixed(2) + ' and ' + cc.site.checks.max.toFixed(2) + '.' : '') + '</p>');
   }
   h += '</ol>';
 
   h += '<div class="ccx-use"><h3>What this site does with it</h3>'
     + '<p>Wherever you choose <b>Engaged views</b>, long-form views counted since ' + onsetShort + ' are divided by '
     + J.toFixed(2) + ', so months before and after the change can be compared fairly. <b>Reported views</b> shows '
-    + 'YouTube\'s own numbers, untouched. Shorts are never adjusted, because they have counted this way since March 2025.</p>';
+    + 'YouTube\'s own numbers, untouched. Shorts are never adjusted, because they have counted this way since March 2025.</p>'
+    + '<p>Because the figure is an estimate, engaged numbers on this site come with their likely range: the same views divided by '
+    + JHI.toFixed(2) + ' at one end and ' + JLO.toFixed(2) + ' at the other.</p>';
 
   const announced = (typeof VCC_DATE === 'string') ? dShort(VCC_DATE) : '24 Aug';
   const fine = [
@@ -6772,7 +6849,12 @@ function renderCountingChangeChart() {
     'The figure comes from ' + ch.dist.post.length + ' ' + esc(bmName) + ' videos published since the change and '
       + ch.dist.pre.length + ' published before it, going back to ' + dLong(cc.from) + '. Last measured '
       + dLong(String(cc.generated).slice(0, 10)) + '.',
-    'The range is a 95% interval. We re-ran the calculation 4,000 times on random re-draws of the videos, and 95 in every 100 results landed inside it.',
+    (cc.site && cc.site.checks && cc.site.sampleLow)
+      ? 'The range covers two kinds of doubt. Chance: we re-ran the calculation 4,000 times on random re-draws of the videos, and 95 in every 100 results fell between '
+        + cc.site.sampleLow.toFixed(2) + ' and ' + cc.site.sampleHigh.toFixed(2) + '. Method: ' + cc.site.checks.n + ' other ways of doing the sum (other kinds of average, reading the videos at other ages, '
+        + 'using only the weeks nearest the change, allowing for a gradual drift in how often people like) give between ' + cc.site.checks.min.toFixed(2) + ' and ' + cc.site.checks.max.toFixed(2)
+        + '. The range shown contains all of them.'
+      : 'The range is a 95% interval. We re-ran the calculation 4,000 times on random re-draws of the videos, and 95 in every 100 results landed inside it.',
   ];
   if (cc.pooled && cc.pooled.factor) {
     const off = Math.abs(cc.pooled.factor / J - 1) * 100;
