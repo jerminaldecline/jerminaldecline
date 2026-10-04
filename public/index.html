@@ -151,20 +151,25 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .kofi-steam path{animation:none}}
 .kofi-label{white-space:nowrap}
 .ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border)}
-.tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+/* Tabs and the date controls share one line on desktop. Four tabs plus the
+   Overview's controls only just fit the 1060px column, so the spacing below is
+   deliberately tight: check the fit (and a phone) before adding to either side. */
+.tabbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:0.6rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .tabbar-row .ds-tabs{border-bottom:none}
 .sticky-controls{display:flex;align-items:center;padding-bottom:0.35rem}
-.bar-controls{display:flex;gap:0.4rem;align-items:center}
+.bar-controls{display:flex;gap:0.35rem;align-items:center;min-width:0}
 .bar-controls[hidden]{display:none}
-.bar-sel{background:var(--surface);color:var(--text);border:1px solid var(--accent);border-radius:7px;padding:0.36rem 1.6rem 0.36rem 0.6rem;font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;max-width:200px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236aa3ff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.55rem center;box-shadow:0 0 0 0 var(--accent);transition:box-shadow .12s,background-color .12s}
+.bar-sel{background:var(--surface);color:var(--text);border:1px solid var(--accent);border-radius:7px;padding:0.36rem 1.45rem 0.36rem 0.55rem;font-family:inherit;font-size:0.8rem;font-weight:700;cursor:pointer;max-width:200px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236aa3ff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.5rem center;box-shadow:0 0 0 0 var(--accent);transition:box-shadow .12s,background-color .12s}
 .bar-sel:hover{background-color:var(--surface-2);box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.18))}
 .bar-sel:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.3))}
 .bar-sel:hover{border-color:var(--accent)}
 .bar-sel option{background:var(--surface);color:var(--text)}
-.ds-tab{appearance:none;background:var(--surface);border:1px solid var(--border);border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;padding:0.6rem 1.15rem;cursor:pointer;margin-bottom:-1px;border-radius:9px 9px 0 0;transition:background .14s,color .14s}
+.ds-tab{appearance:none;background:var(--surface);border:1px solid var(--border);border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.95rem;font-weight:700;padding:0.6rem 0.85rem;cursor:pointer;margin-bottom:-1px;border-radius:9px 9px 0 0;transition:background .14s,color .14s}
 .ds-tab:hover{color:var(--text);background:var(--surface-2)}
 .ds-tab:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.28))}
 .ds-tab[aria-selected="true"]{color:var(--accent);background:var(--surface-2);border-bottom-color:var(--accent);border-bottom-width:3px}
+@media(min-width:1100px){.tabbar-row{flex-wrap:nowrap}.ds-tabs{flex:0 0 auto}.sticky-controls{flex:0 1 auto;min-width:0}.bar-controls .bar-sel{flex:0 1 auto;min-width:0}}
+@media(max-width:680px){.ds-tabs{width:100%}.ds-tab{flex:1 1 0;min-width:min-content;font-size:0.86rem;padding:0.55rem 0.35rem}}
 .ds-tabpanel[hidden]{display:none}
 .tab-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:3rem 2rem;text-align:center}
 .tab-placeholder h3{margin:0 0 0.75rem;font-size:1.2rem;font-weight:800;color:var(--text)}
@@ -2525,7 +2530,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .mood-pair .mood-label{display:none}
 /* Month quick-jump segmented control (Overview controls row) */
 .month-quick{display:inline-flex;gap:0.3rem;flex:0 0 auto}
-.mq-btn{appearance:none;border:1px solid var(--accent);border-radius:7px;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.04rem;padding:0.28rem 0.7rem;line-height:1.12;text-align:center;flex:1 1 0;min-width:0}
+.mq-btn{appearance:none;border:1px solid var(--accent);border-radius:7px;background:var(--surface);color:var(--subtext);font-family:inherit;cursor:pointer;white-space:nowrap;transition:background-color .12s ease,color .12s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.04rem;padding:0.28rem 0.55rem;line-height:1.12;text-align:center;flex:1 1 0;min-width:0}
 .mq-main{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.02em;opacity:0.8;white-space:nowrap}
 .mq-sub{font-size:0.78rem;font-weight:800;letter-spacing:-0.01em;white-space:nowrap}
 .mq-btn:hover{color:var(--text)}
