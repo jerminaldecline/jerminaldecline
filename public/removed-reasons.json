@@ -1,7 +1,7 @@
 {
  "_note": "Resolved unavailability reason per removed video, from YouTube watch-page playabilityStatus.",
  "_method": "watch-page playabilityStatus scrape",
- "_generated": "2026-09-05",
+ "_generated": "2026-10-03",
  "reasons": {
   "tM97PVvD2KA": {
    "reason": "private"
@@ -511,11 +511,6 @@
    "reason": "unlisted",
    "checked": "2026-08-18T15:39:56.394Z"
   },
-  "8a1kWPVJo-U": {
-   "reason": "copyright",
-   "checked": "2026-08-19T10:38:29.600Z",
-   "detail": "Korey Batey"
-  },
   "19uMUwYYNgs": {
    "reason": "unlisted",
    "checked": "2026-08-25T01:46:16.766Z"
@@ -529,8 +524,8 @@
    "checked": "2026-08-29T11:00:01.390Z"
   },
   "NPJoESiC2_M": {
-   "reason": "unavailable",
-   "checked": "2026-09-05T04:16:14.630Z"
+   "reason": "deleted",
+   "checked": "2026-09-16T15:43:37.758Z"
   },
   "DkuNwRA_GWk": {
    "reason": "private",
@@ -539,6 +534,19 @@
   "XdPiD6aAuf8": {
    "reason": "private",
    "checked": "2026-09-05T04:16:13.027Z"
+  },
+  "MzSFY1eLfmY": {
+   "reason": "copyright",
+   "checked": "2026-09-16T15:43:36.118Z",
+   "detail": "The Moto Experience"
+  },
+  "FrxvCnIhLFE": {
+   "reason": "deleted",
+   "checked": "2026-09-16T15:43:34.472Z"
+  },
+  "teh3DsFempY": {
+   "reason": "deleted",
+   "checked": "2026-09-30T06:35:47.857Z"
   }
  }
 }
