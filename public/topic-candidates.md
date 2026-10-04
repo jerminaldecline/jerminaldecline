@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-03
+# Topic candidates — 2026-10-04
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,14 +6,14 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 14 recent videos, 123 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 14/15 videos (**93%**)
-- **Baseline saturation:** 37/127 videos (29%)
-- **Spike ratio:** 3.2x
-- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `join`, `server`, `jack o'lantern`, `o'lantern back`
+- **Recent saturation:** 13/14 videos (**93%**)
+- **Baseline saturation:** 38/123 videos (31%)
+- **Spike ratio:** 3.0x
+- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
   - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
     Karen Kills Puppy In Absolutely Evil Attack
@@ -28,9 +28,9 @@ Pool: 15 recent videos, 127 baseline videos
 
 ### Cluster 2: `exposed`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 7/127 videos (6%)
-- **Spike ratio:** 3.4x
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 7/123 videos (6%)
+- **Spike ratio:** 3.5x
 - **Related terms:** `exposed`
 - **Sample recent videos:**
   - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
@@ -42,13 +42,13 @@ Pool: 15 recent videos, 127 baseline videos
 
 ## @JeremyHambly
 
-Pool: 8 recent videos, 81 baseline videos
+Pool: 8 recent videos, 79 baseline videos
 
 ### Cluster 1: `o'lantern`
 
 - **Recent saturation:** 8/8 videos (**100%**)
-- **Baseline saturation:** 37/81 videos (46%)
-- **Spike ratio:** 2.2x
+- **Baseline saturation:** 37/79 videos (47%)
+- **Spike ratio:** 2.1x
 - **Related terms:** `o'lantern`, `server`, `join`, `massive`, `jack o'lantern`, `o'lantern back`, `stock sign`, `our server`
 - **Sample recent videos:**
   - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
