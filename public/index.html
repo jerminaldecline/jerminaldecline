@@ -672,7 +672,14 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
    so adding/removing keys never moves the chart. Buttons are also shrunk here. */
 @media(max-width:680px){
   .trend-legend-row{flex-direction:column;align-items:stretch;gap:0.45rem;margin-bottom:0.4rem}
-  .trend-legend-row .chart-controls-overlay{order:1;justify-content:flex-end;gap:0.35rem}
+  /* The Views chart can show four controls at once (previous year, format,
+     counting basis, labels): 398px of buttons in a 317px card. Squeezed onto
+     one line the first two wrapped their text and Labels hung outside the
+     card. They now keep their natural size and wrap as whole buttons onto a
+     second right-aligned row. */
+  .trend-legend-row .chart-controls-overlay{order:1;justify-content:flex-end;gap:0.35rem;flex-wrap:wrap}
+  .trend-legend-row .chart-controls-overlay > *{flex:0 0 auto}
+  .trend-legend-row .chart-controls-overlay .chart-ctrl-btn{white-space:nowrap}
   .trend-legend-row .trend-legend{order:2;flex:1 1 100%;min-height:3em;align-content:flex-start;
     font-size:0.72rem;gap:0.3rem 0.7rem}
   .chart-ctrl-btn{font-size:0.7rem;padding:0.22rem 0.45rem;gap:0.28rem;border-radius:6px}
