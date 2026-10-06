@@ -2738,6 +2738,11 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .assoc-chart{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;margin-top:1.2rem}
 .assoc-chart .an-chart-title-main{margin-bottom:0.15rem}
 .assoc-chart .chart-wrap{position:relative;margin-top:0.6rem}
+/* A month with nothing to report in a row: one quiet line instead of four
+   zero cards and a column of "down 100%" comparisons. */
+.assoc-none{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:0.95rem 1.2rem;color:var(--subtext);font-size:0.9rem;line-height:1.5;margin-bottom:1.1rem}
+.assoc-none b{color:var(--text);font-weight:700}
+.trend-legend-swatch.blank{background:none;width:9px;height:9px;border:1.4px dashed var(--text-dim);border-radius:50%;opacity:0.85}
 .assoc-note{font-size:0.78rem;color:var(--text-dim);margin-top:1.2rem;line-height:1.45}
 .assoc-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
 .assoc-kind{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);border:1px solid var(--border);border-radius:999px;padding:0.05rem 0.5rem;white-space:nowrap}
@@ -14352,7 +14357,7 @@ function renderWindowList(startDate, endDate) {
     const mName = k => (typeof monthName === 'function') ? monthName(k) : label(k);
     sel.innerHTML = Object.entries(PRESETS).map(([v, l]) => `<option value="${v}"${v === monthKey ? ' selected' : ''}>${l === 'Year to date' ? 'YTD' : l}</option>`).join('')
       + (ms.length ? `<option disabled>\u2500\u2500\u2500\u2500\u2500\u2500</option>` : '')
-      + ms.slice().reverse().map(k => `<option value="${k}"${k === monthKey ? ' selected' : ''}>${mName(k)}</option>`).join('');
+      + ms.slice().reverse().map(k => `<option value="${k}"${k === monthKey ? ' selected' : ''}>${mName(k)}${sums[k] ? '' : ' \u00b7 nothing posted'}</option>`).join('');
     const EMPTY = { n: 0, tot: 0, med: null, mean: null, lv: null, comments: 0, runtime: 0, avglen: null, sn: 0, stot: 0, smed: null, ln: 0, ltot: 0, lmed: null, lhours: 0, top: null, worst: null, worstVsMed: null, debate: null };
     const isAgg = !!PRESETS[monthKey];
     let d, p = null, y = null, lblMo = '', lblYr = '', inProg = false, gained = null, headLabel;
@@ -14381,40 +14386,52 @@ function renderWindowList(startDate, endDate) {
     let h = `<div class="assoc-meta"><b>${esc(ch.title)}</b><span><a href="${esc(ch.url)}" target="_blank" rel="noopener">${esc(ch.handle)} \u2197</a></span>
       <span><b>${fmt(ch.subscriberCount)}</b> subscribers</span><span><b>${lf.toLocaleString()}</b> uploads${hasLive ? ` \u00b7 <b>${lvn.toLocaleString()}</b> live streams` : ''} \u00b7 <b>${shn.toLocaleString()}</b> Shorts</span>
       <span><b>${fmt(ch.channelViews || sum(vids.map(v => v.views || 0)))}</b> lifetime views</span>${gen ? `<span>updated ${gen.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>` : ''}</div>`;
-    h += `<div class="hero-rowlabel">${headLabel} \u2014 ${hasLive ? 'long-form uploads' : 'long-form'}</div><div class="hero cols4">`;
+    // Single months with nothing in a format get one line, not a row of zeros
+    // and "down 100%" comparisons. Channels that post in bursts, or mostly
+    // Shorts, have many such months. Presets pool months, so they keep the cards.
+    const noLF = !isAgg && !d.n, noLive = hasLive && !isAgg && !d.ln, noSh = !isAgg && !d.sn;
+    const none = txt => `<div class="assoc-none">${txt}</div>`;
+    // Share of ALL the month's views (uploads + streams + Shorts); used by the Shorts row and Other stats.
+    const allOf = x => x ? x.tot + x.stot + (x.ltot || 0) : 0;
+    h += `<div class="hero-rowlabel">${headLabel} \u2014 ${hasLive ? 'long-form uploads' : 'long-form'}</div>`;
+    if (noLF) h += none(`<b>No long-form uploads this month.</b>${noLive ? ' No live streams either.' : ''}${d.sn ? ` ${d.sn} Short${d.sn === 1 ? '' : 's'} posted.` : (!noLive && d.ln ? ` ${d.ln} live stream${d.ln === 1 ? '' : 's'}.` : '')}`);
+    else { h += `<div class="hero cols4">`;
     h += card('Total views', fmt(d.tot), d.n ? `across ${d.n} upload${d.n === 1 ? '' : 's'}` : 'no long-form uploads', deltas(d.tot, p && p.tot, y && y.tot, lblMo, lblYr, true));
     h += card('Average views', d.med == null ? '\u2014' : fmt(d.med), d.med == null ? '' : `median per upload \u00b7 mean ${fmt(d.mean)}`, deltas(d.med, p && p.med, y && y.med, lblMo, lblYr, true));
     h += card('Uploads', String(d.n), 'long-form videos', deltas(d.n, p && p.n, y && y.n, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
     h += card('Like rate', d.lv == null ? '\u2014' : d.lv + '%', d.lv == null ? '' : 'median across uploads', deltas(d.lv, p && p.lv, y && y.lv, lblMo, lblYr, true, { unit: ' pts', dec: 1, pct: false }));
-    h += `</div>`;
-    if (hasLive) {
-      h += `<div class="hero-rowlabel">Live streams</div><div class="hero cols4">`;
+    h += `</div>`; }
+    if (hasLive && !(noLF && noLive)) {
+      h += `<div class="hero-rowlabel">Live streams</div>`;
+      if (noLive) h += none('<b>No live streams this month.</b>'); else { h += `<div class="hero cols4">`;
       h += card('Total views', fmt(d.ltot), d.ln ? `across ${d.ln} stream${d.ln === 1 ? '' : 's'}` : 'no streams', deltas(d.ltot, p && p.ltot, y && y.ltot, lblMo, lblYr, true));
       h += card('Average views', d.lmed == null ? '\u2014' : fmt(d.lmed), d.lmed == null ? '' : 'median per stream', deltas(d.lmed, p && p.lmed, y && y.lmed, lblMo, lblYr, true));
       h += card('Streams', String(d.ln), 'live streams', deltas(d.ln, p && p.ln, y && y.ln, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
       h += card('Hours live', d.lhours + ' h', 'total stream runtime', deltas(d.lhours, p && p.lhours, y && y.lhours, lblMo, lblYr, null, { unit: 'h', dec: 1, pct: false }));
-      h += `</div>`;
+      h += `</div>`; }
     }
-    h += `<div class="hero-rowlabel">Shorts</div><div class="hero cols4">`;
+    h += `<div class="hero-rowlabel">Shorts</div>`;
+    if (noSh) h += none('<b>No Shorts this month.</b>'); else { h += `<div class="hero cols4">`;
     h += card('Total views', fmt(d.stot), d.sn ? `across ${d.sn} Short${d.sn === 1 ? '' : 's'}` : 'no Shorts', deltas(d.stot, p && p.stot, y && y.stot, lblMo, lblYr, true));
     h += card('Average views', d.smed == null ? '\u2014' : fmt(d.smed), d.smed == null ? '' : 'median per Short', deltas(d.smed, p && p.smed, y && y.smed, lblMo, lblYr, true));
     h += card('Uploads', String(d.sn), 'Shorts', deltas(d.sn, p && p.sn, y && y.sn, lblMo, lblYr, null, { unit: '', dec: 0, pct: true }));
     // Share of ALL the month's views (uploads + streams + Shorts), so this and
     // the live-stream share in Other stats describe the same pie.
-    const allOf = x => x ? x.tot + x.stot + (x.ltot || 0) : 0;
     const share = allOf(d) > 0 ? Math.round(d.stot / allOf(d) * 100) : null;
     const pshare = p && allOf(p) > 0 ? Math.round(p.stot / allOf(p) * 100) : null;
     const yshare = y && allOf(y) > 0 ? Math.round(y.stot / allOf(y) * 100) : null;
     h += card('Share of views', share == null ? '\u2014' : share + '%', share == null ? '' : "of the month's views came from Shorts", deltas(share, pshare, yshare, lblMo, lblYr, null, { unit: ' pts', dec: 0, pct: false }));
-    h += `</div>`;
-    h += `<div class="hero-rowlabel">Other stats</div><div class="stat-row">`;
+    h += `</div>`; }
+    h += `<div class=\"hero-rowlabel\">Other stats</div><div class="stat-row">`;
     const upl = hasLive ? 'uploads' : 'long-form';
+    if (!noLF) {
     h += stat(fmt(d.comments), 'Comments (' + upl + ')', d.comments, p && p.comments, y && y.comments, lblMo, lblYr, true);
     h += stat(d.runtime + ' h', 'Total runtime (' + upl + ')', d.runtime, p && p.runtime, y && y.runtime, lblMo, lblYr, null, { unit: 'h', dec: 1, pct: false });
     h += stat(d.avglen == null ? null : d.avglen + ' min', 'Average video length (' + upl + ')', d.avglen, p && p.avglen, y && y.avglen, lblMo, lblYr, null, { unit: 'm', dec: 1, pct: false });
+    }
     h += stat(gained == null ? '\u2014' : (gained >= 0 ? '+' : '') + fmt(gained), 'Subscribers gained', null, null, null, lblMo, lblYr, true);
     const vps = ch.subscriberCount ? Math.round(d.tot / ch.subscriberCount * 100) / 100 : null;
-    h += stat(vps == null ? null : '\u2248' + vps, 'Views per subscriber (' + upl + ')', vps, null, null, lblMo, lblYr, true);
+    if (!noLF) h += stat(vps == null ? null : '\u2248' + vps, 'Views per subscriber (' + upl + ')', vps, null, null, lblMo, lblYr, true);
     const mshare = allOf(d) > 0 && hasLive ? Math.round(d.ltot / allOf(d) * 100) : null;
     h += stat(mshare == null ? null : mshare + '%', "Live streams' share of the month's views", mshare, null, null, lblMo, lblYr, null);
     h += `</div>`;
@@ -14462,8 +14479,11 @@ function renderWindowList(startDate, endDate) {
     let keys = [];
     if (isAgg) { const range = presetMonths(monthKey, months(sums), sums) || []; keys = range.filter(k => k < thisMonth); }
     if (keys.length < 2) { keys = []; for (let i = 11; i >= 0; i--) keys.push(shiftKey(end, -i)); }
-    const val = sm => !sm ? null : chartFmt === 'live' ? sm.ltot : chartFmt === 'uploads' ? sm.tot : sm.tot + sm.ltot;
     const cnt = sm => !sm ? 0 : chartFmt === 'live' ? sm.ln : chartFmt === 'uploads' ? sm.n : sm.n + sm.ln;
+    // A month with nothing in the chosen format is a gap, not a zero. The line
+    // lifts over it and a hollow marker sits on the axis, as the Overview does,
+    // so a Shorts-only month does not read as long-form views collapsing.
+    const val = sm => (!sm || cnt(sm) === 0) ? null : chartFmt === 'live' ? sm.ltot : chartFmt === 'uploads' ? sm.tot : sm.tot + sm.ltot;
     const cur = keys.map(k => val(sums[k]));
     const prev = keys.map(k => val(sums[shiftKey(k, -12)]));
     const ip = val(sums[thisMonth]), ipPrev = val(sums[shiftKey(thisMonth, -12)]);
@@ -14494,6 +14514,8 @@ function renderWindowList(startDate, endDate) {
       if (cur[i] != null) { curPath += (started ? 'L' : 'M') + pt(cur, i); dots += `<circle class="chart-dot curr" cx="${xFor(i).toFixed(1)}" cy="${yFor(cur[i]).toFixed(1)}" r="3.5"/>`; started = true; } else started = false;
       if (prev[i] != null) { prevPath += (pstarted ? 'L' : 'M') + pt(prev, i); pdots += `<circle class="chart-dot prev" cx="${xFor(i).toFixed(1)}" cy="${yFor(prev[i]).toFixed(1)}" r="3"/>`; pstarted = true; } else pstarted = false;
     }
+    let blanks = '';
+    for (let i = 0; i < n; i++) if (cur[i] == null) blanks += `<circle class="chart-dot blank" cx="${xFor(i).toFixed(1)}" cy="${yFor(0).toFixed(1)}" r="3.2"/>`;
     if (ipPrev != null && pstarted) { prevPath += 'L' + `${xFor(n).toFixed(1)},${yFor(ipPrev).toFixed(1)}`; pdots += `<circle class="chart-dot prev" cx="${xFor(n).toFixed(1)}" cy="${yFor(ipPrev).toFixed(1)}" r="3"/>`; }
     // Year-over-year shading between the two lines, coloured by which is on top.
     let red = '', green = '';
@@ -14504,7 +14526,10 @@ function renderWindowList(startDate, endDate) {
       if (deficit) red += poly + ' '; else green += poly + ' ';
     }
     let ipMark = '';
-    if (ip != null && cur[n - 1] != null) ipMark = `<path class="chart-line-inprogress" d="M${pt(cur, n - 1)} L${xFor(n).toFixed(1)},${yFor(ip).toFixed(1)}"/><circle class="chart-dot-inprogress" cx="${xFor(n).toFixed(1)}" cy="${yFor(ip).toFixed(1)}" r="4.5"/>`;
+    // The in-progress point stands on its own when the last complete month was a
+    // gap; only the dashed connector needs a point to come from.
+    if (ip != null) ipMark = (cur[n - 1] != null ? `<path class="chart-line-inprogress" d="M${pt(cur, n - 1)} L${xFor(n).toFixed(1)},${yFor(ip).toFixed(1)}"/>` : '')
+      + `<circle class="chart-dot-inprogress" cx="${xFor(n).toFixed(1)}" cy="${yFor(ip).toFixed(1)}" r="4.5"/>`;
     let labels = '';
     const lstride = n <= 13 ? 3 : Math.max(3, Math.ceil(n / 8));
     cur.forEach((v, i) => { if (v == null) return; const peak = v === Math.max(...cur.filter(x => x != null)); if (peak || (i === n - 1 && ip == null) || i % lstride === 0) labels += `<text class="chart-pt-label" x="${xFor(i).toFixed(1)}" y="${(yFor(v) - 8).toFixed(1)}" text-anchor="middle">${fmtCompact(v)}</text>`; });
@@ -14513,15 +14538,19 @@ function renderWindowList(startDate, endDate) {
     let hits = ''; const wHover = innerW / Math.max(1, nTotal - 1);
     for (let i = 0; i < nTotal; i++) hits += `<rect class="chart-hit" x="${(xFor(i) - wHover / 2).toFixed(1)}" y="${P.top}" width="${wHover.toFixed(1)}" height="${innerH}" data-i="${i}"/>`;
     svg.innerHTML = grid + brk + (red ? `<path class="chart-gap deficit" d="${red}"/>` : '') + (green ? `<path class="chart-gap surplus" d="${green}"/>` : '') +
-      (prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : '') + `<path class="chart-line-curr" d="${curPath}"/>` + ipMark + pdots + dots + labels + xl + hits;
+      (prevPath ? `<path class="chart-line-prev" d="${prevPath}"/>` : '') + `<path class="chart-line-curr" d="${curPath}"/>` + ipMark + blanks + pdots + dots + labels + xl + hits;
     legend.innerHTML = `<span class="trend-legend-item"><span class="trend-legend-swatch"></span> ${chartFmt === 'live' ? 'Live-stream views' : chartFmt === 'uploads' ? 'Upload views' : 'Long-form views'}</span><span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>` +
-      (red ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap deficit"></span> YoY deficit</span>' : '') + (green ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap surplus"></span> YoY surplus</span>' : '');
+      (red ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap deficit"></span> YoY deficit</span>' : '') + (green ? '<span class="trend-legend-item"><span class="trend-legend-swatch gap surplus"></span> YoY surplus</span>' : '')
+      + (blanks ? `<span class="trend-legend-item"><span class="trend-legend-swatch blank"></span> No ${chartFmt === 'live' ? 'streams' : 'uploads'} that month</span>` : '');
     const wrap = svg.parentElement;
     svg.querySelectorAll('.chart-hit').forEach(r => {
       r.addEventListener('mouseenter', () => {
         const i = +r.getAttribute('data-i'); const k = i < n ? keys[i] : thisMonth; const v = i < n ? cur[i] : ip; const pv = i < n ? prev[i] : ipPrev; const sm = sums[k];
-        if (v == null) { tip.style.display = 'none'; return; }
-        tip.innerHTML = `<div class="tooltip-month">${label(k)}${i >= n ? ' <span class="tooltip-tag">in progress</span>' : ''}</div><div class="tooltip-row"><strong>${fmt(v)}</strong> ${chartFmt === 'live' ? 'live-stream' : 'long-form'} views</div><div class="tooltip-row tooltip-detail">across ${cnt(sm)} ${chartFmt === 'live' ? 'stream' : chartFmt === 'uploads' ? 'upload' : 'upload or stream'}${cnt(sm) === 1 ? '' : 's'}</div>${pv != null ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(pv)}</div>` : ''}`;
+        if (v == null) {
+          if (i >= n) { tip.style.display = 'none'; return; }
+          const why = chartFmt === 'live' ? 'No live streams this month' : (sm && sm.sn) ? `No ${chartFmt === 'uploads' ? 'uploads' : 'long-form'} this month \u2014 ${sm.sn} Short${sm.sn === 1 ? '' : 's'} posted` : 'Nothing posted this month';
+          tip.innerHTML = `<div class="tooltip-month">${label(k)}</div><div class="tooltip-row chart-tooltip-blank">${why}</div>`;
+        } else tip.innerHTML = `<div class="tooltip-month">${label(k)}${i >= n ? ' <span class="tooltip-tag">in progress</span>' : ''}</div><div class="tooltip-row"><strong>${fmt(v)}</strong> ${chartFmt === 'live' ? 'live-stream' : 'long-form'} views</div><div class="tooltip-row tooltip-detail">across ${cnt(sm)} ${chartFmt === 'live' ? 'stream' : chartFmt === 'uploads' ? 'upload' : 'upload or stream'}${cnt(sm) === 1 ? '' : 's'}</div>${pv != null ? `<div class="tooltip-row tooltip-detail">prev year: ${fmt(pv)}</div>` : ''}`;
         tip.style.display = 'block';
         const b = r.getBoundingClientRect(), wb = wrap.getBoundingClientRect();
         const half = (tip.offsetWidth || 200) / 2; const x = Math.max(half + 8, Math.min(wb.width - half - 8, b.left - wb.left + b.width / 2));
