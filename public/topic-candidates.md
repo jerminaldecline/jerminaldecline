@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-05
+# Topic candidates — 2026-10-06
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,61 +6,47 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 14 recent videos, 120 baseline videos
+Pool: 15 recent videos, 119 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 13/14 videos (**93%**)
-- **Baseline saturation:** 38/120 videos (32%)
-- **Spike ratio:** 2.9x
+- **Recent saturation:** 14/15 videos (**93%**)
+- **Baseline saturation:** 31/119 videos (26%)
+- **Spike ratio:** 3.6x
 - **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
+  - 2026-10-05 — _Failed Execution UNREAL New Twist!_  
+    Christa Pike May NEVER Wake Up After Failed Execution
+  - 2026-10-05 — _IT'S OVER FOR THEM_  
+    SNL Audience ROARS As Cornell Seven Scandal Explodes
+  - 2026-10-05 — _3 MORE Killer MOMS Just Struck! Lindsay Clancy Syndrome Spreads_  
+    Two Mothers Accused As Clancy Copycat Fears Explode
+  - 2026-10-05 — _Leftist TERROR Strikes High School_  
+    Teen Faces TERROR Charges After School Chemical Attack
   - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
     Karen Kills Puppy In Absolutely Evil Attack
-  - 2026-10-01 — _Big Announcement_  
-    They’re MELTING DOWN Over Me Going On Timcast
-  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
-    Death Row Killer SURVIVES Two Lethal Injections
-  - 2026-09-30 — _Female KILLER SAVED By Female Judges_  
-    Female Killer SAVED One Hour Before Her Execution
-  - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
-    Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
-
-### Cluster 2: `exposed`
-
-- **Recent saturation:** 3/14 videos (**21%**)
-- **Baseline saturation:** 7/120 videos (6%)
-- **Spike ratio:** 3.5x
-- **Related terms:** `exposed`
-- **Sample recent videos:**
-  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
-    Death Row Killer SURVIVES Two Lethal Injections
-  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
-    Massive Walmart SNAP Scandal EXPOSED By Government Report
-  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
-    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
 
 ## @JeremyHambly
 
-Pool: 8 recent videos, 76 baseline videos
+Pool: 8 recent videos, 78 baseline videos
 
-### Cluster 1: `o'lantern`
+### Cluster 1: `server`
 
-- **Recent saturation:** 8/8 videos (**100%**)
-- **Baseline saturation:** 37/76 videos (49%)
-- **Spike ratio:** 2.1x
-- **Related terms:** `o'lantern`, `server`, `join`, `massive`, `jack o'lantern`, `o'lantern back`, `stock sign`, `our server`
+- **Recent saturation:** 7/8 videos (**88%**)
+- **Baseline saturation:** 19/78 videos (24%)
+- **Spike ratio:** 3.5x
+- **Related terms:** `server`, `join`, `massive`, `our server`, `server our`, `join our`, `tourney candace`
 - **Sample recent videos:**
+  - 2026-10-05 — _Asmongold & The Burnt Peanut BLAST Gears Of War_  
+    Asmongold Just DESTROYED Gears Of War E-Day
+  - 2026-10-05 — _Lindsay Clancy CULT Hits ROCK BOTTOM_  
+    TikTok’s Newest Trend Is Completely INSANE
+  - 2026-10-05 — _Candace Owens Is SINKING & Fast!_  
+    Sponsors CANCEL Candace As Erika Kirk War Explodes
   - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
     Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
   - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
     Nolan Wells Campaign Sparks Massive Backlash
-  - 2026-09-29 — _Candace Owens BOMBSHELL_  
-    Candace Owens BOMBSHELL Raises Massive Questions
-  - 2026-09-29 — _Candace Owens SUED Again_  
-    Candace Owens Hit With MASSIVE New Defamation Lawsuit
-  - 2026-09-29 — _Judge Judy DESTROYS The Woke Left_  
-    Judge Judy DESTROYS Liberals In Brutal America-First Rant
 
 ---
 
