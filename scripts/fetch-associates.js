@@ -27,6 +27,7 @@ const https = require('https');
 
 const ASSOCIATES = [
   '@paramounttactical',
+  '@MelonieMacGoBoom',    // added 2026-10-06: Shorts-heavy, long-form in bursts, streams resumed Oct 2026
 ];
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
