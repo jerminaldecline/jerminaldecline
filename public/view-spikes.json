@@ -2,8 +2,8 @@
   "_note": "Anomalous view-velocity spikes on aged long-form videos NOT in ad-videos.json. A spike is an anomaly (possible undisclosed ad, off-platform promotion, or news/viral resurface), NOT a confirmed paid ad.",
   "window": {
     "from": "2026-06-11-PM",
-    "to": "2026-10-06-AM",
-    "snapshots": 231
+    "to": "2026-10-07-AM",
+    "snapshots": 233
   },
   "params": {
     "MIN_AGE_DAYS": 7,
@@ -64,13 +64,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-21T20:25:41.000Z",
       "ageDaysAtSpike": 17.5,
-      "baselinePerDay": 8,
+      "baselinePerDay": 6,
       "peakPerDay": 962,
-      "ratio": 120.3,
+      "ratio": 160.3,
       "spikeStartDate": "2026-09-07-PM",
       "elevatedSnapshots": 15,
       "status": "sustained",
-      "estPromotedViews": 4546,
+      "estPromotedViews": 4561,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -437,6 +437,14 @@
         [
           "2026-10-06-AM",
           34457
+        ],
+        [
+          "2026-10-06-PM",
+          34457
+        ],
+        [
+          "2026-10-07-AM",
+          34458
         ]
       ]
     },
@@ -451,9 +459,9 @@
       "peakPerDay": 2156,
       "ratio": 1078,
       "spikeStartDate": "2026-10-02-AM",
-      "elevatedSnapshots": 8,
+      "elevatedSnapshots": 10,
       "status": "sustained",
-      "estPromotedViews": 3061,
+      "estPromotedViews": 3404,
       "topic": "Woke / culture war",
       "newsLikely": false,
       "series": [
@@ -1380,6 +1388,14 @@
         [
           "2026-10-06-AM",
           299383
+        ],
+        [
+          "2026-10-06-PM",
+          299573
+        ],
+        [
+          "2026-10-07-AM",
+          299728
         ]
       ]
     },
@@ -1955,6 +1971,14 @@
         [
           "2026-10-06-AM",
           32190
+        ],
+        [
+          "2026-10-06-PM",
+          32190
+        ],
+        [
+          "2026-10-07-AM",
+          32190
         ]
       ]
     },
@@ -1965,13 +1989,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-09-03T22:29:49.000Z",
       "ageDaysAtSpike": 17.5,
-      "baselinePerDay": 17,
+      "baselinePerDay": 14,
       "peakPerDay": 1472,
-      "ratio": 86.6,
+      "ratio": 105.1,
       "spikeStartDate": "2026-09-20-PM",
       "elevatedSnapshots": 4,
       "status": "sustained",
-      "estPromotedViews": 1862,
+      "estPromotedViews": 1868,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2234,6 +2258,14 @@
         [
           "2026-10-06-AM",
           173337
+        ],
+        [
+          "2026-10-06-PM",
+          173338
+        ],
+        [
+          "2026-10-07-AM",
+          173339
         ]
       ]
     },
@@ -2793,6 +2825,213 @@
         [
           "2026-10-06-AM",
           72789
+        ],
+        [
+          "2026-10-06-PM",
+          72789
+        ],
+        [
+          "2026-10-07-AM",
+          72789
+        ]
+      ]
+    },
+    {
+      "id": "0zxVwVuXWpE",
+      "title": "Psycho Liberals INSTANT Regret!",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "channel": "TheQuartering",
+      "publishedAt": "2026-09-14T21:00:32.000Z",
+      "ageDaysAtSpike": 7.5,
+      "baselinePerDay": 58,
+      "peakPerDay": 472,
+      "ratio": 8.1,
+      "spikeStartDate": "2026-09-21-PM",
+      "elevatedSnapshots": 7,
+      "status": "sustained",
+      "estPromotedViews": 1267,
+      "topic": null,
+      "newsLikely": false,
+      "series": [
+        [
+          "2026-09-15-AM",
+          38535
+        ],
+        [
+          "2026-09-15-PM",
+          49284
+        ],
+        [
+          "2026-09-16-AM",
+          59792
+        ],
+        [
+          "2026-09-16-PM",
+          65293
+        ],
+        [
+          "2026-09-17-AM",
+          77943
+        ],
+        [
+          "2026-09-17-PM",
+          81972
+        ],
+        [
+          "2026-09-18-AM",
+          85180
+        ],
+        [
+          "2026-09-18-PM",
+          85746
+        ],
+        [
+          "2026-09-19-AM",
+          88547
+        ],
+        [
+          "2026-09-19-PM",
+          88905
+        ],
+        [
+          "2026-09-20-AM",
+          88679
+        ],
+        [
+          "2026-09-20-PM",
+          86779
+        ],
+        [
+          "2026-09-21-AM",
+          87198
+        ],
+        [
+          "2026-09-21-PM",
+          87076
+        ],
+        [
+          "2026-09-22-AM",
+          87312
+        ],
+        [
+          "2026-09-22-PM",
+          87515
+        ],
+        [
+          "2026-09-23-AM",
+          87750
+        ],
+        [
+          "2026-09-23-PM",
+          87929
+        ],
+        [
+          "2026-09-24-AM",
+          88146
+        ],
+        [
+          "2026-09-24-PM",
+          88329
+        ],
+        [
+          "2026-09-25-AM",
+          88546
+        ],
+        [
+          "2026-09-25-PM",
+          88697
+        ],
+        [
+          "2026-09-26-AM",
+          88867
+        ],
+        [
+          "2026-09-26-PM",
+          88937
+        ],
+        [
+          "2026-09-27-AM",
+          89050
+        ],
+        [
+          "2026-09-27-PM",
+          89192
+        ],
+        [
+          "2026-09-28-AM",
+          89314
+        ],
+        [
+          "2026-09-28-PM",
+          89422
+        ],
+        [
+          "2026-09-29-AM",
+          89582
+        ],
+        [
+          "2026-09-29-PM",
+          89603
+        ],
+        [
+          "2026-09-30-AM",
+          89647
+        ],
+        [
+          "2026-09-30-PM",
+          89675
+        ],
+        [
+          "2026-10-01-AM",
+          89728
+        ],
+        [
+          "2026-10-01-PM",
+          89764
+        ],
+        [
+          "2026-10-02-AM",
+          89842
+        ],
+        [
+          "2026-10-02-PM",
+          89872
+        ],
+        [
+          "2026-10-03-AM",
+          89903
+        ],
+        [
+          "2026-10-03-PM",
+          89928
+        ],
+        [
+          "2026-10-04-AM",
+          89965
+        ],
+        [
+          "2026-10-04-PM",
+          89987
+        ],
+        [
+          "2026-10-05-AM",
+          90021
+        ],
+        [
+          "2026-10-05-PM",
+          90034
+        ],
+        [
+          "2026-10-06-AM",
+          90051
+        ],
+        [
+          "2026-10-06-PM",
+          90062
+        ],
+        [
+          "2026-10-07-AM",
+          90075
         ]
       ]
     },
@@ -2803,13 +3042,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-09-14T22:30:16.000Z",
       "ageDaysAtSpike": 7.5,
-      "baselinePerDay": 14,
+      "baselinePerDay": 10,
       "peakPerDay": 1624,
-      "ratio": 116,
+      "ratio": 162.4,
       "spikeStartDate": "2026-09-21-PM",
       "elevatedSnapshots": 2,
       "status": "sustained",
-      "estPromotedViews": 1050,
+      "estPromotedViews": 1054,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -2984,6 +3223,14 @@
         [
           "2026-10-06-AM",
           215169
+        ],
+        [
+          "2026-10-06-PM",
+          215173
+        ],
+        [
+          "2026-10-07-AM",
+          215178
         ]
       ]
     },
@@ -2994,13 +3241,13 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-03-20T19:47:01.000Z",
       "ageDaysAtSpike": 177,
-      "baselinePerDay": 6,
+      "baselinePerDay": 7,
       "peakPerDay": 624,
-      "ratio": 104,
+      "ratio": 89.1,
       "spikeStartDate": "2026-09-13-AM",
       "elevatedSnapshots": 3,
       "status": "sustained",
-      "estPromotedViews": 832,
+      "estPromotedViews": 831,
       "topic": null,
       "newsLikely": false,
       "series": [
@@ -3927,6 +4174,14 @@
         [
           "2026-10-06-AM",
           57570
+        ],
+        [
+          "2026-10-06-PM",
+          57631
+        ],
+        [
+          "2026-10-07-AM",
+          57681
         ]
       ]
     },
@@ -3937,9 +4192,9 @@
       "channel": "TheQuartering",
       "publishedAt": "2026-08-06T23:42:50.000Z",
       "ageDaysAtSpike": 22.5,
-      "baselinePerDay": 7,
+      "baselinePerDay": 6,
       "peakPerDay": 1236,
-      "ratio": 176.6,
+      "ratio": 206,
       "spikeStartDate": "2026-08-28-PM",
       "elevatedSnapshots": 1,
       "status": "emerging",
@@ -4430,6 +4685,14 @@
         [
           "2026-10-06-AM",
           103420
+        ],
+        [
+          "2026-10-06-PM",
+          103420
+        ],
+        [
+          "2026-10-07-AM",
+          103421
         ]
       ]
     },
@@ -4781,6 +5044,14 @@
         [
           "2026-10-06-AM",
           53587
+        ],
+        [
+          "2026-10-06-PM",
+          53591
+        ],
+        [
+          "2026-10-07-AM",
+          53595
         ]
       ]
     }
