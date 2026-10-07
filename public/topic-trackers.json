@@ -1,6 +1,25 @@
 {
-  "lastUpdated": "2026-10-06T11:25:04.543Z",
+  "lastUpdated": "2026-10-07T11:13:52.266Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "server",
+      "keywords": [
+        "server",
+        "our server",
+        "server our",
+        "join",
+        "join our"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.0926,
+        "spikeRatio": 10.8,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-10-07T11:13:52.266Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "o'lantern",
@@ -16,32 +35,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.9333,
-        "baselineSaturation": 0.2625,
-        "spikeRatio": 3.56,
+        "baselineSaturation": 0.2851,
+        "spikeRatio": 3.27,
         "recentVideoCount": 14,
-        "baselineVideoCount": 31,
-        "detectedAt": "2026-10-06T11:25:04.543Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "server",
-      "keywords": [
-        "server",
-        "our server",
-        "server our",
-        "join",
-        "join our",
-        "massive",
-        "tourney candace"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.875,
-        "baselineSaturation": 0.2468,
-        "spikeRatio": 3.54,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-10-06T11:25:04.543Z"
+        "baselineVideoCount": 34,
+        "detectedAt": "2026-10-07T11:13:52.266Z"
       }
     }
   ]
