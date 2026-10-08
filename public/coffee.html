@@ -154,11 +154,9 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
 .detail-stats{font-size:0.8rem;color:var(--text-muted)}
 .detail-stats b{color:var(--text)}
 .detail-close{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font:inherit;font-size:0.74rem;font-weight:700;padding:0.25rem 0.6rem;border-radius:8px;cursor:pointer}
-/* Click a bar: the day (or week) behind it opens under the chart, product by product. */
+/* Click a bar: the day (or week) behind it opens in its own panel below both charts, product by product. */
 .chart .hit{cursor:pointer}
 .chart .hit.picked{fill:var(--accent-2-bg)}
-.dayview{margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid var(--border)}
-.dayview .panel-title{font-size:0.95rem}
 .dayview .panel-sub b{color:var(--text)}
 .dayview .tbl-wrap{margin-top:0.5rem}
 .dayview table{min-width:480px}
@@ -249,17 +247,17 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <div class="legend"><span><i style="background:var(--brand)"></i>Sold</span><span><i style="background:var(--text-dim)"></i>Delivered in</span><span><i style="background:var(--accent-2)"></i>Moved out in one go<i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></span></div>
     </div>
     <div id="movChart"></div>
-    <div class="dayview" id="movDay" hidden></div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Estimated sales value and profit</div><div class="panel-sub" id="revSub"></div></div>
+      <div><div class="panel-title">Estimated sales value and profit</div><div class="panel-sub" id="revSub"></div><div class="panel-sub">Click a bar to see which products moved that day.</div></div>
       <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Value at list price</span><span><i style="background:var(--up)"></i><span id="revNetLeg">Profit</span></span></div>
     </div>
     <div id="revChart"></div>
-    <div class="dayview" id="revDay" hidden></div>
   </div>
+
+  <div class="panel dayview" id="dayPanel" hidden></div>
 
   <div class="panel">
     <div class="panel-head">
@@ -326,7 +324,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, MIN_RUN={amazon:3,shopify:1};
-const state={channel:'amazon',period:30,margin:15,mode:'pct',bulk:false,day:null,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={channel:'amazon',period:30,margin:15,mode:'pct',bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -588,8 +586,7 @@ function renderKpis(c,A,P){
 // The channel day indexes behind one bar (one day, or every day in the week).
 function dayIdx(A,S,key){ const out=[]; for(let k=0;k<A.days.length;k++){ const d=A.days[k]; if(S.weekly ? weekStart(d)===key : d===key) out.push(A.i0+k); } return out; }
 function renderDayView(c,A,S){
-  const mov=document.getElementById('movDay'), rev=document.getElementById('revDay');
-  for(const el of [mov,rev]){ el.hidden=true; el.innerHTML=''; }
+  const el=document.getElementById('dayPanel'); el.hidden=true; el.innerHTML='';
   const d=state.day; if(!d) return;
   const js=dayIdx(A,S,d.key); if(!js.length){ state.day=null; return; }
   const rows=[], tot={sold:0,bulk:0,rest:0,ret:0,val:0};
@@ -597,18 +594,22 @@ function renderDayView(c,A,S){
     let sl=0,bk=0,rs=0,rt=0; for(const j of js){ sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; rt+=s.ret[j]; }
     if(state.bulk){ sl+=bk; bk=0; }
     if(!(sl||bk||rs||rt)) continue;
-    const p=s.price||0; rows.push({s,sl,bk,rs,rt,val:sl*p}); tot.sold+=sl; tot.bulk+=bk; tot.rest+=rs; tot.ret+=rt; tot.val+=sl*p;
+    const p=s.price||0; rows.push({s,name:s.name+(s.variant?' · '+s.variant:''),sl,bk,rs,rt,val:sl*p}); tot.sold+=sl; tot.bulk+=bk; tot.rest+=rs; tot.ret+=rt; tot.val+=sl*p;
   }
-  rows.sort((a,b)=>b.sl-a.sl||b.rs-a.rs||b.bk-a.bk);
+  const k=state.daySort.key, dir=state.daySort.dir==='asc'?1:-1;
+  rows.sort((a,b)=> k==='name' ? a.name.localeCompare(b.name)*dir : ((a[k]-b[k])*dir || b.sl-a.sl || b.rs-a.rs));
   const label=S.weekly?`Week of ${fmtDY(d.key)}`:fmtDY(d.key);
   const anyOut=rows.some(r=>r.bk), anyRet=rows.some(r=>r.rt);
-  const name=s=>esc(s.name+(s.variant?' · '+s.variant:''))+`<small>${esc([s.variant?null:s.family, s.size, c.both?chName(s.channel):null].filter(Boolean).join(' · '))}</small>`;
-  const html=`<div class="detail-head"><div><div class="panel-title">${label} · what moved</div>
-      <div class="panel-sub">Sold <b>${fmtU(tot.sold)}</b>${anyOut?` · moved out <b>${fmtU(tot.bulk)}</b>`:''} · delivered in <b>${fmtU(tot.rest)}</b> · value at list <b>${fmtM(tot.val)}</b> · ${rows.length} listing${rows.length===1?'':'s'}. Click a product for its history.</div></div>
+  const cols=[['name','Product'],['sl','Sold'],...(anyOut?[['bk','Moved out']]:[]),['rs','Added'],...(anyRet?[['rt','Came back']]:[]),['val','Value at list']];
+  const th=cols.map(([key,lab])=>`<th><button type="button" data-dkey="${key}"${state.daySort.key===key?` data-dir="${state.daySort.dir}"`:''}>${lab}</button></th>`).join('');
+  const small=s=>esc([s.variant?null:s.family, s.size, c.both?chName(s.channel):null].filter(Boolean).join(' · '));
+  const cell=(r,key)=> key==='val' ? (r.sl?fmtM(r.val):'—') : (r[key]?fmtU(r[key]):'—');
+  el.innerHTML=`<div class="panel-head"><div><div class="panel-title">${label} · what moved</div>
+      <div class="panel-sub">Sold <b>${fmtU(tot.sold)}</b>${anyOut?` · moved out <b>${fmtU(tot.bulk)}</b>`:''} · delivered in <b>${fmtU(tot.rest)}</b> · value at list <b>${fmtM(tot.val)}</b> · ${rows.length} listing${rows.length===1?'':'s'}. Click a heading to sort, or a product for its history.</div></div>
       <button type="button" class="detail-close" data-day-close>Close</button></div>
-    <div class="tbl-wrap"><table class="daytbl"><thead><tr><th>Product</th><th>Sold</th>${anyOut?'<th>Moved out</th>':''}<th>Added</th>${anyRet?'<th>Came back</th>':''}<th>Value at list</th></tr></thead><tbody>${rows.map(r=>`<tr class="row" data-id="${esc(r.s.channel+'|'+r.s.id)}"><td class="name"><span class="fam" style="background:${famColor(r.s.family)}"></span>${name(r.s)}</td><td>${r.sl?fmtU(r.sl):'—'}</td>${anyOut?`<td>${r.bk?fmtU(r.bk):'—'}</td>`:''}<td>${r.rs?fmtU(r.rs):'—'}</td>${anyRet?`<td>${r.rt?fmtU(r.rt):'—'}</td>`:''}<td>${r.sl?fmtM(r.val):'—'}</td></tr>`).join('')}</tbody></table></div>
+    <div class="tbl-wrap"><table class="daytbl"><thead><tr>${th}</tr></thead><tbody>${rows.map(r=>`<tr class="row" data-id="${esc(r.s.channel+'|'+r.s.id)}"><td class="name"><span class="fam" style="background:${famColor(r.s.family)}"></span>${esc(r.name)}<small>${small(r.s)}</small></td>${cols.slice(1).map(([key])=>`<td>${cell(r,key)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
     ${anyRet?'<div class="tfoot">Came back is stock returning to a listing within four weeks of leaving in one go. It is not counted as a delivery.</div>':''}`;
-  const el=d.src==='rev'?rev:mov; el.hidden=false; el.innerHTML=html;
+  el.hidden=false;
 }
 
 function renderTop(c,A){
@@ -717,9 +718,11 @@ function wire(){
   document.querySelectorAll('[data-mb]').forEach(b=>b.onclick=()=>setMode(b.dataset.mb));
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
   // click a bar: open (or close) the day behind it under that chart
-  for(const [id,src] of [['movChart','mov'],['revChart','rev']]) document.getElementById(id).addEventListener('click',e=>{ const h=e.target.closest&&e.target.closest('rect.hit'); if(!h) return; const key=h.getAttribute('data-key');
-    state.day=(state.day&&state.day.key===key&&state.day.src===src)?null:{key,src}; render(); });
-  document.addEventListener('click',e=>{ if(!e.target.closest) return; if(e.target.closest('[data-day-close]')){ state.day=null; render(); return; } const tr=e.target.closest('.dayview tr.row'); if(tr) select(tr.dataset.id); });
+  for(const id of ['movChart','revChart']) document.getElementById(id).addEventListener('click',e=>{ const h=e.target.closest&&e.target.closest('rect.hit'); if(!h) return; const key=h.getAttribute('data-key');
+    state.day=(state.day&&state.day.key===key)?null:{key}; render(); if(state.day) document.getElementById('dayPanel').scrollIntoView({block:'nearest',behavior:'smooth'}); });
+  document.getElementById('dayPanel').addEventListener('click',e=>{ if(e.target.closest('[data-day-close]')){ state.day=null; render(); return; }
+    const b=e.target.closest('th button[data-dkey]'); if(b){ const k=b.dataset.dkey; if(state.daySort.key===k) state.daySort.dir=state.daySort.dir==='asc'?'desc':'asc'; else state.daySort={key:k,dir:k==='name'?'asc':'desc'}; render(); return; }
+    const tr=e.target.closest('tr.row'); if(tr) select(tr.dataset.id); });
   document.querySelector('#tbl thead').addEventListener('click',e=>{ const b=e.target.closest('button[data-key]'); if(!b||b.disabled) return; const k=b.dataset.key;
     if(state.sort.key===k) state.sort.dir=state.sort.dir==='asc'?'desc':'asc'; else state.sort={key:k,dir:k==='name'||k==='size'||k==='channel'?'asc':'desc'}; render(); });
   document.querySelector('#tbl tbody').addEventListener('click',e=>{ const tr=e.target.closest('tr.row'); if(tr) select(tr.dataset.id); });
