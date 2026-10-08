@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build public/coffee.json from the two Coffee Brand Coffee scanners.
+Build public/coffee.json from the two Coffee Brand Coffee trackers.
 
 Inputs (both outside this repo, on OneDrive; override with env vars):
   COFFEE_AMAZON_CSV    StockTracker/tracker_data/history.csv
@@ -16,22 +16,22 @@ the controls there (period, margin, bulk-drop handling) can recompute live.
 Cleaning rules, and why:
   * One reading per SKU per day: the LAST by time. Catch-up runs produce a second
     reading on ~4% of SKU-days; the later one is the better-rested read.
-  * Amazon "available" is an exact count only when numeric. Blank (no stock
-    signal / read failed / timeout) and the ">=30" floor guess are both emitted
+  * Amazon "available" is used only when it is an exact number. Blank (no stock
+    figure / read failed / timeout) and any "at least N" value are both emitted
     as null - "unknown that day" - and the page skips such days when it
-    differences stock. Treating a floor as a number would invent sales.
+    differences stock. Treating a lower bound as a number would invent sales.
   * "out of stock" rows carry available=0, which IS a real reading (zero).
   * Amazon price: a per-SKU MODAL in-stock price is emitted alongside the daily
     price series. About a third of listings flap between $19.99 and $85 because
-    the scraper reads whichever size variant Amazon puts in the buy box, most
+    the tracker records whichever size variant Amazon puts in the buy box, most
     often the 5 lb one while the 12 oz is out of stock. The daily series keeps
     the raw reads for the price log; valuations use the modal figure.
   * Size is not in the Amazon label (the same name is listed once per size), so
     it is inferred: K-Cups -> 12-pack, "Kona" -> 7oz, modal price >= $45 -> 5lb,
     else 12oz.
-  * Shopify counts stop at 80, so 80 means "at least 80". It is emitted as 80
-    with cap:80 in the channel meta; the page treats a capped reading as a
-    floor and never differences across it. sold_out -> 0; any other status -> null.
+  * Shopify counts top out at 80 (emitted as 80, with cap:80 in the channel
+    meta); the page shows those as 80+ and never differences across them.
+    sold_out -> 0; any other status -> null.
 
 Usage:
   python scripts/build-coffee.py            # write public/coffee.json, print a summary
