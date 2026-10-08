@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coffee Brand Coffee tracker · Jerminal Decline</title>
-<meta name="description" content="Daily stock, price and inferred sales readings for Coffee Brand Coffee on Amazon and coffeebrandcoffee.com.">
+<meta name="description" content="Daily stock, prices and estimated sales for Coffee Brand Coffee on Amazon and coffeebrandcoffee.com.">
 <link rel="icon" href="logo.png" type="image/png">
 <script>
 // Theme, applied before paint. Same key as the main site so the choice carries over.
@@ -197,9 +197,9 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   </div>
 
   <h1>Coffee Brand Coffee <span class="wip">work in progress</span></h1>
-  <p class="sub">Stock, prices and estimated sales for Jeremy's coffee brand, read once a day from Amazon and coffeebrandcoffee.com.</p>
+  <p class="sub">Stock, prices and estimated sales for Jeremy's coffee brand, tracked daily on Amazon and coffeebrandcoffee.com.</p>
   <p class="fresh" id="fresh">Loading…</p>
-  <p class="intro">Once a day we read how many units each listing says it has left. When that number falls, something was sold or moved out; when it rises, stock arrived. Everything below is built from those daily readings.</p>
+  <p class="intro">Once a day we record how much stock each listing has. When that number falls, something was sold or moved out; when it rises, stock arrived. Everything below is built from those daily readings.</p>
 
   <div class="controls" id="controls">
     <div class="ctl"><span class="ctl-label">Channel</span>
@@ -297,12 +297,12 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   <div class="panel notes">
     <div class="panel-title" style="color:var(--text)">How to read this</div>
     <ul>
-      <li><b>Stock</b> is the number of units a listing says it has available, read once a day. Shopify counts above 80 are shown as "at least 80".</li>
+      <li><b>Stock</b> is how many units a listing has available, recorded once a day. Store listings with plenty of stock are shown as 80+.</li>
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units and at least half of a listing vanish in a single day, that is not forty customers finding one listing on one day; it is a pallet leaving. We call that <b>moved out</b>, show it in amber, and keep it out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. Amazon shuffles deliveries between its warehouses, so a count can collapse one day and rebuild over the following weeks. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted as a move or a delivery.</li>
       <li><b>Sales value</b> is units sold multiplied by the listing's usual in-stock price. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
-      <li>A delivery and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group scan days by the week starting Monday.</li>
+      <li>A delivery and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group days by the week starting Monday.</li>
       <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
     </ul>
   </div>
@@ -352,7 +352,7 @@ function deriveSku(s, days, cap){
       if(d<0){ const drop=-d; if(drop>=BULK_MIN && drop>=BULK_SHARE*pv) bulk[i]=drop; else sold[i]=drop; }
       else if(d>0) rest[i]=d;
     }
-    pv = capped ? null : v;   // never difference across a capped (floor) reading
+    pv = capped ? null : v;   // never difference across an 80+ reading
   }
   const open=[];   // big drops still waiting for their stock to come back, oldest first
   for(let i=0;i<n;i++){
@@ -442,7 +442,7 @@ function series(A){
   const pick=k=>keys.map(x=>m.get(x)[k]);
   return {weekly:true, days:keys, counts:pick('n'), sold:pick('sold'), bulk:pick('bulk'), rest:pick('rest'), gross:pick('gross'), grossBulk:pick('grossBulk')};
 }
-const when=(S,i)=> S.weekly ? `Week of ${fmtDY(S.days[i])} (${S.counts[i]} scan day${S.counts[i]===1?'':'s'})` : fmtDY(S.days[i]);
+const when=(S,i)=> S.weekly ? `Week of ${fmtDY(S.days[i])} (${S.counts[i]} day${S.counts[i]===1?'':'s'} with data)` : fmtDY(S.days[i]);
 
 // ---- SVG helpers ---------------------------------------------------------------
 function niceMax(v){ if(v<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p; const s=[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(x=>m<=x); return s*p; }
@@ -535,7 +535,7 @@ function lineChart(days, vals, opts){
   let path=segs.map(s=> s.length>1 ? `<polyline points="${s.join(' ')}" fill="none" stroke="${opts.color}" stroke-width="2" stroke-linejoin="round"/>` : `<circle cx="${s[0].split(',')[0]}" cy="${s[0].split(',')[1]}" r="3" fill="${opts.color}"/>`).join('');
   if(opts.cap!=null) vals.forEach((v,i)=>{ if(v!=null&&v>=opts.cap) path+=`<circle cx="${x(i).toFixed(1)}" cy="${(y0-v*sc).toFixed(1)}" r="3.5" fill="var(--surface)" stroke="${opts.color}" stroke-width="1.5"/>`; });
   let hits=''; const step=(W-pl-pr)/Math.max(1,n-1);
-  for(let i=0;i<n;i++){ if(vals[i]==null) continue; const tip=`${fmtDY(days[i])}\n${opts.label}: ${opts.money?fmtP(vals[i]):fmtU(vals[i])+(opts.cap!=null&&vals[i]>=opts.cap?' (at least)':'')}`;
+  for(let i=0;i<n;i++){ if(vals[i]==null) continue; const tip=`${fmtDY(days[i])}\n${opts.label}: ${opts.money?fmtP(vals[i]):fmtU(vals[i])+(opts.cap!=null&&vals[i]>=opts.cap?'+':'')}`;
     hits+=`<rect class="hit" x="${(x(i)-step/2).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(tip)}"/>`; }
   return frame(W,H)+hgrid(M,3,pl,W,pr,y0,sc,opts.money?(t=>'$'+(+t.toFixed(2))):fmtU)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+path+hits+xLabels(days,x,W,H-8)+'</svg>';
 }
@@ -548,7 +548,7 @@ function spark(vals){
 }
 
 // ---- render ---------------------------------------------------------------------
-function periodLabel(A,S){ return `${fmtD(A.days[0])} – ${fmtDY(A.days[A.days.length-1])} · ${A.days.length} scan days${S&&S.weekly?' · by week':''}`; }
+function periodLabel(A,S){ return `${fmtD(A.days[0])} – ${fmtDY(A.days[A.days.length-1])} · ${A.days.length} days with data${S&&S.weekly?' · by week':''}`; }
 function deltaHtml(curV, prevV){
   if(prevV==null) return '';
   if(!(prevV>0)) return curV>0?`<span class="dl up">▲ new</span> vs prior ${state.period}d`:'';
@@ -561,14 +561,14 @@ function renderKpis(c,A,P){
   const nd=A.days.length, units=A.units, gross=A.grossAll, net=netOf(gross,units);
   const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
   const j=(...xs)=>xs.filter(Boolean).join(' · ');
-  const oh=(A.capped?'≥':'')+fmtU(A.onHand);
+  const oh=fmtU(A.onHand)+(A.capped?'+':'');
   const moved=A.bulkU;
   const tiles=[
     ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} moved out in one go`:(moved?`another ${fmtU(moved)} moved out in one go, not counted`:''))],
     ['Sales at list price', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
     [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the list price`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
-    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price', A.capped?`${A.capped} shown as at least 80`:'')],
+    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price', A.capped?`${A.capped} shown as 80+`:'')],
     ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
@@ -600,11 +600,11 @@ function renderTable(c,A){
     <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.channel==='amazon'?' · '+r.s.id:''}</small></td>
     ${c.both?`<td>${chName(r.channel)}</td>`:''}
     <td>${esc(r.size||'—')}</td><td>${fmtP(r.price)}</td>
-    <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':(r.capped?'<span class="cap">≥</span>':'')+fmtU(r.stock)}</td>
+    <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':fmtU(r.stock)+(r.capped?'<span class="cap">+</span>':'')}</td>
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
     <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td><td>${r.oos||'—'}</td>
     <td>${spark(r.series)}</td></tr>`).join(''):`<tr><td colspan="${cols.length}" class="empty" style="text-align:center">No listings match.</td></tr>`;
-  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Moved out and Added are units over the period. Moved out is stock that vanished in one go (40 or more units and at least half the listing) and did not come back within four weeks, usually a pallet leaving rather than customers buying. Change is stock now against the first reading in the period. Days out counts scan days at zero. "?" means no usable reading yet.`;
+  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Moved out and Added are units over the period. Moved out is stock that vanished in one go (40 or more units and at least half the listing) and did not come back within four weeks, usually a pallet leaving rather than customers buying. Change is stock now against the first reading in the period. Days out counts days at zero. "?" means no usable reading yet.`;
 }
 
 function renderDetail(c,A){
@@ -655,7 +655,7 @@ function render(){
   document.getElementById('revNetLeg').textContent='Profit '+netLabel();
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderTop(c,A);
-  document.getElementById('ohSub').textContent='What each listing reports as available, added up by type'+(c.cap||c.both?'; Shopify listings shown as at least 80 count as 80':'')+'. The legend shows the latest day.';
+  document.getElementById('ohSub').textContent='What each listing reports as available, added up by type'+(c.cap||c.both?'; store listings shown as 80+ count as 80':'')+'. The legend shows the latest day.';
   document.getElementById('ohChart').innerHTML=onHandChart(A);
   renderTable(c,A);
   renderDetail(c,A);
