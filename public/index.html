@@ -79,7 +79,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .theme-seg-btn:hover{color:var(--text)}
 .theme-seg-btn.active{background:var(--accent);color:#fff}
 .theme-seg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-/* Sister sites: the other two trackers in the family, as a labelled pill group in the header. */
+/* Other resources: the two companion sites, as a labelled pill group in the header. */
 .sister{display:inline-flex;align-items:center;gap:0.1rem;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.15rem;margin-left:auto}
 .sister+.util-cluster{margin-left:0}
 .sister-label{font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-dim);padding:0 0.4rem 0 0.55rem;white-space:nowrap}
@@ -87,7 +87,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .sister-link:hover{color:var(--text);background:var(--surface)}
 .sister-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .sister-link .ext{font-size:0.68em;opacity:0.65}
-/* Phones: the brand and the cluster share one row as before; the sister sites take a row of their own under them. */
+/* Phones: the brand and the cluster share one row as before; the other-resources group takes a row of its own under them. */
 @media(max-width:680px){.sticky-head .util-bar{flex-wrap:wrap}.sticky-head .sister{order:3;flex:1 1 100%;margin-left:0;justify-content:center}.sister-label{display:none}.sister-link{padding:0.28rem 0.7rem}}
 .util-social{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:background .12s,color .12s,border-color .12s}
 .util-social:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
@@ -2775,10 +2775,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <div class="util-updated" id="lastUpdated"><span class="status-dot"></span><span class="status-text">The Quartering network</span></div>
       </div>
     </div>
-    <nav class="sister" aria-label="Sister sites">
-      <span class="sister-label">Sister sites</span>
-      <a class="sister-link" href="https://jerline.net/" target="_blank" rel="noopener" title="JerLine: a calendar timeline of his social media activity">JerLine<span class="ext" aria-hidden="true">↗</span></a>
-      <a class="sister-link" href="https://jeralyzer.pages.dev/" target="_blank" rel="noopener" title="Jeralyzer: browse and search his video transcripts">Jeralyzer<span class="ext" aria-hidden="true">↗</span></a>
+    <nav class="sister" aria-label="Other resources">
+      <span class="sister-label">Other resources</span>
+      <a class="sister-link" href="https://jerline.net/" target="_blank" rel="noopener" title="JerLine: a calendar timeline of social media activity">JerLine<span class="ext" aria-hidden="true">↗</span></a>
+      <a class="sister-link" href="https://jeralyzer.pages.dev/" target="_blank" rel="noopener" title="Jeralyzer: browse and search video transcripts">Jeralyzer<span class="ext" aria-hidden="true">↗</span></a>
     </nav>
     <div class="util-cluster">
       <a class="util-social kofi" href="https://ko-fi.com/jerminaldecline" target="_blank" rel="noopener" title="Support on Ko-fi" aria-label="Support on Ko-fi">
