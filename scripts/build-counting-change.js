@@ -148,6 +148,7 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   const rate = p => 100 * p.lk / p.vw;
   const distPre = pre.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   const post = pts.filter(p => p.d >= ONSET);
+  const postViews = post.reduce((a, p) => a + p.vw, 0);
   const distPost = post.map(rate).map(r => +r.toFixed(2)).sort((a, b) => a - b);
   // Median of the PER-VIDEO rates, not a ratio of aggregate medians. This is the
   // same statistic the site's factor is measured with, and mixing the two would
@@ -158,6 +159,7 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
   out.channels[handle] = {
     n: pts.length, nPost: post.length,
     lowRatePct: LOW_RATE_PCT,
+    postViews: Math.round(postViews),
     dist: { pre: distPre, post: distPost,
             lowPre: distPre.filter(r => r < LOW_RATE_PCT).length,
             lowPost: distPost.filter(r => r < LOW_RATE_PCT).length },
@@ -165,13 +167,145 @@ for (const [handle, cid] of Object.entries(CHANNELS)) {
     factor: +(rateBefore / rateAfter).toFixed(2),
     series,
   };
+
+  // ---- the same question asked other ways ---------------------------------
+  // A bootstrap interval only covers "which videos happened to be published".
+  // It says nothing about the choices made in the analysis itself: which
+  // average, what age to read at, how much history counts as the baseline,
+  // whether to allow for a gradual drift in how often people like. Each check
+  // below changes exactly one of those and re-measures. The published range is
+  // then widened to contain every one of them (see the site section).
+  //
+  // Why this exists: a deep check on 2026-10-04 found the like rate wanders by
+  // about 12% from month to month in ordinary times, so a comparison confined
+  // to the weeks nearest the change, or one that allows a drift, reads a little
+  // lower (1.94-2.03) than the full before-and-after figure (2.07). None of
+  // them is distinguishable from it statistically, but an honest range should
+  // cover them.
+  {
+    const rk = p => 1000 * p.lk / p.vw;
+    const fac = (a, b) => (a.length >= 15 && b.length >= 15) ? med(a.map(rk)) / med(b.map(rk)) : null;
+    const dn = d => Date.parse(d + 'T00:00:00Z') / 864e5, on = dn(ONSET);
+    const mean = a => a.reduce((t, x) => t + x, 0) / a.length;
+    const sum = (a, k) => a.reduce((t, p) => t + p[k], 0);
+    const near = W => fac(pre.filter(p => dn(p.d) >= on - 3 - W), post.filter(p => dn(p.d) < on + W));
+    const atAge = H => {
+      const o = [];
+      for (const [id, m] of meta) {
+        if (m.channelId !== cid) continue;
+        const r = at(id, H);
+        if (r && r.views > 500) o.push({ d: m.publishedAt.slice(0, 10), vw: r.views, lk: r.likes });
+      }
+      return fac(o.filter(p => p.d < '2026-08-24'), o.filter(p => p.d >= ONSET));
+    };
+    // One gradual drift in the like rate throughout, plus a step at the change.
+    const drift = () => {
+      const all = pre.concat(post);
+      const X = all.map(p => [1, dn(p.d) - on, p.d >= ONSET ? 1 : 0]), y = all.map(p => Math.log(rk(p)));
+      const A = [0, 1, 2].map(a => [0, 1, 2].map(b => X.reduce((t, r) => t + r[a] * r[b], 0))
+        .concat([X.reduce((t, r, i) => t + r[a] * y[i], 0)]));
+      for (let c = 0; c < 3; c++) {
+        let p = c;
+        for (let r = c + 1; r < 3; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+        [A[c], A[p]] = [A[p], A[c]];
+        for (let r = 0; r < 3; r++) if (r !== c) { const f = A[r][c] / A[c][c]; for (let j = c; j < 4; j++) A[r][j] -= f * A[c][j]; }
+      }
+      return Math.exp(-A[2][3] / A[2][2]);
+    };
+    const enough = pre.length >= 15 && post.length >= 15;
+    out.channels[handle].checks = [
+      ['the average video rather than the middle one', enough ? Math.exp(mean(pre.map(p => Math.log(rk(p)))) - mean(post.map(p => Math.log(rk(p))))) : null],
+      ['all likes divided by all views', enough ? (sum(pre, 'lk') / sum(pre, 'vw')) / (sum(post, 'lk') / sum(post, 'vw')) : null],
+      ['only the two weeks either side of the change', near(14)],
+      ['only the four weeks either side of the change', near(28)],
+      ['only the last 30 days as the baseline', fac(pre.filter(p => dn(p.d) >= on - 33), post)],
+      ['allowing for a gradual drift in how often people like', enough ? drift() : null],
+      ['reading each video at 12 hours old', atAge(12)],
+      ['reading each video at 48 hours old', atAge(48)],
+      ['reading each video at 72 hours old', atAge(72)],
+    ].filter(k => k[1] != null && isFinite(k[1])).map(k => ({ label: k[0], factor: +k[1].toFixed(2) }));
+  }
+}
+
+// ---- the number the site divides by ----------------------------------------
+// BENCHMARK CHANNEL, not a pooled figure (changed 2026-10-03). The site's factor
+// is the main channel's own measurement: one channel, one calculation, nothing
+// to weight and nothing to explain about weighting. The other channel is
+// reported beside it as an independent check - the rule change was
+// platform-wide, so a second audience landing on the same multiple is the
+// evidence that the factor measures the rule and not the channel.
+//
+// Pooling them view-weighted (the previous method) gave 2.10 against 2.08 on the
+// day this changed, so the choice moves no figure by more than 1%. `pooled`
+// keeps that number on file so the two can always be compared.
+//
+// Every channel gets its own bootstrapped 95% interval, resampling uploads
+// within the channel, so the page can draw the two side by side.
+//
+// SHIPS WITH THE PAGE. index.html prints `site` in its caption and divides by
+// the constants VCC_MID / VCC_FACTOR, which must be set to match. Committing
+// this file without the page that reads it makes the two disagree.
+const BENCHMARK = '@TheQuartering';
+const chans = Object.values(out.channels);
+if (chans.length) {
+  let seed = 20260907;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const medOf = a => { const q = [...a].sort((x, y) => x - y), n = q.length;
+    return n ? (n % 2 ? q[(n - 1) / 2] : (q[n / 2 - 1] + q[n / 2]) / 2) : NaN; };
+  const B = 4000;
+  const wsum = chans.reduce((a, c) => a + c.postViews, 0) || 1;
+  const pooledBoot = new Array(B).fill(0);
+  for (const c of chans) {
+    const arr = [];
+    for (let b = 0; b < B; b++) {
+      const pre = Array.from({ length: c.dist.pre.length }, () => pick(c.dist.pre));
+      const po  = Array.from({ length: c.dist.post.length }, () => pick(c.dist.post));
+      const mp = medOf(po);
+      const f = mp > 0 ? medOf(pre) / mp : c.factor;
+      arr.push(f);
+      pooledBoot[b] += c.postViews * f / wsum;
+    }
+    arr.sort((x, y) => x - y);
+    // sampleLow/High: the bootstrapped 95% interval on its own.
+    // low/high: that interval widened to take in every alternative method, so
+    // the published range answers "what could the figure be" and not only
+    // "how much would it move with a different draw of videos".
+    c.sampleLow = +arr[Math.floor(B * 0.025)].toFixed(2);
+    c.sampleHigh = +arr[Math.floor(B * 0.975)].toFixed(2);
+    const alt = (c.checks || []).map(k => k.factor);
+    c.low = +Math.min(c.sampleLow, ...alt).toFixed(2);
+    c.high = +Math.max(c.sampleHigh, ...alt).toFixed(2);
+  }
+  pooledBoot.sort((x, y) => x - y);
+  out.pooled = {
+    factor: +(chans.reduce((a, c) => a + c.postViews * c.factor, 0) / wsum).toFixed(2),
+    low: +pooledBoot[Math.floor(B * 0.025)].toFixed(2),
+    high: +pooledBoot[Math.floor(B * 0.975)].toFixed(2),
+    nPost: chans.reduce((a, c) => a + c.nPost, 0),
+  };
+  const bmHandle = out.channels[BENCHMARK] ? BENCHMARK : Object.keys(out.channels)[0];
+  const bm = out.channels[bmHandle];
+  const alts = (bm.checks || []).map(k => k.factor);
+  out.site = { channel: bmHandle, factor: bm.factor, low: bm.low, high: bm.high, nPost: bm.nPost,
+    sampleLow: bm.sampleLow, sampleHigh: bm.sampleHigh,
+    checks: alts.length ? { n: alts.length, min: Math.min(...alts), max: Math.max(...alts) } : null };
 }
 
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
 console.log('Wrote %s', path.relative(process.cwd(), OUT));
+if (out.site) {
+  console.log('  SITE FACTOR %s  (range %s-%s, n=%d post-change uploads, benchmark %s)',
+    out.site.factor, out.site.low, out.site.high, out.site.nPost, out.site.channel);
+  console.log('    sampling interval alone: %s-%s', out.site.sampleLow, out.site.sampleHigh);
+  for (const k of (out.channels[out.site.channel].checks || [])) console.log('    %s  %s', k.factor.toFixed(2), k.label);
+  console.log('  pooled across channels, for reference: %s  (95%% %s-%s, n=%d)',
+    out.pooled.factor, out.pooled.low, out.pooled.high, out.pooled.nPost);
+  console.log('    -> set VCC_MID and VCC_FACTOR in public/index.html to match\n');
+}
 for (const [h, c] of Object.entries(out.channels)) {
-  console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx',
-    h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor);
+  console.log('  %s  n=%d (post %d)  like rate %s -> %s per 1k  factor %sx  (95%% %s-%s)',
+    h, c.n, c.nPost, c.rateBefore, c.rateAfter, c.factor, c.low, c.high);
   console.log('      below %s%%: %d of %d before, %d of %d after',
     c.lowRatePct, c.dist.lowPre, c.dist.pre.length, c.dist.lowPost, c.dist.post.length);
 }

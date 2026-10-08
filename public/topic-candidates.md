@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-03
+# Topic candidates — 2026-10-08
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,61 +6,89 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 14 recent videos, 123 baseline videos
 
-### Cluster 1: `o'lantern`
+### Cluster 1: `coffee sign`
 
-- **Recent saturation:** 14/15 videos (**93%**)
-- **Baseline saturation:** 37/127 videos (29%)
-- **Spike ratio:** 3.2x
-- **Related terms:** `o'lantern`, `limited`, `edition`, `jack`, `join`, `server`, `jack o'lantern`, `o'lantern back`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 53.1x
+- **Related terms:** `coffee sign`
 - **Sample recent videos:**
+  - 2026-10-07 — _PSYCHO MOM TAKES OUT FAMILY_  
+    Police Had Been Called FIVE TIMES Before Family Bloodbath
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+
+### Cluster 2: `attack join`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 2/123 videos (2%)
+- **Spike ratio:** 10.6x
+- **Related terms:** `attack`, `attack join`
+- **Sample recent videos:**
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-05 — _Leftist TERROR Strikes High School_  
+    Teen Faces TERROR Charges After School Chemical Attack
   - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
     Karen Kills Puppy In Absolutely Evil Attack
-  - 2026-10-01 — _Big Announcement_  
-    They’re MELTING DOWN Over Me Going On Timcast
-  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
-    Death Row Killer SURVIVES Two Lethal Injections
-  - 2026-09-30 — _Female KILLER SAVED By Female Judges_  
-    Female Killer SAVED One Hour Before Her Execution
-  - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
-    Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
 
-### Cluster 2: `exposed`
+### Cluster 3: `cornell`
 
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 7/127 videos (6%)
-- **Spike ratio:** 3.4x
-- **Related terms:** `exposed`
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 53.1x
+- **Related terms:** `cornell`
 - **Sample recent videos:**
-  - 2026-10-01 — _EPIC FAIL For All Female Execution Team As Christa Pike Faces Chair Now_  
-    Death Row Killer SURVIVES Two Lethal Injections
-  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
-    Massive Walmart SNAP Scandal EXPOSED By Government Report
-  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
-    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
+    Cornell Case Flips After Explosive Counterclaim
+  - 2026-10-05 — _IT'S OVER FOR THEM_  
+    SNL Audience ROARS As Cornell Seven Scandal Explodes
+
+### Cluster 4: `join`
+
+- **Recent saturation:** 12/14 videos (**86%**)
+- **Baseline saturation:** 11/123 videos (9%)
+- **Spike ratio:** 9.2x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
+- **Sample recent videos:**
+  - 2026-10-07 — _PSYCHO MOM TAKES OUT FAMILY_  
+    Police Had Been Called FIVE TIMES Before Family Bloodbath
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+  - 2026-10-06 — _Planet Fitness In HUGE Trouble After Woke Policy Backfires_  
+    Convicted Predator Arrested Inside Women’s Locker Room
+  - 2026-10-06 — _McDonald's BUSTED Using AI To SCAM Customers!_  
+    McDonalds Customers Just Got Completely RIPPED OFF
 
 ## @JeremyHambly
 
 Pool: 8 recent videos, 81 baseline videos
 
-### Cluster 1: `o'lantern`
+### Cluster 1: `join`
 
 - **Recent saturation:** 8/8 videos (**100%**)
-- **Baseline saturation:** 37/81 videos (46%)
-- **Spike ratio:** 2.2x
-- **Related terms:** `o'lantern`, `server`, `join`, `massive`, `jack o'lantern`, `o'lantern back`, `stock sign`, `our server`
+- **Baseline saturation:** 9/81 videos (11%)
+- **Spike ratio:** 8.6x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
-  - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
-    Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
-  - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
-    Nolan Wells Campaign Sparks Massive Backlash
-  - 2026-09-29 — _Candace Owens BOMBSHELL_  
-    Candace Owens BOMBSHELL Raises Massive Questions
-  - 2026-09-29 — _Candace Owens SUED Again_  
-    Candace Owens Hit With MASSIVE New Defamation Lawsuit
-  - 2026-09-29 — _Judge Judy DESTROYS The Woke Left_  
-    Judge Judy DESTROYS Liberals In Brutal America-First Rant
+  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
+    Nolan Wells Conspiracy Crowd Gets DESTROYED
+  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
+    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
+  - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
+    This Is Terrifying! Seattle Has Completely Collapsed
+  - 2026-10-06 — _Nike ADMITS Woke KILLED Their Brand_  
+    Nike CEO HUMILIATED By Devastating New Numbers
+  - 2026-10-06 — _Cornell 7 RIOTS As Students RAGE & Vandalize University_  
+    Cornell 7 RIOTS As Students RAGE & Vandalize University
 
 ---
 
