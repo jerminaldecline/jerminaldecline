@@ -62,13 +62,13 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .ctl{display:flex;flex-direction:column;gap:0.3rem}
 .ctl-label{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:var(--label)}
 .seg{display:inline-flex}
-.seg button{appearance:none;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.8rem;font-weight:700;padding:0.36rem 0.8rem;cursor:pointer;margin-left:-1px;border-radius:0}
+.seg button{appearance:none;white-space:nowrap;background:var(--surface-2);border:1px solid var(--border);color:var(--label);font-family:inherit;font-size:0.8rem;font-weight:700;padding:0.36rem 0.8rem;cursor:pointer;margin-left:-1px;border-radius:0}
 .seg button:first-child{border-radius:8px 0 0 8px;margin-left:0}
 .seg button:last-child{border-radius:0 8px 8px 0}
 .seg button[aria-pressed="true"]{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff;position:relative;z-index:1}
 .seg button:hover{color:var(--text)}
 .seg button[aria-pressed="true"]:hover{color:#fff}
-.margin{display:flex;align-items:center;gap:0.6rem}
+.margin{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem 0.6rem}
 .margin input[type=range]{width:160px;accent-color:var(--accent-fill)}
 .margin input[type=number]{width:4.2rem;font:inherit;font-weight:700;padding:0.28rem 0.4rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);text-align:right}
 .margin-pct{display:inline-flex;align-items:center;gap:0.6rem}
@@ -197,7 +197,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   </div>
 
   <h1>Coffee Brand Coffee <span class="wip">work in progress</span></h1>
-  <p class="sub">Stock, prices and inferred sales for Jeremy's coffee brand, read once a day from Amazon and coffeebrandcoffee.com.</p>
+  <p class="sub">Stock, prices and estimated sales for Jeremy's coffee brand, read once a day from Amazon and coffeebrandcoffee.com.</p>
   <p class="fresh" id="fresh">Loading…</p>
   <p class="intro">Once a day we read how many units each listing says it has left. When that number falls, something was sold or moved out; when it rises, stock arrived. Everything below is built from those daily readings.</p>
 
@@ -215,38 +215,38 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
         <button type="button" data-per="90" aria-pressed="false">90 days</button>
         <button type="button" data-per="0" aria-pressed="false">All</button>
       </div></div>
-    <div class="ctl"><span class="ctl-label">Bars</span>
+    <div class="ctl"><span class="ctl-label">Bars by</span>
       <div class="seg" role="group" aria-label="Group bars by">
         <button type="button" data-group="day" aria-pressed="true">Day</button>
         <button type="button" data-group="week" aria-pressed="false">Week</button>
       </div></div>
-    <div class="ctl"><span class="ctl-label">Hypothetical margin</span>
+    <div class="ctl"><span class="ctl-label">Assumed profit margin</span>
       <div class="margin">
         <div class="seg" role="group" aria-label="Margin basis">
-          <button type="button" data-mb="pct" aria-pressed="true">% of list</button>
+          <button type="button" data-mb="pct" aria-pressed="true">% of list price</button>
           <button type="button" data-mb="bag" aria-pressed="false">$1 a bag</button>
         </div>
         <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="30" aria-label="Margin percent">
         <input type="number" id="marginNum" min="0" max="100" step="1" value="30" aria-label="Margin percent"><span>%</span></span>
         <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its list price.">i</i></span>
       </div></div>
-    <label class="check"><input type="checkbox" id="bulkChk"> Count big one-day drops as sales <small>(usually stock moved elsewhere, not sold)</small><i class="info" data-tip="A big one-day drop is when 40 or more units and at least half of a listing's stock vanish between one day's reading and the next. That is far more than a day of normal buying, so it is probably stock being moved somewhere else: to his own shop, a wholesale order, or between Amazon warehouses. It is shown separately and left out of sales unless you tick the box.">i</i></label>
+    <label class="check"><input type="checkbox" id="bulkChk"> Count stock moved out as sales <small>(big one-day drops, usually a pallet leaving)</small><i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></label>
   </div>
 
   <div class="kpis" id="kpis"></div>
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Units sold and restocked</div><div class="panel-sub" id="movSub"></div></div>
-      <div class="legend"><span><i style="background:var(--brand)"></i>Units sold</span><span><i style="background:var(--accent-2)"></i>Big one-day drop<i class="info" data-tip="A big one-day drop is when 40 or more units and at least half of a listing's stock vanish between one day's reading and the next. That is far more than a day of normal buying, so it is probably stock being moved somewhere else: to his own shop, a wholesale order, or between Amazon warehouses. It is shown separately and left out of sales unless you tick the box.">i</i></span><span><i style="background:var(--text-dim)"></i>Restocked</span></div>
+      <div><div class="panel-title">Units sold and stock movements</div><div class="panel-sub" id="movSub"></div></div>
+      <div class="legend"><span><i style="background:var(--brand)"></i>Sold</span><span><i style="background:var(--text-dim)"></i>Delivered in</span><span><i style="background:var(--accent-2)"></i>Moved out in one go<i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></span></div>
     </div>
     <div id="movChart"></div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Estimated revenue</div><div class="panel-sub" id="revSub"></div></div>
-      <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Gross at list price</span><span><i style="background:var(--up)"></i>Net at margin</span></div>
+      <div><div class="panel-title">Estimated sales value and profit</div><div class="panel-sub" id="revSub"></div></div>
+      <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Value at list price</span><span><i style="background:var(--up)"></i><span id="revNetLeg">Profit</span></span></div>
     </div>
     <div id="revChart"></div>
   </div>
@@ -261,7 +261,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
 
   <div class="panel">
     <div class="panel-head">
-      <div><div class="panel-title">Units on hand</div><div class="panel-sub" id="ohSub"></div></div>
+      <div><div class="panel-title">Stock on hand</div><div class="panel-sub" id="ohSub"></div></div>
       <div class="legend" id="ohLegend"></div>
     </div>
     <div id="ohChart"></div>
@@ -297,11 +297,12 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   <div class="panel notes">
     <div class="panel-title" style="color:var(--text)">How to read this</div>
     <ul>
-      <li><b>Stock</b> is the number of units a listing reports as available, read once a day. Shopify counts above 80 are shown as "at least 80".</li>
-      <li><b>Units sold</b> is any fall in stock between two readings. A count going down cannot tell us whether a customer bought a bag or the owner moved a pallet, so when 40 or more units and at least half of a listing's stock vanish in a single day we call it a <b>big one-day drop</b>, show it in amber, and leave it out of sales unless you tick the box. Forty separate customers finding one listing on one day is much less likely than one pallet leaving.</li>
-      <li><b>Revenue</b> is units multiplied by the listing's usual in-stock price. <b>Net</b> is that figure multiplied by whatever margin you set above, or, in the <b>$1 a bag</b> mode, one dollar for every unit sold, which is what he has said he makes. Neither is a real figure from the business.</li>
+      <li><b>Stock</b> is the number of units a listing says it has available, read once a day. Shopify counts above 80 are shown as "at least 80".</li>
+      <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units and at least half of a listing vanish in a single day, that is not forty customers finding one listing on one day; it is a pallet leaving. We call that <b>moved out</b>, show it in amber, and keep it out of sales unless you tick the box.</li>
+      <li><b>Stock that leaves and comes back</b> is left out of everything. Amazon shuffles deliveries between its warehouses, so a count can collapse one day and rebuild over the following weeks. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted as a move or a delivery.</li>
+      <li><b>Sales value</b> is units sold multiplied by the listing's usual in-stock price. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
-      <li>Restocks and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group scan days by the week starting Monday.</li>
+      <li>A delivery and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group scan days by the week starting Monday.</li>
       <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
     </ul>
   </div>
@@ -333,8 +334,15 @@ const netOf=(gross,units)=>state.mode==='bag'?units*BAG_NET:gross*state.margin/1
 const netLabel=()=>state.mode==='bag'?'at $1 a bag':'at '+state.margin+'%';
 
 // ---- derive per-SKU daily movements once per channel -------------------------
+// A fall is a sale unless it is a big one-day drop (a pallet leaving). Amazon also
+// shuffles received stock between its warehouses: the count collapses, then
+// rebuilds over days or weeks as the units come back. Each big drop is paired
+// with the climb-back on the same listing inside RETURN_DAYS and both legs are
+// removed, so a shuffle reads as neither a move out nor a delivery in. Whatever
+// has not come back is what we call moved out.
+const RETURN_DAYS=28;
 function deriveSku(s, days, cap){
-  const n=days.length, sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0);
+  const n=days.length, sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0), ret=new Array(n).fill(0);
   let pv=null;
   for(let i=0;i<n;i++){
     const v=s.stock[i]; if(v==null) continue;
@@ -346,7 +354,18 @@ function deriveSku(s, days, cap){
     }
     pv = capped ? null : v;   // never difference across a capped (floor) reading
   }
-  s.sold=sold; s.bulk=bulk; s.rest=rest;
+  const open=[];   // big drops still waiting for their stock to come back, oldest first
+  for(let i=0;i<n;i++){
+    while(open.length && toT(days[i])-toT(days[open[0].i])>RETURN_DAYS*dayMs) open.shift();
+    if(rest[i]>0){
+      for(const o of open){ if(!rest[i]) break; const back=Math.min(o.left,rest[i]); o.left-=back; rest[i]-=back; bulk[o.i]-=back; ret[i]+=back; }
+      while(open.length && open[0].left<=0) open.shift();
+    }
+    if(bulk[i]>0) open.push({i,left:bulk[i]});
+  }
+  // a remnant too small to be a pallet is ordinary selling during the shuffle
+  for(let i=0;i<n;i++) if(bulk[i]>0 && bulk[i]<BULK_MIN){ sold[i]+=bulk[i]; bulk[i]=0; }
+  s.sold=sold; s.bulk=bulk; s.rest=rest; s.ret=ret;
   s.last=lastKnown(s.stock);
   s.lastCapped = cap!=null && s.last!=null && s.last>=cap;
 }
@@ -364,7 +383,7 @@ function prepBoth(){
   const a=CH.amazon, b=CH.shopify; if(!a||!b) return a||b;
   const days=[...new Set([...a.days,...b.days])].sort();
   const idx=new Map(days.map((d,i)=>[d,i]));
-  const realign=(s,src)=>{const o=Object.assign({},s); for(const k of ['stock','prices','compareAt','sold','bulk','rest']){ if(!s[k]) continue; const arr=new Array(days.length).fill(k==='sold'||k==='bulk'||k==='rest'?0:null); src.days.forEach((d,i)=>{arr[idx.get(d)]=s[k][i]}); o[k]=arr;} return o;};
+  const realign=(s,src)=>{const o=Object.assign({},s); for(const k of ['stock','prices','compareAt','sold','bulk','rest','ret']){ if(!s[k]) continue; const arr=new Array(days.length).fill(k==='sold'||k==='bulk'||k==='rest'||k==='ret'?0:null); src.days.forEach((d,i)=>{arr[idx.get(d)]=s[k][i]}); o[k]=arr;} return o;};
   return {days, skus:[...a.skus.map(s=>realign(s,a)),...b.skus.map(s=>realign(s,b))], cap:null, both:true};
 }
 function cur(){ return state.channel==='both' ? CH.both : CH[state.channel]; }
@@ -391,15 +410,16 @@ function aggregate(c,[i0,i1]){
   const days=c.days.slice(i0,i1+1), n=days.length;
   const sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0), gross=new Array(n).fill(0), grossBulk=new Array(n).fill(0);
   const byFam={}, famSold={}; FAM.forEach(f=>{byFam[f[0]]=new Array(n).fill(0); famSold[f[0]]=0;});
-  let onHand=0,onHandVal=0,capped=0,inStock=0,oos=0,unknown=0;
+  let onHand=0,onHandVal=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,ohDelta=0;
   const rows=[];
   for(const s of c.skus){
     const p=s.price||0; let sl=0,bk=0,rs=0,oo=0;
-    for(let i=0;i<n;i++){ const j=i0+i; sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; gross[i]+=s.sold[j]*p; grossBulk[i]+=s.bulk[j]*p;
+    for(let i=0;i<n;i++){ const j=i0+i; sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; retU+=s.ret[j]; gross[i]+=s.sold[j]*p; grossBulk[i]+=s.bulk[j]*p;
       sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; if(s.stock[j]===0) oo++;
       const v = s.stock[j]!=null ? s.stock[j] : lastKnownBefore(s.stock,j); if(v!=null) byFam[s.family][i]+=v; }
     famSold[s.family]+=sl+(state.bulk?bk:0);
     const first=firstKnownFrom(s.stock,i0), cap=capOf(s);
+    if(first!=null&&s.last!=null&&!(cap!=null&&(first>=cap||s.last>=cap))) ohDelta+=s.last-first;
     rows.push({s, name:s.name+(s.variant?' · '+s.variant:''), fam:s.family, size:s.size, price:s.price, channel:s.channel,
       stock:s.last, capped:cap!=null&&s.last!=null&&s.last>=cap, delta:(first!=null&&s.last!=null)?s.last-first:null,
       sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos:oo, gross:(sl+(state.bulk?bk:0))*p, series:s.stock.slice(i0,i1+1)});
@@ -407,7 +427,7 @@ function aggregate(c,[i0,i1]){
     if(s.last>0) inStock++; else oos++;
     onHand+=s.last; onHandVal+=s.last*p; if(s.lastCapped) capped++;
   }
-  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,capped,inStock,oos,unknown,
+  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,capped,inStock,oos,unknown,retU,ohDelta,
     soldU:sum(sold),bulkU:sum(bulk),restU:sum(rest),grossU:sum(gross),grossBulkU:sum(grossBulk),
     units:sum(sold)+(state.bulk?sum(bulk):0), grossAll:sum(gross)+(state.bulk?sum(grossBulk):0)};
 }
@@ -435,27 +455,34 @@ function frame(W,H){ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="im
 // A 900-unit viewBox scaled onto a 330px phone shrinks 11px text to 4px. Measure
 // the container and draw at that width instead; re-rendered on resize.
 function cw(id,max){ const el=document.getElementById(id); const w=el?el.clientWidth:0; return Math.round(Math.max(300,Math.min(max,w||max))); }
-function hgrid(M,k,pl,W,pr,y0,sc,f){ let g=''; for(const t of ticks(M,k)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text x="${pl-6}" y="${(y+4).toFixed(1)}" text-anchor="end">${f(t)}</text>`; } return g; }
+// Pick a tick count whose steps are round numbers: 250 in five steps of 50, not four of 62.5.
+function kFor(M,want){ if(!(M>0)||want<2) return want; const e=Math.floor(Math.log10(M)); if(e<1) return want; const unit=Math.pow(10,e-1);
+  for(const k of [want,want+1,want-1,want+2,want-2]){ if(k<2) continue; const st=M/k/unit; if(Math.abs(st-Math.round(st))<1e-9) return k; } return want; }
+function hgrid(M,k,pl,W,pr,y0,sc,f){ k=kFor(M,k); let g=''; for(const t of ticks(M,k)){ const y=y0-t*sc; g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text x="${pl-6}" y="${(y+4).toFixed(1)}" text-anchor="end">${f(t)}</text>`; } return g; }
 
-// Two lanes on one x-axis: sales on top with their own scale, restocks below with
-// theirs. A single diverging scale let one 1,200-unit restock squash a month of
-// 60-a-day sales into a few pixels.
+// Two lanes on one x-axis. Top: what customers bought, a few units at a time.
+// Bottom: what the business did, deliveries up and pallets out down, on its own
+// scale, so one 1,200-unit delivery cannot squash a month of 60-a-day sales.
 function movementsChart(S){
   const n=S.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
-  const W=cw('movChart',900), narrow=W<600, pl=narrow?44:52, pr=12, pt=18, pb=26, gap=32, h2=narrow?52:66, h1=narrow?130:170, H=pt+h1+gap+h2+pb;
-  const y1=pt+h1, y2=pt+h1+gap+h2;
-  const M1=niceMax(Math.max(...S.sold.map((v,i)=>v+S.bulk[i]))), sc1=h1/M1;
-  const M2=niceMax(Math.max(...S.rest)), sc2=h2/M2;
+  const W=cw('movChart',900), narrow=W<600, pl=narrow?44:52, pr=12, pt=18, pb=26, gap=34, inc=state.bulk;
+  const top=S.sold.map((v,i)=>v+(inc?S.bulk[i]:0)), anyOut=!inc&&S.bulk.some(v=>v>0);
+  const h1=narrow?120:160, up=narrow?44:58, dn=anyOut?up:0;
+  const H=pt+h1+gap+up+dn+pb, y1=pt+h1, y2=pt+h1+gap+up;
+  const M1=niceMax(Math.max(...top)), sc1=h1/M1;
+  const M2=niceMax(Math.max(...S.rest,...(anyOut?S.bulk:[0]))), sc2=up/M2;
   const step=(W-pl-pr)/n, bw=Math.max(2,step*0.72), x=i=>pl+i*step+step/2;
-  let g=`<text class="lane" x="${pl}" y="${pt-7}">SOLD</text><text class="lane" x="${pl}" y="${y1+gap-7}">RESTOCKED</text>`;
+  let g=`<text class="lane" x="${pl}" y="${pt-7}">SOLD TO CUSTOMERS</text><text class="lane" x="${pl}" y="${y1+gap-7}">${anyOut?'DELIVERED IN ↑ · MOVED OUT ↓':'DELIVERED IN'}</text>`;
   g+=hgrid(M1,narrow?2:4,pl,W,pr,y1,sc1,fmtU)+hgrid(M2,1,pl,W,pr,y2,sc2,fmtU);
+  if(anyOut) g+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${(y2+dn).toFixed(1)}" y2="${(y2+dn).toFixed(1)}"/><text x="${pl-6}" y="${(y2+dn+4).toFixed(1)}" text-anchor="end">${fmtU(M2)}</text>`;
   let bars='';
   for(let i=0;i<n;i++){
     const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1);
     if(S.sold[i]>0) bars+=`<rect x="${xl}" y="${(y1-S.sold[i]*sc1).toFixed(1)}" width="${w}" height="${(S.sold[i]*sc1).toFixed(1)}" rx="1.5" fill="var(--brand)"/>`;
-    if(S.bulk[i]>0) bars+=`<rect x="${xl}" y="${(y1-(S.sold[i]+S.bulk[i])*sc1).toFixed(1)}" width="${w}" height="${(S.bulk[i]*sc1).toFixed(1)}" rx="1.5" fill="var(--accent-2)"/>`;
+    if(inc&&S.bulk[i]>0) bars+=`<rect x="${xl}" y="${(y1-top[i]*sc1).toFixed(1)}" width="${w}" height="${(S.bulk[i]*sc1).toFixed(1)}" rx="1.5" fill="var(--accent-2)"/>`;
     if(S.rest[i]>0) bars+=`<rect x="${xl}" y="${(y2-S.rest[i]*sc2).toFixed(1)}" width="${w}" height="${(S.rest[i]*sc2).toFixed(1)}" rx="1.5" fill="var(--text-dim)"/>`;
-    const tip=`${when(S,i)}\nSold: ${fmtU(S.sold[i])} units\nBig one-day drop: ${fmtU(S.bulk[i])}${S.bulk[i]?' (probably moved, not sold)':''}\nRestocked: ${fmtU(S.rest[i])}`;
+    if(anyOut&&S.bulk[i]>0) bars+=`<rect x="${xl}" y="${y2}" width="${w}" height="${(S.bulk[i]*sc2).toFixed(1)}" rx="1.5" fill="var(--accent-2)"/>`;
+    const tip=`${when(S,i)}\nSold: ${fmtU(S.sold[i])} units${inc&&S.bulk[i]?` (includes ${fmtU(S.bulk[i])} moved out in one go)`:''}\nDelivered in: ${fmtU(S.rest[i])}${!inc&&S.bulk[i]?`\nMoved out in one go: ${fmtU(S.bulk[i])}`:''}`;
     bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${H-pt-pb}" data-tip="${esc(tip)}"/>`;
   }
   return frame(W,H)+g+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y1}" y2="${y1}"/><line class="axis" x1="${pl}" x2="${W-pr}" y1="${y2}" y2="${y2}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
@@ -472,7 +499,7 @@ function revenueChart(S){
     const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1), gv=gross[i], nv=netOf(gv,units[i]);
     if(gv>0){ bars+=`<rect x="${xl}" y="${(y0-gv*sc).toFixed(1)}" width="${w}" height="${(gv*sc).toFixed(1)}" rx="1.5" fill="var(--brand)" opacity="0.35"/>`;
       if(nv>0) bars+=`<rect x="${xl}" y="${(y0-nv*sc).toFixed(1)}" width="${w}" height="${(nv*sc).toFixed(1)}" rx="1.5" fill="var(--up)"/>`; }
-    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nGross: ${fmtM(gv)}\nNet ${netLabel()}: ${fmtM(nv)}`)}"/>`;
+    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nValue at list: ${fmtM(gv)}\nProfit ${netLabel()}: ${fmtM(nv)}`)}"/>`;
   }
   return frame(W,H)+hgrid(M,4,pl,W,pr,y0,sc,fmtM)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
 }
@@ -535,13 +562,14 @@ function renderKpis(c,A,P){
   const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
   const j=(...xs)=>xs.filter(Boolean).join(' · ');
   const oh=(A.capped?'≥':'')+fmtU(A.onHand);
+  const moved=A.bulkU;
   const tiles=[
-    ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`incl. ${fmtU(A.bulkU)} from big one-day drops`:`+ ${fmtU(A.bulkU)} more vanished in big one-day drops, probably moved rather than sold`)],
-    ['Gross at list', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
-    ['Net '+netLabel(), fmtM(net), j(state.mode==='bag'?'his claim':'hypothetical', state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
-    ['Restocked', fmtU(A.restU), j('units added', P&&deltaHtml(A.restU,P.restU))],
-    ['On hand now', oh, j('units', fmtM(A.onHandVal)+' at list', A.capped?`${A.capped} shown as at least 80`:'')],
-    ['In stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown} listings`, `${A.oos} out`, A.unknown?`${A.unknown} never read`:'')],
+    ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} moved out in one go`:(moved?`another ${fmtU(moved)} moved out in one go, not counted`:''))],
+    ['Sales at list price', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
+    [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the list price`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
+    ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
+    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price', A.capped?`${A.capped} shown as at least 80`:'')],
+    ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
 }
@@ -552,7 +580,7 @@ function renderTop(c,A){
   document.getElementById('share').innerHTML = total ? `<div class="share">${fams.map(f=>`<i style="width:${(A.famSold[f]/total*100).toFixed(2)}%;background:${famColor(f)}" data-tip="${esc(f+': '+fmtU(A.famSold[f])+' units ('+Math.round(A.famSold[f]/total*100)+'%)')}"></i>`).join('')}</div>
     <div class="share-legend">${fams.map(f=>`<span><i class="fam" style="background:${famColor(f)}"></i>${f} <b>${Math.round(A.famSold[f]/total*100)}%</b> · ${fmtU(A.famSold[f])}</span>`).join('')}</div>` : '';
   const list=A.rows.filter(r=>r.sold>0).sort((a,b)=>b.sold-a.sold).slice(0,10), max=list.length?list[0].sold:1;
-  document.getElementById('topSub').textContent = total ? `Share of units by family, then the ten listings that sold most in the period${state.bulk?' (big one-day drops included)':''}.` : 'No units sold in this period.';
+  document.getElementById('topSub').textContent = total ? `Share of units sold by type, then the ten best sellers in the period${state.bulk?' (stock moved out in one go counted as sold)':''}.` : 'No units sold in this period.';
   document.getElementById('top').innerHTML=list.map(r=>`<div class="top-row" data-id="${esc(r.s.channel+'|'+r.s.id)}" role="button" tabindex="0">
       <span class="top-name" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size, c.both?chName(r.channel):null].filter(Boolean).join(' · '))}</small></span>
       <span class="top-bar"><i style="width:${(r.sold/max*100).toFixed(1)}%;background:${famColor(r.fam)}"></i></span>
@@ -566,7 +594,7 @@ function renderTable(c,A){
   if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(r=>r.name.toLowerCase().includes(q)||(r.s.id||'').toLowerCase().includes(q)); }
   const k=state.sort.key, dir=state.sort.dir==='asc'?1:-1;
   rows=rows.slice().sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
-  const cols=[['name','Product'],...(c.both?[['channel','Channel']]:[]),['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Big drops'],['rest','Restocked'],['oos','Days out'],['trend','Trend']];
+  const cols=[['name','Product'],...(c.both?[['channel','Channel']]:[]),['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Moved out'],['rest','Added'],['oos','Days out'],['trend','Trend']];
   document.querySelector('#tbl thead').innerHTML='<tr>'+cols.map(([key,lab])=>`<th><button type="button" data-key="${key}" ${state.sort.key===key?`data-dir="${state.sort.dir}"`:''} ${key==='trend'?'disabled':''}>${lab}</button></th>`).join('')+'</tr>';
   document.querySelector('#tbl tbody').innerHTML=rows.length?rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
     <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.channel==='amazon'?' · '+r.s.id:''}</small></td>
@@ -576,7 +604,7 @@ function renderTable(c,A){
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
     <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td><td>${r.oos||'—'}</td>
     <td>${spark(r.series)}</td></tr>`).join(''):`<tr><td colspan="${cols.length}" class="empty" style="text-align:center">No listings match.</td></tr>`;
-  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold and Big drops are units over the period (a big drop is 40+ units and half the stock gone in a day, usually moved rather than sold); Change is stock now versus the first reading in the period; Days out counts scan days at zero. "?" means no usable reading yet.`;
+  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Moved out and Added are units over the period. Moved out is stock that vanished in one go (40 or more units and at least half the listing) and did not come back within four weeks, usually a pallet leaving rather than customers buying. Change is stock now against the first reading in the period. Days out counts scan days at zero. "?" means no usable reading yet.`;
 }
 
 function renderDetail(c,A){
@@ -585,7 +613,7 @@ function renderDetail(c,A){
   const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, big one-day drops <b>${fmtU(r.bulk)}</b>`:''}, restocked <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · gross <b>${fmtM(r.gross)}</b>, net ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, moved out <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · value at list <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
     <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
       <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
@@ -612,7 +640,7 @@ function renderPriceLog(c){
   }
   out.sort((a,b)=>b.d.localeCompare(a.d));
   const el=document.getElementById('pricelog');
-  document.getElementById('plSub').textContent = out.length ? `Repricings that held for at least ${state.channel==='shopify'?'one reading':'three in-stock readings'}, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.` : 'No sustained price changes recorded on this channel yet.';
+  document.getElementById('plSub').textContent = out.length ? `Price changes that stuck for at least ${state.channel==='shopify'?'one reading':'three in-stock readings'}, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.` : 'No sustained price changes recorded on this channel yet.';
   el.innerHTML=out.slice(0,60).map(e=>`<li><span class="d">${fmtDY(e.d)}</span><span class="n" title="${esc(e.s.name)}">${esc(e.s.name)}${e.s.variant?' · '+esc(e.s.variant):''} <small>${esc([e.s.variant?null:e.s.family, e.s.variant?null:e.s.size, c.both?chName(e.s.channel):null].filter(Boolean).join(' · '))}</small></span><span class="p ${e.to<e.from?'dn':'upp'}">${fmtP(e.from)} → ${fmtP(e.to)}${e.sale?'<span class="sale">sale</span>':''}</span></li>`).join('');
 }
 
@@ -621,12 +649,13 @@ function render(){
   const win=windowFor(c), A=aggregate(c,win), pw=prevWindow(c,win[0]), P=pw?aggregate(c,pw):null, S=series(A);
   const eff=effGroup(A); document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.group===eff));
   renderKpis(c,A,P);
-  document.getElementById('movSub').textContent=periodLabel(A,S)+(c.both?' · Shopify readings begin 10 Aug 2026':'')+'. Blue is stock that went down a little at a time (sales). Amber is stock that vanished in one go, which usually means it was moved, not sold.';
+  document.getElementById('movSub').textContent=periodLabel(A,S)+(c.both?' · Shopify readings begin 10 Aug 2026':'')+'. Top: units customers bought, a few at a time. Bottom: deliveries that arrived (grey) and stock that left in one go (amber), which is usually a pallet moving, not a sale.'+(A.retU?` ${fmtU(A.retU)} units that left and came back within four weeks are left out of both.`:'');
   document.getElementById('movChart').innerHTML=movementsChart(S);
-  document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net ${netLabel()}${state.bulk?', big one-day drops included':', big one-day drops left out'}${S.weekly?' · by week':''}.`;
+  document.getElementById('revSub').textContent=`Units sold × usual list price. The solid part is the profit ${netLabel()}${state.mode==='bag'?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
+  document.getElementById('revNetLeg').textContent='Profit '+netLabel();
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderTop(c,A);
-  document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings shown as at least 80 count as 80':'')+'. Legend shows the latest day.';
+  document.getElementById('ohSub').textContent='What each listing reports as available, added up by type'+(c.cap||c.both?'; Shopify listings shown as at least 80 count as 80':'')+'. The legend shows the latest day.';
   document.getElementById('ohChart').innerHTML=onHandChart(A);
   renderTable(c,A);
   renderDetail(c,A);
