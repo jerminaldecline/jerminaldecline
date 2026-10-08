@@ -1,52 +1,94 @@
-# Topic candidates — 2026-10-07
+# Topic candidates — 2026-10-08
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @TheQuartering
+
+Pool: 14 recent videos, 123 baseline videos
+
+### Cluster 1: `coffee sign`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 53.1x
+- **Related terms:** `coffee sign`
+- **Sample recent videos:**
+  - 2026-10-07 — _PSYCHO MOM TAKES OUT FAMILY_  
+    Police Had Been Called FIVE TIMES Before Family Bloodbath
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+
+### Cluster 2: `attack join`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 2/123 videos (2%)
+- **Spike ratio:** 10.6x
+- **Related terms:** `attack`, `attack join`
+- **Sample recent videos:**
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-05 — _Leftist TERROR Strikes High School_  
+    Teen Faces TERROR Charges After School Chemical Attack
+  - 2026-10-01 — _Woke Karen RUNS OVER Puppy!_  
+    Karen Kills Puppy In Absolutely Evil Attack
+
+### Cluster 3: `cornell`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 53.1x
+- **Related terms:** `cornell`
+- **Sample recent videos:**
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
+    Cornell Case Flips After Explosive Counterclaim
+  - 2026-10-05 — _IT'S OVER FOR THEM_  
+    SNL Audience ROARS As Cornell Seven Scandal Explodes
+
+### Cluster 4: `join`
+
+- **Recent saturation:** 12/14 videos (**86%**)
+- **Baseline saturation:** 11/123 videos (9%)
+- **Spike ratio:** 9.2x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
+- **Sample recent videos:**
+  - 2026-10-07 — _PSYCHO MOM TAKES OUT FAMILY_  
+    Police Had Been Called FIVE TIMES Before Family Bloodbath
+  - 2026-10-07 — _TERROR AT MALL OF AMERICA!_  
+    Somali Terror Suspect BUSTED Before Mall Of America Attack
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+  - 2026-10-06 — _Planet Fitness In HUGE Trouble After Woke Policy Backfires_  
+    Convicted Predator Arrested Inside Women’s Locker Room
+  - 2026-10-06 — _McDonald's BUSTED Using AI To SCAM Customers!_  
+    McDonalds Customers Just Got Completely RIPPED OFF
+
 ## @JeremyHambly
 
-Pool: 8 recent videos, 80 baseline videos
+Pool: 8 recent videos, 81 baseline videos
 
-### Cluster 1: `server`
+### Cluster 1: `join`
 
 - **Recent saturation:** 8/8 videos (**100%**)
-- **Baseline saturation:** 7/80 videos (9%)
-- **Spike ratio:** 10.8x
-- **Related terms:** `server`, `join`, `our server`, `server our`, `join our`
+- **Baseline saturation:** 9/81 videos (11%)
+- **Spike ratio:** 8.6x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
+  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
+    Nolan Wells Conspiracy Crowd Gets DESTROYED
+  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
+    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
   - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
     This Is Terrifying! Seattle Has Completely Collapsed
   - 2026-10-06 — _Nike ADMITS Woke KILLED Their Brand_  
     Nike CEO HUMILIATED By Devastating New Numbers
   - 2026-10-06 — _Cornell 7 RIOTS As Students RAGE & Vandalize University_  
     Cornell 7 RIOTS As Students RAGE & Vandalize University
-  - 2026-10-05 — _Asmongold & The Burnt Peanut BLAST Gears Of War_  
-    Asmongold Just DESTROYED Gears Of War E-Day
-  - 2026-10-05 — _Lindsay Clancy CULT Hits ROCK BOTTOM_  
-    TikTok’s Newest Trend Is Completely INSANE
-
-## @TheQuartering
-
-Pool: 15 recent videos, 120 baseline videos
-
-### Cluster 1: `o'lantern`
-
-- **Recent saturation:** 14/15 videos (**93%**)
-- **Baseline saturation:** 34/120 videos (28%)
-- **Spike ratio:** 3.3x
-- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
-  - 2026-10-06 — _Planet Fitness In HUGE Trouble After Woke Policy Backfires_  
-    Convicted Predator Arrested Inside Women’s Locker Room
-  - 2026-10-06 — _McDonald's BUSTED Using AI To SCAM Customers!_  
-    McDonalds Customers Just Got Completely RIPPED OFF
-  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
-    Cornell Case Flips After Explosive Counterclaim
-  - 2026-10-05 — _Failed Execution UNREAL New Twist!_  
-    Christa Pike May NEVER Wake Up After Failed Execution
-  - 2026-10-05 — _IT'S OVER FOR THEM_  
-    SNL Audience ROARS As Cornell Seven Scandal Explodes
 
 ---
 
