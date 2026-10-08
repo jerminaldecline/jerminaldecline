@@ -226,8 +226,8 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
           <button type="button" data-mb="pct" aria-pressed="true">% of list price</button>
           <button type="button" data-mb="bag" aria-pressed="false">$1 a bag</button>
         </div>
-        <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="30" aria-label="Margin percent">
-        <input type="number" id="marginNum" min="0" max="100" step="1" value="30" aria-label="Margin percent"><span>%</span></span>
+        <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="15" aria-label="Margin percent">
+        <input type="number" id="marginNum" min="0" max="100" step="1" value="15" aria-label="Margin percent"><span>%</span></span>
         <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its list price.">i</i></span>
       </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count stock moved out as sales <small>(big one-day drops, usually a pallet leaving)</small><i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></label>
@@ -316,7 +316,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, MIN_RUN={amazon:3,shopify:1};
-const state={channel:'amazon',period:30,margin:30,mode:'pct',bulk:false,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={channel:'amazon',period:30,margin:15,mode:'pct',bulk:false,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
