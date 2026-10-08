@@ -112,6 +112,54 @@ function get(url) {
   });
 }
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// How many more times a video we believed live must be absent from the API
+// before it is treated as removed, and the base wait between asks.
+const VIDEO_RECHECKS = 3;
+const RECHECK_DELAY_MS = 2000;
+// An audit that still finds more than this many removals at once asks one last
+// time after a pause before believing any of them.
+const BULK_RECHECK_OVER = 10;
+const BULK_RECHECK_PAUSE_MS = 20000;
+
+/**
+ * videos.list for one batch of up to 50, hardened against short answers.
+ *
+ * Absence from the response is the only way a removed video is detected: the API
+ * simply leaves deleted and private videos out. On 2026-10-03 it also answered
+ * HTTP 200 with no items at all for 5 of 317 audit batches. Read at face value
+ * that flagged 221 public videos as removed, dropped 11.3M views out of eleven
+ * months' totals, and had the site announce 146 of them as "no longer public".
+ *
+ * One response cannot tell a short answer from a removal, so a video we believed
+ * live is only treated as gone once it has also been absent from VIDEO_RECHECKS
+ * follow-up requests. A real removal costs a few seconds and a few quota units;
+ * a blip costs nothing visible. Videos already flagged unavailable are not
+ * rechecked - staying absent is what is expected of them.
+ *
+ * `snippet` rides along for description capture and so the audit can spot
+ * retroactive edits and re-titles; `status` carries the unlisted state.
+ */
+async function fetchVideoItems(batch) {
+  const urlFor = ids => `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,status&id=${ids.join(',')}&key=${API_KEY}`;
+  const byId = new Map();
+  const first = await get(urlFor(batch.map(v => v.id)));
+  for (const it of (first.items || [])) byId.set(it.id, it);
+  let missing = batch.filter(v => !v.unavailable && !byId.has(v.id));
+  for (let attempt = 1; missing.length && attempt <= VIDEO_RECHECKS; attempt++) {
+    await sleep(RECHECK_DELAY_MS * attempt);
+    const again = await get(urlFor(missing.map(v => v.id)));
+    for (const it of (again.items || [])) byId.set(it.id, it);
+    const still = missing.filter(v => !byId.has(v.id));
+    if (still.length < missing.length) {
+      console.log(`    API answered short: ${missing.length - still.length} of ${missing.length} absent videos came back on recheck ${attempt}`);
+    }
+    missing = still;
+  }
+  return byId;
+}
+
 function parseDuration(iso) {
   const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!m) return 0;
@@ -209,12 +257,9 @@ async function enrichVideos(videos, descriptions) {
   console.log(`  Fetching duration + view stats for ${videos.length} videos...`);
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
-    const ids = batch.map(v => v.id).join(',');
-    // snippet added for description capture. Cost: 2 quota units/call instead
-    // of 1 — still well within daily quota (we run at ~13% utilisation).
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,status&id=${ids}&key=${API_KEY}`;
-    const data = await get(url);
-    const byId = new Map(data.items.map(it => [it.id, it]));
+    // One hardened request per batch: a short answer is rechecked before any
+    // video is treated as removed (see fetchVideoItems).
+    const byId = await fetchVideoItems(batch);
     for (const v of batch) {
       const det = byId.get(v.id);
       if (det) {
@@ -270,14 +315,9 @@ async function auditEnrich(videos, descriptions, titleHistory) {
   const newlyUnlisted = [];
   for (let i = 0; i < videos.length; i += 50) {
     const batch = videos.slice(i, i + 50);
-    const ids = batch.map(v => v.id).join(',');
-    // snippet added so the audit also refreshes descriptions — useful for
-    // detecting retroactive edits on older videos (e.g. removing sponsor
-    // mentions after a deal sours). Audit runs once daily so this is a
-    // small quota cost (~280 units vs ~140 previously).
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,status&id=${ids}&key=${API_KEY}`;
-    const data = await get(url);
-    const byId = new Map(data.items.map(it => [it.id, it]));
+    // One hardened request per batch: a short answer is rechecked before any
+    // video is treated as removed (see fetchVideoItems).
+    const byId = await fetchVideoItems(batch);
     for (const v of batch) {
       const det = byId.get(v.id);
       const wasUnavailable = !!v.unavailable;
@@ -324,6 +364,34 @@ async function auditEnrich(videos, descriptions, titleHistory) {
       }
     }
     console.log(`    Audited ${Math.min(i + 50, videos.length)} / ${videos.length}`);
+  }
+  // A bulk removal gets one more look after a pause. Each batch has already
+  // rechecked its own absentees, so anything still listed was missing four times
+  // over about twelve seconds - but a longer API outage looks exactly the same,
+  // and announcing dozens of removals that did not happen is the costly mistake.
+  // A video that comes back here keeps its last-known stats until the next audit.
+  if (newlyUnavailable.length > BULK_RECHECK_OVER) {
+    console.log(`  ${newlyUnavailable.length} videos newly missing in one pass - asking again in ${BULK_RECHECK_PAUSE_MS / 1000}s before believing it`);
+    await sleep(BULK_RECHECK_PAUSE_MS);
+    const byVid = new Map(videos.map(v => [v.id, v]));
+    let back = 0;
+    for (let i = 0; i < newlyUnavailable.length; i += 50) {
+      const ids = newlyUnavailable.slice(i, i + 50).map(n => n.id);
+      const data = await get(`https://www.googleapis.com/youtube/v3/videos?part=id&id=${ids.join(',')}&key=${API_KEY}`);
+      for (const it of (data.items || [])) {
+        const v = byVid.get(it.id);
+        if (v && v.unavailable) { delete v.unavailable; delete v.unavailableSince; back++; }
+      }
+    }
+    if (back) {
+      for (let k = newlyUnavailable.length - 1; k >= 0; k--) {
+        if (!byVid.get(newlyUnavailable[k].id).unavailable) newlyUnavailable.splice(k, 1);
+      }
+      console.log(`  ${back} of them are live after all - the API answered short, nothing was removed`);
+    }
+    if (newlyUnavailable.length > BULK_RECHECK_OVER) {
+      console.log(`::warning::${newlyUnavailable.length} videos confirmed missing in a single pass - a real bulk removal, or an API outage longer than the rechecks cover`);
+    }
   }
   return { newlyUnavailable, restoredToLive, newlyUnlisted };
 }

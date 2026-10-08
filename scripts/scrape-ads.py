@@ -12,6 +12,14 @@ it — a dated campaign record read from the page's own SearchCreatives API — 
 because a thumbnail request went past. The thumbnail harvest is still run, as a
 cross-check and to spot campaigns that have stopped.
 
+The harvest is NOT allowed to gate the run. From 2026-09-25 the Centre serves the
+card thumbnails from tpc.googlesyndication.com instead of i.ytimg.com, so the
+harvest returns 0 ids even though the page is fine (~300 creatives listed). For
+seven days that 0 tripped the --min-ads abort before the creative capture ever
+ran, and the ad roster silently stopped updating. The creative path is unaffected
+(each creative's preview content.js still carries the YouTube id), so a thin
+harvest is logged as a warning and the creative count is the only safety floor.
+
 Note the Centre only retains roughly the last ~10 months of creatives, so a
 video advertised before that has no record. Catalogued videos are therefore
 never removed for lack of one; absence is only meaningful for a video newer
@@ -276,12 +284,11 @@ def main():
     cid2handle = {c["channelId"]: h for h, c in ads["channels"].items()}
     flagged = set(i for c in ads["channels"].values() for i in c["videoIds"])
 
-    scraped = scrape_ids()
-    if len(scraped) < MIN_ADS:
-        log(f"ABORT: only {len(scraped)} ids harvested (< --min-ads {MIN_ADS}); "
-            "likely a bot-block/empty load. No changes made.")
-        if ASJSON: print(json.dumps({"ok": False, "scraped": len(scraped)}))
-        sys.exit(2)
+    harvested = scrape_ids()
+    if len(harvested) < MIN_ADS:
+        log(f"WARNING: only {len(harvested)} ids in the thumbnail harvest (< --min-ads {MIN_ADS}) "
+            "- the Centre no longer serves card thumbnails from i.ytimg.com (since 2026-09-25), "
+            "so this cross-check is expected to be thin. The creative capture below is the gate.")
 
     # A video earns the ad badge when the Transparency Centre holds a CREATIVE for
     # it — a dated campaign record with first/last-shown timestamps — not merely
@@ -305,11 +312,14 @@ def main():
         sys.exit(2)
 
     evidenced = {v for v in campaigns["videos"] if v}
+    # What the Centre currently shows for this advertiser: every video with a
+    # creative record, plus anything the thumbnail cross-check still catches.
+    scraped = harvested | evidenced
     missing = sorted(evidenced - flagged)
     # Harvested from thumbnails but with no creative behind it. Not badged, and
     # worth seeing in the log: a persistent entry here means the two sources
     # disagree, which is exactly the case the old rule couldn't distinguish.
-    unevidenced = sorted(scraped - flagged - evidenced)
+    unevidenced = sorted(harvested - flagged - evidenced)
     stale   = sorted(flagged - scraped)
     unknown = [i for i in missing if i not in meta]
 
@@ -317,7 +327,7 @@ def main():
         v = meta.get(i)
         return f"{v.get('title','')[:60]}" if v else "(not in data.json)"
 
-    log(f"\nTransparency Center: {len(scraped)} ads harvested, {len(evidenced)} with creative records"
+    log(f"\nTransparency Center: {len(harvested)} ids in the thumbnail harvest, {len(evidenced)} videos with creative records"
         f"   |   ad-videos.json: {len(flagged)}")
     log(f"MISSING (add): {len(missing)}   STALE (stopped, kept): {len(stale)}   UNKNOWN ids: {len(unknown)}")
     for i in missing:

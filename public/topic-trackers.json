@@ -1,52 +1,42 @@
 {
-  "lastUpdated": "2026-10-05T11:43:28.971Z",
+  "lastUpdated": "2026-10-08T11:31:19.568Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "o'lantern",
+      "termId": "join",
       "keywords": [
         "join",
         "server",
         "join our",
         "our server",
-        "server our",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back",
-        "stock sign"
+        "server our"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9286,
-        "baselineSaturation": 0.3182,
-        "spikeRatio": 2.92,
-        "recentVideoCount": 13,
-        "baselineVideoCount": 38,
-        "detectedAt": "2026-10-05T11:43:28.971Z"
+        "recentSaturation": 0.8571,
+        "baselineSaturation": 0.0927,
+        "spikeRatio": 9.24,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-10-08T11:31:19.568Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "o'lantern",
+      "termId": "join",
       "keywords": [
-        "server",
-        "our server",
-        "server our",
         "join",
         "join our",
-        "tourney candace",
-        "massive",
-        "o'lantern",
-        "jack o'lantern",
-        "o'lantern back",
-        "stock sign"
+        "server",
+        "our server",
+        "server our"
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.487,
-        "spikeRatio": 2.05,
+        "baselineSaturation": 0.1159,
+        "spikeRatio": 8.63,
         "recentVideoCount": 8,
-        "baselineVideoCount": 37,
-        "detectedAt": "2026-10-05T11:43:28.971Z"
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-10-08T11:31:19.568Z"
       }
     }
   ]
