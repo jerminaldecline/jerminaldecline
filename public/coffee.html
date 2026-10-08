@@ -71,6 +71,9 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .margin{display:flex;align-items:center;gap:0.6rem}
 .margin input[type=range]{width:160px;accent-color:var(--accent-fill)}
 .margin input[type=number]{width:4.2rem;font:inherit;font-weight:700;padding:0.28rem 0.4rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);text-align:right}
+.margin-pct{display:inline-flex;align-items:center;gap:0.6rem}
+.margin-claim{display:inline-flex;align-items:center;font-size:0.82rem;color:var(--text-dim)}
+.margin-pct[hidden],.margin-claim[hidden]{display:none}
 .check{display:flex;align-items:center;gap:0.45rem;font-size:0.82rem;color:var(--text);padding-bottom:0.25rem}
 .check input{accent-color:var(--accent-fill);width:15px;height:15px}
 .check small{color:var(--text-dim);font-size:0.72rem}
@@ -219,8 +222,13 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       </div></div>
     <div class="ctl"><span class="ctl-label">Hypothetical margin</span>
       <div class="margin">
-        <input type="range" id="marginRange" min="0" max="100" step="1" value="30" aria-label="Margin percent">
-        <input type="number" id="marginNum" min="0" max="100" step="1" value="30" aria-label="Margin percent"><span>%</span>
+        <div class="seg" role="group" aria-label="Margin basis">
+          <button type="button" data-mb="pct" aria-pressed="true">% of list</button>
+          <button type="button" data-mb="bag" aria-pressed="false">$1 a bag</button>
+        </div>
+        <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="30" aria-label="Margin percent">
+        <input type="number" id="marginNum" min="0" max="100" step="1" value="30" aria-label="Margin percent"><span>%</span></span>
+        <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its list price.">i</i></span>
       </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count big one-day drops as sales <small>(usually stock moved elsewhere, not sold)</small><i class="info" data-tip="A big one-day drop is when 40 or more units and at least half of a listing's stock vanish between one day's reading and the next. That is far more than a day of normal buying, so it is probably stock being moved somewhere else: to his own shop, a wholesale order, or between Amazon warehouses. It is shown separately and left out of sales unless you tick the box.">i</i></label>
   </div>
@@ -291,7 +299,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
     <ul>
       <li><b>Stock</b> is the number of units a listing reports as available, read once a day. Shopify counts above 80 are shown as "at least 80".</li>
       <li><b>Units sold</b> is any fall in stock between two readings. A count going down cannot tell us whether a customer bought a bag or the owner moved a pallet, so when 40 or more units and at least half of a listing's stock vanish in a single day we call it a <b>big one-day drop</b>, show it in amber, and leave it out of sales unless you tick the box. Forty separate customers finding one listing on one day is much less likely than one pallet leaving.</li>
-      <li><b>Revenue</b> is units multiplied by the listing's usual in-stock price. <b>Net</b> is that figure multiplied by whatever margin you set above. Neither is a real figure from the business.</li>
+      <li><b>Revenue</b> is units multiplied by the listing's usual in-stock price. <b>Net</b> is that figure multiplied by whatever margin you set above, or, in the <b>$1 a bag</b> mode, one dollar for every unit sold, which is what he has said he makes. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
       <li>Restocks and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group scan days by the week starting Monday.</li>
       <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
@@ -307,7 +315,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, MIN_RUN={amazon:3,shopify:1};
-const state={channel:'amazon',period:30,margin:30,bulk:false,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={channel:'amazon',period:30,margin:30,mode:'pct',bulk:false,group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -319,6 +327,10 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const dayMs=864e5, toT=d=>Date.parse(d+'T00:00:00Z');
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const chName=c=>c==='amazon'?'Amazon':'Shopify';
+// Net is either a share of gross at list, or his own claim of a dollar a unit.
+const BAG_NET=1;
+const netOf=(gross,units)=>state.mode==='bag'?units*BAG_NET:gross*state.margin/100;
+const netLabel=()=>state.mode==='bag'?'at $1 a bag':'at '+state.margin+'%';
 
 // ---- derive per-SKU daily movements once per channel -------------------------
 function deriveSku(s, days, cap){
@@ -452,15 +464,15 @@ function movementsChart(S){
 function revenueChart(S){
   const n=S.days.length; if(!n) return '<div class="empty">No readings in this period.</div>';
   const W=cw('revChart',900), narrow=W<600, H=narrow?210:240, pl=narrow?48:56, pr=12, pt=14, pb=26;
-  const inc=state.bulk, m=state.margin/100, gross=S.gross.map((v,i)=>v+(inc?S.grossBulk[i]:0));
+  const inc=state.bulk, gross=S.gross.map((v,i)=>v+(inc?S.grossBulk[i]:0)), units=S.sold.map((v,i)=>v+(inc?S.bulk[i]:0));
   const M=niceMax(Math.max(...gross)), ih=H-pt-pb, sc=ih/M, y0=pt+ih;
   const step=(W-pl-pr)/n, bw=Math.max(2,step*0.72), x=i=>pl+i*step+step/2;
   let bars='';
   for(let i=0;i<n;i++){
-    const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1), gv=gross[i], nv=gv*m;
+    const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1), gv=gross[i], nv=netOf(gv,units[i]);
     if(gv>0){ bars+=`<rect x="${xl}" y="${(y0-gv*sc).toFixed(1)}" width="${w}" height="${(gv*sc).toFixed(1)}" rx="1.5" fill="var(--brand)" opacity="0.35"/>`;
       if(nv>0) bars+=`<rect x="${xl}" y="${(y0-nv*sc).toFixed(1)}" width="${w}" height="${(nv*sc).toFixed(1)}" rx="1.5" fill="var(--up)"/>`; }
-    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nGross: ${fmtM(gv)}\nNet at ${state.margin}%: ${fmtM(nv)}`)}"/>`;
+    bars+=`<rect class="hit" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nGross: ${fmtM(gv)}\nNet ${netLabel()}: ${fmtM(nv)}`)}"/>`;
   }
   return frame(W,H)+hgrid(M,4,pl,W,pr,y0,sc,fmtM)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
 }
@@ -519,14 +531,14 @@ function deltaHtml(curV, prevV){
 }
 
 function renderKpis(c,A,P){
-  const nd=A.days.length, units=A.units, gross=A.grossAll, net=gross*state.margin/100;
+  const nd=A.days.length, units=A.units, gross=A.grossAll, net=netOf(gross,units);
   const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
   const j=(...xs)=>xs.filter(Boolean).join(' · ');
   const oh=(A.capped?'≥':'')+fmtU(A.onHand);
   const tiles=[
     ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`incl. ${fmtU(A.bulkU)} from big one-day drops`:`+ ${fmtU(A.bulkU)} more vanished in big one-day drops, probably moved rather than sold`)],
     ['Gross at list', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
-    ['Net at '+state.margin+'%', fmtM(net), j('hypothetical', P&&deltaHtml(net,P.grossAll*state.margin/100)), 'net'],
+    ['Net '+netLabel(), fmtM(net), j(state.mode==='bag'?'his claim':'hypothetical', state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Restocked', fmtU(A.restU), j('units added', P&&deltaHtml(A.restU,P.restU))],
     ['On hand now', oh, j('units', fmtM(A.onHandVal)+' at list', A.capped?`${A.capped} shown as at least 80`:'')],
     ['In stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown} listings`, `${A.oos} out`, A.unknown?`${A.unknown} never read`:'')],
@@ -573,7 +585,7 @@ function renderDetail(c,A){
   const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, big one-day drops <b>${fmtU(r.bulk)}</b>`:''}, restocked <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · gross <b>${fmtM(r.gross)}</b>, net at ${state.margin}% <b>${fmtM(r.gross*state.margin/100)}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, big one-day drops <b>${fmtU(r.bulk)}</b>`:''}, restocked <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · gross <b>${fmtM(r.gross)}</b>, net ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
     <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
       <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
@@ -611,7 +623,7 @@ function render(){
   renderKpis(c,A,P);
   document.getElementById('movSub').textContent=periodLabel(A,S)+(c.both?' · Shopify readings begin 10 Aug 2026':'')+'. Blue is stock that went down a little at a time (sales). Amber is stock that vanished in one go, which usually means it was moved, not sold.';
   document.getElementById('movChart').innerHTML=movementsChart(S);
-  document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net at ${state.margin}%${state.bulk?', big one-day drops included':', big one-day drops left out'}${S.weekly?' · by week':''}.`;
+  document.getElementById('revSub').textContent=`Units × usual list price; the solid part is net ${netLabel()}${state.bulk?', big one-day drops included':', big one-day drops left out'}${S.weekly?' · by week':''}.`;
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderTop(c,A);
   document.getElementById('ohSub').textContent='Sum of the latest known reading per listing, by product family'+(c.cap||c.both?'; Shopify listings shown as at least 80 count as 80':'')+'. Legend shows the latest day.';
@@ -634,6 +646,8 @@ function wire(){
   const r=document.getElementById('marginRange'), nI=document.getElementById('marginNum');
   const setM=v=>{ v=Math.max(0,Math.min(100,Math.round(+v||0))); state.margin=v; r.value=v; nI.value=v; render(); };
   r.oninput=()=>setM(r.value); nI.onchange=()=>setM(nI.value);
+  const setMode=m=>{ state.mode=m; press('[data-mb]','mb',m); document.getElementById('marginPct').hidden=m==='bag'; document.getElementById('marginClaim').hidden=m!=='bag'; render(); };
+  document.querySelectorAll('[data-mb]').forEach(b=>b.onclick=()=>setMode(b.dataset.mb));
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
   document.querySelector('#tbl thead').addEventListener('click',e=>{ const b=e.target.closest('button[data-key]'); if(!b||b.disabled) return; const k=b.dataset.key;
     if(state.sort.key===k) state.sort.dir=state.sort.dir==='asc'?'desc':'asc'; else state.sort={key:k,dir:k==='name'||k==='size'||k==='channel'?'asc':'desc'}; render(); });
