@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-01
+# Topic candidates — 2026-10-07
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,75 +6,47 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 82 baseline videos
+Pool: 8 recent videos, 80 baseline videos
 
 ### Cluster 1: `server`
 
-- **Recent saturation:** 7/10 videos (**70%**)
-- **Baseline saturation:** 9/82 videos (11%)
-- **Spike ratio:** 6.1x
-- **Related terms:** `server`, `join`, `our server`, `server our`, `join our`, `tourney candace`
+- **Recent saturation:** 8/8 videos (**100%**)
+- **Baseline saturation:** 7/80 videos (9%)
+- **Spike ratio:** 10.8x
+- **Related terms:** `server`, `join`, `our server`, `server our`, `join our`
 - **Sample recent videos:**
-  - 2026-09-30 — _Black Mom Abandons Kids For Cruise_  
-    Mom Abandons FJoin our Discord server https://discord.com/invite/MqQp6vdHc
-  - 2026-09-30 — _Nolan Wells Grift Goes Nuclear_  
-    Nolan Wells Campaign Sparks Massive Backlash
-  - 2026-09-29 — _Candace Owens BOMBSHELL_  
-    Candace Owens BOMBSHELL Raises Massive Questions
-  - 2026-09-29 — _Candace Owens SUED Again_  
-    Candace Owens Hit With MASSIVE New Defamation Lawsuit
-  - 2026-09-28 — _They Won't Stop!_  
-    Another Trans Killer Gets 50 YEARS After Horrific Double Murder
+  - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
+    This Is Terrifying! Seattle Has Completely Collapsed
+  - 2026-10-06 — _Nike ADMITS Woke KILLED Their Brand_  
+    Nike CEO HUMILIATED By Devastating New Numbers
+  - 2026-10-06 — _Cornell 7 RIOTS As Students RAGE & Vandalize University_  
+    Cornell 7 RIOTS As Students RAGE & Vandalize University
+  - 2026-10-05 — _Asmongold & The Burnt Peanut BLAST Gears Of War_  
+    Asmongold Just DESTROYED Gears Of War E-Day
+  - 2026-10-05 — _Lindsay Clancy CULT Hits ROCK BOTTOM_  
+    TikTok’s Newest Trend Is Completely INSANE
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 127 baseline videos
+Pool: 15 recent videos, 120 baseline videos
 
 ### Cluster 1: `o'lantern`
 
-- **Recent saturation:** 12/15 videos (**80%**)
-- **Baseline saturation:** 36/127 videos (28%)
-- **Spike ratio:** 2.8x
-- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `stock sign`, `join our`, `our server`
+- **Recent saturation:** 14/15 videos (**93%**)
+- **Baseline saturation:** 34/120 videos (28%)
+- **Spike ratio:** 3.3x
+- **Related terms:** `o'lantern`, `join`, `server`, `jack o'lantern`, `o'lantern back`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
-  - 2026-09-30 — _Female KILLER SAVED By Female Judges_  
-    Female Killer SAVED One Hour Before Her Execution
-  - 2026-09-30 — _Walmart BUSTED In Massive Ripoff Scheme & Folds_  
-    Walmart RIPOFF SCHEME Fails After Massive Customer Backlash
-  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
-    Lindsay Clancy Copycat Horror—It Happened Again
-  - 2026-09-30 — _TERROR IN THE SKIES!_  
-    Pilot Tries To HIJACK Passenger Jet And Crash It
-  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
-    Massive Walmart SNAP Scandal EXPOSED By Government Report
-
-### Cluster 2: `mother`
-
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 6/127 videos (5%)
-- **Spike ratio:** 3.9x
-- **Related terms:** `mother`
-- **Sample recent videos:**
-  - 2026-09-30 — _Another Lindsay Clancy Copycat_  
-    Lindsay Clancy Copycat Horror—It Happened Again
-  - 2026-09-25 — _She BAKED Her Baby & Walked!_  
-    We Do Not Live In A Fair World.
-  - 2026-09-25 — _Karmelo Anthony ATTACKED In Prison Grifters Pounce!_  
-    Viral Claim Karmelo Anthony Was Stabbed In Prison Appears False
-
-### Cluster 3: `exposed`
-
-- **Recent saturation:** 3/15 videos (**20%**)
-- **Baseline saturation:** 6/127 videos (5%)
-- **Spike ratio:** 3.9x
-- **Related terms:** `exposed`
-- **Sample recent videos:**
-  - 2026-09-29 — _Walmart SCAM Revealed With MASSIVE SNAP Fraud_  
-    Massive Walmart SNAP Scandal EXPOSED By Government Report
-  - 2026-09-28 — _Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface_  
-    Lindsay Clancy Husband’s DELETED POSTS Finally Exposed
-  - 2026-09-24 — _Anti-Woke South Park DESTROYS Modern South Park & Goes Viral!_  
-    Stop leaving yourself vulnerable to data breaches. Go to my sponsor https://aura.com/thequartering to get a 14-day free 
+  - 2026-10-06 — _Planet Fitness In HUGE Trouble After Woke Policy Backfires_  
+    Convicted Predator Arrested Inside Women’s Locker Room
+  - 2026-10-06 — _McDonald's BUSTED Using AI To SCAM Customers!_  
+    McDonalds Customers Just Got Completely RIPPED OFF
+  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
+    Cornell Case Flips After Explosive Counterclaim
+  - 2026-10-05 — _Failed Execution UNREAL New Twist!_  
+    Christa Pike May NEVER Wake Up After Failed Execution
+  - 2026-10-05 — _IT'S OVER FOR THEM_  
+    SNL Audience ROARS As Cornell Seven Scandal Explodes
 
 ---
 

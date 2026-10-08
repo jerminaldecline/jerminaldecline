@@ -76,6 +76,17 @@ git checkout -q main
 git pull -q --rebase origin main
 git checkout origin/staging -- public/index.html
 
+# Files that ship WITH the page. counting-change.json is not built by CI, and the
+# page prints its figures beside the constants it divides by (VCC_MID /
+# VCC_FACTOR), so the two have to go live in the same commit or the explainer
+# contradicts the cards. Carried only when staging's copy differs from main's.
+for f in public/counting-change.json; do
+  if ! git diff --quiet origin/main origin/staging -- "$f"; then
+    git checkout origin/staging -- "$f"
+    echo "  also carrying $f (it ships with the page)"
+  fi
+done
+
 # node --check cannot parse HTML, so pull each inline <script> out and compile it.
 # A promote that ships a syntax error takes the whole site down, not one panel.
 node -e '

@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-01T11:05:12.000Z",
+  "lastUpdated": "2026-10-07T11:13:52.266Z",
   "trackers": [
     {
       "channelHandle": "@JeremyHambly",
@@ -9,16 +9,15 @@
         "our server",
         "server our",
         "join",
-        "join our",
-        "tourney candace"
+        "join our"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7,
-        "baselineSaturation": 0.1145,
-        "spikeRatio": 6.12,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-10-01T11:05:12.000Z"
+        "recentSaturation": 1,
+        "baselineSaturation": 0.0926,
+        "spikeRatio": 10.8,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-10-07T11:13:52.266Z"
       }
     },
     {
@@ -32,16 +31,15 @@
         "server our",
         "o'lantern",
         "jack o'lantern",
-        "o'lantern back",
-        "stock sign"
+        "o'lantern back"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8,
-        "baselineSaturation": 0.2852,
-        "spikeRatio": 2.81,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 36,
-        "detectedAt": "2026-10-01T11:05:12.000Z"
+        "recentSaturation": 0.9333,
+        "baselineSaturation": 0.2851,
+        "spikeRatio": 3.27,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 34,
+        "detectedAt": "2026-10-07T11:13:52.266Z"
       }
     }
   ]

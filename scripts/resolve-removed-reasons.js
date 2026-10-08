@@ -49,7 +49,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 function classify(status, reason, sub) {
   const t = ((reason || '') + ' ' + (sub || '')).toLowerCase();
   if (status === 'OK') return { reason: 'public' };                 // reinstated — caller prunes
-  if (status === 'LOGIN_REQUIRED') return { reason: 'private' };
+  // LOGIN_REQUIRED is not proof of a private video. From datacenter IPs YouTube
+  // answers a perfectly public video with the same status and "Sign in to confirm
+  // you're not a bot" (an age gate does it too). On 2026-10-03 that labelled 146
+  // public videos private. A genuinely private video says so ("Private video"),
+  // so require the wording and leave anything else unresolved for a later run.
+  if (status === 'LOGIN_REQUIRED') return t.includes('private') ? { reason: 'private' } : null;
   if (t.includes('copyright')) {
     const m = /request by (.+?)[.\s]*$/i.exec(sub || '');
     return { reason: 'copyright', detail: m ? m[1].trim() : undefined };
