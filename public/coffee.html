@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coffee Brand Coffee tracker · Jerminal Decline</title>
-<meta name="description" content="Daily stock, prices and estimated sales for Coffee Brand Coffee on Amazon and coffeebrandcoffee.com.">
+<meta name="description" content="Daily stock, prices and estimated sales for Coffee Brand Coffee on Amazon.">
 <link rel="icon" href="logo.png" type="image/png">
 <script>
 // Theme, applied before paint. Same key as the main site so the choice carries over.
@@ -203,17 +203,11 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   </div>
 
   <h1>Coffee Brand Coffee <span class="wip">work in progress</span></h1>
-  <p class="sub">Stock, prices and estimated sales for Jeremy's coffee brand, tracked daily on Amazon and coffeebrandcoffee.com.</p>
+  <p class="sub">Stock, prices and estimated sales for Jeremy's coffee brand, tracked daily on Amazon.</p>
   <p class="fresh" id="fresh">Loading…</p>
   <p class="intro">Once a day we record how much stock each listing has. When that number falls, something was sold or moved out; when it rises, stock arrived. Everything below is built from those daily readings.</p>
 
   <div class="controls" id="controls">
-    <div class="ctl"><span class="ctl-label">Channel</span>
-      <div class="seg" role="group" aria-label="Channel">
-        <button type="button" data-ch="amazon" aria-pressed="true">Amazon</button>
-        <button type="button" data-ch="shopify" aria-pressed="false">Shopify</button>
-        <button type="button" data-ch="both" aria-pressed="false">Both</button>
-      </div></div>
     <div class="ctl"><span class="ctl-label">Period</span>
       <div class="seg" role="group" aria-label="Period">
         <button type="button" data-per="7" aria-pressed="false">7 days</button>
@@ -305,7 +299,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   <div class="panel notes">
     <div class="panel-title" style="color:var(--text)">How to read this</div>
     <ul>
-      <li><b>Stock</b> is how many units a listing has available, recorded once a day. Store listings with plenty of stock are shown as 80+.</li>
+      <li><b>Stock</b> is how many units a listing has available, recorded once a day.</li>
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units and at least half of a listing vanish in a single day, that is not forty customers finding one listing on one day; it is a pallet leaving. We call that <b>moved out</b>, show it in amber, and keep it out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. Amazon shuffles deliveries between its warehouses, so a count can collapse one day and rebuild over the following weeks. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted as a move or a delivery.</li>
       <li><b>Sales value</b> is units sold multiplied by the listing's usual in-stock price. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
@@ -323,8 +317,8 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
-const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, MIN_RUN={amazon:3,shopify:1};
-const state={channel:'amazon',period:30,margin:15,mode:'pct',bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, PRICE_MIN_RUN=3;
+const state={period:30,margin:15,mode:'pct',bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -335,7 +329,6 @@ const fmtDY=d=>{const p=d.split('-');return (+p[2])+' '+MONTHS[+p[1]-1]+' '+p[0]
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dayMs=864e5, toT=d=>Date.parse(d+'T00:00:00Z');
 const sum=a=>a.reduce((x,y)=>x+y,0);
-const chName=c=>c==='amazon'?'Amazon':'Shopify';
 // Net is either a share of gross at list, or his own claim of a dollar a unit.
 const BAG_NET=1;
 const netOf=(gross,units)=>state.mode==='bag'?units*BAG_NET:gross*state.margin/100;
@@ -360,7 +353,7 @@ function deriveSku(s, days, cap){
       if(d<0){ const drop=-d; if(drop>=BULK_MIN && drop>=BULK_SHARE*pv) bulk[i]=drop; else sold[i]=drop; }
       else if(d>0) rest[i]=d;
     }
-    pv = capped ? null : v;   // never difference across an 80+ reading
+    pv = capped ? null : v;   // never difference across a capped reading
   }
   const open=[];   // big drops still waiting for their stock to come back, oldest first
   for(let i=0;i<n;i++){
@@ -387,15 +380,9 @@ function prepChannel(name){
   skus.forEach(s=>deriveSku(s,c.days,c.cap));
   return {days:c.days, skus, cap:c.cap};
 }
-function prepBoth(){
-  const a=CH.amazon, b=CH.shopify; if(!a||!b) return a||b;
-  const days=[...new Set([...a.days,...b.days])].sort();
-  const idx=new Map(days.map((d,i)=>[d,i]));
-  const realign=(s,src)=>{const o=Object.assign({},s); for(const k of ['stock','prices','compareAt','sold','bulk','rest','ret']){ if(!s[k]) continue; const arr=new Array(days.length).fill(k==='sold'||k==='bulk'||k==='rest'||k==='ret'?0:null); src.days.forEach((d,i)=>{arr[idx.get(d)]=s[k][i]}); o[k]=arr;} return o;};
-  return {days, skus:[...a.skus.map(s=>realign(s,a)),...b.skus.map(s=>realign(s,b))], cap:null, both:true};
-}
-function cur(){ return state.channel==='both' ? CH.both : CH[state.channel]; }
-function capOf(s){ return s.channel==='shopify' ? DATA.shopify.cap : null; }
+function cur(){ return CH.amazon; }
+// Amazon reports a true unit count, so nothing is ever capped.
+function capOf(){ return null; }
 
 // ---- windows -------------------------------------------------------------------
 function windowFor(c){
@@ -577,7 +564,7 @@ function renderKpis(c,A,P){
     ['Sales at list price', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
     [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the list price`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
-    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price', A.capped?`${A.capped} shown as 80+`:'')],
+    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price')],
     ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
@@ -602,7 +589,7 @@ function renderDayView(c,A,S){
   const anyOut=rows.some(r=>r.bk), anyRet=rows.some(r=>r.rt);
   const cols=[['name','Product'],['sl','Sold'],...(anyOut?[['bk','Moved out']]:[]),['rs','Added'],...(anyRet?[['rt','Came back']]:[]),['val','Value at list']];
   const th=cols.map(([key,lab])=>`<th><button type="button" data-dkey="${key}"${state.daySort.key===key?` data-dir="${state.daySort.dir}"`:''}>${lab}</button></th>`).join('');
-  const small=s=>esc([s.variant?null:s.family, s.size, c.both?chName(s.channel):null].filter(Boolean).join(' · '));
+  const small=s=>esc([s.variant?null:s.family, s.size].filter(Boolean).join(' · '));
   const cell=(r,key)=> key==='val' ? (r.sl?fmtM(r.val):'—') : (r[key]?fmtU(r[key]):'—');
   el.innerHTML=`<div class="panel-head"><div><div class="panel-title">${label} · what moved</div>
       <div class="panel-sub">Sold <b>${fmtU(tot.sold)}</b>${anyOut?` · moved out <b>${fmtU(tot.bulk)}</b>`:''} · delivered in <b>${fmtU(tot.rest)}</b> · value at list <b>${fmtM(tot.val)}</b> · ${rows.length} listing${rows.length===1?'':'s'}. Click a heading to sort, or a product for its history.</div></div>
@@ -620,7 +607,7 @@ function renderTop(c,A){
   const list=A.rows.filter(r=>r.sold>0).sort((a,b)=>b.sold-a.sold).slice(0,10), max=list.length?list[0].sold:1;
   document.getElementById('topSub').textContent = total ? `Share of units sold by type, then the ten best sellers in the period${state.bulk?' (stock moved out in one go counted as sold)':''}.` : 'No units sold in this period.';
   document.getElementById('top').innerHTML=list.map(r=>`<div class="top-row" data-id="${esc(r.s.channel+'|'+r.s.id)}" role="button" tabindex="0">
-      <span class="top-name" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size, c.both?chName(r.channel):null].filter(Boolean).join(' · '))}</small></span>
+      <span class="top-name" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size].filter(Boolean).join(' · '))}</small></span>
       <span class="top-bar"><i style="width:${(r.sold/max*100).toFixed(1)}%;background:${famColor(r.fam)}"></i></span>
       <span class="top-units">${fmtU(r.sold)}</span><span class="top-gross">${fmtM(r.gross)}</span></div>`).join('');
 }
@@ -632,11 +619,10 @@ function renderTable(c,A){
   if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(r=>r.name.toLowerCase().includes(q)||(r.s.id||'').toLowerCase().includes(q)); }
   const k=state.sort.key, dir=state.sort.dir==='asc'?1:-1;
   rows=rows.slice().sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
-  const cols=[['name','Product'],...(c.both?[['channel','Channel']]:[]),['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Moved out'],['rest','Added'],['oos','Days out'],['trend','Trend']];
+  const cols=[['name','Product'],['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Moved out'],['rest','Added'],['oos','Days out'],['trend','Trend']];
   document.querySelector('#tbl thead').innerHTML='<tr>'+cols.map(([key,lab])=>`<th><button type="button" data-key="${key}" ${state.sort.key===key?`data-dir="${state.sort.dir}"`:''} ${key==='trend'?'disabled':''}>${lab}</button></th>`).join('')+'</tr>';
   document.querySelector('#tbl tbody').innerHTML=rows.length?rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
-    <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.channel==='amazon'?' · '+r.s.id:''}</small></td>
-    ${c.both?`<td>${chName(r.channel)}</td>`:''}
+    <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.id?' · '+esc(r.s.id):''}</small></td>
     <td>${esc(r.size||'—')}</td><td>${fmtP(r.price)}</td>
     <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':fmtU(r.stock)+(r.capped?'<span class="cap">+</span>':'')}</td>
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
@@ -651,7 +637,7 @@ function renderDetail(c,A){
   const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${chName(s.channel)} · ${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, moved out <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · value at list <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, moved out <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · value at list <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
     <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
       <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
@@ -663,7 +649,7 @@ function renderDetail(c,A){
 function renderPriceLog(c){
   const out=[];
   for(const s of c.skus){
-    const minRun=MIN_RUN[s.channel]||1, runs=[];
+    const minRun=PRICE_MIN_RUN, runs=[];
     for(let i=0;i<c.days.length;i++){
       const p=s.prices[i]; if(p==null) continue;
       if(s.channel==='amazon' && !(s.stock[i]>0)) continue;
@@ -678,8 +664,8 @@ function renderPriceLog(c){
   }
   out.sort((a,b)=>b.d.localeCompare(a.d));
   const el=document.getElementById('pricelog');
-  document.getElementById('plSub').textContent = out.length ? `Price changes that stuck for at least ${state.channel==='shopify'?'one reading':'three in-stock readings'}, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.` : 'No sustained price changes recorded on this channel yet.';
-  el.innerHTML=out.slice(0,60).map(e=>`<li><span class="d">${fmtDY(e.d)}</span><span class="n" title="${esc(e.s.name)}">${esc(e.s.name)}${e.s.variant?' · '+esc(e.s.variant):''} <small>${esc([e.s.variant?null:e.s.family, e.s.variant?null:e.s.size, c.both?chName(e.s.channel):null].filter(Boolean).join(' · '))}</small></span><span class="p ${e.to<e.from?'dn':'upp'}">${fmtP(e.from)} → ${fmtP(e.to)}${e.sale?'<span class="sale">sale</span>':''}</span></li>`).join('');
+  document.getElementById('plSub').textContent = out.length ? `Price changes that stuck for at least three in-stock readings, newest first${out.length>60?` (showing 60 of ${out.length})`:''}.` : 'No sustained price changes recorded yet.';
+  el.innerHTML=out.slice(0,60).map(e=>`<li><span class="d">${fmtDY(e.d)}</span><span class="n" title="${esc(e.s.name)}">${esc(e.s.name)}${e.s.variant?' · '+esc(e.s.variant):''} <small>${esc([e.s.variant?null:e.s.family, e.s.variant?null:e.s.size].filter(Boolean).join(' · '))}</small></span><span class="p ${e.to<e.from?'dn':'upp'}">${fmtP(e.from)} → ${fmtP(e.to)}${e.sale?'<span class="sale">sale</span>':''}</span></li>`).join('');
 }
 
 function render(){
@@ -687,14 +673,14 @@ function render(){
   const win=windowFor(c), A=aggregate(c,win), pw=prevWindow(c,win[0]), P=pw?aggregate(c,pw):null, S=series(A);
   const eff=effGroup(A); document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.group===eff));
   renderKpis(c,A,P);
-  document.getElementById('movSub').textContent=periodLabel(A,S)+(c.both?' · Shopify readings begin 10 Aug 2026':'')+'. Top: units customers bought, a few at a time. Bottom: deliveries that arrived (grey) and stock that left in one go (amber), which is usually a pallet moving, not a sale.'+(A.retU?` ${fmtU(A.retU)} units that left and came back within four weeks are left out of both.`:'');
+  document.getElementById('movSub').textContent=periodLabel(A,S)+'. Top: units customers bought, a few at a time. Bottom: deliveries that arrived (grey) and stock that left in one go (amber), which is usually a pallet moving, not a sale.'+(A.retU?` ${fmtU(A.retU)} units that left and came back within four weeks are left out of both.`:'');
   document.getElementById('movChart').innerHTML=movementsChart(S);
   document.getElementById('revSub').textContent=`Units sold × usual list price. The solid part is the profit ${netLabel()}${state.mode==='bag'?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
   document.getElementById('revNetLeg').textContent='Profit '+netLabel();
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderDayView(c,A,S);
   renderTop(c,A);
-  document.getElementById('ohSub').textContent='What each listing reports as available, added up by type'+(c.cap||c.both?'; store listings shown as 80+ count as 80':'')+'. The legend shows the latest day.';
+  document.getElementById('ohSub').textContent='What each listing reports as available, added up by type. The legend shows the latest day.';
   document.getElementById('ohChart').innerHTML=onHandChart(A);
   renderTable(c,A);
   renderDetail(c,A);
@@ -705,7 +691,6 @@ function render(){
 function press(sel, attr, val){ document.querySelectorAll(sel).forEach(x=>x.setAttribute('aria-pressed', x.dataset[attr]===val)); }
 function select(id){ state.sel=state.sel===id?null:id; render(); if(state.sel) document.getElementById('detail').scrollIntoView({block:'nearest',behavior:'smooth'}); }
 function wire(){
-  document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{ state.channel=b.dataset.ch; state.sel=null; state.day=null; press('[data-ch]','ch',state.channel); render(); });
   document.querySelectorAll('[data-per]').forEach(b=>b.onclick=()=>{ state.period=+b.dataset.per; state.day=null; press('[data-per]','per',b.dataset.per); render(); });
   document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{ state.group=b.dataset.group; state.day=null; render(); });
   document.querySelectorAll('[data-fam]').forEach(b=>b.onclick=()=>{ state.fam=b.dataset.fam; press('[data-fam]','fam',state.fam); render(); });
@@ -748,10 +733,9 @@ function wire(){
 }
 
 fetch('coffee.json',{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }).then(d=>{
-  DATA=d; CH.amazon=prepChannel('amazon'); CH.shopify=prepChannel('shopify'); CH.both=prepBoth();
-  if(!CH.amazon && CH.shopify){ state.channel='shopify'; press('[data-ch]','ch','shopify'); }
+  DATA=d; CH.amazon=prepChannel('amazon');
   const g=d.generated?new Date(d.generated):null;
-  const parts=[]; if(d.amazon) parts.push(`Amazon through ${fmtDY(d.amazon.days[d.amazon.days.length-1])} (${d.amazon.skus.length} listings)`); if(d.shopify) parts.push(`Shopify through ${fmtDY(d.shopify.days[d.shopify.days.length-1])} (${d.shopify.skus.length} variants)`);
+  const parts=[]; if(d.amazon) parts.push(`Amazon through ${fmtDY(d.amazon.days[d.amazon.days.length-1])} (${d.amazon.skus.length} listings)`);
   document.getElementById('fresh').textContent=parts.join(' · ')+(g?` · built ${g.toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}`:'');
   wire(); render();
 }).catch(e=>{ document.getElementById('fresh').textContent='Could not load coffee.json ('+e.message+').'; wire(); });
