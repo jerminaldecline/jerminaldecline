@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-09
+# Topic candidates — 2026-10-10
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,33 +6,35 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 15 recent videos, 126 baseline videos
+Pool: 17 recent videos, 123 baseline videos
 
 ### Cluster 1: `join`
 
-- **Recent saturation:** 14/15 videos (**93%**)
-- **Baseline saturation:** 13/126 videos (10%)
-- **Spike ratio:** 8.8x
+- **Recent saturation:** 17/17 videos (**100%**)
+- **Baseline saturation:** 13/123 videos (11%)
+- **Spike ratio:** 9.2x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
 - **Sample recent videos:**
+  - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
+    Trump Approves Historic Execution Of Fort Hood Killer
+  - 2026-10-09 — _ICE Riots ERUPT As Mamdani INCITES Attacks At Officers!_  
+    ICE Shoots Alleged Gang Member As Liberals ERUPT!
+  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
+    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
   - 2026-10-08 — _Starbucks BLASTED Over HUGE LIE Making Customers Fat_  
     Starbucks SUED Over “Sugar-Free” Drinks Loaded With Sugar!
   - 2026-10-08 — _Indians MELTDOWN As H1 B SHUT DOWN By Trump_  
     Trump Administration Drops The HAMMER On Tech Visa Abuse
-  - 2026-10-08 — _New INSANE Cornell 7 Update!_  
-    Cornell 7 Accuser Says Police MISLED Her About Investigation
-  - 2026-10-08 — _Mamdani CHASED In Streets_  
-    Mamdani’s Running Scared As His Own Protesters Turn On Him
-  - 2026-10-07 — _PSYCHO MOM TAKES OUT FAMILY_  
-    Police Had Been Called FIVE TIMES Before Family Bloodbath
 
 ### Cluster 2: `cornell`
 
-- **Recent saturation:** 4/15 videos (**27%**)
-- **Baseline saturation:** 0/126 videos (0%)
-- **Spike ratio:** 67.7x
+- **Recent saturation:** 5/17 videos (**29%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 72.9x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
+  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
+    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
   - 2026-10-08 — _New INSANE Cornell 7 Update!_  
     Cornell 7 Accuser Says Police MISLED Her About Investigation
   - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
@@ -44,13 +46,13 @@ Pool: 15 recent videos, 126 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 81 baseline videos
+Pool: 9 recent videos, 78 baseline videos
 
 ### Cluster 1: `coffee sign`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/81 videos (0%)
-- **Spike ratio:** 54.7x
+- **Baseline saturation:** 0/78 videos (0%)
+- **Spike ratio:** 52.7x
 - **Related terms:** `coffee sign`
 - **Sample recent videos:**
   - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
@@ -63,8 +65,8 @@ Pool: 9 recent videos, 81 baseline videos
 ### Cluster 2: `join`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 9/81 videos (11%)
-- **Spike ratio:** 8.6x
+- **Baseline saturation:** 9/78 videos (12%)
+- **Spike ratio:** 8.3x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
   - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
