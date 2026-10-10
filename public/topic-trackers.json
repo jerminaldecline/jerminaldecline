@@ -1,10 +1,11 @@
 {
-  "lastUpdated": "2026-10-08T11:31:19.568Z",
+  "lastUpdated": "2026-10-10T10:43:57.319Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "join",
       "keywords": [
+        "coffee sign",
         "join",
         "server",
         "join our",
@@ -12,12 +13,27 @@
         "server our"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8571,
-        "baselineSaturation": 0.0927,
-        "spikeRatio": 9.24,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 11,
-        "detectedAt": "2026-10-08T11:31:19.568Z"
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1089,
+        "spikeRatio": 9.19,
+        "recentVideoCount": 17,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-10-10T10:43:57.319Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "coffee sign",
+      "keywords": [
+        "coffee sign"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0063,
+        "spikeRatio": 52.67,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-10-10T10:43:57.319Z"
       }
     },
     {
@@ -32,11 +48,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1159,
-        "spikeRatio": 8.63,
-        "recentVideoCount": 8,
+        "baselineSaturation": 0.1203,
+        "spikeRatio": 8.32,
+        "recentVideoCount": 9,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-10-08T11:31:19.568Z"
+        "detectedAt": "2026-10-10T10:43:57.319Z"
       }
     }
   ]

@@ -29,9 +29,10 @@ Cleaning rules, and why:
   * Size is not in the Amazon label (the same name is listed once per size), so
     it is inferred: K-Cups -> 12-pack, "Kona" -> 7oz, modal price >= $45 -> 5lb,
     else 12oz.
-  * Shopify counts top out at 80 (emitted as 80, with cap:80 in the channel
-    meta); the page shows those as 80+ and never differences across them.
-    sold_out -> 0; any other status -> null.
+  * Shopify is still read and summarised in the run log for our own reference,
+    but is not part of the published JSON (2026-10-09): its reported stock is
+    merchant-configured, not a dependable sales signal. in_stock -> the reported
+    number; sold_out -> 0; any other status -> null.
 
 Usage:
   python scripts/build-coffee.py            # write public/coffee.json, print a summary
@@ -46,7 +47,6 @@ ONEDRIVE = Path(os.environ.get("USERPROFILE", "C:/Users/bradw")) / "OneDrive" / 
 AMAZON_CSV = Path(os.environ.get("COFFEE_AMAZON_CSV", ONEDRIVE / "StockTracker" / "tracker_data" / "history.csv"))
 AMAZON_CATALOG = Path(os.environ.get("COFFEE_AMAZON_CATALOG", ONEDRIVE / "StockTracker" / "tracker_data" / "products.json"))
 SHOPIFY_CSV = Path(os.environ.get("COFFEE_SHOPIFY_CSV", ONEDRIVE / "ShopifyTracker" / "data" / "shopify_history.csv"))
-SHOPIFY_CAP = 80
 COMMIT = "--commit" in sys.argv
 
 
@@ -186,17 +186,20 @@ def build_shopify():
             "lastReading": known[-1] if known else None,
         })
     skus.sort(key=lambda s: (s["family"], s["name"], s["size"], s["variant"]))
-    return {"days": days, "skus": skus, "cap": SHOPIFY_CAP}
+    return {"days": days, "skus": skus, "cap": None}
 
 
 # ------------------------------------------------------------------ main ---
 def main():
     amazon = build_amazon()
     shopify = build_shopify()
+    # Shopify is still scraped and summarised in the run log below for our own
+    # reference, but dropped from the published JSON on 2026-10-09: its reported
+    # stock is merchant-configured and not a reliable sales signal, so the public
+    # page is Amazon-only, where the unit count is a dependable hard figure.
     out = {
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "amazon": amazon,
-        "shopify": shopify,
     }
     text = json.dumps(out, separators=(",", ":"), ensure_ascii=False)
     old = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
