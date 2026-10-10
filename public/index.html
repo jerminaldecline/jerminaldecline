@@ -1408,6 +1408,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .an-rank-name {font-size: 0.78rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .an-rank-track {height: 14px; background: var(--surface-2); border-radius: 7px; overflow: hidden;}
 .an-rank-fill {display: block; height: 100%; border-radius: 7px; min-width: 3px;}
+.an-rank-incl {opacity: .6; font-weight: 700; font-size: .78em; margin-left: .3em; vertical-align: 1px;}
 .an-rank-count {font-size: 0.74rem; color: var(--text-muted); font-variant-numeric: tabular-nums; font-weight: 600;}
 .an-rank-empty {font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0;}
 @media (max-width: 680px) {
@@ -9244,6 +9245,18 @@ function niceDurationAxis(minSec, maxSec) {
   const MODE_ORDER = ['woke','politics','viral-video-review','group-fatigue','outrage-bait','gaming','other'];
   function topicColorOf(id, fallback){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].color) || fallback || '#888'; }
   function topicNameOf(id){ return (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || id; }
+  // Clusters: a person's entry in topics.json may list `related` subjects (their own
+  // films or franchises). The person's count and filter include those videos; the
+  // related subjects keep their own lines. Declared in the data, not here.
+  function topicRelatedOf(id){ const t = ANALYTICS_TOPICS && ANALYTICS_TOPICS[id]; return (t && Array.isArray(t.related)) ? t.related : []; }
+  let TOPIC_PRIMARY_OF = null;
+  function topicPrimariesOf(id){
+    if (!TOPIC_PRIMARY_OF && ANALYTICS_TOPICS){ TOPIC_PRIMARY_OF = {}; for (const [pid, t] of Object.entries(ANALYTICS_TOPICS)) if (t && Array.isArray(t.related)) for (const r of t.related) (TOPIC_PRIMARY_OF[r] = TOPIC_PRIMARY_OF[r] || []).push(pid); }
+    return (TOPIC_PRIMARY_OF && TOPIC_PRIMARY_OF[id]) || [];
+  }
+  function topicMatches(tagId, id){ return tagId === id || topicRelatedOf(id).includes(tagId); }
+  function topicInclNote(id){ const rel = topicRelatedOf(id).filter(r => ANALYTICS_TOPICS && ANALYTICS_TOPICS[r]); return rel.length ? ' (incl. ' + rel.map(topicNameOf).join(', ') + ')' : ''; }
+  window.__topicMatches = topicMatches; window.__topicInclNote = topicInclNote; window.__topicPrimariesOf = topicPrimariesOf;
 
   // Channel + period-scoped, long-form, available videos (the tagged universe).
   function anTopicVideos(){
@@ -9343,6 +9356,7 @@ function niceDurationAxis(minSec, maxSec) {
     for (const v of vids){
       const id = map[v.id]; if (!id) continue;
       if (excludeSet && excludeSet.has(id)) continue;
+      if (kind === 'subject') for (const p of topicPrimariesOf(id)) counts.set(p, (counts.get(p)||0) + 1);
       if (kind === 'subject' && ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue;
       counts.set(id, (counts.get(id)||0) + 1);
     }
@@ -9351,7 +9365,8 @@ function niceDurationAxis(minSec, maxSec) {
     const max=ranked[0][1];
     el.innerHTML = ranked.map(([id,c])=>{
       const pct=Math.max(3,(c/max)*100);
-      return `<div class="an-rank-bar"><span class="an-rank-name" title="${escapeHtml(topicNameOf(id))}">${escapeHtml(topicNameOf(id))}</span>`+
+      const incl = kind === 'subject' ? topicInclNote(id) : '';
+      return `<div class="an-rank-bar"><span class="an-rank-name" title="${escapeHtml(topicNameOf(id) + incl)}">${escapeHtml(topicNameOf(id))}${incl ? '<small class="an-rank-incl">+' + topicRelatedOf(id).length + '</small>' : ''}</span>`+
         `<span class="an-rank-track"><span class="an-rank-fill" style="width:${pct.toFixed(1)}%;background:${topicColorOf(id)}"></span></span>`+
         `<span class="an-rank-count">${c}</span></div>`;
     }).join('');
@@ -11156,7 +11171,7 @@ function renderWindowList(startDate, endDate) {
     const map = kind === 'subject' ? ANALYTICS_TOPIC_TAGS
       : kind === 'theme' ? ANALYTICS_TOPIC_THEMES
       : ANALYTICS_TOPIC_MODES;
-    scopedVideos = scopedVideos.filter(v => map && map[v.id] === id);
+    scopedVideos = scopedVideos.filter(v => map && (kind === 'subject' ? window.__topicMatches(map[v.id], id) : map[v.id] === id));
   }
   // Apply creator-tag filter — set by clicking a tag in the Creator tags explorer.
   // Matches videos whose scraped creator tag list contains the chosen tag.
@@ -11378,6 +11393,7 @@ function renderWindowList(startDate, endDate) {
       tagged++;
       // Subjects are filtered to the promoted set (thousands of raw one-offs);
       // themes and modes are a fixed curated set, so show all of them.
+      if (view === 'subject') for (const p of window.__topicPrimariesOf(id)) counts.set(p, (counts.get(p) || 0) + 1);
       if (view === 'subject' && ANALYTICS_PROMOTED_SUBJECTS && !ANALYTICS_PROMOTED_SUBJECTS.has(id)) continue;
       counts.set(id, (counts.get(id) || 0) + 1);
     }
@@ -11389,7 +11405,7 @@ function renderWindowList(startDate, endDate) {
     const cur = windowListState.topicFilter;
     body.innerHTML = ranked.map(([id, c]) => {
       const active = cur && cur.kind === view && cur.id === id;
-      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="${view}" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
+      return `<button type="button" class="topic-pill${active ? ' active' : ''}" data-tck="${view}" data-tci="${escapeHtml(id)}" title="${escapeHtml(topicNameOf(id) + (view === 'subject' ? window.__topicInclNote(id) : ''))} — ${c} video${c === 1 ? '' : 's'}"><span class="vchip-dot" style="background:${topicColorOf(id)}"></span><span class="tp-name">${escapeHtml(topicNameOf(id))}</span><span class="tp-count">${c}</span></button>`;
     }).join('');
   };
 
