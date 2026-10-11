@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-10
+# Topic candidates — 2026-10-11
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 123 baseline videos
+Pool: 17 recent videos, 119 baseline videos
 
 ### Cluster 1: `join`
 
 - **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 13/123 videos (11%)
-- **Spike ratio:** 9.2x
+- **Baseline saturation:** 13/119 videos (11%)
+- **Spike ratio:** 8.9x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
 - **Sample recent videos:**
   - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
@@ -29,8 +29,8 @@ Pool: 17 recent videos, 123 baseline videos
 ### Cluster 2: `cornell`
 
 - **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 0/123 videos (0%)
-- **Spike ratio:** 72.9x
+- **Baseline saturation:** 0/119 videos (0%)
+- **Spike ratio:** 70.6x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
   - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
@@ -46,13 +46,13 @@ Pool: 17 recent videos, 123 baseline videos
 
 ## @JeremyHambly
 
-Pool: 9 recent videos, 78 baseline videos
+Pool: 9 recent videos, 75 baseline videos
 
 ### Cluster 1: `coffee sign`
 
 - **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/78 videos (0%)
-- **Spike ratio:** 52.7x
+- **Baseline saturation:** 0/75 videos (0%)
+- **Spike ratio:** 50.7x
 - **Related terms:** `coffee sign`
 - **Sample recent videos:**
   - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
@@ -65,8 +65,8 @@ Pool: 9 recent videos, 78 baseline videos
 ### Cluster 2: `join`
 
 - **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 9/78 videos (12%)
-- **Spike ratio:** 8.3x
+- **Baseline saturation:** 9/75 videos (12%)
+- **Spike ratio:** 8.0x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
   - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
