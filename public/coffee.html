@@ -223,12 +223,12 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
     <div class="ctl"><span class="ctl-label">Assumed profit margin</span>
       <div class="margin">
         <div class="seg" role="group" aria-label="Margin basis">
-          <button type="button" data-mb="pct" aria-pressed="true">% of list price</button>
+          <button type="button" data-mb="pct" aria-pressed="true">% of sales</button>
           <button type="button" data-mb="bag" aria-pressed="false">$1 a bag</button>
         </div>
         <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="15" aria-label="Margin percent">
         <input type="number" id="marginNum" min="0" max="100" step="1" value="15" aria-label="Margin percent"><span>%</span></span>
-        <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its list price.">i</i></span>
+        <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its price.">i</i></span>
       </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count stock moved out as sales <small>(big one-day drops, usually a pallet leaving)</small><i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></label>
   </div>
@@ -246,7 +246,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
   <div class="panel">
     <div class="panel-head">
       <div><div class="panel-title">Estimated sales value and profit</div><div class="panel-sub" id="revSub"></div><div class="panel-sub">Click a bar to see which products moved that day.</div></div>
-      <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Value at list price</span><span><i style="background:var(--up)"></i><span id="revNetLeg">Profit</span></span></div>
+      <div class="legend"><span><i style="background:var(--brand);opacity:0.35"></i>Sales value</span><span><i style="background:var(--up)"></i><span id="revNetLeg">Profit</span></span></div>
     </div>
     <div id="revChart"></div>
   </div>
@@ -302,7 +302,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <li><b>Stock</b> is how many units a listing has available, recorded once a day.</li>
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units and at least half of a listing vanish in a single day, that is not forty customers finding one listing on one day; it is a pallet leaving. We call that <b>moved out</b>, show it in amber, and keep it out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. Amazon shuffles deliveries between its warehouses, so a count can collapse one day and rebuild over the following weeks. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted as a move or a delivery.</li>
-      <li><b>Sales value</b> is units sold multiplied by the listing's usual in-stock price. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
+      <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
       <li>A delivery and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group days by the week starting Monday.</li>
       <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
@@ -329,7 +329,7 @@ const fmtDY=d=>{const p=d.split('-');return (+p[2])+' '+MONTHS[+p[1]-1]+' '+p[0]
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dayMs=864e5, toT=d=>Date.parse(d+'T00:00:00Z');
 const sum=a=>a.reduce((x,y)=>x+y,0);
-// Net is either a share of gross at list, or his own claim of a dollar a unit.
+// Net is either a share of gross sales, or his own claim of a dollar a unit.
 const BAG_NET=1;
 const netOf=(gross,units)=>state.mode==='bag'?units*BAG_NET:gross*state.margin/100;
 const netLabel=()=>state.mode==='bag'?'at $1 a bag':'at '+state.margin+'%';
@@ -367,6 +367,18 @@ function deriveSku(s, days, cap){
   // a remnant too small to be a pallet is ordinary selling during the shuffle
   for(let i=0;i<n;i++) if(bulk[i]>0 && bulk[i]<BULK_MIN){ sold[i]+=bulk[i]; bulk[i]=0; }
   s.sold=sold; s.bulk=bulk; s.rest=rest; s.ret=ret;
+  // Value each day's sales at the price that HELD for >= PRICE_MIN_RUN in-stock
+  // readings (the same rule the price log uses), carried forward across one-day
+  // buy-box flaps and gaps: a clearance lasting a few days is valued at the
+  // clearance price, a one-day flap is not. Before any held price appears, the
+  // usual (modal) price stands in.
+  const eff=new Array(n).fill(null), valid=[];
+  for(let i=0;i<n;i++) if(s.prices[i]!=null && s.stock[i]>0) valid.push({i,p:s.prices[i]});
+  const runLen=new Array(valid.length).fill(1);
+  for(let start=0,k=1;k<=valid.length;k++) if(k===valid.length || Math.abs(valid[k].p-valid[k-1].p)>=0.005){ for(let m=start;m<k;m++) runLen[m]=k-start; start=k; }
+  let held=(s.price!=null?s.price:null), vk=0;
+  for(let i=0;i<n;i++){ if(vk<valid.length && valid[vk].i===i){ if(runLen[vk]>=PRICE_MIN_RUN) held=valid[vk].p; vk++; } eff[i]=held; }
+  s.effPrice=eff;
   s.last=lastKnown(s.stock);
   s.lastCapped = cap!=null && s.last!=null && s.last>=cap;
 }
@@ -408,16 +420,17 @@ function aggregate(c,[i0,i1]){
   let onHand=0,onHandVal=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,ohDelta=0;
   const rows=[];
   for(const s of c.skus){
-    const p=s.price||0; let sl=0,bk=0,rs=0,oo=0;
-    for(let i=0;i<n;i++){ const j=i0+i; sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; retU+=s.ret[j]; gross[i]+=s.sold[j]*p; grossBulk[i]+=s.bulk[j]*p;
-      sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; if(s.stock[j]===0) oo++;
+    const p=s.price||0; let sl=0,bk=0,rs=0,oo=0,rg=0;
+    for(let i=0;i<n;i++){ const j=i0+i, ep=(s.effPrice&&s.effPrice[j]!=null)?s.effPrice[j]:p;
+      sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; retU+=s.ret[j]; gross[i]+=s.sold[j]*ep; grossBulk[i]+=s.bulk[j]*ep;
+      sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; rg+=(s.sold[j]+(state.bulk?s.bulk[j]:0))*ep; if(s.stock[j]===0) oo++;
       const v = s.stock[j]!=null ? s.stock[j] : lastKnownBefore(s.stock,j); if(v!=null) byFam[s.family][i]+=v; }
     famSold[s.family]+=sl+(state.bulk?bk:0);
     const first=firstKnownFrom(s.stock,i0), cap=capOf(s);
     if(first!=null&&s.last!=null&&!(cap!=null&&(first>=cap||s.last>=cap))) ohDelta+=s.last-first;
     rows.push({s, name:s.name+(s.variant?' · '+s.variant:''), fam:s.family, size:s.size, price:s.price, channel:s.channel,
       stock:s.last, capped:cap!=null&&s.last!=null&&s.last>=cap, delta:(first!=null&&s.last!=null)?s.last-first:null,
-      sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos:oo, gross:(sl+(state.bulk?bk:0))*p, series:s.stock.slice(i0,i1+1)});
+      sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos:oo, gross:rg, series:s.stock.slice(i0,i1+1)});
     if(s.last==null){unknown++;continue;}
     if(s.last>0) inStock++; else oos++;
     onHand+=s.last; onHandVal+=s.last*p; if(s.lastCapped) capped++;
@@ -495,7 +508,7 @@ function revenueChart(S){
     const xl=(x(i)-bw/2).toFixed(1), w=bw.toFixed(1), gv=gross[i], nv=netOf(gv,units[i]);
     if(gv>0){ bars+=`<rect x="${xl}" y="${(y0-gv*sc).toFixed(1)}" width="${w}" height="${(gv*sc).toFixed(1)}" rx="1.5" fill="var(--brand)" opacity="0.35"/>`;
       if(nv>0) bars+=`<rect x="${xl}" y="${(y0-nv*sc).toFixed(1)}" width="${w}" height="${(nv*sc).toFixed(1)}" rx="1.5" fill="var(--up)"/>`; }
-    bars+=`<rect class="hit${picked(S,i)}" data-key="${S.days[i]}" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nValue at list: ${fmtM(gv)}\nProfit ${netLabel()}: ${fmtM(nv)}`)}"/>`;
+    bars+=`<rect class="hit${picked(S,i)}" data-key="${S.days[i]}" x="${(pl+i*step).toFixed(1)}" y="${pt}" width="${step.toFixed(1)}" height="${ih}" data-tip="${esc(`${when(S,i)}\nSales value: ${fmtM(gv)}\nProfit ${netLabel()}: ${fmtM(nv)}`)}"/>`;
   }
   return frame(W,H)+hgrid(M,4,pl,W,pr,y0,sc,fmtM)+`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${y0}" y2="${y0}"/>`+bars+xLabels(S.days,x,W,H-8)+'</svg>';
 }
@@ -561,10 +574,10 @@ function renderKpis(c,A,P){
   const moved=A.bulkU;
   const tiles=[
     ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} moved out in one go`:(moved?`another ${fmtU(moved)} moved out in one go, not counted`:''))],
-    ['Sales at list price', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
-    [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the list price`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
+    ['Sales value', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
+    [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
-    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at list price')],
+    ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at usual price')],
     ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
@@ -578,21 +591,23 @@ function renderDayView(c,A,S){
   const js=dayIdx(A,S,d.key); if(!js.length){ state.day=null; return; }
   const rows=[], tot={sold:0,bulk:0,rest:0,ret:0,val:0};
   for(const s of c.skus){
-    let sl=0,bk=0,rs=0,rt=0; for(const j of js){ sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; rt+=s.ret[j]; }
+    let sl=0,bk=0,rs=0,rt=0,val=0; const pp=s.price||0;
+    for(const j of js){ const ep=(s.effPrice&&s.effPrice[j]!=null)?s.effPrice[j]:pp;
+      sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; rt+=s.ret[j]; val+=(s.sold[j]+(state.bulk?s.bulk[j]:0))*ep; }
     if(state.bulk){ sl+=bk; bk=0; }
     if(!(sl||bk||rs||rt)) continue;
-    const p=s.price||0; rows.push({s,name:s.name+(s.variant?' · '+s.variant:''),sl,bk,rs,rt,val:sl*p}); tot.sold+=sl; tot.bulk+=bk; tot.rest+=rs; tot.ret+=rt; tot.val+=sl*p;
+    rows.push({s,name:s.name+(s.variant?' · '+s.variant:''),sl,bk,rs,rt,val}); tot.sold+=sl; tot.bulk+=bk; tot.rest+=rs; tot.ret+=rt; tot.val+=val;
   }
   const k=state.daySort.key, dir=state.daySort.dir==='asc'?1:-1;
   rows.sort((a,b)=> k==='name' ? a.name.localeCompare(b.name)*dir : ((a[k]-b[k])*dir || b.sl-a.sl || b.rs-a.rs));
   const label=S.weekly?`Week of ${fmtDY(d.key)}`:fmtDY(d.key);
   const anyOut=rows.some(r=>r.bk), anyRet=rows.some(r=>r.rt);
-  const cols=[['name','Product'],['sl','Sold'],...(anyOut?[['bk','Moved out']]:[]),['rs','Added'],...(anyRet?[['rt','Came back']]:[]),['val','Value at list']];
+  const cols=[['name','Product'],['sl','Sold'],...(anyOut?[['bk','Moved out']]:[]),['rs','Added'],...(anyRet?[['rt','Came back']]:[]),['val','Value']];
   const th=cols.map(([key,lab])=>`<th><button type="button" data-dkey="${key}"${state.daySort.key===key?` data-dir="${state.daySort.dir}"`:''}>${lab}</button></th>`).join('');
   const small=s=>esc([s.variant?null:s.family, s.size].filter(Boolean).join(' · '));
   const cell=(r,key)=> key==='val' ? (r.sl?fmtM(r.val):'—') : (r[key]?fmtU(r[key]):'—');
   el.innerHTML=`<div class="panel-head"><div><div class="panel-title">${label} · what moved</div>
-      <div class="panel-sub">Sold <b>${fmtU(tot.sold)}</b>${anyOut?` · moved out <b>${fmtU(tot.bulk)}</b>`:''} · delivered in <b>${fmtU(tot.rest)}</b> · value at list <b>${fmtM(tot.val)}</b> · ${rows.length} listing${rows.length===1?'':'s'}. Click a heading to sort, or a product for its history.</div></div>
+      <div class="panel-sub">Sold <b>${fmtU(tot.sold)}</b>${anyOut?` · moved out <b>${fmtU(tot.bulk)}</b>`:''} · delivered in <b>${fmtU(tot.rest)}</b> · value <b>${fmtM(tot.val)}</b> · ${rows.length} listing${rows.length===1?'':'s'}. Click a heading to sort, or a product for its history.</div></div>
       <button type="button" class="detail-close" data-day-close>Close</button></div>
     <div class="tbl-wrap"><table class="daytbl"><thead><tr>${th}</tr></thead><tbody>${rows.map(r=>`<tr class="row" data-id="${esc(r.s.channel+'|'+r.s.id)}"><td class="name"><span class="fam" style="background:${famColor(r.s.family)}"></span>${esc(r.name)}<small>${small(r.s)}</small></td>${cols.slice(1).map(([key])=>`<td>${cell(r,key)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
     ${anyRet?'<div class="tfoot">Came back is stock returning to a listing within four weeks of leaving in one go. It is not counted as a delivery.</div>':''}`;
@@ -637,7 +652,7 @@ function renderDetail(c,A){
   const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, moved out <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · value at list <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, moved out <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · sales value <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
     <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
       <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
@@ -675,7 +690,7 @@ function render(){
   renderKpis(c,A,P);
   document.getElementById('movSub').textContent=periodLabel(A,S)+'. Top: units customers bought, a few at a time. Bottom: deliveries that arrived (grey) and stock that left in one go (amber), which is usually a pallet moving, not a sale.'+(A.retU?` ${fmtU(A.retU)} units that left and came back within four weeks are left out of both.`:'');
   document.getElementById('movChart').innerHTML=movementsChart(S);
-  document.getElementById('revSub').textContent=`Units sold × usual list price. The solid part is the profit ${netLabel()}${state.mode==='bag'?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
+  document.getElementById('revSub').textContent=`Units sold × the price each one sold for. The solid part is the profit ${netLabel()}${state.mode==='bag'?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
   document.getElementById('revNetLeg').textContent='Profit '+netLabel();
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderDayView(c,A,S);
