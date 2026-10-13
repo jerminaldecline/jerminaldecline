@@ -1,74 +1,22 @@
-# Topic candidates — 2026-10-12
+# Topic candidates — 2026-10-13
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @TheQuartering
+## @JeremyHambly
 
-Pool: 17 recent videos, 116 baseline videos
+Pool: 7 recent videos, 75 baseline videos
 
 ### Cluster 1: `join`
 
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 13/116 videos (11%)
-- **Spike ratio:** 8.7x
+- **Recent saturation:** 7/7 videos (**100%**)
+- **Baseline saturation:** 12/75 videos (16%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
 - **Sample recent videos:**
-  - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
-    Trump Approves Historic Execution Of Fort Hood Killer
-  - 2026-10-09 — _ICE Riots ERUPT As Mamdani INCITES Attacks At Officers!_  
-    ICE Shoots Alleged Gang Member As Liberals ERUPT!
-  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
-    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
-  - 2026-10-08 — _Starbucks BLASTED Over HUGE LIE Making Customers Fat_  
-    Starbucks SUED Over “Sugar-Free” Drinks Loaded With Sugar!
-  - 2026-10-08 — _Indians MELTDOWN As H1 B SHUT DOWN By Trump_  
-    Trump Administration Drops The HAMMER On Tech Visa Abuse
-
-### Cluster 2: `cornell`
-
-- **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 0/116 videos (0%)
-- **Spike ratio:** 68.8x
-- **Related terms:** `cornell`
-- **Sample recent videos:**
-  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
-    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
-  - 2026-10-08 — _New INSANE Cornell 7 Update!_  
-    Cornell 7 Accuser Says Police MISLED Her About Investigation
-  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
-    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
-  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
-    Cornell Case Flips After Explosive Counterclaim
-  - 2026-10-05 — _IT'S OVER FOR THEM_  
-    SNL Audience ROARS As Cornell Seven Scandal Explodes
-
-## @JeremyHambly
-
-Pool: 9 recent videos, 73 baseline videos
-
-### Cluster 1: `coffee sign`
-
-- **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/73 videos (0%)
-- **Spike ratio:** 49.3x
-- **Related terms:** `coffee sign`
-- **Sample recent videos:**
-  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
-    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
-  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
-    Nolan Wells Conspiracy Crowd Gets DESTROYED
-  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
-    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
-
-### Cluster 2: `join`
-
-- **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 9/73 videos (12%)
-- **Spike ratio:** 7.8x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
+  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
+    Trans Streamer Allegedly Helped Plan School Massacre!
   - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
     GameStop’s Insane PS5 Pro Price Has Gamers RAGING
   - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
@@ -77,8 +25,46 @@ Pool: 9 recent videos, 73 baseline videos
     Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
   - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
     This Is Terrifying! Seattle Has Completely Collapsed
-  - 2026-10-06 — _Nike ADMITS Woke KILLED Their Brand_  
-    Nike CEO HUMILIATED By Devastating New Numbers
+
+## @TheQuartering
+
+Pool: 16 recent videos, 117 baseline videos
+
+### Cluster 1: `join`
+
+- **Recent saturation:** 16/16 videos (**100%**)
+- **Baseline saturation:** 17/117 videos (15%)
+- **Spike ratio:** 6.7x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
+- **Sample recent videos:**
+  - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
+    Cornell 7 Merch Sellers Hit A Sickening New Low
+  - 2026-10-12 — _Shane Gillis SNL MELTDOWN After Blasting Women_  
+    Woke Media MELTS DOWN Over Shane Gillis On SNL!
+  - 2026-10-12 — _Illhan Omar FINDS OUT As Trump Causes EPIC MELTDOWN_  
+    Ilhan Omar’s Home RAIDED By Federal Agents!
+  - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
+    Trump Approves Historic Execution Of Fort Hood Killer
+  - 2026-10-09 — _ICE Riots ERUPT As Mamdani INCITES Attacks At Officers!_  
+    ICE Shoots Alleged Gang Member As Liberals ERUPT!
+
+### Cluster 2: `cornell`
+
+- **Recent saturation:** 5/16 videos (**31%**)
+- **Baseline saturation:** 1/117 videos (1%)
+- **Spike ratio:** 24.6x
+- **Related terms:** `cornell`
+- **Sample recent videos:**
+  - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
+    Cornell 7 Merch Sellers Hit A Sickening New Low
+  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
+    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
+  - 2026-10-08 — _New INSANE Cornell 7 Update!_  
+    Cornell 7 Accuser Says Police MISLED Her About Investigation
+  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
+    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
+  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
+    Cornell Case Flips After Explosive Counterclaim
 
 ---
 

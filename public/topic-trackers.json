@@ -1,6 +1,26 @@
 {
-  "lastUpdated": "2026-10-12T12:17:56.161Z",
+  "lastUpdated": "2026-10-13T12:01:15.998Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "join",
+      "keywords": [
+        "coffee sign",
+        "join",
+        "join our",
+        "server",
+        "our server",
+        "server our"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1645,
+        "spikeRatio": 6.08,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-10-13T12:01:15.998Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "join",
@@ -14,45 +34,26 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1154,
-        "spikeRatio": 8.67,
-        "recentVideoCount": 17,
-        "baselineVideoCount": 13,
-        "detectedAt": "2026-10-12T12:17:56.161Z"
+        "baselineSaturation": 0.1483,
+        "spikeRatio": 6.74,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-10-13T12:01:15.998Z"
       }
     },
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "coffee sign",
+      "channelHandle": "@TheQuartering",
+      "termId": "cornell",
       "keywords": [
-        "coffee sign"
+        "cornell"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0068,
-        "spikeRatio": 49.33,
-        "recentVideoCount": 3,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-10-12T12:17:56.161Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "join",
-      "keywords": [
-        "join",
-        "join our",
-        "server",
-        "our server",
-        "server our"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1284,
-        "spikeRatio": 7.79,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-10-12T12:17:56.161Z"
+        "recentSaturation": 0.3125,
+        "baselineSaturation": 0.0127,
+        "spikeRatio": 24.58,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-10-13T12:01:15.998Z"
       }
     }
   ]
