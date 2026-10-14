@@ -1,7 +1,7 @@
 {
  "_note": "Resolved unavailability reason per removed video, from YouTube watch-page playabilityStatus.",
  "_method": "watch-page playabilityStatus scrape",
- "_generated": "2026-10-13",
+ "_generated": "2026-10-14",
  "reasons": {
   "tM97PVvD2KA": {
    "reason": "private"
@@ -575,6 +575,10 @@
   "H4tpdIZY03U": {
    "reason": "private",
    "checked": "2026-10-13T23:15:13.716Z"
+  },
+  "Af3ykEYPrMM": {
+   "reason": "deleted",
+   "checked": "2026-10-14T17:57:10.383Z"
   }
  }
 }
