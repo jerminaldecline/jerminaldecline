@@ -1,60 +1,40 @@
-# Topic candidates — 2026-10-13
+# Topic candidates — 2026-10-14
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @JeremyHambly
-
-Pool: 7 recent videos, 75 baseline videos
-
-### Cluster 1: `join`
-
-- **Recent saturation:** 7/7 videos (**100%**)
-- **Baseline saturation:** 12/75 videos (16%)
-- **Spike ratio:** 6.1x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
-- **Sample recent videos:**
-  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
-    Trans Streamer Allegedly Helped Plan School Massacre!
-  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
-    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
-  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
-    Nolan Wells Conspiracy Crowd Gets DESTROYED
-  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
-    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
-  - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
-    This Is Terrifying! Seattle Has Completely Collapsed
-
 ## @TheQuartering
 
-Pool: 16 recent videos, 117 baseline videos
+Pool: 17 recent videos, 119 baseline videos
 
-### Cluster 1: `join`
+### Cluster 1: `coffee sign`
 
-- **Recent saturation:** 16/16 videos (**100%**)
-- **Baseline saturation:** 17/117 videos (15%)
-- **Spike ratio:** 6.7x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
+- **Recent saturation:** 17/17 videos (**100%**)
+- **Baseline saturation:** 20/119 videos (17%)
+- **Spike ratio:** 5.9x
+- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
+  - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
+    Cornell 7 Podcast Turns Into A War On ALL Men
+  - 2026-10-13 — _Shane GIllis Outrage GOES NUCLEAR Women RAGING!_  
+    Shane Gillis Outrage GOES NUCLEAR! Women RAGING!
+  - 2026-10-13 — _Metallica BLASTS Woke Kacey Musgraves & Woke Musicians!_  
+    Metallica’s James Hetfield Just DESTROYED Woke Musicians!
+  - 2026-10-13 — _Brutal UPDATE On Six Flags Coaster Death_  
+    Terrifying Twist In Six Flags Roller Coaster Death
   - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
     Cornell 7 Merch Sellers Hit A Sickening New Low
-  - 2026-10-12 — _Shane Gillis SNL MELTDOWN After Blasting Women_  
-    Woke Media MELTS DOWN Over Shane Gillis On SNL!
-  - 2026-10-12 — _Illhan Omar FINDS OUT As Trump Causes EPIC MELTDOWN_  
-    Ilhan Omar’s Home RAIDED By Federal Agents!
-  - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
-    Trump Approves Historic Execution Of Fort Hood Killer
-  - 2026-10-09 — _ICE Riots ERUPT As Mamdani INCITES Attacks At Officers!_  
-    ICE Shoots Alleged Gang Member As Liberals ERUPT!
 
 ### Cluster 2: `cornell`
 
-- **Recent saturation:** 5/16 videos (**31%**)
-- **Baseline saturation:** 1/117 videos (1%)
-- **Spike ratio:** 24.6x
+- **Recent saturation:** 5/17 videos (**29%**)
+- **Baseline saturation:** 2/119 videos (2%)
+- **Spike ratio:** 14.1x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
+  - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
+    Cornell 7 Podcast Turns Into A War On ALL Men
   - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
     Cornell 7 Merch Sellers Hit A Sickening New Low
   - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
@@ -63,8 +43,28 @@ Pool: 16 recent videos, 117 baseline videos
     Cornell 7 Accuser Says Police MISLED Her About Investigation
   - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
     Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
-  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
-    Cornell Case Flips After Explosive Counterclaim
+
+## @JeremyHambly
+
+Pool: 6 recent videos, 78 baseline videos
+
+### Cluster 1: `coffee sign`
+
+- **Recent saturation:** 6/6 videos (**100%**)
+- **Baseline saturation:** 15/78 videos (19%)
+- **Spike ratio:** 5.1x
+- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
+- **Sample recent videos:**
+  - 2026-10-13 — _Marvel PANICS Over Avengers Doomsday Early Reviews?_  
+    Marvel PANICS Over Avengers: Doomsday “Bloodbath” Rumor?!
+  - 2026-10-13 — _The View Does The Impossible_  
+    Kelly Clarkson HUMILIATED After Attacking Tiny Store
+  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
+    Trans Streamer Allegedly Helped Plan School Massacre!
+  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
+    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
+  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
+    Nolan Wells Conspiracy Crowd Gets DESTROYED
 
 ---
 

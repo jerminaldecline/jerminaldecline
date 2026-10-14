@@ -1,9 +1,29 @@
 {
-  "lastUpdated": "2026-10-13T12:01:15.998Z",
+  "lastUpdated": "2026-10-14T09:38:35.329Z",
   "trackers": [
     {
+      "channelHandle": "@TheQuartering",
+      "termId": "coffee sign",
+      "keywords": [
+        "coffee sign",
+        "join",
+        "server",
+        "join our",
+        "our server",
+        "server our"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 1,
+        "baselineSaturation": 0.1708,
+        "spikeRatio": 5.85,
+        "recentVideoCount": 17,
+        "baselineVideoCount": 20,
+        "detectedAt": "2026-10-14T09:38:35.329Z"
+      }
+    },
+    {
       "channelHandle": "@JeremyHambly",
-      "termId": "join",
+      "termId": "coffee sign",
       "keywords": [
         "coffee sign",
         "join",
@@ -14,46 +34,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.1645,
-        "spikeRatio": 6.08,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-10-13T12:01:15.998Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "join",
-      "keywords": [
-        "coffee sign",
-        "join",
-        "server",
-        "join our",
-        "our server",
-        "server our"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 1,
-        "baselineSaturation": 0.1483,
-        "spikeRatio": 6.74,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 17,
-        "detectedAt": "2026-10-13T12:01:15.998Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "cornell",
-      "keywords": [
-        "cornell"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3125,
-        "baselineSaturation": 0.0127,
-        "spikeRatio": 24.58,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-10-13T12:01:15.998Z"
+        "baselineSaturation": 0.1962,
+        "spikeRatio": 5.1,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 15,
+        "detectedAt": "2026-10-14T09:38:35.329Z"
       }
     }
   ]
