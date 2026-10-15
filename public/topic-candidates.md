@@ -1,36 +1,72 @@
-# Topic candidates — 2026-10-14
+# Topic candidates — 2026-10-15
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @TheQuartering
+## @JeremyHambly
 
-Pool: 17 recent videos, 119 baseline videos
+Pool: 6 recent videos, 80 baseline videos
 
 ### Cluster 1: `coffee sign`
 
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 20/119 videos (17%)
-- **Spike ratio:** 5.9x
+- **Recent saturation:** 6/6 videos (**100%**)
+- **Baseline saturation:** 17/80 videos (21%)
+- **Spike ratio:** 4.6x
 - **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
-  - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
-    Cornell 7 Podcast Turns Into A War On ALL Men
+  - 2026-10-14 — _Netflix COLLAPSING Woke Hollywood Is Losing_  
+    Netflix In HUGE Trouble As 1,000 Employees Get AXED!
+  - 2026-10-14 — _Another Lindsay Clancy KILLER Just Struck!_  
+    Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
+  - 2026-10-13 — _Marvel PANICS Over Avengers Doomsday Early Reviews?_  
+    Marvel PANICS Over Avengers: Doomsday “Bloodbath” Rumor?!
+  - 2026-10-13 — _The View Does The Impossible_  
+    Kelly Clarkson HUMILIATED After Attacking Tiny Store
+  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
+    Trans Streamer Allegedly Helped Plan School Massacre!
+
+## @TheQuartering
+
+Pool: 17 recent videos, 122 baseline videos
+
+### Cluster 1: `shane`
+
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 0/122 videos (0%)
+- **Spike ratio:** 43.4x
+- **Related terms:** `shane`, `gillis`, `shane gillis`
+- **Sample recent videos:**
+  - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
+    Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
   - 2026-10-13 — _Shane GIllis Outrage GOES NUCLEAR Women RAGING!_  
     Shane Gillis Outrage GOES NUCLEAR! Women RAGING!
-  - 2026-10-13 — _Metallica BLASTS Woke Kacey Musgraves & Woke Musicians!_  
-    Metallica’s James Hetfield Just DESTROYED Woke Musicians!
-  - 2026-10-13 — _Brutal UPDATE On Six Flags Coaster Death_  
-    Terrifying Twist In Six Flags Roller Coaster Death
-  - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
-    Cornell 7 Merch Sellers Hit A Sickening New Low
+  - 2026-10-12 — _Shane Gillis SNL MELTDOWN After Blasting Women_  
+    Woke Media MELTS DOWN Over Shane Gillis On SNL!
 
-### Cluster 2: `cornell`
+### Cluster 2: `coffee sign`
 
-- **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 2/119 videos (2%)
-- **Spike ratio:** 14.1x
+- **Recent saturation:** 17/17 videos (**100%**)
+- **Baseline saturation:** 23/122 videos (19%)
+- **Spike ratio:** 5.2x
+- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
+- **Sample recent videos:**
+  - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
+    Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
+  - 2026-10-14 — _Theo Von BLASTED Over Brutal New Netflix Clip_  
+    Marc Maron HUMILIATES Theo Von As Netflix Special Drops!
+  - 2026-10-14 — _Woke Hollywood & Gaming Just Got DESTROYED_  
+    Epic Goes ALL-IN On AI With Disney—Artists ERUPT!
+  - 2026-10-14 — _Ilhan Omar BOMBSHELL Revealed After RAID & May Be Deported!_  
+    Ilhan Omar Might Actually Get DEPORTED After Federal Raid!
+  - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
+    Cornell 7 Podcast Turns Into A War On ALL Men
+
+### Cluster 3: `cornell`
+
+- **Recent saturation:** 4/17 videos (**24%**)
+- **Baseline saturation:** 3/122 videos (2%)
+- **Spike ratio:** 8.3x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
   - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
@@ -41,30 +77,6 @@ Pool: 17 recent videos, 119 baseline videos
     Cornell 7 Accuser’s Explosive Text Messages LEAKED!
   - 2026-10-08 — _New INSANE Cornell 7 Update!_  
     Cornell 7 Accuser Says Police MISLED Her About Investigation
-  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
-    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
-
-## @JeremyHambly
-
-Pool: 6 recent videos, 78 baseline videos
-
-### Cluster 1: `coffee sign`
-
-- **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 15/78 videos (19%)
-- **Spike ratio:** 5.1x
-- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
-  - 2026-10-13 — _Marvel PANICS Over Avengers Doomsday Early Reviews?_  
-    Marvel PANICS Over Avengers: Doomsday “Bloodbath” Rumor?!
-  - 2026-10-13 — _The View Does The Impossible_  
-    Kelly Clarkson HUMILIATED After Attacking Tiny Store
-  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
-    Trans Streamer Allegedly Helped Plan School Massacre!
-  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
-    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
-  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
-    Nolan Wells Conspiracy Crowd Gets DESTROYED
 
 ---
 
