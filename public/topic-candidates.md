@@ -1,42 +1,22 @@
-# Topic candidates — 2026-10-15
+# Topic candidates — 2026-10-16
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @JeremyHambly
-
-Pool: 6 recent videos, 80 baseline videos
-
-### Cluster 1: `coffee sign`
-
-- **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 17/80 videos (21%)
-- **Spike ratio:** 4.6x
-- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
-  - 2026-10-14 — _Netflix COLLAPSING Woke Hollywood Is Losing_  
-    Netflix In HUGE Trouble As 1,000 Employees Get AXED!
-  - 2026-10-14 — _Another Lindsay Clancy KILLER Just Struck!_  
-    Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
-  - 2026-10-13 — _Marvel PANICS Over Avengers Doomsday Early Reviews?_  
-    Marvel PANICS Over Avengers: Doomsday “Bloodbath” Rumor?!
-  - 2026-10-13 — _The View Does The Impossible_  
-    Kelly Clarkson HUMILIATED After Attacking Tiny Store
-  - 2026-10-12 — _Psycho Streamer ARRESTED For Aiding HORRENDOUS Attack_  
-    Trans Streamer Allegedly Helped Plan School Massacre!
-
 ## @TheQuartering
 
-Pool: 17 recent videos, 122 baseline videos
+Pool: 17 recent videos, 126 baseline videos
 
 ### Cluster 1: `shane`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/122 videos (0%)
-- **Spike ratio:** 43.4x
-- **Related terms:** `shane`, `gillis`, `shane gillis`
+- **Recent saturation:** 4/17 videos (**24%**)
+- **Baseline saturation:** 1/126 videos (1%)
+- **Spike ratio:** 19.9x
+- **Related terms:** `shane`, `gillis`, `nuclear`, `shane gillis`
 - **Sample recent videos:**
+  - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
+    Cornell Goes NUCLEAR! Every Frat House Party BANNED Until 2027
   - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
     Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
   - 2026-10-13 — _Shane GIllis Outrage GOES NUCLEAR Women RAGING!_  
@@ -47,36 +27,72 @@ Pool: 17 recent videos, 122 baseline videos
 ### Cluster 2: `coffee sign`
 
 - **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 23/122 videos (19%)
-- **Spike ratio:** 5.2x
+- **Baseline saturation:** 27/126 videos (21%)
+- **Spike ratio:** 4.6x
 - **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
+  - 2026-10-15 — _HERO Dad Takes Out SHOOTER!_  
+    Active Shooter Attacks Oregon Elementary School—Gunman Killed
+  - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
+    Somali Leaders RAGE After Feds Raid Ilhan Omar’s Home!
+  - 2026-10-15 — _Donald Trump CANCELS Livestreamed Execution!_  
+    Trump Pulls The Plug On Firing Squad Livestream!
+  - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
+    Cornell Goes NUCLEAR! Every Frat House Party BANNED Until 2027
   - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
     Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
-  - 2026-10-14 — _Theo Von BLASTED Over Brutal New Netflix Clip_  
-    Marc Maron HUMILIATES Theo Von As Netflix Special Drops!
-  - 2026-10-14 — _Woke Hollywood & Gaming Just Got DESTROYED_  
-    Epic Goes ALL-IN On AI With Disney—Artists ERUPT!
+
+### Cluster 3: `ilhan`
+
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 4/126 videos (3%)
+- **Spike ratio:** 5.0x
+- **Related terms:** `ilhan`, `omar`, `federal`, `ilhan omar`
+- **Sample recent videos:**
+  - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
+    Somali Leaders RAGE After Feds Raid Ilhan Omar’s Home!
   - 2026-10-14 — _Ilhan Omar BOMBSHELL Revealed After RAID & May Be Deported!_  
     Ilhan Omar Might Actually Get DEPORTED After Federal Raid!
-  - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
-    Cornell 7 Podcast Turns Into A War On ALL Men
+  - 2026-10-12 — _Illhan Omar FINDS OUT As Trump Causes EPIC MELTDOWN_  
+    Ilhan Omar’s Home RAIDED By Federal Agents!
 
-### Cluster 3: `cornell`
+### Cluster 4: `cornell`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 8.3x
+- **Baseline saturation:** 4/126 videos (3%)
+- **Spike ratio:** 6.6x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
+  - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
+    Cornell Goes NUCLEAR! Every Frat House Party BANNED Until 2027
   - 2026-10-13 — _Cornell 7 Women DESTROYED In New DESPERATE Move_  
     Cornell 7 Podcast Turns Into A War On ALL Men
   - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
     Cornell 7 Merch Sellers Hit A Sickening New Low
   - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
     Cornell 7 Accuser’s Explosive Text Messages LEAKED!
-  - 2026-10-08 — _New INSANE Cornell 7 Update!_  
-    Cornell 7 Accuser Says Police MISLED Her About Investigation
+
+## @JeremyHambly
+
+Pool: 6 recent videos, 81 baseline videos
+
+### Cluster 1: `coffee sign`
+
+- **Recent saturation:** 6/6 videos (**100%**)
+- **Baseline saturation:** 18/81 videos (22%)
+- **Spike ratio:** 4.4x
+- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
+- **Sample recent videos:**
+  - 2026-10-15 — _Cornell 7 WINS!_  
+    Cornell Jane Doe In HIDING As “Lies” Firestorm Explodes!
+  - 2026-10-14 — _Netflix COLLAPSING Woke Hollywood Is Losing_  
+    Netflix In HUGE Trouble As 1,000 Employees Get AXED!
+  - 2026-10-14 — _Another Lindsay Clancy KILLER Just Struck!_  
+    Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
+  - 2026-10-13 — _Marvel PANICS Over Avengers Doomsday Early Reviews?_  
+    Marvel PANICS Over Avengers: Doomsday “Bloodbath” Rumor?!
+  - 2026-10-13 — _The View Does The Impossible_  
+    Kelly Clarkson HUMILIATED After Attacking Tiny Store
 
 ---
 
