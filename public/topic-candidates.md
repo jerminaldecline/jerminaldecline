@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-16
+# Topic candidates — 2026-10-17
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 126 baseline videos
+Pool: 17 recent videos, 125 baseline videos
 
 ### Cluster 1: `shane`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/126 videos (1%)
-- **Spike ratio:** 19.9x
+- **Baseline saturation:** 1/125 videos (1%)
+- **Spike ratio:** 19.8x
 - **Related terms:** `shane`, `gillis`, `nuclear`, `shane gillis`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -24,29 +24,11 @@ Pool: 17 recent videos, 126 baseline videos
   - 2026-10-12 — _Shane Gillis SNL MELTDOWN After Blasting Women_  
     Woke Media MELTS DOWN Over Shane Gillis On SNL!
 
-### Cluster 2: `coffee sign`
-
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 27/126 videos (21%)
-- **Spike ratio:** 4.6x
-- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
-- **Sample recent videos:**
-  - 2026-10-15 — _HERO Dad Takes Out SHOOTER!_  
-    Active Shooter Attacks Oregon Elementary School—Gunman Killed
-  - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
-    Somali Leaders RAGE After Feds Raid Ilhan Omar’s Home!
-  - 2026-10-15 — _Donald Trump CANCELS Livestreamed Execution!_  
-    Trump Pulls The Plug On Firing Squad Livestream!
-  - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
-    Cornell Goes NUCLEAR! Every Frat House Party BANNED Until 2027
-  - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
-    Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
-
-### Cluster 3: `ilhan`
+### Cluster 2: `ilhan`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 4/126 videos (3%)
-- **Spike ratio:** 5.0x
+- **Baseline saturation:** 3/125 videos (2%)
+- **Spike ratio:** 6.4x
 - **Related terms:** `ilhan`, `omar`, `federal`, `ilhan omar`
 - **Sample recent videos:**
   - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
@@ -56,11 +38,29 @@ Pool: 17 recent videos, 126 baseline videos
   - 2026-10-12 — _Illhan Omar FINDS OUT As Trump Causes EPIC MELTDOWN_  
     Ilhan Omar’s Home RAIDED By Federal Agents!
 
+### Cluster 3: `join`
+
+- **Recent saturation:** 17/17 videos (**100%**)
+- **Baseline saturation:** 30/125 videos (24%)
+- **Spike ratio:** 4.1x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
+- **Sample recent videos:**
+  - 2026-10-16 — _Lindsay Clancy Just Got TORCHED By Holdout Juror_  
+    Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
+  - 2026-10-16 — _Vile SHOOTER Identified & New Hero REVEALED_  
+    Oregon School Shooter IDENTIFIED As Horrifying New Details Emerge
+  - 2026-10-16 — _Steven Crowder Goes NUCLEAR May Take Down CNN_  
+    CNN Is In HUGE TROUBLE After Steven Crowder Announces Lawsuit!
+  - 2026-10-15 — _HERO Dad Takes Out SHOOTER!_  
+    Active Shooter Attacks Oregon Elementary School—Gunman Killed
+  - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
+    Somali Leaders RAGE After Feds Raid Ilhan Omar’s Home!
+
 ### Cluster 4: `cornell`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 4/126 videos (3%)
-- **Spike ratio:** 6.6x
+- **Recent saturation:** 3/17 videos (**18%**)
+- **Baseline saturation:** 5/125 videos (4%)
+- **Spike ratio:** 4.0x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -69,18 +69,16 @@ Pool: 17 recent videos, 126 baseline videos
     Cornell 7 Podcast Turns Into A War On ALL Men
   - 2026-10-12 — _Cornell 7 INSANITY Gets Worse!_  
     Cornell 7 Merch Sellers Hit A Sickening New Low
-  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
-    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
 
 ## @JeremyHambly
 
-Pool: 6 recent videos, 81 baseline videos
+Pool: 6 recent videos, 77 baseline videos
 
 ### Cluster 1: `coffee sign`
 
 - **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 18/81 videos (22%)
-- **Spike ratio:** 4.4x
+- **Baseline saturation:** 18/77 videos (23%)
+- **Spike ratio:** 4.2x
 - **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 WINS!_  

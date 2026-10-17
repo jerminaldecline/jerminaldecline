@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-10-16T09:10:31.563Z",
+  "lastUpdated": "2026-10-17T08:42:44.871Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "coffee sign",
+      "termId": "join",
       "keywords": [
         "coffee sign",
         "join",
@@ -14,11 +14,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2165,
-        "spikeRatio": 4.62,
+        "baselineSaturation": 0.2421,
+        "spikeRatio": 4.13,
         "recentVideoCount": 17,
-        "baselineVideoCount": 27,
-        "detectedAt": "2026-10-16T09:10:31.563Z"
+        "baselineVideoCount": 30,
+        "detectedAt": "2026-10-17T08:42:44.871Z"
       }
     },
     {
@@ -34,11 +34,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 1,
-        "baselineSaturation": 0.2256,
-        "spikeRatio": 4.43,
+        "baselineSaturation": 0.2372,
+        "spikeRatio": 4.22,
         "recentVideoCount": 6,
         "baselineVideoCount": 18,
-        "detectedAt": "2026-10-16T09:10:31.563Z"
+        "detectedAt": "2026-10-17T08:42:44.871Z"
       }
     }
   ]
