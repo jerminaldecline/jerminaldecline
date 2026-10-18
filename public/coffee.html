@@ -73,7 +73,9 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .margin input[type=number]{width:4.2rem;font:inherit;font-weight:700;padding:0.28rem 0.4rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);text-align:right}
 .margin-pct{display:inline-flex;align-items:center;gap:0.6rem}
 .margin-claim{display:inline-flex;align-items:center;font-size:0.82rem;color:var(--text-dim)}
-.margin-pct[hidden],.margin-claim[hidden]{display:none}
+.margin-bag{display:inline-flex;flex-wrap:wrap;align-items:center;gap:0.5rem 0.6rem}
+.seg.tight button{padding:0.36rem 0.62rem;font-variant-numeric:tabular-nums}
+.margin-pct[hidden],.margin-bag[hidden]{display:none}
 .check{display:flex;align-items:center;gap:0.45rem;font-size:0.82rem;color:var(--text);padding-bottom:0.25rem}
 .check input{accent-color:var(--accent-fill);width:15px;height:15px}
 .check small{color:var(--text-dim);font-size:0.72rem}
@@ -224,11 +226,13 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <div class="margin">
         <div class="seg" role="group" aria-label="Margin basis">
           <button type="button" data-mb="pct" aria-pressed="true">% of sales</button>
-          <button type="button" data-mb="bag" aria-pressed="false">$1 a bag</button>
+          <button type="button" data-mb="bag" aria-pressed="false">$ a bag</button>
         </div>
         <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="15" aria-label="Margin percent">
         <input type="number" id="marginNum" min="0" max="100" step="1" value="15" aria-label="Margin percent"><span>%</span></span>
-        <span class="margin-claim" id="marginClaim" hidden>his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns $1 whatever its price.">i</i></span>
+        <span class="margin-bag" id="marginBag" hidden><span class="seg tight" role="group" aria-label="Profit per bag">
+          <button type="button" data-bag="1" aria-pressed="true">$1</button><button type="button" data-bag="2" aria-pressed="false">$2</button><button type="button" data-bag="3" aria-pressed="false">$3</button><button type="button" data-bag="4" aria-pressed="false">$4</button><button type="button" data-bag="5" aria-pressed="false">$5</button>
+        </span><span class="margin-claim">$1 is his claim<i class="info" data-tip="He has said he only makes about a dollar a bag. This takes him at his word: every unit sold, a box of K-cups included, earns the amount you pick whatever its price. $1 is what he has said; the higher amounts are there to see what changes if he is being modest.">i</i></span></span>
       </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count stock moved out as sales <small>(big one-day drops, usually a pallet leaving)</small><i class="info" data-tip="When 40 or more units and at least half of a listing's stock vanish between one day's reading and the next, that is not forty customers finding one listing on one day; it is a pallet leaving, for his own shop, a wholesale order or another Amazon warehouse. If the stock comes back to the same listing within four weeks it was only shuffled, and neither the drop nor the return is shown. What is left is shown in amber and kept out of sales unless you tick the box.">i</i></label>
   </div>
@@ -302,7 +306,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <li><b>Stock</b> is how many units a listing has available, recorded once a day.</li>
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units and at least half of a listing vanish in a single day, that is not forty customers finding one listing on one day; it is a pallet leaving. We call that <b>moved out</b>, show it in amber, and keep it out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. Amazon shuffles deliveries between its warehouses, so a count can collapse one day and rebuild over the following weeks. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted as a move or a delivery.</li>
-      <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> applies whatever margin you set above, or $1 for every unit in the $1-a-bag mode, which is what he has said he makes. Neither is a real figure from the business.</li>
+      <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> applies whatever margin you set above, or a flat $1 to $5 for every unit in the $-a-bag mode; $1 is what he has said he makes. Both describe what he keeps after Amazon's fees and his costs, before income tax. Neither is a real figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
       <li>A delivery and sales inside the same day cancel out in a single reading, so both are undercounts. Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group days by the week starting Monday.</li>
       <li>Amazon lists each coffee once per size with the same name. Size is inferred from the usual price (5 lb bags around $85). Amazon often shows a different size's price while the default size is out of stock, so the <b>price log</b> only reports a change once the new price has held for three consecutive in-stock readings.</li>
@@ -318,7 +322,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, PRICE_MIN_RUN=3;
-const state={period:30,margin:15,mode:'pct',bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={period:30,margin:15,mode:'pct',bag:1,bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -330,9 +334,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const dayMs=864e5, toT=d=>Date.parse(d+'T00:00:00Z');
 const sum=a=>a.reduce((x,y)=>x+y,0);
 // Net is either a share of gross sales, or his own claim of a dollar a unit.
-const BAG_NET=1;
-const netOf=(gross,units)=>state.mode==='bag'?units*BAG_NET:gross*state.margin/100;
-const netLabel=()=>state.mode==='bag'?'at $1 a bag':'at '+state.margin+'%';
+const netOf=(gross,units)=>state.mode==='bag'?units*state.bag:gross*state.margin/100;
+const netLabel=()=>state.mode==='bag'?'at $'+state.bag+' a bag':'at '+state.margin+'%';
 
 // ---- derive per-SKU daily movements once per channel -------------------------
 // A fall is a sale unless it is a big one-day drop (a pallet leaving). Amazon also
@@ -575,7 +578,7 @@ function renderKpis(c,A,P){
   const tiles=[
     ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} moved out in one go`:(moved?`another ${fmtU(moved)} moved out in one go, not counted`:''))],
     ['Sales value', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
-    [state.mode==='bag'?'Profit at $1 a bag':'Profit at '+state.margin+'%', fmtM(net), j(state.mode==='bag'?'his claim: $1 for every unit sold':`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
+    ['Profit '+netLabel(), fmtM(net), j(state.mode==='bag'?(state.bag===1?'his claim: $1 for every unit sold':'$'+state.bag+' for every unit sold'):`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
     ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at usual price')],
     ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
@@ -690,7 +693,7 @@ function render(){
   renderKpis(c,A,P);
   document.getElementById('movSub').textContent=periodLabel(A,S)+'. Top: units customers bought, a few at a time. Bottom: deliveries that arrived (grey) and stock that left in one go (amber), which is usually a pallet moving, not a sale.'+(A.retU?` ${fmtU(A.retU)} units that left and came back within four weeks are left out of both.`:'');
   document.getElementById('movChart').innerHTML=movementsChart(S);
-  document.getElementById('revSub').textContent=`Units sold × the price each one sold for. The solid part is the profit ${netLabel()}${state.mode==='bag'?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
+  document.getElementById('revSub').textContent=`Units sold × the price each one sold for. The solid part is the profit ${netLabel()}${state.mode==='bag'&&state.bag===1?', which is what he says he makes':''}${state.bulk?'; stock moved out in one go is counted as sold':''}${S.weekly?' · by week':''}.`;
   document.getElementById('revNetLeg').textContent='Profit '+netLabel();
   document.getElementById('revChart').innerHTML=revenueChart(S);
   renderDayView(c,A,S);
@@ -714,8 +717,9 @@ function wire(){
   const r=document.getElementById('marginRange'), nI=document.getElementById('marginNum');
   const setM=v=>{ v=Math.max(0,Math.min(100,Math.round(+v||0))); state.margin=v; r.value=v; nI.value=v; render(); };
   r.oninput=()=>setM(r.value); nI.onchange=()=>setM(nI.value);
-  const setMode=m=>{ state.mode=m; press('[data-mb]','mb',m); document.getElementById('marginPct').hidden=m==='bag'; document.getElementById('marginClaim').hidden=m!=='bag'; render(); };
+  const setMode=m=>{ state.mode=m; press('[data-mb]','mb',m); document.getElementById('marginPct').hidden=m==='bag'; document.getElementById('marginBag').hidden=m!=='bag'; render(); };
   document.querySelectorAll('[data-mb]').forEach(b=>b.onclick=()=>setMode(b.dataset.mb));
+  document.querySelectorAll('[data-bag]').forEach(b=>b.onclick=()=>{ state.bag=+b.dataset.bag; press('[data-bag]','bag',b.dataset.bag); render(); });
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
   // click a bar: open (or close) the day behind it under that chart
   for(const id of ['movChart','revChart']) document.getElementById(id).addEventListener('click',e=>{ const h=e.target.closest&&e.target.closest('rect.hit'); if(!h) return; const key=h.getAttribute('data-key');
