@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-17
+# Topic candidates — 2026-10-18
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 17 recent videos, 125 baseline videos
+Pool: 18 recent videos, 122 baseline videos
 
 ### Cluster 1: `shane`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/125 videos (1%)
-- **Spike ratio:** 19.8x
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 1/122 videos (1%)
+- **Spike ratio:** 18.2x
 - **Related terms:** `shane`, `gillis`, `nuclear`, `shane gillis`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -26,9 +26,9 @@ Pool: 17 recent videos, 125 baseline videos
 
 ### Cluster 2: `ilhan`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/125 videos (2%)
-- **Spike ratio:** 6.4x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/122 videos (2%)
+- **Spike ratio:** 5.9x
 - **Related terms:** `ilhan`, `omar`, `federal`, `ilhan omar`
 - **Sample recent videos:**
   - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
@@ -40,9 +40,9 @@ Pool: 17 recent videos, 125 baseline videos
 
 ### Cluster 3: `join`
 
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 30/125 videos (24%)
-- **Spike ratio:** 4.1x
+- **Recent saturation:** 17/18 videos (**94%**)
+- **Baseline saturation:** 30/122 videos (25%)
+- **Spike ratio:** 3.8x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
 - **Sample recent videos:**
   - 2026-10-16 — _Lindsay Clancy Just Got TORCHED By Holdout Juror_  
@@ -58,9 +58,9 @@ Pool: 17 recent videos, 125 baseline videos
 
 ### Cluster 4: `cornell`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 5/125 videos (4%)
-- **Spike ratio:** 4.0x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 5/122 videos (4%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -83,7 +83,7 @@ Pool: 6 recent videos, 77 baseline videos
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 WINS!_  
     Cornell Jane Doe In HIDING As “Lies” Firestorm Explodes!
-  - 2026-10-14 — _Netflix COLLAPSING Woke Hollywood Is Losing_  
+  - 2026-10-14 — _Nextflix FINALLY Finds Out_  
     Netflix In HUGE Trouble As 1,000 Employees Get AXED!
   - 2026-10-14 — _Another Lindsay Clancy KILLER Just Struck!_  
     Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
