@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-18
+# Topic candidates — 2026-10-19
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 18 recent videos, 122 baseline videos
+Pool: 18 recent videos, 119 baseline videos
 
 ### Cluster 1: `shane`
 
 - **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 1/122 videos (1%)
-- **Spike ratio:** 18.2x
+- **Baseline saturation:** 1/119 videos (1%)
+- **Spike ratio:** 17.8x
 - **Related terms:** `shane`, `gillis`, `nuclear`, `shane gillis`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -27,8 +27,8 @@ Pool: 18 recent videos, 122 baseline videos
 ### Cluster 2: `ilhan`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 3/122 videos (2%)
-- **Spike ratio:** 5.9x
+- **Baseline saturation:** 3/119 videos (3%)
+- **Spike ratio:** 5.7x
 - **Related terms:** `ilhan`, `omar`, `federal`, `ilhan omar`
 - **Sample recent videos:**
   - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
@@ -41,8 +41,8 @@ Pool: 18 recent videos, 122 baseline videos
 ### Cluster 3: `join`
 
 - **Recent saturation:** 17/18 videos (**94%**)
-- **Baseline saturation:** 30/122 videos (25%)
-- **Spike ratio:** 3.8x
+- **Baseline saturation:** 30/119 videos (25%)
+- **Spike ratio:** 3.7x
 - **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
 - **Sample recent videos:**
   - 2026-10-16 — _Lindsay Clancy Just Got TORCHED By Holdout Juror_  
@@ -59,8 +59,8 @@ Pool: 18 recent videos, 122 baseline videos
 ### Cluster 4: `cornell`
 
 - **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 5/122 videos (4%)
-- **Spike ratio:** 3.7x
+- **Baseline saturation:** 5/119 videos (4%)
+- **Spike ratio:** 3.6x
 - **Related terms:** `cornell`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
@@ -72,13 +72,13 @@ Pool: 18 recent videos, 122 baseline videos
 
 ## @JeremyHambly
 
-Pool: 6 recent videos, 77 baseline videos
+Pool: 6 recent videos, 74 baseline videos
 
 ### Cluster 1: `coffee sign`
 
 - **Recent saturation:** 6/6 videos (**100%**)
-- **Baseline saturation:** 18/77 videos (23%)
-- **Spike ratio:** 4.2x
+- **Baseline saturation:** 18/74 videos (24%)
+- **Spike ratio:** 4.1x
 - **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
   - 2026-10-15 — _Cornell 7 WINS!_  
