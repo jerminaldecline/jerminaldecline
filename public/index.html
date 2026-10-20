@@ -1903,6 +1903,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .wordcloud-hint{font-weight:400;color:var(--subtext);font-size:0.85rem;margin-left:0.4rem}
 .wordcloud-panel{padding:0 1.4rem 1.4rem}
 .wordcloud-meta{font-size:0.8rem;color:var(--subtext);margin-bottom:1rem}
+#topicsMeta .topics-note{display:block;margin-top:0.3rem;color:var(--text-muted);line-height:1.5}
 .wordcloud-body{display:flex;flex-wrap:wrap;gap:0.4rem 0.9rem;align-items:center;line-height:1.4}
 .wordcloud-word{color:var(--accent);font-weight:700}
 .wordcloud-empty{color:var(--text-dim);font-size:0.88rem}
@@ -11385,12 +11386,17 @@ function renderWindowList(startDate, endDate) {
     const map = view === 'theme' ? ANALYTICS_TOPIC_THEMES
       : view === 'mode' ? ANALYTICS_TOPIC_MODES
       : ANALYTICS_TOPIC_TAGS;
+    // Shorts are never classified, so every figure below is over long-form only.
+    const longV = videos.filter(v => !v.isShort);
+    const shortN = videos.length - longV.length;
+    if (!longV.length && shortN) { body.innerHTML = `<div class="wordcloud-empty">Shorts aren't given topics. Switch the list to long-form to browse subjects.</div>`; if (meta) meta.textContent = ''; if (hint) hint.textContent = ''; return; }
     const counts = new Map();
-    let tagged = 0;
+    let tagged = 0, listed = 0;
     for (const v of videos) {
       const id = map && map[v.id];
       if (!id) continue;
       tagged++;
+      if (view !== 'subject' || !ANALYTICS_PROMOTED_SUBJECTS || ANALYTICS_PROMOTED_SUBJECTS.has(id)) listed++;
       // Subjects are filtered to the promoted set (thousands of raw one-offs);
       // themes and modes are a fixed curated set, so show all of them.
       if (view === 'subject') for (const p of window.__topicPrimariesOf(id)) counts.set(p, (counts.get(p) || 0) + 1);
@@ -11401,7 +11407,23 @@ function renderWindowList(startDate, endDate) {
     const noun = view === 'theme' ? 'theme' : view === 'mode' ? 'mode' : 'subject';
     if (hint) hint.textContent = ranked.length ? `(${ranked.length} ${noun}${ranked.length === 1 ? '' : 's'})` : '';
     if (!ranked.length) { body.innerHTML = `<div class="wordcloud-empty">No tagged ${noun}s in this range.</div>`; if (meta) meta.textContent = ''; return; }
-    if (meta) meta.textContent = `Click a ${noun} to filter the list below — ${tagged} of ${videos.length} videos tagged.`;
+    if (meta) {
+      // pending = newest uploads the tagger has not seen yet (it runs twice a week);
+      // none = classified, but with nothing on this axis (for subjects: a one-off story).
+      const n = longV.length, rare = tagged - listed;
+      const pending = longV.filter(v => !(ANALYTICS_TOPIC_MODES && ANALYTICS_TOPIC_MODES[v.id])).length;
+      const none = Math.max(0, n - tagged - pending);
+      const pl = (k, one, many) => k + ' ' + (k === 1 ? one : many);
+      const bits = [];
+      if (view === 'subject') {
+        if (rare) bits.push(pl(rare, 'has', 'have') + ' a subject seen too rarely to list');
+        if (none) bits.push(pl(none, 'is a one-off story', 'are one-off stories') + ' with no named person or company to file under, so ' + (none === 1 ? 'it carries' : 'they carry') + ' a theme only');
+      } else if (none) bits.push(pl(none, 'has', 'have') + ' no ' + noun);
+      if (pending) bits.push(pl(pending, 'is', 'are') + ' not classified yet');
+      const rest = n - listed;
+      const note = (bits.length ? (view === 'subject' ? 'The other ' + pl(rest, 'video', 'videos') + ': ' : '') + bits.join('; ') + '. ' : '') + (shortN ? 'Shorts aren\'t given topics.' : '');
+      meta.innerHTML = `Click a ${noun} to filter the list below — ${listed} of ${pl(n, 'long-form video', 'long-form videos')} ${view === 'subject' ? 'filed under a subject listed here' : 'tagged'}.` + (note ? `<span class="topics-note">${note.trim()}</span>` : '');
+    }
     const cur = windowListState.topicFilter;
     body.innerHTML = ranked.map(([id, c]) => {
       const active = cur && cur.kind === view && cur.id === id;
