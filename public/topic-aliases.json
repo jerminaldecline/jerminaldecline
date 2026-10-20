@@ -1,0 +1,15 @@
+{
+  "_note": "Spelling variants of a subject folded into one id: left is the variant's id, right is the subject to file it under. Applied by scripts/merge-topic-aliases.js after the backfill on every tagger run, and consulted by backfill-topic-tags.js before it creates a new subject. Mechanical variants (punctuation, a leading The, number words, a trailing case/saga, middle initials) are found automatically and do not need an entry here.",
+  "aliases": {
+    "cornell-university": "cornell-7-case",
+    "trine-do": "cornell-7-case",
+    "nidal-hasan": "nidal-malik-hasan",
+    "sean-diddy-combs": "sean-combs",
+    "virginia-roberts-giuffre": "virginia-giuffre",
+    "nashville-shooting": "nashville-school-shooting",
+    "nashville-school-shooting-manifesto": "nashville-school-shooting",
+    "madden-21": "madden-nfl-21",
+    "warcraft-3-reforged": "warcraft-iii-reforged",
+    "the-rings-of-power": "the-lord-of-the-rings-the-rings-of-power"
+  }
+}

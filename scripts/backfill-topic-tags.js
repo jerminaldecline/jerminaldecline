@@ -43,27 +43,40 @@ const tags = llm.tags || (llm.tags = {});
 const modes = llm.modes || {};
 const raw = llm._subjectRaw || {};
 
-const slugify = s => String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const ALIASES = opt('--aliases', path.join(ROOT, 'public', 'topic-aliases.json'));
+// Spelling variants resolve to the subject we already have (see merge-topic-aliases.js),
+// so "Cornell Seven" joins "Cornell 7 case" instead of becoming a second id.
+const { slugify, keyOf, buildCanonMap, resolveSubjectId, loadAliases } = require('./merge-topic-aliases.js');
 // Deterministic hue from the name, in the same spirit as the tagger's palette.
 const colorOf = name => { let h = 0; for (const c of String(name)) h = (h * 31 + c.charCodeAt(0)) >>> 0; const hue = h % 360; const [r, g, b] = hslToRgb(hue / 360, 0.6, 0.56); return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join(''); };
 function hslToRgb(h, s, l) { const f = n => { const k = (n + h * 12) % 12; const a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); }; return [f(0), f(8), f(4)]; }
 const usable = r => { if (r == null) return false; const s = String(r).trim(); return s && s.toLowerCase() !== 'null' && s.toLowerCase() !== 'none' && s.length <= 80; };
 
-let joined = 0, created = 0, skipped = 0; const createdNames = [];
+const promoted = new Set(llm._promotedSubjects || llm._promoted || []);
+const { canon, groups } = buildCanonMap({ topics, tags, promoted, aliases: loadAliases(ALIASES) });
+let joined = 0, created = 0, skipped = 0, folded = 0; const createdNames = [];
 for (const v of data.videos || []) {
   if (!CHANNELS.includes(v.channelId) || v.isShort || v.unavailable) continue;
   if (tags[v.id] || !(v.id in modes) || !usable(raw[v.id])) continue;
   const name = String(raw[v.id]).trim();
-  const id = slugify(name);
-  if (!id) { skipped++; continue; }
-  const def = topics[id];
-  if (def && def.kind && def.kind !== 'subject') { skipped++; continue; } // a theme or mode id collides; leave it
-  if (!def) { if (!DRY) topics[id] = { name, color: colorOf(name), kind: 'subject' }; created++; createdNames.push(name); }
+  let id = resolveSubjectId(name, topics, canon, groups);
+  if (id === null) {
+    id = slugify(name);
+    if (!id) { skipped++; continue; }
+    const def = topics[id];
+    if (def && def.kind && def.kind !== 'subject') { skipped++; continue; } // a theme or mode id collides; leave it
+    if (!def) {
+      if (!DRY) topics[id] = { name, color: colorOf(name), kind: 'subject' };
+      // Register it so a variant spelling later in this same run joins it rather than creating another.
+      const k = keyOf(name); if (k) (groups.get(k) || groups.set(k, []).get(k)).push(id); if (DRY) topics[id] = { name, kind: 'subject', _dry: true };
+      created++; createdNames.push(name);
+    }
+  } else if (id !== slugify(name)) folded++;
   if (!DRY) tags[v.id] = id;
   joined++;
 }
 
-console.log(`backfill-topic-tags: ${joined} video${joined === 1 ? '' : 's'} joined to their subject (${joined - created} to existing topics, ${created} new one-off topics)${skipped ? `, ${skipped} skipped` : ''}${DRY ? ' (dry run, nothing written)' : ''}`);
+console.log(`backfill-topic-tags: ${joined} video${joined === 1 ? '' : 's'} joined to their subject (${joined - created} to existing topics, ${created} new one-off topics${folded ? `, ${folded} folded into an existing spelling` : ''})${skipped ? `, ${skipped} skipped` : ''}${DRY ? ' (dry run, nothing written)' : ''}`);
 if (createdNames.length) console.log('  new topics e.g. ' + createdNames.slice(0, 12).join(', ') + (createdNames.length > 12 ? ', ...' : ''));
 if (!DRY && joined) {
   fs.writeFileSync(TAGS, JSON.stringify(llm));
