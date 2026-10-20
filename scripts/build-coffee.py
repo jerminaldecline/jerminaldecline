@@ -84,7 +84,7 @@ def build_amazon():
     catalog = {}
     if AMAZON_CATALOG.exists():
         for p in json.load(open(AMAZON_CATALOG, encoding="utf-8")):
-            catalog[p["asin"]] = tidy(p.get("label"))
+            catalog[p["asin"]] = p   # keep the whole entry (label + optional explicit size)
     rows = list(csv.DictReader(open(AMAZON_CSV, encoding="utf-8", errors="replace")))
     rows.sort(key=lambda r: (r["date"], r["time"]))
     by = collections.defaultdict(dict)          # asin -> date -> row (last wins)
@@ -98,7 +98,8 @@ def build_amazon():
     days = sorted({d for a in by.values() for d in a})
     skus = []
     for asin, per_day in by.items():
-        label = catalog.get(asin) or last_label.get(asin) or asin
+        entry = catalog.get(asin) or {}
+        label = tidy(entry.get("label")) or last_label.get(asin) or asin
         family, _, name = label.partition(" - ")
         if not name:
             family, name = "Other", label
@@ -115,14 +116,19 @@ def build_amazon():
         in_stock_prices = [p for p, s, r in zip(prices, stock, [per_day.get(d) for d in days])
                            if p is not None and s and (r.get("status") or "").startswith("ok")]
         price = mode(in_stock_prices) if in_stock_prices else mode(prices)
-        if family == "K-Cups":
-            size = "12-pack"
-        elif "kona" in name.lower():
-            size = "7oz"
-        elif price is not None and price >= 45:
-            size = "5lb"
-        else:
-            size = "12oz"
+        # Size: an explicit catalogue "size" wins (read off the listing, e.g. the
+        # 12 oz hot-cocoa tubs added 2026-10-11, which the price rule would only
+        # default to 12oz by luck). Otherwise infer from family/price.
+        size = (entry.get("size") or "").strip()
+        if not size:
+            if family == "K-Cups":
+                size = "12-pack"
+            elif "kona" in name.lower():
+                size = "7oz"
+            elif price is not None and price >= 45:
+                size = "5lb"
+            else:
+                size = "12oz"
         known = [d for d, s in zip(days, stock) if s is not None]
         skus.append({
             "id": asin, "name": name.strip(), "family": family, "size": size,

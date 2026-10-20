@@ -1,84 +1,96 @@
-# Topic candidates — 2026-10-10
+# Topic candidates — 2026-10-20
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
-## @TheQuartering
-
-Pool: 17 recent videos, 123 baseline videos
-
-### Cluster 1: `join`
-
-- **Recent saturation:** 17/17 videos (**100%**)
-- **Baseline saturation:** 13/123 videos (11%)
-- **Spike ratio:** 9.2x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
-- **Sample recent videos:**
-  - 2026-10-09 — _Liberals RAGE Over Livestreamed Execution As Youtube & Tiktok BAN It!_  
-    Trump Approves Historic Execution Of Fort Hood Killer
-  - 2026-10-09 — _ICE Riots ERUPT As Mamdani INCITES Attacks At Officers!_  
-    ICE Shoots Alleged Gang Member As Liberals ERUPT!
-  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
-    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
-  - 2026-10-08 — _Starbucks BLASTED Over HUGE LIE Making Customers Fat_  
-    Starbucks SUED Over “Sugar-Free” Drinks Loaded With Sugar!
-  - 2026-10-08 — _Indians MELTDOWN As H1 B SHUT DOWN By Trump_  
-    Trump Administration Drops The HAMMER On Tech Visa Abuse
-
-### Cluster 2: `cornell`
-
-- **Recent saturation:** 5/17 videos (**29%**)
-- **Baseline saturation:** 0/123 videos (0%)
-- **Spike ratio:** 72.9x
-- **Related terms:** `cornell`
-- **Sample recent videos:**
-  - 2026-10-09 — _Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!_  
-    Cornell 7 Accuser’s Explosive Text Messages LEAKED!
-  - 2026-10-08 — _New INSANE Cornell 7 Update!_  
-    Cornell 7 Accuser Says Police MISLED Her About Investigation
-  - 2026-10-07 — _Cornell 7 BOMBSHELL Everything Just Changed!_  
-    Megyn Kelly DESTROYS Olivia Rodrigo Over Cornell Claims
-  - 2026-10-06 — _Cornell 7 STRIKE BACK In EPIC Fashion! She Lied!_  
-    Cornell Case Flips After Explosive Counterclaim
-  - 2026-10-05 — _IT'S OVER FOR THEM_  
-    SNL Audience ROARS As Cornell Seven Scandal Explodes
-
 ## @JeremyHambly
 
-Pool: 9 recent videos, 78 baseline videos
+Pool: 10 recent videos, 75 baseline videos
 
 ### Cluster 1: `coffee sign`
 
-- **Recent saturation:** 3/9 videos (**33%**)
-- **Baseline saturation:** 0/78 videos (0%)
-- **Spike ratio:** 52.7x
-- **Related terms:** `coffee sign`
+- **Recent saturation:** 8/10 videos (**80%**)
+- **Baseline saturation:** 19/75 videos (25%)
+- **Spike ratio:** 3.1x
+- **Related terms:** `join`, `server`, `coffee sign`, `join our`, `our server`, `server our`
 - **Sample recent videos:**
-  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
-    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
-  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
-    Nolan Wells Conspiracy Crowd Gets DESTROYED
-  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
-    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
+  - 2026-10-19 — _Moist Critical DESTROYS Female Streamers Horrible Dog Treatment_  
+    Join our Discord server https://discord.com/invite/MqQp6vdHc
+  - 2026-10-19 — _Hasan Piker IMPLODES As He Realizes How Bad He Really Is_  
+    Hasan Piker DOUBLES DOWN After Jewish Voters Push Back!
+  - 2026-10-19 — _TheBurntPeanut DESTROYS Angry eGirls_  
+    Join our Discord server https://discord.com/invite/MqQp6vdHc
+  - 2026-10-15 — _Cornell 7 WINS!_  
+    Cornell Jane Doe In HIDING As “Lies” Firestorm Explodes!
+  - 2026-10-14 — _Nextflix FINALLY Finds Out_  
+    Netflix In HUGE Trouble As 1,000 Employees Get AXED!
 
-### Cluster 2: `join`
+## @TheQuartering
 
-- **Recent saturation:** 9/9 videos (**100%**)
-- **Baseline saturation:** 9/78 videos (12%)
-- **Spike ratio:** 8.3x
-- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`
+Pool: 21 recent videos, 119 baseline videos
+
+### Cluster 1: `nuclear`
+
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 1/119 videos (1%)
+- **Spike ratio:** 11.4x
+- **Related terms:** `nuclear`
 - **Sample recent videos:**
-  - 2026-10-08 — _Gamestop BLASTED For New RIPOFF On Playstation 5 Pro Over GTA 6_  
-    GameStop’s Insane PS5 Pro Price Has Gamers RAGING
-  - 2026-10-07 — _TikTok Karmelo Anthony RACE GRIFTERS Find Out!_  
-    Nolan Wells Conspiracy Crowd Gets DESTROYED
-  - 2026-10-07 — _Woke Mark Ruffalo HUMILIATED Again!_  
-    Woke Hulk’s Trump Meltdown Is Absolutely Embarrassing
-  - 2026-10-06 — _The BRUTAL Price Of Wokeness_  
-    This Is Terrifying! Seattle Has Completely Collapsed
-  - 2026-10-06 — _Nike ADMITS Woke KILLED Their Brand_  
-    Nike CEO HUMILIATED By Devastating New Numbers
+  - 2026-10-15 — _Cornell 7 INSANITY Just Got WORSE!_  
+    Cornell Goes NUCLEAR! Every Frat House Party BANNED Until 2027
+  - 2026-10-14 — _Shane Gillis Backlash GOES NUCLEAR_  
+    Shane Gillis Outrage GOES NUCLEAR As Kathy Griffin MELTS DOWN!
+  - 2026-10-13 — _Shane GIllis Outrage GOES NUCLEAR Women RAGING!_  
+    Shane Gillis Outrage GOES NUCLEAR! Women RAGING!
+
+### Cluster 2: `ilhan`
+
+- **Recent saturation:** 4/21 videos (**19%**)
+- **Baseline saturation:** 4/119 videos (3%)
+- **Spike ratio:** 5.1x
+- **Related terms:** `ilhan`, `omar`, `federal`, `ilhan omar`
+- **Sample recent videos:**
+  - 2026-10-19 — _Ilhan Omar Just BUSTED In Massive New Financial Scam_  
+    Ilhan Omar’s Winery Story Just Got MUCH WORSE!
+  - 2026-10-19 — _IT'S WAY WORSE THAN WE KNEW_  
+    Ilhan Omar Is FINALLY COOKED! Obama Jumps Into Federal Fight
+  - 2026-10-15 — _Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!_  
+    Somali Leaders RAGE After Feds Raid Ilhan Omar’s Home!
+  - 2026-10-14 — _Ilhan Omar BOMBSHELL Revealed After RAID & May Be Deported!_  
+    Ilhan Omar Might Actually Get DEPORTED After Federal Raid!
+
+### Cluster 3: `join`
+
+- **Recent saturation:** 19/21 videos (**90%**)
+- **Baseline saturation:** 33/119 videos (28%)
+- **Spike ratio:** 3.2x
+- **Related terms:** `join`, `server`, `join our`, `our server`, `server our`, `coffee sign`
+- **Sample recent videos:**
+  - 2026-10-19 — _Ilhan Omar Just BUSTED In Massive New Financial Scam_  
+    Ilhan Omar’s Winery Story Just Got MUCH WORSE!
+  - 2026-10-19 — _Trans LUNATICS Attack Harry Potter Event & Get Destroyed_  
+    Woke Harry Potter Protest BACKFIRES! Rowling’s Agent Strikes Back
+  - 2026-10-19 — _Feminist Sports Bar COLLAPSES Hilariously_  
+    Marsha’s Sports Bar Is DONE! Owner Blames Brutal Backlash
+  - 2026-10-19 — _Cornell 7 Get MASSIVE WIN & Jane Doe Humiliated Again_  
+    Cornell Protesters Hold FAKE Trial—Then A REAL Judge Rules!
+  - 2026-10-19 — _IT'S WAY WORSE THAN WE KNEW_  
+    Ilhan Omar Is FINALLY COOKED! Obama Jumps Into Federal Fight
+
+### Cluster 4: `accused`
+
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 2/119 videos (2%)
+- **Spike ratio:** 6.9x
+- **Related terms:** `accused`
+- **Sample recent videos:**
+  - 2026-10-19 — _SHE'S FREAKING OUT_  
+    AOC In FULL BLOWN PANIC! Drops $1 Million As JD Vance Attacks
+  - 2026-10-16 — _Lindsay Clancy Just Got TORCHED By Holdout Juror_  
+    Yet Another Clancy-Like Killer! Mom Accused In Resort Horror
+  - 2026-10-16 — _Vile SHOOTER Identified & New Hero REVEALED_  
+    Oregon School Shooter IDENTIFIED As Horrifying New Details Emerge
 
 ---
 
