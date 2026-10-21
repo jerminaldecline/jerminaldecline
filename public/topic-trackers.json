@@ -1,24 +1,22 @@
 {
-  "lastUpdated": "2026-10-20T09:33:07.859Z",
+  "lastUpdated": "2026-10-21T09:28:55.485Z",
   "trackers": [
     {
-      "channelHandle": "@JeremyHambly",
-      "termId": "coffee sign",
+      "channelHandle": "@TheQuartering",
+      "termId": "ilhan",
       "keywords": [
-        "coffee sign",
-        "join",
-        "join our",
-        "server",
-        "our server",
-        "server our"
+        "another",
+        "ilhan",
+        "omar",
+        "ilhan omar"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8,
-        "baselineSaturation": 0.2566,
-        "spikeRatio": 3.12,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 19,
-        "detectedAt": "2026-10-20T09:33:07.859Z"
+        "recentSaturation": 0.3182,
+        "baselineSaturation": 0.0289,
+        "spikeRatio": 11,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-10-21T09:28:55.485Z"
       }
     },
     {
@@ -33,12 +31,32 @@
         "server our"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.9048,
-        "baselineSaturation": 0.2792,
-        "spikeRatio": 3.24,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 33,
-        "detectedAt": "2026-10-20T09:33:07.859Z"
+        "recentSaturation": 0.9091,
+        "baselineSaturation": 0.3017,
+        "spikeRatio": 3.01,
+        "recentVideoCount": 20,
+        "baselineVideoCount": 36,
+        "detectedAt": "2026-10-21T09:28:55.485Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "coffee sign",
+      "keywords": [
+        "coffee sign",
+        "join",
+        "join our",
+        "server",
+        "our server",
+        "server our"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.8333,
+        "baselineSaturation": 0.2756,
+        "spikeRatio": 3.02,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 21,
+        "detectedAt": "2026-10-21T09:28:55.485Z"
       }
     }
   ]
