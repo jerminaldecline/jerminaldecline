@@ -1,54 +1,37 @@
 {
-  "lastUpdated": "2026-10-22T09:31:58.241Z",
+  "lastUpdated": "2026-10-23T09:27:53.286Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "ilhan",
       "keywords": [
-        "another",
+        "tourney ilhan",
         "ilhan",
         "omar",
         "ilhan omar"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.036,
-        "spikeRatio": 10.1,
+        "recentSaturation": 0.3478,
+        "baselineSaturation": 0.0349,
+        "spikeRatio": 9.97,
         "recentVideoCount": 8,
         "baselineVideoCount": 4,
-        "detectedAt": "2026-10-22T09:31:58.241Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "coffee sign",
-      "keywords": [
-        "coffee sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.8636,
-        "baselineSaturation": 0.164,
-        "spikeRatio": 5.27,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 20,
-        "detectedAt": "2026-10-22T09:31:58.241Z"
+        "detectedAt": "2026-10-23T09:27:53.286Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "coffee sign",
       "keywords": [
-        "coffee sign",
-        "join",
-        "join our"
+        "coffee sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.8462,
-        "baselineSaturation": 0.2813,
-        "spikeRatio": 3.01,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 22,
-        "detectedAt": "2026-10-22T09:31:58.241Z"
+        "recentSaturation": 0.875,
+        "baselineSaturation": 0.1187,
+        "spikeRatio": 7.37,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-10-23T09:27:53.286Z"
       }
     }
   ]
