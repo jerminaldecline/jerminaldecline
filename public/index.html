@@ -2997,7 +2997,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="promos" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l14-7v16L3 13z"/><path d="M17 8a3 3 0 010 8"/></svg>Promoted videos <span class="vtab-cnt" data-cnt="promos" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="removed" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M19 6l-1 14a1 1 0 01-1 1H7a1 1 0 01-1-1L5 6"/></svg>Removed <span class="vtab-cnt" data-cnt="removed" hidden></span></button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="reposts" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Stolen shorts <span class="vtab-cnt" data-cnt="reposts" hidden></span></button>
-        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="cadence" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 17v-4M12 17v-2M16 17v-5"/></svg>Upload cadence</button>
+        <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="cadence" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 17v-4M12 17v-2M16 17v-5"/></svg>Daily uploads</button>
         <button type="button" class="vtab" aria-selected="false" aria-controls="vBody" data-t="dailyviews" role="tab"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>Daily views</button>
       </div>
       <div class="vbody" id="vBody" hidden>
@@ -3262,7 +3262,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     #panelVideos .reposts-cred .rt-alert:active{transform:translateY(0.5px)}
     #panelVideos .reposts-cred .rt-alert.done{border-color:var(--up,#3fb950);color:var(--up,#3fb950);background:color-mix(in srgb,var(--up,#3fb950) 12%,transparent)}
     #panelVideos .reposts-foot{font-size:0.72rem;color:var(--text-dim);margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid var(--border);line-height:1.45}
-    /* ---- Upload cadence panel ---- */
+    /* ---- Daily uploads panel ---- */
     .dv-host .cadence-section{display:none}
     .dv-host .cadence-section.vt-active{display:block}
     .dv-host .cadence-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
@@ -3366,7 +3366,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .dailyviews-section{display:none}
     .dv-host .dailyviews-section.vt-active{display:block}
     .dv-host .dailyviews-body{--uc-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace}
-    /* Hue = format (blue long-form, orange Shorts, matching Upload cadence);
+    /* Hue = format (blue long-form, orange Shorts, matching Daily uploads);
        shade = content age (solid = this month, pale = previous months). */
     .dv-host .dv-bar.top{border-radius:3px 3px 0 0}
     .dv-host .dv-bar.lf.new{background:var(--brand)}
@@ -3585,7 +3585,7 @@ function rpmFor(d){ if(d>=480) return RPM.l8; if(d>=180) return RPM.l38; return 
 const CHAN_ORDER = ['@TheQuartering','@JeremyHambly','@QuarteringLive','@QuarteringVlogs','@rcnightmare','@UnSleevedMedia'];
 const MIN_MONTH = '2017-07';
 // Month window in the creator's local (Central / Wisconsin) time — the same
-// basis the Daily views + Upload cadence charts use, so "this month" counts
+// basis the Daily views + Daily uploads charts use, so "this month" counts
 // agree across the overview instead of splitting on the UTC date line.
 const _ctMonthFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit' });
 const _ctMonthCache = new Map();
@@ -4890,7 +4890,7 @@ function render(m){
   // report is showing a multi-month period (YTD, All time, Last 12/24m, Since peak).
   window.__dvOvAgg = isAgg;
   if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview();
-  // Overview "Uploads" card (mirrors the Videos-tab Upload cadence).
+  // Overview "Uploads" card (mirrors the Videos-tab Daily uploads).
   if (typeof window.__ucRenderOverview === 'function') window.__ucRenderOverview();
 }
 
@@ -13708,7 +13708,7 @@ function renderWindowList(startDate, endDate) {
     const foot='<div class="reposts-foot">Most listed are clips where a platform stamp survived his crop — the watermark proves the clip was lifted from that account, and the handle is read straight from it — so the true repost rate is far higher. Note a watermarked account isn’t always the original creator: some are themselves repost accounts, so the handle shown is where <em>he</em> took it from, not necessarily who filmed it.</div>';
     box.innerHTML=intro+listHtml+foot;
   }
-  // ---- Upload cadence panel: publishing rhythm (long-form vs Shorts) per day ----
+  // ---- Daily uploads panel: publishing rhythm (long-form vs Shorts) per day ----
   // The creator is in Wisconsin (Central Time). Bucket uploads by HIS local
   // calendar day, not UTC, so a late-night post lands on the right day/weekday.
   // DST-aware via the America/Chicago zone; cached per timestamp.
@@ -13840,7 +13840,7 @@ function renderWindowList(startDate, endDate) {
     // scroll — only narrower cards (phones, tablets) scroll.
     const plotW = isOv ? days.length*13+30 : Math.max(640, days.length*20+40);
     host.innerHTML=
-      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Upload cadence</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
+      '<div class="uc-head"><div>'+(isOv?'<h3 class="uc-h uc-h-ov">Uploads</h3>':'<p class="uc-eyebrow">Daily uploads</p><h3 class="uc-h">When are videos published?</h3>')+'</div>'+
       '<div class="uc-controls">'+nav+
       '<button type="button" class="uc-tog lf" onclick="__ucToggleLong(\''+scope+'\')" aria-pressed="'+(st.lf?'true':'false')+'" title="Show or hide long-form"><span class="uc-tdot"></span>Long-form</button>'+
       '<button type="button" class="uc-tog" onclick="__ucToggleShorts(\''+scope+'\')" aria-pressed="'+(st.shorts?'true':'false')+'" title="Show or hide Shorts"><span class="uc-tdot"></span>Shorts</button></div></div>'+
@@ -14239,7 +14239,7 @@ function renderWindowList(startDate, endDate) {
     tip.style.left=x+"px"; tip.style.top=y+"px";
   }
   function __dvHideTip(){ const t=byId("dvTip"); if(t)t.style.opacity="0"; }
-  // Leaving Daily views / Upload cadence (which hide the page period selector and
+  // Leaving Daily views / Daily uploads (which hide the page period selector and
   // run their own month nav): re-sync the video-list window to the page period so
   // the list below never shows a stale month after switching in and out.
   function __resyncVidList(){ try{ if(window.__syncVidWindow) window.__syncVidWindow(); if(window.renderVideosTab) window.renderVideosTab(); }catch(e){} }
