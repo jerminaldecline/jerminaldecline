@@ -1,22 +1,22 @@
 {
-  "lastUpdated": "2026-10-23T09:27:53.286Z",
+  "lastUpdated": "2026-10-24T08:59:27.494Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "ilhan",
+      "termId": "coffee sign",
       "keywords": [
-        "tourney ilhan",
         "ilhan",
         "omar",
-        "ilhan omar"
+        "ilhan omar",
+        "coffee sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3478,
-        "baselineSaturation": 0.0349,
-        "spikeRatio": 9.97,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-10-23T09:27:53.286Z"
+        "recentSaturation": 0.76,
+        "baselineSaturation": 0.2087,
+        "spikeRatio": 3.64,
+        "recentVideoCount": 19,
+        "baselineVideoCount": 26,
+        "detectedAt": "2026-10-24T08:59:27.494Z"
       }
     },
     {
@@ -26,12 +26,12 @@
         "coffee sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.875,
-        "baselineSaturation": 0.1187,
-        "spikeRatio": 7.37,
+        "recentSaturation": 0.7368,
+        "baselineSaturation": 0.1234,
+        "spikeRatio": 5.97,
         "recentVideoCount": 14,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-10-23T09:27:53.286Z"
+        "detectedAt": "2026-10-24T08:59:27.494Z"
       }
     }
   ]
