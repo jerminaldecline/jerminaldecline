@@ -3311,6 +3311,27 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     .dv-host .uc-col.future{opacity:.35}
     .dv-host .uc-col.future .uc-bar,.dv-host .uc-col.future .uc-tick{display:none}
     .dv-host .uc-col:hover .uc-bar{filter:brightness(1.13)}
+    .dv-host .uc-col:not(.future){cursor:pointer}
+    .dv-host .uc-col.picked{background:color-mix(in srgb,var(--text) 10%,transparent)}
+    .dv-host .uc-col.picked .uc-bar{filter:brightness(1.2)}
+    .dv-host .uc-day{margin-top:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
+    .dv-host .uc-day-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+    .dv-host .uc-day-head b{font-size:13px}
+    .dv-host .uc-day-head small{font-size:11.5px;color:var(--text-muted);flex:1 1 auto}
+    .dv-host .uc-day-close{appearance:none;background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:6px;font:inherit;font-size:11px;padding:2px 8px;cursor:pointer}
+    .dv-host .uc-day-close:hover{color:var(--text)}
+    .dv-host .uc-day ol{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+    .dv-host .uc-day li{display:grid;grid-template-columns:22px minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:12.5px;line-height:1.3}
+    .dv-host .uc-day li .r{color:var(--text-dim);font-family:var(--uc-mono);font-size:11px}
+    .dv-host .uc-day li .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dv-host .uc-day li .t a{color:var(--text);text-decoration:none}
+    .dv-host .uc-day li .t a:hover{text-decoration:underline}
+    .dv-host .uc-day li .t i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:1px}
+    .dv-host .uc-day li .t small{color:var(--text-muted);margin-left:6px;font-size:11px}
+    .dv-host .uc-day li .n{font-family:var(--uc-mono);font-variant-numeric:tabular-nums;font-size:12px;text-align:right}
+    .dv-host .uc-day li .p{font-family:var(--uc-mono);font-size:11px;color:var(--text-muted);min-width:34px;text-align:right}
+    .dv-host .uc-day .uc-day-more{font-size:11.5px;color:var(--text-muted);margin-top:8px}
+    @media(max-width:680px){.dv-host .uc-day li{grid-template-columns:18px minmax(0,1fr) auto}.dv-host .uc-day li .p{display:none}}
     .dv-host .uc-today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--brand);opacity:.7}
     .dv-host .uc-today span{position:absolute;top:-15px;left:4px;font-family:var(--uc-mono);font-size:9px;letter-spacing:.06em;color:var(--brand);white-space:nowrap}
     .dv-host .uc-xrow{display:flex;gap:3px;padding-left:28px;margin-top:8px}
@@ -13700,6 +13721,27 @@ function renderWindowList(startDate, endDate) {
     catch(e){ v={ym:String(iso).slice(0,7),day:+String(iso).slice(8,10)}; }
     cache[iso]=v; return v;
   }
+  // Click a bar: the videos published that day (his Central-time day), most viewed first.
+  window.__ucPick=function(scope,ds){ const st=_ucst(scope); st.pick=(st.pick===ds)?null:ds; renderUploadCadence(scope); };
+  const _ucTimeFmt=new Intl.DateTimeFormat('en-GB',{timeZone:'America/Chicago',hour:'2-digit',minute:'2-digit',hour12:false});
+  function ucDayPanel(scope,dset,ch,st){
+    if(!st.pick||!dset||!dset.videos) return '';
+    const ds=st.pick, MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], DOWL=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const p=ds.split('-'), Y=+p[0], M=+p[1], D=+p[2]; const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
+    const title=DOWL[wd]+' '+D+' '+MONF[M-1];
+    const close='<button type="button" class="uc-day-close" onclick="__ucPick(\''+scope+'\',\''+ds+'\')">close</button>';
+    const items=[];
+    for(const v of dset.videos){ if(ch!=="ALL"&&v.channelId!==ch) continue; if(v.unavailable||!v.publishedAt) continue;
+      const lp=ucLocalParts(v.publishedAt); if(lp.ym!==ds.slice(0,7)||lp.day!==D) continue; if(v.isShort?!st.shorts:!st.lf) continue; items.push(v); }
+    items.sort((a,b)=>(b.views||0)-(a.views||0));
+    const chans=dset.channels||{};
+    const rows=items.map((v,i)=>{ let tm=''; try{ tm=_ucTimeFmt.format(new Date(v.publishedAt)); }catch(e){}
+      const chn=(ch==="ALL"&&chans[v.channelId])?(chans[v.channelId].handle||chans[v.channelId].title):'';
+      return '<li><span class="r">'+(i+1)+'</span><span class="t"><i style="background:'+(v.isShort?'var(--shorts)':'var(--brand)')+'"></i><a href="https://www.youtube.com/watch?v='+esc(v.id)+'" target="_blank" rel="noopener">'+esc(v.title||v.id)+'</a><small>'+esc([chn,tm?(tm+' CT'):''].filter(Boolean).join(' · '))+'</small></span><span class="n">'+dvFmt(v.views||0)+'</span><span class="p">'+(v.likes!=null?dvFmt(v.likes)+' likes':'')+'</span></li>'; }).join('');
+    const sub=items.length+' video'+(items.length===1?'':'s')+' published · views to date, most to least';
+    return '<div class="uc-day"><div class="uc-day-head"><b>'+title+'</b><small>'+sub+'</small>'+close+'</div>'+(rows?'<ol>'+rows+'</ol>':'<div class="uc-day-more">Nothing published that day on the current toggles.</div>')+'</div>';
+  }
   function ucCompute(ds, ch, monthKey){
     const p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
     const dim=new Date(Date.UTC(Y,M,0)).getUTCDate();
@@ -13756,6 +13798,7 @@ function renderWindowList(startDate, endDate) {
       if(st.month<minKey) st.month=minKey;         // clamp into range (e.g. after a channel switch)
     }
     const days=ucCompute(ds,ch,st.month);
+    if(st.pick && st.pick.slice(0,7)!==st.month) st.pick=null;   // a picked day belongs to one month
     const isCur=st.month===curKey, today=isCur?nowP.day:days.length;
     let peak=1; days.forEach(x=>{peak=Math.max(peak,(st.lf?x.lf:0)+(st.shorts?x.sh:0));});
     peak=Math.max(peak,3);
@@ -13771,7 +13814,7 @@ function renderWindowList(startDate, endDate) {
         if(shVis) inner+='<div class="uc-bar sh top" style="height:'+(x.sh/max*100)+'%"></div>';
         if(x.lf===0&&x.sh===0) inner+='<div class="uc-tick none"></div>';
       }
-      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+'" data-d="'+x.d+'" data-mo="'+MONF[(+st.month.slice(5,7))-1]+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(future?' future':'')+(st.pick===(st.month+'-'+String(x.d).padStart(2,'0'))?' picked':'')+'" data-ds="'+st.month+'-'+String(x.d).padStart(2,'0')+'" data-d="'+x.d+'" data-mo="'+MONF[(+st.month.slice(5,7))-1]+'" data-lf="'+x.lf+'" data-sh="'+x.sh+'" data-wknd="'+(wknd?1:0)+'" data-future="'+(future?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+'"><span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
     });
     let todayLine="";
@@ -13804,12 +13847,13 @@ function renderWindowList(startDate, endDate) {
       '<div class="uc-legend"><span class="uc-lfkey'+(st.lf?'':' off')+'"><i class="uc-sw lf"></i>Long-form</span><span class="uc-shkey'+(st.shorts?'':' off')+'"><i class="uc-sw sh"></i>Shorts</span></div>'+
       '<p class="uc-axcap">Videos published / day <span>'+axsub+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+todayLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-botzone"><div class="uc-summary">'+summary+'</div></div>'+
+      '<div class="uc-botzone">'+ucDayPanel(scope,ds,ch,st)+'<div class="uc-summary">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0]+' · '+esc(chName)+' · days in Central Time (Wisconsin) · source: jerminaldecline.com'+(isCur?' · month in progress':'')+'</p>'));
     window.__ucCurMonthName=MONF[(+st.month.split("-")[1])-1];
     if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
-    if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip); }
+    if(colsEl){ colsEl.addEventListener("mousemove",__ucTip); colsEl.addEventListener("mouseleave",__ucHideTip);
+      colsEl.addEventListener("click",e=>{ const c=e.target.closest(".uc-col"); if(!c||c.dataset.future==="1"||!c.dataset.ds) return; __ucHideTip(); window.__ucPick(scope,c.dataset.ds); }); }
   }
   function _ucst(scope){ return (scope==='ov') ? (window.__ucOvState||(window.__ucOvState={month:null,shorts:true,lf:true})) : (window.__ucState||(window.__ucState={month:null,shorts:true,lf:true})); }
   window.__ucSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_ucst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderUploadCadence(scope); };
@@ -13877,6 +13921,60 @@ function renderWindowList(startDate, endDate) {
     if (window.__viewEngaged && ds && ds >= VCC_ONSET_DAY) {
       lfNew /= VCC_MID; lfOld /= VCC_MID; lfPW /= VCC_MID;
     } return {shNew,lfNew,shOld,lfOld,shPW,lfPW}; }
+  // ---- Click a bar: which videos got the views that day -------------------
+  // The per-video lists live in daily-videos/YYYY-MM.json (one file per month,
+  // fetched on first use): the top 30 by views gained plus a bucketed remainder,
+  // built by the same script and with the same exclusions as the bars, so a
+  // day's list sums to its bar under the same format / prior-months toggles.
+  function dvVidById(){
+    const d=(typeof ANALYTICS_DATASET!=="undefined")?ANALYTICS_DATASET:null; if(!d||!d.videos) return new Map();
+    const c=window.__dvVidIdx; if(c&&c.n===d.videos.length) return c.m;
+    const m=new Map(); for(const v of d.videos) m.set(v.id,v); window.__dvVidIdx={n:d.videos.length,m}; return m;
+  }
+  function dvVideosFor(ym){
+    const cache=window.__dvVideos||(window.__dvVideos={});
+    if(ym in cache) return cache[ym];
+    cache[ym]=null;                                  // in flight
+    const gen=(dvData()&&dvData()._generated)||'';
+    fetch('daily-videos/'+ym+'.json?v='+encodeURIComponent(gen)).then(r=>r.ok?r.json():Promise.reject(r.status))
+      .then(j=>{ cache[ym]=j; }).catch(()=>{ cache[ym]={days:{},_missing:true}; })
+      .then(()=>{ renderDailyViews('main'); renderDailyViews('ov'); });
+    return null;
+  }
+  window.__dvPick=function(scope,ds){ const st=_dvst(scope); st.pick=(st.pick===ds)?null:ds; renderDailyViews(scope); };
+  function dvDayPanel(scope,ch,st,days){
+    if(!st.pick) return '';
+    const ds=st.pick, row=days.find(x=>x.ds===ds); if(!row||!row.inRange) return '';
+    const MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], DOWL=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const title=DOWL[row.wd]+' '+(+ds.slice(8,10))+' '+MONF[(+ds.slice(5,7))-1];
+    const close='<button type="button" class="uc-day-close" onclick="__dvPick(\''+scope+'\',\''+ds+'\')">close</button>';
+    const mf=dvVideosFor(ds.slice(0,7));
+    if(mf===null) return '<div class="uc-day"><div class="uc-day-head"><b>'+title+'</b><small>loading the videos for this day…</small>'+close+'</div></div>';
+    const rec=(mf.days||{})[ds];
+    const eng=!!window.__viewEngaged && ds>=VCC_ONSET_DAY;          // same scaling as dvRoll
+    const scale=e=>(eng&&!e[2])?e[1]/VCC_MID:e[1];
+    const want=e=>((e[2]?st.shorts:st.lf)&&(e[3]||st.showOld));
+    const items=[]; let restN=0, restG=0;
+    if(rec){ for(const chId in rec){ if(ch!=="ALL"&&chId!==ch) continue; const r=rec[chId];
+      for(const e of (r.top||[])) if(want(e)) items.push({id:e[0],g:scale(e),s:e[2],n:e[3],ch:chId});
+      (r.rest||[]).forEach((b,i)=>{ const isNew=i<2, isShort=(i%2)===0; if((isShort?st.shorts:st.lf)&&(isNew||st.showOld)){ restN+=b[0]; restG+=(eng&&!isShort)?b[1]/VCC_MID:b[1]; } }); } }
+    items.sort((a,b)=>b.g-a.g);
+    const total=items.reduce((s,x)=>s+x.g,0)+restG;
+    const vm=dvVidById(), chans=((typeof ANALYTICS_DATASET!=="undefined")&&ANALYTICS_DATASET&&ANALYTICS_DATASET.channels)||{};
+    const chipCol=x=>x.s?(x.n?'var(--shorts)':'color-mix(in srgb,var(--shorts) 42%,var(--surface))'):(x.n?'var(--brand)':'color-mix(in srgb,var(--brand) 42%,var(--surface))');
+    const SHOW=25;
+    const rows=items.slice(0,SHOW).map((x,i)=>{ const v=vm.get(x.id); const t=v?(v.title||x.id):x.id;
+      const pub=(v&&v.publishedAt)?((+v.publishedAt.slice(8,10))+' '+MONF[(+v.publishedAt.slice(5,7))-1]):'';
+      const chn=(ch==="ALL"&&chans[x.ch])?(chans[x.ch].handle||chans[x.ch].title):'';
+      return '<li><span class="r">'+(i+1)+'</span><span class="t"><i style="background:'+chipCol(x)+'"></i><a href="https://www.youtube.com/watch?v='+esc(x.id)+'" target="_blank" rel="noopener">'+esc(t)+'</a><small>'+esc([chn,pub?('posted '+pub):''].filter(Boolean).join(' · '))+'</small></span><span class="n">'+dvFmt(x.g)+'</span><span class="p">'+(total>0?Math.round(x.g/total*100):0)+'%</span></li>'; }).join('');
+    const extraN=Math.max(0,items.length-SHOW)+restN, extraG=items.slice(SHOW).reduce((s,x)=>s+x.g,0)+restG;
+    const more=extraN>0?'<div class="uc-day-more">and '+extraN.toLocaleString()+' more video'+(extraN===1?'':'s')+' with '+dvFmt(extraG)+' views between them</div>':'';
+    const none=rows?'':'<div class="uc-day-more">'+(mf._missing?'No breakdown is available for this month yet.':'Nothing matches the current toggles for this day.')+'</div>';
+    const nAll=items.length+restN;
+    const sub=nAll.toLocaleString()+' video'+(nAll===1?'':'s')+' · '+dvFmt(total)+' views gained'+(eng?' · long-form shown as engaged views':'')+' · most to least';
+    return '<div class="uc-day"><div class="uc-day-head"><b>'+title+'</b><small>'+sub+'</small>'+close+'</div>'+(rows?'<ol>'+rows+'</ol>':'')+more+none+'</div>';
+  }
   function dvCompute(ch, monthKey){
     const d=dvData(), p2=monthKey.split("-"), Y=+p2[0], M=+p2[1];
     const dim=new Date(Date.UTC(Y,M,0)).getUTCDate(), out=[];
@@ -13884,7 +13982,7 @@ function renderWindowList(startDate, endDate) {
       const ds=Y+"-"+String(M).padStart(2,"0")+"-"+String(day).padStart(2,"0");
       const rec=(d&&d.days)?d.days[ds]:null, inRange=!!rec, b=dvRoll(rec,ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,day)).getUTCDay()+6)%7;
-      out.push({d:day,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
+      out.push({d:day,ds,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange});
     }
     return out;
   }
@@ -13918,7 +14016,7 @@ function renderWindowList(startDate, endDate) {
       if(start && ds<start) continue;         // channel did not exist yet
       const p=ds.split("-"), Y=+p[0], M=+p[1], D=+p[2], b=dvRoll(d.days[ds],ch,ds);
       const wd=(new Date(Date.UTC(Y,M-1,D)).getUTCDay()+6)%7;
-      out.push({d:D,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
+      out.push({d:D,ds,mo:M,wd,lfNew:b.lfNew,lfOld:b.lfOld,shNew:b.shNew,shOld:b.shOld,lfPW:b.lfPW,shPW:b.shPW,inRange:true,moLabel:M!==prevMo?1:0});
       prevMo=M;
     }
     return out;
@@ -13972,6 +14070,7 @@ function renderWindowList(startDate, endDate) {
     if(st.month>maxKey) st.month=maxKey;
     if(st.month<minKey) st.month=minKey;
     if(months.indexOf(st.month)<0) st.month=maxKey; // snap to a month that actually has data
+    if(st.pick && !st.full && st.pick.slice(0,7)!==st.month) st.pick=null;   // a picked day belongs to one month
     const days=st.full?dvSeriesAll(ch):dvCompute(ch,st.month);
     let lastData=0; days.forEach(x=>{ if(x.inRange) lastData=x.d; });
     const isLatest=st.month===maxKey;
@@ -13993,7 +14092,7 @@ function renderWindowList(startDate, endDate) {
           segs.forEach((s,i)=>{ inner+='<div class="uc-bar dv-bar '+s[1]+(i===segs.length-1?' top':'')+'" style="height:'+(s[0]/max*100)+'%"></div>'; });
         } else inner+='<div class="uc-tick none"></div>';
       }
-      cols+='<div class="uc-col'+(wknd?' wknd':'')+(nodata?' future':'')+(moL?' momark':'')+'" data-d="'+x.d+'" data-mo="'+MONF[x.mo-1]+'" data-lfn="'+x.lfNew+'" data-lfo="'+x.lfOld+'" data-shn="'+x.shNew+'" data-sho="'+x.shOld+'" data-wknd="'+(wknd?1:0)+'" data-nodata="'+(nodata?1:0)+'">'+inner+'</div>';
+      cols+='<div class="uc-col'+(wknd?' wknd':'')+(nodata?' future':'')+(moL?' momark':'')+(st.pick===x.ds?' picked':'')+'" data-ds="'+x.ds+'" data-d="'+x.d+'" data-mo="'+MONF[x.mo-1]+'" data-lfn="'+x.lfNew+'" data-lfo="'+x.lfOld+'" data-shn="'+x.shNew+'" data-sho="'+x.shOld+'" data-wknd="'+(wknd?1:0)+'" data-nodata="'+(nodata?1:0)+'">'+inner+'</div>';
       xrow+='<div class="uc-xr'+(wknd?' wknd':'')+(moL?' momark':'')+'">'+(st.full?'<span class="uc-mo">'+moL+'</span>':'')+'<span class="uc-dow">'+DOW[x.wd]+'</span><span class="uc-dnum">'+x.d+'</span></div>';
     });
     let asLine="";
@@ -14082,13 +14181,14 @@ function renderWindowList(startDate, endDate) {
       '</div>'+
       '<p class="uc-axcap">Views gained / day <span>'+axsub+(st.full?' · full series':'')+'</span></p>'+
       '<div class="uc-scroll"><div class="uc-plot" style="min-width:'+plotW+'px"><div class="uc-chartarea"><div class="uc-grid">'+grid+'</div><div class="uc-cols">'+cols+'</div>'+asLine+'</div><div class="uc-xrow">'+xrow+'</div></div></div>'+
-      '<div class="uc-botzone">'+remNote+'<div class="uc-summary'+((st.full&&n7)?' four':'')+'">'+summary+'</div></div>'+
+      '<div class="uc-botzone">'+dvDayPanel(scope,ch,st,days)+remNote+'<div class="uc-summary'+((st.full&&n7)?' four':'')+'">'+summary+'</div></div>'+
       (isOv?'':('<p class="uc-foot">'+(st.full?dvNiceDate(dvEffFrom(ch,(d._range&&d._range.from)||"2026-06-11"),MONF)+' – '+dvNiceDate((d._range&&d._range.to)||maxKey,MONF):MONL[(+st.month.split("-")[1])-1]+' '+st.month.split("-")[0])+' · '+esc(chName)+' · view gains between daily snapshots · days in Central Time (Wisconsin)</p>'+
       '<p class="uc-foot dv-fn">'+(dvChannelStart(ch)&&dvChannelStart(ch)>((d._range&&d._range.from)||"2026-06-11")?esc(chName)+' launched '+dvNiceDate(dvChannelStart(ch),MONF)+', so the series starts there. ':'')+'History starts '+dvNiceDate((d._range&&d._range.from)||"2026-06-11",MONF)+' — the day twice-daily view snapshots began. Daily view gains before then weren’t recorded, so earlier months can’t be shown.</p>'));
     window.__dvCurMonthName=MONF[(+st.month.split("-")[1])-1];
     if(card) card.hidden=false;
     const colsEl=host.querySelector(".uc-cols");
-    if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip); }
+    if(colsEl){ colsEl.addEventListener("mousemove",__dvTip); colsEl.addEventListener("mouseleave",__dvHideTip);
+      colsEl.addEventListener("click",e=>{ const c=e.target.closest(".uc-col"); if(!c||c.classList.contains("future")||!c.dataset.ds) return; __dvHideTip(); window.__dvPick(scope,c.dataset.ds); }); }
   }
   function _dvst(scope){ return (scope==='ov') ? (window.__dvOvState||(window.__dvOvState={month:null,shorts:true,lf:true,full:false,showOld:true})) : (window.__dvState||(window.__dvState={month:null,shorts:true,lf:true,full:false,showOld:true})); }
   window.__dvSetMonthNum=function(m,scope){ scope=scope||'main'; const st=_dvst(scope); const y=st.month?st.month.slice(0,4):String(new Date().getUTCFullYear()); st.month=y+"-"+String(m).padStart(2,"0"); renderDailyViews(scope); };
