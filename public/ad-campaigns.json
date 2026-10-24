@@ -1,12 +1,12 @@
 {
  "_note": "Per-video advertising history from the Google Ads Transparency Centre. Each creative is one ad entry with its own first/last-shown dates, so a video promoted repeatedly shows a run count above 1. Independent of ad-ledger.json, which infers bursts from view snapshots and only reaches back to 2026-06-11.",
  "_method": "SearchCreatives capture; each creative's preview resolved to its video",
- "_generated": "2026-10-20",
+ "_generated": "2026-10-24",
  "advertiser": "Marketing Sheriff",
- "creatives": 222,
- "resolved": 220,
- "unresolved": 2,
- "trackingFrom": "2025-10-21",
+ "creatives": 221,
+ "resolved": 218,
+ "unresolved": 3,
+ "trackingFrom": "2025-10-23",
  "videos": {
   "kT0UsZpuKaU": {
    "runs": 1,
@@ -1680,18 +1680,14 @@
    "last": "2025-11-07"
   },
   "OQ58hc_5fV8": {
-   "runs": 2,
+   "runs": 1,
    "windows": [
-    [
-     "2025-10-21",
-     "2025-10-24"
-    ],
     [
      "2025-11-03",
      "2025-11-07"
     ]
    ],
-   "first": "2025-10-21",
+   "first": "2025-11-03",
    "last": "2025-11-07"
   },
   "xXVaYfbSwgA": {
@@ -1737,17 +1733,6 @@
    ],
    "first": "2025-10-23",
    "last": "2025-10-26"
-  },
-  "pNP4B0PJk-Q": {
-   "runs": 1,
-   "windows": [
-    [
-     "2025-10-21",
-     "2025-10-24"
-    ]
-   ],
-   "first": "2025-10-21",
-   "last": "2025-10-24"
   }
  }
 }

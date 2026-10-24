@@ -38,6 +38,11 @@ const snapArg = args.includes('--snapshots') ? args[args.indexOf('--snapshots') 
 // this drops into the same "Rebuild view-velocity.json" CI step unchanged.
 const SNAP_DIR = path.resolve(snapArg || process.env.SNAPSHOTS_DIR || path.join(__dirname, '..', '..', 'jerminaldecline-snapshots', 'snapshots'));
 const OUT = path.join(__dirname, '..', 'public', 'daily-views.json');
+// Per-video breakdown of each day, one file per month, for the click-to-expand
+// list under the Daily views chart: the top TOP videos by views gained that day
+// plus a bucketed remainder, so a day's list always sums to its bar.
+const VID_DIR = path.join(__dirname, '..', 'public', 'daily-videos');
+const TOP = 30;
 
 // Publish month in the creator's local (Central) time, cached per timestamp.
 const _fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit' });
@@ -98,6 +103,7 @@ function main() {
 
   const days = {};
   const removed = {};                       // [newShort, newLong, oldShort, oldLong] of since-removed videos' gains
+  const perMonth = {};                      // YYYY-MM -> { days: { date: { channelId: { top, rest } } } }
   const channelTitles = {};
   let prev = loadSnap(byDate.get(dates[0]).file);
   Object.entries(prev.channels).forEach(([id, c]) => { channelTitles[id] = c.title || c.handle || id; });
@@ -118,6 +124,7 @@ function main() {
     const prevTime = prev.at || Date.parse(dates[i - 1] + 'T00:00:00Z');
     const perCh = {};
     const remCh = {};
+    const listCh = {};                            // channelId -> [[videoId, gain, isShort, isNew], ...]
     for (const [id, v] of cur.videos) {
       const before = prev.videos.get(id);
       let gain;
@@ -146,6 +153,7 @@ function main() {
       const idx = (isNew ? 0 : 2) + (v.isShort ? 0 : 1);
       const arr = perCh[v.channelId] || (perCh[v.channelId] = [0, 0, 0, 0, 0, 0]);
       arr[idx] += gain;
+      (listCh[v.channelId] || (listCh[v.channelId] = [])).push([id, Math.round(gain), v.isShort ? 1 : 0, isNew ? 1 : 0]);
       // Prev-month-final-week: an *additional* recency tally over the old bucket
       // (already counted above) — uploads from the last 7 days of the prev month.
       if (!isNew) {
@@ -161,6 +169,17 @@ function main() {
       if (arr.some(n => n)) rec[id] = arr.map(n => Math.round(n));
     }
     days[labelDate] = rec;
+    // The same day, video by video. rest is bucketed like the value arrays above
+    // ([newShort, newLong, oldShort, oldLong], each [count, gain]) so the page can
+    // apply the chart's format and prior-months toggles to the remainder too.
+    const dayList = {};
+    for (const [chId, list] of Object.entries(listCh)) {
+      list.sort((a, b) => b[1] - a[1]);
+      const rest = [[0, 0], [0, 0], [0, 0], [0, 0]];
+      for (const e of list.slice(TOP)) { const bi = (e[3] ? 0 : 2) + (e[2] ? 0 : 1); rest[bi][0]++; rest[bi][1] += e[1]; }
+      dayList[chId] = { top: list.slice(0, TOP), rest };
+    }
+    if (Object.keys(dayList).length) (perMonth[dayMonth] || (perMonth[dayMonth] = { days: {} })).days[labelDate] = dayList;
     const remRec = {};
     for (const [id, arr] of Object.entries(remCh)) { if (arr.some(n => n)) remRec[id] = arr.map(n => Math.round(n)); }
     if (Object.keys(remRec).length) removed[labelDate] = remRec;
@@ -178,6 +197,14 @@ function main() {
     removed,
   };
   fs.writeFileSync(OUT, JSON.stringify(out));
+  fs.mkdirSync(VID_DIR, { recursive: true });
+  for (const [ym, mf] of Object.entries(perMonth)) {
+    fs.writeFileSync(path.join(VID_DIR, ym + '.json'), JSON.stringify({
+      _note: 'The videos behind daily-views.json for ' + ym + ', per day and channel: top = the ' + TOP + ' videos that gained most views that day as [videoId, gain, isShort, publishedThisMonth]; rest = the remainder bucketed as [newShort, newLong, oldShort, oldLong], each [count, gain]. Same method and exclusions as daily-views.json, so a day here sums to its figures there.',
+      _generated: out._generated, _month: ym, top: TOP, days: mf.days,
+    }));
+  }
+  console.log('daily-videos/: ' + Object.keys(perMonth).length + ' month files written');
   // Summary
   let tot = 0; const dcount = Object.keys(days).length;
   for (const rec of Object.values(days)) for (const arr of Object.values(rec)) tot += arr[0] + arr[1] + arr[2] + arr[3];
