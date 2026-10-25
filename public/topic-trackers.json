@@ -1,22 +1,24 @@
 {
-  "lastUpdated": "2026-10-24T08:59:27.494Z",
+  "lastUpdated": "2026-10-25T09:16:24.136Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "coffee sign",
+      "termId": "ilhan",
       "keywords": [
+        "tourney ilhan",
+        "omar investigation",
         "ilhan",
         "omar",
         "ilhan omar",
-        "coffee sign"
+        "investigation"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.76,
-        "baselineSaturation": 0.2087,
-        "spikeRatio": 3.64,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-10-24T08:59:27.494Z"
+        "recentSaturation": 0.4,
+        "baselineSaturation": 0.0363,
+        "spikeRatio": 11.02,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-10-25T09:16:24.136Z"
       }
     },
     {
@@ -27,11 +29,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.7368,
-        "baselineSaturation": 0.1234,
-        "spikeRatio": 5.97,
+        "baselineSaturation": 0.1267,
+        "spikeRatio": 5.82,
         "recentVideoCount": 14,
         "baselineVideoCount": 9,
-        "detectedAt": "2026-10-24T08:59:27.494Z"
+        "detectedAt": "2026-10-25T09:16:24.136Z"
       }
     }
   ]

@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-24
+# Topic candidates — 2026-10-25
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,15 +6,17 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 25 recent videos, 126 baseline videos
+Pool: 25 recent videos, 123 baseline videos
 
 ### Cluster 1: `huck`
 
-- **Recent saturation:** 6/25 videos (**24%**)
-- **Baseline saturation:** 0/126 videos (0%)
-- **Spike ratio:** 61.0x
+- **Recent saturation:** 7/25 videos (**28%**)
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 69.4x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
+  - 2026-10-24 — _Ilhan Omar DELETED Tweet BACKFIRES As She RAGES Over Trump & Dems Panic_  
+    Ilhan Omar RAGES At Trump After He Demands She RESIGN!
   - 2026-10-23 — _Ilhan Omar ROCKED With New Scandal & FLEES Reporters!_  
     Tim Walz Funded THIS Group?! Insane Drug Kits EXPOSED
   - 2026-10-23 — _SNAP Scammers RAGE As Immigrants STEALING Food Stamps Busted_  
@@ -23,32 +25,30 @@ Pool: 25 recent videos, 126 baseline videos
     Buffalo Wild Wings MELTDOWN Goes Completely Nuclear!
   - 2026-10-23 — _Ethan Klein FIRED For VILE Behavior & Cheating On Wife Hila Klein With Employee_  
     H3 Podcast OVER! Ethan Klein’s Entire Crew QUITS
-  - 2026-10-23 — _SHE'S IN TROUBLE!_  
-    Trump Demands Ilhan Omar RESIGN After Identity Bombshell!
 
-### Cluster 2: `another`
+### Cluster 2: `ilhan`
 
-- **Recent saturation:** 6/25 videos (**24%**)
-- **Baseline saturation:** 3/126 videos (2%)
-- **Spike ratio:** 8.7x
-- **Related terms:** `another`, `investigation`, `omar investigation`, `tourney ilhan`
+- **Recent saturation:** 10/25 videos (**40%**)
+- **Baseline saturation:** 4/123 videos (3%)
+- **Spike ratio:** 11.0x
+- **Related terms:** `ilhan`, `omar`, `investigation`, `ilhan omar`, `tourney ilhan`, `omar investigation`
 - **Sample recent videos:**
+  - 2026-10-24 — _Ilhan Omar DELETED Tweet BACKFIRES As She RAGES Over Trump & Dems Panic_  
+    Ilhan Omar RAGES At Trump After He Demands She RESIGN!
   - 2026-10-23 — _SHE'S IN TROUBLE!_  
     Trump Demands Ilhan Omar RESIGN After Identity Bombshell!
+  - 2026-10-22 — _Ilham Omar FREAKING OUT As NEW Clues Point To Deportation!_  
+    Ilhan Omar Court Docs Reveal TWO Huge Clues!
   - 2026-10-22 — _SHE ADMITTED IT_  
     Ilhan Omar ADMITS Fraud Accidently In TRAINWRECK Interview 
   - 2026-10-21 — _Ilhan Omar FAKE NAME Revealed In HUGE New Filing & Fans Turn On Her_  
-    Join our Discord server https://discord.com/invite/MqQp6vdHc
-  - 2026-10-20 — _Ilhan Omar IN HIDING As New DNA PROVES GUILT & Donald Trump Erupts_  
-    Ilhan Omar Faces ANOTHER DNA Bombshell Claim!
-  - 2026-10-20 — _Ilhan Omar FREAKS OUT As Passport SEIZED & DNA Evidence BOMBSHELL_  
     Join our Discord server https://discord.com/invite/MqQp6vdHc
 
 ### Cluster 3: `campaign`
 
 - **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 0/126 videos (0%)
-- **Spike ratio:** 30.5x
+- **Baseline saturation:** 0/123 videos (0%)
+- **Spike ratio:** 29.8x
 - **Related terms:** `campaign`
 - **Sample recent videos:**
   - 2026-10-22 — _AOC BUSTED In MASSIVE Financial Probe & Her Supporters Are RAGING_  
@@ -61,8 +61,8 @@ Pool: 25 recent videos, 126 baseline videos
 ### Cluster 4: `finally`
 
 - **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 2/126 videos (2%)
-- **Spike ratio:** 8.1x
+- **Baseline saturation:** 2/123 videos (2%)
+- **Spike ratio:** 7.9x
 - **Related terms:** `finally`, `omar finally`
 - **Sample recent videos:**
   - 2026-10-22 — _SHE ADMITTED IT_  
@@ -77,8 +77,8 @@ Pool: 25 recent videos, 126 baseline videos
 ### Cluster 5: `fight`
 
 - **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 1/126 videos (1%)
-- **Spike ratio:** 13.5x
+- **Baseline saturation:** 1/123 videos (1%)
+- **Spike ratio:** 13.2x
 - **Related terms:** `fight`
 - **Sample recent videos:**
   - 2026-10-23 — _Bufallo Wild Wings BLACK FATIGUE Goes Nuclear! She Had Enough_  
@@ -90,33 +90,29 @@ Pool: 25 recent videos, 126 baseline videos
   - 2026-10-19 — _IT'S WAY WORSE THAN WE KNEW_  
     Ilhan Omar Is FINALLY COOKED! Obama Jumps Into Federal Fight
 
-### Cluster 6: `coffee sign`
+### Cluster 6: `protesters`
 
-- **Recent saturation:** 19/25 videos (**76%**)
-- **Baseline saturation:** 26/126 videos (21%)
-- **Spike ratio:** 3.6x
-- **Related terms:** `ilhan`, `omar`, `coffee sign`, `ilhan omar`
+- **Recent saturation:** 3/25 videos (**12%**)
+- **Baseline saturation:** 1/123 videos (1%)
+- **Spike ratio:** 9.9x
+- **Related terms:** `protesters`
 - **Sample recent videos:**
-  - 2026-10-23 — _SHE'S IN TROUBLE!_  
-    Trump Demands Ilhan Omar RESIGN After Identity Bombshell!
-  - 2026-10-22 — _Ilham Omar FREAKING OUT As NEW Clues Point To Deportation!_  
-    Ilhan Omar Court Docs Reveal TWO Huge Clues!
-  - 2026-10-22 — _9 THUGS Attack White Hero & Instantly Regret It_  
-    He Defended A Girl—Then NINE Students Attacked!
-  - 2026-10-22 — _AOC BUSTED In MASSIVE Financial Probe & Her Supporters Are RAGING_  
-    AOC’s Luxury Spending Gets EXPOSED!
-  - 2026-10-22 — _SHE'S IN TROUBLE!_  
-    Anti-Trump Senator Hit With MASSIVE Federal Charges!
+  - 2026-10-21 — _NEW ASSASSIN CAUGHT!_  
+    Trump Rally ERUPTS! Five Protesters THROWN OUT
+  - 2026-10-19 — _Trans LUNATICS Attack Harry Potter Event & Get Destroyed_  
+    Woke Harry Potter Protest BACKFIRES! Rowling’s Agent Strikes Back
+  - 2026-10-19 — _Cornell 7 Get MASSIVE WIN & Jane Doe Humiliated Again_  
+    Cornell Protesters Hold FAKE Trial—Then A REAL Judge Rules!
 
 ## @JeremyHambly
 
-Pool: 19 recent videos, 76 baseline videos
+Pool: 19 recent videos, 74 baseline videos
 
 ### Cluster 1: `huck`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 0/76 videos (0%)
-- **Spike ratio:** 24.3x
+- **Baseline saturation:** 0/74 videos (0%)
+- **Spike ratio:** 23.7x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
   - 2026-10-23 — _Asmongold DESTROYS Man Hating Call Her Daddy Podcast_  
@@ -129,8 +125,8 @@ Pool: 19 recent videos, 76 baseline videos
 ### Cluster 2: `coffee sign`
 
 - **Recent saturation:** 14/19 videos (**74%**)
-- **Baseline saturation:** 9/76 videos (12%)
-- **Spike ratio:** 6.0x
+- **Baseline saturation:** 9/74 videos (12%)
+- **Spike ratio:** 5.8x
 - **Related terms:** `coffee sign`
 - **Sample recent videos:**
   - 2026-10-22 — _XBOX To Charge PER MINUTE For Gaming_  
@@ -147,8 +143,8 @@ Pool: 19 recent videos, 76 baseline videos
 ### Cluster 3: `down`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 2/76 videos (3%)
-- **Spike ratio:** 4.9x
+- **Baseline saturation:** 2/74 videos (3%)
+- **Spike ratio:** 4.7x
 - **Related terms:** `down`
 - **Sample recent videos:**
   - 2026-10-21 — _Bioware SHUTS DOWN After Attacking Gamers! The Chuds Won!_  
