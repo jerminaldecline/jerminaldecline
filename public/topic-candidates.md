@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-25
+# Topic candidates — 2026-10-26
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 25 recent videos, 123 baseline videos
+Pool: 25 recent videos, 119 baseline videos
 
 ### Cluster 1: `huck`
 
 - **Recent saturation:** 7/25 videos (**28%**)
-- **Baseline saturation:** 0/123 videos (0%)
-- **Spike ratio:** 69.4x
+- **Baseline saturation:** 0/119 videos (0%)
+- **Spike ratio:** 67.2x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
   - 2026-10-24 — _Ilhan Omar DELETED Tweet BACKFIRES As She RAGES Over Trump & Dems Panic_  
@@ -29,8 +29,8 @@ Pool: 25 recent videos, 123 baseline videos
 ### Cluster 2: `ilhan`
 
 - **Recent saturation:** 10/25 videos (**40%**)
-- **Baseline saturation:** 4/123 videos (3%)
-- **Spike ratio:** 11.0x
+- **Baseline saturation:** 4/119 videos (3%)
+- **Spike ratio:** 10.7x
 - **Related terms:** `ilhan`, `omar`, `investigation`, `ilhan omar`, `tourney ilhan`, `omar investigation`
 - **Sample recent videos:**
   - 2026-10-24 — _Ilhan Omar DELETED Tweet BACKFIRES As She RAGES Over Trump & Dems Panic_  
@@ -47,8 +47,8 @@ Pool: 25 recent videos, 123 baseline videos
 ### Cluster 3: `campaign`
 
 - **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 0/123 videos (0%)
-- **Spike ratio:** 29.8x
+- **Baseline saturation:** 0/119 videos (0%)
+- **Spike ratio:** 28.8x
 - **Related terms:** `campaign`
 - **Sample recent videos:**
   - 2026-10-22 — _AOC BUSTED In MASSIVE Financial Probe & Her Supporters Are RAGING_  
@@ -61,8 +61,8 @@ Pool: 25 recent videos, 123 baseline videos
 ### Cluster 4: `finally`
 
 - **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 2/123 videos (2%)
-- **Spike ratio:** 7.9x
+- **Baseline saturation:** 2/119 videos (2%)
+- **Spike ratio:** 7.7x
 - **Related terms:** `finally`, `omar finally`
 - **Sample recent videos:**
   - 2026-10-22 — _SHE ADMITTED IT_  
@@ -77,8 +77,8 @@ Pool: 25 recent videos, 123 baseline videos
 ### Cluster 5: `fight`
 
 - **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 1/123 videos (1%)
-- **Spike ratio:** 13.2x
+- **Baseline saturation:** 1/119 videos (1%)
+- **Spike ratio:** 12.8x
 - **Related terms:** `fight`
 - **Sample recent videos:**
   - 2026-10-23 — _Bufallo Wild Wings BLACK FATIGUE Goes Nuclear! She Had Enough_  
@@ -93,8 +93,8 @@ Pool: 25 recent videos, 123 baseline videos
 ### Cluster 6: `protesters`
 
 - **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 1/123 videos (1%)
-- **Spike ratio:** 9.9x
+- **Baseline saturation:** 1/119 videos (1%)
+- **Spike ratio:** 9.6x
 - **Related terms:** `protesters`
 - **Sample recent videos:**
   - 2026-10-21 — _NEW ASSASSIN CAUGHT!_  
@@ -106,13 +106,13 @@ Pool: 25 recent videos, 123 baseline videos
 
 ## @JeremyHambly
 
-Pool: 19 recent videos, 74 baseline videos
+Pool: 19 recent videos, 73 baseline videos
 
 ### Cluster 1: `huck`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 0/74 videos (0%)
-- **Spike ratio:** 23.7x
+- **Baseline saturation:** 0/73 videos (0%)
+- **Spike ratio:** 23.4x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
   - 2026-10-23 — _Asmongold DESTROYS Man Hating Call Her Daddy Podcast_  
@@ -125,8 +125,8 @@ Pool: 19 recent videos, 74 baseline videos
 ### Cluster 2: `coffee sign`
 
 - **Recent saturation:** 14/19 videos (**74%**)
-- **Baseline saturation:** 9/74 videos (12%)
-- **Spike ratio:** 5.8x
+- **Baseline saturation:** 9/73 videos (12%)
+- **Spike ratio:** 5.7x
 - **Related terms:** `coffee sign`
 - **Sample recent videos:**
   - 2026-10-22 — _XBOX To Charge PER MINUTE For Gaming_  
@@ -143,7 +143,7 @@ Pool: 19 recent videos, 74 baseline videos
 ### Cluster 3: `down`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 2/74 videos (3%)
+- **Baseline saturation:** 2/73 videos (3%)
 - **Spike ratio:** 4.7x
 - **Related terms:** `down`
 - **Sample recent videos:**
