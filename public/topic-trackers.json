@@ -1,24 +1,25 @@
 {
-  "lastUpdated": "2026-10-26T10:22:04.538Z",
+  "lastUpdated": "2026-10-27T09:56:37.915Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "ilhan",
       "keywords": [
-        "tourney ilhan",
         "omar investigation",
+        "investigation",
+        "turn",
         "ilhan",
         "omar",
         "ilhan omar",
-        "investigation"
+        "another"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4,
-        "baselineSaturation": 0.0375,
-        "spikeRatio": 10.67,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-10-26T10:22:04.538Z"
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.0766,
+        "spikeRatio": 6.53,
+        "recentVideoCount": 12,
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-10-27T09:56:37.915Z"
       }
     },
     {
@@ -28,12 +29,12 @@
         "coffee sign"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7368,
-        "baselineSaturation": 0.1284,
-        "spikeRatio": 5.74,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-10-26T10:22:04.538Z"
+        "recentSaturation": 0.5789,
+        "baselineSaturation": 0.1623,
+        "spikeRatio": 3.57,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-10-27T09:56:37.915Z"
       }
     }
   ]
