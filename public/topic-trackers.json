@@ -1,40 +1,21 @@
 {
-  "lastUpdated": "2026-10-27T09:56:37.915Z",
+  "lastUpdated": "2026-10-28T10:43:22.370Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "ilhan",
       "keywords": [
-        "omar investigation",
-        "investigation",
-        "turn",
         "ilhan",
         "omar",
-        "ilhan omar",
-        "another"
+        "ilhan omar"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.5,
-        "baselineSaturation": 0.0766,
-        "spikeRatio": 6.53,
-        "recentVideoCount": 12,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-10-27T09:56:37.915Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "coffee sign",
-      "keywords": [
-        "coffee sign"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5789,
-        "baselineSaturation": 0.1623,
-        "spikeRatio": 3.57,
+        "recentSaturation": 0.4583,
+        "baselineSaturation": 0.0595,
+        "spikeRatio": 7.7,
         "recentVideoCount": 11,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-10-27T09:56:37.915Z"
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-10-28T10:43:22.370Z"
       }
     }
   ]
