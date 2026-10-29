@@ -11147,6 +11147,51 @@ function formatWindowTitle(startDate, endDate) {
   return `Videos from ${pretty(startDate)} to ${pretty(endDate)}`;
 }
 
+// ---- Download the dataset as CSV --------------------------------------------
+// Built in the browser from what the page already holds: data.json (every video
+// on every channel with its public stats), the LLM topic labels, the promoted
+// flag and the removal reason. Nothing is fetched or sent. Deliberately left out:
+// video descriptions, the AI summaries, YouTube keyword tags, title history and
+// anything that is not shown on the site. Free-text cells (titles, topic names)
+// that begin with = + - @ get a leading space so a spreadsheet cannot treat them
+// as formulas; ids, URLs, dates and numbers are written untouched.
+window.__buildCsv = function(){
+  const ds = (typeof ANALYTICS_DATASET !== 'undefined') ? ANALYTICS_DATASET : null;
+  if (!ds || !ds.videos) return null;
+  const chans = ds.channels || {};
+  const tags = ANALYTICS_TOPIC_TAGS || {}, themes = ANALYTICS_TOPIC_THEMES || {}, modes = ANALYTICS_TOPIC_MODES || {};
+  const nameOf = id => (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || id;
+  const rr = window.__removedReasons || {}, ads = window.__adIdSet || new Set();
+  const ctFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const clean = v => v == null ? '' : String(v).replace(/[\r\n\t]+/g, ' ').trim();
+  const quote = t => /[",]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  const raw = v => quote(clean(v));
+  const txt = v => { let t = clean(v); if (/^[=+\-@]/.test(t)) t = ' ' + t; return quote(t); };
+  const head = ['channel_handle','channel_title','video_id','url','title','published_utc','published_central_date','format','duration_seconds','views','likes','comments','status','promoted','subject','theme','mode'];
+  const lines = [head.join(',')];
+  const vids = ds.videos.slice().sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
+  for (const v of vids) {
+    const c = chans[v.channelId] || {};
+    let ct = ''; try { ct = ctFmt.format(new Date(v.publishedAt)); } catch (e) {}
+    const status = v.unavailable ? ('unavailable' + (rr[v.id] && rr[v.id].reason ? ':' + rr[v.id].reason : '')) : (v.unlisted ? 'unlisted' : 'public');
+    lines.push([
+      raw(String(c.handle || '').replace(/^@/, '')), txt(c.title || ''), raw(v.id), raw('https://www.youtube.com/watch?v=' + v.id), txt(v.title || ''),
+      raw(v.publishedAt || ''), raw(ct), raw(v.isShort ? 'short' : 'long-form'), raw(v.durationSec != null ? v.durationSec : ''),
+      raw(v.views != null ? v.views : ''), raw(v.likes != null ? v.likes : ''), raw(v.comments != null ? v.comments : ''),
+      raw(status), raw(ads.has(v.id) ? 'yes' : 'no'),
+      txt(tags[v.id] ? nameOf(tags[v.id]) : ''), txt(themes[v.id] ? nameOf(themes[v.id]) : ''), txt(modes[v.id] ? nameOf(modes[v.id]) : '')
+    ].join(','));
+  }
+  const asOf = String((ds.meta && ds.meta.lastUpdated) || new Date().toISOString()).slice(0, 10);
+  return { text: '\uFEFF' + lines.join('\r\n') + '\r\n', rows: lines.length - 1, name: 'jerminaldecline-videos-' + asOf + '.csv' };
+};
+window.__downloadCsv = function(){
+  const out = window.__buildCsv();
+  if (!out) { alert('The data has not finished loading yet. Try again in a moment.'); return; }
+  const blob = new Blob([out.text], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = out.name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+};
 function renderWindowList(startDate, endDate) {
   document.getElementById('windowTitle').textContent = formatWindowTitle(startDate, endDate);
   // Keep the Videos-tab section headers (word cloud, video tags, topics) showing
@@ -11317,6 +11362,7 @@ function renderWindowList(startDate, endDate) {
       ${renamedDataAvailable ? `<button type="button" class="promo-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
       ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
       <button type="button" class="promo-only-btn wl-compact${windowListState.density==='compact'?' active':''}" id="densityBtn" aria-pressed="${windowListState.density==='compact'}" title="Compact list — hide the AI summary and topic chips">≡ Compact list</button>
+      <button type="button" class="promo-only-btn wl-csv" id="csvBtn" title="Download the whole dataset as a CSV file: every video on every channel with its stats, status and topics, as of the last update. Built in your browser from the data this page already holds.">⇣ Download CSV</button>
       <label class="window-sort-wrap" for="windowSortSelect"><span class="window-sort-lbl">Sort</span>
         <select id="windowSortSelect" class="an-mobile-sel" aria-label="Sort videos">
           <option value="date|desc"${windowListState.sortBy==='date'&&windowListState.sortDir==='desc'?' selected':''}>Newest first</option>
@@ -11759,6 +11805,9 @@ function renderWindowList(startDate, endDate) {
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
+    // Download the dataset as CSV (whole archive, not the current filter).
+    const csvBtn = e.target.closest('#csvBtn');
+    if (csvBtn) { window.__downloadCsv(); return; }
     // Clear all tag/topic/filter state in one click.
     const clearBtn = e.target.closest('#clearFiltersBtn');
     if (clearBtn && document.getElementById('windowList')?.contains(clearBtn)) {
