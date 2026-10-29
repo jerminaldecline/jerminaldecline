@@ -11155,9 +11155,11 @@ function formatWindowTitle(startDate, endDate) {
 // on every channel with its public stats), the LLM topic labels, the promoted
 // flag and the removal reason. Nothing is fetched or sent. Deliberately left out:
 // video descriptions, the AI summaries, YouTube keyword tags, title history and
-// anything that is not shown on the site. Free-text cells (titles, topic names)
-// that begin with = + - @ get a leading space so a spreadsheet cannot treat them
-// as formulas; ids, URLs, dates and numbers are written untouched.
+// anything that is not shown on the site. Any cell that begins with = + - @
+// (some video ids start with a dash, as do a couple of titles) is written as the
+// spreadsheet text formula ="..." so Excel and Google Sheets show and copy the
+// exact value instead of evaluating it (a bare -abc becomes #NAME? in Excel).
+// The url column always carries the id untouched for anyone reading the file in code.
 window.__buildCsv = function(){
   const ds = (typeof ANALYTICS_DATASET !== 'undefined') ? ANALYTICS_DATASET : null;
   if (!ds || !ds.videos) return null;
@@ -11168,8 +11170,7 @@ window.__buildCsv = function(){
   const ctFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
   const clean = v => v == null ? '' : String(v).replace(/[\r\n\t]+/g, ' ').trim();
   const quote = t => /[",]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
-  const raw = v => quote(clean(v));
-  const txt = v => { let t = clean(v); if (/^[=+\-@]/.test(t)) t = ' ' + t; return quote(t); };
+  const cell = v => { const t = clean(v); return quote(/^[=+\-@]/.test(t) ? '="' + t.replace(/"/g, '""') + '"' : t); };
   const head = ['channel_handle','channel_title','video_id','url','title','published_utc','published_central_date','format','duration_seconds','views','likes','comments','status','promoted','subject','theme','mode'];
   const lines = [head.join(',')];
   const vids = ds.videos.slice().sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
@@ -11178,12 +11179,12 @@ window.__buildCsv = function(){
     let ct = ''; try { ct = ctFmt.format(new Date(v.publishedAt)); } catch (e) {}
     const status = v.unavailable ? ('unavailable' + (rr[v.id] && rr[v.id].reason ? ':' + rr[v.id].reason : '')) : (v.unlisted ? 'unlisted' : 'public');
     lines.push([
-      raw(String(c.handle || '').replace(/^@/, '')), txt(c.title || ''), raw(v.id), raw('https://www.youtube.com/watch?v=' + v.id), txt(v.title || ''),
-      raw(v.publishedAt || ''), raw(ct), raw(v.isShort ? 'short' : 'long-form'), raw(v.durationSec != null ? v.durationSec : ''),
-      raw(v.views != null ? v.views : ''), raw(v.likes != null ? v.likes : ''), raw(v.comments != null ? v.comments : ''),
-      raw(status), raw(ads.has(v.id) ? 'yes' : 'no'),
-      txt(tags[v.id] ? nameOf(tags[v.id]) : ''), txt(themes[v.id] ? nameOf(themes[v.id]) : ''), txt(modes[v.id] ? nameOf(modes[v.id]) : '')
-    ].join(','));
+      String(c.handle || '').replace(/^@/, ''), c.title || '', v.id, 'https://www.youtube.com/watch?v=' + v.id, v.title || '',
+      v.publishedAt || '', ct, v.isShort ? 'short' : 'long-form', v.durationSec != null ? v.durationSec : '',
+      v.views != null ? v.views : '', v.likes != null ? v.likes : '', v.comments != null ? v.comments : '',
+      status, ads.has(v.id) ? 'yes' : 'no',
+      tags[v.id] ? nameOf(tags[v.id]) : '', themes[v.id] ? nameOf(themes[v.id]) : '', modes[v.id] ? nameOf(modes[v.id]) : ''
+    ].map(cell).join(','));
   }
   const asOf = String((ds.meta && ds.meta.lastUpdated) || new Date().toISOString()).slice(0, 10);
   return { text: '\uFEFF' + lines.join('\r\n') + '\r\n', rows: lines.length - 1, name: 'jerminaldecline-videos-' + asOf + '.csv' };
