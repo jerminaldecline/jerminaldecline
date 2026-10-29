@@ -87,6 +87,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .sister-link:hover{color:var(--text);background:var(--surface)}
 .sister-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .sister-link .ext{font-size:0.68em;opacity:0.65}
+.sister-btn{appearance:none;background:transparent;border:none;font-family:inherit;cursor:pointer}
+@media(max-width:1100px){.sister-btn .lbl-long{display:none}}
 /* Phones: the brand and the cluster share one row as before; the other-resources group takes a row of its own under them. */
 @media(max-width:680px){.sticky-head .util-bar{flex-wrap:wrap}.sticky-head .sister{order:3;flex:1 1 100%;margin-left:0;justify-content:center}.sister-label{display:none}.sister-link{padding:0.28rem 0.7rem}}
 .util-social{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:background .12s,color .12s,border-color .12s}
@@ -2781,6 +2783,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <span class="sister-label">Other resources</span>
       <a class="sister-link" href="https://jerline.net/" target="_blank" rel="noopener" title="JerLine: a calendar timeline of social media activity">JerLine<span class="ext" aria-hidden="true">↗</span></a>
       <a class="sister-link" href="https://jeralyzer.pages.dev/" target="_blank" rel="noopener" title="Jeralyzer: browse and search video transcripts">Jeralyzer<span class="ext" aria-hidden="true">↗</span></a>
+      <button type="button" class="sister-link sister-btn" onclick="window.__downloadCsv()" title="Download the whole dataset as a CSV file: every video on every channel with its stats, status and topics, as of the last update. Built in your browser from the data this page already holds."><span class="lbl-long">Download </span>CSV<span class="ext" aria-hidden="true">⇣</span></button>
     </nav>
     <div class="util-cluster">
       <a class="util-social kofi" href="https://ko-fi.com/jerminaldecline" target="_blank" rel="noopener" title="Support on Ko-fi" aria-label="Support on Ko-fi">
@@ -11147,6 +11150,51 @@ function formatWindowTitle(startDate, endDate) {
   return `Videos from ${pretty(startDate)} to ${pretty(endDate)}`;
 }
 
+// ---- Download the dataset as CSV --------------------------------------------
+// Built in the browser from what the page already holds: data.json (every video
+// on every channel with its public stats), the LLM topic labels, the promoted
+// flag and the removal reason. Nothing is fetched or sent. Deliberately left out:
+// video descriptions, the AI summaries, YouTube keyword tags, title history and
+// anything that is not shown on the site. Free-text cells (titles, topic names)
+// that begin with = + - @ get a leading space so a spreadsheet cannot treat them
+// as formulas; ids, URLs, dates and numbers are written untouched.
+window.__buildCsv = function(){
+  const ds = (typeof ANALYTICS_DATASET !== 'undefined') ? ANALYTICS_DATASET : null;
+  if (!ds || !ds.videos) return null;
+  const chans = ds.channels || {};
+  const tags = ANALYTICS_TOPIC_TAGS || {}, themes = ANALYTICS_TOPIC_THEMES || {}, modes = ANALYTICS_TOPIC_MODES || {};
+  const nameOf = id => (ANALYTICS_TOPICS && ANALYTICS_TOPICS[id] && ANALYTICS_TOPICS[id].name) || id;
+  const rr = window.__removedReasons || {}, ads = window.__adIdSet || new Set();
+  const ctFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const clean = v => v == null ? '' : String(v).replace(/[\r\n\t]+/g, ' ').trim();
+  const quote = t => /[",]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  const raw = v => quote(clean(v));
+  const txt = v => { let t = clean(v); if (/^[=+\-@]/.test(t)) t = ' ' + t; return quote(t); };
+  const head = ['channel_handle','channel_title','video_id','url','title','published_utc','published_central_date','format','duration_seconds','views','likes','comments','status','promoted','subject','theme','mode'];
+  const lines = [head.join(',')];
+  const vids = ds.videos.slice().sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
+  for (const v of vids) {
+    const c = chans[v.channelId] || {};
+    let ct = ''; try { ct = ctFmt.format(new Date(v.publishedAt)); } catch (e) {}
+    const status = v.unavailable ? ('unavailable' + (rr[v.id] && rr[v.id].reason ? ':' + rr[v.id].reason : '')) : (v.unlisted ? 'unlisted' : 'public');
+    lines.push([
+      raw(String(c.handle || '').replace(/^@/, '')), txt(c.title || ''), raw(v.id), raw('https://www.youtube.com/watch?v=' + v.id), txt(v.title || ''),
+      raw(v.publishedAt || ''), raw(ct), raw(v.isShort ? 'short' : 'long-form'), raw(v.durationSec != null ? v.durationSec : ''),
+      raw(v.views != null ? v.views : ''), raw(v.likes != null ? v.likes : ''), raw(v.comments != null ? v.comments : ''),
+      raw(status), raw(ads.has(v.id) ? 'yes' : 'no'),
+      txt(tags[v.id] ? nameOf(tags[v.id]) : ''), txt(themes[v.id] ? nameOf(themes[v.id]) : ''), txt(modes[v.id] ? nameOf(modes[v.id]) : '')
+    ].join(','));
+  }
+  const asOf = String((ds.meta && ds.meta.lastUpdated) || new Date().toISOString()).slice(0, 10);
+  return { text: '\uFEFF' + lines.join('\r\n') + '\r\n', rows: lines.length - 1, name: 'jerminaldecline-videos-' + asOf + '.csv' };
+};
+window.__downloadCsv = function(){
+  const out = window.__buildCsv();
+  if (!out) { alert('The data has not finished loading yet. Try again in a moment.'); return; }
+  const blob = new Blob([out.text], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = out.name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+};
 function renderWindowList(startDate, endDate) {
   document.getElementById('windowTitle').textContent = formatWindowTitle(startDate, endDate);
   // Keep the Videos-tab section headers (word cloud, video tags, topics) showing
