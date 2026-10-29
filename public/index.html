@@ -11365,7 +11365,6 @@ function renderWindowList(startDate, endDate) {
       ${renamedDataAvailable ? `<button type="button" class="promo-only-btn${windowListState.renamedOnly?' active':''}" id="renamedOnlyBtn" aria-pressed="${windowListState.renamedOnly}">✎ Renamed</button>` : ''}
       ${(windowListState.topicFilter || windowListState.creatorTagFilter || windowListState.creatorBlockFilter || windowListState.adOnly || windowListState.renamedOnly || windowListState.query) ? `<button type="button" class="clear-filters-btn" id="clearFiltersBtn">Clear filters ✕</button>` : ''}
       <button type="button" class="promo-only-btn wl-compact${windowListState.density==='compact'?' active':''}" id="densityBtn" aria-pressed="${windowListState.density==='compact'}" title="Compact list — hide the AI summary and topic chips">≡ Compact list</button>
-      <button type="button" class="promo-only-btn wl-csv" id="csvBtn" title="Download the whole dataset as a CSV file: every video on every channel with its stats, status and topics, as of the last update. Built in your browser from the data this page already holds.">⇣ Download CSV</button>
       <label class="window-sort-wrap" for="windowSortSelect"><span class="window-sort-lbl">Sort</span>
         <select id="windowSortSelect" class="an-mobile-sel" aria-label="Sort videos">
           <option value="date|desc"${windowListState.sortBy==='date'&&windowListState.sortDir==='desc'?' selected':''}>Newest first</option>
@@ -11808,9 +11807,6 @@ function renderWindowList(startDate, endDate) {
       const sd=document.getElementById('startDate').value, ed=document.getElementById('endDate').value;
       if (sd && ed) renderWindowList(sd, ed); return;
     }
-    // Download the dataset as CSV (whole archive, not the current filter).
-    const csvBtn = e.target.closest('#csvBtn');
-    if (csvBtn) { window.__downloadCsv(); return; }
     // Clear all tag/topic/filter state in one click.
     const clearBtn = e.target.closest('#clearFiltersBtn');
     if (clearBtn && document.getElementById('windowList')?.contains(clearBtn)) {
