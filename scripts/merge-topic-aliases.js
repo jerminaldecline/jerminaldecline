@@ -116,6 +116,16 @@ function run() {
 
   let moved = 0; const touched = new Set();
   for (const [vid, id] of Object.entries(tags)) { const to = canon[id]; if (to && to !== id) { if (!DRY) tags[vid] = to; moved++; touched.add(id); } }
+  // A variant that was folded into another id must not stay promoted: the tagger
+  // promotes a new subject (and writes its definition) before this step runs, so
+  // without this a listed alias such as cornell-university would survive as an
+  // empty promoted pill beside the subject it was merged into.
+  let demoted = 0;
+  for (const id of Object.keys(canon)) {
+    if (canon[id] === id || !promoted.has(id)) continue;
+    promoted.delete(id); demoted++;
+    for (const k of ['_promotedSubjects', '_promoted']) if (Array.isArray(llm[k])) llm[k] = llm[k].filter(x => x !== id);
+  }
   let removed = 0;
   for (const id of Object.keys(canon)) {
     if (!topics[id] || promoted.has(id) || referenced.has(id)) continue;
@@ -123,7 +133,7 @@ function run() {
     if (stillTagged) continue;
     if (!DRY) delete topics[id]; removed++;
   }
-  console.log(`  ${moved} video${moved === 1 ? '' : 's'} re-filed, ${removed} orphaned definition${removed === 1 ? '' : 's'} removed`);
+  console.log(`  ${moved} video${moved === 1 ? '' : 's'} re-filed, ${demoted} folded id${demoted === 1 ? '' : 's'} un-promoted, ${removed} orphaned definition${removed === 1 ? '' : 's'} removed`);
 
   if (DRY) {
     // Candidates for the alias file: names sharing first and last word but differing in the middle.
@@ -133,7 +143,7 @@ function run() {
     if (cands.length) { console.log(`  ${cands.length} first+last-word collisions to eyeball for the alias file (ids in brackets):`); for (const s of cands) console.log('    ' + [...s].map(id => `${show(id)} [${id}]`).join('  |  ')); }
     return;
   }
-  if (moved || removed) {
+  if (moved || removed || demoted) {
     fs.writeFileSync(TAGS, JSON.stringify(llm));
     fs.writeFileSync(TOPICS, JSON.stringify(topics));
   }
