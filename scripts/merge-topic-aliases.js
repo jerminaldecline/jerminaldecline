@@ -122,9 +122,11 @@ function run() {
   // empty promoted pill beside the subject it was merged into.
   let demoted = 0;
   for (const id of Object.keys(canon)) {
-    if (canon[id] === id || !promoted.has(id)) continue;
+    if (canon[id] === id) continue;
+    const inList = promoted.has(id) || ['_promotedSubjects', '_promoted'].some(k => Array.isArray(llm[k]) && llm[k].some(x => (x && typeof x === 'object' ? x.id : x) === id));
+    if (!inList) continue;
     promoted.delete(id); demoted++;
-    for (const k of ['_promotedSubjects', '_promoted']) if (Array.isArray(llm[k])) llm[k] = llm[k].filter(x => x !== id);
+    for (const k of ['_promotedSubjects', '_promoted']) if (Array.isArray(llm[k])) llm[k] = llm[k].filter(x => (x && typeof x === 'object' ? x.id : x) !== id);
   }
   let removed = 0;
   for (const id of Object.keys(canon)) {
