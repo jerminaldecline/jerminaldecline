@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-29
+# Topic candidates — 2026-10-30
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,27 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 25 recent videos, 128 baseline videos
+Pool: 22 recent videos, 133 baseline videos
 
-### Cluster 1: `huck`
+### Cluster 1: `followed`
 
-- **Recent saturation:** 7/25 videos (**28%**)
-- **Baseline saturation:** 0/128 videos (0%)
-- **Spike ratio:** 72.2x
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 0/133 videos (0%)
+- **Spike ratio:** 36.5x
+- **Related terms:** `followed`
+- **Sample recent videos:**
+  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
+    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
+  - 2026-10-27 — _THIS IS UNBELIEVABLE!_  
+    HERO DAD SPEAKS! Brutal New Details From Oregon School Massacre
+  - 2026-10-26 — _Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY_  
+    Woman ARRESTED After Horrifying Rabbi NEEDLE ATTACK!
+
+### Cluster 2: `huck`
+
+- **Recent saturation:** 6/22 videos (**27%**)
+- **Baseline saturation:** 1/133 videos (1%)
+- **Spike ratio:** 24.4x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
   - 2026-10-24 — _Ilhan Omar DELETED Tweet BACKFIRES As She RAGES Over Trump & Dems Panic_  
@@ -26,41 +40,15 @@ Pool: 25 recent videos, 128 baseline videos
   - 2026-10-23 — _Ethan Klein FIRED For VILE Behavior & Cheating On Wife Hila Klein With Employee_  
     H3 Podcast OVER! Ethan Klein’s Entire Crew QUITS
 
-### Cluster 2: `followed`
+### Cluster 3: `him`
 
-- **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 0/128 videos (0%)
-- **Spike ratio:** 31.0x
-- **Related terms:** `followed`
-- **Sample recent videos:**
-  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
-    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
-  - 2026-10-27 — _THIS IS UNBELIEVABLE!_  
-    HERO DAD SPEAKS! Brutal New Details From Oregon School Massacre
-  - 2026-10-26 — _Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY_  
-    Woman ARRESTED After Horrifying Rabbi NEEDLE ATTACK!
-
-### Cluster 3: `roughly`
-
-- **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 1/128 videos (1%)
-- **Spike ratio:** 10.3x
-- **Related terms:** `roughly`
-- **Sample recent videos:**
-  - 2026-10-28 — _Ilhan Omar Faces MORE RAIDS As Democrats Abandon Her!_  
-    Ilhan Omar Disaster Gets WORSE! Party Support Starts To Crack
-  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
-    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
-  - 2026-10-28 — _Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC_  
-    Ilhan Omar Investigation EXPLODES! New Memo Claim Changes Everything
-
-### Cluster 4: `him`
-
-- **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 2/128 videos (2%)
-- **Spike ratio:** 8.3x
+- **Recent saturation:** 5/22 videos (**23%**)
+- **Baseline saturation:** 2/133 videos (2%)
+- **Spike ratio:** 12.2x
 - **Related terms:** `him`
 - **Sample recent videos:**
+  - 2026-10-29 — _Harassed Pizza Man STRIKES BACK In Epic Way! Red Baron Worker Update_  
+    They Found The Pizza Guy! Internet Changes His Life Overnight
   - 2026-10-29 — _THEY MADE IT WORSE!_  
     Absurd Cornell 7 Leak! University’s “Punishment” Is A Complete Joke
   - 2026-10-28 — _Walmart Pizza Man GOES NUCLEAR With Fatigue!_  
@@ -70,59 +58,61 @@ Pool: 25 recent videos, 128 baseline videos
   - 2026-10-26 — _Ilhan Omar Just SAVAGED By Donald Trump As Nikki Minaj Causes Leftist MELTDOWN_  
     Trump UNLOADS On Ilhan Omar As Nicki Minaj Joins Him!
 
-### Cluster 5: `brutal`
+### Cluster 4: `york`
 
-- **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 2/128 videos (2%)
-- **Spike ratio:** 6.2x
-- **Related terms:** `brutal`
+- **Recent saturation:** 4/22 videos (**18%**)
+- **Baseline saturation:** 3/133 videos (2%)
+- **Spike ratio:** 7.0x
+- **Related terms:** `york`, `worse`
 - **Sample recent videos:**
-  - 2026-10-28 — _Walmart Pizza Man GOES NUCLEAR With Fatigue!_  
-    Walmart Pizza Man GOES NUCLEAR With Fatigue! This Is BRUTAL
-  - 2026-10-27 — _Ilhan Omar DELETES EVIDENCE In PANIC As New BRUTAL Information Drops_  
-    Ilhan Omar BUSTED Again! Brutal New Evidence Raises HUGE Questions
-  - 2026-10-27 — _THIS IS UNBELIEVABLE!_  
-    HERO DAD SPEAKS! Brutal New Details From Oregon School Massacre
-
-### Cluster 6: `investigation`
-
-- **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 3/128 videos (2%)
-- **Spike ratio:** 5.9x
-- **Related terms:** `investigation`, `omar investigation`
-- **Sample recent videos:**
-  - 2026-10-28 — _Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC_  
-    Ilhan Omar Investigation EXPLODES! New Memo Claim Changes Everything
+  - 2026-10-29 — _Ilhan Omar BLASTED By Her HUSBAND & An INSANE Arrest_  
+    Ilhan Omar Disaster Gets WORSE! Ex-Husband Bombshell Erupts
+  - 2026-10-28 — _Ilhan Omar Faces MORE RAIDS As Democrats Abandon Her!_  
+    Ilhan Omar Disaster Gets WORSE! Party Support Starts To Crack
   - 2026-10-26 — _Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!_  
     Massive Cornell 7 Panic! Letitia James DODGES Questions
-  - 2026-10-26 — _Ilhan Omar TREASON CHARGES Added To Her NIGHTMARE As Somalia Turns On Her_  
-    Foreign Official RUSHES To Defend Ilhan Omar As Case EXPLODES
+  - 2026-10-26 — _Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY_  
+    Woman ARRESTED After Horrifying Rabbi NEEDLE ATTACK!
+
+### Cluster 5: `roughly`
+
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 1/133 videos (1%)
+- **Spike ratio:** 12.2x
+- **Related terms:** `roughly`
+- **Sample recent videos:**
+  - 2026-10-28 — _Ilhan Omar Faces MORE RAIDS As Democrats Abandon Her!_  
+    Ilhan Omar Disaster Gets WORSE! Party Support Starts To Crack
+  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
+    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
+  - 2026-10-28 — _Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC_  
+    Ilhan Omar Investigation EXPLODES! New Memo Claim Changes Everything
+
+### Cluster 6: `husband`
+
+- **Recent saturation:** 4/22 videos (**18%**)
+- **Baseline saturation:** 5/133 videos (4%)
+- **Spike ratio:** 4.4x
+- **Related terms:** `husband`, `bombshell`
+- **Sample recent videos:**
+  - 2026-10-29 — _Ilhan Omar BLASTED By Her HUSBAND & An INSANE Arrest_  
+    Ilhan Omar Disaster Gets WORSE! Ex-Husband Bombshell Erupts
+  - 2026-10-26 — _Ilhan Omar BUSTED Getting MILLIONS From Foreign Investors! It's Over!_  
+    Ilhan Omar BOMBSHELL! Mysterious $11.25 MILLION Money Trail EXPOSED
+  - 2026-10-23 — _Ethan Klein FIRED For VILE Behavior & Cheating On Wife Hila Klein With Employee_  
+    H3 Podcast OVER! Ethan Klein’s Entire Crew QUITS
   - 2026-10-23 — _SHE'S IN TROUBLE!_  
     Trump Demands Ilhan Omar RESIGN After Identity Bombshell!
 
 ## @JeremyHambly
 
-Pool: 16 recent videos, 82 baseline videos
+Pool: 12 recent videos, 86 baseline videos
 
-### Cluster 1: `calling`
+### Cluster 1: `nuclear`
 
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 0/82 videos (0%)
-- **Spike ratio:** 31.1x
-- **Related terms:** `calling`
-- **Sample recent videos:**
-  - 2026-10-28 — _Kamala Harris FREAKS OUT As Donors BEG Her Not To Run!_  
-    Kamala Harris HUMILIATED! Gavin Newsom Leaves Her In The Dust
-  - 2026-10-26 — _Elon Musk Companies To be SEIZED According To Democrats_  
-    Everyone Is Coming For Elon Musk!
-  - 2026-10-22 — _SHE WENT TOO FAR_  
-    Megyn Kelly Just Went WAY Too Far!
-
-### Cluster 2: `nuclear`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 0/82 videos (0%)
-- **Spike ratio:** 31.1x
+- **Recent saturation:** 3/12 videos (**25%**)
+- **Baseline saturation:** 0/86 videos (0%)
+- **Spike ratio:** 43.5x
 - **Related terms:** `nuclear`
 - **Sample recent videos:**
   - 2026-10-27 — _Asmongold SAVAGES Entitled Female Streamer_  
@@ -132,11 +122,11 @@ Pool: 16 recent videos, 82 baseline videos
   - 2026-10-26 — _Donald Trump DESTROYS Bill Maher After Slimeball Two Faced Move_  
     Trump ENDS Bill Maher Bromance In BRUTAL Takedown!
 
-### Cluster 3: `huck`
+### Cluster 2: `huck`
 
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 0/82 videos (0%)
-- **Spike ratio:** 31.1x
+- **Recent saturation:** 3/12 videos (**25%**)
+- **Baseline saturation:** 0/86 videos (0%)
+- **Spike ratio:** 43.5x
 - **Related terms:** `huck`, `blend`, `coffee huck`, `huck blend`, `blend sign`
 - **Sample recent videos:**
   - 2026-10-23 — _Asmongold DESTROYS Man Hating Call Her Daddy Podcast_  
@@ -145,20 +135,6 @@ Pool: 16 recent videos, 82 baseline videos
     H3 Podcast OVER! Ethan Klein’s Entire Crew QUITS
   - 2026-10-23 — _Russell Brand Trial SHOCKER He's In HUGE Trouble_  
     Russell Brand Trial Takes DARK TURN! Jury Hears 24 Witnesses
-
-### Cluster 4: `asmongold`
-
-- **Recent saturation:** 3/16 videos (**19%**)
-- **Baseline saturation:** 3/82 videos (4%)
-- **Spike ratio:** 4.4x
-- **Related terms:** `asmongold`
-- **Sample recent videos:**
-  - 2026-10-27 — _Asmongold SAVAGES Entitled Female Streamer_  
-    Asmongold TORCHES QTCinderella! DMCA Backlash Goes Nuclear
-  - 2026-10-23 — _Asmongold DESTROYS Man Hating Call Her Daddy Podcast_  
-    Asmongold DESTROYS Man-Hating Hollywood Star!
-  - 2026-10-22 — _Asmongold REVEALS Massive CHEATING Scandal!_  
-    Asmongold ACCUSES Streamer Awards Of CHEATING!
 
 ---
 
