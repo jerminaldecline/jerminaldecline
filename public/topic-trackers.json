@@ -1,4 +1,38 @@
 {
-  "lastUpdated": "2026-10-30T10:57:33.637Z",
-  "trackers": []
+  "lastUpdated": "2026-10-31T10:30:09.688Z",
+  "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "clip",
+      "keywords": [
+        "clip",
+        "posted",
+        "him"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0172,
+        "spikeRatio": 19.33,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-10-31T10:30:09.688Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "calling",
+      "keywords": [
+        "calling",
+        "reportedly"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0402,
+        "spikeRatio": 8.29,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-10-31T10:30:09.688Z"
+      }
+    }
+  ]
 }
