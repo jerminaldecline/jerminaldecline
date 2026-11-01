@@ -1,4 +1,4 @@
-# Topic candidates — 2026-10-31
+# Topic candidates — 2026-11-01
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,29 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 12 recent videos, 86 baseline videos
+Pool: 14 recent videos, 83 baseline videos
 
-### Cluster 1: `clip`
+### Cluster 1: `donald`
 
-- **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 1/86 videos (1%)
-- **Spike ratio:** 19.3x
+- **Recent saturation:** 4/14 videos (**29%**)
+- **Baseline saturation:** 2/83 videos (2%)
+- **Spike ratio:** 9.6x
+- **Related terms:** `donald`, `trump`, `donald trump`
+- **Sample recent videos:**
+  - 2026-10-31 — _Halloween PSYCHOS Instant REGRET Over ABSURD Display_  
+    This Halloween Display Is Absolutely DERANGED! It Was Taken Down
+  - 2026-10-30 — _Donald Trump BAILS On Midterms Liberals Claim Victory After Massive Arrest!_  
+    Trump BAILS On Midterms?! Canceled Rallies Suddenly BACK ON
+  - 2026-10-26 — _Ilhan Omar DESTROYED Over Hasan Piker & Donald Trump ROASTS Both Of Them!_  
+    Trump DESTROYS Hasan Piker! Ilhan Omar Event Sparks Democrat Revolt
+  - 2026-10-26 — _Donald Trump DESTROYS Bill Maher After Slimeball Two Faced Move_  
+    Trump ENDS Bill Maher Bromance In BRUTAL Takedown!
+
+### Cluster 2: `clip`
+
+- **Recent saturation:** 4/14 videos (**29%**)
+- **Baseline saturation:** 1/83 videos (1%)
+- **Spike ratio:** 16.0x
 - **Related terms:** `clip`, `posted`, `him`
 - **Sample recent videos:**
   - 2026-10-30 — _Hasan Piker DESTROYED IN Pathetic Act Of Cowardness!_  
@@ -24,25 +40,11 @@ Pool: 12 recent videos, 86 baseline videos
   - 2026-10-26 — _Elon Musk Companies To be SEIZED According To Democrats_  
     Everyone Is Coming For Elon Musk!
 
-### Cluster 2: `donald`
-
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 2/86 videos (2%)
-- **Spike ratio:** 8.7x
-- **Related terms:** `donald`, `trump`, `donald trump`
-- **Sample recent videos:**
-  - 2026-10-30 — _Donald Trump BAILS On Midterms Liberals Claim Victory After Massive Arrest!_  
-    Trump BAILS On Midterms?! Canceled Rallies Suddenly BACK ON
-  - 2026-10-26 — _Ilhan Omar DESTROYED Over Hasan Piker & Donald Trump ROASTS Both Of Them!_  
-    Trump DESTROYS Hasan Piker! Ilhan Omar Event Sparks Democrat Revolt
-  - 2026-10-26 — _Donald Trump DESTROYS Bill Maher After Slimeball Two Faced Move_  
-    Trump ENDS Bill Maher Bromance In BRUTAL Takedown!
-
 ### Cluster 3: `nuclear`
 
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 0/86 videos (0%)
-- **Spike ratio:** 43.5x
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 0/83 videos (0%)
+- **Spike ratio:** 36.0x
 - **Related terms:** `nuclear`
 - **Sample recent videos:**
   - 2026-10-27 — _Asmongold SAVAGES Entitled Female Streamer_  
@@ -54,9 +56,9 @@ Pool: 12 recent videos, 86 baseline videos
 
 ### Cluster 4: `calling`
 
-- **Recent saturation:** 4/12 videos (**33%**)
-- **Baseline saturation:** 3/86 videos (3%)
-- **Spike ratio:** 8.3x
+- **Recent saturation:** 4/14 videos (**29%**)
+- **Baseline saturation:** 3/83 videos (4%)
+- **Spike ratio:** 6.9x
 - **Related terms:** `calling`, `reportedly`
 - **Sample recent videos:**
   - 2026-10-30 — _Pat McAfee BLASTED Over Charlie Kirk Comments!_  
@@ -68,16 +70,66 @@ Pool: 12 recent videos, 86 baseline videos
   - 2026-10-26 — _Elon Musk Companies To be SEIZED According To Democrats_  
     Everyone Is Coming For Elon Musk!
 
+### Cluster 5: `political`
+
+- **Recent saturation:** 3/14 videos (**21%**)
+- **Baseline saturation:** 2/83 videos (2%)
+- **Spike ratio:** 7.2x
+- **Related terms:** `political`
+- **Sample recent videos:**
+  - 2026-10-31 — _Halloween PSYCHOS Instant REGRET Over ABSURD Display_  
+    This Halloween Display Is Absolutely DERANGED! It Was Taken Down
+  - 2026-10-30 — _Hasan Piker DESTROYED IN Pathetic Act Of Cowardness!_  
+    Hasan Piker FLEES Midstream! Viral Sacramento Clip Explodes
+  - 2026-10-28 — _Kamala Harris FREAKS OUT As Donors BEG Her Not To Run!_  
+    Kamala Harris HUMILIATED! Gavin Newsom Leaves Her In The Dust
+
 ## @TheQuartering
 
-Pool: 20 recent videos, 133 baseline videos
+Pool: 21 recent videos, 130 baseline videos
 
-### Cluster 1: `red`
+### Cluster 1: `questions`
 
-- **Recent saturation:** 5/20 videos (**25%**)
-- **Baseline saturation:** 8/133 videos (6%)
-- **Spike ratio:** 3.9x
-- **Related terms:** `red`, `baron`, `viral`, `finally`, `red baron`
+- **Recent saturation:** 5/21 videos (**24%**)
+- **Baseline saturation:** 1/130 videos (1%)
+- **Spike ratio:** 20.8x
+- **Related terms:** `questions`, `raises`
+- **Sample recent videos:**
+  - 2026-10-31 — _Ilhan Omar Brother ADMITS IT As DHS Confirms Multiple New Targets_  
+    New Ilhan Omar Marriage Document Raises MORE Questions!
+  - 2026-10-30 — _Scumbag FOUND As Red Baron Backlash Goes More NUCLEAR_  
+    Prankster IDENTIFIED After Red Baron Worker Raises Over $500K!
+  - 2026-10-30 — _Ilhan Omar NEW RAID Feds BREAK DOWN Doors & Vote To Expel Her Looms_  
+    Ilhan Omar Faces NEW FRAUD QUESTIONS! Minnesota Raids Explode
+  - 2026-10-27 — _Ilhan Omar DELETES EVIDENCE In PANIC As New BRUTAL Information Drops_  
+    Ilhan Omar BUSTED Again! Brutal New Evidence Raises HUGE Questions
+  - 2026-10-26 — _Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!_  
+    Massive Cornell 7 Panic! Letitia James DODGES Questions
+
+### Cluster 2: `described`
+
+- **Recent saturation:** 5/21 videos (**24%**)
+- **Baseline saturation:** 5/130 videos (4%)
+- **Spike ratio:** 5.7x
+- **Related terms:** `described`, `former`, `husband`
+- **Sample recent videos:**
+  - 2026-10-31 — _Ilhan Omar Brother ADMITS IT As DHS Confirms Multiple New Targets_  
+    New Ilhan Omar Marriage Document Raises MORE Questions!
+  - 2026-10-29 — _Ilhan Omar BLASTED By Her HUSBAND & An INSANE Arrest_  
+    Ilhan Omar Disaster Gets WORSE! Ex-Husband Bombshell Erupts
+  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
+    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
+  - 2026-10-26 — _Ilhan Omar BUSTED Getting MILLIONS From Foreign Investors! It's Over!_  
+    Ilhan Omar BOMBSHELL! Mysterious $11.25 MILLION Money Trail EXPOSED
+  - 2026-10-26 — _Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!_  
+    Massive Cornell 7 Panic! Letitia James DODGES Questions
+
+### Cluster 3: `red`
+
+- **Recent saturation:** 4/21 videos (**19%**)
+- **Baseline saturation:** 2/130 videos (2%)
+- **Spike ratio:** 10.0x
+- **Related terms:** `red`, `baron`, `viral`, `red baron`
 - **Sample recent videos:**
   - 2026-10-30 — _Scumbag FOUND As Red Baron Backlash Goes More NUCLEAR_  
     Prankster IDENTIFIED After Red Baron Worker Raises Over $500K!
@@ -87,14 +139,12 @@ Pool: 20 recent videos, 133 baseline videos
     They Found The Pizza Guy! Internet Changes His Life Overnight
   - 2026-10-28 — _Walmart Pizza Man GOES NUCLEAR With Fatigue!_  
     Walmart Pizza Man GOES NUCLEAR With Fatigue! This Is BRUTAL
-  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
-    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
 
-### Cluster 2: `followed`
+### Cluster 4: `followed`
 
-- **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 0/133 videos (0%)
-- **Spike ratio:** 40.2x
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 0/130 videos (0%)
+- **Spike ratio:** 37.4x
 - **Related terms:** `followed`
 - **Sample recent videos:**
   - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
@@ -104,71 +154,41 @@ Pool: 20 recent videos, 133 baseline videos
   - 2026-10-26 — _Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY_  
     Woman ARRESTED After Horrifying Rabbi NEEDLE ATTACK!
 
-### Cluster 3: `james`
+### Cluster 5: `james`
 
-- **Recent saturation:** 5/20 videos (**25%**)
-- **Baseline saturation:** 12/133 videos (9%)
-- **Spike ratio:** 2.7x
-- **Related terms:** `james`, `questions`, `investigation`, `case`
+- **Recent saturation:** 5/21 videos (**24%**)
+- **Baseline saturation:** 13/130 videos (10%)
+- **Spike ratio:** 2.3x
+- **Related terms:** `james`, `explodes`, `investigation`, `case`
 - **Sample recent videos:**
+  - 2026-10-31 — _Cornell 7 SCORE Huge Win AGAIN! Corrupt Lawmakers DESTROYED_  
+    Letitia James Gets GRILLED In Court! Cornell 7 Fight Explodes
   - 2026-10-30 — _Ilhan Omar NEW RAID Feds BREAK DOWN Doors & Vote To Expel Her Looms_  
     Ilhan Omar Faces NEW FRAUD QUESTIONS! Minnesota Raids Explode
   - 2026-10-28 — _Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC_  
     Ilhan Omar Investigation EXPLODES! New Memo Claim Changes Everything
-  - 2026-10-27 — _Ilhan Omar DELETES EVIDENCE In PANIC As New BRUTAL Information Drops_  
-    Ilhan Omar BUSTED Again! Brutal New Evidence Raises HUGE Questions
   - 2026-10-26 — _Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!_  
     Massive Cornell 7 Panic! Letitia James DODGES Questions
   - 2026-10-26 — _Ilhan Omar TREASON CHARGES Added To Her NIGHTMARE As Somalia Turns On Her_  
     Foreign Official RUSHES To Defend Ilhan Omar As Case EXPLODES
 
-### Cluster 4: `him`
+### Cluster 6: `turn`
 
-- **Recent saturation:** 5/20 videos (**25%**)
-- **Baseline saturation:** 2/133 videos (2%)
-- **Spike ratio:** 13.4x
-- **Related terms:** `him`
+- **Recent saturation:** 5/21 videos (**24%**)
+- **Baseline saturation:** 4/130 videos (3%)
+- **Spike ratio:** 6.9x
+- **Related terms:** `turn`, `bizarre`
 - **Sample recent videos:**
-  - 2026-10-29 — _Harassed Pizza Man STRIKES BACK In Epic Way! Red Baron Worker Update_  
-    They Found The Pizza Guy! Internet Changes His Life Overnight
-  - 2026-10-29 — _THEY MADE IT WORSE!_  
-    Absurd Cornell 7 Leak! University’s “Punishment” Is A Complete Joke
-  - 2026-10-28 — _Walmart Pizza Man GOES NUCLEAR With Fatigue!_  
-    Walmart Pizza Man GOES NUCLEAR With Fatigue! This Is BRUTAL
-  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
-    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
-  - 2026-10-26 — _Ilhan Omar Just SAVAGED By Donald Trump As Nikki Minaj Causes Leftist MELTDOWN_  
-    Trump UNLOADS On Ilhan Omar As Nicki Minaj Joins Him!
-
-### Cluster 5: `york`
-
-- **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 3/133 videos (2%)
-- **Spike ratio:** 7.7x
-- **Related terms:** `york`, `worse`
-- **Sample recent videos:**
+  - 2026-10-31 — _Ilhan Omar Brother ADMITS IT As DHS Confirms Multiple New Targets_  
+    New Ilhan Omar Marriage Document Raises MORE Questions!
+  - 2026-10-30 — _SHE'S BLIND DRUNK!_  
+    She Was DRUNK AGAIN?! Amy Acton Rally Clip Goes Viral
   - 2026-10-29 — _Ilhan Omar BLASTED By Her HUSBAND & An INSANE Arrest_  
     Ilhan Omar Disaster Gets WORSE! Ex-Husband Bombshell Erupts
-  - 2026-10-28 — _Ilhan Omar Faces MORE RAIDS As Democrats Abandon Her!_  
-    Ilhan Omar Disaster Gets WORSE! Party Support Starts To Crack
-  - 2026-10-26 — _Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!_  
-    Massive Cornell 7 Panic! Letitia James DODGES Questions
-  - 2026-10-26 — _Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY_  
-    Woman ARRESTED After Horrifying Rabbi NEEDLE ATTACK!
-
-### Cluster 6: `roughly`
-
-- **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 1/133 videos (1%)
-- **Spike ratio:** 13.4x
-- **Related terms:** `roughly`
-- **Sample recent videos:**
-  - 2026-10-28 — _Ilhan Omar Faces MORE RAIDS As Democrats Abandon Her!_  
-    Ilhan Omar Disaster Gets WORSE! Party Support Starts To Crack
-  - 2026-10-28 — _Shane Gillis BETRAYED Everyone_  
-    Shane Gillis BENDS THE KNEE! He Finally Addresses SNL Backlash
   - 2026-10-28 — _Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC_  
     Ilhan Omar Investigation EXPLODES! New Memo Claim Changes Everything
+  - 2026-10-26 — _Ilhan Omar TREASON CHARGES Added To Her NIGHTMARE As Somalia Turns On Her_  
+    Foreign Official RUSHES To Defend Ilhan Omar As Case EXPLODES
 
 ---
 
