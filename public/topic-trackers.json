@@ -1,6 +1,22 @@
 {
-  "lastUpdated": "2026-11-03T12:10:11.886Z",
+  "lastUpdated": "2026-11-04T12:22:41.487Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "election",
+      "keywords": [
+        "election",
+        "michigan"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0181,
+        "spikeRatio": 18.44,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-11-04T12:22:41.487Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "political",
@@ -8,29 +24,12 @@
         "political"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3846,
+        "recentSaturation": 0.3333,
         "baselineSaturation": 0.0301,
-        "spikeRatio": 12.77,
+        "spikeRatio": 11.07,
         "recentVideoCount": 5,
         "baselineVideoCount": 2,
-        "detectedAt": "2026-11-03T12:10:11.886Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "exploded",
-      "keywords": [
-        "exploded",
-        "clip",
-        "war"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.0904,
-        "spikeRatio": 4.26,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-11-03T12:10:11.886Z"
+        "detectedAt": "2026-11-04T12:22:41.487Z"
       }
     }
   ]
