@@ -6,7 +6,7 @@
  "snapshotEra": {
   "from": "2026-06-11",
   "to": "2026-11-04",
-  "snapshots": 289
+  "snapshots": 290
  },
  "ageMinDays": 14,
  "sample": {
@@ -25,6 +25,7 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
+  "FiLs5ovIfts": 59,
   "5CwhyEC_nz0": 16,
   "kT0UsZpuKaU": 17,
   "Sr0WmHdxJvs": 49,
@@ -33,7 +34,6 @@
   "iTu_6j22RAM": 3,
   "aGDMKiNGFr8": 5,
   "3O6sdSffHzs": 39,
-  "FiLs5ovIfts": 58,
   "xQCnmaq_L-4": 1,
   "tcevefZ9G18": 1,
   "7Mg87BPII_4": 8,
@@ -173,6 +173,19 @@
    "perDay": 2452
   },
   {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-06-28",
+   "to": "2026-07-02",
+   "days": 5,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 6837,
+   "baselinePerDay": 0,
+   "adViews": 6837,
+   "perDay": 1367
+  },
+  {
    "id": "Sr0WmHdxJvs",
    "title": "Movie Theatre Black Fatigue Backfire!",
    "from": "2026-06-28",
@@ -201,15 +214,15 @@
   {
    "id": "FiLs5ovIfts",
    "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-06-28",
-   "to": "2026-07-02",
-   "days": 5,
-   "observedTo": "2026-07-04",
-   "observedDays": 7,
-   "gain": 6837,
+   "from": "2026-08-10",
+   "to": "2026-08-13",
+   "days": 4,
+   "observedTo": "2026-08-15",
+   "observedDays": 6,
+   "gain": 34087,
    "baselinePerDay": 0,
-   "adViews": 6837,
-   "perDay": 1367
+   "adViews": 34087,
+   "perDay": 8522
   },
   {
    "id": "Sr0WmHdxJvs",
@@ -236,19 +249,6 @@
    "baselinePerDay": 0,
    "adViews": 44509,
    "perDay": 11127
-  },
-  {
-   "id": "FiLs5ovIfts",
-   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-08-10",
-   "to": "2026-08-13",
-   "days": 4,
-   "observedTo": "2026-08-15",
-   "observedDays": 6,
-   "gain": 34087,
-   "baselinePerDay": 0,
-   "adViews": 34087,
-   "perDay": 8522
   },
   {
    "id": "Sr0WmHdxJvs",
