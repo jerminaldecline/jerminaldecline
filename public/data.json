@@ -925,13 +925,13 @@
         }
       ],
       "meta": {
-        "videoCount": 11605,
+        "videoCount": 11606,
         "longFormCount": 9823,
         "shortsCount": 1742,
-        "unavailableCount": 40,
+        "unavailableCount": 41,
         "unlistedCount": 3,
         "oldestVideoDate": "2017-07-14T02:23:12.000Z",
-        "newestVideoDate": "2026-11-05T17:47:15.000Z",
+        "newestVideoDate": "2026-11-05T19:57:17.000Z",
         "ytVideoCount": 11567
       }
     },
@@ -1854,20 +1854,20 @@
         },
         {
           "date": "2026-11-05",
-          "channelViews": 162288756,
+          "channelViews": 162450540,
           "subscriberCount": 354000,
-          "videoCount": 2124
+          "videoCount": 2125
         }
       ],
       "meta": {
-        "videoCount": 2143,
-        "longFormCount": 1348,
+        "videoCount": 2144,
+        "longFormCount": 1349,
         "shortsCount": 777,
         "unavailableCount": 18,
         "unlistedCount": 0,
         "oldestVideoDate": "2024-04-02T17:00:09.000Z",
-        "newestVideoDate": "2026-11-05T03:15:15.000Z",
-        "ytVideoCount": 2124
+        "newestVideoDate": "2026-11-05T18:33:35.000Z",
+        "ytVideoCount": 2125
       }
     },
     "UCIIeZClsD9f0KlRsT1CBpDw": {
@@ -2789,7 +2789,7 @@
         },
         {
           "date": "2026-11-05",
-          "channelViews": 39824330,
+          "channelViews": 39824432,
           "subscriberCount": 183000,
           "videoCount": 1539
         }
@@ -3724,7 +3724,7 @@
         },
         {
           "date": "2026-11-05",
-          "channelViews": 18319766,
+          "channelViews": 18319940,
           "subscriberCount": 64100,
           "videoCount": 380
         }
@@ -4636,18 +4636,18 @@
           "date": "2026-11-05",
           "channelViews": 97464765,
           "subscriberCount": 110000,
-          "videoCount": 1022
+          "videoCount": 1023
         }
       ],
       "meta": {
-        "videoCount": 1031,
-        "longFormCount": 459,
+        "videoCount": 1032,
+        "longFormCount": 460,
         "shortsCount": 563,
         "unavailableCount": 9,
         "unlistedCount": 0,
         "oldestVideoDate": "2025-07-16T19:58:13.000Z",
-        "newestVideoDate": "2026-11-05T15:30:09.000Z",
-        "ytVideoCount": 1022
+        "newestVideoDate": "2026-11-05T20:00:20.000Z",
+        "ytVideoCount": 1023
       }
     },
     "UCd9lxVsVlQ9cvY8gi6bphUA": {
@@ -5414,16 +5414,49 @@
     }
   },
   "meta": {
-    "lastUpdated": "2026-11-05T17:57:38.166Z",
-    "videoCount": 16828,
-    "longFormCount": 13558,
+    "lastUpdated": "2026-11-05T20:35:54.714Z",
+    "videoCount": 16831,
+    "longFormCount": 13560,
     "shortsCount": 3087,
-    "unavailableCount": 183,
+    "unavailableCount": 184,
     "oldestVideoDate": "2010-08-27T21:12:09.000Z",
-    "newestVideoDate": "2026-11-05T17:47:15.000Z",
+    "newestVideoDate": "2026-11-05T20:00:20.000Z",
     "shortsCutoffSec": 180
   },
   "videos": [
+    {
+      "id": "koN7dWJtlpA",
+      "channelId": "UCYtHYzxsUH_QCZtrldLMyUg",
+      "title": "Insane Attack On Grandparents For Loving Grandkids!",
+      "publishedAt": "2026-11-05T20:00:20.000Z",
+      "durationSec": 628,
+      "views": 67,
+      "likes": 18,
+      "comments": 2,
+      "isShort": false
+    },
+    {
+      "id": "pk5etHJYiUA",
+      "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
+      "title": "The PURGE At White House BEGINS As Stock Market CRASHES Over Midterm Chaos",
+      "publishedAt": "2026-11-05T19:57:17.000Z",
+      "durationSec": 876,
+      "views": 5683,
+      "likes": 579,
+      "comments": 129,
+      "isShort": false
+    },
+    {
+      "id": "UTtzh3fmfUA",
+      "channelId": "UCEOtZuVe8emWLKRzJIkzVow",
+      "title": "Russell Brand GUILTY Faces LIFE In Prison!",
+      "publishedAt": "2026-11-05T18:33:35.000Z",
+      "durationSec": 733,
+      "views": 1338,
+      "likes": 248,
+      "comments": 63,
+      "isShort": false
+    },
     {
       "id": "Vl4KL8FBbc4",
       "channelId": "UCfwE_ODI1YTbdjkzuSi1Nag",
@@ -5433,7 +5466,9 @@
       "views": 682,
       "likes": 57,
       "comments": 19,
-      "isShort": false
+      "isShort": false,
+      "unavailable": true,
+      "unavailableSince": "2026-11-05T20:35:54.685Z"
     },
     {
       "id": "lT-E_6KAqSE",
@@ -5441,9 +5476,9 @@
       "title": "Donald Trump BETTER NOT Do This!",
       "publishedAt": "2026-11-05T16:27:28.000Z",
       "durationSec": 820,
-      "views": 9146,
-      "likes": 1422,
-      "comments": 568,
+      "views": 41930,
+      "likes": 2588,
+      "comments": 986,
       "isShort": false
     },
     {
@@ -5452,9 +5487,9 @@
       "title": "Homeowners Hit With $7,500 Monthly HOA Fee Proposal #HOA #Homeowners #Fees #Housing",
       "publishedAt": "2026-11-05T15:30:09.000Z",
       "durationSec": 140,
-      "views": 3757,
-      "likes": 398,
-      "comments": 104,
+      "views": 9060,
+      "likes": 695,
+      "comments": 160,
       "isShort": true
     },
     {
@@ -5463,9 +5498,9 @@
       "title": "Woke University Student Gets Dismantled In A Brexit Debate #College #Debate #Politics #Woke",
       "publishedAt": "2026-11-05T04:00:12.000Z",
       "durationSec": 78,
-      "views": 5942,
-      "likes": 333,
-      "comments": 11,
+      "views": 6695,
+      "likes": 389,
+      "comments": 15,
       "isShort": true
     },
     {
@@ -5474,9 +5509,9 @@
       "title": "Wife Catches Husband On A Tinder Date At A Restaurant #Cheating #Marriage #Dating #Restaurants",
       "publishedAt": "2026-11-05T03:15:15.000Z",
       "durationSec": 36,
-      "views": 3072,
-      "likes": 231,
-      "comments": 25,
+      "views": 3332,
+      "likes": 256,
+      "comments": 27,
       "isShort": true
     },
     {
@@ -5485,9 +5520,9 @@
       "title": "University Activist Can't Define The Far Right #College #Politics #Woke #Debate",
       "publishedAt": "2026-11-05T02:30:26.000Z",
       "durationSec": 98,
-      "views": 3377,
-      "likes": 295,
-      "comments": 23,
+      "views": 3785,
+      "likes": 330,
+      "comments": 28,
       "isShort": true
     },
     {
@@ -5496,9 +5531,9 @@
       "title": "Woman Says You Don't Just Marry A Person You Marry Their Childhood #Marriage #Relationships #Dating",
       "publishedAt": "2026-11-05T02:15:03.000Z",
       "durationSec": 176,
-      "views": 5038,
-      "likes": 547,
-      "comments": 26,
+      "views": 5806,
+      "likes": 664,
+      "comments": 31,
       "isShort": true
     },
     {
@@ -5507,9 +5542,9 @@
       "title": "Feminist Doesn't Like The Statistic That Undercuts Her Argument #Feminism #Debate #Politics #Culture",
       "publishedAt": "2026-11-05T01:00:21.000Z",
       "durationSec": 102,
-      "views": 12747,
-      "likes": 913,
-      "comments": 108,
+      "views": 14770,
+      "likes": 1019,
+      "comments": 125,
       "isShort": true
     },
     {
@@ -5518,9 +5553,9 @@
       "title": "Loud Customer Kicked Out Of Line For Arguing With Everyone #Customer #Line #KickedOut #Drama",
       "publishedAt": "2026-11-05T00:30:05.000Z",
       "durationSec": 78,
-      "views": 11466,
-      "likes": 391,
-      "comments": 17,
+      "views": 13706,
+      "likes": 421,
+      "comments": 19,
       "isShort": true
     },
     {
@@ -5529,9 +5564,9 @@
       "title": "Republicans SHOCK Move To BLOCK Democrats From Power After Midterms!",
       "publishedAt": "2026-11-05T00:15:06.000Z",
       "durationSec": 823,
-      "views": 83434,
-      "likes": 2709,
-      "comments": 793,
+      "views": 85938,
+      "likes": 2761,
+      "comments": 804,
       "isShort": false
     },
     {
@@ -5540,9 +5575,9 @@
       "title": "Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!",
       "publishedAt": "2026-11-05T00:00:06.000Z",
       "durationSec": 764,
-      "views": 9238,
-      "likes": 325,
-      "comments": 139,
+      "views": 9795,
+      "likes": 342,
+      "comments": 148,
       "isShort": false
     },
     {
@@ -5551,9 +5586,9 @@
       "title": "Customer Tries To Pay With Pennies And Cashier Won't Count Them #Pennies #Cashier #Checkout",
       "publishedAt": "2026-11-04T23:30:12.000Z",
       "durationSec": 133,
-      "views": 33293,
-      "likes": 831,
-      "comments": 111,
+      "views": 35227,
+      "likes": 872,
+      "comments": 123,
       "isShort": true
     },
     {
@@ -5562,9 +5597,9 @@
       "title": "Hasan Piker MELTDOWN Over Asmongold! He Humilated Himself",
       "publishedAt": "2026-11-04T22:30:20.000Z",
       "durationSec": 734,
-      "views": 9857,
-      "likes": 447,
-      "comments": 99,
+      "views": 10080,
+      "likes": 461,
+      "comments": 100,
       "isShort": false
     },
     {
@@ -5573,9 +5608,9 @@
       "title": "THERE'S NO COMING BACK!",
       "publishedAt": "2026-11-04T22:15:25.000Z",
       "durationSec": 822,
-      "views": 29203,
-      "likes": 780,
-      "comments": 266,
+      "views": 29580,
+      "likes": 803,
+      "comments": 272,
       "isShort": false
     },
     {
@@ -5584,9 +5619,9 @@
       "title": "HE COMPLETELY SNAPPED!",
       "publishedAt": "2026-11-04T21:05:19.000Z",
       "durationSec": 751,
-      "views": 21658,
-      "likes": 993,
-      "comments": 371,
+      "views": 22705,
+      "likes": 1017,
+      "comments": 380,
       "isShort": false
     },
     {
@@ -5595,9 +5630,9 @@
       "title": "WE'RE DOOMED NOW!",
       "publishedAt": "2026-11-04T20:19:53.000Z",
       "durationSec": 890,
-      "views": 62265,
-      "likes": 2067,
-      "comments": 1008,
+      "views": 63057,
+      "likes": 2086,
+      "comments": 1013,
       "isShort": false
     },
     {
@@ -5606,8 +5641,8 @@
       "title": "People Getting RICH Off Their Water Heaters!",
       "publishedAt": "2026-11-04T20:00:10.000Z",
       "durationSec": 641,
-      "views": 5748,
-      "likes": 115,
+      "views": 6558,
+      "likes": 120,
       "comments": 7,
       "isShort": false
     },
@@ -5617,9 +5652,9 @@
       "title": "JD Vance Just WENT NUCLEAR Over Midterms & Changed EVERYTHING!",
       "publishedAt": "2026-11-04T18:30:15.000Z",
       "durationSec": 817,
-      "views": 131642,
-      "likes": 4996,
-      "comments": 2163,
+      "views": 133112,
+      "likes": 5020,
+      "comments": 2172,
       "isShort": false
     },
     {
@@ -5628,9 +5663,9 @@
       "title": "HE KNOWS NOTHING!",
       "publishedAt": "2026-11-04T17:20:45.000Z",
       "durationSec": 741,
-      "views": 19890,
-      "likes": 723,
-      "comments": 147,
+      "views": 21029,
+      "likes": 748,
+      "comments": 164,
       "isShort": false
     },
     {
@@ -5639,9 +5674,9 @@
       "title": "HE JUST ERUPTED!",
       "publishedAt": "2026-11-04T16:34:29.000Z",
       "durationSec": 916,
-      "views": 91227,
-      "likes": 3606,
-      "comments": 1399,
+      "views": 93295,
+      "likes": 3633,
+      "comments": 1404,
       "isShort": false
     },
     {
@@ -5650,9 +5685,9 @@
       "title": "Airbnb Host Finds Bag Of Drugs Stashed Outside Her Rental #Airbnb #Host #Drugs #Rental",
       "publishedAt": "2026-11-04T15:30:06.000Z",
       "durationSec": 124,
-      "views": 9424,
-      "likes": 568,
-      "comments": 131,
+      "views": 9746,
+      "likes": 589,
+      "comments": 139,
       "isShort": true
     },
     {
@@ -5661,8 +5696,8 @@
       "title": "Man Caught With Two Women Proposes They Share Him Week By Week #Cheating #Dating #Relationships",
       "publishedAt": "2026-11-04T13:15:33.000Z",
       "durationSec": 57,
-      "views": 11852,
-      "likes": 537,
+      "views": 12140,
+      "likes": 550,
       "comments": 46,
       "isShort": true
     },
@@ -5672,9 +5707,9 @@
       "title": "Midterm BLOODBATH! Donald Trump Issues BRUTAL Response!",
       "publishedAt": "2026-11-04T04:56:48.000Z",
       "durationSec": 1263,
-      "views": 225567,
-      "likes": 11221,
-      "comments": 7679,
+      "views": 225940,
+      "likes": 11222,
+      "comments": 7687,
       "isShort": false
     },
     {
@@ -5683,8 +5718,8 @@
       "title": "Trump Shuts Down CNN Reporter Pushing Russia Sanctions #Trump #CNN #Politics #Media",
       "publishedAt": "2026-11-04T04:00:01.000Z",
       "durationSec": 61,
-      "views": 3688,
-      "likes": 333,
+      "views": 3769,
+      "likes": 341,
       "comments": 12,
       "isShort": true
     },
@@ -5694,8 +5729,8 @@
       "title": "Woman Says Her Affair Was The Best Thing She Ever Did #Marriage #Relationships #Dating #Cheating",
       "publishedAt": "2026-11-04T03:15:09.000Z",
       "durationSec": 176,
-      "views": 5326,
-      "likes": 347,
+      "views": 5362,
+      "likes": 351,
       "comments": 108,
       "isShort": true
     },
@@ -5705,8 +5740,8 @@
       "title": "Nearly Ten Protesters Thrown Out Of Trump's South Carolina Rally #Trump #Politics #Protest #Rally",
       "publishedAt": "2026-11-04T02:30:31.000Z",
       "durationSec": 55,
-      "views": 3092,
-      "likes": 262,
+      "views": 3136,
+      "likes": 271,
       "comments": 13,
       "isShort": true
     },
@@ -5716,9 +5751,9 @@
       "title": "Woman Gets Upset After Man Pays For Everything Including Her Friends #Dating #Relationships #Money",
       "publishedAt": "2026-11-04T02:15:37.000Z",
       "durationSec": 48,
-      "views": 9039,
-      "likes": 471,
-      "comments": 105,
+      "views": 9379,
+      "likes": 481,
+      "comments": 113,
       "isShort": true
     },
     {
@@ -5727,9 +5762,9 @@
       "title": "Midterm SCANDAL Explodes! Caught On Tape As MSM PANICS!",
       "publishedAt": "2026-11-04T01:30:10.000Z",
       "durationSec": 843,
-      "views": 97636,
-      "likes": 3108,
-      "comments": 308,
+      "views": 98312,
+      "likes": 3131,
+      "comments": 316,
       "isShort": false
     },
     {
@@ -5738,9 +5773,9 @@
       "title": "Midterm CHAOS As Voters TURNED AWAY, Poll Watchers BANNED & THREATS Called In",
       "publishedAt": "2026-11-04T00:15:13.000Z",
       "durationSec": 768,
-      "views": 64311,
-      "likes": 2232,
-      "comments": 384,
+      "views": 64637,
+      "likes": 2239,
+      "comments": 387,
       "isShort": false
     },
     {
@@ -5749,8 +5784,8 @@
       "title": "College Athlete Won't Say Brand Name On Camera For Fan #College #Athlete #Brand #Camera",
       "publishedAt": "2026-11-03T23:30:00.000Z",
       "durationSec": 142,
-      "views": 2831,
-      "likes": 106,
+      "views": 2879,
+      "likes": 107,
       "comments": 16,
       "isShort": true
     },
@@ -5760,8 +5795,8 @@
       "title": "Midterm INSANITY Democrats DESPERATLY Disavow Woke Candidates",
       "publishedAt": "2026-11-03T23:00:00.000Z",
       "durationSec": 694,
-      "views": 15001,
-      "likes": 734,
+      "views": 15028,
+      "likes": 736,
       "comments": 67,
       "isShort": false
     },
@@ -5771,8 +5806,8 @@
       "title": "Ilhan Omar THREATS To Critics Over Midterms MELTDOWN",
       "publishedAt": "2026-11-03T22:15:36.000Z",
       "durationSec": 797,
-      "views": 45240,
-      "likes": 1926,
+      "views": 45403,
+      "likes": 1939,
       "comments": 119,
       "isShort": false
     },
@@ -5782,8 +5817,8 @@
       "title": "Democrats PANIC & ADMIT Fraud Incoming For Midterms",
       "publishedAt": "2026-11-03T21:45:25.000Z",
       "durationSec": 807,
-      "views": 19241,
-      "likes": 976,
+      "views": 19271,
+      "likes": 977,
       "comments": 101,
       "isShort": false
     },
@@ -5793,9 +5828,9 @@
       "title": "Cockroach Milk FORCED On Americans!",
       "publishedAt": "2026-11-03T20:00:33.000Z",
       "durationSec": 643,
-      "views": 5125,
-      "likes": 255,
-      "comments": 81,
+      "views": 5211,
+      "likes": 256,
+      "comments": 82,
       "isShort": false
     },
     {
@@ -5804,9 +5839,9 @@
       "title": "THIS IS DISGRACEFUL!",
       "publishedAt": "2026-11-03T19:45:15.000Z",
       "durationSec": 825,
-      "views": 90769,
-      "likes": 3375,
-      "comments": 584,
+      "views": 91747,
+      "likes": 3391,
+      "comments": 587,
       "isShort": false
     },
     {
@@ -5815,8 +5850,8 @@
       "title": "Megyn Kelly Goes FULL MASK OFF & Hates America",
       "publishedAt": "2026-11-03T18:47:59.000Z",
       "durationSec": 748,
-      "views": 15201,
-      "likes": 962,
+      "views": 15245,
+      "likes": 964,
       "comments": 126,
       "isShort": false
     },
@@ -5826,8 +5861,8 @@
       "title": "Democrats FREAK OUT As Midterm RED WAVE Hits & Polling All Wrong",
       "publishedAt": "2026-11-03T17:45:12.000Z",
       "durationSec": 824,
-      "views": 171381,
-      "likes": 7966,
+      "views": 171495,
+      "likes": 7967,
       "comments": 1217,
       "isShort": false
     },
@@ -5848,8 +5883,8 @@
       "title": "The BRUTAL Truth Revealed In Learjet Crash BLAMED On Trump",
       "publishedAt": "2026-11-03T15:33:20.000Z",
       "durationSec": 886,
-      "views": 90071,
-      "likes": 4248,
+      "views": 91219,
+      "likes": 4264,
       "comments": 707,
       "isShort": false
     },
@@ -5859,9 +5894,9 @@
       "title": "New Neighbor Demands Family Remove Generations Old Beehives #Neighbors #HOA #Bees #Property",
       "publishedAt": "2026-11-03T15:30:07.000Z",
       "durationSec": 123,
-      "views": 410501,
-      "likes": 20644,
-      "comments": 611,
+      "views": 429817,
+      "likes": 21382,
+      "comments": 625,
       "isShort": true
     },
     {
@@ -5870,9 +5905,9 @@
       "title": "Trump Calls On Congress To Abolish The Income Tax #Trump #Taxes #Politics #Economy",
       "publishedAt": "2026-11-03T15:00:39.000Z",
       "durationSec": 83,
-      "views": 15338,
-      "likes": 1691,
-      "comments": 207,
+      "views": 15581,
+      "likes": 1720,
+      "comments": 208,
       "isShort": true
     },
     {
@@ -5881,8 +5916,8 @@
       "title": "Woman Explains Why Dating Is Really About Pleasing Women's Egos #Dating #Relationships #Men #Women",
       "publishedAt": "2026-11-03T14:30:35.000Z",
       "durationSec": 81,
-      "views": 12755,
-      "likes": 874,
+      "views": 12821,
+      "likes": 879,
       "comments": 35,
       "isShort": true
     },
@@ -5892,8 +5927,8 @@
       "title": "Woman Asked What Makes Her Girlfriend Material Gives A Wild Answer #Dating #Relationships #Interview",
       "publishedAt": "2026-11-03T03:30:08.000Z",
       "durationSec": 152,
-      "views": 2624,
-      "likes": 158,
+      "views": 2631,
+      "likes": 159,
       "comments": 21,
       "isShort": true
     },
@@ -5903,9 +5938,9 @@
       "title": "Starbucks Union Asks Customers To Boycott The Store #Starbucks #Union #Boycott #Business",
       "publishedAt": "2026-11-03T03:00:01.000Z",
       "durationSec": 105,
-      "views": 26142,
-      "likes": 1328,
-      "comments": 618,
+      "views": 26165,
+      "likes": 1332,
+      "comments": 621,
       "isShort": true
     },
     {
@@ -5914,8 +5949,8 @@
       "title": "Wife Catches Husband On A Tinder Date At A Restaurant #Cheating #Marriage #Dating #Restaurants",
       "publishedAt": "2026-11-03T01:30:36.000Z",
       "durationSec": 37,
-      "views": 10597,
-      "likes": 606,
+      "views": 10717,
+      "likes": 611,
       "comments": 65,
       "isShort": true
     },
@@ -5925,7 +5960,7 @@
       "title": "Lindsay Clancy Supporter ARRESTED For INSANE Reason",
       "publishedAt": "2026-11-03T01:00:27.000Z",
       "durationSec": 625,
-      "views": 6227,
+      "views": 6232,
       "likes": 384,
       "comments": 25,
       "isShort": false
@@ -5936,9 +5971,9 @@
       "title": "School Makes A 14 Step Protocol Before Feeding A Hungry ADHD Kid #Schools #Education #Parenting",
       "publishedAt": "2026-11-03T01:00:19.000Z",
       "durationSec": 126,
-      "views": 37196,
-      "likes": 2220,
-      "comments": 458,
+      "views": 37830,
+      "likes": 2233,
+      "comments": 460,
       "isShort": true
     },
     {
@@ -5947,8 +5982,8 @@
       "title": "Neighbor Complains About Leaves Landing On Her Driveway #Neighbors #HOA #Home #Property",
       "publishedAt": "2026-11-03T00:30:37.000Z",
       "durationSec": 55,
-      "views": 66462,
-      "likes": 1520,
+      "views": 66685,
+      "likes": 1526,
       "comments": 100,
       "isShort": true
     },
@@ -5958,8 +5993,8 @@
       "title": "Lindsay Clancy Gets BRUTAL NEWS! As Judge EXPLODES On Her Lawyer!",
       "publishedAt": "2026-11-03T00:24:22.000Z",
       "durationSec": 792,
-      "views": 89870,
-      "likes": 3981,
+      "views": 90107,
+      "likes": 3990,
       "comments": 658,
       "isShort": false
     },
@@ -5969,8 +6004,8 @@
       "title": "Mother Drops Kids At A Stranger's House And Now He's Enrolling Them In School #Parenting #Family",
       "publishedAt": "2026-11-02T23:30:26.000Z",
       "durationSec": 64,
-      "views": 11868,
-      "likes": 591,
+      "views": 11956,
+      "likes": 596,
       "comments": 28,
       "isShort": true
     },
@@ -5980,8 +6015,8 @@
       "title": "INSTANT REGRET! Vile Woman Who Celebrated Charlie Kirk's Death FINDS OUT",
       "publishedAt": "2026-11-02T22:30:28.000Z",
       "durationSec": 748,
-      "views": 21434,
-      "likes": 1675,
+      "views": 21444,
+      "likes": 1676,
       "comments": 255,
       "isShort": false
     },
@@ -5991,8 +6026,8 @@
       "title": "Halloween Black Fatigue GOES NUCLEAR Gets People FIRED",
       "publishedAt": "2026-11-02T22:15:28.000Z",
       "durationSec": 828,
-      "views": 77722,
-      "likes": 3242,
+      "views": 77903,
+      "likes": 3248,
       "comments": 675,
       "isShort": false
     },
@@ -6002,8 +6037,8 @@
       "title": "Unhinged College Girl ARRESTED After Campus Attack!",
       "publishedAt": "2026-11-02T21:15:30.000Z",
       "durationSec": 705,
-      "views": 13612,
-      "likes": 771,
+      "views": 13620,
+      "likes": 772,
       "comments": 120,
       "isShort": false
     },
@@ -6013,8 +6048,8 @@
       "title": "Insane TWIST In Florida Learjet Crash",
       "publishedAt": "2026-11-02T20:15:12.000Z",
       "durationSec": 1072,
-      "views": 108578,
-      "likes": 4852,
+      "views": 108678,
+      "likes": 4855,
       "comments": 1314,
       "isShort": false
     },
@@ -6024,8 +6059,8 @@
       "title": "THEY POISONED THEM!",
       "publishedAt": "2026-11-02T20:00:19.000Z",
       "durationSec": 753,
-      "views": 12499,
-      "likes": 353,
+      "views": 12864,
+      "likes": 363,
       "comments": 86,
       "isShort": false
     },
@@ -6035,7 +6070,7 @@
       "title": "IT ALL BACKFIRED!",
       "publishedAt": "2026-11-02T19:01:36.000Z",
       "durationSec": 759,
-      "views": 14972,
+      "views": 14985,
       "likes": 1003,
       "comments": 89,
       "isShort": false
@@ -6046,8 +6081,8 @@
       "title": "Ilhan Omar THREATENS Americans In UNHINGED Post & MORE Fraud Revealed",
       "publishedAt": "2026-11-02T17:15:08.000Z",
       "durationSec": 763,
-      "views": 156928,
-      "likes": 9798,
+      "views": 157161,
+      "likes": 9810,
       "comments": 751,
       "isShort": false
     },
@@ -6057,9 +6092,9 @@
       "title": "Trump BLAMED For BRUTAL Learjet Crash Near Mar-a-Lago! Here's The TRUTH & Haunting Final Words",
       "publishedAt": "2026-11-02T14:44:18.000Z",
       "durationSec": 844,
-      "views": 123010,
-      "likes": 5569,
-      "comments": 1414,
+      "views": 123030,
+      "likes": 5570,
+      "comments": 1413,
       "isShort": false
     },
     {
@@ -6068,9 +6103,9 @@
       "title": "Mom Blocks The Other Parent's Car In A Parking Lot Until He Explains #Parenting #Custody #Family",
       "publishedAt": "2026-11-02T00:30:25.000Z",
       "durationSec": 70,
-      "views": 72821,
-      "likes": 1583,
-      "comments": 167,
+      "views": 73225,
+      "likes": 1590,
+      "comments": 168,
       "isShort": true
     },
     {
@@ -6079,9 +6114,9 @@
       "title": "Man Blows His Nose In A Shared Restroom Sink And Gets Called Out #Hygiene #Public #Confrontation",
       "publishedAt": "2026-11-01T23:30:17.000Z",
       "durationSec": 78,
-      "views": 24102,
-      "likes": 613,
-      "comments": 186,
+      "views": 24124,
+      "likes": 611,
+      "comments": 189,
       "isShort": true
     },
     {
@@ -6090,7 +6125,7 @@
       "title": "New Jersey City Council Walks Out After Crowd Erupts #NewJersey #CityCouncil #Politics #Protest",
       "publishedAt": "2026-11-01T17:30:07.000Z",
       "durationSec": 84,
-      "views": 8604,
+      "views": 8622,
       "likes": 624,
       "comments": 126,
       "isShort": true
@@ -6101,8 +6136,8 @@
       "title": "What Makes A High Value Woman According To This Clip #Dating #Relationships #Women #Advice",
       "publishedAt": "2026-11-01T17:00:26.000Z",
       "durationSec": 66,
-      "views": 16810,
-      "likes": 916,
+      "views": 16894,
+      "likes": 917,
       "comments": 47,
       "isShort": true
     },
@@ -6123,9 +6158,9 @@
       "title": "Lowe's Takes $4,000 Cash And Says He Can Only Get It Back As Store Credit #Lowes #Retail #Money",
       "publishedAt": "2026-11-01T15:30:21.000Z",
       "durationSec": 126,
-      "views": 540792,
-      "likes": 22404,
-      "comments": 543,
+      "views": 558344,
+      "likes": 23121,
+      "comments": 553,
       "isShort": true
     },
     {
@@ -6134,8 +6169,8 @@
       "title": "Single Mom Of Three Vents To Her Mother And Gets A Reality Check #Dating #Relationships #Family",
       "publishedAt": "2026-11-01T15:00:29.000Z",
       "durationSec": 134,
-      "views": 17309,
-      "likes": 1681,
+      "views": 17315,
+      "likes": 1682,
       "comments": 174,
       "isShort": true
     },
@@ -6145,7 +6180,7 @@
       "title": "Narnia Director Pick Sparks Backlash Over Faith Themes #Narnia #Hollywood #Woke #Movies",
       "publishedAt": "2026-11-01T02:00:24.000Z",
       "durationSec": 82,
-      "views": 29063,
+      "views": 29081,
       "likes": 1520,
       "comments": 132,
       "isShort": true
@@ -6156,8 +6191,8 @@
       "title": "71 Year Old Reveals Why She's Always Been Attracted To Black Men #Dating #Relationships #Interview",
       "publishedAt": "2026-11-01T01:00:37.000Z",
       "durationSec": 103,
-      "views": 4960,
-      "likes": 367,
+      "views": 4961,
+      "likes": 368,
       "comments": 46,
       "isShort": true
     },
@@ -6167,9 +6202,9 @@
       "title": "McDonald's Worker Near A School Says Kids Can't Count Change Anymore #Education #Schools #America",
       "publishedAt": "2026-11-01T00:00:11.000Z",
       "durationSec": 131,
-      "views": 63573,
-      "likes": 4621,
-      "comments": 637,
+      "views": 64848,
+      "likes": 4727,
+      "comments": 646,
       "isShort": true
     },
     {
@@ -6189,7 +6224,7 @@
       "title": "Karen Had Nothing Nice To Say And Got Called Out #Karen #Meltdown #Entitled #CaughtOnCamera",
       "publishedAt": "2026-10-31T23:30:16.000Z",
       "durationSec": 58,
-      "views": 6826,
+      "views": 6854,
       "likes": 190,
       "comments": 10,
       "isShort": true
@@ -6200,8 +6235,8 @@
       "title": "This Is The Kind Of Woman To Marry #Marriage #Dating #Relationships #Women",
       "publishedAt": "2026-10-31T23:00:18.000Z",
       "durationSec": 163,
-      "views": 11523,
-      "likes": 1433,
+      "views": 11536,
+      "likes": 1434,
       "comments": 99,
       "isShort": true
     },
@@ -6211,8 +6246,8 @@
       "title": "Karen Lays Into An Employee Who Doesn't Get Paid Enough For This #Karen #CustomerService #Retail",
       "publishedAt": "2026-10-31T22:30:32.000Z",
       "durationSec": 69,
-      "views": 34820,
-      "likes": 819,
+      "views": 35090,
+      "likes": 822,
       "comments": 43,
       "isShort": true
     },
@@ -6222,9 +6257,9 @@
       "title": "Enterprise Gives Away Customer's Reserved Car And Leaves Him Stranded #CustomerService #Travel",
       "publishedAt": "2026-10-31T22:30:01.000Z",
       "durationSec": 135,
-      "views": 29917,
-      "likes": 1642,
-      "comments": 128,
+      "views": 30053,
+      "likes": 1650,
+      "comments": 129,
       "isShort": true
     },
     {
@@ -6233,7 +6268,7 @@
       "title": "Youtube Gets HORRIBLE News!",
       "publishedAt": "2026-10-31T21:00:11.000Z",
       "durationSec": 732,
-      "views": 23810,
+      "views": 23821,
       "likes": 1080,
       "comments": 111,
       "isShort": false
@@ -6244,8 +6279,8 @@
       "title": "Cornell 7 SCORE Huge Win AGAIN! Corrupt Lawmakers DESTROYED",
       "publishedAt": "2026-10-31T20:30:02.000Z",
       "durationSec": 886,
-      "views": 58368,
-      "likes": 2305,
+      "views": 58386,
+      "likes": 2306,
       "comments": 179,
       "isShort": false
     },
@@ -6255,8 +6290,8 @@
       "title": "Halloween PSYCHOS Instant REGRET Over ABSURD Display",
       "publishedAt": "2026-10-31T19:00:08.000Z",
       "durationSec": 731,
-      "views": 19592,
-      "likes": 1074,
+      "views": 19595,
+      "likes": 1075,
       "comments": 165,
       "isShort": false
     },
@@ -6266,8 +6301,8 @@
       "title": "Ilhan Omar Brother ADMITS IT As DHS Confirms Multiple New Targets",
       "publishedAt": "2026-10-31T18:23:32.000Z",
       "durationSec": 878,
-      "views": 75925,
-      "likes": 4004,
+      "views": 75933,
+      "likes": 4005,
       "comments": 290,
       "isShort": false
     },
@@ -6277,8 +6312,8 @@
       "title": "THIS IS RIDICULOUS!",
       "publishedAt": "2026-10-31T17:48:48.000Z",
       "durationSec": 719,
-      "views": 3517,
-      "likes": 170,
+      "views": 3540,
+      "likes": 171,
       "comments": 58,
       "isShort": false
     },
@@ -6288,9 +6323,9 @@
       "title": "Customer Won't Pay So Crew Rips Up The Floor They Just Installed #Contractors #HomeImprovement",
       "publishedAt": "2026-10-31T14:30:19.000Z",
       "durationSec": 106,
-      "views": 21540,
-      "likes": 776,
-      "comments": 81,
+      "views": 21701,
+      "likes": 780,
+      "comments": 83,
       "isShort": true
     },
     {
@@ -6299,8 +6334,8 @@
       "title": "Grandmother Fine With Puberty Blockers But Not Tattoos For Grandkids #Parenting #Gender #Family",
       "publishedAt": "2026-10-31T14:00:03.000Z",
       "durationSec": 47,
-      "views": 37176,
-      "likes": 2221,
+      "views": 37192,
+      "likes": 2224,
       "comments": 370,
       "isShort": true
     },
@@ -6310,8 +6345,8 @@
       "title": "Mom Puts 4 Week Old In Daycare To Go Home And Do Nothing #Parenting #Motherhood #Daycare #Family",
       "publishedAt": "2026-10-31T13:30:27.000Z",
       "durationSec": 71,
-      "views": 13466,
-      "likes": 1259,
+      "views": 13471,
+      "likes": 1260,
       "comments": 293,
       "isShort": true
     },
@@ -6332,8 +6367,8 @@
       "title": "There's No Way This Is Real #Smoker #Cleaning #Apartments #Gross",
       "publishedAt": "2026-10-31T01:00:38.000Z",
       "durationSec": 69,
-      "views": 24584,
-      "likes": 1158,
+      "views": 24593,
+      "likes": 1159,
       "comments": 167,
       "isShort": true
     },
@@ -6354,8 +6389,8 @@
       "title": "Contractor Sledgehammers $150K Backyard Remodel After Client Stiffs Him #Contractors",
       "publishedAt": "2026-10-30T23:30:20.000Z",
       "durationSec": 43,
-      "views": 13977,
-      "likes": 395,
+      "views": 13987,
+      "likes": 396,
       "comments": 72,
       "isShort": true
     },
@@ -6365,8 +6400,8 @@
       "title": "Single Woman Hits The Wall At 47 With No Kids Or Man #Dating #Relationships #Single #Women",
       "publishedAt": "2026-10-30T23:00:03.000Z",
       "durationSec": 65,
-      "views": 5279,
-      "likes": 434,
+      "views": 5286,
+      "likes": 436,
       "comments": 16,
       "isShort": true
     },
@@ -6376,8 +6411,8 @@
       "title": "Father Catches A Man Sneaking Into His Home To See His Daughter #Parenting #Family #Home",
       "publishedAt": "2026-10-30T22:30:34.000Z",
       "durationSec": 38,
-      "views": 114823,
-      "likes": 2433,
+      "views": 117033,
+      "likes": 2520,
       "comments": 47,
       "isShort": true
     },
@@ -6387,8 +6422,8 @@
       "title": "Hasan Piker DESTROYED IN Pathetic Act Of Cowardness!",
       "publishedAt": "2026-10-30T21:30:39.000Z",
       "durationSec": 695,
-      "views": 19308,
-      "likes": 1159,
+      "views": 19313,
+      "likes": 1161,
       "comments": 82,
       "isShort": false
     },
@@ -6398,8 +6433,8 @@
       "title": "Scumbag FOUND As Red Baron Backlash Goes More NUCLEAR",
       "publishedAt": "2026-10-30T21:00:16.000Z",
       "durationSec": 784,
-      "views": 149761,
-      "likes": 6606,
+      "views": 149827,
+      "likes": 6609,
       "comments": 911,
       "isShort": false
     },
@@ -6409,7 +6444,7 @@
       "title": "Pat McAfee BLASTED Over Charlie Kirk Comments!",
       "publishedAt": "2026-10-30T20:12:06.000Z",
       "durationSec": 692,
-      "views": 9366,
+      "views": 9372,
       "likes": 364,
       "comments": 22,
       "isShort": false
@@ -6420,8 +6455,8 @@
       "title": "SHE'S BLIND DRUNK!",
       "publishedAt": "2026-10-30T19:00:22.000Z",
       "durationSec": 705,
-      "views": 53978,
-      "likes": 2055,
+      "views": 54020,
+      "likes": 2057,
       "comments": 386,
       "isShort": false
     },
@@ -6431,7 +6466,7 @@
       "title": "Donald Trump BAILS On Midterms Liberals Claim Victory After Massive Arrest!",
       "publishedAt": "2026-10-30T18:04:58.000Z",
       "durationSec": 730,
-      "views": 19706,
+      "views": 19704,
       "likes": 987,
       "comments": 177,
       "isShort": false
@@ -6442,7 +6477,7 @@
       "title": "Ilhan Omar NEW RAID Feds BREAK DOWN Doors & Vote To Expel Her Looms",
       "publishedAt": "2026-10-30T16:24:28.000Z",
       "durationSec": 977,
-      "views": 78434,
+      "views": 78462,
       "likes": 4353,
       "comments": 324,
       "isShort": false
@@ -6453,9 +6488,9 @@
       "title": "Elderly Woman Confronts Mom At Restaurant Over Her Autistic Child #Restaurants #Parenting #Autism",
       "publishedAt": "2026-10-30T14:30:03.000Z",
       "durationSec": 64,
-      "views": 23729,
+      "views": 23746,
       "likes": 570,
-      "comments": 112,
+      "comments": 114,
       "isShort": true
     },
     {
@@ -6464,7 +6499,7 @@
       "title": "Liberal Woman Says Nice Guys Online Are Capitalizing On Tragedy #Feminism #Politics #Men #Culture",
       "publishedAt": "2026-10-30T14:00:03.000Z",
       "durationSec": 93,
-      "views": 9808,
+      "views": 9812,
       "likes": 615,
       "comments": 287,
       "isShort": true
@@ -6475,8 +6510,8 @@
       "title": "Man Builds A House Right Behind His Ex-Wife's After Divorce #Divorce #Relationships #Petty #Home",
       "publishedAt": "2026-10-30T13:30:09.000Z",
       "durationSec": 178,
-      "views": 9261,
-      "likes": 935,
+      "views": 9266,
+      "likes": 936,
       "comments": 136,
       "isShort": true
     },
@@ -6486,7 +6521,7 @@
       "title": "LA City Council Approves $460K Study For A City-Owned Bank Amid Budget Gap #LosAngeles #CityCouncil",
       "publishedAt": "2026-10-30T02:00:06.000Z",
       "durationSec": 133,
-      "views": 14782,
+      "views": 14788,
       "likes": 1666,
       "comments": 304,
       "isShort": true
@@ -6497,8 +6532,8 @@
       "title": "Man Brings Gifts For His Kid But Not Her Other Kids #Parenting #Relationships #Dating #Family",
       "publishedAt": "2026-10-30T01:00:10.000Z",
       "durationSec": 155,
-      "views": 56045,
-      "likes": 3992,
+      "views": 56046,
+      "likes": 3993,
       "comments": 639,
       "isShort": true
     },
@@ -6508,7 +6543,7 @@
       "title": "John Harbaugh Shuts Down Reporter Asking Why He Met With Trump #NFL #Trump #Media #Ravens",
       "publishedAt": "2026-10-30T00:00:35.000Z",
       "durationSec": 50,
-      "views": 31492,
+      "views": 31494,
       "likes": 2182,
       "comments": 61,
       "isShort": true
@@ -6519,8 +6554,8 @@
       "title": "HOA Karen Treats Resident's Night Swim Like A Felony #HOA #Karen #Neighbors #Pool",
       "publishedAt": "2026-10-29T23:30:03.000Z",
       "durationSec": 53,
-      "views": 13788,
-      "likes": 530,
+      "views": 13864,
+      "likes": 532,
       "comments": 35,
       "isShort": true
     },
@@ -6530,8 +6565,8 @@
       "title": "Did The Man Overreact #Relationships #Debate #Men #Women",
       "publishedAt": "2026-10-29T23:00:20.000Z",
       "durationSec": 38,
-      "views": 19607,
-      "likes": 834,
+      "views": 19617,
+      "likes": 836,
       "comments": 135,
       "isShort": true
     },
@@ -6541,9 +6576,9 @@
       "title": "Woman Spotted Throwing Huge Rocks Into Her Ex's Car #Breakup #Ex #Revenge #CaughtOnCamera",
       "publishedAt": "2026-10-29T22:30:26.000Z",
       "durationSec": 67,
-      "views": 25205,
-      "likes": 801,
-      "comments": 187,
+      "views": 25289,
+      "likes": 803,
+      "comments": 188,
       "isShort": true
     },
     {
@@ -6552,7 +6587,7 @@
       "title": "Harassed Pizza Man STRIKES BACK In Epic Way! Red Baron Worker Update",
       "publishedAt": "2026-10-29T18:52:27.000Z",
       "durationSec": 690,
-      "views": 87002,
+      "views": 87006,
       "likes": 3192,
       "comments": 494,
       "isShort": false
@@ -6563,7 +6598,7 @@
       "title": "Ilhan Omar BLASTED By Her HUSBAND & An INSANE Arrest",
       "publishedAt": "2026-10-29T15:47:55.000Z",
       "durationSec": 765,
-      "views": 114090,
+      "views": 114102,
       "likes": 5603,
       "comments": 413,
       "isShort": false
@@ -6574,9 +6609,9 @@
       "title": "Wendy's Hands Customer Two Burgers Instead Of Three And The Manager Can't Follow #FastFood #Wendys",
       "publishedAt": "2026-10-29T14:30:04.000Z",
       "durationSec": 120,
-      "views": 281918,
-      "likes": 3721,
-      "comments": 177,
+      "views": 284373,
+      "likes": 3741,
+      "comments": 179,
       "isShort": true
     },
     {
@@ -6585,7 +6620,7 @@
       "title": "Google Gemini Says Every Religion Is Real Except Christianity #AI #Google #Religion #Tech",
       "publishedAt": "2026-10-29T14:00:21.000Z",
       "durationSec": 137,
-      "views": 58301,
+      "views": 58302,
       "likes": 5567,
       "comments": 492,
       "isShort": true
@@ -6596,8 +6631,8 @@
       "title": "How Does Any Man Put Up With A Woman Like This #Relationships #Dating #Men #Women",
       "publishedAt": "2026-10-29T13:30:31.000Z",
       "durationSec": 58,
-      "views": 6052,
-      "likes": 443,
+      "views": 6055,
+      "likes": 444,
       "comments": 61,
       "isShort": true
     },
@@ -6607,8 +6642,8 @@
       "title": "Feds Move To Seize Minneapolis Block Allegedly Bought With Stolen SNAP Money #Minneapolis #Fraud",
       "publishedAt": "2026-10-29T02:00:21.000Z",
       "durationSec": 82,
-      "views": 10392,
-      "likes": 1065,
+      "views": 10407,
+      "likes": 1066,
       "comments": 60,
       "isShort": true
     },
@@ -6618,7 +6653,7 @@
       "title": "THEY MADE IT WORSE!",
       "publishedAt": "2026-10-29T01:15:14.000Z",
       "durationSec": 726,
-      "views": 53156,
+      "views": 53159,
       "likes": 1830,
       "comments": 130,
       "isShort": false
@@ -6640,7 +6675,7 @@
       "title": "Thieves Snatch A Pickup Truck In Seconds #Theft #Trucks #Crime #CaughtOnCamera",
       "publishedAt": "2026-10-28T23:30:07.000Z",
       "durationSec": 109,
-      "views": 28700,
+      "views": 28709,
       "likes": 717,
       "comments": 91,
       "isShort": true
@@ -6662,8 +6697,8 @@
       "title": "Every Couple Should See This Right Now #Dating #Relationships #Women #Advice",
       "publishedAt": "2026-10-28T23:00:34.000Z",
       "durationSec": 80,
-      "views": 111648,
-      "likes": 3776,
+      "views": 112768,
+      "likes": 3795,
       "comments": 191,
       "isShort": true
     },
@@ -6673,9 +6708,9 @@
       "title": "Man Does The Walk Of Shame With Two 12-Packs Of Corona #Beer #Funny #Everyday #Relatable",
       "publishedAt": "2026-10-28T22:30:33.000Z",
       "durationSec": 40,
-      "views": 14006,
+      "views": 14029,
       "likes": 451,
-      "comments": 66,
+      "comments": 67,
       "isShort": true
     },
     {
@@ -6684,8 +6719,8 @@
       "title": "Walmart Pizza Man GOES NUCLEAR With Fatigue!",
       "publishedAt": "2026-10-28T19:33:54.000Z",
       "durationSec": 715,
-      "views": 127213,
-      "likes": 4206,
+      "views": 127227,
+      "likes": 4208,
       "comments": 539,
       "isShort": false
     },
@@ -6695,7 +6730,7 @@
       "title": "Hasan Piker Makes 72 Million Dollar Blunder",
       "publishedAt": "2026-10-28T18:57:29.000Z",
       "durationSec": 719,
-      "views": 18167,
+      "views": 18171,
       "likes": 1184,
       "comments": 73,
       "isShort": false
@@ -6706,7 +6741,7 @@
       "title": "Shane Gillis BETRAYED Everyone",
       "publishedAt": "2026-10-28T17:43:19.000Z",
       "durationSec": 760,
-      "views": 34247,
+      "views": 34250,
       "likes": 1008,
       "comments": 286,
       "isShort": false
@@ -6717,7 +6752,7 @@
       "title": "Kamala Harris FREAKS OUT As Donors BEG Her Not To Run!",
       "publishedAt": "2026-10-28T16:45:30.000Z",
       "durationSec": 712,
-      "views": 13760,
+      "views": 13761,
       "likes": 864,
       "comments": 82,
       "isShort": false
@@ -6728,7 +6763,7 @@
       "title": "Ilhan Omar In WAY WORSE Trouble Than We Thought As Democrats PANIC",
       "publishedAt": "2026-10-28T15:40:08.000Z",
       "durationSec": 849,
-      "views": 66166,
+      "views": 66167,
       "likes": 3703,
       "comments": 365,
       "isShort": false
@@ -6739,8 +6774,8 @@
       "title": "Karen Meltdown That's Just Embarrassing To Watch #Karen #Meltdown #Entitled #CaughtOnCamera",
       "publishedAt": "2026-10-28T14:30:29.000Z",
       "durationSec": 54,
-      "views": 18900,
-      "likes": 794,
+      "views": 18904,
+      "likes": 795,
       "comments": 116,
       "isShort": true
     },
@@ -6750,8 +6785,8 @@
       "title": "She Breaks Down How Some Women Play Men Who Can't Say No #Dating #Relationships #Men #Women",
       "publishedAt": "2026-10-28T13:30:24.000Z",
       "durationSec": 174,
-      "views": 5128,
-      "likes": 414,
+      "views": 5130,
+      "likes": 415,
       "comments": 104,
       "isShort": true
     },
@@ -6761,8 +6796,8 @@
       "title": "Clothing Labels Now Carry Hidden RFID Chips Here's What They Do #Privacy #Tech #Retail #Shopping",
       "publishedAt": "2026-10-28T02:00:12.000Z",
       "durationSec": 69,
-      "views": 156895,
-      "likes": 4283,
+      "views": 156935,
+      "likes": 4284,
       "comments": 564,
       "isShort": true
     },
@@ -6772,9 +6807,9 @@
       "title": "Boyfriend Gets Out In The Rain Over A Sandwich Argument #Relationships #Dating #Food #Funny",
       "publishedAt": "2026-10-28T01:00:00.000Z",
       "durationSec": 138,
-      "views": 17430,
-      "likes": 1073,
-      "comments": 333,
+      "views": 17432,
+      "likes": 1074,
+      "comments": 332,
       "isShort": true
     },
     {
@@ -6783,8 +6818,8 @@
       "title": "Chicago's First Free Public Toilet Plumbing Costs Hundreds Of Thousands #Chicago #Government",
       "publishedAt": "2026-10-28T00:00:31.000Z",
       "durationSec": 76,
-      "views": 31982,
-      "likes": 1600,
+      "views": 31997,
+      "likes": 1601,
       "comments": 415,
       "isShort": true
     },
@@ -6794,7 +6829,7 @@
       "title": "Guy Pays $1,000 For A Dumpster And A Stranger Fills It With His Junk #Neighbors #Dumpster #Home",
       "publishedAt": "2026-10-27T23:30:17.000Z",
       "durationSec": 78,
-      "views": 32424,
+      "views": 32434,
       "likes": 1215,
       "comments": 122,
       "isShort": true
@@ -6816,8 +6851,8 @@
       "title": "A Real Man Will Provide But A Woman Has To Play Her Role #Relationships #Marriage #Men #Women",
       "publishedAt": "2026-10-27T23:00:37.000Z",
       "durationSec": 57,
-      "views": 8821,
-      "likes": 594,
+      "views": 8824,
+      "likes": 595,
       "comments": 95,
       "isShort": true
     },
@@ -6827,7 +6862,7 @@
       "title": "Driver Hits A Tesla And Won't Even Say Sorry #Tesla #Driving #Accident #Confrontation",
       "publishedAt": "2026-10-27T22:30:29.000Z",
       "durationSec": 95,
-      "views": 24595,
+      "views": 24606,
       "likes": 978,
       "comments": 229,
       "isShort": true
@@ -6838,7 +6873,7 @@
       "title": "Netflix DESTROYED Over WOKEST Show In History!",
       "publishedAt": "2026-10-27T19:00:35.000Z",
       "durationSec": 716,
-      "views": 73440,
+      "views": 73442,
       "likes": 2981,
       "comments": 361,
       "isShort": false
@@ -6849,8 +6884,8 @@
       "title": "Gavin Newsome BUSTED By Under Cover Journalist!",
       "publishedAt": "2026-10-27T18:45:13.000Z",
       "durationSec": 660,
-      "views": 21699,
-      "likes": 1405,
+      "views": 21712,
+      "likes": 1406,
       "comments": 120,
       "isShort": false
     },
@@ -6860,8 +6895,8 @@
       "title": "THIS IS UNBELIEVABLE!",
       "publishedAt": "2026-10-27T17:39:57.000Z",
       "durationSec": 733,
-      "views": 48002,
-      "likes": 2776,
+      "views": 48003,
+      "likes": 2777,
       "comments": 306,
       "isShort": false
     },
@@ -6871,8 +6906,8 @@
       "title": "Asmongold SAVAGES Entitled Female Streamer",
       "publishedAt": "2026-10-27T15:45:17.000Z",
       "durationSec": 693,
-      "views": 15266,
-      "likes": 745,
+      "views": 15267,
+      "likes": 746,
       "comments": 43,
       "isShort": false
     },
@@ -6882,7 +6917,7 @@
       "title": "Ilhan Omar DEVASTATED As MORE Bad News & Hasan Piker Rally FLOPS",
       "publishedAt": "2026-10-27T14:45:17.000Z",
       "durationSec": 847,
-      "views": 97036,
+      "views": 97039,
       "likes": 5834,
       "comments": 831,
       "isShort": false
@@ -6893,7 +6928,7 @@
       "title": "Handicap Burger King Worker Says Store Won't Accommodate Him #FastFood #BurgerKing #Jobs #Disability",
       "publishedAt": "2026-10-27T14:30:13.000Z",
       "durationSec": 89,
-      "views": 19016,
+      "views": 19022,
       "likes": 1065,
       "comments": 326,
       "isShort": true
@@ -6915,8 +6950,8 @@
       "title": "See Fellas There's A Woman For Every Type Of Man #Dating #Relationships #Men #Funny",
       "publishedAt": "2026-10-27T13:30:16.000Z",
       "durationSec": 88,
-      "views": 53635,
-      "likes": 1394,
+      "views": 53645,
+      "likes": 1395,
       "comments": 139,
       "isShort": true
     },
@@ -6926,9 +6961,9 @@
       "title": "Mom Gave Up Her Son At 12 Now Wants Him Back #Parenting #Family #Motherhood #Relationships",
       "publishedAt": "2026-10-27T02:30:36.000Z",
       "durationSec": 84,
-      "views": 46508,
-      "likes": 1655,
-      "comments": 378,
+      "views": 46512,
+      "likes": 1656,
+      "comments": 377,
       "isShort": true
     },
     {
@@ -6937,7 +6972,7 @@
       "title": "Charlie Kirk Answers Woman Defending Islam On Campus #CharlieKirk #Debate #College #Religion",
       "publishedAt": "2026-10-27T02:00:04.000Z",
       "durationSec": 49,
-      "views": 17892,
+      "views": 17896,
       "likes": 1462,
       "comments": 60,
       "isShort": true
@@ -6948,8 +6983,8 @@
       "title": "Teacher's Outfit Goes Viral And Sparks Debate #Teacher #School #Fashion #Debate",
       "publishedAt": "2026-10-27T00:30:08.000Z",
       "durationSec": 102,
-      "views": 4279,
-      "likes": 300,
+      "views": 4283,
+      "likes": 301,
       "comments": 104,
       "isShort": true
     },
@@ -6959,7 +6994,7 @@
       "title": "Socialist Activists Plaster Revolution Signs On A Neighborhood Sidewalk #Socialism #Activism",
       "publishedAt": "2026-10-27T00:00:22.000Z",
       "durationSec": 67,
-      "views": 28291,
+      "views": 28293,
       "likes": 1851,
       "comments": 396,
       "isShort": true
@@ -6970,7 +7005,7 @@
       "title": "Karen Gives The Definition Of Unhinged In Public #Karen #Meltdown #Entitled #CaughtOnCamera",
       "publishedAt": "2026-10-26T23:30:29.000Z",
       "durationSec": 60,
-      "views": 4650,
+      "views": 4655,
       "likes": 320,
       "comments": 106,
       "isShort": true
@@ -6981,8 +7016,8 @@
       "title": "Ilhan Omar BUSTED Getting MILLIONS From Foreign Investors! It's Over!",
       "publishedAt": "2026-10-26T23:15:38.000Z",
       "durationSec": 789,
-      "views": 140472,
-      "likes": 8889,
+      "views": 140479,
+      "likes": 8888,
       "comments": 430,
       "isShort": false
     },
@@ -6992,9 +7027,9 @@
       "title": "Shoppers Caught Pouring Extra Cat Litter Into The Jug In The Aisle #Retail #Shopping #Stealing #Stor",
       "publishedAt": "2026-10-26T22:30:07.000Z",
       "durationSec": 75,
-      "views": 422516,
-      "likes": 8573,
-      "comments": 152,
+      "views": 425402,
+      "likes": 8716,
+      "comments": 153,
       "isShort": true
     },
     {
@@ -7004,7 +7039,7 @@
       "publishedAt": "2026-10-26T22:15:08.000Z",
       "durationSec": 692,
       "views": 16736,
-      "likes": 957,
+      "likes": 958,
       "comments": 31,
       "isShort": false
     },
@@ -7014,8 +7049,8 @@
       "title": "Zohran Mamdani HAMMERED By Supporters For Being A TOTAL FAILURE!",
       "publishedAt": "2026-10-26T21:19:54.000Z",
       "durationSec": 704,
-      "views": 12026,
-      "likes": 745,
+      "views": 12027,
+      "likes": 746,
       "comments": 51,
       "isShort": false
     },
@@ -7025,8 +7060,8 @@
       "title": "Cornell 7 NEW MASSIVE WIN! It's All Falling Apart!",
       "publishedAt": "2026-10-26T20:15:11.000Z",
       "durationSec": 767,
-      "views": 90763,
-      "likes": 3323,
+      "views": 90770,
+      "likes": 3324,
       "comments": 211,
       "isShort": false
     },
@@ -7036,7 +7071,7 @@
       "title": "HE'S FREAKING OUT!",
       "publishedAt": "2026-10-26T19:38:52.000Z",
       "durationSec": 835,
-      "views": 13660,
+      "views": 13662,
       "likes": 674,
       "comments": 117,
       "isShort": false
@@ -7047,7 +7082,7 @@
       "title": "Deranged Leftist Needle Attack In NYC As Mamdani Sets Her Free INSTANTLY",
       "publishedAt": "2026-10-26T18:43:40.000Z",
       "durationSec": 737,
-      "views": 36768,
+      "views": 36769,
       "likes": 1794,
       "comments": 134,
       "isShort": false
@@ -7069,7 +7104,7 @@
       "title": "Ilhan Omar Just SAVAGED By Donald Trump As Nikki Minaj Causes Leftist MELTDOWN",
       "publishedAt": "2026-10-26T17:15:02.000Z",
       "durationSec": 871,
-      "views": 38432,
+      "views": 38433,
       "likes": 1844,
       "comments": 112,
       "isShort": false
@@ -7080,7 +7115,7 @@
       "title": "Airbnb ENRAGES Hosts & Sparks Boycott Over New Pro Customer Move",
       "publishedAt": "2026-10-26T16:15:03.000Z",
       "durationSec": 676,
-      "views": 12574,
+      "views": 12579,
       "likes": 208,
       "comments": 30,
       "isShort": false
@@ -7102,8 +7137,8 @@
       "title": "Ilhan Omar TREASON CHARGES Added To Her NIGHTMARE As Somalia Turns On Her",
       "publishedAt": "2026-10-26T14:41:40.000Z",
       "durationSec": 868,
-      "views": 105703,
-      "likes": 6533,
+      "views": 105712,
+      "likes": 6534,
       "comments": 565,
       "isShort": false
     },
@@ -7124,7 +7159,7 @@
       "title": "Ilhan Omar ROCKED With New Scandal & FLEES Reporters!",
       "publishedAt": "2026-10-23T23:15:28.000Z",
       "durationSec": 755,
-      "views": 81054,
+      "views": 81056,
       "likes": 3179,
       "comments": 359,
       "isShort": false
@@ -7146,7 +7181,7 @@
       "title": "SNAP Scammers RAGE As Immigrants STEALING Food Stamps Busted",
       "publishedAt": "2026-10-23T21:15:39.000Z",
       "durationSec": 791,
-      "views": 76482,
+      "views": 76486,
       "likes": 3727,
       "comments": 367,
       "isShort": false
@@ -7168,7 +7203,7 @@
       "title": "Bufallo Wild Wings BLACK FATIGUE Goes Nuclear! She Had Enough",
       "publishedAt": "2026-10-23T19:15:09.000Z",
       "durationSec": 725,
-      "views": 115204,
+      "views": 115205,
       "likes": 3964,
       "comments": 600,
       "isShort": false
@@ -7190,7 +7225,7 @@
       "title": "Ethan Klein FIRED For VILE Behavior & Cheating On Wife Hila Klein With Employee",
       "publishedAt": "2026-10-23T17:15:39.000Z",
       "durationSec": 799,
-      "views": 68388,
+      "views": 68397,
       "likes": 2140,
       "comments": 436,
       "isShort": false
@@ -7201,7 +7236,7 @@
       "title": "SHE'S IN TROUBLE!",
       "publishedAt": "2026-10-23T15:21:32.000Z",
       "durationSec": 822,
-      "views": 99307,
+      "views": 99309,
       "likes": 5912,
       "comments": 794,
       "isShort": false
@@ -7212,7 +7247,7 @@
       "title": "Ilham Omar FREAKING OUT As NEW Clues Point To Deportation!",
       "publishedAt": "2026-10-22T23:31:57.000Z",
       "durationSec": 784,
-      "views": 72064,
+      "views": 72066,
       "likes": 3798,
       "comments": 437,
       "isShort": false
@@ -7234,8 +7269,8 @@
       "title": "9 THUGS Attack White Hero & Instantly Regret It",
       "publishedAt": "2026-10-22T21:15:12.000Z",
       "durationSec": 757,
-      "views": 148316,
-      "likes": 8249,
+      "views": 148328,
+      "likes": 8250,
       "comments": 1326,
       "isShort": false
     },
@@ -7278,8 +7313,8 @@
       "title": "SHE'S IN TROUBLE!",
       "publishedAt": "2026-10-22T16:16:09.000Z",
       "durationSec": 734,
-      "views": 80293,
-      "likes": 3885,
+      "views": 80296,
+      "likes": 3886,
       "comments": 389,
       "isShort": false
     },
@@ -7366,7 +7401,7 @@
       "title": "Carrot Top Has EPIC Return To Stage & God",
       "publishedAt": "2026-10-21T15:15:26.000Z",
       "durationSec": 617,
-      "views": 11867,
+      "views": 11868,
       "likes": 592,
       "comments": 53,
       "isShort": false
@@ -7410,7 +7445,7 @@
       "title": "Shane Gillis DESTROYS Woke SNL Meltdown Via Jimmy Carr",
       "publishedAt": "2026-10-20T21:15:28.000Z",
       "durationSec": 779,
-      "views": 168962,
+      "views": 168971,
       "likes": 2939,
       "comments": 282,
       "isShort": false
@@ -7465,7 +7500,7 @@
       "title": "Ilhan Omar FREAKS OUT As Passport SEIZED & DNA Evidence BOMBSHELL",
       "publishedAt": "2026-10-20T14:19:08.000Z",
       "durationSec": 721,
-      "views": 110233,
+      "views": 110238,
       "likes": 6304,
       "comments": 597,
       "isShort": false
@@ -7476,7 +7511,7 @@
       "title": "Woman Cuts The Line And Refuses To Move To The Back #LineCutter #Entitlement #Freakout",
       "publishedAt": "2026-10-20T02:30:17.000Z",
       "durationSec": 92,
-      "views": 29535,
+      "views": 29538,
       "likes": 1129,
       "comments": 162,
       "isShort": true
@@ -7498,7 +7533,7 @@
       "title": "Woman Spends Her Day Off Blocking A Work Crew Over A Piece Of Glass #crew  #Confrontation #Freakout",
       "publishedAt": "2026-10-20T00:30:10.000Z",
       "durationSec": 94,
-      "views": 81757,
+      "views": 81761,
       "likes": 2743,
       "comments": 186,
       "isShort": true
@@ -7509,7 +7544,7 @@
       "title": "Customer Cuts The Line And Expects The Restaurant To Accommodate Her",
       "publishedAt": "2026-10-20T00:00:12.000Z",
       "durationSec": 179,
-      "views": 265424,
+      "views": 265425,
       "likes": 14660,
       "comments": 969,
       "isShort": true
@@ -7532,7 +7567,7 @@
       "publishedAt": "2026-10-19T23:30:11.000Z",
       "durationSec": 97,
       "views": 58023,
-      "likes": 1535,
+      "likes": 1537,
       "comments": 92,
       "isShort": true
     },
@@ -7542,7 +7577,7 @@
       "title": "Ilhan Omar Just BUSTED In Massive New Financial Scam",
       "publishedAt": "2026-10-19T23:27:09.000Z",
       "durationSec": 665,
-      "views": 129629,
+      "views": 129632,
       "likes": 5405,
       "comments": 440,
       "isShort": false
@@ -7553,7 +7588,7 @@
       "title": "Truck Driver Ruins A Parking Lot Immediately After It Was Sealed #Truck #ParkingLot #InstantRegret #",
       "publishedAt": "2026-10-19T23:00:39.000Z",
       "durationSec": 102,
-      "views": 61386,
+      "views": 61391,
       "likes": 2213,
       "comments": 144,
       "isShort": true
@@ -7564,7 +7599,7 @@
       "title": "Beach Confrontation Turns Into A Completely Unhinged Meltdown #Beach #PublicFreakout #Confrontation",
       "publishedAt": "2026-10-19T22:30:07.000Z",
       "durationSec": 86,
-      "views": 175217,
+      "views": 175224,
       "likes": 2923,
       "comments": 126,
       "isShort": true
@@ -7586,7 +7621,7 @@
       "title": "Trans LUNATICS Attack Harry Potter Event & Get Destroyed",
       "publishedAt": "2026-10-19T21:52:24.000Z",
       "durationSec": 745,
-      "views": 54693,
+      "views": 54695,
       "likes": 1760,
       "comments": 199,
       "isShort": false
@@ -7597,7 +7632,7 @@
       "title": "Feminist Sports Bar COLLAPSES Hilariously",
       "publishedAt": "2026-10-19T21:15:01.000Z",
       "durationSec": 686,
-      "views": 48161,
+      "views": 48162,
       "likes": 1647,
       "comments": 198,
       "isShort": false
@@ -7620,7 +7655,7 @@
       "publishedAt": "2026-10-19T18:15:11.000Z",
       "durationSec": 707,
       "views": 83621,
-      "likes": 3472,
+      "likes": 3471,
       "comments": 489,
       "isShort": false
     },
@@ -7630,7 +7665,7 @@
       "title": "Hasan Piker IMPLODES As He Realizes How Bad He Really Is",
       "publishedAt": "2026-10-19T17:35:11.000Z",
       "durationSec": 723,
-      "views": 15346,
+      "views": 15348,
       "likes": 1021,
       "comments": 67,
       "isShort": false
@@ -7641,8 +7676,8 @@
       "title": "Cornell 7 Get MASSIVE WIN & Jane Doe Humiliated Again",
       "publishedAt": "2026-10-19T16:26:58.000Z",
       "durationSec": 719,
-      "views": 107050,
-      "likes": 4084,
+      "views": 107054,
+      "likes": 4083,
       "comments": 488,
       "isShort": false
     },
@@ -7685,8 +7720,8 @@
       "title": "Party Of 18 Expects A Flawless Experience At Fogo De Chão #FogoDeChao #Restaurant #LargeParty #Custo",
       "publishedAt": "2026-10-18T23:30:34.000Z",
       "durationSec": 86,
-      "views": 219640,
-      "likes": 3878,
+      "views": 219642,
+      "likes": 3879,
       "comments": 452,
       "isShort": true
     },
@@ -7696,8 +7731,8 @@
       "title": "Restaurant Confrontation Descends Into Complete Chaos #Restaurant #Confrontation #PublicFreakout #Ca",
       "publishedAt": "2026-10-18T22:31:13.000Z",
       "durationSec": 78,
-      "views": 142328,
-      "likes": 4168,
+      "views": 142424,
+      "likes": 4179,
       "comments": 460,
       "isShort": true
     },
@@ -7729,9 +7764,9 @@
       "title": "Walmart Customer Becomes The Loudest Person In The Entire Store #Walmart #CustomerMeltdown #Retail #",
       "publishedAt": "2026-10-18T14:30:35.000Z",
       "durationSec": 178,
-      "views": 33560,
-      "likes": 973,
-      "comments": 76,
+      "views": 33573,
+      "likes": 974,
+      "comments": 78,
       "isShort": true
     },
     {
@@ -7775,7 +7810,7 @@
       "title": "Chick fil A Customer Has An Unhinged Meltdown Inside The Restaurant #ChickFilA #CustomerMeltdown #Re",
       "publishedAt": "2026-10-18T01:00:06.000Z",
       "durationSec": 173,
-      "views": 154024,
+      "views": 154047,
       "likes": 9058,
       "comments": 860,
       "isShort": true
@@ -7797,7 +7832,7 @@
       "title": "Man Starts A Confrontation Without Realizing How Unreasonable He Looks",
       "publishedAt": "2026-10-17T23:30:25.000Z",
       "durationSec": 98,
-      "views": 123768,
+      "views": 123770,
       "likes": 2176,
       "comments": 146,
       "isShort": true
@@ -7819,8 +7854,8 @@
       "title": "IHOP Customer’s Entitled Meltdown Leaves The Entire Restaurant Stunned #IHOP #CustomerMeltdown #Rest",
       "publishedAt": "2026-10-17T22:30:26.000Z",
       "durationSec": 176,
-      "views": 144903,
-      "likes": 3578,
+      "views": 145446,
+      "likes": 3586,
       "comments": 234,
       "isShort": true
     },
@@ -7830,7 +7865,7 @@
       "title": "Hero Teacher REVEALED As INSANE New Details Of Oregon Horror Released!",
       "publishedAt": "2026-10-17T18:13:39.000Z",
       "durationSec": 707,
-      "views": 85761,
+      "views": 85762,
       "likes": 4029,
       "comments": 556,
       "isShort": false
@@ -7841,9 +7876,9 @@
       "title": "Parking Dispute Erupts Into A Full Blown Neighborhood War #ParkingWars #Neighbors #Confrontation #Ne",
       "publishedAt": "2026-10-17T14:30:05.000Z",
       "durationSec": 75,
-      "views": 5507,
+      "views": 5509,
       "likes": 318,
-      "comments": 59,
+      "comments": 61,
       "isShort": true
     },
     {
@@ -7852,7 +7887,7 @@
       "title": "Would You Ask Her To Move Her Car After Seeing This #Parking #Car #NeighborDrama #Unexpected",
       "publishedAt": "2026-10-17T14:00:27.000Z",
       "durationSec": 179,
-      "views": 211973,
+      "views": 211986,
       "likes": 18745,
       "comments": 4699,
       "isShort": true
@@ -7863,7 +7898,7 @@
       "title": "Woman Climbs Into Her Car While It Is Being Repossessed #Repossession #Car #TowTruck #CaughtOnCamera",
       "publishedAt": "2026-10-17T13:30:06.000Z",
       "durationSec": 108,
-      "views": 21195,
+      "views": 21196,
       "likes": 1205,
       "comments": 198,
       "isShort": true
@@ -7885,7 +7920,7 @@
       "title": "Police Officer Looks Almost Exactly Like A Famous Celebrity #PoliceOfficer #Lookalike #Unexpected #F",
       "publishedAt": "2026-10-17T01:00:27.000Z",
       "durationSec": 167,
-      "views": 18266,
+      "views": 18265,
       "likes": 1615,
       "comments": 485,
       "isShort": true
@@ -7896,9 +7931,9 @@
       "title": "Tow Truck Driver Gives An Angry Customer A Brutal Reality Check @wrecktransport #TowTruck #Towing",
       "publishedAt": "2026-10-17T00:00:27.000Z",
       "durationSec": 87,
-      "views": 243389,
-      "likes": 11181,
-      "comments": 921,
+      "views": 243479,
+      "likes": 11186,
+      "comments": 922,
       "isShort": true
     },
     {
@@ -7907,7 +7942,7 @@
       "title": "Older Man Is Convinced He Is Still In His Prime #OldPeople #Confidence #LifeLessons #Funny",
       "publishedAt": "2026-10-16T23:30:01.000Z",
       "durationSec": 125,
-      "views": 63489,
+      "views": 63492,
       "likes": 1190,
       "comments": 135,
       "isShort": true
@@ -7918,7 +7953,7 @@
       "title": "Lindsay Clancy Just Got TORCHED By Holdout Juror",
       "publishedAt": "2026-10-16T23:07:02.000Z",
       "durationSec": 924,
-      "views": 48994,
+      "views": 48995,
       "likes": 1846,
       "comments": 169,
       "isShort": false
@@ -7942,9 +7977,9 @@
       "title": "Mother Gets Judged For Wearing A Sweatshirt To A Class Party #Parenting #SchoolParty #MomLife #Socia",
       "publishedAt": "2026-10-16T22:45:18.000Z",
       "durationSec": 180,
-      "views": 1119582,
-      "likes": 66366,
-      "comments": 978,
+      "views": 1119954,
+      "likes": 66386,
+      "comments": 979,
       "isShort": true
     },
     {
@@ -7964,7 +7999,7 @@
       "title": "Steven Crowder Goes NUCLEAR May Take Down CNN",
       "publishedAt": "2026-10-16T16:41:19.000Z",
       "durationSec": 580,
-      "views": 95845,
+      "views": 95848,
       "likes": 2659,
       "comments": 137,
       "isShort": false
@@ -7975,8 +8010,8 @@
       "title": "Customer Wants His Order Remade After Waiting Too Long To Pick It Up #FoodOrder #CustomerService #Re",
       "publishedAt": "2026-10-16T14:30:33.000Z",
       "durationSec": 167,
-      "views": 82646,
-      "likes": 1930,
+      "views": 83681,
+      "likes": 1954,
       "comments": 184,
       "isShort": true
     },
@@ -7986,7 +8021,7 @@
       "title": "Taco Bell Manager Nearly Gets Hit While Wearing Earbuds #TacoBell #WorkplaceSafety #CloseCall #Caugh",
       "publishedAt": "2026-10-16T14:00:11.000Z",
       "durationSec": 178,
-      "views": 34375,
+      "views": 34379,
       "likes": 1881,
       "comments": 283,
       "isShort": true
@@ -8008,8 +8043,8 @@
       "title": "Driver Appears Completely Oblivious To The Truck In Front of Her #Driving #RoadSafety #DriverFail",
       "publishedAt": "2026-10-16T02:00:16.000Z",
       "durationSec": 126,
-      "views": 141713,
-      "likes": 4950,
+      "views": 141863,
+      "likes": 4951,
       "comments": 518,
       "isShort": true
     },
@@ -8019,8 +8054,8 @@
       "title": "Hotel Guest Says This Might Be The Worst Place She Has Ever Stayed #Hotel #CustomerService #Travel",
       "publishedAt": "2026-10-16T01:00:11.000Z",
       "durationSec": 167,
-      "views": 277967,
-      "likes": 10272,
+      "views": 278088,
+      "likes": 10276,
       "comments": 456,
       "isShort": true
     },
@@ -8041,8 +8076,8 @@
       "title": "This Homeowner Might Be The Cheapest Customer Ever #karen #entitled #customerservice #publicfreakout",
       "publishedAt": "2026-10-15T23:45:34.000Z",
       "durationSec": 160,
-      "views": 103483,
-      "likes": 2582,
+      "views": 103512,
+      "likes": 2583,
       "comments": 217,
       "isShort": true
     },
@@ -8052,7 +8087,7 @@
       "title": "HERO Dad Takes Out SHOOTER!",
       "publishedAt": "2026-10-15T23:24:14.000Z",
       "durationSec": 603,
-      "views": 83380,
+      "views": 83381,
       "likes": 3965,
       "comments": 609,
       "isShort": false
@@ -8063,7 +8098,7 @@
       "title": "Officer Says The Citizen Will Not Dictate The Encounter Before Losing Control #Police #CivilRights #",
       "publishedAt": "2026-10-15T23:00:02.000Z",
       "durationSec": 93,
-      "views": 35019,
+      "views": 35018,
       "likes": 2325,
       "comments": 131,
       "isShort": true
@@ -8096,7 +8131,7 @@
       "title": "Ilhan Omar DEPORTATION Gets REAL! CNN Freaks Out!",
       "publishedAt": "2026-10-15T21:19:47.000Z",
       "durationSec": 601,
-      "views": 93662,
+      "views": 93671,
       "likes": 3428,
       "comments": 395,
       "isShort": false
@@ -8107,9 +8142,9 @@
       "title": "Donald Trump CANCELS Livestreamed Execution!",
       "publishedAt": "2026-10-15T19:59:54.000Z",
       "durationSec": 588,
-      "views": 29281,
+      "views": 29282,
       "likes": 1105,
-      "comments": 465,
+      "comments": 464,
       "isShort": false
     },
     {
@@ -8118,9 +8153,9 @@
       "title": "Cornell 7 INSANITY Just Got WORSE!",
       "publishedAt": "2026-10-15T18:00:21.000Z",
       "durationSec": 590,
-      "views": 59772,
+      "views": 59773,
       "likes": 2070,
-      "comments": 252,
+      "comments": 251,
       "isShort": false
     },
     {
@@ -8140,7 +8175,7 @@
       "title": "Shane Gillis Backlash GOES NUCLEAR",
       "publishedAt": "2026-10-14T23:19:16.000Z",
       "durationSec": 764,
-      "views": 44805,
+      "views": 44806,
       "likes": 1047,
       "comments": 169,
       "isShort": false
@@ -8151,9 +8186,9 @@
       "title": "HOA President’s Petty Dispute With A Homeowner Spirals Out Of Control #HOA #Homeowner #NeighborhoodD",
       "publishedAt": "2026-10-14T23:00:29.000Z",
       "durationSec": 116,
-      "views": 97171,
-      "likes": 6284,
-      "comments": 1077,
+      "views": 97210,
+      "likes": 6287,
+      "comments": 1078,
       "isShort": true
     },
     {
@@ -8184,7 +8219,7 @@
       "title": "Theo Von BLASTED Over Brutal New Netflix Clip",
       "publishedAt": "2026-10-14T21:18:14.000Z",
       "durationSec": 842,
-      "views": 55530,
+      "views": 55535,
       "likes": 1362,
       "comments": 354,
       "isShort": false
@@ -8228,9 +8263,9 @@
       "title": "Mother Blames The Principal After Her Child Brings A Lighter To School #School #Parenting #Disciplin",
       "publishedAt": "2026-10-14T19:00:14.000Z",
       "durationSec": 175,
-      "views": 246479,
-      "likes": 12922,
-      "comments": 1890,
+      "views": 246784,
+      "likes": 12937,
+      "comments": 1895,
       "isShort": true
     },
     {
@@ -8239,7 +8274,7 @@
       "title": "Parent And Bus Monitor Clash Over The Treatment Of A Student #SchoolBus #Parents #StudentSafety #Acc",
       "publishedAt": "2026-10-14T18:00:30.000Z",
       "durationSec": 123,
-      "views": 11121,
+      "views": 11122,
       "likes": 399,
       "comments": 127,
       "isShort": true
@@ -8251,7 +8286,7 @@
       "publishedAt": "2026-10-14T17:00:36.000Z",
       "durationSec": 89,
       "views": 51725,
-      "likes": 3084,
+      "likes": 3085,
       "comments": 607,
       "isShort": true
     },
@@ -8283,7 +8318,7 @@
       "title": "Homeowner Considers Removing A Neighbor’s Fence From His Property #PropertyRights #Fence #Neighbors",
       "publishedAt": "2026-10-14T15:00:25.000Z",
       "durationSec": 65,
-      "views": 17043,
+      "views": 17044,
       "likes": 517,
       "comments": 48,
       "isShort": true
@@ -8294,9 +8329,9 @@
       "title": "McDonald’s Tells An Employee To Stop Saying Sir And Ma’am #McDonalds #Workplace #CustomerService",
       "publishedAt": "2026-10-14T02:00:26.000Z",
       "durationSec": 145,
-      "views": 968412,
-      "likes": 74658,
-      "comments": 4276,
+      "views": 968604,
+      "likes": 74680,
+      "comments": 4278,
       "isShort": true
     },
     {
@@ -8305,7 +8340,7 @@
       "title": "Code Enforcement Enters A Homeowner’s Property And Starts A Major Dispute #CodeEnforcement #Property",
       "publishedAt": "2026-10-14T01:00:11.000Z",
       "durationSec": 145,
-      "views": 15655,
+      "views": 15657,
       "likes": 1444,
       "comments": 228,
       "isShort": true
@@ -8327,8 +8362,8 @@
       "title": "Store Manager’s Treatment Of A Customer Sparks Outrage #StoreManager #CustomerService #Retail #Accou",
       "publishedAt": "2026-10-13T23:30:18.000Z",
       "durationSec": 176,
-      "views": 144579,
-      "likes": 5654,
+      "views": 145057,
+      "likes": 5661,
       "comments": 221,
       "isShort": true
     },
@@ -8338,9 +8373,9 @@
       "title": "Cornell 7 Women DESTROYED In New DESPERATE Move",
       "publishedAt": "2026-10-13T23:16:35.000Z",
       "durationSec": 719,
-      "views": 77638,
+      "views": 77641,
       "likes": 2299,
-      "comments": 225,
+      "comments": 224,
       "isShort": false
     },
     {
@@ -8349,7 +8384,7 @@
       "title": "Protester Gets Carried Away After An Extremely Embarrassing Exit #Protester #Demonstration #PublicRe",
       "publishedAt": "2026-10-13T23:15:13.000Z",
       "durationSec": 142,
-      "views": 5483,
+      "views": 5484,
       "likes": 675,
       "comments": 45,
       "isShort": true
@@ -8417,7 +8452,7 @@
       "title": "IT'S WAY WORSE THAN THOUGHT",
       "publishedAt": "2026-10-13T17:10:47.000Z",
       "durationSec": 630,
-      "views": 128622,
+      "views": 128623,
       "likes": 4597,
       "comments": 847,
       "isShort": false
@@ -8439,9 +8474,9 @@
       "title": "Cornell 7 INSANITY Gets Worse!",
       "publishedAt": "2026-10-12T22:00:16.000Z",
       "durationSec": 749,
-      "views": 103227,
+      "views": 103232,
       "likes": 3409,
-      "comments": 346,
+      "comments": 345,
       "isShort": false
     },
     {
@@ -8461,7 +8496,7 @@
       "title": "Illhan Omar FINDS OUT As Trump Causes EPIC MELTDOWN",
       "publishedAt": "2026-10-12T16:59:10.000Z",
       "durationSec": 645,
-      "views": 59240,
+      "views": 59241,
       "likes": 2649,
       "comments": 249,
       "isShort": false
@@ -8494,7 +8529,7 @@
       "title": "Girl Tries To Change Her Earl And Immediately Creates Confusion #Confused #Unexpected #Funny #Viral",
       "publishedAt": "2026-10-10T22:00:36.000Z",
       "durationSec": 163,
-      "views": 12766,
+      "views": 12767,
       "likes": 620,
       "comments": 160,
       "isShort": true
@@ -8527,7 +8562,7 @@
       "title": "These New Halloween Scare Pranks Are Absolutely Ruthless #Halloween #ScarePrank #Jumpscare #Funny",
       "publishedAt": "2026-10-10T19:00:22.000Z",
       "durationSec": 67,
-      "views": 171841,
+      "views": 171848,
       "likes": 4460,
       "comments": 30,
       "isShort": true
@@ -8538,7 +8573,7 @@
       "title": "Woman Translates What Common Female Phrases Actually Mean #Women #Relationships #Translation #Comedy",
       "publishedAt": "2026-10-10T18:00:10.000Z",
       "durationSec": 114,
-      "views": 61606,
+      "views": 61607,
       "likes": 2303,
       "comments": 55,
       "isShort": true
@@ -8586,9 +8621,9 @@
       "title": "USA Forever Stamps Appear To Have A Strange New Addition #ForeverStamps #USPS #PostalService #Americ",
       "publishedAt": "2026-10-09T23:00:03.000Z",
       "durationSec": 114,
-      "views": 487146,
-      "likes": 17491,
-      "comments": 1177,
+      "views": 487301,
+      "likes": 17500,
+      "comments": 1178,
       "isShort": true
     },
     {
@@ -8619,7 +8654,7 @@
       "title": "These Extremely Vocal Dogs Have A Lot To Say #Dogs #TalkingDogs #FunnyAnimals #Pets",
       "publishedAt": "2026-10-09T21:00:02.000Z",
       "durationSec": 120,
-      "views": 31723,
+      "views": 31724,
       "likes": 2298,
       "comments": 16,
       "isShort": true
@@ -8663,7 +8698,7 @@
       "title": "Cornell 7 VINDICATED Brutal New Texts Reveal SHE LIED! Lawsuits Coming!",
       "publishedAt": "2026-10-09T18:48:00.000Z",
       "durationSec": 578,
-      "views": 119565,
+      "views": 119566,
       "likes": 4262,
       "comments": 449,
       "isShort": false
@@ -8722,7 +8757,7 @@
       "title": "Historian Tries To Explain Our Completely Absurd Modern Era #History #ModernCulture #Society #Comedy",
       "publishedAt": "2026-10-09T02:00:14.000Z",
       "durationSec": 109,
-      "views": 28024,
+      "views": 28025,
       "likes": 1509,
       "comments": 223,
       "isShort": true
@@ -8766,7 +8801,7 @@
       "title": "Man Presents A Very Unusual Argument During This Heated Discussion #Debate #Argument #Controversy #D",
       "publishedAt": "2026-10-08T23:30:17.000Z",
       "durationSec": 75,
-      "views": 5264,
+      "views": 5265,
       "likes": 318,
       "comments": 41,
       "isShort": true
@@ -8788,7 +8823,7 @@
       "title": "Guy Desperately Tries To Save His Rapidly Sinking Jet Ski #JetSki #WaterSports #Rescue #Fail",
       "publishedAt": "2026-10-08T23:00:23.000Z",
       "durationSec": 152,
-      "views": 16419,
+      "views": 16420,
       "likes": 756,
       "comments": 42,
       "isShort": true
@@ -8799,7 +8834,7 @@
       "title": "Ben Bankas Weighs In On The Growing Macklemore Controversy #BenBankas #Macklemore #Comedy #Controver",
       "publishedAt": "2026-10-08T22:30:39.000Z",
       "durationSec": 100,
-      "views": 9095,
+      "views": 9096,
       "likes": 464,
       "comments": 13,
       "isShort": true
@@ -8832,7 +8867,7 @@
       "title": "Mamdani CHASED In Streets",
       "publishedAt": "2026-10-08T18:48:32.000Z",
       "durationSec": 603,
-      "views": 43325,
+      "views": 43326,
       "likes": 2619,
       "comments": 236,
       "isShort": false
@@ -8854,7 +8889,7 @@
       "title": "Be Careful With The Fuzzy Tauntaun Drink Because It Does That #FuzzyTauntaun #StarWars #ThemePark #D",
       "publishedAt": "2026-10-08T14:30:07.000Z",
       "durationSec": 80,
-      "views": 14701,
+      "views": 14702,
       "likes": 393,
       "comments": 57,
       "isShort": true
@@ -8898,7 +8933,7 @@
       "title": "This Brilliant Concert Exit Strategy Avoids The Entire Traffic Nightmare #Concert #Traffic #LifeHack",
       "publishedAt": "2026-10-08T01:00:27.000Z",
       "durationSec": 70,
-      "views": 10589,
+      "views": 10590,
       "likes": 754,
       "comments": 39,
       "isShort": true
@@ -8931,9 +8966,9 @@
       "title": "Teacher Gets Suspicious When A Dad Arrives To Collect His Son #School #Parenting #Teacher #Misunders",
       "publishedAt": "2026-10-07T23:00:04.000Z",
       "durationSec": 179,
-      "views": 1286257,
-      "likes": 47950,
-      "comments": 17407,
+      "views": 1286582,
+      "likes": 47956,
+      "comments": 17413,
       "isShort": true
     },
     {
@@ -8953,7 +8988,7 @@
       "title": "Sometimes Speed Dating Actually Goes Surprisingly Well #SpeedDating #Dating #Relationships #Unexpect",
       "publishedAt": "2026-10-07T22:30:14.000Z",
       "durationSec": 111,
-      "views": 2225,
+      "views": 2226,
       "likes": 78,
       "comments": 9,
       "isShort": true
@@ -8964,7 +8999,7 @@
       "title": "TikTok Karmelo Anthony RACE GRIFTERS Find Out!",
       "publishedAt": "2026-10-07T21:37:31.000Z",
       "durationSec": 731,
-      "views": 19928,
+      "views": 19929,
       "likes": 1004,
       "comments": 40,
       "isShort": false
@@ -9087,7 +9122,7 @@
       "title": "Aunt Surprises The Kids With Their Own Tiny Motorcycles #Motorcycles #Kids #Family #Surprise",
       "publishedAt": "2026-10-06T23:00:20.000Z",
       "durationSec": 82,
-      "views": 17784,
+      "views": 17786,
       "likes": 1231,
       "comments": 99,
       "isShort": true
@@ -9120,7 +9155,7 @@
       "title": "Planet Fitness In HUGE Trouble After Woke Policy Backfires",
       "publishedAt": "2026-10-06T22:18:08.000Z",
       "durationSec": 745,
-      "views": 84662,
+      "views": 84664,
       "likes": 3110,
       "comments": 212,
       "isShort": false
@@ -9142,7 +9177,7 @@
       "title": "McDonald's BUSTED Using AI To SCAM Customers!",
       "publishedAt": "2026-10-06T20:40:00.000Z",
       "durationSec": 733,
-      "views": 39643,
+      "views": 39644,
       "likes": 1347,
       "comments": 202,
       "isShort": false
@@ -9197,7 +9232,7 @@
       "title": "Son Returns After A Long Absence Disguised As Their Waiter #FamilyReunion #Surprise #Homecoming #Hea",
       "publishedAt": "2026-10-06T13:30:03.000Z",
       "durationSec": 107,
-      "views": 12263,
+      "views": 12264,
       "likes": 1179,
       "comments": 46,
       "isShort": true
@@ -9208,7 +9243,7 @@
       "title": "There Is Always Something Wild Happening On The Streets Of Chicago #Chicago #StreetChaos #CaughtOnCa",
       "publishedAt": "2026-10-06T01:00:24.000Z",
       "durationSec": 172,
-      "views": 5943,
+      "views": 5944,
       "likes": 438,
       "comments": 119,
       "isShort": true
@@ -9307,7 +9342,7 @@
       "title": "Leftist TERROR Strikes High School",
       "publishedAt": "2026-10-05T16:51:15.000Z",
       "durationSec": 706,
-      "views": 76310,
+      "views": 76311,
       "likes": 3538,
       "comments": 413,
       "isShort": false
@@ -9340,7 +9375,7 @@
       "title": "Woman Lets Her Dog Leave An Unwanted Gift In Her Neighbor’s Yard #Dogs #BadNeighbors #PetOwners #Cau",
       "publishedAt": "2026-10-04T13:30:11.000Z",
       "durationSec": 64,
-      "views": 36142,
+      "views": 36144,
       "likes": 2014,
       "comments": 383,
       "isShort": true
@@ -9362,7 +9397,7 @@
       "title": "Man Climbs Into A Manhole To Rescue A Bottle Of Sunscreen #Manhole #Sunscreen #RescueMission #Funny",
       "publishedAt": "2026-10-04T01:00:17.000Z",
       "durationSec": 75,
-      "views": 17562,
+      "views": 17563,
       "likes": 772,
       "comments": 129,
       "isShort": true
@@ -9428,7 +9463,7 @@
       "title": "Store Manager Catches A Customer Red Handed And Immediately Confronts Her #Retail #Shoplifting #Stor",
       "publishedAt": "2026-10-03T00:00:31.000Z",
       "durationSec": 130,
-      "views": 219364,
+      "views": 219365,
       "likes": 16505,
       "comments": 1938,
       "isShort": true
@@ -9483,7 +9518,7 @@
       "title": "Parents Use A Creative Prank To Finally Limit Their Kid’s Screen Time #ScreenTime #Parenting #Prank",
       "publishedAt": "2026-10-02T02:30:14.000Z",
       "durationSec": 75,
-      "views": 63874,
+      "views": 63881,
       "likes": 2965,
       "comments": 234,
       "isShort": true
@@ -9505,7 +9540,7 @@
       "title": "Shrinkflation Has Officially Come For Your Rolls Of Toilet Paper #Shrinkflation #ToiletPaper #Consum",
       "publishedAt": "2026-10-02T00:00:30.000Z",
       "durationSec": 153,
-      "views": 36540,
+      "views": 36541,
       "likes": 2822,
       "comments": 301,
       "isShort": true
@@ -9516,8 +9551,8 @@
       "title": "Strange Things Keep Happening On The New York City Subway #NewYorkSubway #PublicTransit #Unexpected",
       "publishedAt": "2026-10-01T23:30:26.000Z",
       "durationSec": 72,
-      "views": 3379881,
-      "likes": 31883,
+      "views": 3380209,
+      "likes": 31887,
       "comments": 225,
       "isShort": true
     },
@@ -9527,7 +9562,7 @@
       "title": "Her Friend’s Boyfriend Is Not Enjoying Her Intrusive Energy #Friendship #Boyfriend #Awkward #Relatio",
       "publishedAt": "2026-10-01T23:00:36.000Z",
       "durationSec": 101,
-      "views": 63149,
+      "views": 63151,
       "likes": 2125,
       "comments": 306,
       "isShort": true
@@ -9560,7 +9595,7 @@
       "title": "Big Announcement",
       "publishedAt": "2026-10-01T21:03:28.000Z",
       "durationSec": 770,
-      "views": 81819,
+      "views": 81818,
       "likes": 4356,
       "comments": 606,
       "isShort": false
@@ -9593,7 +9628,7 @@
       "title": "This Hilarious Bird Has More Personality Than Most People #Birds #FunnyAnimals #Pets #Personality",
       "publishedAt": "2026-10-01T13:30:15.000Z",
       "durationSec": 99,
-      "views": 18430,
+      "views": 18431,
       "likes": 2238,
       "comments": 69,
       "isShort": true
@@ -9615,7 +9650,7 @@
       "title": "Monkey Unexpectedly Interrupts A Man’s Peaceful Afternoon By The Pool #Monkey #PoolTime #Wildlife #U",
       "publishedAt": "2026-10-01T01:00:34.000Z",
       "durationSec": 144,
-      "views": 8965,
+      "views": 8966,
       "likes": 677,
       "comments": 111,
       "isShort": true
@@ -9626,7 +9661,7 @@
       "title": "Woman Walks Straight Toward The Camera Insisting She Cannot Be Recorded #PublicFilming #Confrontatio",
       "publishedAt": "2026-10-01T00:00:15.000Z",
       "durationSec": 128,
-      "views": 67027,
+      "views": 67028,
       "likes": 4886,
       "comments": 1252,
       "isShort": true
@@ -9670,7 +9705,7 @@
       "title": "These Brilliant Tool Organization Tips Could Transform Your Entire Workshop #ToolOrganization #Works",
       "publishedAt": "2026-09-30T23:00:06.000Z",
       "durationSec": 80,
-      "views": 117381,
+      "views": 117390,
       "likes": 3513,
       "comments": 55,
       "isShort": true
@@ -9681,7 +9716,7 @@
       "title": "Country Club Customer Has A Complete Meltdown Inside The Pro Shop #CountryClub #CustomerMeltdown #Pu",
       "publishedAt": "2026-09-30T22:30:02.000Z",
       "durationSec": 135,
-      "views": 63491,
+      "views": 63492,
       "likes": 1947,
       "comments": 108,
       "isShort": true
@@ -9703,7 +9738,7 @@
       "title": "Walmart BUSTED In Massive Ripoff Scheme & Folds",
       "publishedAt": "2026-09-30T21:11:18.000Z",
       "durationSec": 692,
-      "views": 40989,
+      "views": 40990,
       "likes": 1884,
       "comments": 303,
       "isShort": false
@@ -9758,7 +9793,7 @@
       "title": "We Definitely Need To See More Incredible Trucks Like This #Trucks #CustomVehicles #Automotive #Engi",
       "publishedAt": "2026-09-30T13:30:13.000Z",
       "durationSec": 114,
-      "views": 137769,
+      "views": 137770,
       "likes": 6020,
       "comments": 105,
       "isShort": true
@@ -9780,7 +9815,7 @@
       "title": "Two Women Turn A Henderson Parking Lot Dispute Into Total Chaos #ParkingLot #PublicFreakout",
       "publishedAt": "2026-09-30T01:00:35.000Z",
       "durationSec": 94,
-      "views": 153645,
+      "views": 153648,
       "likes": 3574,
       "comments": 228,
       "isShort": true
@@ -9791,7 +9826,7 @@
       "title": "Woman Reconsiders Her Position After Watching A 60 Minutes Interview #60Minutes #PublicOpinion #Inte",
       "publishedAt": "2026-09-30T00:00:03.000Z",
       "durationSec": 107,
-      "views": 9568,
+      "views": 9569,
       "likes": 586,
       "comments": 85,
       "isShort": true
@@ -9802,7 +9837,7 @@
       "title": "Modern Woman Shares Her Complicated Feelings About Dating Today #ModernDating #Relationships #Women",
       "publishedAt": "2026-09-29T23:30:38.000Z",
       "durationSec": 75,
-      "views": 20961,
+      "views": 20962,
       "likes": 765,
       "comments": 56,
       "isShort": true
@@ -9826,7 +9861,7 @@
       "title": "This Is Exactly Why You Never Park In Front Of Fire Hydrants #FireHydrant #ParkingFail #Firefighters",
       "publishedAt": "2026-09-29T23:00:01.000Z",
       "durationSec": 129,
-      "views": 43360,
+      "views": 43362,
       "likes": 3655,
       "comments": 830,
       "isShort": true
@@ -9870,7 +9905,7 @@
       "title": "Candace Owens SUED Again",
       "publishedAt": "2026-09-29T19:13:24.000Z",
       "durationSec": 668,
-      "views": 13438,
+      "views": 13439,
       "likes": 1013,
       "comments": 109,
       "isShort": false
@@ -9936,7 +9971,7 @@
       "title": "Transgender Debate Quickly Becomes An Awkward And Heated Exchange #TransgenderDebate #Culture #Discu",
       "publishedAt": "2026-09-29T13:30:28.000Z",
       "durationSec": 172,
-      "views": 10724,
+      "views": 10726,
       "likes": 1256,
       "comments": 61,
       "isShort": true
@@ -9947,8 +9982,8 @@
       "title": "This Wild Bus Ride Through India Is Absolutely Terrifying #India #BusRide #DangerousDriving #Travel",
       "publishedAt": "2026-09-29T02:00:38.000Z",
       "durationSec": 90,
-      "views": 121927,
-      "likes": 5408,
+      "views": 121928,
+      "likes": 5407,
       "comments": 1132,
       "isShort": true
     },
@@ -9958,7 +9993,7 @@
       "title": "They Taught This Robot Kung Fu And The Results Are Incredible #Robotics #MartialArts #Technology #In",
       "publishedAt": "2026-09-29T01:00:24.000Z",
       "durationSec": 104,
-      "views": 83973,
+      "views": 83974,
       "likes": 1767,
       "comments": 285,
       "isShort": true
@@ -10057,7 +10092,7 @@
       "title": "Lindsay Clancy BACK IN COURT As Deleted Reddit Messages Surface",
       "publishedAt": "2026-09-28T17:56:10.000Z",
       "durationSec": 854,
-      "views": 108922,
+      "views": 108923,
       "likes": 3611,
       "comments": 581,
       "isShort": false
@@ -10068,8 +10103,8 @@
       "title": "Comedian Describes The Nightmare Of Sitting Beside A Kid On A Flight #Comedy #AirTravel #Children",
       "publishedAt": "2026-09-27T14:30:04.000Z",
       "durationSec": 179,
-      "views": 1703685,
-      "likes": 38142,
+      "views": 1703866,
+      "likes": 38143,
       "comments": 96,
       "isShort": true
     },
@@ -10090,7 +10125,7 @@
       "title": "His Description Of Living With ADHD Goes Beyond The Usual Stereotypes #ADHD #PersonalExperience #Dai",
       "publishedAt": "2026-09-27T13:30:14.000Z",
       "durationSec": 72,
-      "views": 33716,
+      "views": 33719,
       "likes": 2390,
       "comments": 216,
       "isShort": true
@@ -10112,7 +10147,7 @@
       "title": "She Spots Something Missing In America And Starts Her Own Business #SmallBusiness #Entrepreneurship",
       "publishedAt": "2026-09-27T01:00:31.000Z",
       "durationSec": 147,
-      "views": 49963,
+      "views": 49964,
       "likes": 2408,
       "comments": 594,
       "isShort": true
@@ -10200,7 +10235,7 @@
       "title": "Officer Mistakes A Driver’s Sandwich For A Phone During Traffic Stop #Police #TrafficStop #Sandwich",
       "publishedAt": "2026-09-26T13:30:02.000Z",
       "durationSec": 88,
-      "views": 21883,
+      "views": 21885,
       "likes": 1620,
       "comments": 168,
       "isShort": true
@@ -10211,7 +10246,7 @@
       "title": "RNC Attendees Share Their Personal Memories And Thoughts About Charlie Kirk #CharlieKirk #RNC #Inter",
       "publishedAt": "2026-09-26T02:00:29.000Z",
       "durationSec": 125,
-      "views": 11459,
+      "views": 11460,
       "likes": 2099,
       "comments": 74,
       "isShort": true
@@ -10233,7 +10268,7 @@
       "title": "Man Urges Other Men To Stand Firm Against Toxic Relationship Behavior #Men #Relationships #Boundary",
       "publishedAt": "2026-09-26T01:00:18.000Z",
       "durationSec": 99,
-      "views": 4793,
+      "views": 4794,
       "likes": 772,
       "comments": 34,
       "isShort": true
@@ -10299,7 +10334,7 @@
       "title": "Karmelo Anthony ATTACKED In Prison Grifters Pounce!",
       "publishedAt": "2026-09-25T16:40:40.000Z",
       "durationSec": 729,
-      "views": 169885,
+      "views": 169888,
       "likes": 10516,
       "comments": 2344,
       "isShort": false
@@ -10310,7 +10345,7 @@
       "title": "This Dolphin Has Other Plans For The Fishermen’s Day On The Water #Dolphin #Fishing #MarineLife #Fun",
       "publishedAt": "2026-09-25T14:30:03.000Z",
       "durationSec": 80,
-      "views": 656528,
+      "views": 656529,
       "likes": 18454,
       "comments": 70,
       "isShort": true
@@ -10332,7 +10367,7 @@
       "title": "Man Runs Up A Massive Lap Dance Bill And Refuses To Pay #UnpaidBill #Nightclub #Entitlement",
       "publishedAt": "2026-09-25T13:30:28.000Z",
       "durationSec": 170,
-      "views": 46567,
+      "views": 46568,
       "likes": 1881,
       "comments": 170,
       "isShort": true
@@ -10343,7 +10378,7 @@
       "title": "Anti-Woke South Park DESTROYS Modern South Park & Goes Viral!",
       "publishedAt": "2026-09-24T22:40:19.000Z",
       "durationSec": 760,
-      "views": 170967,
+      "views": 170965,
       "likes": 5667,
       "comments": 812,
       "isShort": false
@@ -10420,7 +10455,7 @@
       "title": "She Turns A Date Into An Unexpected Opportunity To Share The Gospel #Dating #Gospel #Christianity #F",
       "publishedAt": "2026-09-23T23:00:39.000Z",
       "durationSec": 147,
-      "views": 719027,
+      "views": 719029,
       "likes": 34502,
       "comments": 373,
       "isShort": true
@@ -10431,7 +10466,7 @@
       "title": "Candace Owens EXPOSED Again!",
       "publishedAt": "2026-09-23T23:00:19.000Z",
       "durationSec": 697,
-      "views": 24869,
+      "views": 24870,
       "likes": 1336,
       "comments": 167,
       "isShort": false
@@ -10442,7 +10477,7 @@
       "title": "Brutal News For Men",
       "publishedAt": "2026-09-23T22:41:53.000Z",
       "durationSec": 800,
-      "views": 98430,
+      "views": 98432,
       "likes": 3723,
       "comments": 836,
       "isShort": false
@@ -10519,7 +10554,7 @@
       "title": "Woman Explains Why She Thinks Jealousy Works Differently For Men #Jealousy #Men #Women #Relationship",
       "publishedAt": "2026-09-23T13:30:28.000Z",
       "durationSec": 117,
-      "views": 16204,
+      "views": 16207,
       "likes": 1027,
       "comments": 53,
       "isShort": true
@@ -10541,7 +10576,7 @@
       "title": "Her First Date Story Takes A Turn Nobody Would See Coming #FirstDate #DatingStory #PlotTwist #Unexpe",
       "publishedAt": "2026-09-23T01:00:09.000Z",
       "durationSec": 173,
-      "views": 196166,
+      "views": 196168,
       "likes": 4135,
       "comments": 158,
       "isShort": true
@@ -10585,7 +10620,7 @@
       "title": "Husband Pretends Her Cat Died In A Ploy To Expose Cheating #Cheating #Marriage #Cat #RelationshipDra",
       "publishedAt": "2026-09-22T23:00:28.000Z",
       "durationSec": 98,
-      "views": 161475,
+      "views": 161478,
       "likes": 3042,
       "comments": 125,
       "isShort": true
@@ -10706,7 +10741,7 @@
       "title": "Security Guard Insists The Sidewalk Is Private Property During Confrontation #SecurityGuard #Sidewal",
       "publishedAt": "2026-09-22T13:30:34.000Z",
       "durationSec": 160,
-      "views": 11808,
+      "views": 11810,
       "likes": 977,
       "comments": 73,
       "isShort": true
@@ -10829,7 +10864,7 @@
       "title": "Carrot Top Does The Unthinkable",
       "publishedAt": "2026-09-21T18:48:51.000Z",
       "durationSec": 665,
-      "views": 120111,
+      "views": 120112,
       "likes": 5131,
       "comments": 423,
       "isShort": false
@@ -10884,7 +10919,7 @@
       "title": "Nine Voicemails Turn Into A Very Awkward Police Visit #Voicemail #Exes #Bodycam #Viral",
       "publishedAt": "2026-09-20T13:30:05.000Z",
       "durationSec": 179,
-      "views": 11621,
+      "views": 11622,
       "likes": 1045,
       "comments": 124,
       "isShort": true
@@ -10895,7 +10930,7 @@
       "title": "Customer Returns Next Morning To Complain About Pizza #PizzaHut #Customer #Restaurant #Viral",
       "publishedAt": "2026-09-19T14:30:14.000Z",
       "durationSec": 144,
-      "views": 92591,
+      "views": 92592,
       "likes": 2535,
       "comments": 263,
       "isShort": true
@@ -10906,7 +10941,7 @@
       "title": "Girl Loses Dream Job For Submitting Her Documents Too Late And Completely Lacks Accountability #Drea",
       "publishedAt": "2026-09-19T14:00:24.000Z",
       "durationSec": 64,
-      "views": 181008,
+      "views": 181011,
       "likes": 6883,
       "comments": 521,
       "isShort": true
@@ -10917,7 +10952,7 @@
       "title": "Tenant Calls Police Over Roof And Learns Hard Lesson #Tenant #Roof #Police #Viral mp4",
       "publishedAt": "2026-09-19T13:30:26.000Z",
       "durationSec": 172,
-      "views": 22273,
+      "views": 22275,
       "likes": 2093,
       "comments": 150,
       "isShort": true
@@ -10939,7 +10974,7 @@
       "title": "Server Says Twenty Percent Tips Are No Longer Enough #Tipping #Server #Debate #Viral",
       "publishedAt": "2026-09-19T01:00:17.000Z",
       "durationSec": 119,
-      "views": 225148,
+      "views": 225149,
       "likes": 6476,
       "comments": 1191,
       "isShort": true
@@ -10972,7 +11007,7 @@
       "title": "Neighbor Confronted Over Speeding Through Residential Street #Neighbor #Speeding #Argument #Viral",
       "publishedAt": "2026-09-18T23:00:13.000Z",
       "durationSec": 104,
-      "views": 11211,
+      "views": 11213,
       "likes": 895,
       "comments": 53,
       "isShort": true
@@ -11016,7 +11051,7 @@
       "title": "Lindsay Clancy BLASTED By Judge Judy",
       "publishedAt": "2026-09-18T20:00:22.000Z",
       "durationSec": 624,
-      "views": 34298,
+      "views": 34299,
       "likes": 1507,
       "comments": 118,
       "isShort": false
@@ -11049,7 +11084,7 @@
       "title": "Tesla’s Robot Is Now Serving Popcorn To Customers #Tesla #Optimus #Robot #Viral",
       "publishedAt": "2026-09-18T14:30:30.000Z",
       "durationSec": 60,
-      "views": 4780,
+      "views": 4783,
       "likes": 204,
       "comments": 14,
       "isShort": true
@@ -11060,7 +11095,7 @@
       "title": "Riders Say Los Angeles Metro Has Stopped Enforcing Fares #Metro #LosAngeles #Transit #Viral",
       "publishedAt": "2026-09-18T14:00:14.000Z",
       "durationSec": 99,
-      "views": 21381,
+      "views": 21382,
       "likes": 1817,
       "comments": 136,
       "isShort": true
@@ -11071,7 +11106,7 @@
       "title": "Adult Sneaks Into High School Disguised As Student #School #Disguise #Bodycam #Viral",
       "publishedAt": "2026-09-18T13:30:40.000Z",
       "durationSec": 176,
-      "views": 10164,
+      "views": 10166,
       "likes": 847,
       "comments": 93,
       "isShort": true
@@ -11093,7 +11128,7 @@
       "title": "The Girl Found Out How Powerful The Mask Is #Mask #Confidence #Transformation #Funny",
       "publishedAt": "2026-09-18T01:00:12.000Z",
       "durationSec": 113,
-      "views": 12425,
+      "views": 12427,
       "likes": 1285,
       "comments": 32,
       "isShort": true
@@ -11104,7 +11139,7 @@
       "title": "Woman Interrupts ICE Arrest Then Demands An Uber #Seattle #ICE #Argument #Viral",
       "publishedAt": "2026-09-18T00:00:06.000Z",
       "durationSec": 100,
-      "views": 36242,
+      "views": 36247,
       "likes": 2796,
       "comments": 954,
       "isShort": true
@@ -11159,7 +11194,7 @@
       "title": "Lindsay Clancy FIRES Lawyer As Massive Scandal Revealed",
       "publishedAt": "2026-09-17T17:51:59.000Z",
       "durationSec": 820,
-      "views": 146323,
+      "views": 146324,
       "likes": 6445,
       "comments": 832,
       "isShort": false
@@ -11181,7 +11216,7 @@
       "title": "This Homemade Flying Machine Is Way Too Awesome #FlyingMachine #HomemadeAircraft #Engineering #Innov",
       "publishedAt": "2026-09-17T14:30:03.000Z",
       "durationSec": 176,
-      "views": 965663,
+      "views": 965664,
       "likes": 41940,
       "comments": 297,
       "isShort": true
@@ -11192,7 +11227,7 @@
       "title": "Driver Blocks Truck Scale Then Stops To Pray #Trucking #Parking #Public #Viral",
       "publishedAt": "2026-09-17T14:00:12.000Z",
       "durationSec": 62,
-      "views": 656193,
+      "views": 656203,
       "likes": 36560,
       "comments": 4847,
       "isShort": true
@@ -11203,7 +11238,7 @@
       "title": "Dude Busts His Girlfriend For Not Going To The Gym Every Day #Gym #Girlfriend #Relationship #Caught",
       "publishedAt": "2026-09-17T13:30:40.000Z",
       "durationSec": 75,
-      "views": 64030,
+      "views": 64052,
       "likes": 2491,
       "comments": 156,
       "isShort": true
@@ -11225,7 +11260,7 @@
       "title": "Dude Catches His Wife Cheating While She Was Supposed To Be With The Kids #Cheating #Marriage #Betra",
       "publishedAt": "2026-09-17T01:00:05.000Z",
       "durationSec": 74,
-      "views": 317141,
+      "views": 317157,
       "likes": 7906,
       "comments": 270,
       "isShort": true
@@ -11236,8 +11271,8 @@
       "title": "Toyota Is Practically Giving This Hydrogen Car Away #Toyota #Hydrogen #Cars #Viral",
       "publishedAt": "2026-09-17T00:00:12.000Z",
       "durationSec": 67,
-      "views": 190696,
-      "likes": 4896,
+      "views": 190700,
+      "likes": 4897,
       "comments": 531,
       "isShort": true
     },
@@ -11247,8 +11282,8 @@
       "title": "His Tesla Detected People Inside An Empty Graveyard #Tesla #Graveyard #Mystery #Viral",
       "publishedAt": "2026-09-16T23:30:24.000Z",
       "durationSec": 98,
-      "views": 2576658,
-      "likes": 84197,
+      "views": 2577239,
+      "likes": 84210,
       "comments": 717,
       "isShort": true
     },
@@ -11269,7 +11304,7 @@
       "title": "TikTok Influencer Crashes Car And Acts Absolutely Incoherent #TikTokInfluencer #CarCrash #Incoherent",
       "publishedAt": "2026-09-16T23:00:33.000Z",
       "durationSec": 178,
-      "views": 22385,
+      "views": 22387,
       "likes": 1908,
       "comments": 84,
       "isShort": true
@@ -11357,8 +11392,8 @@
       "title": "This Old Dude Is Absolutely Hysterical #OldPeople #Comedy #Storytelling #Funny",
       "publishedAt": "2026-09-16T13:30:36.000Z",
       "durationSec": 166,
-      "views": 1577414,
-      "likes": 102050,
+      "views": 1579780,
+      "likes": 102115,
       "comments": 1928,
       "isShort": true
     },
@@ -11566,7 +11601,7 @@
       "title": "Seeing A Live B 2 Bomber In America Is Awesome #B2Bomber #MilitaryAviation #America #Aircraft",
       "publishedAt": "2026-09-14T23:30:10.000Z",
       "durationSec": 78,
-      "views": 3882,
+      "views": 3883,
       "likes": 269,
       "comments": 13,
       "isShort": true
@@ -11588,7 +11623,7 @@
       "title": "Lindsay Clancy Lawyer In HUGE Trouble",
       "publishedAt": "2026-09-14T22:30:16.000Z",
       "durationSec": 890,
-      "views": 215412,
+      "views": 215413,
       "likes": 8409,
       "comments": 927,
       "isShort": false
@@ -11621,7 +11656,7 @@
       "title": "Psycho Liberals INSTANT Regret!",
       "publishedAt": "2026-09-14T21:00:32.000Z",
       "durationSec": 851,
-      "views": 90892,
+      "views": 90894,
       "likes": 3891,
       "comments": 320,
       "isShort": false
@@ -11676,7 +11711,7 @@
       "title": "How Do You Brain Fart This Badly  #BrainFart #Confused #GameShow #Funny",
       "publishedAt": "2026-09-13T22:00:27.000Z",
       "durationSec": 57,
-      "views": 11046,
+      "views": 11049,
       "likes": 442,
       "comments": 20,
       "isShort": true
@@ -11931,7 +11966,7 @@
       "title": "Guy Eats At Every Chinese Buffet He Can Until He Gets Food Poisoning #ChineseBuffet #FoodChallenge #",
       "publishedAt": "2026-09-10T23:00:50.000Z",
       "durationSec": 179,
-      "views": 205871,
+      "views": 205872,
       "likes": 11289,
       "comments": 989,
       "isShort": true
@@ -12030,7 +12065,7 @@
       "title": "The Cardboard Cutouts Have Them Jumping Out Of Their Skin #CardboardCutout #Jumpscare #Prank #Funny",
       "publishedAt": "2026-09-10T18:00:38.000Z",
       "durationSec": 69,
-      "views": 16151,
+      "views": 16154,
       "likes": 424,
       "comments": 7,
       "isShort": true
@@ -12063,7 +12098,7 @@
       "title": "Guy Just Wanted To Order His Lunch And Had To Deal With This Lady #LunchOrder #Restaurant #fafo",
       "publishedAt": "2026-09-10T14:00:00.000Z",
       "durationSec": 95,
-      "views": 1105750,
+      "views": 1105755,
       "likes": 25511,
       "comments": 3242,
       "isShort": true
@@ -12164,7 +12199,7 @@
       "title": "I Bet This Inspired A Slew Of Anime #Anime #Inspiration #Action #Cinema",
       "publishedAt": "2026-09-09T22:30:32.000Z",
       "durationSec": 92,
-      "views": 3543,
+      "views": 3544,
       "likes": 266,
       "comments": 6,
       "isShort": true
@@ -12219,7 +12254,7 @@
       "title": "This Weird Instrument Sounds Like A Human Voice #Instrument #HumanVoice #Music #Unusual",
       "publishedAt": "2026-09-09T14:30:33.000Z",
       "durationSec": 126,
-      "views": 3233,
+      "views": 3234,
       "likes": 93,
       "comments": 12,
       "isShort": true
@@ -12231,7 +12266,7 @@
       "publishedAt": "2026-09-09T14:00:37.000Z",
       "durationSec": 108,
       "views": 318040,
-      "likes": 18726,
+      "likes": 18725,
       "comments": 1276,
       "isShort": true
     },
@@ -12252,8 +12287,8 @@
       "title": "What Have They Done To The Pickles  #Pickles #FoodIndustry #Ingredients #Food",
       "publishedAt": "2026-09-09T02:00:02.000Z",
       "durationSec": 176,
-      "views": 2915118,
-      "likes": 93881,
+      "views": 2915524,
+      "likes": 93886,
       "comments": 4090,
       "isShort": true
     },
@@ -12276,7 +12311,7 @@
       "title": "Jimmy Kimmel FIRED For Good! It's Over!",
       "publishedAt": "2026-09-09T00:11:00.000Z",
       "durationSec": 726,
-      "views": 84130,
+      "views": 84131,
       "likes": 3726,
       "comments": 408,
       "isShort": false
@@ -12287,7 +12322,7 @@
       "title": "This Raise Your Hand And Squat Prank Is So Devious #SquatPrank #Challenge #Devious #Funny",
       "publishedAt": "2026-09-08T23:30:34.000Z",
       "durationSec": 72,
-      "views": 10877,
+      "views": 10878,
       "likes": 558,
       "comments": 19,
       "isShort": true
@@ -12298,7 +12333,7 @@
       "title": "He Got Her With The Laundry Challenge #LaundryChallenge #Couples #Prank #Funny",
       "publishedAt": "2026-09-08T23:00:14.000Z",
       "durationSec": 68,
-      "views": 61774,
+      "views": 61775,
       "likes": 1777,
       "comments": 117,
       "isShort": true
@@ -12309,7 +12344,7 @@
       "title": "Lindsay Clancy Jury SPEAKS OUT In Unhinged Interview",
       "publishedAt": "2026-09-08T22:56:59.000Z",
       "durationSec": 755,
-      "views": 102287,
+      "views": 102288,
       "likes": 3667,
       "comments": 1018,
       "isShort": false
@@ -12529,7 +12564,7 @@
       "title": "This Girl Struggles To Put Gas In Her Car With No Help #Fail #GasStation #Fuel #Funny",
       "publishedAt": "2026-09-06T22:30:07.000Z",
       "durationSec": 114,
-      "views": 46349,
+      "views": 46355,
       "likes": 1354,
       "comments": 171,
       "isShort": true
