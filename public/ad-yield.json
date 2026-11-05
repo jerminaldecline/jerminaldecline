@@ -1,22 +1,22 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-11-04",
+ "_generated": "2026-11-05",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-11-04",
-  "snapshots": 290
+  "to": "2026-11-05",
+  "snapshots": 291
  },
  "ageMinDays": 14,
  "sample": {
-  "campaigns": 9,
-  "campaignDays": 37,
+  "campaigns": 11,
+  "campaignDays": 39,
   "adViews": 193318
  },
  "viewsPerCampaignDay": {
-  "low": 1367,
-  "central": 5225,
+  "low": 0,
+  "central": 4957,
   "high": 11127
  },
  "cpvUSD": {
@@ -25,10 +25,11 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
+  "OHSwVxhZe-E": 1,
+  "Sr0WmHdxJvs": 50,
   "FiLs5ovIfts": 59,
   "5CwhyEC_nz0": 16,
   "kT0UsZpuKaU": 17,
-  "Sr0WmHdxJvs": 49,
   "O_LjCrLlUAw": 7,
   "EeVtP-LxWaI": 2,
   "iTu_6j22RAM": 3,
@@ -173,19 +174,6 @@
    "perDay": 2452
   },
   {
-   "id": "FiLs5ovIfts",
-   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-06-28",
-   "to": "2026-07-02",
-   "days": 5,
-   "observedTo": "2026-07-04",
-   "observedDays": 7,
-   "gain": 6837,
-   "baselinePerDay": 0,
-   "adViews": 6837,
-   "perDay": 1367
-  },
-  {
    "id": "Sr0WmHdxJvs",
    "title": "Movie Theatre Black Fatigue Backfire!",
    "from": "2026-06-28",
@@ -197,6 +185,19 @@
    "baselinePerDay": 0,
    "adViews": 7116,
    "perDay": 1423
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-06-28",
+   "to": "2026-07-02",
+   "days": 5,
+   "observedTo": "2026-07-04",
+   "observedDays": 7,
+   "gain": 6837,
+   "baselinePerDay": 0,
+   "adViews": 6837,
+   "perDay": 1367
   },
   {
    "id": "3O6sdSffHzs",
@@ -212,19 +213,6 @@
    "perDay": 1586
   },
   {
-   "id": "FiLs5ovIfts",
-   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-08-10",
-   "to": "2026-08-13",
-   "days": 4,
-   "observedTo": "2026-08-15",
-   "observedDays": 6,
-   "gain": 34087,
-   "baselinePerDay": 0,
-   "adViews": 34087,
-   "perDay": 8522
-  },
-  {
    "id": "Sr0WmHdxJvs",
    "title": "Movie Theatre Black Fatigue Backfire!",
    "from": "2026-08-10",
@@ -236,6 +224,19 @@
    "baselinePerDay": 1,
    "adViews": 38708,
    "perDay": 9677
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-08-10",
+   "to": "2026-08-13",
+   "days": 4,
+   "observedTo": "2026-08-15",
+   "observedDays": 6,
+   "gain": 34087,
+   "baselinePerDay": 0,
+   "adViews": 34087,
+   "perDay": 8522
   },
   {
    "id": "3O6sdSffHzs",
@@ -262,6 +263,32 @@
    "baselinePerDay": 1,
    "adViews": 42114,
    "perDay": 10529
+  },
+  {
+   "id": "Sr0WmHdxJvs",
+   "title": "Movie Theatre Black Fatigue Backfire!",
+   "from": "2026-11-04",
+   "to": "2026-11-04",
+   "days": 1,
+   "observedTo": "2026-11-05",
+   "observedDays": 2,
+   "gain": 5,
+   "baselinePerDay": 4,
+   "adViews": 0,
+   "perDay": 0
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-11-04",
+   "to": "2026-11-04",
+   "days": 1,
+   "observedTo": "2026-11-05",
+   "observedDays": 2,
+   "gain": 0,
+   "baselinePerDay": 0,
+   "adViews": 0,
+   "perDay": 0
   }
  ]
 }

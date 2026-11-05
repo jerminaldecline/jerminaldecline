@@ -1,13 +1,79 @@
 {
  "_note": "Per-video advertising history from the Google Ads Transparency Centre. Each creative is one ad entry with its own first/last-shown dates, so a video promoted repeatedly shows a run count above 1. Independent of ad-ledger.json, which infers bursts from view snapshots and only reaches back to 2026-06-11.",
  "_method": "SearchCreatives capture; each creative's preview resolved to its video",
- "_generated": "2026-11-04",
+ "_generated": "2026-11-05",
  "advertiser": "Marketing Sheriff",
- "creatives": 216,
- "resolved": 214,
+ "creatives": 218,
+ "resolved": 216,
  "unresolved": 2,
  "trackingFrom": "2025-11-03",
  "videos": {
+  "OHSwVxhZe-E": {
+   "runs": 1,
+   "windows": [
+    [
+     "2026-11-05",
+     "2026-11-05"
+    ]
+   ],
+   "first": "2026-11-05",
+   "last": "2026-11-05"
+  },
+  "Sr0WmHdxJvs": {
+   "runs": 12,
+   "windows": [
+    [
+     "2026-04-19",
+     "2026-04-23"
+    ],
+    [
+     "2026-04-24",
+     "2026-04-27"
+    ],
+    [
+     "2026-04-27",
+     "2026-05-01"
+    ],
+    [
+     "2026-05-11",
+     "2026-05-14"
+    ],
+    [
+     "2026-05-14",
+     "2026-05-18"
+    ],
+    [
+     "2026-05-23",
+     "2026-05-26"
+    ],
+    [
+     "2026-05-26",
+     "2026-05-29"
+    ],
+    [
+     "2026-06-03",
+     "2026-06-07"
+    ],
+    [
+     "2026-06-28",
+     "2026-07-02"
+    ],
+    [
+     "2026-08-10",
+     "2026-08-13"
+    ],
+    [
+     "2026-08-16",
+     "2026-08-19"
+    ],
+    [
+     "2026-11-04",
+     "2026-11-04"
+    ]
+   ],
+   "first": "2026-04-19",
+   "last": "2026-11-04"
+  },
   "FiLs5ovIfts": {
    "runs": 14,
    "windows": [
@@ -92,57 +158,6 @@
    ],
    "first": "2026-08-10",
    "last": "2026-08-26"
-  },
-  "Sr0WmHdxJvs": {
-   "runs": 11,
-   "windows": [
-    [
-     "2026-04-19",
-     "2026-04-23"
-    ],
-    [
-     "2026-04-24",
-     "2026-04-27"
-    ],
-    [
-     "2026-04-27",
-     "2026-05-01"
-    ],
-    [
-     "2026-05-11",
-     "2026-05-14"
-    ],
-    [
-     "2026-05-14",
-     "2026-05-18"
-    ],
-    [
-     "2026-05-23",
-     "2026-05-26"
-    ],
-    [
-     "2026-05-26",
-     "2026-05-29"
-    ],
-    [
-     "2026-06-03",
-     "2026-06-07"
-    ],
-    [
-     "2026-06-28",
-     "2026-07-02"
-    ],
-    [
-     "2026-08-10",
-     "2026-08-13"
-    ],
-    [
-     "2026-08-16",
-     "2026-08-19"
-    ]
-   ],
-   "first": "2026-04-19",
-   "last": "2026-08-19"
   },
   "O_LjCrLlUAw": {
    "runs": 2,
