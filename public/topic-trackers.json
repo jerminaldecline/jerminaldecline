@@ -1,35 +1,60 @@
 {
-  "lastUpdated": "2026-11-04T12:22:41.487Z",
+  "lastUpdated": "2026-11-05T12:37:28.471Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "election",
+      "keywords": [
+        "election",
+        "across",
+        "ballot",
+        "county",
+        "erupted",
+        "paper",
+        "york",
+        "day"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4583,
+        "baselineSaturation": 0.0784,
+        "spikeRatio": 5.85,
+        "recentVideoCount": 11,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-11-05T12:37:28.471Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "election",
       "keywords": [
         "election",
-        "michigan"
+        "night",
+        "election night"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0181,
-        "spikeRatio": 18.44,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-11-04T12:22:41.487Z"
+        "recentSaturation": 0.3529,
+        "baselineSaturation": 0.006,
+        "spikeRatio": 59.29,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-11-05T12:37:28.471Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "political",
+      "termId": "midterm",
       "keywords": [
-        "political"
+        "midterm",
+        "warned",
+        "trump"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0301,
-        "spikeRatio": 11.07,
-        "recentVideoCount": 5,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-11-04T12:22:41.487Z"
+        "recentSaturation": 0.4118,
+        "baselineSaturation": 0.0417,
+        "spikeRatio": 9.88,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-11-05T12:37:28.471Z"
       }
     }
   ]
