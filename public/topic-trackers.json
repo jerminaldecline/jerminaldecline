@@ -1,6 +1,25 @@
 {
-  "lastUpdated": "2026-11-05T12:37:28.471Z",
+  "lastUpdated": "2026-11-06T12:20:02.049Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "midterm",
+      "keywords": [
+        "midterm",
+        "republican",
+        "gop",
+        "democrats",
+        "senate"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0184,
+        "spikeRatio": 16.74,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 2,
+        "detectedAt": "2026-11-06T12:20:02.049Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "election",
@@ -11,16 +30,34 @@
         "county",
         "erupted",
         "paper",
-        "york",
-        "day"
+        "chaos",
+        "york"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4583,
-        "baselineSaturation": 0.0784,
-        "spikeRatio": 5.85,
+        "recentSaturation": 0.4231,
+        "baselineSaturation": 0.0699,
+        "spikeRatio": 6.06,
         "recentVideoCount": 11,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-11-05T12:37:28.471Z"
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-11-06T12:20:02.049Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "midterm",
+      "keywords": [
+        "midterm",
+        "warned",
+        "him",
+        "trump"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.0536,
+        "spikeRatio": 9.33,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-11-06T12:20:02.049Z"
       }
     },
     {
@@ -32,29 +69,31 @@
         "election night"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3529,
+        "recentSaturation": 0.35,
         "baselineSaturation": 0.006,
-        "spikeRatio": 59.29,
-        "recentVideoCount": 6,
+        "spikeRatio": 58.8,
+        "recentVideoCount": 7,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-11-05T12:37:28.471Z"
+        "detectedAt": "2026-11-06T12:20:02.049Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "midterm",
+      "termId": "michigan",
       "keywords": [
-        "midterm",
-        "warned",
-        "trump"
+        "michigan",
+        "sayed",
+        "abdul",
+        "abdul sayed",
+        "party"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4118,
-        "baselineSaturation": 0.0417,
-        "spikeRatio": 9.88,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-11-05T12:37:28.471Z"
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.0536,
+        "spikeRatio": 5.6,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-11-06T12:20:02.049Z"
       }
     }
   ]
