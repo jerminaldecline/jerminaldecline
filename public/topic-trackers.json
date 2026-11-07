@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-06T12:20:02.049Z",
+  "lastUpdated": "2026-11-07T11:14:09.885Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
@@ -9,22 +9,22 @@
         "republican",
         "gop",
         "democrats",
-        "senate"
+        "senate",
+        "republicans"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3077,
-        "baselineSaturation": 0.0184,
-        "spikeRatio": 16.74,
-        "recentVideoCount": 8,
-        "baselineVideoCount": 2,
-        "detectedAt": "2026-11-06T12:20:02.049Z"
+        "recentSaturation": 0.3846,
+        "baselineSaturation": 0.0255,
+        "spikeRatio": 15.05,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 3,
+        "detectedAt": "2026-11-07T11:14:09.885Z"
       }
     },
     {
       "channelHandle": "@TheQuartering",
-      "termId": "election",
+      "termId": "across",
       "keywords": [
-        "election",
         "across",
         "ballot",
         "county",
@@ -34,30 +34,12 @@
         "york"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4231,
-        "baselineSaturation": 0.0699,
-        "spikeRatio": 6.06,
-        "recentVideoCount": 11,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-11-06T12:20:02.049Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "midterm",
-      "keywords": [
-        "midterm",
-        "warned",
-        "him",
-        "trump"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5,
-        "baselineSaturation": 0.0536,
-        "spikeRatio": 9.33,
+        "recentSaturation": 0.3846,
+        "baselineSaturation": 0.0693,
+        "spikeRatio": 5.55,
         "recentVideoCount": 10,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-11-06T12:20:02.049Z"
+        "baselineVideoCount": 9,
+        "detectedAt": "2026-11-07T11:14:09.885Z"
       }
     },
     {
@@ -69,12 +51,29 @@
         "election night"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.35,
-        "baselineSaturation": 0.006,
-        "spikeRatio": 58.8,
+        "recentSaturation": 0.3889,
+        "baselineSaturation": 0.0058,
+        "spikeRatio": 66.89,
         "recentVideoCount": 7,
         "baselineVideoCount": 0,
-        "detectedAt": "2026-11-06T12:20:02.049Z"
+        "detectedAt": "2026-11-07T11:14:09.885Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "midterm",
+      "keywords": [
+        "warned",
+        "midterm",
+        "trump"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3889,
+        "baselineSaturation": 0.0523,
+        "spikeRatio": 7.43,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-11-07T11:14:09.885Z"
       }
     },
     {
@@ -88,12 +87,12 @@
         "party"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3,
-        "baselineSaturation": 0.0536,
-        "spikeRatio": 5.6,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0523,
+        "spikeRatio": 6.37,
         "recentVideoCount": 6,
         "baselineVideoCount": 4,
-        "detectedAt": "2026-11-06T12:20:02.049Z"
+        "detectedAt": "2026-11-07T11:14:09.885Z"
       }
     }
   ]

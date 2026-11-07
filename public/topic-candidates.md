@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-06
+# Topic candidates — 2026-11-07
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,33 +6,35 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 26 recent videos, 135 baseline videos
+Pool: 26 recent videos, 136 baseline videos
 
 ### Cluster 1: `midterm`
 
-- **Recent saturation:** 8/26 videos (**31%**)
-- **Baseline saturation:** 2/135 videos (1%)
-- **Spike ratio:** 16.7x
-- **Related terms:** `midterm`, `republican`, `gop`, `democrats`, `senate`
+- **Recent saturation:** 10/26 videos (**38%**)
+- **Baseline saturation:** 3/136 videos (2%)
+- **Spike ratio:** 15.1x
+- **Related terms:** `midterm`, `democrats`, `republican`, `gop`, `senate`, `republicans`
 - **Sample recent videos:**
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
+  - 2026-11-06 — _Trump Goes NUCLEAR As Democrats Suffer INSTANT REGRET Over Midterm Win_  
+    Trump ERUPTS After $3 Trillion Stock Market Wipeout! “You Did This!”
   - 2026-11-05 — _THE PURGE BEGINS!_  
     Trump Team In CHAOS! Senior Official OUT After Midterm Disaster
   - 2026-11-05 — _Donald Trump BETTER NOT Do This!_  
     Trump BACKS Hegseth As Republicans Plot His Downfall!
   - 2026-11-05 — _Republicans SHOCK Move To BLOCK Democrats From Power After Midterms!_  
     Blood In The Water! Ron DeSantis DECLARES GOP Extinction Event
-  - 2026-11-04 — _THERE'S NO COMING BACK!_  
-    TOTAL MUSLIM VICTORY! Ilhan Wins As Her Ally Takes Senate
-  - 2026-11-04 — _WE'RE DOOMED NOW!_  
-    Texas Just Turned BLUE! The GOP Refuses To Admit What Happened
 
-### Cluster 2: `election`
+### Cluster 2: `across`
 
-- **Recent saturation:** 11/26 videos (**42%**)
-- **Baseline saturation:** 9/135 videos (7%)
-- **Spike ratio:** 6.1x
-- **Related terms:** `election`, `across`, `ballot`, `county`, `erupted`, `paper`, `chaos`, `york`
+- **Recent saturation:** 10/26 videos (**38%**)
+- **Baseline saturation:** 9/136 videos (7%)
+- **Spike ratio:** 5.5x
+- **Related terms:** `across`, `ballot`, `county`, `erupted`, `paper`, `chaos`, `york`
 - **Sample recent videos:**
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
   - 2026-11-06 — _Ilhan Omar SECRET FAMILY Revealed As PANIC Over Midterms Set In!_  
     New Ilhan Omar FAMILY BOMBSHELL! Alleged London Siblings Exposed
   - 2026-11-05 — _THE PURGE BEGINS!_  
@@ -41,96 +43,74 @@ Pool: 26 recent videos, 135 baseline videos
     Blood In The Water! Ron DeSantis DECLARES GOP Extinction Event
   - 2026-11-04 — _HE JUST ERUPTED!_  
     Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
+
+### Cluster 3: `election`
+
+- **Recent saturation:** 4/26 videos (**15%**)
+- **Baseline saturation:** 0/136 videos (0%)
+- **Spike ratio:** 42.2x
+- **Related terms:** `election`
+- **Sample recent videos:**
   - 2026-11-04 — _Midterm SCANDAL Explodes! Caught On Tape As MSM PANICS!_  
     Somali Election Video Under FEDERAL REVIEW! Shocking Lewiston Connection
-
-### Cluster 3: `congress`
-
-- **Recent saturation:** 3/26 videos (**12%**)
-- **Baseline saturation:** 0/135 videos (0%)
-- **Spike ratio:** 31.4x
-- **Related terms:** `congress`
-- **Sample recent videos:**
-  - 2026-11-05 — _Republicans SHOCK Move To BLOCK Democrats From Power After Midterms!_  
-    Blood In The Water! Ron DeSantis DECLARES GOP Extinction Event
-  - 2026-11-04 — _THERE'S NO COMING BACK!_  
-    TOTAL MUSLIM VICTORY! Ilhan Wins As Her Ally Takes Senate
-  - 2026-11-04 — _JD Vance Just WENT NUCLEAR Over Midterms & Changed EVERYTHING!_  
-    Vance BLAMES Iran War For GOP Wipeout! “Everyone Knows Why We Lost”
-
-### Cluster 4: `critics`
-
-- **Recent saturation:** 3/26 videos (**12%**)
-- **Baseline saturation:** 0/135 videos (0%)
-- **Spike ratio:** 31.4x
-- **Related terms:** `critics`
-- **Sample recent videos:**
-  - 2026-11-03 — _Ilhan Omar THREATS To Critics Over Midterms MELTDOWN_  
-    “YOU WILL BE KILLED, SNAKE!” Omar Critics Reveal Chilling Threats
-  - 2026-10-31 — _Ilhan Omar Brother ADMITS IT As DHS Confirms Multiple New Targets_  
-    New Ilhan Omar Marriage Document Raises MORE Questions!
-  - 2026-10-30 — _SHE'S BLIND DRUNK!_  
-    She Was DRUNK AGAIN?! Amy Acton Rally Clip Goes Viral
-
-### Cluster 5: `appear`
-
-- **Recent saturation:** 3/26 videos (**12%**)
-- **Baseline saturation:** 0/135 videos (0%)
-- **Spike ratio:** 31.4x
-- **Related terms:** `appear`
-- **Sample recent videos:**
+  - 2026-11-04 — _Midterm CHAOS As Voters TURNED AWAY, Poll Watchers BANNED & THREATS Called In_  
+    Election Day descended into chaos as voting-machine failures, reports of people being told to return later and a fight o
+  - 2026-11-03 — _THIS IS DISGRACEFUL!_  
+    Election Day CHAOS! Machines Fail In Critical House Battleground
   - 2026-11-03 — _Democrats FREAK OUT As Midterm RED WAVE Hits & Polling All Wrong_  
     CNN Board SHOCKS Democrats! GOP Could KEEP The Senate
-  - 2026-11-02 — _Halloween Black Fatigue GOES NUCLEAR Gets People FIRED_  
-    Halloween Is RUINED! Greedy Adults Empty Entire Candy Bowls
-  - 2026-10-30 — _SHE'S BLIND DRUNK!_  
-    She Was DRUNK AGAIN?! Amy Acton Rally Clip Goes Viral
 
-### Cluster 6: `learjet`
+### Cluster 4: `did`
 
-- **Recent saturation:** 5/26 videos (**19%**)
-- **Baseline saturation:** 3/135 videos (2%)
-- **Spike ratio:** 7.5x
-- **Related terms:** `learjet`, `internet`, `killed`, `crash`
+- **Recent saturation:** 3/26 videos (**12%**)
+- **Baseline saturation:** 0/136 videos (0%)
+- **Spike ratio:** 31.6x
+- **Related terms:** `did`
 - **Sample recent videos:**
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
+  - 2026-11-06 — _Trump Goes NUCLEAR As Democrats Suffer INSTANT REGRET Over Midterm Win_  
+    Trump ERUPTS After $3 Trillion Stock Market Wipeout! “You Did This!”
   - 2026-11-05 — _Harassed Red Baron Pizza Guy SPEAKS & Gives AMAZING Update!_  
     Red Baron Hero Turns Down MORE MONEY After Internet Raises $787K
-  - 2026-11-03 — _Ilhan Omar THREATS To Critics Over Midterms MELTDOWN_  
-    “YOU WILL BE KILLED, SNAKE!” Omar Critics Reveal Chilling Threats
-  - 2026-11-03 — _The BRUTAL Truth Revealed In Learjet Crash BLAMED On Trump_  
-    They BLAMED Trump For Learjet Crash! NTSB Reveals Horrifying Truth
-  - 2026-11-02 — _Insane TWIST In Florida Learjet Crash_  
-    People Are SICK! Internet Mob Blames WRONG Pilot For Fatal Crash
-  - 2026-11-02 — _Trump BLAMED For BRUTAL Learjet Crash Near Mar-a-Lago! Here's The TRUTH & Haunting Final Words_  
-    Terrifying New Audio From Florida Plane Crash! Nine Dead
+
+### Cluster 5: `midterms`
+
+- **Recent saturation:** 3/26 videos (**12%**)
+- **Baseline saturation:** 0/136 videos (0%)
+- **Spike ratio:** 31.6x
+- **Related terms:** `midterms`
+- **Sample recent videos:**
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
+  - 2026-11-04 — _HE JUST ERUPTED!_  
+    Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
+  - 2026-11-04 — _Midterm BLOODBATH! Donald Trump Issues BRUTAL Response!_  
+    The 2026 midterms went about as bad as possible.  Now what?
+
+### Cluster 6: `wipeout`
+
+- **Recent saturation:** 3/26 videos (**12%**)
+- **Baseline saturation:** 0/136 videos (0%)
+- **Spike ratio:** 31.6x
+- **Related terms:** `wipeout`
+- **Sample recent videos:**
+  - 2026-11-06 — _Trump Goes NUCLEAR As Democrats Suffer INSTANT REGRET Over Midterm Win_  
+    Trump ERUPTS After $3 Trillion Stock Market Wipeout! “You Did This!”
+  - 2026-11-04 — _JD Vance Just WENT NUCLEAR Over Midterms & Changed EVERYTHING!_  
+    Vance BLAMES Iran War For GOP Wipeout! “Everyone Knows Why We Lost”
+  - 2026-11-04 — _HE JUST ERUPTED!_  
+    Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
 
 ## @JeremyHambly
 
-Pool: 20 recent videos, 83 baseline videos
+Pool: 18 recent videos, 85 baseline videos
 
-### Cluster 1: `midterm`
+### Cluster 1: `election`
 
-- **Recent saturation:** 10/20 videos (**50%**)
-- **Baseline saturation:** 4/83 videos (5%)
-- **Spike ratio:** 9.3x
-- **Related terms:** `midterm`, `him`, `trump`, `warned`
-- **Sample recent videos:**
-  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
-    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
-  - 2026-11-05 — _Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!_  
-    Tim Pool’s Election Stream ERUPTS! MTG Says Trump Betrayed MAGA
-  - 2026-11-04 — _Hasan Piker MELTDOWN Over Asmongold! He Humilated Himself_  
-    Hasan Piker EXPLODES! Wants Asmongold Thrown In Prison
-  - 2026-11-04 — _HE COMPLETELY SNAPPED!_  
-    Matt Walsh TURNS On Trump! “We Have To Move On” After GOP Wipeout
-  - 2026-11-04 — _HE KNOWS NOTHING!_  
-    Joe Rogan Sounds The Alarm On Terrifying Iran Rumors!
-
-### Cluster 2: `election`
-
-- **Recent saturation:** 7/20 videos (**35%**)
-- **Baseline saturation:** 0/83 videos (0%)
-- **Spike ratio:** 58.8x
+- **Recent saturation:** 7/18 videos (**39%**)
+- **Baseline saturation:** 0/85 videos (0%)
+- **Spike ratio:** 66.9x
 - **Related terms:** `election`, `night`, `election night`
 - **Sample recent videos:**
   - 2026-11-05 — _Russell Brand GUILTY Faces LIFE In Prison!_  
@@ -144,41 +124,29 @@ Pool: 20 recent videos, 83 baseline videos
   - 2026-11-03 — _Democrats PANIC & ADMIT Fraud Incoming For Midterms_  
     Democrats PANIC! They Just “Admitted” What’s Coming On Election Night
 
-### Cluster 3: `republican`
+### Cluster 2: `midterm`
 
-- **Recent saturation:** 4/20 videos (**20%**)
-- **Baseline saturation:** 2/83 videos (2%)
-- **Spike ratio:** 6.7x
-- **Related terms:** `republican`, `donald`, `donald trump`
+- **Recent saturation:** 7/18 videos (**39%**)
+- **Baseline saturation:** 4/85 videos (5%)
+- **Spike ratio:** 7.4x
+- **Related terms:** `midterm`, `trump`, `warned`
 - **Sample recent videos:**
+  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
+    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
   - 2026-11-05 — _Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!_  
     Tim Pool’s Election Stream ERUPTS! MTG Says Trump Betrayed MAGA
-  - 2026-11-03 — _Megyn Kelly Goes FULL MASK OFF & Hates America_  
-    Megyn Kelly Turns On Conservatives! Election Day Meltdown Explodes
-  - 2026-10-31 — _Halloween PSYCHOS Instant REGRET Over ABSURD Display_  
-    This Halloween Display Is Absolutely DERANGED! It Was Taken Down
-  - 2026-10-30 — _Donald Trump BAILS On Midterms Liberals Claim Victory After Massive Arrest!_  
-    Trump BAILS On Midterms?! Canceled Rallies Suddenly BACK ON
+  - 2026-11-04 — _Hasan Piker MELTDOWN Over Asmongold! He Humilated Himself_  
+    Hasan Piker EXPLODES! Wants Asmongold Thrown In Prison
+  - 2026-11-04 — _HE COMPLETELY SNAPPED!_  
+    Matt Walsh TURNS On Trump! “We Have To Move On” After GOP Wipeout
+  - 2026-11-04 — _HE KNOWS NOTHING!_  
+    Joe Rogan Sounds The Alarm On Terrifying Iran Rumors!
 
-### Cluster 4: `student`
+### Cluster 3: `michigan`
 
-- **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 0/83 videos (0%)
-- **Spike ratio:** 25.2x
-- **Related terms:** `student`
-- **Sample recent videos:**
-  - 2026-11-02 — _INSTANT REGRET! Vile Woman Who Celebrated Charlie Kirk's Death FINDS OUT_  
-    Charlie Kirk Mocker PANICS And Begs For Forgiveness!
-  - 2026-11-02 — _Unhinged College Girl ARRESTED After Campus Attack!_  
-    Woke Campus Lunatic SNAPS! Screams Death Threat After Attacking Activist
-  - 2026-10-30 — _Pat McAfee BLASTED Over Charlie Kirk Comments!_  
-    Pat McAfee Reveals SICK Death Threats! “They Want Me Kirked"
-
-### Cluster 5: `michigan`
-
-- **Recent saturation:** 6/20 videos (**30%**)
-- **Baseline saturation:** 4/83 videos (5%)
-- **Spike ratio:** 5.6x
+- **Recent saturation:** 6/18 videos (**33%**)
+- **Baseline saturation:** 4/85 videos (5%)
+- **Spike ratio:** 6.4x
 - **Related terms:** `michigan`, `sayed`, `abdul`, `party`, `abdul sayed`
 - **Sample recent videos:**
   - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
@@ -192,11 +160,11 @@ Pool: 20 recent videos, 83 baseline videos
   - 2026-11-02 — _Unhinged College Girl ARRESTED After Campus Attack!_  
     Woke Campus Lunatic SNAPS! Screams Death Threat After Attacking Activist
 
-### Cluster 6: `online`
+### Cluster 4: `online`
 
-- **Recent saturation:** 3/20 videos (**15%**)
-- **Baseline saturation:** 1/83 videos (1%)
-- **Spike ratio:** 8.4x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 1/85 videos (1%)
+- **Spike ratio:** 9.6x
 - **Related terms:** `online`
 - **Sample recent videos:**
   - 2026-11-05 — _Hasan Piker RAGES & Threatens More Lawsuits Immediately REGRETS It_  
@@ -205,6 +173,34 @@ Pool: 20 recent videos, 83 baseline videos
     Charlie Kirk Mocker PANICS And Begs For Forgiveness!
   - 2026-11-02 — _IT ALL BACKFIRED!_  
     Democrats Turn On HER After She Betrays Abdul El-Sayed!
+
+### Cluster 5: `democrats`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 2/85 videos (2%)
+- **Spike ratio:** 5.7x
+- **Related terms:** `democrats`
+- **Sample recent videos:**
+  - 2026-11-04 — _HE COMPLETELY SNAPPED!_  
+    Matt Walsh TURNS On Trump! “We Have To Move On” After GOP Wipeout
+  - 2026-11-03 — _Democrats PANIC & ADMIT Fraud Incoming For Midterms_  
+    Democrats PANIC! They Just “Admitted” What’s Coming On Election Night
+  - 2026-11-02 — _IT ALL BACKFIRED!_  
+    Democrats Turn On HER After She Betrays Abdul El-Sayed!
+
+### Cluster 6: `him`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/85 videos (4%)
+- **Spike ratio:** 4.1x
+- **Related terms:** `him`
+- **Sample recent videos:**
+  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
+    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
+  - 2026-11-05 — _Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!_  
+    Tim Pool’s Election Stream ERUPTS! MTG Says Trump Betrayed MAGA
+  - 2026-11-04 — _Hasan Piker MELTDOWN Over Asmongold! He Humilated Himself_  
+    Hasan Piker EXPLODES! Wants Asmongold Thrown In Prison
 
 ---
 
