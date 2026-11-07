@@ -1,22 +1,22 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-11-06",
+ "_generated": "2026-11-07",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-11-06",
-  "snapshots": 293
+  "to": "2026-11-07",
+  "snapshots": 295
  },
  "ageMinDays": 14,
  "sample": {
-  "campaigns": 10,
-  "campaignDays": 39,
-  "adViews": 199200
+  "campaigns": 9,
+  "campaignDays": 37,
+  "adViews": 193318
  },
  "viewsPerCampaignDay": {
   "low": 1367,
-  "central": 5108,
+  "central": 5225,
   "high": 11127
  },
  "cpvUSD": {
@@ -25,8 +25,8 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
-  "Sr0WmHdxJvs": 52,
-  "FiLs5ovIfts": 60,
+  "Sr0WmHdxJvs": 53,
+  "FiLs5ovIfts": 62,
   "5CwhyEC_nz0": 16,
   "kT0UsZpuKaU": 17,
   "O_LjCrLlUAw": 7,
@@ -81,7 +81,7 @@
   "RdXePOwc4to": 8,
   "rpfLr0L19Ng": 14,
   "wEnWx3jAmYQ": 11,
-  "Lh038oA3QNY": 46,
+  "Lh038oA3QNY": 41,
   "1bEdZATxDZc": 1,
   "9jVTPCyKRhI": 2,
   "N4W-iPhT-Ds": 1,
@@ -141,9 +141,7 @@
   "f2QY6sD4gbY": 19,
   "r7SNFS9AEEw": 3,
   "4zl2C10Mjls": 4,
-  "Xa9jjt2XF24": 4,
-  "G9jfiWY5PTY": 5,
-  "OQ58hc_5fV8": 5
+  "Xa9jjt2XF24": 4
  },
  "measurements": [
   {
@@ -262,19 +260,6 @@
    "baselinePerDay": 1,
    "adViews": 42114,
    "perDay": 10529
-  },
-  {
-   "id": "FiLs5ovIfts",
-   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
-   "from": "2026-11-04",
-   "to": "2026-11-05",
-   "days": 2,
-   "observedTo": "2026-11-06",
-   "observedDays": 3,
-   "gain": 5882,
-   "baselinePerDay": 0,
-   "adViews": 5882,
-   "perDay": 2941
   }
  ]
 }
