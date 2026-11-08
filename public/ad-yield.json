@@ -1,22 +1,22 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-11-07",
+ "_generated": "2026-11-08",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-11-07",
-  "snapshots": 295
+  "to": "2026-11-08",
+  "snapshots": 297
  },
  "ageMinDays": 14,
  "sample": {
-  "campaigns": 9,
-  "campaignDays": 37,
-  "adViews": 193318
+  "campaigns": 11,
+  "campaignDays": 45,
+  "adViews": 235285
  },
  "viewsPerCampaignDay": {
   "low": 1367,
-  "central": 5225,
+  "central": 5229,
   "high": 11127
  },
  "cpvUSD": {
@@ -260,6 +260,32 @@
    "baselinePerDay": 1,
    "adViews": 42114,
    "perDay": 10529
+  },
+  {
+   "id": "Sr0WmHdxJvs",
+   "title": "Movie Theatre Black Fatigue Backfire!",
+   "from": "2026-11-04",
+   "to": "2026-11-07",
+   "days": 4,
+   "observedTo": "2026-11-08",
+   "observedDays": 5,
+   "gain": 22230,
+   "baselinePerDay": 4,
+   "adViews": 22210,
+   "perDay": 5553
+  },
+  {
+   "id": "FiLs5ovIfts",
+   "title": "Walmart ABANDONS Middle Class & Opens \"Dark Stores\" You Can't Even Enter!",
+   "from": "2026-11-04",
+   "to": "2026-11-07",
+   "days": 4,
+   "observedTo": "2026-11-08",
+   "observedDays": 5,
+   "gain": 19757,
+   "baselinePerDay": 0,
+   "adViews": 19757,
+   "perDay": 4939
   }
  ]
 }
