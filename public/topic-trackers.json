@@ -1,24 +1,59 @@
 {
-  "lastUpdated": "2026-11-07T11:14:09.885Z",
+  "lastUpdated": "2026-11-08T11:25:45.328Z",
   "trackers": [
     {
-      "channelHandle": "@TheQuartering",
+      "channelHandle": "@JeremyHambly",
+      "termId": "election",
+      "keywords": [
+        "election",
+        "night",
+        "votes",
+        "election night",
+        "republican",
+        "trump"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5263,
+        "baselineSaturation": 0.0647,
+        "spikeRatio": 8.13,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-11-08T11:25:45.328Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
       "termId": "midterm",
+      "keywords": [
+        "warned",
+        "midterm"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3158,
+        "baselineSaturation": 0.0176,
+        "spikeRatio": 17.89,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-11-08T11:25:45.328Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trump",
       "keywords": [
         "midterm",
         "republican",
-        "gop",
         "democrats",
-        "senate",
-        "republicans"
+        "republicans",
+        "trump"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.0255,
-        "spikeRatio": 15.05,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 3,
-        "detectedAt": "2026-11-07T11:14:09.885Z"
+        "recentSaturation": 0.5385,
+        "baselineSaturation": 0.1222,
+        "spikeRatio": 4.41,
+        "recentVideoCount": 14,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-11-08T11:25:45.328Z"
       }
     },
     {
@@ -29,70 +64,16 @@
         "ballot",
         "county",
         "erupted",
-        "paper",
         "chaos",
         "york"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3846,
-        "baselineSaturation": 0.0693,
-        "spikeRatio": 5.55,
-        "recentVideoCount": 10,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-11-07T11:14:09.885Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "election",
-      "keywords": [
-        "election",
-        "night",
-        "election night"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3889,
-        "baselineSaturation": 0.0058,
-        "spikeRatio": 66.89,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 0,
-        "detectedAt": "2026-11-07T11:14:09.885Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "midterm",
-      "keywords": [
-        "warned",
-        "midterm",
-        "trump"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3889,
-        "baselineSaturation": 0.0523,
-        "spikeRatio": 7.43,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-11-07T11:14:09.885Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "michigan",
-      "keywords": [
-        "michigan",
-        "sayed",
-        "abdul",
-        "abdul sayed",
-        "party"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3333,
-        "baselineSaturation": 0.0523,
-        "spikeRatio": 6.37,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 4,
-        "detectedAt": "2026-11-07T11:14:09.885Z"
+        "recentSaturation": 0.3462,
+        "baselineSaturation": 0.0556,
+        "spikeRatio": 6.23,
+        "recentVideoCount": 9,
+        "baselineVideoCount": 7,
+        "detectedAt": "2026-11-08T11:25:45.328Z"
       }
     }
   ]
