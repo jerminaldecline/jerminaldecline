@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-08
+# Topic candidates — 2026-11-09
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @JeremyHambly
 
-Pool: 19 recent videos, 84 baseline videos
+Pool: 19 recent videos, 81 baseline videos
 
 ### Cluster 1: `election`
 
 - **Recent saturation:** 10/19 videos (**53%**)
-- **Baseline saturation:** 5/84 videos (6%)
-- **Spike ratio:** 8.1x
+- **Baseline saturation:** 5/81 videos (6%)
+- **Spike ratio:** 7.8x
 - **Related terms:** `election`, `night`, `republican`, `trump`, `votes`, `election night`
 - **Sample recent videos:**
   - 2026-11-07 — _THEY'RE ALWAYS CHEATING!_  
@@ -29,8 +29,8 @@ Pool: 19 recent videos, 84 baseline videos
 ### Cluster 2: `party`
 
 - **Recent saturation:** 5/19 videos (**26%**)
-- **Baseline saturation:** 5/84 videos (6%)
-- **Spike ratio:** 4.1x
+- **Baseline saturation:** 5/81 videos (6%)
+- **Spike ratio:** 3.9x
 - **Related terms:** `party`, `turns`, `meltdown`
 - **Sample recent videos:**
   - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
@@ -47,8 +47,8 @@ Pool: 19 recent videos, 84 baseline videos
 ### Cluster 3: `maga`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 0/84 videos (0%)
-- **Spike ratio:** 26.8x
+- **Baseline saturation:** 0/81 videos (0%)
+- **Spike ratio:** 25.9x
 - **Related terms:** `maga`
 - **Sample recent videos:**
   - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
@@ -61,8 +61,8 @@ Pool: 19 recent videos, 84 baseline videos
 ### Cluster 4: `midterm`
 
 - **Recent saturation:** 6/19 videos (**32%**)
-- **Baseline saturation:** 1/84 videos (1%)
-- **Spike ratio:** 17.9x
+- **Baseline saturation:** 1/81 videos (1%)
+- **Spike ratio:** 17.3x
 - **Related terms:** `midterm`, `warned`
 - **Sample recent videos:**
   - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
@@ -79,8 +79,8 @@ Pool: 19 recent videos, 84 baseline videos
 ### Cluster 5: `michigan`
 
 - **Recent saturation:** 5/19 videos (**26%**)
-- **Baseline saturation:** 1/84 videos (1%)
-- **Spike ratio:** 14.9x
+- **Baseline saturation:** 1/81 videos (1%)
+- **Spike ratio:** 14.4x
 - **Related terms:** `michigan`, `sayed`, `abdul`, `abdul sayed`
 - **Sample recent videos:**
   - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
@@ -97,8 +97,8 @@ Pool: 19 recent videos, 84 baseline videos
 ### Cluster 6: `online`
 
 - **Recent saturation:** 3/19 videos (**16%**)
-- **Baseline saturation:** 1/84 videos (1%)
-- **Spike ratio:** 8.9x
+- **Baseline saturation:** 1/81 videos (1%)
+- **Spike ratio:** 8.6x
 - **Related terms:** `online`
 - **Sample recent videos:**
   - 2026-11-05 — _Hasan Piker RAGES & Threatens More Lawsuits Immediately REGRETS It_  
@@ -110,13 +110,13 @@ Pool: 19 recent videos, 84 baseline videos
 
 ## @TheQuartering
 
-Pool: 26 recent videos, 134 baseline videos
+Pool: 26 recent videos, 131 baseline videos
 
 ### Cluster 1: `trump`
 
 - **Recent saturation:** 14/26 videos (**54%**)
-- **Baseline saturation:** 16/134 videos (12%)
-- **Spike ratio:** 4.4x
+- **Baseline saturation:** 16/131 videos (12%)
+- **Spike ratio:** 4.3x
 - **Related terms:** `trump`, `midterm`, `republican`, `democrats`, `republicans`
 - **Sample recent videos:**
   - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
@@ -133,8 +133,8 @@ Pool: 26 recent videos, 134 baseline videos
 ### Cluster 2: `election`
 
 - **Recent saturation:** 5/26 videos (**19%**)
-- **Baseline saturation:** 0/134 videos (0%)
-- **Spike ratio:** 51.9x
+- **Baseline saturation:** 0/131 videos (0%)
+- **Spike ratio:** 50.8x
 - **Related terms:** `election`
 - **Sample recent videos:**
   - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
@@ -151,8 +151,8 @@ Pool: 26 recent videos, 134 baseline videos
 ### Cluster 3: `across`
 
 - **Recent saturation:** 9/26 videos (**35%**)
-- **Baseline saturation:** 7/134 videos (5%)
-- **Spike ratio:** 6.2x
+- **Baseline saturation:** 7/131 videos (5%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `across`, `ballot`, `county`, `erupted`, `chaos`, `york`
 - **Sample recent videos:**
   - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
@@ -169,8 +169,8 @@ Pool: 26 recent videos, 134 baseline videos
 ### Cluster 4: `gop`
 
 - **Recent saturation:** 6/26 videos (**23%**)
-- **Baseline saturation:** 0/134 videos (0%)
-- **Spike ratio:** 62.3x
+- **Baseline saturation:** 0/131 videos (0%)
+- **Spike ratio:** 60.9x
 - **Related terms:** `gop`, `result`, `congress`
 - **Sample recent videos:**
   - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
@@ -184,11 +184,25 @@ Pool: 26 recent videos, 134 baseline videos
   - 2026-11-04 — _JD Vance Just WENT NUCLEAR Over Midterms & Changed EVERYTHING!_  
     Vance BLAMES Iran War For GOP Wipeout! “Everyone Knows Why We Lost”
 
-### Cluster 5: `senate`
+### Cluster 5: `votes`
+
+- **Recent saturation:** 3/26 videos (**12%**)
+- **Baseline saturation:** 0/131 videos (0%)
+- **Spike ratio:** 30.5x
+- **Related terms:** `votes`
+- **Sample recent videos:**
+  - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
+    They Found 388 Missing Votes! Memory Card Changes Election Lead
+  - 2026-11-07 — _MASSIVE BOMBSHELL BREAK!_  
+    Trump Sounds The Alarm Over Shocking 20 MILLION Vote Surge!
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
+
+### Cluster 6: `senate`
 
 - **Recent saturation:** 5/26 videos (**19%**)
-- **Baseline saturation:** 1/134 videos (1%)
-- **Spike ratio:** 17.3x
+- **Baseline saturation:** 1/131 videos (1%)
+- **Spike ratio:** 16.9x
 - **Related terms:** `senate`, `state`
 - **Sample recent videos:**
   - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
@@ -201,20 +215,6 @@ Pool: 26 recent videos, 134 baseline videos
     Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
   - 2026-11-03 — _Democrats FREAK OUT As Midterm RED WAVE Hits & Polling All Wrong_  
     CNN Board SHOCKS Democrats! GOP Could KEEP The Senate
-
-### Cluster 6: `did`
-
-- **Recent saturation:** 3/26 videos (**12%**)
-- **Baseline saturation:** 0/134 videos (0%)
-- **Spike ratio:** 31.2x
-- **Related terms:** `did`
-- **Sample recent videos:**
-  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
-    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
-  - 2026-11-06 — _Trump Goes NUCLEAR As Democrats Suffer INSTANT REGRET Over Midterm Win_  
-    Trump ERUPTS After $3 Trillion Stock Market Wipeout! “You Did This!”
-  - 2026-11-05 — _Harassed Red Baron Pizza Guy SPEAKS & Gives AMAZING Update!_  
-    Red Baron Hero Turns Down MORE MONEY After Internet Raises $787K
 
 ---
 
