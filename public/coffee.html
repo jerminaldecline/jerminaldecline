@@ -668,16 +668,25 @@ function renderPriceLog(c){
   const out=[];
   for(const s of c.skus){
     const minRun=PRICE_MIN_RUN, runs=[];
+    // A 5 lb-variant price (~$85+) surfaces when the default size is out of stock;
+    // that is a different product size, not a price change, so ignore those reads.
+    const bulkCut=Math.max(55, (s.price||0)*1.5);
     for(let i=0;i<c.days.length;i++){
       const p=s.prices[i]; if(p==null) continue;
       if(s.channel==='amazon' && !(s.stock[i]>0)) continue;
+      if(p>bulkCut) continue;
       const last=runs[runs.length-1];
       if(last && Math.abs(last.p-p)<0.005){ last.n++; last.sale=last.sale||!!(s.compareAt&&s.compareAt[i]); }
       else runs.push({p, i, n:1, sale:!!(s.compareAt&&s.compareAt[i])});
     }
-    for(let k=1;k<runs.length;k++){
-      const a=runs[k-1], b=runs[k];
-      if(a.n>=minRun && b.n>=minRun) out.push({d:c.days[b.i], s, from:a.p, to:b.p, held:b.n, sale:b.sale});
+    // Compare each sustained price (>= minRun readings) to the previous SUSTAINED
+    // price, skipping any brief blips between them, so a lasting change that follows
+    // a short dip (e.g. 15.19 -> 11.39 via two 2-day steps) still registers.
+    let lastSust=null;
+    for(const b of runs){
+      if(b.n<minRun) continue;
+      if(lastSust && Math.abs(lastSust.p-b.p)>=0.005) out.push({d:c.days[b.i], s, from:lastSust.p, to:b.p, held:b.n, sale:b.sale});
+      lastSust=b;
     }
   }
   out.sort((a,b)=>b.d.localeCompare(a.d));
