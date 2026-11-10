@@ -1,18 +1,18 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-11-09",
+ "_generated": "2026-11-10",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-11-09",
-  "snapshots": 300
+  "to": "2026-11-10",
+  "snapshots": 301
  },
  "ageMinDays": 14,
  "sample": {
   "campaigns": 11,
   "campaignDays": 47,
-  "adViews": 257257
+  "adViews": 257263
  },
  "viewsPerCampaignDay": {
   "low": 1367,
@@ -126,7 +126,7 @@
   "PncXpDfg4M8": 8,
   "bd9lxRvXG9Q": 4,
   "OwHAcIt1Hpw": 4,
-  "0pHYgMHhi60": 20,
+  "0pHYgMHhi60": 16,
   "8RiHnmAGy8U": 4,
   "y0Zp5aw0KYo": 3,
   "dwRs_iGZYVs": 18,
@@ -265,12 +265,12 @@
    "from": "2026-11-04",
    "to": "2026-11-08",
    "days": 5,
-   "observedTo": "2026-11-09",
-   "observedDays": 6,
-   "gain": 33937,
+   "observedTo": "2026-11-10",
+   "observedDays": 7,
+   "gain": 33947,
    "baselinePerDay": 4,
-   "adViews": 33913,
-   "perDay": 6783
+   "adViews": 33919,
+   "perDay": 6784
   },
   {
    "id": "FiLs5ovIfts",
@@ -278,8 +278,8 @@
    "from": "2026-11-04",
    "to": "2026-11-08",
    "days": 5,
-   "observedTo": "2026-11-09",
-   "observedDays": 6,
+   "observedTo": "2026-11-10",
+   "observedDays": 7,
    "gain": 30026,
    "baselinePerDay": 0,
    "adViews": 30026,
