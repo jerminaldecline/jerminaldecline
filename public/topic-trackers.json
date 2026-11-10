@@ -1,6 +1,44 @@
 {
-  "lastUpdated": "2026-11-09T13:11:48.428Z",
+  "lastUpdated": "2026-11-10T12:51:41.917Z",
   "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "trump",
+      "keywords": [
+        "midterm",
+        "republican",
+        "democrats",
+        "republicans",
+        "trump"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.6154,
+        "baselineSaturation": 0.1231,
+        "spikeRatio": 5,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "across",
+      "keywords": [
+        "across",
+        "ballot",
+        "chaos",
+        "claim",
+        "york"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0784,
+        "spikeRatio": 3.93,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
     {
       "channelHandle": "@JeremyHambly",
       "termId": "election",
@@ -14,11 +52,28 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.5263,
-        "baselineSaturation": 0.0671,
-        "spikeRatio": 7.85,
+        "baselineSaturation": 0.0655,
+        "spikeRatio": 8.04,
         "recentVideoCount": 10,
         "baselineVideoCount": 5,
-        "detectedAt": "2026-11-09T13:11:48.428Z"
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "turns",
+      "keywords": [
+        "turns",
+        "meltdown",
+        "party"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3158,
+        "baselineSaturation": 0.0655,
+        "spikeRatio": 4.82,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
       }
     },
     {
@@ -30,50 +85,11 @@
       ],
       "detectorMeta": {
         "recentSaturation": 0.3158,
-        "baselineSaturation": 0.0183,
-        "spikeRatio": 17.26,
+        "baselineSaturation": 0.0179,
+        "spikeRatio": 17.68,
         "recentVideoCount": 6,
         "baselineVideoCount": 1,
-        "detectedAt": "2026-11-09T13:11:48.428Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "trump",
-      "keywords": [
-        "midterm",
-        "republican",
-        "democrats",
-        "republicans",
-        "trump"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5385,
-        "baselineSaturation": 0.125,
-        "spikeRatio": 4.31,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-11-09T13:11:48.428Z"
-      }
-    },
-    {
-      "channelHandle": "@TheQuartering",
-      "termId": "across",
-      "keywords": [
-        "across",
-        "ballot",
-        "county",
-        "erupted",
-        "chaos",
-        "york"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3462,
-        "baselineSaturation": 0.0568,
-        "spikeRatio": 6.09,
-        "recentVideoCount": 9,
-        "baselineVideoCount": 7,
-        "detectedAt": "2026-11-09T13:11:48.428Z"
+        "detectedAt": "2026-11-10T12:51:41.917Z"
       }
     }
   ]
