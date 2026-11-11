@@ -52,6 +52,12 @@ ADS_FILE = ROOT / "public" / "ad-videos.json"
 DATA_FILE = ROOT / "public" / "data.json"
 CAMPAIGNS_FILE = ROOT / "public" / "ad-campaigns.json"
 CREATIVE_CACHE = ROOT / "scripts" / "ad-creative-cache.json"
+# Every creative ever captured, with its video and first/last-shown days. The
+# Centre lists only what it still holds (about ten months, and it can drop a
+# creative within days — the 5 Nov 2026 Halloween Black Fatigue ad was gone by
+# the 10th), so a campaign file rebuilt from the listing alone forgets history.
+# This file is merged into every run and never shrinks.
+CREATIVE_HISTORY = ROOT / "scripts" / "ad-creative-history.json"
 
 APPLY   = "--apply" in sys.argv
 COMMIT  = "--commit" in sys.argv
@@ -236,21 +242,56 @@ def build_campaigns(write=True):
     cache = resolve_creative_videos(creatives)
     day = lambda ms: datetime.datetime.utcfromtimestamp(ms / 1000).strftime("%Y-%m-%d") if ms else None
 
-    videos, unresolved = {}, 0
+    # Merge this capture into the persistent per-creative history. A creative
+    # seen before keeps its earliest first day and takes the latest last day; one
+    # that has dropped out of the listing keeps the dates it was last seen with.
+    # Entries keyed legacy:<video>:<first>:<n> came from a one-off backfill of
+    # the file's own git history (windows only, no creative ids); the first live
+    # creative for the same video and first day claims such an entry, so the
+    # backfill never double-counts a campaign the Centre still lists.
+    history = {}
+    if CREATIVE_HISTORY.exists():
+        try:
+            history = json.loads(CREATIVE_HISTORY.read_text(encoding="utf-8"))
+        except Exception:
+            history = {}
+    today = datetime.date.today().isoformat()
+    unresolved = 0
     for c in creatives:
         vid = cache.get(c["creative"])
         if not vid:
             unresolved += 1
             continue
-        e = videos.setdefault(vid, {"runs": 0, "windows": []})
-        e["runs"] += 1
-        if c["first_ms"] and c["last_ms"]:
-            e["windows"].append([day(c["first_ms"]), day(c["last_ms"])])
+        first, last = day(c["first_ms"]), day(c["last_ms"])
+        e = history.get(c["creative"])
+        if e is None:
+            for k, v in list(history.items()):
+                if k.startswith("legacy:") and v.get("video") == vid and v.get("first") == first:
+                    e = history.pop(k)
+                    break
+            if e is None:
+                e = {"video": vid, "first": first, "last": last}
+            history[c["creative"]] = e
+        e["video"] = vid
+        if first and (not e.get("first") or first < e["first"]):
+            e["first"] = first
+        if last and (not e.get("last") or last > e["last"]):
+            e["last"] = last
+        e["seen"] = today
+
+    videos = {}
+    for e in history.values():
+        v = videos.setdefault(e["video"], {"runs": 0, "windows": []})
+        v["runs"] += 1
+        if e.get("first") and e.get("last"):
+            v["windows"].append([e["first"], e["last"]])
     for v in videos.values():
         v["windows"].sort()
         if v["windows"]:
             v["first"] = v["windows"][0][0]
             v["last"] = max(w[1] for w in v["windows"])
+    log(f"campaigns on record: {len(videos)} videos, {len(history)} creatives "
+        f"({len(creatives)} listed by the Centre today, {unresolved} of those unresolved)")
 
     allw = [w for v in videos.values() for w in v["windows"]]
     doc = {
@@ -259,16 +300,19 @@ def build_campaigns(write=True):
                  "video promoted repeatedly shows a run count above 1. Independent of "
                  "ad-ledger.json, which infers bursts from view snapshots and only reaches "
                  "back to 2026-06-11.",
-        "_method": "SearchCreatives capture; each creative's preview resolved to its video",
+        "_method": "SearchCreatives capture; each creative's preview resolved to its video; "
+                   "creatives are kept on record after the Centre drops them, so history only grows",
         "_generated": datetime.date.today().isoformat(),
         "advertiser": "Marketing Sheriff",
         "creatives": len(creatives),
+        "creativesOnRecord": len(history),
         "resolved": len(creatives) - unresolved,
         "unresolved": unresolved,
         "trackingFrom": min((w[0] for w in allw), default=None),
         "videos": videos,
     }
     if write:
+        CREATIVE_HISTORY.write_text(json.dumps(history, indent=0) + "\n", encoding="utf-8")
         CAMPAIGNS_FILE.write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
         log(f"\nwrote {CAMPAIGNS_FILE.name}: {len(videos)} videos, {len(creatives)} creatives, "
             f"{unresolved} unresolved, history from {doc['trackingFrom']}")
@@ -388,7 +432,7 @@ def main():
                 sys.exit(3)
             subprocess.run(["git", "add", "public/ad-videos.json", "public/view-spikes.json",
                             "public/ad-campaigns.json", "public/ad-yield.json",
-                            "scripts/ad-creative-cache.json"],
+                            "scripts/ad-creative-cache.json", "scripts/ad-creative-history.json"],
                            cwd=ROOT, check=True)
             staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
             if staged.returncode != 0:           # something actually changed
