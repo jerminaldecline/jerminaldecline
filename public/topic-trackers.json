@@ -1,95 +1,56 @@
 {
-  "lastUpdated": "2026-11-10T12:51:41.917Z",
+  "lastUpdated": "2026-11-11T12:00:15.677Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "trump",
       "keywords": [
+        "republican",
+        "result",
         "midterm",
-        "republican",
-        "democrats",
-        "republicans",
+        "gop",
         "trump"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.6154,
-        "baselineSaturation": 0.1231,
-        "spikeRatio": 5,
-        "recentVideoCount": 16,
-        "baselineVideoCount": 16,
-        "detectedAt": "2026-11-10T12:51:41.917Z"
+        "recentSaturation": 0.6522,
+        "baselineSaturation": 0.1268,
+        "spikeRatio": 5.14,
+        "recentVideoCount": 15,
+        "baselineVideoCount": 17,
+        "detectedAt": "2026-11-11T12:00:15.677Z"
       }
     },
     {
-      "channelHandle": "@TheQuartering",
-      "termId": "across",
+      "channelHandle": "@JeremyHambly",
+      "termId": "absolutely",
       "keywords": [
-        "across",
-        "ballot",
-        "chaos",
-        "claim",
-        "york"
+        "immediately",
+        "called",
+        "absolutely"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3077,
-        "baselineSaturation": 0.0784,
-        "spikeRatio": 3.93,
+        "recentSaturation": 0.3333,
+        "baselineSaturation": 0.0511,
+        "spikeRatio": 6.52,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 4,
+        "detectedAt": "2026-11-11T12:00:15.677Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "him",
+      "keywords": [
+        "midterm",
+        "him"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4444,
+        "baselineSaturation": 0.0625,
+        "spikeRatio": 7.11,
         "recentVideoCount": 8,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-11-10T12:51:41.917Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "election",
-      "keywords": [
-        "election",
-        "night",
-        "votes",
-        "election night",
-        "republican",
-        "trump"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.5263,
-        "baselineSaturation": 0.0655,
-        "spikeRatio": 8.04,
-        "recentVideoCount": 10,
         "baselineVideoCount": 5,
-        "detectedAt": "2026-11-10T12:51:41.917Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "turns",
-      "keywords": [
-        "turns",
-        "meltdown",
-        "party"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3158,
-        "baselineSaturation": 0.0655,
-        "spikeRatio": 4.82,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 5,
-        "detectedAt": "2026-11-10T12:51:41.917Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "midterm",
-      "keywords": [
-        "warned",
-        "midterm"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3158,
-        "baselineSaturation": 0.0179,
-        "spikeRatio": 17.68,
-        "recentVideoCount": 6,
-        "baselineVideoCount": 1,
-        "detectedAt": "2026-11-10T12:51:41.917Z"
+        "detectedAt": "2026-11-11T12:00:15.677Z"
       }
     }
   ]
