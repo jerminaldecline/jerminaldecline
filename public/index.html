@@ -10698,7 +10698,7 @@ function renderAdPanel() {
     median: 'The typical long-form upload from the same month — half of that month did better, half worse. It is the yardstick for the two columns after it.',
     perf:   'Views divided by that median. 2× is twice the typical upload from its month; under 1× means it underperformed its own month despite being promoted.',
     excess: 'Views above the median. This is outperformance, not money spent — a video can beat its month on its own merits. Spend is measured separately, from the campaign dates.',
-    runs:   'Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. A dash means no campaign on record: the Centre only keeps about 10 months, so anything older has aged out of view.',
+    runs:   'Separate ad campaigns the Transparency Centre lists for this video — 3 means it was promoted on three separate occasions, not that it ran for three days. Campaigns stay on record here after the Centre drops them, so a dash means none has been seen since tracking began in late 2025.',
     lastad: 'The most recent day the Transparency Centre showed an ad for this video. Sorting by it puts the latest campaigns first, so an old video being pushed again surfaces at the top instead of hiding among the back catalogue.',
   };
   const colInfo = (key, label) => COL_NOTES[key]
@@ -10864,7 +10864,7 @@ function renderAdPanel() {
               + `against the view archive, giving about ${fmt(y.viewsPerCampaignDay.central)} ad-driven views per `
               + `campaign-day. That rate is applied to the ${fmt(cdays)} campaign-days the Transparency Centre `
               + `lists for these videos, then priced at $${y.cpvUSD.low}–$${y.cpvUSD.high} per view. `
-              + (from ? `Covers campaigns since ${from} only — the Centre keeps about 10 months, so anything earlier is not counted. ` : '')
+              + (from ? `Covers campaigns since ${from} only — nothing earlier is on record. ` : '')
               + `The view rate is measured from our own archive; the per-view price is a published benchmark, since nobody `
               + `discloses what he actually pays. A small sample, and it will tighten as more campaigns fall inside the archive.`;
             return `<div class="promo-stat">
@@ -10948,8 +10948,8 @@ function renderAdPanel() {
           const c = (window.__adYield || {}).cpvUSD;
           return c ? ` at $${c.low}–$${c.high} per view` : '';
         })()}. It deliberately does <em>not</em> price the excess
-        above — beating a monthly median may just mean the video did well. Caveats: a small sample, only the ~10 months the Centre
-        still lists, and not every counted view is one Google bills for. Identified via the
+        above — beating a monthly median may just mean the video did well. Caveats: a small sample, no record before late 2025,
+        and not every counted view is one Google bills for. Identified via the
         <a href="${escapeHtml(adVideoData.meta?.source || '#')}" target="_blank" rel="noopener">Google Ads Transparency Centre</a>.
       </div>
     </div>
@@ -13455,8 +13455,8 @@ function renderWindowList(startDate, endDate) {
       const runsLabel = nAds
         ? `${nAds} ad${nAds===1?"":"s"}` + (nAds!==nB ? ` \u00b7 ${nB} detectable burst${nB===1?"":"s"}` : "")
         // No creative record: the video is a confirmed past advertiser whose ads
-        // have aged out of the Transparency Centre (~10 months of retention), so
-        // the ad count is unknown. Report the bursts, which is what we measured,
+        // predate the campaign record (which starts late 2025), so the ad count
+        // is unknown. Report the bursts, which is what we measured,
         // rather than implying a campaign count we cannot see.
         : `${nB} view burst${nB===1?"":"s"}`;
       const runsTitle = !nAds

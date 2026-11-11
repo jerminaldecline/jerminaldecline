@@ -1,22 +1,22 @@
 {
  "_note": "Measured yield of paid promotion: how many views one campaign-day actually buys. Derived by comparing view counts across a known campaign window against the video's own dormant baseline, for campaigns inside the snapshot era on videos at least 14 days old (younger than that, launch traffic and paid traffic cannot be separated). Replaces pricing \"excess views over the month's median\", which credited organic outperformance to advertising and overstated the total several-fold.",
- "_generated": "2026-11-10",
+ "_generated": "2026-11-11",
  "method": "view gain across the campaign window plus a 2-day tail (clamped so it cannot reach the next campaign), minus the video's dormant baseline; divided by the campaign's own length, so the rate is per day of advertising",
  "tailDays": 2,
  "snapshotEra": {
   "from": "2026-06-11",
-  "to": "2026-11-10",
-  "snapshots": 301
+  "to": "2026-11-11",
+  "snapshots": 303
  },
  "ageMinDays": 14,
  "sample": {
-  "campaigns": 11,
-  "campaignDays": 47,
-  "adViews": 257263
+  "campaigns": 12,
+  "campaignDays": 50,
+  "adViews": 277120
  },
  "viewsPerCampaignDay": {
   "low": 1367,
-  "central": 5474,
+  "central": 5542,
   "high": 11127
  },
  "cpvUSD": {
@@ -25,6 +25,20 @@
  },
  "cpvBasis": "2026 published benchmarks: ~$0.024 cross-network average for skippable in-stream; $0.022 mobile / $0.029 desktop / $0.038 CTV; $0.018 (CPG) to $0.058 (legal) by industry. Commentary sits at the cheap end, so the band is centred near the average rather than in the $0.05+ range used by finance, legal and tech.",
  "campaignDaysByVideo": {
+  "0pHYgMHhi60": 20,
+  "4zl2C10Mjls": 4,
+  "G9jfiWY5PTY": 10,
+  "Lh038oA3QNY": 50,
+  "OHSwVxhZe-E": 1,
+  "OQ58hc_5fV8": 9,
+  "Xa9jjt2XF24": 4,
+  "ZdOwygmc8jg": 4,
+  "aGDMKiNGFr8": 9,
+  "n-I7Cp9iTTw": 9,
+  "pNP4B0PJk-Q": 4,
+  "qhSSU-cPFt4": 4,
+  "xXVaYfbSwgA": 4,
+  "ylmhShFD48Q": 4,
   "Sr0WmHdxJvs": 54,
   "FiLs5ovIfts": 63,
   "5CwhyEC_nz0": 16,
@@ -32,7 +46,6 @@
   "O_LjCrLlUAw": 7,
   "EeVtP-LxWaI": 2,
   "iTu_6j22RAM": 3,
-  "aGDMKiNGFr8": 5,
   "3O6sdSffHzs": 39,
   "xQCnmaq_L-4": 1,
   "tcevefZ9G18": 1,
@@ -55,7 +68,7 @@
   "eQ7GGuvphtM": 9,
   "ugRBxP-uDhA": 6,
   "L_n5w8XnBBE": 2,
-  "QeSmSLqLR6w": 19,
+  "QeSmSLqLR6w": 30,
   "Ep_qtW2K3BY": 10,
   "3m3wcoMgkJI": 2,
   "Jgt05aa3o8M": 3,
@@ -81,7 +94,6 @@
   "RdXePOwc4to": 8,
   "rpfLr0L19Ng": 14,
   "wEnWx3jAmYQ": 11,
-  "Lh038oA3QNY": 36,
   "1bEdZATxDZc": 1,
   "9jVTPCyKRhI": 2,
   "N4W-iPhT-Ds": 1,
@@ -93,7 +105,7 @@
   "C1FZpSbyUfs": 1,
   "GSX0WVDBTSk": 1,
   "qv2bMvsQP3c": 2,
-  "umq5RhyFOpQ": 3,
+  "umq5RhyFOpQ": 4,
   "vTng6A4Irt8": 5,
   "p-n5SlF_hIk": 4,
   "-5A6cNeHEcw": 15,
@@ -126,7 +138,6 @@
   "PncXpDfg4M8": 8,
   "bd9lxRvXG9Q": 4,
   "OwHAcIt1Hpw": 4,
-  "0pHYgMHhi60": 16,
   "8RiHnmAGy8U": 4,
   "y0Zp5aw0KYo": 3,
   "dwRs_iGZYVs": 18,
@@ -208,6 +219,19 @@
    "perDay": 1586
   },
   {
+   "id": "n-I7Cp9iTTw",
+   "title": "WALMART FATIGUE GOES NUCLEAR",
+   "from": "2026-08-10",
+   "to": "2026-08-12",
+   "days": 3,
+   "observedTo": "2026-08-14",
+   "observedDays": 5,
+   "gain": 19876,
+   "baselinePerDay": 5,
+   "adViews": 19851,
+   "perDay": 6617
+  },
+  {
    "id": "Sr0WmHdxJvs",
    "title": "Movie Theatre Black Fatigue Backfire!",
    "from": "2026-08-10",
@@ -267,10 +291,10 @@
    "days": 5,
    "observedTo": "2026-11-10",
    "observedDays": 7,
-   "gain": 33947,
+   "gain": 33953,
    "baselinePerDay": 4,
-   "adViews": 33919,
-   "perDay": 6784
+   "adViews": 33925,
+   "perDay": 6785
   },
   {
    "id": "FiLs5ovIfts",
