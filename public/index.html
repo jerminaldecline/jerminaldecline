@@ -1750,7 +1750,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     padding: 0.7rem 0; border-bottom: 1px solid var(--border);}
   .promo-perf-table td {border: none; padding: 0;}
   .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {flex: 0 0 100%; width: auto; min-width: 0; margin-bottom: 0.45rem; order: 0;}
-  .promo-perf-table td[data-lab="Last ad"]   {order: 1;}
+  .promo-perf-table td[data-lab="Last run"]   {order: 1;}
   .promo-perf-table td[data-lab="Views"]     {order: 2;}
   .promo-perf-table td[data-lab="vs median"] {order: 3;}
   .promo-perf-table td[data-lab="Runs"]      {order: 4;}
@@ -10787,7 +10787,7 @@ function renderAdPanel() {
           </div>
         </td>
         <td class="col-date" data-lab="Published">${ctDate(r.v.publishedAt)}</td>
-        <td class="col-date${isLive ? ' promo-lastad-live' : ''}" data-lab="Last ad">${lastAd ? escapeHtml(lastAd) : '<span aria-label="no campaign on record">—</span>'}</td>
+        <td class="col-date${isLive ? ' promo-lastad-live' : ''}" data-lab="Last run">${lastAd ? escapeHtml(lastAd) : '<span aria-label="no campaign on record">—</span>'}</td>
         <td class="col-num" data-lab="Runs">${promoRunCell(r.v.id)}</td>
         <td class="col-num promo-num-strong" data-lab="Views">${fmt(r.views)}</td>
         <td class="col-num" data-lab="Median">${r.monthMedian ? fmt(Math.round(r.monthMedian)) : '—'}</td>
@@ -10908,7 +10908,7 @@ function renderAdPanel() {
         // The (i) rides along on the pills because the table header — where the
         // desktop notes live — is hidden at this width, leaving a phone reader
         // with no way to ask what a column means.
-        const cols = [['lastad', 'Last ad'], ['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
+        const cols = [['lastad', 'Last run'], ['views', 'Views'], ['runs', 'Runs'], ['perf', 'vs median'],
                       ['excess', 'Excess'], ['median', 'Median'], ['date', 'Published'], ['title', 'Title']];
         return `<div class="promo-msort" role="group" aria-label="Sort promoted videos">
           <span class="promo-msort-lab">Sort</span>
@@ -10923,7 +10923,7 @@ function renderAdPanel() {
             <tr>
               ${sortHeader('Video', 'title', 'col-vid')}
               ${sortHeader('Published', 'date', 'col-date')}
-              ${sortHeader('Last ad' + colInfo('lastad', 'the last ad day'), 'lastad', 'col-date')}
+              ${sortHeader('Last run' + colInfo('lastad', 'the last run day'), 'lastad', 'col-date')}
               ${sortHeader('Runs' + colInfo('runs', 'campaign runs'), 'runs', 'col-num')}
               ${sortHeader('Views' + colInfo('views', 'views'), 'views', 'col-num')}
               ${sortHeader('Median' + colInfo('median', 'the month median'), 'median', 'col-num')}
