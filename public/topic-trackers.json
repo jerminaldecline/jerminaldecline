@@ -1,37 +1,95 @@
 {
-  "lastUpdated": "2026-10-24T08:59:27.494Z",
+  "lastUpdated": "2026-11-10T12:51:41.917Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
-      "termId": "coffee sign",
+      "termId": "trump",
       "keywords": [
-        "ilhan",
-        "omar",
-        "ilhan omar",
-        "coffee sign"
+        "midterm",
+        "republican",
+        "democrats",
+        "republicans",
+        "trump"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.76,
-        "baselineSaturation": 0.2087,
-        "spikeRatio": 3.64,
-        "recentVideoCount": 19,
-        "baselineVideoCount": 26,
-        "detectedAt": "2026-10-24T08:59:27.494Z"
+        "recentSaturation": 0.6154,
+        "baselineSaturation": 0.1231,
+        "spikeRatio": 5,
+        "recentVideoCount": 16,
+        "baselineVideoCount": 16,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "across",
+      "keywords": [
+        "across",
+        "ballot",
+        "chaos",
+        "claim",
+        "york"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3077,
+        "baselineSaturation": 0.0784,
+        "spikeRatio": 3.93,
+        "recentVideoCount": 8,
+        "baselineVideoCount": 10,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
       }
     },
     {
       "channelHandle": "@JeremyHambly",
-      "termId": "coffee sign",
+      "termId": "election",
       "keywords": [
-        "coffee sign"
+        "election",
+        "night",
+        "votes",
+        "election night",
+        "republican",
+        "trump"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.7368,
-        "baselineSaturation": 0.1234,
-        "spikeRatio": 5.97,
-        "recentVideoCount": 14,
-        "baselineVideoCount": 9,
-        "detectedAt": "2026-10-24T08:59:27.494Z"
+        "recentSaturation": 0.5263,
+        "baselineSaturation": 0.0655,
+        "spikeRatio": 8.04,
+        "recentVideoCount": 10,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "turns",
+      "keywords": [
+        "turns",
+        "meltdown",
+        "party"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3158,
+        "baselineSaturation": 0.0655,
+        "spikeRatio": 4.82,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 5,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "midterm",
+      "keywords": [
+        "warned",
+        "midterm"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3158,
+        "baselineSaturation": 0.0179,
+        "spikeRatio": 17.68,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 1,
+        "detectedAt": "2026-11-10T12:51:41.917Z"
       }
     }
   ]

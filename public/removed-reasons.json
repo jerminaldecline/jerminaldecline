@@ -1,7 +1,7 @@
 {
  "_note": "Resolved unavailability reason per removed video, from YouTube watch-page playabilityStatus.",
  "_method": "watch-page playabilityStatus scrape",
- "_generated": "2026-10-20",
+ "_generated": "2026-11-05",
  "reasons": {
   "tM97PVvD2KA": {
    "reason": "private"
@@ -503,10 +503,6 @@
    "reason": "private",
    "checked": "2026-07-30T17:41:45.496Z"
   },
-  "hfHrW_ntb3I": {
-   "reason": "guidelines",
-   "checked": "2026-08-13T22:53:07.240Z"
-  },
   "3_KabLseCXw": {
    "reason": "unlisted",
    "checked": "2026-08-18T15:39:56.394Z"
@@ -599,6 +595,10 @@
   "I7kor9wbM_M": {
    "reason": "private",
    "checked": "2026-10-20T00:13:28.640Z"
+  },
+  "Vl4KL8FBbc4": {
+   "reason": "deleted",
+   "checked": "2026-11-05T20:35:58.008Z"
   }
  }
 }
