@@ -1646,14 +1646,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Claim the column explicitly. The numeric columns are width:1% (shrink to
    content), so without this the title column gives up space to whichever
    header happens to be longest and titles wrap to four lines. */
-.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
+.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 270px;}
 /* Tighter than the default cell padding: five column notes added ~76px of
    header furniture, and with width:1% numeric columns that came straight out
    of the title column, pushing titles to four lines. Trimmed on header and body
    together so the figures stay aligned under their headings. */
 .promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;
-    padding-left: 0.4rem; padding-right: 0.55rem;}
-.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
+    padding-left: 0.3rem; padding-right: 0.45rem;}
+.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;
+    padding-left: 0.45rem; padding-right: 0.45rem;}
 .promo-perf-table tbody tr {transition: background .12s;}
 .promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
 .promo-perf-table td.col-num {color: var(--text-muted);}
@@ -1725,20 +1726,32 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-msort-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
 .promo-msort-arrow {margin-left: 0.2rem; font-size: 0.7rem;}
 
-@media (max-width: 640px) {
+/* Eight columns need about 950px. Rather than a sideways scroll on a tablet
+   or a phone held landscape, the table sheds its derived columns in two steps
+   — the figures are still there in the stacked layout below and on a desktop —
+   and the thumbnail and title column tighten. Published stays throughout:
+   an old upload with a recent Last run is exactly the pattern to catch. */
+@media (max-width: 1060px) {
   .promo-thumb, .promo-thumb img {width: 60px;}
   .promo-thumb img {height: 34px;}
-  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.45rem;}
+  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.4rem;}
+  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {min-width: 210px;}
+  .promo-perf-table th[data-promo-sort="median"], .promo-perf-table td[data-lab="Median"],
+  .promo-perf-table th[data-promo-sort="excess"], .promo-perf-table td[data-lab="Excess"] {display: none;}
+}
+@media (max-width: 840px) {
+  .promo-perf-table th[data-promo-sort="perf"], .promo-perf-table td[data-lab="vs median"] {display: none;}
 }
 
-/* Below 560px a seven-column table cannot be read: at 390px the titles wrapped
+/* Below 720px even five columns cannot be read: at 390px the titles wrapped
    to six or seven lines and every figure sat off-screen behind a horizontal
    scroll. The table collapses to one stacked block per video — thumbnail and
-   title, then the figures as labelled chips — matching how the Removed and
-   Stolen-shorts lists already read on a phone. The <table> markup is unchanged,
-   so sorting and the desktop layout are untouched; the header's sorting role
-   passes to .promo-msort, which is why that bar exists. */
-@media (max-width: 560px) {
+   title, then every figure as a labelled chip, including the columns the
+   tiers above hide — matching how the Removed and Stolen-shorts lists already
+   read on a phone. The <table> markup is unchanged, so sorting and the desktop
+   layout are untouched; the header's sorting role passes to .promo-msort,
+   which is why that bar exists. */
+@media (max-width: 720px) {
   .promo-msort {display: flex;}
   .promo-perf-table-wrap {overflow-x: visible; max-height: none;}
   .promo-perf-table, .promo-perf-table tbody, .promo-perf-table td {display: block; width: auto;}
@@ -1767,6 +1780,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     content: attr(data-lab); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
     color: var(--label); font-weight: 700;}
   .promo-perf-table td.promo-num-strong {font-size: 0.88rem;}
+  /* The column-dropping tiers above also match here; chips show everything. */
+  .promo-perf-table td[data-lab="Median"], .promo-perf-table td[data-lab="Excess"],
+  .promo-perf-table td[data-lab="vs median"] {display: inline-flex;}
   .promo-perf-table tbody tr:hover {background: none;}
   .promo-search-empty {display: block; padding: 1.4rem 0.5rem;}
 }
