@@ -5762,7 +5762,7 @@ function buildMonthlyData(scope){
     return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video' };
   }
   function activeDisplayName() {
-    if (ANALYTICS_CHANNEL === 'ALL') return 'Quartering universe';
+    if (ANALYTICS_CHANNEL === 'ALL') return 'All channels';
     return ANALYTICS_DATASET?.channels?.[ANALYTICS_CHANNEL]?.title || 'Channel';
   }
   function fmtCompact(n) {
@@ -11147,7 +11147,7 @@ function renderTopicChips(v) {
 // Shared helper: a compact "Channel - period" string for the Videos-tab section
 // headers (word cloud, video tags, topics), so each says what it's scoped to.
 function sectionContextLabel() {
-  let channel = 'Quartering universe';
+  let channel = 'All channels';
   if (typeof ANALYTICS_CHANNEL !== 'undefined' && ANALYTICS_CHANNEL !== 'ALL') {
     channel = (ANALYTICS_DATASET && ANALYTICS_DATASET.channels && ANALYTICS_DATASET.channels[ANALYTICS_CHANNEL] && ANALYTICS_DATASET.channels[ANALYTICS_CHANNEL].title) || 'Channel';
   }
