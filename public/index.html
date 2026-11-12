@@ -723,6 +723,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
   .trend-legend-swatch.duration {background: transparent;
     height: 0;
     border-top: 2px dashed var(--accent-2);}
+.trend-legend-swatch.uploads {background: var(--text-dim); opacity: 0.45; width: 10px; height: 10px; border-radius: 2px;}
 /* Revenue band swatch — translucent fill matching the chart's revenue band. */
   .trend-legend-swatch.revenue-band {background: var(--up);
     opacity: 0.22;
@@ -913,6 +914,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
   .chart-line-duration {fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round;}
 .chart-dot.duration {fill: var(--accent-2);}
+/* Uploads bars (views+uploads) — quiet and behind the line; the line is the story. */
+.chart-bar-uploads {fill: var(--text-dim); opacity: 0.28;}
+.chart-bar-uploads.inprogress {opacity: 0.16;}
 /* Like-rate dots — match the chart-line-likerate colour (purple) so the
      rate line and its data points read as a single visual unit. */
   .chart-dot.likerate {fill: var(--accent-2);}
@@ -1045,6 +1049,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .chart-tooltip-row .swatch.curr {background: var(--accent);}
 .chart-tooltip-row .swatch.prev {background: var(--text-dim);}
 .chart-tooltip-row .swatch.duration {background: var(--accent-2);}
+.chart-tooltip-row .swatch.uploads {background: var(--text-dim); opacity: 0.6;}
 .chart-tooltip-row .swatch.likes {background: var(--accent-2);}
 /* In-progress caveat — small italic footer in the tooltip */
   .chart-tooltip-inprogress {font-size: 0.7rem;
@@ -2878,6 +2883,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
       <div class="an-metric-toggle" id="anMetricToggle" role="tablist" aria-label="Chart metric">
         <button type="button" class="an-metric-btn active" data-metric="views" role="tab">Views</button>
         <button type="button" class="an-metric-btn" data-metric="views_length" role="tab">Views + length</button>
+        <button type="button" class="an-metric-btn" data-metric="views_uploads" role="tab">Views + uploads</button>
         <button type="button" class="an-metric-btn" data-metric="views_likes" role="tab">Views + likes</button>
         <button type="button" class="an-metric-btn" data-metric="median_views" role="tab">Average views</button>
         <button type="button" class="an-metric-btn" data-metric="median_length" role="tab">Average length</button>
@@ -2891,6 +2897,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
         <select id="anMetricSelect" class="an-mobile-sel" aria-label="Chart metric">
           <option value="views">Views</option>
           <option value="views_length">Views + length</option>
+          <option value="views_uploads">Views + uploads</option>
           <option value="views_likes">Views + likes</option>
           <option value="median_views">Average views</option>
           <option value="median_length">Average length</option>
@@ -5239,6 +5246,9 @@ function anSummarise(videos) {
 // months rather than dropping it to the axis. The rate line in the views+likes
 // chart has always done this ("lifts over gaps rather than dipping to 0%"); this
 // generalises the same rule.
+// Which metrics follow the long-form / Shorts / both toggle: the plain views
+// chart and views + uploads. Every other metric keeps its long-form framing.
+function anFormatMetric(m){ return m === 'views' || m === 'views_uploads'; }
 function anMonthHasUploads(m, mode){
   const c = m && m.curr; if (!c) return false;
   if (mode === 'short') return (c.shorts || []).length > 0;
@@ -5727,7 +5737,7 @@ function buildMonthlyData(scope){
   // views there closes the very gap it came from and the line goes flat by
   // identity. Counts (tag blocks, uploads) and subscribers are untouched by the
   // counting change at all.
-  const VCC_BASIS_METRICS = { views:1, views_length:1, median_views:1 };
+  const VCC_BASIS_METRICS = { views:1, views_length:1, views_uploads:1, median_views:1 };
   function vccBasisApplies(){ return !!VCC_BASIS_METRICS[chartMetric]; }
   function metricsFor(summary) {
     if (!summary) return null;
@@ -5740,9 +5750,9 @@ function buildMonthlyData(scope){
     // the month actually carries post-change views.
     const _rng = (_eng && summary.longViewsEngagedLo != null && summary.longViewsEngagedHi > summary.longViewsEngagedLo * 1.005)
       ? [summary.longViewsEngagedLo, summary.longViewsEngagedHi] : null;
-    // "Include Shorts" applies only to the plain Views metric — every other
-    // consumer of this helper keeps its long-form framing.
-    if (chartMetric === 'views' && includeShorts) {
+    // "Include Shorts" applies to the plain Views metric and Views + uploads —
+    // every other consumer of this helper keeps its long-form framing.
+    if (anFormatMetric(chartMetric) && includeShorts) {
       const _tv = _lv + summary.shortViews, _tc = summary.totalCount();
       return { views: _tv, count: _tc, avg: _tc ? _tv / _tc : 0, label: 'video',
                lo: _rng ? _rng[0] + summary.shortViews : null, hi: _rng ? _rng[1] + summary.shortViews : null };
@@ -5951,9 +5961,16 @@ function setChartTitle(metric, mode) {
     : isAllMode
       ? "Total views on each month's uploads — long-form and Shorts — with year-over-year shading."
       : "Total views on each month's long-form uploads, with year-over-year shading.";
+  const uploadsT = isShort ? 'Shorts views vs. Shorts posted' : isAllMode ? 'Views vs. uploads (Shorts included)' : 'Long-form views vs. uploads';
+  const uploadsS = isShort
+    ? "Each month's Shorts views against how many Shorts went out — is a fall in views a fall in output, or in reach?"
+    : isAllMode
+      ? "Each month's views against how many videos went out, long-form and Shorts together — output, or reach?"
+      : "Each month's long-form views against how many videos went out — is a fall in views a fall in output, or in reach?";
   const T = {
     views: [viewsT, viewsS],
     views_length: ['Views vs. video length', 'Monthly views against the median upload length — is runtime climbing as views fall?'],
+    views_uploads: [uploadsT, uploadsS],
     views_likes: ['Views vs. like rate', 'Monthly views against the like rate — did engagement hold as reach shrank?'],
     median_views: ['Median views per upload', "The typical upload's reach each month — median, so one viral hit can't skew it."],
     median_length: ['Median upload length', "The typical long-form upload's runtime each month — median, so one marathon stream can't skew it."],
@@ -5978,13 +5995,13 @@ function setChartTitle(metric, mode) {
   // not views, so the counting change cannot touch it.
   // counting_change is absent on purpose: that chart IS the explanation, so
   // captioning it with a warning about the thing it explains reads as a loop.
-  const _vccMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+  const _vccMetrics = { views:1, views_length:1, views_uploads:1, views_likes:1, median_views:1,
                         like_rate:1, engagement_variance:1, all_videos:1 };
   // Rate metrics need different wording: the line falls because the divisor
   // grew, which reads as an engagement collapse if left unexplained.
   const _vccRateMetrics = { like_rate:1, engagement_variance:1, views_likes:1 };
   // Which of them plot months on the x axis, and so can carry the rule.
-  const _vccRuleMetrics = { views:1, views_length:1, views_likes:1, median_views:1,
+  const _vccRuleMetrics = { views:1, views_length:1, views_uploads:1, views_likes:1, median_views:1,
                             like_rate:1, engagement_variance:1 };
   const _vccRelevant = !!_vccMetrics[metric] && mode !== 'short';
   el.innerHTML = `<div class="an-chart-title-main">${t}</div><div class="an-chart-title-sub">${s}</div>` + (_vccRelevant ? vccNote(_vccRateMetrics[metric] ? 'rate' : 'chart', !!_vccRuleMetrics[metric]) : '');
@@ -5994,7 +6011,7 @@ function renderTrendChart(yoy) {
   const svg = document.getElementById('trendChart');
   const legend = document.getElementById('trendLegend');
   const tooltip = document.getElementById('chartTooltip');
-  setChartTitle(chartMetric, (chartMetric === 'views' && includeShorts) ? 'all' : viewMode);
+  setChartTitle(chartMetric, (anFormatMetric(chartMetric) && includeShorts) ? 'all' : viewMode);
   // The tag-blocks key is specific to that chart; hide it for every other metric.
   // renderTagBlocksChart re-shows it when that chart is active.
   const _tbKey = document.getElementById('tagBlockKey');
@@ -6069,7 +6086,7 @@ function renderTrendChart(yoy) {
     }
     const shortsCtrl = document.getElementById('chartFormatSeg');
     if (shortsCtrl) {
-      shortsCtrl.hidden = chartMetric !== 'views';
+      shortsCtrl.hidden = !anFormatMetric(chartMetric);
       const active = includeShorts ? 'all' : (viewMode === 'short' ? 'short' : 'long');
       for (const b of shortsCtrl.querySelectorAll('.chart-ctrl-btn.seg')) {
         b.setAttribute('aria-pressed', String(b.dataset.fmt === active));
@@ -6205,6 +6222,16 @@ function renderTrendChart(yoy) {
     && channelQualifiesForLengthChart(ANALYTICS_CHANNEL)
     && hasDurationData;
 
+  // Views + uploads: the same views line over a quiet bar per month for how
+  // many videos went out, so a falling line can be read as fewer uploads or as
+  // less reach per upload. Follows the format toggle like the plain views chart
+  // (long-form / Shorts / both); the bars count what was posted in that mode.
+  const showUploads = chartMetric === 'views_uploads';
+  const upMode = (anFormatMetric(chartMetric) && includeShorts) ? 'all' : viewMode;
+  const uploadsFor = c => !c ? 0 : upMode === 'short' ? (c.shorts || []).length
+    : upMode === 'all' ? (c.longForm || []).length + (c.shorts || []).length : (c.longForm || []).length;
+  const uploads = chartData.map(m => uploadsFor(m.curr));
+
   // In views+length mode, we suppress the YoY visual (deficit/surplus fills, prev-year line)
   // because two superimposed lines on dual axes plus the gap fill becomes noisy.
   // The view-history alone is the story; duration overlay is the story.
@@ -6217,7 +6244,7 @@ function renderTrendChart(yoy) {
   // the legend entry with it.
   const yoyCoverage = chartData.reduce((k, m) => k + (m.yoy ? 1 : 0), 0);
   const yoyUsable = yoyCoverage >= 3 && yoyCoverage >= chartData.length / 3;
-  const effectiveYoy = yoy && !showDuration && yoyUsable;
+  const effectiveYoy = yoy && !showDuration && !showUploads && yoyUsable;
   // The subtitle is written before this point and advertises "year-over-year
   // shading". Drop that clause when there is no comparison line to shade against,
   // rather than describing something the chart does not contain.
@@ -6233,12 +6260,13 @@ function renderTrendChart(yoy) {
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
     ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
     ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Average length</span>' : ''}
+    ${showUploads ? '<span class="trend-legend-item"><span class="trend-legend-swatch uploads"></span> Uploads</span>' : ''}
   `;
 
   // Layout — taller to accommodate annotation, more left padding for Y labels.
   // When the duration line is shown, also add right padding for the secondary Y axis labels.
   const W = 720, H = 280;
-  const P = { top: 20, right: showDuration ? 66 : 24, bottom: 48, left: 66 };
+  const P = { top: 20, right: (showDuration || showUploads) ? 66 : 24, bottom: 48, left: 66 };
   const innerW = W - P.left - P.right;
   const innerH = H - P.top - P.bottom;
 
@@ -6274,7 +6302,7 @@ function renderTrendChart(yoy) {
   // Build path strings
   // Months that published nothing the current mode measures are not zeros — the
   // line lifts over them and a hollow marker sits on the axis instead.
-  const vMode = (chartMetric === 'views' && includeShorts) ? 'all' : viewMode;
+  const vMode = (anFormatMetric(chartMetric) && includeShorts) ? 'all' : viewMode;
   const vHas = i => anMonthHasUploads(chartData[i], vMode);
   const currPath = anGapPath(currValues, xFor, yFor, vHas);
 
@@ -6538,9 +6566,26 @@ function renderTrendChart(yoy) {
       data-idx="${i}"/>
   `).join('');
 
-  // Right-axis labels for duration scale (only when showDuration is true)
+  // Uploads bars (views+uploads mode): their own scale on the right, kept to the
+  // lower 60% of the plot so the views line stays the headline.
+  let upBars = '', upTicks = [];
+  if (showUploads) {
+    const ipUp = inProgressMonth ? uploadsFor(inProgressMonth.curr) : 0;
+    const upMax = niceMax(Math.max(1, ...uploads, ipUp) * 1.05);
+    const yForUp = v => P.top + innerH - (v / upMax) * innerH * 0.6;
+    const bw = Math.min(28, Math.max(3, (innerW / Math.max(1, nTotal - 1)) * 0.5));
+    const bar = (i, u, extra) => u > 0
+      ? `<rect class="chart-bar-uploads${extra || ''}" x="${(xFor(i) - bw / 2).toFixed(1)}" y="${yForUp(u).toFixed(1)}" width="${bw.toFixed(1)}" height="${(P.top + innerH - yForUp(u)).toFixed(1)}" rx="2"/>`
+      : '';
+    upBars = uploads.map((u, i) => bar(i, u)).join('') + (inProgressMonth ? bar(n, ipUp, ' inprogress') : '');
+    for (const v of [0, upMax / 2, upMax]) upTicks.push({ y: yForUp(v), v: Math.round(v) });
+  }
+
+  // Right-axis labels: the duration scale in views+length, the uploads scale in views+uploads
   const durLabelsSvg = showDuration ? durTicks.map(t =>
     `<text class="chart-axis-label y dur" x="${P.left + innerW + 8}" y="${t.y + 4}">${fmtDurStat(t.v)}</text>`
+  ).join('') : showUploads ? upTicks.map(t =>
+    `<text class="chart-axis-label y dur" x="${P.left + innerW + 8}" y="${t.y + 4}">${t.v}</text>`
   ).join('') : '';
 
   // In-progress month rendering:
@@ -6617,6 +6662,7 @@ function renderTrendChart(yoy) {
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
+    ${upBars}
     ${(viewMode === 'short' && !includeShorts) ? '' : vccBreakRule(chartData, xFor, P, innerH)}
     ${xLabels}
     ${durLabelsSvg}
@@ -6698,16 +6744,26 @@ function renderTrendChart(yoy) {
       }
       durationHtml = `<div class="chart-tooltip-row"><span class="swatch duration"></span> ${fmtDurStat(durSec)} median length ${durDeltaHtml}</div>`;
     }
+    // Uploads row (views+uploads mode): the count behind the bar, and what each
+    // upload averaged, which is the reach figure the comparison is really about.
+    let uploadsHtml = '';
+    if (showUploads) {
+      const u = uploadsFor(m.curr);
+      const noun = upMode === 'short' ? (u === 1 ? 'Short' : 'Shorts') : upMode === 'all' ? (u === 1 ? 'upload' : 'uploads') : (u === 1 ? 'long-form upload' : 'long-form uploads');
+      const per = (u > 0 && curr.views > 0) ? ` <span class="chart-tooltip-delta-ref">${fmtCompact(curr.views / u)} per ${upMode === 'short' ? 'Short' : 'upload'}</span>` : '';
+      uploadsHtml = `<div class="chart-tooltip-row"><span class="swatch uploads"></span> ${u} ${noun}${per}</div>`;
+    }
     // In-progress caveat — clarifies which numbers are partial and which aren't.
     // Views are cumulative and incomplete; duration medians are real numbers.
     const inProgressCaveat = isInProgress
-      ? `<div class="chart-tooltip-inprogress">In progress — views are partial; length is a running median.</div>`
+      ? `<div class="chart-tooltip-inprogress">In progress — views are partial; ${showUploads ? 'uploads are the count so far' : 'length is a running median'}.</div>`
       : '';
     tooltip.innerHTML = `
       <div class="chart-tooltip-month">${m.label}${isInProgress ? ' <span class="chart-tooltip-inprogress-tag">live</span>' : ''}</div>
       <div class="chart-tooltip-row"><span class="swatch curr"></span> ${fmt(curr.views)} ${deltaHtml}</div>
       ${curr.lo != null ? `<div class="chart-tooltip-row chart-tooltip-range">likely ${fmt(curr.lo)} \u2013 ${fmt(curr.hi)}</div>` : ''}
       ${!isInProgress && effectiveYoy && yoyM ? `<div class="chart-tooltip-row"><span class="swatch prev"></span> ${fmt(yoyM.views)} <span style="color:var(--text-dim);font-size:0.75rem;">(${m.label.split(' ')[0]} ${parseInt(m.label.split(' ')[1]) - 1})</span></div>` : ''}
+      ${uploadsHtml}
       ${durationHtml}
       ${inProgressCaveat}
     `;
