@@ -1646,14 +1646,15 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 /* Claim the column explicitly. The numeric columns are width:1% (shrink to
    content), so without this the title column gives up space to whichever
    header happens to be longest and titles wrap to four lines. */
-.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 300px;}
+.promo-perf-table th.col-vid, .promo-perf-table td.col-vid {text-align: left; width: 46%; min-width: 270px;}
 /* Tighter than the default cell padding: five column notes added ~76px of
    header furniture, and with width:1% numeric columns that came straight out
    of the title column, pushing titles to four lines. Trimmed on header and body
    together so the figures stay aligned under their headings. */
 .promo-perf-table th.col-num, .promo-perf-table td.col-num {text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%;
-    padding-left: 0.4rem; padding-right: 0.55rem;}
-.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;}
+    padding-left: 0.3rem; padding-right: 0.45rem;}
+.promo-perf-table th.col-date, .promo-perf-table td.col-date {text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; width: 1%; color: var(--text-muted); font-size: 0.8rem;
+    padding-left: 0.45rem; padding-right: 0.45rem;}
 .promo-perf-table tbody tr {transition: background .12s;}
 .promo-perf-table tbody tr:hover {background: color-mix(in srgb, var(--accent-2) 4%, transparent);}
 .promo-perf-table td.col-num {color: var(--text-muted);}
@@ -1725,20 +1726,32 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .promo-msort-btn.active {background: var(--accent-2); border-color: var(--accent-2); color: #0d0c0c;}
 .promo-msort-arrow {margin-left: 0.2rem; font-size: 0.7rem;}
 
-@media (max-width: 640px) {
+/* Eight columns need about 950px. Rather than a sideways scroll on a tablet
+   or a phone held landscape, the table sheds its derived columns in two steps
+   — the figures are still there in the stacked layout below and on a desktop —
+   and the thumbnail and title column tighten. Published stays throughout:
+   an old upload with a recent Last run is exactly the pattern to catch. */
+@media (max-width: 1060px) {
   .promo-thumb, .promo-thumb img {width: 60px;}
   .promo-thumb img {height: 34px;}
-  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.45rem;}
+  .promo-perf-table th, .promo-perf-table td {padding: 0.55rem 0.4rem;}
+  .promo-perf-table th.col-vid, .promo-perf-table td.col-vid {min-width: 210px;}
+  .promo-perf-table th[data-promo-sort="median"], .promo-perf-table td[data-lab="Median"],
+  .promo-perf-table th[data-promo-sort="excess"], .promo-perf-table td[data-lab="Excess"] {display: none;}
+}
+@media (max-width: 840px) {
+  .promo-perf-table th[data-promo-sort="perf"], .promo-perf-table td[data-lab="vs median"] {display: none;}
 }
 
-/* Below 560px a seven-column table cannot be read: at 390px the titles wrapped
+/* Below 720px even five columns cannot be read: at 390px the titles wrapped
    to six or seven lines and every figure sat off-screen behind a horizontal
    scroll. The table collapses to one stacked block per video — thumbnail and
-   title, then the figures as labelled chips — matching how the Removed and
-   Stolen-shorts lists already read on a phone. The <table> markup is unchanged,
-   so sorting and the desktop layout are untouched; the header's sorting role
-   passes to .promo-msort, which is why that bar exists. */
-@media (max-width: 560px) {
+   title, then every figure as a labelled chip, including the columns the
+   tiers above hide — matching how the Removed and Stolen-shorts lists already
+   read on a phone. The <table> markup is unchanged, so sorting and the desktop
+   layout are untouched; the header's sorting role passes to .promo-msort,
+   which is why that bar exists. */
+@media (max-width: 720px) {
   .promo-msort {display: flex;}
   .promo-perf-table-wrap {overflow-x: visible; max-height: none;}
   .promo-perf-table, .promo-perf-table tbody, .promo-perf-table td {display: block; width: auto;}
@@ -1767,6 +1780,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     content: attr(data-lab); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
     color: var(--label); font-weight: 700;}
   .promo-perf-table td.promo-num-strong {font-size: 0.88rem;}
+  /* The column-dropping tiers above also match here; chips show everything. */
+  .promo-perf-table td[data-lab="Median"], .promo-perf-table td[data-lab="Excess"],
+  .promo-perf-table td[data-lab="vs median"] {display: inline-flex;}
   .promo-perf-table tbody tr:hover {background: none;}
   .promo-search-empty {display: block; padding: 1.4rem 0.5rem;}
 }
@@ -4241,8 +4257,23 @@ function render(m){
   const monthKey = isAgg ? (d._agg ? d._agg.last : null) : m;
   const SD=d.shorts||{n:0,v:0,best:null};
   const pm = isAgg ? null : prevMonth(m), yo = isAgg ? null : yoyMonth(m);
-  const p = isAgg ? null : D[pm], y = isAgg ? null : D[yo];
-  const lblMo = pm ? moAbbr(pm) : '', lblYr = yo ? moAbbrYr(yo) : '';
+  let p = isAgg ? null : D[pm], y = isAgg ? null : D[yo];
+  // While the month is still running, compare against the previous month and
+  // the year-ago month AS THEY STOOD AT THIS POINT, not their whole-month
+  // totals: twelve days of young uploads set against a complete October read
+  // a third down when November was running well ahead. month-to-date.json
+  // carries those comparators, recomputed from the snapshot archive by
+  // scripts/build-month-to-date.js with this page's own formulas. Until it
+  // arrives, or if it describes another month, the whole-month figures stand
+  // and the banner keeps its warning.
+  const MTD = window.__mtd;
+  const lfl = (!isAgg && m===CURRENT_MONTH_KEY && MTD && MTD.month===m && MTD.scopes && MTD.scopes[scope] && MTD.scopes[scope].prev) ? MTD : null;
+  if (lfl) { p = lfl.scopes[scope].prev; y = lfl.scopes[scope].yoy || null; }
+  const lflAsOf = (lfl && lfl.prev && lfl.prev.asOf) ? (s => (+s.slice(8,10)) + ' ' + MONTHS[+s.slice(5,7)-1].slice(0,3))(ctDate(lfl.prev.asOf)) : '';
+  // The pill says what it compares against; the banner above the cards says
+  // how. "vs same point in Oct" rather than "vs Oct" plus a footnote.
+  const lblMo = pm ? (lfl ? 'vs same point in ' + MONTHS[+pm.slice(5,7)-1].slice(0,3) : moAbbr(pm)) : '';
+  const lblYr = yo ? (lfl ? 'vs same point in ' + MONTHS[+yo.slice(5,7)-1].slice(0,3) + " '" + yo.slice(2,4) : moAbbrYr(yo)) : '';
   const revStr = money(d.revlo)+' – '+money(d.revhi);
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
@@ -4353,7 +4384,14 @@ function render(m){
   // selection carried in from another month is ignored rather than showing a
   // caption on a period that has nothing to adjust.
   const useEng = vccAdj && !!window.__viewEngaged;
-  const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
+  // The counting-change caption only matters when a comparison actually
+  // crosses the change. A post-change month set against another post-change
+  // month was counted by the same rules, and captioning it "not like-for-like"
+  // beside the same-point note read as a contradiction. Pre-change comparators
+  // are months before September 2026 (August straddles the onset) that carry
+  // a views figure to compare.
+  const vccCross = !!((p && pm && pm < '2026-09' && p.tot) || (y && yo && yo < '2026-09' && y.tot));
+  const basisTag = (vccAdj && vccCross) ? (useEng ? 'engaged' : 'reported') : null;
   // An engaged figure is an estimate, so it is shown with the range it could
   // sit in: the same views divided by each end of the factor's range. One quiet
   // line under the number, and nothing at all on periods the change never
@@ -4643,7 +4681,9 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
+    ${isPartial ? (lfl
+      ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> Comparisons below are like for like: ${monthName(m)} so far against ${monthName(pm)} as it stood on ${lflAsOf}, and the same point of ${monthName(yo)} where the record allows.</div>`
+      : `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>`) : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
@@ -5280,6 +5320,8 @@ function vccNote(kind, hasRule){
 // Vertical rule marking where the counting change lands on a monthly chart.
 // Drawn on Aug 2026, the first month it touches - the effect is partial there
 // (it starts on the 27th) and total from September onward.
+// Not drawn on a Shorts-only series: Shorts have counted from the first frame
+// since Mar 2025, so the change never touched them (the trend chart skips it).
 const VCC_BREAK_MONTH = '2026-08';
 function vccHasBreak(chartData){ return chartData.some(m => m.key === VCC_BREAK_MONTH); }
 function vccBreakRule(chartData, xFor, P, innerH){
@@ -6578,7 +6620,7 @@ function renderTrendChart(yoy) {
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
-    ${vccBreakRule(chartData, xFor, P, innerH)}
+    ${(viewMode === 'short' && !includeShorts) ? '' : vccBreakRule(chartData, xFor, P, innerH)}
     ${xLabels}
     ${durLabelsSvg}
     ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
@@ -10297,6 +10339,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
       fetch('ad-yield.json').then(async r => { if (r.ok){ window.__adYield = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-yield', e)),
+      fetch('month-to-date.json').then(async r => { if (r.ok){ window.__mtd = await r.json(); if (typeof ovCurrent !== 'undefined' && ovCurrent === CURRENT_MONTH_KEY && typeof window.__ovRerender === 'function') window.__ovRerender(); } }).catch(e => console.warn('month-to-date', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
