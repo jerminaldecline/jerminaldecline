@@ -251,9 +251,10 @@ jobs:
           SNAPSHOTS_DIR=/tmp/snapshots/snapshots python scripts/build-ad-ledger.py
           SNAPSHOTS_DIR=/tmp/snapshots/snapshots python scripts/build-historic-views.py
           SNAPSHOTS_DIR=/tmp/snapshots/snapshots node scripts/build-daily-views.js
+          SNAPSHOTS_DIR=/tmp/snapshots/snapshots node scripts/build-month-to-date.js
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/view-velocity.json public/ad-ledger.json public/historic-views.json public/daily-views.json public/daily-videos
+          git add public/view-velocity.json public/ad-ledger.json public/historic-views.json public/daily-views.json public/daily-videos public/month-to-date.json
           if git diff --staged --quiet; then
             echo "view-velocity/ad-ledger unchanged."
             exit 0
