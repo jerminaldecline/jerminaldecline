@@ -4257,7 +4257,21 @@ function render(m){
   const monthKey = isAgg ? (d._agg ? d._agg.last : null) : m;
   const SD=d.shorts||{n:0,v:0,best:null};
   const pm = isAgg ? null : prevMonth(m), yo = isAgg ? null : yoyMonth(m);
-  const p = isAgg ? null : D[pm], y = isAgg ? null : D[yo];
+  let p = isAgg ? null : D[pm], y = isAgg ? null : D[yo];
+  // While the month is still running, compare against the previous month and
+  // the year-ago month AS THEY STOOD AT THIS POINT, not their whole-month
+  // totals: twelve days of young uploads set against a complete October read
+  // a third down when November was running well ahead. month-to-date.json
+  // carries those comparators, recomputed from the snapshot archive by
+  // scripts/build-month-to-date.js with this page's own formulas. Until it
+  // arrives, or if it describes another month, the whole-month figures stand
+  // and the banner keeps its warning.
+  const MTD = window.__mtd;
+  const lfl = (!isAgg && m===CURRENT_MONTH_KEY && MTD && MTD.month===m && MTD.scopes && MTD.scopes[scope] && MTD.scopes[scope].prev) ? MTD : null;
+  if (lfl) { p = lfl.scopes[scope].prev; y = lfl.scopes[scope].yoy || null; }
+  const lflAsOf = (lfl && lfl.prev && lfl.prev.asOf) ? (s => (+s.slice(8,10)) + ' ' + MONTHS[+s.slice(5,7)-1].slice(0,3))(ctDate(lfl.prev.asOf)) : '';
+  const lflText = lfl ? `Like for like: ${monthName(m)} so far against ${monthName(pm)} as it stood on ${lflAsOf}, the same number of days in rather than the whole month. A year back only uploads, runtime and video length can be matched, so the other year-on-year figures are left out. Whole-month comparisons return once ${monthName(m)} is complete.` : '';
+  const lflNote = lfl ? `<span class="delta-basis">same point <span class="info-icon" data-popover="${escapeHtml(lflText)}" tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>` : '';
   const lblMo = pm ? moAbbr(pm) : '', lblYr = yo ? moAbbrYr(yo) : '';
   const revStr = money(d.revlo)+' – '+money(d.revhi);
   const isAll = scope==='ALL';
@@ -4369,7 +4383,14 @@ function render(m){
   // selection carried in from another month is ignored rather than showing a
   // caption on a period that has nothing to adjust.
   const useEng = vccAdj && !!window.__viewEngaged;
-  const basisTag = vccAdj ? (useEng ? 'engaged' : 'reported') : null;
+  // The counting-change caption only matters when a comparison actually
+  // crosses the change. A post-change month set against another post-change
+  // month was counted by the same rules, and captioning it "not like-for-like"
+  // beside the same-point note read as a contradiction. Pre-change comparators
+  // are months before September 2026 (August straddles the onset) that carry
+  // a views figure to compare.
+  const vccCross = !!((p && pm && pm < '2026-09' && p.tot) || (y && yo && yo < '2026-09' && y.tot));
+  const basisTag = (vccAdj && vccCross) ? (useEng ? 'engaged' : 'reported') : null;
   // An engaged figure is an estimate, so it is shown with the range it could
   // sit in: the same views divided by each end of the factor's range. One quiet
   // line under the number, and nothing at all on periods the change never
@@ -4477,7 +4498,7 @@ function render(m){
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}</div>`:''; };
+  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}${lflNote}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
@@ -4659,7 +4680,9 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${isPartial ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
+    ${isPartial ? (lfl
+      ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> Comparisons below are like for like: ${monthName(m)} so far against ${monthName(pm)} as it stood on ${lflAsOf}, and the same point of ${monthName(yo)} where the record allows.</div>`
+      : `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>`) : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
@@ -10313,6 +10336,7 @@ function niceDurationAxis(minSec, maxSec) {
       fetch('removed-reasons.json').then(async r => { if (r.ok){ const j = await r.json(); window.__removedReasons = (j && j.reasons) || {}; if (typeof renderRemoved === 'function') renderRemoved(); } }).catch(e => console.warn('removed-reasons', e)),
       fetch('ad-campaigns.json').then(async r => { if (r.ok){ window.__adCampaigns = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-campaigns', e)),
       fetch('ad-yield.json').then(async r => { if (r.ok){ window.__adYield = await r.json(); if (typeof renderAdPanel === 'function') { try { renderAdPanel(); } catch(e){} } } }).catch(e => console.warn('ad-yield', e)),
+      fetch('month-to-date.json').then(async r => { if (r.ok){ window.__mtd = await r.json(); if (typeof ovCurrent !== 'undefined' && ovCurrent === CURRENT_MONTH_KEY && typeof window.__ovRerender === 'function') window.__ovRerender(); } }).catch(e => console.warn('month-to-date', e)),
       fetch('daily-views.json').then(async r => { if (r.ok){ window.__dvData = await r.json(); if (typeof window.__dvRerenderIfActive === 'function') window.__dvRerenderIfActive(); if (typeof window.__dvRenderOverview === 'function') window.__dvRenderOverview(); } }).catch(e => console.warn('daily-views', e))
     ]);
   }
