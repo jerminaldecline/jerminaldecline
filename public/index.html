@@ -4270,9 +4270,10 @@ function render(m){
   const lfl = (!isAgg && m===CURRENT_MONTH_KEY && MTD && MTD.month===m && MTD.scopes && MTD.scopes[scope] && MTD.scopes[scope].prev) ? MTD : null;
   if (lfl) { p = lfl.scopes[scope].prev; y = lfl.scopes[scope].yoy || null; }
   const lflAsOf = (lfl && lfl.prev && lfl.prev.asOf) ? (s => (+s.slice(8,10)) + ' ' + MONTHS[+s.slice(5,7)-1].slice(0,3))(ctDate(lfl.prev.asOf)) : '';
-  const lflText = lfl ? `Like for like: ${monthName(m)} so far against ${monthName(pm)} as it stood on ${lflAsOf}, the same number of days in rather than the whole month. A year back only uploads, runtime and video length can be matched, so the other year-on-year figures are left out. Whole-month comparisons return once ${monthName(m)} is complete.` : '';
-  const lflNote = lfl ? `<span class="delta-basis">same point <span class="info-icon" data-popover="${escapeHtml(lflText)}" tabindex="0" role="button" aria-label="About this comparison">ⓘ</span></span>` : '';
-  const lblMo = pm ? moAbbr(pm) : '', lblYr = yo ? moAbbrYr(yo) : '';
+  // The pill says what it compares against; the banner above the cards says
+  // how. "vs same point in Oct" rather than "vs Oct" plus a footnote.
+  const lblMo = pm ? (lfl ? 'vs same point in ' + MONTHS[+pm.slice(5,7)-1].slice(0,3) : moAbbr(pm)) : '';
+  const lblYr = yo ? (lfl ? 'vs same point in ' + MONTHS[+yo.slice(5,7)-1].slice(0,3) + " '" + yo.slice(2,4) : moAbbrYr(yo)) : '';
   const revStr = money(d.revlo)+' – '+money(d.revhi);
   const isAll = scope==='ALL';
   const subjectName = isAll ? 'The Quartering network' : scope;
@@ -4498,7 +4499,7 @@ function render(m){
   // Hero deltas: %-only (these numbers are large — absolute deltas would be unwieldy),
   // wrapped conditionally so the bordered row disappears when there's no comparator
   // (e.g. the earliest month), matching the stat cards.
-  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}${lflNote}</div>`:''; };
+  const heroDeltas=(cur,pv,yv,abs,xcls,basis)=>{ const dd=mini(lblMo,cur,pv,true,abs)+mini(lblYr,cur,yv,true,abs); const cap = basis==='engaged'?VCC_NOTE_ENG : basis==='reported'?VCC_NOTE_REP : ''; return dd?`<div class="deltas${xcls?' '+xcls:''}">${dd}${cap}</div>`:''; };
 
   // Display label + link helpers that work for both single-month and aggregate.
   // mLabel: the header heading. mForLinks: a real month key for "see videos"
