@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-11
+# Topic candidates — 2026-11-12
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,185 +6,115 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 23 recent videos, 137 baseline videos
+Pool: 22 recent videos, 142 baseline videos
 
-### Cluster 1: `trump`
+### Cluster 1: `votes`
 
-- **Recent saturation:** 15/23 videos (**65%**)
-- **Baseline saturation:** 17/137 videos (12%)
-- **Spike ratio:** 5.1x
-- **Related terms:** `trump`, `republican`, `midterm`, `result`, `gop`
+- **Recent saturation:** 8/22 videos (**36%**)
+- **Baseline saturation:** 10/142 videos (7%)
+- **Spike ratio:** 5.0x
+- **Related terms:** `votes`, `republicans`, `million`, `election`, `state`
 - **Sample recent videos:**
-  - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
-    Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
-  - 2026-11-10 — _Donald Trump SNAPS Over Impeachment & TORCHES CNN In Hilarious Fashion Over Amnesty LIES_  
-    Donald Trump ruthlessly roasted CNN over some lies and the impeachment of Pete Hegseth
-  - 2026-11-09 — _Trump Shares BOMBSHELL Evidence On Midterm Elections & The Left Is FREAKING OUT!_  
-    Trump Shares EXPLOSIVE 15% Election Pattern! Something Is Very Wrong
-  - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
-    They Found 388 Missing Votes! Memory Card Changes Election Lead
-  - 2026-11-07 — _MASSIVE BOMBSHELL BREAK!_  
-    Trump Sounds The Alarm Over Shocking 20 MILLION Vote Surge!
-
-### Cluster 2: `state`
-
-- **Recent saturation:** 5/23 videos (**22%**)
-- **Baseline saturation:** 4/137 videos (3%)
-- **Spike ratio:** 6.7x
-- **Related terms:** `state`, `election`
-- **Sample recent videos:**
-  - 2026-11-09 — _Trump Shares BOMBSHELL Evidence On Midterm Elections & The Left Is FREAKING OUT!_  
-    Trump Shares EXPLOSIVE 15% Election Pattern! Something Is Very Wrong
-  - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
-    They Said A Memory Card Was Missing—Now Officials DENY It!
-  - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
-    They Found 388 Missing Votes! Memory Card Changes Election Lead
-  - 2026-11-04 — _THERE'S NO COMING BACK!_  
-    TOTAL MUSLIM VICTORY! Ilhan Wins As Her Ally Takes Senate
-  - 2026-11-04 — _WE'RE DOOMED NOW!_  
-    Texas Just Turned BLUE! The GOP Refuses To Admit What Happened
-
-### Cluster 3: `votes`
-
-- **Recent saturation:** 5/23 videos (**22%**)
-- **Baseline saturation:** 2/137 videos (1%)
-- **Spike ratio:** 12.0x
-- **Related terms:** `votes`, `million`
-- **Sample recent videos:**
+  - 2026-11-11 — _MIDTERM ELECTION FLIP INCOMING!_  
+    Massive Election Fraud Claim ERUPTS After 100,000 Republican Votes Vanish
   - 2026-11-09 — _SHE'S PANICKING NOW!_  
     Jennifer Welch PANICS After Losing $8 MILLION In Sponsors?!
+  - 2026-11-09 — _Trump Shares BOMBSHELL Evidence On Midterm Elections & The Left Is FREAKING OUT!_  
+    Trump Shares EXPLOSIVE 15% Election Pattern! Something Is Very Wrong
   - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
     They Said A Memory Card Was Missing—Now Officials DENY It!
   - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
     They Found 388 Missing Votes! Memory Card Changes Election Lead
-  - 2026-11-07 — _MASSIVE BOMBSHELL BREAK!_  
-    Trump Sounds The Alarm Over Shocking 20 MILLION Vote Surge!
-  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
-    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
 
-### Cluster 4: `hegseth`
+### Cluster 2: `secretary`
 
-- **Recent saturation:** 3/23 videos (**13%**)
-- **Baseline saturation:** 0/137 videos (0%)
-- **Spike ratio:** 36.0x
-- **Related terms:** `hegseth`, `impeachment`, `pete`, `pete hegseth`
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 0/142 videos (0%)
+- **Spike ratio:** 39.0x
+- **Related terms:** `secretary`
+- **Sample recent videos:**
+  - 2026-11-11 — _MIDTERM ELECTION FLIP INCOMING!_  
+    Massive Election Fraud Claim ERUPTS After 100,000 Republican Votes Vanish
+  - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
+    They Said A Memory Card Was Missing—Now Officials DENY It!
+  - 2026-11-05 — _Donald Trump BETTER NOT Do This!_  
+    Trump BACKS Hegseth As Republicans Plot His Downfall!
+
+### Cluster 3: `out`
+
+- **Recent saturation:** 6/22 videos (**27%**)
+- **Baseline saturation:** 14/142 videos (10%)
+- **Spike ratio:** 2.7x
+- **Related terms:** `out`, `backlash`, `charlie`, `madison`, `square`, `garden`, `dave`, `chappelle`
+- **Sample recent videos:**
+  - 2026-11-11 — _HIS CAREER IS OVER!_  
+    Dave Chappelle Backlash EXPLODES After Sick 9/11 Claim
+  - 2026-11-10 — _Jennifer Welch MELTDOWN Live As She Offers INSANE Cope!_  
+    Jennifer Welch Just Made It WORSE! Sponsors Keep Fleeing Her
+  - 2026-11-10 — _HE'S RUNNING SCARED!_  
+    Dave Chappelle Disaster Gets WORSE! Another Sick Kirk Clip Leaks
+  - 2026-11-09 — _IT GOT WAY WORSE!_  
+    Dave Chappelle PANICS As Backlash Goes NUCLEAR?!
+  - 2026-11-06 — _Donald Trump FIRES Chief Of Staff As DARK SECRETS Reveal Her Evil!_  
+    Heads are rolling in the Trump Administration and it turns out Susie Wiles was behind so much bad stuff
+
+### Cluster 4: `house`
+
+- **Recent saturation:** 5/22 videos (**23%**)
+- **Baseline saturation:** 7/142 videos (5%)
+- **Spike ratio:** 4.3x
+- **Related terms:** `house`, `hegseth`, `impeachment`, `pete`, `pete hegseth`
 - **Sample recent videos:**
   - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
     Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
   - 2026-11-10 — _Donald Trump SNAPS Over Impeachment & TORCHES CNN In Hilarious Fashion Over Amnesty LIES_  
     Donald Trump ruthlessly roasted CNN over some lies and the impeachment of Pete Hegseth
-  - 2026-11-05 — _Donald Trump BETTER NOT Do This!_  
-    Trump BACKS Hegseth As Republicans Plot His Downfall!
-
-### Cluster 5: `flipped`
-
-- **Recent saturation:** 3/23 videos (**13%**)
-- **Baseline saturation:** 0/137 videos (0%)
-- **Spike ratio:** 36.0x
-- **Related terms:** `flipped`
-- **Sample recent videos:**
-  - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
-    They Said A Memory Card Was Missing—Now Officials DENY It!
-  - 2026-11-05 — _Republicans SHOCK Move To BLOCK Democrats From Power After Midterms!_  
-    Blood In The Water! Ron DeSantis DECLARES GOP Extinction Event
-  - 2026-11-04 — _HE JUST ERUPTED!_  
-    Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
-
-### Cluster 6: `republicans`
-
-- **Recent saturation:** 5/23 videos (**22%**)
-- **Baseline saturation:** 1/137 videos (1%)
-- **Spike ratio:** 20.0x
-- **Related terms:** `republicans`, `vote`
-- **Sample recent videos:**
+  - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
+    They Found 388 Missing Votes! Memory Card Changes Election Lead
   - 2026-11-07 — _MASSIVE BOMBSHELL BREAK!_  
     Trump Sounds The Alarm Over Shocking 20 MILLION Vote Surge!
-  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
-    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
   - 2026-11-05 — _Donald Trump BETTER NOT Do This!_  
     Trump BACKS Hegseth As Republicans Plot His Downfall!
-  - 2026-11-04 — _THERE'S NO COMING BACK!_  
-    TOTAL MUSLIM VICTORY! Ilhan Wins As Her Ally Takes Senate
-  - 2026-11-04 — _HE JUST ERUPTED!_  
-    Trump HUMILIATED In Midterm Bloodbath! Democrats Warn “LAWYER UP”
+
+### Cluster 5: `did`
+
+- **Recent saturation:** 4/22 videos (**18%**)
+- **Baseline saturation:** 5/142 videos (4%)
+- **Spike ratio:** 4.7x
+- **Related terms:** `did`, `democrats`
+- **Sample recent videos:**
+  - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
+    Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
+  - 2026-11-06 — _Midterm BOMBSHELL 20 MILLION Democrat Votes Questioned!_  
+    Where Did 20 MILLION Votes Come From?! Midterm Numbers Spark Fury
+  - 2026-11-06 — _Trump Goes NUCLEAR As Democrats Suffer INSTANT REGRET Over Midterm Win_  
+    Trump ERUPTS After $3 Trillion Stock Market Wipeout! “You Did This!”
+  - 2026-11-05 — _Harassed Red Baron Pizza Guy SPEAKS & Gives AMAZING Update!_  
+    Red Baron Hero Turns Down MORE MONEY After Internet Raises $787K
+
+### Cluster 6: `began`
+
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 1/142 videos (1%)
+- **Spike ratio:** 13.0x
+- **Related terms:** `began`
+- **Sample recent videos:**
+  - 2026-11-10 — _Jennifer Welch MELTDOWN Live As She Offers INSANE Cope!_  
+    Jennifer Welch Just Made It WORSE! Sponsors Keep Fleeing Her
+  - 2026-11-10 — _HE'S RUNNING SCARED!_  
+    Dave Chappelle Disaster Gets WORSE! Another Sick Kirk Clip Leaks
+  - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
+    Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
 
 ## @JeremyHambly
 
-Pool: 18 recent videos, 87 baseline videos
+Pool: 16 recent videos, 91 baseline videos
 
-### Cluster 1: `absolutely`
+### Cluster 1: `time`
 
-- **Recent saturation:** 6/18 videos (**33%**)
-- **Baseline saturation:** 4/87 videos (5%)
-- **Spike ratio:** 6.5x
-- **Related terms:** `absolutely`, `immediately`, `called`
-- **Sample recent videos:**
-  - 2026-11-10 — _AOC Is Running For PRESIDENT! This Is Hilarious_  
-    AOC Is Running For PRESIDENT! This Is Absolutely Hilarious News
-  - 2026-11-09 — _CNN TORCHED Over Unhinged Elon Musk Segment Putting His Life In Danger_  
-    CNN In Huge Trouble After SICK Elon Musk Remarks Go Viral
-  - 2026-11-07 — _THEY'RE ALWAYS CHEATING!_  
-    You Won’t BELIEVE This! Daycare Boss With 16 Violations WINS Election
-  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
-    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
-  - 2026-11-04 — _Hasan Piker MELTDOWN Over Asmongold! He Humilated Himself_  
-    Hasan Piker EXPLODES! Wants Asmongold Thrown In Prison
-
-### Cluster 2: `maga`
-
-- **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 2/87 videos (2%)
-- **Spike ratio:** 7.8x
-- **Related terms:** `maga`, `republican`
-- **Sample recent videos:**
-  - 2026-11-07 — _THEY'RE ALWAYS CHEATING!_  
-    You Won’t BELIEVE This! Daycare Boss With 16 Violations WINS Election
-  - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
-    Tucker Turns On Scott Presler! MAGA Is FURIOUS
-  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
-    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
-  - 2026-11-05 — _Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!_  
-    Tim Pool’s Election Stream ERUPTS! MTG Says Trump Betrayed MAGA
-
-### Cluster 3: `turns`
-
-- **Recent saturation:** 4/18 videos (**22%**)
-- **Baseline saturation:** 4/87 videos (5%)
-- **Spike ratio:** 4.3x
-- **Related terms:** `turns`, `party`
-- **Sample recent videos:**
-  - 2026-11-09 — _Dave Chappelle Own Fans TURN ON HIM Very Publicly With Some SURPRISING Statements_  
-    Dave Chappelle Hits ROCK BOTTOM! Everyone Turns On Him
-  - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
-    Tucker Turns On Scott Presler! MAGA Is FURIOUS
-  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
-    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
-  - 2026-11-04 — _HE COMPLETELY SNAPPED!_  
-    Matt Walsh TURNS On Trump! “We Have To Move On” After GOP Wipeout
-
-### Cluster 4: `him`
-
-- **Recent saturation:** 8/18 videos (**44%**)
-- **Baseline saturation:** 5/87 videos (6%)
-- **Spike ratio:** 7.1x
-- **Related terms:** `him`, `midterm`
-- **Sample recent videos:**
-  - 2026-11-10 — _THIS IS A DISGRACE!_  
-    Judge Delays Tyler Robinson Trial Until 2028, Kirk Family Erupts
-  - 2026-11-09 — _Dave Chappelle Own Fans TURN ON HIM Very Publicly With Some SURPRISING Statements_  
-    Dave Chappelle Hits ROCK BOTTOM! Everyone Turns On Him
-  - 2026-11-09 — _Russell Brand Gets 10 YEARS In Prison With ZERO Evidence! This Is Unjust!_  
-    Russell Brand Gets 10 YEARS! His Stunning Downfall Is Complete
-  - 2026-11-07 — _Tucker Carlson INSANE Attack On The Right BACKFIRES!_  
-    Tucker Turns On Scott Presler! MAGA Is FURIOUS
-  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
-    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
-
-### Cluster 5: `time`
-
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 2/87 videos (2%)
-- **Spike ratio:** 5.9x
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 2/91 videos (2%)
+- **Spike ratio:** 6.9x
 - **Related terms:** `time`
 - **Sample recent videos:**
   - 2026-11-10 — _Candace Owens Gets BRUTAL News! The Clock is Ticking!_  
@@ -194,19 +124,65 @@ Pool: 18 recent videos, 87 baseline videos
   - 2026-11-05 — _Hasan Piker RAGES & Threatens More Lawsuits Immediately REGRETS It_  
     They’re FIGHTING Each Other! Destiny DARES Hasan Piker To Sue
 
-### Cluster 6: `erupts`
+### Cluster 2: `charlie`
 
-- **Recent saturation:** 3/18 videos (**17%**)
-- **Baseline saturation:** 2/87 videos (2%)
-- **Spike ratio:** 5.9x
+- **Recent saturation:** 4/16 videos (**25%**)
+- **Baseline saturation:** 5/91 videos (5%)
+- **Spike ratio:** 4.2x
+- **Related terms:** `charlie`, `kirk`, `charlie kirk`
+- **Sample recent videos:**
+  - 2026-11-10 — _THIS IS A DISGRACE!_  
+    Judge Delays Tyler Robinson Trial Until 2028, Kirk Family Erupts
+  - 2026-11-09 — _Dave Chappelle Own Fans TURN ON HIM Very Publicly With Some SURPRISING Statements_  
+    Dave Chappelle Hits ROCK BOTTOM! Everyone Turns On Him
+  - 2026-11-09 — _Jennifer Welch Has Lost ALL SPONSORS Of The I've Had It Podcast!_  
+    Jennifer Welch PANICS As Sponsors FLEE! Backlash Goes NUCLEAR
+  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
+    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
+
+### Cluster 3: `erupts`
+
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 3/91 videos (3%)
+- **Spike ratio:** 4.9x
 - **Related terms:** `erupts`
 - **Sample recent videos:**
+  - 2026-11-11 — _Worrying TPUSA Claims Go VIRAL But This STINKS Like The Cornell 7_  
+    Wild TPUSA Accusation ERUPTS After Disturbing Video Leaks
   - 2026-11-10 — _THIS IS A DISGRACE!_  
     Judge Delays Tyler Robinson Trial Until 2028, Kirk Family Erupts
   - 2026-11-06 — _Gamers RAGE After Man FIRED For Being Christian!_  
     Asmongold ERUPTS! G2 Fires Legend For Saying Abortion Is Murder
-  - 2026-11-05 — _Tim Pool Hosts Midterm BLOWOUT Stream Where MTG Gloats!_  
-    Tim Pool’s Election Stream ERUPTS! MTG Says Trump Betrayed MAGA
+
+### Cluster 4: `him`
+
+- **Recent saturation:** 4/16 videos (**25%**)
+- **Baseline saturation:** 5/91 videos (5%)
+- **Spike ratio:** 4.2x
+- **Related terms:** `him`
+- **Sample recent videos:**
+  - 2026-11-10 — _THIS IS A DISGRACE!_  
+    Judge Delays Tyler Robinson Trial Until 2028, Kirk Family Erupts
+  - 2026-11-09 — _Dave Chappelle Own Fans TURN ON HIM Very Publicly With Some SURPRISING Statements_  
+    Dave Chappelle Hits ROCK BOTTOM! Everyone Turns On Him
+  - 2026-11-09 — _Russell Brand Gets 10 YEARS In Prison With ZERO Evidence! This Is Unjust!_  
+    Russell Brand Gets 10 YEARS! His Stunning Downfall Is Complete
+  - 2026-11-05 — _The View Hits ROCK BOTTOM With INSANE Interview_  
+    Whoopi Goldberg FLIRTS With El-Sayed?! This Is Embarrassing
+
+### Cluster 5: `absolutely`
+
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 4/91 videos (4%)
+- **Spike ratio:** 3.8x
+- **Related terms:** `absolutely`
+- **Sample recent videos:**
+  - 2026-11-10 — _AOC Is Running For PRESIDENT! This Is Hilarious_  
+    AOC Is Running For PRESIDENT! This Is Absolutely Hilarious News
+  - 2026-11-07 — _THEY'RE ALWAYS CHEATING!_  
+    You Won’t BELIEVE This! Daycare Boss With 16 Violations WINS Election
+  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
+    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
 
 ---
 
