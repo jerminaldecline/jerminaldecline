@@ -177,6 +177,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .ds-tab:hover{color:var(--text);background:var(--surface-2)}
 .ds-tab:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-soft,rgba(106,163,255,0.28))}
 .ds-tab[aria-selected="true"]{color:var(--accent);background:var(--surface-2);border-bottom-color:var(--accent);border-bottom-width:3px}
+/* The Coffee tab is a link to its own page (/coffee) styled as the fourth tab; that
+   page carries the same bar with Coffee selected and the other three linking back. */
+a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
+@media(max-width:680px){.ds-tabs{gap:0.2rem}.ds-tab{font-size:0.9rem;padding:0.55rem 0.7rem}}
 .ds-tabpanel[hidden]{display:none}
 .tab-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:3rem 2rem;text-align:center}
 .tab-placeholder h3{margin:0 0 0.75rem;font-size:1.2rem;font-weight:800;color:var(--text)}
@@ -2839,6 +2843,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
     <button class="ds-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
     <button class="ds-tab" role="tab" data-tab="analysis" aria-selected="false">Charts &amp; Analysis</button>
     <button class="ds-tab" role="tab" data-tab="videos" aria-selected="false">Videos</button>
+    <a class="ds-tab" role="tab" href="/coffee" title="Coffee Brand Coffee: stock, prices and estimated sales on Amazon, tracked daily">Coffee</a>
   </nav>
   <div class="sticky-controls" id="stickyControls">
     <div class="bar-controls" data-for="overview" id="ovBarControls">
@@ -11974,7 +11979,8 @@ function renderWindowList(startDate, endDate) {
 
 (function tabShell(){
   const TABS = ['overview','analysis','videos'];
-  const tabs = document.querySelectorAll('.ds-tab');
+  // Only the in-page tabs (data-tab); the Coffee tab is a plain link to /coffee.
+  const tabs = document.querySelectorAll('.ds-tab[data-tab]');
   const panels = document.querySelectorAll('.ds-tabpanel');
   if (!tabs.length || !panels.length) return;
   function show(tab){
