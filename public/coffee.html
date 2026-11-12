@@ -658,16 +658,16 @@ function renderTable(c,A){
   if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(r=>r.name.toLowerCase().includes(q)||(r.s.id||'').toLowerCase().includes(q)); }
   const k=state.sort.key, dir=state.sort.dir==='asc'?1:-1;
   rows=rows.slice().sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
-  const cols=[['name','Product'],['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Left in one go'],['rest','Added'],['oos','Days out'],['trend','Trend']];
+  const cols=[['name','Product'],['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Left in one go'],['rest','Added'],['trend','Trend']];
   document.querySelector('#tbl thead').innerHTML='<tr>'+cols.map(([key,lab])=>`<th><button type="button" data-key="${key}" ${state.sort.key===key?`data-dir="${state.sort.dir}"`:''} ${key==='trend'?'disabled':''}>${lab}</button></th>`).join('')+'</tr>';
   document.querySelector('#tbl tbody').innerHTML=rows.length?rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
     <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.id?' · '+esc(r.s.id):''}</small></td>
     <td>${esc(r.size||'—')}</td><td>${fmtP(r.price)}</td>
     <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':fmtU(r.stock)+(r.capped?'<span class="cap">+</span>':'')}</td>
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
-    <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td><td>${r.oos||'—'}</td>
+    <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td>
     <td>${spark(r.series)}</td></tr>`).join(''):`<tr><td colspan="${cols.length}" class="empty" style="text-align:center">No listings match.</td></tr>`;
-  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Left in one go and Added are units over the period. Left in one go is a large sudden fall in one item (40 or more units and at least half the listing) that did not come back within four weeks — possibly a bulk order, possibly stock moved elsewhere. Change is stock now against the first reading in the period. Days out counts days at zero. "?" means no usable reading yet.`;
+  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Left in one go and Added are units over the period. Left in one go is a large sudden fall in one item (40 or more units and at least half the listing) that did not come back within four weeks — possibly a bulk order, possibly stock moved elsewhere. Change is stock now against the first reading in the period. "?" means no usable reading yet.`;
 }
 
 function renderDetail(c,A){
@@ -676,7 +676,7 @@ function renderDetail(c,A){
   const s=r.s, days=A.days, cap=capOf(s);
   el.hidden=false;
   el.innerHTML=`<div class="detail-head"><div><div class="panel-title">${esc(s.name)}${s.variant?' · '+esc(s.variant):''}</div>
-      <div class="detail-stats">${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, left in one go <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b>, out of stock <b>${r.oos}</b> day${r.oos===1?'':'s'} · sales value <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
+      <div class="detail-stats">${esc(s.family)}${s.size?' · '+esc(s.size):''} · usual price <b>${fmtP(s.price)}</b> · period: sold <b>${fmtU(r.sold)}</b>${r.bulk&&!state.bulk?`, left in one go <b>${fmtU(r.bulk)}</b>`:''}, added <b>${fmtU(r.rest)}</b> · sales value <b>${fmtM(r.gross)}</b>, profit ${netLabel()} <b>${fmtM(netOf(r.gross,r.sold))}</b> · <a href="${esc(s.url)}" target="_blank" rel="noopener">listing ↗</a></div></div>
       <button type="button" class="detail-close" id="detailClose">Close</button></div>
     <div class="two"><div><div class="panel-sub">Stock on hand</div>${lineChart(days,s.stock.slice(A.i0,A.i1+1),{color:'var(--brand)',label:'Stock',cap})}</div>
       <div><div class="panel-sub">Price as read</div>${lineChart(days,s.prices.slice(A.i0,A.i1+1),{color:'var(--accent-2)',label:'Price',money:true})}</div></div>`;
