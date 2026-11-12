@@ -39,7 +39,7 @@
 body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:28px;line-height:1.5}
 .wrap{max-width:1060px;margin:0 auto}
 a{color:var(--accent)}
-.util-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.util-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:0.9rem;flex-wrap:wrap}
 .util-brand{display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:inherit}
 .brand-logo{width:34px;height:34px;flex:0 0 34px;border-radius:8px;object-fit:cover}
 .util-brand-name{font-size:1.02rem;font-weight:800;letter-spacing:-0.01em;line-height:1.15}
@@ -52,6 +52,14 @@ a{color:var(--accent)}
 .theme-seg-btn.active{background:var(--accent-fill);color:#fff}
 .theme-seg-btn:hover{color:var(--text)}
 .theme-seg-btn.active:hover{color:#fff}
+/* Section tabs, copied from the main site so this page reads as its fourth tab.
+   The other three are links back to the main page; Coffee is the selected one. */
+.ds-tabs{display:flex;gap:0.25rem;border-bottom:1px solid var(--border);margin:0 0 1.4rem}
+.ds-tab{appearance:none;display:inline-block;background:var(--surface);border:1px solid var(--border);border-bottom:2px solid transparent;color:var(--subtext);font-family:inherit;font-size:0.98rem;font-weight:700;line-height:normal;padding:0.6rem 1.15rem;cursor:pointer;margin-bottom:-1px;border-radius:9px 9px 0 0;text-decoration:none;transition:background .14s,color .14s}
+.ds-tab:hover{color:var(--text);background:var(--surface-2)}
+.ds-tab:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(106,163,255,0.28)}
+.ds-tab[aria-selected="true"]{color:var(--accent);background:var(--surface-2);border-bottom-color:var(--accent);border-bottom-width:3px;cursor:default}
+@media (max-width:680px){.ds-tabs{gap:0.2rem}.ds-tab{font-size:0.9rem;padding:0.55rem 0.7rem}}
 
 h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;line-height:1.15;text-wrap:balance}
 .sub{color:var(--subtext);margin:0 0 0.2rem;font-size:0.95rem}
@@ -194,7 +202,6 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       </span>
     </a>
     <div class="util-cluster">
-      <a class="back" href="/">&larr; Main site</a>
       <div class="theme-seg" id="themeSeg" role="group" aria-label="Colour theme">
         <button type="button" class="theme-seg-btn" data-theme-choice="system">System</button>
         <button type="button" class="theme-seg-btn" data-theme-choice="light">Light</button>
@@ -202,6 +209,12 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       </div>
     </div>
   </div>
+  <nav class="ds-tabs" role="tablist" aria-label="Sections">
+    <a class="ds-tab" role="tab" href="/">Overview</a>
+    <a class="ds-tab" role="tab" href="/?tab=analysis">Charts &amp; Analysis</a>
+    <a class="ds-tab" role="tab" href="/?tab=videos">Videos</a>
+    <span class="ds-tab" role="tab" aria-selected="true">Coffee</span>
+  </nav>
 
   <h1>Coffee Brand Coffee</h1>
   <p class="sub">Stock, prices and estimated sales for Coffee Brand Coffee, tracked daily on Amazon.</p>
