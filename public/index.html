@@ -5319,6 +5319,8 @@ function vccNote(kind, hasRule){
 // Vertical rule marking where the counting change lands on a monthly chart.
 // Drawn on Aug 2026, the first month it touches - the effect is partial there
 // (it starts on the 27th) and total from September onward.
+// Not drawn on a Shorts-only series: Shorts have counted from the first frame
+// since Mar 2025, so the change never touched them (the trend chart skips it).
 const VCC_BREAK_MONTH = '2026-08';
 function vccHasBreak(chartData){ return chartData.some(m => m.key === VCC_BREAK_MONTH); }
 function vccBreakRule(chartData, xFor, P, innerH){
@@ -6617,7 +6619,7 @@ function renderTrendChart(yoy) {
   svg.innerHTML = `
     <line class="chart-axis-line" x1="${P.left}" y1="${P.top + innerH}" x2="${P.left + innerW}" y2="${P.top + innerH}"/>
     ${gridLines}
-    ${vccBreakRule(chartData, xFor, P, innerH)}
+    ${(viewMode === 'short' && !includeShorts) ? '' : vccBreakRule(chartData, xFor, P, innerH)}
     ${xLabels}
     ${durLabelsSvg}
     ${gapSegmentsRed ? `<path class="chart-gap deficit" d="${gapSegmentsRed}"/>` : ''}
