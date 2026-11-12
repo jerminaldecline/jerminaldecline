@@ -26,6 +26,15 @@ Cleaning rules, and why:
     the tracker records whichever size variant Amazon puts in the buy box, most
     often the 5 lb one while the 12 oz is out of stock. The daily series keeps
     the raw reads for the price log; valuations use the modal figure.
+  * Non-persistent price misreads are emitted as null, not a number, the same
+    "no usable reading" class the stock rule already nulls (see clean_prices /
+    detect_bad_days). An isolated spike ABOVE 1.35x the modal is always dropped -
+    a sudden hike is never the real selling price (buy-box flip to a pricier
+    seller/size, or the upward half of a bad scan; a site-wide one on 2026-09-11
+    put $44/$85/$95 on 42 of 68 listings for a day). A reading far BELOW the modal
+    is dropped ONLY on a detected bad-scan day, so genuine clearance (short or
+    stepped, e.g. Tigers Blood to $10-12, Spiked Jack-o'-Lantern to $9.49) is
+    never erased. Sustained reads are always kept; raw reads stay in the CSV.
   * Size is not in the Amazon label (the same name is listed once per size), so
     it is inferred: K-Cups -> 12-pack, "Kona" -> 7oz, modal price >= $45 -> 5lb,
     else 12oz.
@@ -70,6 +79,74 @@ def mode(values):
     top = max(c.values())
     # tie -> the lower price (the 12 oz default, not the 5 lb variant)
     return min(v for v, n in c.items() if n == top)
+
+
+def _held(prices, i, min_run=3, tol=0.08):
+    """Is prices[i] part of a run of >= min_run adjacent readings near its value?
+    A real price persists; an isolated 1-2 day reading does not."""
+    p = prices[i]
+    if p is None:
+        return False
+    n = len(prices)
+    run, j = 1, i - 1
+    while j >= 0 and prices[j] is not None and abs(prices[j] - p) <= tol * p:
+        run += 1; j -= 1
+    j = i + 1
+    while j < n and prices[j] is not None and abs(prices[j] - p) <= tol * p:
+        run += 1; j += 1
+    return run >= min_run
+
+
+def detect_bad_days(skus, hi=1.35, thresh=5):
+    """Day-indices where >= thresh listings each read a price above hi x their
+    own modal at once. One scan can't make dozens of unrelated coffees jump to
+    the same few prices by chance - it means that scan grabbed the wrong element
+    across the run (a variant/seller price, or a bad page). 2026-09-11 hit 42 of
+    68; smaller bursts hit 2026-07-05, 08-01, 08-13, 08-27."""
+    bad = collections.Counter()
+    for s in skus:
+        m = s["price"]
+        if not m:
+            continue
+        for i, p in enumerate(s["prices"]):
+            if p is not None and p > hi * m:
+                bad[i] += 1
+    return {i for i, c in bad.items() if c >= thresh}
+
+
+def clean_prices(prices, modal, bad_days, hi=1.35, lo=0.65):
+    """Null non-persistent price misreads, asymmetrically.
+
+    ALWAYS drop a non-held reading ABOVE 1.35 x the modal: a sudden one/two-day
+    hike is never this seller's real selling price - it's the buy box flipping to
+    a pricier seller or the 5 lb size, or the upward half of a bad scan. These are
+    the spikes that dominate the price chart.
+
+    Drop a non-held reading far BELOW the modal ONLY on a detected bad-scan day.
+    Off a bad day a low reading is left alone, because genuine clearance is real
+    and can be short or drift down in steps (Tigers Blood to $10-12 in Oct, Spiked
+    Jack-o'-Lantern to $9.49 in Nov) - never erase that.
+
+    Sustained reads - real clearance, the 5 lb $85-while-out-of-stock runs - are
+    always kept (they are held). Nulled days show as a gap, "no usable reading",
+    the same policy the stock rule already uses; the raw reads stay in history.csv.
+    Returns (cleaned, n_nulled). Added 2026-11-12 after the price log showed these.
+    """
+    if modal is None or modal <= 0:
+        return list(prices), 0
+    out = list(prices)
+    nulled = 0
+    for i, p in enumerate(prices):
+        if p is None:
+            continue
+        high = p > hi * modal
+        low = p < lo * modal
+        if not (high or (low and i in bad_days)):
+            continue
+        if not _held(prices, i):
+            out[i] = None
+            nulled += 1
+    return out, nulled
 
 
 def tidy(label):
@@ -136,7 +213,16 @@ def build_amazon():
             "stock": stock, "prices": prices,
             "lastReading": known[-1] if known else None,
         })
+    # Price cleaning needs every SKU's modal first, so do it after the loop:
+    # flag the bad-scan days (many listings spiking at once), then null each
+    # SKU's non-persistent misreads. Raw reads remain in history.csv.
+    bad_days = detect_bad_days(skus)
+    nulled_total = 0
+    for s in skus:
+        s["prices"], nulled = clean_prices(s["prices"], s["price"], bad_days)
+        nulled_total += nulled
     skus.sort(key=lambda s: (s["family"], s["name"], s["size"]))
+    log(f"amazon: {len(bad_days)} bad-scan day(s); nulled {nulled_total} non-persistent price outliers")
     return {"days": days, "skus": skus, "cap": None}
 
 
