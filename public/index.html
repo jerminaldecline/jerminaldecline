@@ -4269,7 +4269,6 @@ function render(m){
   const MTD = window.__mtd;
   const lfl = (!isAgg && m===CURRENT_MONTH_KEY && MTD && MTD.month===m && MTD.scopes && MTD.scopes[scope] && MTD.scopes[scope].prev) ? MTD : null;
   if (lfl) { p = lfl.scopes[scope].prev; y = lfl.scopes[scope].yoy || null; }
-  const lflAsOf = (lfl && lfl.prev && lfl.prev.asOf) ? (s => (+s.slice(8,10)) + ' ' + MONTHS[+s.slice(5,7)-1].slice(0,3))(ctDate(lfl.prev.asOf)) : '';
   // The pill says what it compares against; the banner above the cards says
   // how. "vs same point in Oct" rather than "vs Oct" plus a footnote.
   const lblMo = pm ? (lfl ? 'vs same point in ' + MONTHS[+pm.slice(5,7)-1].slice(0,3) : moAbbr(pm)) : '';
@@ -4681,9 +4680,7 @@ function render(m){
         <span class="dying-ticker-new">New excuse ↻</span>
       </div>
     </div>
-    ${isPartial ? (lfl
-      ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> Comparisons below are like for like: ${monthName(m)} so far against ${monthName(pm)} as it stood on ${lflAsOf}, and the same point of ${monthName(yo)} where the record allows.</div>`
-      : `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>`) : ''}
+    ${(isPartial && !lfl) ? `<div class="partial-banner">⏳ <strong>${mLabel} is still in progress.</strong> The month-over-month and year-over-year comparisons below may not be meaningful until the month is complete.</div>` : ''}
 
     ${(()=>{ const pk=PEAKS&&PEAKS[scope]; if(!pk) return '';
       return `<div class="peak-headline">
