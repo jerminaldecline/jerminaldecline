@@ -727,7 +727,7 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
   .trend-legend-swatch.duration {background: transparent;
     height: 0;
     border-top: 2px dashed var(--accent-2);}
-.trend-legend-swatch.uploads {background: var(--text-dim); opacity: 0.45; width: 10px; height: 10px; border-radius: 2px;}
+.trend-legend-swatch.uploads {background: var(--accent-2); opacity: 0.7; width: 10px; height: 10px; border-radius: 2px;}
 /* Revenue band swatch — translucent fill matching the chart's revenue band. */
   .trend-legend-swatch.revenue-band {background: var(--up);
     opacity: 0.22;
@@ -806,6 +806,7 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
 @media(max-width:680px){
   .chart-axis-label {font-size: 22px;}
   .chart-axis-label.y {font-size: 20px;}
+  .chart-axis-title.up {font-size: 17px;}
 }
 /* Per-point value labels (e.g. "4.5M", "68K", "7.2%") sitting just above a data
    point. Smaller and a touch lighter than axis labels so the line stays the hero;
@@ -918,9 +919,17 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
      with the views line. Colour-blind friendly: dash pattern + colour both differentiate. */
   .chart-line-duration {fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-dasharray: 4 4; stroke-linejoin: round; stroke-linecap: round;}
 .chart-dot.duration {fill: var(--accent-2);}
-/* Uploads bars (views+uploads) — quiet and behind the line; the line is the story. */
-.chart-bar-uploads {fill: var(--text-dim); opacity: 0.28;}
-.chart-bar-uploads.inprogress {opacity: 0.16;}
+/* Uploads bars (views+uploads) — the second accent at half strength so they sit
+   behind the views line but still read; the right axis, its title, the legend
+   swatch and the tooltip swatch share the hue so the bars are identifiable at a
+   glance. The count sits in the foot of each bar (hidden with the Labels toggle). */
+.chart-bar-uploads {fill: var(--accent-2); fill-opacity: 0.55;}
+.chart-bar-uploads.inprogress {fill-opacity: 0.3;}
+.chart-pt-label.up {font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums;}
+.chart-axis-label.y.up {text-anchor: start; fill: var(--accent-2-text);}
+.chart-axis-title.up {fill: var(--accent-2-text); text-anchor: start;}
+.chart-axis-tick.up {stroke: var(--accent-2-text); opacity: 0.7;}
+.chart-axis-line.up {stroke: var(--accent-2-text); opacity: 0.45;}
 /* Like-rate dots — match the chart-line-likerate colour (purple) so the
      rate line and its data points read as a single visual unit. */
   .chart-dot.likerate {fill: var(--accent-2);}
@@ -1053,7 +1062,7 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
 .chart-tooltip-row .swatch.curr {background: var(--accent);}
 .chart-tooltip-row .swatch.prev {background: var(--text-dim);}
 .chart-tooltip-row .swatch.duration {background: var(--accent-2);}
-.chart-tooltip-row .swatch.uploads {background: var(--text-dim); opacity: 0.6;}
+.chart-tooltip-row .swatch.uploads {background: var(--accent-2); opacity: 0.75;}
 .chart-tooltip-row .swatch.likes {background: var(--accent-2);}
 /* In-progress caveat — small italic footer in the tooltip */
   .chart-tooltip-inprogress {font-size: 0.7rem;
@@ -6265,7 +6274,7 @@ function renderTrendChart(yoy) {
     <span class="trend-legend-item"><span class="trend-legend-swatch"></span> Views</span>
     ${effectiveYoy ? '<span class="trend-legend-item"><span class="trend-legend-swatch prev"></span> Previous year</span>' : ''}
     ${showDuration ? '<span class="trend-legend-item"><span class="trend-legend-swatch duration"></span> Average length</span>' : ''}
-    ${showUploads ? '<span class="trend-legend-item"><span class="trend-legend-swatch uploads"></span> Uploads</span>' : ''}
+    ${showUploads ? '<span class="trend-legend-item"><span class="trend-legend-swatch uploads"></span> ' + (upMode === 'short' ? 'Shorts posted' : 'Uploads') + '</span>' : ''}
   `;
 
   // Layout — taller to accommodate annotation, more left padding for Y labels.
@@ -6572,25 +6581,46 @@ function renderTrendChart(yoy) {
   `).join('');
 
   // Uploads bars (views+uploads mode): their own scale on the right, kept to the
-  // lower 60% of the plot so the views line stays the headline.
-  let upBars = '', upTicks = [];
+  // lower 60% of the plot so the views line stays the headline. The scale steps
+  // in round numbers (0 · 100 · 200 · 300, never 0 · 158 · 315), each step gets a
+  // tick on a short right-hand axis under an "Uploads" title, and the count sits
+  // in the foot of every bar tall enough to hold it.
+  let upBars = '', upTicks = [], upLabels = '', upAxisSvg = '';
   if (showUploads) {
     const ipUp = inProgressMonth ? uploadsFor(inProgressMonth.curr) : 0;
-    const upMax = niceMax(Math.max(1, ...uploads, ipUp) * 1.05);
+    const upRaw = Math.max(1, ...uploads, ipUp);
+    const upStep = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 5000].find(st => upRaw / st <= 4) || 10000;
+    const upMax = Math.ceil(upRaw / upStep) * upStep;
     const yForUp = v => P.top + innerH - (v / upMax) * innerH * 0.6;
     const bw = Math.min(28, Math.max(3, (innerW / Math.max(1, nTotal - 1)) * 0.5));
+    const baseY = P.top + innerH;
     const bar = (i, u, extra) => u > 0
-      ? `<rect class="chart-bar-uploads${extra || ''}" x="${(xFor(i) - bw / 2).toFixed(1)}" y="${yForUp(u).toFixed(1)}" width="${bw.toFixed(1)}" height="${(P.top + innerH - yForUp(u)).toFixed(1)}" rx="2"/>`
+      ? `<rect class="chart-bar-uploads${extra || ''}" x="${(xFor(i) - bw / 2).toFixed(1)}" y="${yForUp(u).toFixed(1)}" width="${bw.toFixed(1)}" height="${(baseY - yForUp(u)).toFixed(1)}" rx="2"/>`
+      : '';
+    // The count in the bar's foot, away from the views line (which rarely runs
+    // along the baseline). Skipped when the bar is too short or too narrow to
+    // hold it, or when that month's views dot lands on the foot (a near-zero
+    // month, or the in-progress dot early in the month); the tooltip always
+    // has the number.
+    const labelY = baseY - 4.5;
+    const dotYAt = i => i < n ? yFor(currValues[i]) : (ipViewValue != null ? yFor(ipViewValue) : -99);
+    const barLabel = (i, u) => (u > 0 && bw >= 18 && baseY - yForUp(u) >= 15 && Math.abs(dotYAt(i) - labelY) > 13)
+      ? `<text class="chart-pt-label up" x="${xFor(i).toFixed(1)}" y="${labelY.toFixed(1)}">${u}</text>`
       : '';
     upBars = uploads.map((u, i) => bar(i, u)).join('') + (inProgressMonth ? bar(n, ipUp, ' inprogress') : '');
-    for (const v of [0, upMax / 2, upMax]) upTicks.push({ y: yForUp(v), v: Math.round(v) });
+    upLabels = uploads.map((u, i) => barLabel(i, u)).join('') + (inProgressMonth ? barLabel(n, ipUp) : '');
+    for (let v = 0; v <= upMax; v += upStep) upTicks.push({ y: yForUp(v), v });
+    const axX = P.left + innerW;
+    upAxisSvg = `<line class="chart-axis-line up" x1="${axX}" y1="${baseY}" x2="${axX}" y2="${yForUp(upMax).toFixed(1)}"/>`
+      + upTicks.map(t => `<line class="chart-axis-tick up" x1="${axX}" y1="${t.y.toFixed(1)}" x2="${axX + 5}" y2="${t.y.toFixed(1)}"/>`).join('')
+      + `<text class="chart-axis-title up" x="${axX + 8}" y="${(yForUp(upMax) - 11).toFixed(1)}">${upMode === 'short' ? 'Shorts' : 'Uploads'}</text>`;
   }
 
   // Right-axis labels: the duration scale in views+length, the uploads scale in views+uploads
   const durLabelsSvg = showDuration ? durTicks.map(t =>
     `<text class="chart-axis-label y dur" x="${P.left + innerW + 8}" y="${t.y + 4}">${fmtDurStat(t.v)}</text>`
-  ).join('') : showUploads ? upTicks.map(t =>
-    `<text class="chart-axis-label y dur" x="${P.left + innerW + 8}" y="${t.y + 4}">${t.v}</text>`
+  ).join('') : showUploads ? upAxisSvg + upTicks.map(t =>
+    `<text class="chart-axis-label y up" x="${P.left + innerW + 8}" y="${(t.y + 4).toFixed(1)}">${t.v}</text>`
   ).join('') : '';
 
   // In-progress month rendering:
@@ -6680,6 +6710,7 @@ function renderTrendChart(yoy) {
     ${ipPrevDot}
     ${currDots}
     ${showDuration ? durDots : ''}
+    ${upLabels}
     ${inProgressSvg}
     ${currLabels}
     ${attribution}
