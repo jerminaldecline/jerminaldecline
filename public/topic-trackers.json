@@ -1,23 +1,67 @@
 {
-  "lastUpdated": "2026-11-12T13:03:06.101Z",
+  "lastUpdated": "2026-11-13T12:28:20.249Z",
   "trackers": [
     {
       "channelHandle": "@TheQuartering",
       "termId": "votes",
       "keywords": [
         "votes",
-        "republicans",
         "million",
         "state",
-        "election"
+        "election",
+        "republicans"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.0734,
-        "spikeRatio": 4.95,
+        "recentSaturation": 0.3043,
+        "baselineSaturation": 0.0782,
+        "spikeRatio": 3.89,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-11-13T12:28:20.249Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "charlie",
+      "keywords": [
+        "charlie",
+        "charlie kirk",
+        "madison",
+        "square",
+        "garden",
+        "madison square",
+        "square garden",
+        "dave",
+        "chappelle",
+        "kirk",
+        "dave chappelle",
+        "clip"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3478,
+        "baselineSaturation": 0.1327,
+        "spikeRatio": 2.62,
         "recentVideoCount": 8,
-        "baselineVideoCount": 10,
-        "detectedAt": "2026-11-12T13:03:06.101Z"
+        "baselineVideoCount": 19,
+        "detectedAt": "2026-11-13T12:28:20.249Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "charlie",
+      "keywords": [
+        "charlie",
+        "charlie kirk",
+        "kirk",
+        "him"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3571,
+        "baselineSaturation": 0.1211,
+        "spikeRatio": 2.95,
+        "recentVideoCount": 5,
+        "baselineVideoCount": 11,
+        "detectedAt": "2026-11-13T12:28:20.249Z"
       }
     }
   ]
