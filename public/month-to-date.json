@@ -1,14 +1,14 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-13T17:40:09.986Z",
+ "generated": "2026-11-13T20:31:49.585Z",
  "month": "2026-11",
  "dom": 13,
- "liveAt": "2026-11-13T17:39:04.617Z",
+ "liveAt": "2026-11-13T20:31:00.391Z",
  "prev": {
   "month": "2026-10",
-  "asOf": "2026-10-13T14:42:37.489Z",
-  "dump": "2026-10-13-PM.json.gz",
-  "offsetHours": 2.9
+  "asOf": "2026-10-14T01:08:11.301Z",
+  "dump": "2026-10-14-AM.json.gz",
+  "offsetHours": 4.6
  },
  "yoy": {
   "month": "2025-11",
@@ -18,41 +18,41 @@
  "scopes": {
   "ALL": {
    "prev": {
-    "n": 34,
-    "tot": 1724274,
-    "med": 46272,
-    "engaged": 832983,
-    "engagedMed": 22354,
+    "n": 39,
+    "tot": 1872587,
+    "med": 42177,
+    "engaged": 904631,
+    "engagedMed": 20375,
     "lv": 4.6,
-    "comments": 10920,
+    "comments": 11916,
     "avglen": 11.7,
-    "runtime": 6.7,
-    "lrevlo": 654,
-    "lrevhi": 1138,
-    "srevlo": 105,
-    "srevhi": 367,
+    "runtime": 7.6,
+    "lrevlo": 711,
+    "lrevhi": 1236,
+    "srevlo": 108,
+    "srevhi": 377,
     "shorts": {
-     "n": 68,
-     "v": 5236324,
-     "med": 24983.5
+     "n": 73,
+     "v": 5385943,
+     "med": 22317
     }
    },
    "yoy": {
-    "n": 57,
+    "n": 58,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 12.6,
-    "runtime": 25.4,
+    "avglen": 12.7,
+    "runtime": 25.7,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
     "srevhi": null,
     "shorts": {
-     "n": 4,
+     "n": 5,
      "v": null,
      "med": null
     }
@@ -60,35 +60,35 @@
   },
   "@TheQuartering": {
    "prev": {
-    "n": 24,
-    "tot": 1546373,
-    "med": 64111,
-    "engaged": 747040,
-    "engagedMed": 30971,
+    "n": 27,
+    "tot": 1673031,
+    "med": 63104,
+    "engaged": 808228,
+    "engagedMed": 30485,
     "lv": 4,
-    "comments": 9824,
+    "comments": 10684,
     "avglen": 12,
-    "runtime": 4.8,
-    "lrevlo": 587,
-    "lrevhi": 1020,
-    "srevlo": 26,
-    "srevhi": 91,
+    "runtime": 5.3,
+    "lrevlo": 635,
+    "lrevhi": 1104,
+    "srevlo": 27,
+    "srevhi": 94,
     "shorts": {
-     "n": 26,
-     "v": 1300891,
-     "med": 27953
+     "n": 27,
+     "v": 1335873,
+     "med": 27894
     }
    },
    "yoy": {
-    "n": 35,
+    "n": 36,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 12.6,
-    "runtime": 7.4,
+    "avglen": 12.7,
+    "runtime": 7.6,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -102,23 +102,23 @@
   },
   "@JeremyHambly": {
    "prev": {
-    "n": 10,
-    "tot": 177901,
-    "med": 15397,
-    "engaged": 85943,
-    "engagedMed": 7438,
-    "lv": 5.9,
-    "comments": 1096,
-    "avglen": 11.5,
-    "runtime": 1.9,
-    "lrevlo": 68,
-    "lrevhi": 117,
-    "srevlo": 24,
-    "srevhi": 85,
+    "n": 12,
+    "tot": 199556,
+    "med": 14703,
+    "engaged": 96404,
+    "engagedMed": 7103,
+    "lv": 6.1,
+    "comments": 1232,
+    "avglen": 11.3,
+    "runtime": 2.2,
+    "lrevlo": 76,
+    "lrevhi": 132,
+    "srevlo": 26,
+    "srevhi": 90,
     "shorts": {
-     "n": 19,
-     "v": 1216300,
-     "med": 20933
+     "n": 21,
+     "v": 1284450,
+     "med": 18194
     }
    },
    "yoy": {
@@ -136,7 +136,7 @@
     "srevlo": null,
     "srevhi": null,
     "shorts": {
-     "n": 4,
+     "n": 5,
      "v": null,
      "med": null
     }
@@ -239,12 +239,12 @@
     "engagedMed": null,
     "lrevlo": 0,
     "lrevhi": 0,
-    "srevlo": 54,
-    "srevhi": 190,
+    "srevlo": 55,
+    "srevhi": 194,
     "shorts": {
-     "n": 23,
-     "v": 2719133,
-     "med": 16136
+     "n": 25,
+     "v": 2765620,
+     "med": 13724
     }
    },
    "yoy": {
