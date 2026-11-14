@@ -246,6 +246,11 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
           <button type="button" data-bag="1" aria-pressed="true">$1</button><button type="button" data-bag="2" aria-pressed="false">$2</button><button type="button" data-bag="3" aria-pressed="false">$3</button><button type="button" data-bag="4" aria-pressed="false">$4</button><button type="button" data-bag="5" aria-pressed="false">$5</button>
         </span><span class="margin-claim">$1 is his claim<i class="info" data-tip="He has said he makes about a dollar a bag. In this mode every unit sold — a box of K-cups included — earns the amount you pick, whatever its price. $1 is the figure he has given; the higher amounts let you see the totals at a larger profit per bag.">i</i></span></span>
       </div></div>
+    <div class="ctl"><span class="ctl-label">Storage rate</span>
+      <div class="seg" role="group" aria-label="Storage season">
+        <button type="button" data-store="base" aria-pressed="false">Jan–Sep</button>
+        <button type="button" data-store="peak" aria-pressed="false">Oct–Dec</button>
+      </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count big one-day drops as sales <small>(large amounts of one item leaving at once)</small><i class="info" data-tip="Now and then 40 or more units of one item — at least half of what the listing had — disappear between one day's reading and the next. A fall that large and sudden is unusual for everyday sales: it could be a single bulk order, or it could be stock being moved elsewhere (his own shop, a wholesale buyer, or another Amazon warehouse). The stock count on its own can't tell which. These drops are shown separately in amber and left out of the sales totals unless you tick the box. If the same amount returns to the listing within four weeks, it is treated as a temporary move and left out of both the drop and the delivery figures.">i</i></label>
   </div>
 
@@ -335,7 +340,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, PRICE_MIN_RUN=3;
-const state={period:0,margin:15,mode:'bag',bag:1,bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={period:0,margin:15,mode:'bag',bag:1,bulk:false,store:(new Date().getMonth()>=9?'peak':'base'),day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -349,6 +354,13 @@ const sum=a=>a.reduce((x,y)=>x+y,0);
 // Net is either a share of gross sales, or his own claim of a dollar a unit.
 const netOf=(gross,units)=>state.mode==='bag'?units*state.bag:gross*state.margin/100;
 const netLabel=()=>state.mode==='bag'?'at $'+state.bag+' a bag':'at '+state.margin+'%';
+
+// Est. FBA storage cost: per-unit cubic feet by size × Amazon's published monthly storage
+// rate. 12-pack / 12oz / 5lb cu ft are from the listings' stated package dimensions; 24-pack
+// and 7oz are estimates. Standard-size rate: $0.78/cu ft Jan–Sep, $2.40 Oct–Dec (peak).
+const CUFT={'12-pack':0.050,'12oz':0.063,'5lb':0.26,'24-pack':0.11,'7oz':0.03};
+const cuftOf=s=>CUFT[s.size]!=null?CUFT[s.size]:0.06;
+const STORE_RATE={base:0.78, peak:2.40};
 
 // ---- derive per-SKU daily movements once per channel -------------------------
 // A fall is treated as a sale unless it is a big one-day drop (40+ units and >= half
@@ -434,7 +446,7 @@ function aggregate(c,[i0,i1]){
   const days=c.days.slice(i0,i1+1), n=days.length;
   const sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0), gross=new Array(n).fill(0), grossBulk=new Array(n).fill(0);
   const byFam={}, famSold={}; FAM.forEach(f=>{byFam[f[0]]=new Array(n).fill(0); famSold[f[0]]=0;});
-  let onHand=0,onHandVal=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,ohDelta=0;
+  let onHand=0,onHandVal=0,onHandCuft=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,ohDelta=0;
   const rows=[];
   for(const s of c.skus){
     const p=s.price||0; let sl=0,bk=0,rs=0,oo=0,rg=0;
@@ -450,9 +462,9 @@ function aggregate(c,[i0,i1]){
       sold:sl+(state.bulk?bk:0), bulk:bk, rest:rs, oos:oo, gross:rg, series:s.stock.slice(i0,i1+1)});
     if(s.last==null){unknown++;continue;}
     if(s.last>0) inStock++; else oos++;
-    onHand+=s.last; onHandVal+=s.last*p; if(s.lastCapped) capped++;
+    onHand+=s.last; onHandVal+=s.last*p; onHandCuft+=s.last*cuftOf(s); if(s.lastCapped) capped++;
   }
-  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,capped,inStock,oos,unknown,retU,ohDelta,
+  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,onHandCuft,capped,inStock,oos,unknown,retU,ohDelta,
     soldU:sum(sold),bulkU:sum(bulk),restU:sum(rest),grossU:sum(gross),grossBulkU:sum(grossBulk),
     units:sum(sold)+(state.bulk?sum(bulk):0), grossAll:sum(gross)+(state.bulk?sum(grossBulk):0)};
 }
@@ -594,6 +606,7 @@ function renderKpis(c,A,P){
   const nd=A.days.length, units=A.units, gross=A.grossAll, net=netOf(gross,units);
   const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
   const j=(...xs)=>xs.filter(Boolean).join(' · ');
+  const storeRate=STORE_RATE[state.store], storeCost=A.onHandCuft*storeRate;
   const oh=fmtU(A.onHand)+(A.capped?'+':'');
   const moved=A.bulkU;
   const tiles=[
@@ -602,6 +615,7 @@ function renderKpis(c,A,P){
     ['Profit '+netLabel(), fmtM(net), j(state.mode==='bag'?(state.bag===1?'his claim: $1 for every unit sold':'$'+state.bag+' for every unit sold'):`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
     ['Units in stock now', oh, j(A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:'', fmtM(A.onHandVal)+' at usual price')],
+    [`Est. storage / mo <i class="info" data-tip="Rough Amazon FBA storage cost: units on hand × each listing's size in cubic feet × Amazon's published monthly rate (standard-size $0.78/cu ft Jan–Sep, $2.40 Oct–Dec). Cubic feet come from the listings' stated package dimensions — the K-cup box, 12 oz and 5 lb bags measured, the 24-pack and 7 oz estimated. Base rate only: the utilization and aged-inventory surcharges are extra, so treat it as a floor. Not a figure from the business.">i</i>`, fmtM(storeCost), j('Amazon FBA · '+(state.store==='peak'?'Oct–Dec peak':'Jan–Sep')+' rate', `${fmtU(A.onHandCuft)} cu ft × $${storeRate.toFixed(2)}/cu ft`)],
     ['Listings in stock', String(A.inStock), j(`of ${A.inStock+A.oos+A.unknown}`, `${A.oos} out of stock`, A.unknown?`${A.unknown} never read`:'')],
   ];
   document.getElementById('kpis').innerHTML=tiles.map(t=>`<div class="kpi"><div class="kpi-label">${t[0]}</div><div class="kpi-num ${t[3]||''}">${t[1]}</div><div class="kpi-sub">${t[2]}</div></div>`).join('');
@@ -751,6 +765,8 @@ function wire(){
   document.querySelectorAll('[data-mb]').forEach(b=>b.onclick=()=>setMode(b.dataset.mb));
   document.querySelectorAll('[data-bag]').forEach(b=>b.onclick=()=>{ state.bag=+b.dataset.bag; press('[data-bag]','bag',b.dataset.bag); render(); });
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
+  document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>{ state.store=b.dataset.store; press('[data-store]','store',state.store); render(); });
+  press('[data-store]','store',state.store);
   // click a bar: open (or close) the day behind it under that chart
   for(const id of ['movChart','revChart']) document.getElementById(id).addEventListener('click',e=>{ const h=e.target.closest&&e.target.closest('rect.hit'); if(!h) return; const key=h.getAttribute('data-key');
     state.day=(state.day&&state.day.key===key)?null:{key}; render(); if(state.day) document.getElementById('dayPanel').scrollIntoView({block:'nearest',behavior:'smooth'}); });
