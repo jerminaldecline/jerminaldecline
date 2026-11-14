@@ -690,13 +690,28 @@ function renderTop(c,A){
     ? slow.map(r=>lowRow(r, `${fmtU(r.sold)} sold`, `${fmtU(r.stock)} in stock`)).join('')
     : '<div class="lowempty">Nothing in stock in this period.</div>';
 
-  const wk=Math.max(A.days.length/7, 1), OVER_MIN=50;
-  const cov=r=> r.sold>0 ? r.stock/(r.sold/wk) : Infinity;
-  const over=inStock.filter(r=>r.stock>=OVER_MIN).map(r=>({r,c:cov(r)})).sort((a,b)=>b.c-a.c).slice(0,10);
-  document.getElementById('overSub').textContent = over.length?'Most stock relative to how fast it sells — roughly how long the pile would last at the recent pace.':'';
-  document.getElementById('over').innerHTML = over.length
-    ? over.map(({r,c})=>lowRow(r, `${fmtU(r.stock)} in stock`, coverTxt(c))).join('')
-    : '<div class="lowempty">No listing holds 50+ units here.</div>';
+  // Most overstocked: listings NOT being restocked, by weeks of supply at the last 4 weeks' pace.
+  // A recent (not lifetime) pace keeps new seasonal stock-ups from looking "overstocked", and we
+  // skip any listing whose stock is still climbing — that is a deliberate build, not stuck stock.
+  const n=c.days.length, RW=Math.min(28,n), rwWk=RW/7, OVER_MIN=50;
+  const over=[];
+  for(const r of inStock){
+    if(r.stock<OVER_MIN) continue;
+    const s=r.s; let sold=0, then=null;
+    for(let i=n-RW;i<n;i++){ sold += (s.sold[i]||0) + (state.bulk?(s.bulk[i]||0):0); if(then===null && s.stock[i]!=null) then=s.stock[i]; }
+    if(then===null || r.stock>then) continue;            // brand new or still building up -> not overstock
+    const cover = sold>0 ? r.stock/(sold/rwWk) : Infinity;
+    if(isFinite(cover) && cover<8) continue;             // under ~2 months of supply isn't overstocked
+    over.push({r, c:cover});
+  }
+  over.sort((a,b)=>b.c-a.c);
+  const overTop=over.slice(0,10);
+  document.getElementById('overSub').textContent = overTop.length
+    ? `Listings that are not being restocked, by how long the stock would last at the last four weeks’ selling pace.`
+    : '';
+  document.getElementById('over').innerHTML = overTop.length
+    ? overTop.map(({r,c})=>lowRow(r, `${fmtU(r.stock)} in stock`, coverTxt(c))).join('')
+    : '<div class="lowempty">Nothing stuck — the big piles here are all still being stocked up.</div>';
 }
 
 function lowRow(r, primary, secondary){
@@ -706,9 +721,10 @@ function lowRow(r, primary, secondary){
 }
 function coverTxt(c){
   if(!isFinite(c)) return 'no recent sales';
-  const yr=c/52; if(yr>=1) return `≈ ${yr>=10?Math.round(yr):yr.toFixed(1)} yr at this pace`;
-  const mo=c/4.345; if(mo>=1.5) return `≈ ${Math.round(mo)} mo at this pace`;
-  return `≈ ${Math.max(1,Math.round(c))} wk at this pace`;
+  const mo=c/4.345;
+  if(mo>=18) return `≈ ${(mo/12).toFixed(1)} yr of stock at this pace`;
+  if(c>=8) return `≈ ${Math.round(mo)} mo of stock at this pace`;
+  return `≈ ${Math.max(1,Math.round(c))} wk of stock at this pace`;
 }
 
 function renderTable(c,A){
