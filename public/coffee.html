@@ -237,12 +237,12 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
     <div class="ctl"><span class="ctl-label">Assumed profit margin</span>
       <div class="margin">
         <div class="seg" role="group" aria-label="Margin basis">
-          <button type="button" data-mb="pct" aria-pressed="true">% of sales</button>
-          <button type="button" data-mb="bag" aria-pressed="false">$ a bag</button>
+          <button type="button" data-mb="pct" aria-pressed="false">% of sales</button>
+          <button type="button" data-mb="bag" aria-pressed="true">$ a bag</button>
         </div>
-        <span class="margin-pct" id="marginPct"><input type="range" id="marginRange" min="0" max="100" step="1" value="15" aria-label="Margin percent">
+        <span class="margin-pct" id="marginPct" hidden><input type="range" id="marginRange" min="0" max="100" step="1" value="15" aria-label="Margin percent">
         <input type="number" id="marginNum" min="0" max="100" step="1" value="15" aria-label="Margin percent"><span>%</span></span>
-        <span class="margin-bag" id="marginBag" hidden><span class="seg tight" role="group" aria-label="Profit per bag">
+        <span class="margin-bag" id="marginBag"><span class="seg tight" role="group" aria-label="Profit per bag">
           <button type="button" data-bag="1" aria-pressed="true">$1</button><button type="button" data-bag="2" aria-pressed="false">$2</button><button type="button" data-bag="3" aria-pressed="false">$3</button><button type="button" data-bag="4" aria-pressed="false">$4</button><button type="button" data-bag="5" aria-pressed="false">$5</button>
         </span><span class="margin-claim">$1 is his claim<i class="info" data-tip="He has said he makes about a dollar a bag. In this mode every unit sold — a box of K-cups included — earns the amount you pick, whatever its price. $1 is the figure he has given; the higher amounts let you see the totals at a larger profit per bag.">i</i></span></span>
       </div></div>
@@ -318,7 +318,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <li><b>Stock</b> is how many units a listing has available, recorded once a day.</li>
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units — and at least half of a listing — vanish in a single day, that is too big and sudden to read as everyday sales: it may be a single bulk order, or it may be stock moved elsewhere, and the count can't tell which. We show those drops separately in amber as <b>left in one go</b>, and keep them out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. A count can collapse one day and rebuild over the following weeks — for example when Amazon moves stock between its warehouses. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted.</li>
-      <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> applies whatever margin you set above, or a flat $1 to $5 for every unit in the $-a-bag mode; $1 is what he has said he makes. Both describe what he keeps after Amazon's fees and his costs, before income tax. Neither is a real figure from the business.</li>
+      <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> is just that sales value times the margin you pick above, or a flat $1 to $5 a unit in the $-a-bag mode; it starts at the $1 a unit he has said he makes. That is an illustrative figure you set — not a calculation of his real costs, Amazon's fees or tax — and neither it nor the sales value is an actual figure from the business.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
       <li><b>Sales and a delivery on the same day net off.</b> Stock is counted once a day, so we see only the day's net change, not the separate movements inside it. If 10 units sell and 20 arrive, the count rises by 10, so we record a delivery of 10 and no sale — the 10 sales are hidden inside the restock. <b>Units sold</b> and <b>stock delivered in</b> are therefore minimums, higher than shown on any day where selling and restocking both happen.</li>
       <li>Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group days by the week starting Monday.</li>
@@ -335,7 +335,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, PRICE_MIN_RUN=3;
-const state={period:0,margin:15,mode:'pct',bag:1,bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={period:0,margin:15,mode:'bag',bag:1,bulk:false,day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
