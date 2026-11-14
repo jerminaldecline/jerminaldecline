@@ -89,7 +89,8 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .info{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;font-size:0.68rem;font-weight:700;color:var(--text-dim);border:1px solid var(--border);cursor:help;line-height:1;margin-left:0.3rem;vertical-align:1px;font-style:normal}
 .intro{font-size:0.9rem;color:var(--text-muted);margin:0 0 1rem;max-width:62ch;line-height:1.5}
 
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin-bottom:1.2rem}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;margin-bottom:1.2rem}
+@media (min-width:760px){.kpis{grid-template-columns:repeat(4,1fr)}}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0.95rem 1.1rem}
 .kpi-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);margin-bottom:0.35rem}
 .kpi-num{font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums}
@@ -137,7 +138,7 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .chips button[aria-pressed="true"]{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
 .filters input{font:inherit;font-size:0.8rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);min-width:180px}
 .tbl-wrap{overflow-x:auto;margin:0 -0.2rem}
-table{border-collapse:collapse;width:100%;font-size:0.82rem;min-width:760px}
+table{border-collapse:collapse;width:100%;font-size:0.82rem;min-width:840px}
 th,td{padding:0.42rem 0.55rem;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;font-variant-numeric:tabular-nums}
 th{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--label);font-weight:800;position:sticky;top:0;background:var(--surface);z-index:2}
 th button{appearance:none;background:none;border:none;font:inherit;color:inherit;cursor:pointer;padding:0;text-transform:inherit;letter-spacing:inherit}
@@ -670,18 +671,21 @@ function renderTable(c,A){
   if(state.fam!=='all') rows=rows.filter(r=>r.fam===state.fam);
   if(state.oos) rows=rows.filter(r=>r.stock===0);
   if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(r=>r.name.toLowerCase().includes(q)||(r.s.id||'').toLowerCase().includes(q)); }
+  const storeRate=STORE_RATE[state.store];
+  rows=rows.map(r=>({...r, storage: r.stock>0 ? r.stock*cuftOf(r.s)*storeRate : (r.stock===0?0:null)}));
   const k=state.sort.key, dir=state.sort.dir==='asc'?1:-1;
   rows=rows.slice().sort((a,b)=>{ let x=a[k],y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; if(typeof x==='string') return x.localeCompare(y)*dir; return (x-y)*dir; });
-  const cols=[['name','Product'],['size','Size'],['price','Price'],['stock','Stock now'],['delta','Change'],['sold','Sold'],['bulk','Left in one go'],['rest','Added'],['trend','Trend']];
+  const cols=[['name','Product'],['size','Size'],['price','Price'],['stock','Stock now'],['storage','Storage / mo'],['delta','Change'],['sold','Sold'],['bulk','Left in one go'],['rest','Added'],['trend','Trend']];
   document.querySelector('#tbl thead').innerHTML='<tr>'+cols.map(([key,lab])=>`<th><button type="button" data-key="${key}" ${state.sort.key===key?`data-dir="${state.sort.dir}"`:''} ${key==='trend'?'disabled':''}>${lab}</button></th>`).join('')+'</tr>';
   document.querySelector('#tbl tbody').innerHTML=rows.length?rows.map(r=>`<tr class="row${state.sel===r.s.channel+'|'+r.s.id?' sel':''}" data-id="${esc(r.s.channel+'|'+r.s.id)}">
     <td class="name"><span class="fam" style="background:${famColor(r.fam)}"></span>${esc(r.name)}<small>${esc(r.fam)}${r.s.id?' · '+esc(r.s.id):''}</small></td>
     <td>${esc(r.size||'—')}</td><td>${fmtP(r.price)}</td>
     <td>${r.stock==null?'<span class="cap">?</span>':r.stock===0?'<span class="oos">0</span>':fmtU(r.stock)+(r.capped?'<span class="cap">+</span>':'')}</td>
+    <td class="store">${r.storage==null?'<span class="cap">?</span>':r.storage===0?'—':r.storage<0.5?'&lt;$1':fmtM(r.storage)}</td>
     <td>${r.delta==null?'—':(r.delta>0?'+':'')+fmtU(r.delta)}</td>
     <td>${fmtU(r.sold)}</td><td>${r.bulk?fmtU(r.bulk):'—'}</td><td>${r.rest?fmtU(r.rest):'—'}</td>
     <td>${spark(r.series)}</td></tr>`).join(''):`<tr><td colspan="${cols.length}" class="empty" style="text-align:center">No listings match.</td></tr>`;
-  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Sold, Left in one go and Added are units over the period. Left in one go is a large sudden fall in one item (40 or more units and at least half the listing) that did not come back within four weeks — possibly a bulk order, possibly stock moved elsewhere. Change is stock now against the first reading in the period. "?" means no usable reading yet.`;
+  document.getElementById('tfoot').textContent=`${rows.length} of ${A.rows.length} listings. Storage / mo is a rough monthly Amazon FBA storage cost for that listing's units in stock now (${state.store==='peak'?'Oct–Dec':'Jan–Sep'} rate), the per-listing share of the storage figure up top. Sold, Left in one go and Added are units over the period. Left in one go is a large sudden fall in one item (40 or more units and at least half the listing) that did not come back within four weeks — possibly a bulk order, possibly stock moved elsewhere. Change is stock now against the first reading in the period. "?" means no usable reading yet.`;
 }
 
 function renderDetail(c,A){
