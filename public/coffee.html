@@ -130,6 +130,18 @@ h1{font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;margin:0 0 0.15rem;l
 .top-units,.top-gross{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .top-gross{color:var(--subtext)}
 @media (max-width:560px){.top{grid-template-columns:minmax(110px,1fr) 2fr auto}.top-gross{display:none}.top-name{white-space:normal;line-height:1.2}}
+.lowgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 2rem;margin-top:1.3rem;padding-top:1.1rem;border-top:1px solid var(--border)}
+@media (max-width:720px){.lowgrid{grid-template-columns:1fr;gap:1.4rem}}
+.lowhead{font-size:0.92rem;font-weight:800;letter-spacing:-0.01em;line-height:1.2}
+.lowgrid .panel-sub{margin-top:0.1rem;margin-bottom:0.55rem}
+.lowlist{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0.32rem 0.8rem;align-items:baseline;font-size:0.8rem}
+.lowrow{display:contents;cursor:pointer}
+.lowrow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lowrow .nm small{color:var(--text-dim);font-size:0.72rem;margin-left:0.3rem}
+.lowrow:hover .nm{color:var(--accent)}
+.lowrow .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lowrow .v small{color:var(--subtext);font-variant-numeric:normal}
+.lowempty{color:var(--text-dim);font-size:0.8rem}
 
 .filters{display:flex;flex-wrap:wrap;gap:0.5rem 0.9rem;align-items:center;margin:0.1rem 0 0.7rem}
 .chips{display:flex;flex-wrap:wrap;gap:0.35rem}
@@ -281,6 +293,10 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
     </div>
     <div id="share"></div>
     <div class="top" id="top"></div>
+    <div class="lowgrid">
+      <div><div class="lowhead">Slowest movers</div><div class="panel-sub" id="slowSub"></div><div class="lowlist" id="slow"></div></div>
+      <div><div class="lowhead">Most overstocked</div><div class="panel-sub" id="overSub"></div><div class="lowlist" id="over"></div></div>
+    </div>
   </div>
 
   <div class="panel">
@@ -665,6 +681,34 @@ function renderTop(c,A){
       <span class="top-name" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size].filter(Boolean).join(' · '))}</small></span>
       <span class="top-bar"><i style="width:${(r.sold/max*100).toFixed(1)}%;background:${famColor(r.fam)}"></i></span>
       <span class="top-units">${fmtU(r.sold)}</span><span class="top-gross">${fmtM(r.gross)}</span></div>`).join('');
+
+  // Mirror of the best sellers: what is barely moving, and what is piled up relative to how it sells.
+  const inStock=A.rows.filter(r=>r.stock!=null&&r.stock>0);
+  const slow=inStock.slice().sort((a,b)=>(a.sold-b.sold)||(b.stock-a.stock)).slice(0,10);
+  document.getElementById('slowSub').textContent = slow.length?'In-stock listings with the fewest units sold in the period.':'';
+  document.getElementById('slow').innerHTML = slow.length
+    ? slow.map(r=>lowRow(r, `${fmtU(r.sold)} sold`, `${fmtU(r.stock)} in stock`)).join('')
+    : '<div class="lowempty">Nothing in stock in this period.</div>';
+
+  const wk=Math.max(A.days.length/7, 1), OVER_MIN=50;
+  const cov=r=> r.sold>0 ? r.stock/(r.sold/wk) : Infinity;
+  const over=inStock.filter(r=>r.stock>=OVER_MIN).map(r=>({r,c:cov(r)})).sort((a,b)=>b.c-a.c).slice(0,10);
+  document.getElementById('overSub').textContent = over.length?'Most stock relative to how fast it sells — roughly how long the pile would last at the recent pace.':'';
+  document.getElementById('over').innerHTML = over.length
+    ? over.map(({r,c})=>lowRow(r, `${fmtU(r.stock)} in stock`, coverTxt(c))).join('')
+    : '<div class="lowempty">No listing holds 50+ units here.</div>';
+}
+
+function lowRow(r, primary, secondary){
+  return `<div class="lowrow" data-id="${esc(r.s.channel+'|'+r.s.id)}" role="button" tabindex="0">
+    <span class="nm" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size].filter(Boolean).join(' · '))}</small></span>
+    <span class="v">${primary}<small> · ${secondary}</small></span></div>`;
+}
+function coverTxt(c){
+  if(!isFinite(c)) return 'no recent sales';
+  const yr=c/52; if(yr>=1) return `≈ ${yr>=10?Math.round(yr):yr.toFixed(1)} yr at this pace`;
+  const mo=c/4.345; if(mo>=1.5) return `≈ ${Math.round(mo)} mo at this pace`;
+  return `≈ ${Math.max(1,Math.round(c))} wk at this pace`;
 }
 
 function renderTable(c,A){
@@ -784,6 +828,10 @@ function wire(){
   const top=document.getElementById('top');
   top.addEventListener('click',e=>{ const row=e.target.closest('.top-row'); if(row) select(row.dataset.id); });
   top.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ const row=e.target.closest('.top-row'); if(row){ e.preventDefault(); select(row.dataset.id); } } });
+  ['slow','over'].forEach(id=>{ const el=document.getElementById(id);
+    el.addEventListener('click',e=>{ const row=e.target.closest('.lowrow'); if(row) select(row.dataset.id); });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ const row=e.target.closest('.lowrow'); if(row){ e.preventDefault(); select(row.dataset.id); } } });
+  });
   // tooltip: hover on pointer devices, tap on touch
   const tip=document.getElementById('tip');
   const show=e=>{ const t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){ tip.style.display='none'; return; }
