@@ -683,11 +683,18 @@ function renderTop(c,A){
       <span class="top-units">${fmtU(r.sold)}</span><span class="top-gross">${fmtM(r.gross)}</span></div>`).join('');
 
   // Mirror of the best sellers: what is barely moving, and what is piled up relative to how it sells.
+  // Slowest movers: rank by a time-scaled sales pace (sold / weeks each has been on sale in the
+  // window), not raw count — otherwise a brand-new fast seller looks "slow" just for being new.
   const inStock=A.rows.filter(r=>r.stock!=null&&r.stock>0);
-  const slow=inStock.slice().sort((a,b)=>(a.sold-b.sold)||(b.stock-a.stock)).slice(0,10);
-  document.getElementById('slowSub').textContent = slow.length?'In-stock listings with the fewest units sold in the period.':'';
+  const i0=A.i0, i1=A.i1;
+  const slow=inStock.map(r=>{ const st=r.s.stock; let f=null;
+      for(let i=i0;i<=i1;i++){ if(st[i]!=null){ f=i; break; } }
+      const wks=Math.max((i1-(f==null?i1:f)+1)/7, 1);
+      return {r, pace:r.sold/wks};
+    }).sort((a,b)=>a.pace-b.pace).slice(0,10);
+  document.getElementById('slowSub').textContent = slow.length?'In-stock listings with the slowest sales pace — units sold over the time each has been listed.':'';
   document.getElementById('slow').innerHTML = slow.length
-    ? slow.map(r=>lowRow(r, `${fmtU(r.sold)} sold`, `${fmtU(r.stock)} in stock`)).join('')
+    ? slow.map(({r,pace})=>lowRow(r, paceTxt(pace), `${fmtU(r.stock)} in stock`)).join('')
     : '<div class="lowempty">Nothing in stock in this period.</div>';
 
   // Most overstocked: listings NOT being restocked, by weeks of supply at the last 4 weeks' pace.
@@ -718,6 +725,12 @@ function lowRow(r, primary, secondary){
   return `<div class="lowrow" data-id="${esc(r.s.channel+'|'+r.s.id)}" role="button" tabindex="0">
     <span class="nm" title="${esc(r.name)}"><i class="fam" style="background:${famColor(r.fam)}"></i>${esc(r.name)}<small>${esc([r.s.variant?null:r.fam, r.size].filter(Boolean).join(' · '))}</small></span>
     <span class="v">${primary}<small> · ${secondary}</small></span></div>`;
+}
+function paceTxt(p){
+  if(p<=0) return 'none sold lately';
+  const pm=p*4.345;
+  if(pm>=1) return `≈ ${Math.round(pm)} a month`;
+  return `≈ 1 every ${Math.round(1/p)} wk`;
 }
 function coverTxt(c){
   if(!isFinite(c)) return 'no recent sales';
