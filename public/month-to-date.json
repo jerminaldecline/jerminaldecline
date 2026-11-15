@@ -1,14 +1,14 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-15T06:14:51.601Z",
+ "generated": "2026-11-15T10:41:46.848Z",
  "month": "2026-11",
  "dom": 15,
- "liveAt": "2026-11-15T06:13:52.335Z",
+ "liveAt": "2026-11-15T10:40:53.530Z",
  "prev": {
   "month": "2026-10",
-  "asOf": "2026-10-15T01:23:11.215Z",
-  "dump": "2026-10-15-AM.json.gz",
-  "offsetHours": 4.8
+  "asOf": "2026-10-15T14:06:36.718Z",
+  "dump": "2026-10-15-PM.json.gz",
+  "offsetHours": 3.4
  },
  "yoy": {
   "month": "2025-11",
@@ -19,22 +19,22 @@
   "ALL": {
    "prev": {
     "n": 45,
-    "tot": 2119836,
-    "med": 42226,
-    "engaged": 1024075,
-    "engagedMed": 20399,
-    "lv": 4.6,
-    "comments": 13306,
+    "tot": 2214462,
+    "med": 42231,
+    "engaged": 1069788,
+    "engagedMed": 20401,
+    "lv": 4.5,
+    "comments": 13680,
     "avglen": 11.8,
     "runtime": 8.8,
-    "lrevlo": 804,
-    "lrevhi": 1399,
-    "srevlo": 117,
-    "srevhi": 409,
+    "lrevlo": 840,
+    "lrevhi": 1461,
+    "srevlo": 122,
+    "srevhi": 425,
     "shorts": {
      "n": 83,
-     "v": 5842652,
-     "med": 20516
+     "v": 6078022,
+     "med": 22794
     }
    },
    "yoy": {
@@ -61,22 +61,22 @@
   "@TheQuartering": {
    "prev": {
     "n": 31,
-    "tot": 1899998,
-    "med": 56320,
-    "engaged": 917873,
-    "engagedMed": 27208,
-    "lv": 4,
-    "comments": 11912,
+    "tot": 1973501,
+    "med": 57544,
+    "engaged": 953382,
+    "engagedMed": 27799,
+    "lv": 3.8,
+    "comments": 12164,
     "avglen": 12,
     "runtime": 6.2,
-    "lrevlo": 721,
-    "lrevhi": 1254,
-    "srevlo": 29,
-    "srevhi": 103,
+    "lrevlo": 749,
+    "lrevhi": 1302,
+    "srevlo": 32,
+    "srevhi": 111,
     "shorts": {
      "n": 31,
-     "v": 1472055,
-     "med": 27205
+     "v": 1579165,
+     "med": 28429
     }
    },
    "yoy": {
@@ -103,22 +103,22 @@
   "@JeremyHambly": {
    "prev": {
     "n": 14,
-    "tot": 219838,
-    "med": 13797,
-    "engaged": 106202,
-    "engagedMed": 6665,
-    "lv": 6,
-    "comments": 1394,
+    "tot": 240961,
+    "med": 13811,
+    "engaged": 116406,
+    "engagedMed": 6672,
+    "lv": 5.9,
+    "comments": 1516,
     "avglen": 11.3,
     "runtime": 2.6,
-    "lrevlo": 83,
-    "lrevhi": 145,
-    "srevlo": 30,
-    "srevhi": 103,
+    "lrevlo": 91,
+    "lrevhi": 159,
+    "srevlo": 31,
+    "srevhi": 109,
     "shorts": {
      "n": 24,
-     "v": 1477158,
-     "med": 17283
+     "v": 1553903,
+     "med": 17809
     }
    },
    "yoy": {
@@ -239,12 +239,12 @@
     "engagedMed": null,
     "lrevlo": 0,
     "lrevhi": 0,
-    "srevlo": 58,
-    "srevhi": 203,
+    "srevlo": 59,
+    "srevhi": 206,
     "shorts": {
      "n": 28,
-     "v": 2893439,
-     "med": 13441.5
+     "v": 2944954,
+     "med": 13517.5
     }
    },
    "yoy": {
