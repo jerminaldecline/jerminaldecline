@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-14
+# Topic candidates — 2026-11-15
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 23 recent videos, 146 baseline videos
+Pool: 21 recent videos, 145 baseline videos
 
 ### Cluster 1: `charlie`
 
-- **Recent saturation:** 7/23 videos (**30%**)
-- **Baseline saturation:** 19/146 videos (13%)
-- **Spike ratio:** 2.3x
+- **Recent saturation:** 7/21 videos (**33%**)
+- **Baseline saturation:** 18/145 videos (12%)
+- **Spike ratio:** 2.6x
 - **Related terms:** `charlie`, `kirk`, `dave`, `chappelle`, `backlash`, `madison`, `square`, `garden`
 - **Sample recent videos:**
   - 2026-11-12 — _THIS IS DISGRACEFUL!_  
@@ -28,9 +28,9 @@ Pool: 23 recent videos, 146 baseline videos
 
 ### Cluster 2: `jennifer`
 
-- **Recent saturation:** 3/23 videos (**13%**)
-- **Baseline saturation:** 2/146 videos (1%)
-- **Spike ratio:** 7.7x
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 2/145 videos (1%)
+- **Spike ratio:** 8.3x
 - **Related terms:** `jennifer`, `welch`, `sponsors`, `podcast`, `jennifer welch`
 - **Sample recent videos:**
   - 2026-11-13 — _It Just Got Worse For Jennifer Welch , Views Collapse , She's Now Blacklisted And Freaking Out!_  
@@ -40,12 +40,12 @@ Pool: 23 recent videos, 146 baseline videos
   - 2026-11-09 — _SHE'S PANICKING NOW!_  
     Jennifer Welch PANICS After Losing $8 MILLION In Sponsors?!
 
-### Cluster 3: `internet`
+### Cluster 3: `ole`
 
-- **Recent saturation:** 5/23 videos (**22%**)
-- **Baseline saturation:** 4/146 videos (3%)
-- **Spike ratio:** 7.1x
-- **Related terms:** `internet`, `ole`, `miss`, `ole miss`
+- **Recent saturation:** 4/21 videos (**19%**)
+- **Baseline saturation:** 5/145 videos (3%)
+- **Spike ratio:** 5.1x
+- **Related terms:** `ole`, `miss`, `internet`, `ole miss`
 - **Sample recent videos:**
   - 2026-11-12 — _THIS IS DISGRACEFUL!_  
     Viral Ole Miss Interview BACKFIRES As Fundraiser Explodes!
@@ -55,14 +55,12 @@ Pool: 23 recent videos, 146 baseline videos
     Ole Miss Outrage BACKFIRES As Donations Pour In!
   - 2026-11-10 — _They CAN’T Be This Fragile Can They?_  
     Ole Miss Girls CAUGHT On Camera! Internet Meltdown Goes Nuclear
-  - 2026-11-07 — _MASSIVE BOMBSHELL BREAK!_  
-    Trump Sounds The Alarm Over Shocking 20 MILLION Vote Surge!
 
 ### Cluster 4: `began`
 
-- **Recent saturation:** 4/23 videos (**17%**)
-- **Baseline saturation:** 1/146 videos (1%)
-- **Spike ratio:** 17.0x
+- **Recent saturation:** 4/21 videos (**19%**)
+- **Baseline saturation:** 1/145 videos (1%)
+- **Spike ratio:** 18.5x
 - **Related terms:** `began`
 - **Sample recent videos:**
   - 2026-11-12 — _Dave Chappelle Fans Share Shockingly Scary Truth!_  
@@ -74,29 +72,11 @@ Pool: 23 recent videos, 146 baseline videos
   - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
     Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
 
-### Cluster 5: `votes`
+### Cluster 5: `surrounding`
 
-- **Recent saturation:** 6/23 videos (**26%**)
-- **Baseline saturation:** 9/146 videos (6%)
-- **Spike ratio:** 4.0x
-- **Related terms:** `votes`, `election`, `state`, `million`
-- **Sample recent videos:**
-  - 2026-11-11 — _MIDTERM ELECTION FLIP INCOMING!_  
-    Massive Election Fraud Claim ERUPTS After 100,000 Republican Votes Vanish
-  - 2026-11-09 — _SHE'S PANICKING NOW!_  
-    Jennifer Welch PANICS After Losing $8 MILLION In Sponsors?!
-  - 2026-11-09 — _Trump Shares BOMBSHELL Evidence On Midterm Elections & The Left Is FREAKING OUT!_  
-    Trump Shares EXPLOSIVE 15% Election Pattern! Something Is Very Wrong
-  - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
-    They Said A Memory Card Was Missing—Now Officials DENY It!
-  - 2026-11-07 — _Election FLIPS Republican After MISSING MEMORY CARD Located!_  
-    They Found 388 Missing Votes! Memory Card Changes Election Lead
-
-### Cluster 6: `surrounding`
-
-- **Recent saturation:** 3/23 videos (**13%**)
-- **Baseline saturation:** 1/146 videos (1%)
-- **Spike ratio:** 12.8x
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 1/145 videos (1%)
+- **Spike ratio:** 13.9x
 - **Related terms:** `surrounding`
 - **Sample recent videos:**
   - 2026-11-12 — _llhan Omar Gets TERRIBLE News_  
@@ -106,15 +86,29 @@ Pool: 23 recent videos, 146 baseline videos
   - 2026-11-09 — _SHE'S PANICKING NOW!_  
     Jennifer Welch PANICS After Losing $8 MILLION In Sponsors?!
 
+### Cluster 6: `story`
+
+- **Recent saturation:** 3/21 videos (**14%**)
+- **Baseline saturation:** 3/145 videos (2%)
+- **Spike ratio:** 6.0x
+- **Related terms:** `story`
+- **Sample recent videos:**
+  - 2026-11-12 — _THIS IS INSANITY!_  
+    INSANE New Details About The DC Gym Shooter Emerge!
+  - 2026-11-10 — _Jennifer Welch MELTDOWN Live As She Offers INSANE Cope!_  
+    Jennifer Welch Just Made It WORSE! Sponsors Keep Fleeing Her
+  - 2026-11-09 — _Another Election FLIP Found Over Missing Memory Card & Photo Copied Ballots! Democrats DENY Fraud!_  
+    They Said A Memory Card Was Missing—Now Officials DENY It!
+
 ## @JeremyHambly
 
-Pool: 13 recent videos, 91 baseline videos
+Pool: 10 recent videos, 91 baseline videos
 
 ### Cluster 1: `charlie`
 
-- **Recent saturation:** 5/13 videos (**38%**)
+- **Recent saturation:** 4/10 videos (**40%**)
 - **Baseline saturation:** 10/91 videos (11%)
-- **Spike ratio:** 3.4x
+- **Spike ratio:** 3.5x
 - **Related terms:** `charlie`, `kirk`, `him`, `charlie kirk`
 - **Sample recent videos:**
   - 2026-11-10 — _THIS IS A DISGRACE!_  
@@ -125,22 +119,6 @@ Pool: 13 recent videos, 91 baseline videos
     Jennifer Welch PANICS As Sponsors FLEE! Backlash Goes NUCLEAR
   - 2026-11-09 — _Russell Brand Gets 10 YEARS In Prison With ZERO Evidence! This Is Unjust!_  
     Russell Brand Gets 10 YEARS! His Stunning Downfall Is Complete
-  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
-    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
-
-### Cluster 2: `absolutely`
-
-- **Recent saturation:** 3/13 videos (**23%**)
-- **Baseline saturation:** 4/91 videos (4%)
-- **Spike ratio:** 4.7x
-- **Related terms:** `absolutely`
-- **Sample recent videos:**
-  - 2026-11-10 — _AOC Is Running For PRESIDENT! This Is Hilarious_  
-    AOC Is Running For PRESIDENT! This Is Absolutely Hilarious News
-  - 2026-11-07 — _THEY'RE ALWAYS CHEATING!_  
-    You Won’t BELIEVE This! Daycare Boss With 16 Violations WINS Election
-  - 2026-11-07 — _Instant Regret! Vile Leftists Loses ALL SPONSORS After UNHINGED Charlie Kirk Comments!_  
-    Her Charlie Kirk Joke Backfired INSTANTLY! Sponsors Flee Jennifer Welch
 
 ---
 
