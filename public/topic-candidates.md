@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-15
+# Topic candidates — 2026-11-16
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,12 +6,12 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 21 recent videos, 145 baseline videos
+Pool: 21 recent videos, 142 baseline videos
 
 ### Cluster 1: `charlie`
 
 - **Recent saturation:** 7/21 videos (**33%**)
-- **Baseline saturation:** 18/145 videos (12%)
+- **Baseline saturation:** 18/142 videos (13%)
 - **Spike ratio:** 2.6x
 - **Related terms:** `charlie`, `kirk`, `dave`, `chappelle`, `backlash`, `madison`, `square`, `garden`
 - **Sample recent videos:**
@@ -29,8 +29,8 @@ Pool: 21 recent videos, 145 baseline videos
 ### Cluster 2: `jennifer`
 
 - **Recent saturation:** 3/21 videos (**14%**)
-- **Baseline saturation:** 2/145 videos (1%)
-- **Spike ratio:** 8.3x
+- **Baseline saturation:** 2/142 videos (1%)
+- **Spike ratio:** 8.2x
 - **Related terms:** `jennifer`, `welch`, `sponsors`, `podcast`, `jennifer welch`
 - **Sample recent videos:**
   - 2026-11-13 — _It Just Got Worse For Jennifer Welch , Views Collapse , She's Now Blacklisted And Freaking Out!_  
@@ -43,8 +43,8 @@ Pool: 21 recent videos, 145 baseline videos
 ### Cluster 3: `ole`
 
 - **Recent saturation:** 4/21 videos (**19%**)
-- **Baseline saturation:** 5/145 videos (3%)
-- **Spike ratio:** 5.1x
+- **Baseline saturation:** 5/142 videos (4%)
+- **Spike ratio:** 5.0x
 - **Related terms:** `ole`, `miss`, `internet`, `ole miss`
 - **Sample recent videos:**
   - 2026-11-12 — _THIS IS DISGRACEFUL!_  
@@ -59,8 +59,8 @@ Pool: 21 recent videos, 145 baseline videos
 ### Cluster 4: `began`
 
 - **Recent saturation:** 4/21 videos (**19%**)
-- **Baseline saturation:** 1/145 videos (1%)
-- **Spike ratio:** 18.5x
+- **Baseline saturation:** 1/142 videos (1%)
+- **Spike ratio:** 18.2x
 - **Related terms:** `began`
 - **Sample recent videos:**
   - 2026-11-12 — _Dave Chappelle Fans Share Shockingly Scary Truth!_  
@@ -75,8 +75,8 @@ Pool: 21 recent videos, 145 baseline videos
 ### Cluster 5: `surrounding`
 
 - **Recent saturation:** 3/21 videos (**14%**)
-- **Baseline saturation:** 1/145 videos (1%)
-- **Spike ratio:** 13.9x
+- **Baseline saturation:** 1/142 videos (1%)
+- **Spike ratio:** 13.6x
 - **Related terms:** `surrounding`
 - **Sample recent videos:**
   - 2026-11-12 — _llhan Omar Gets TERRIBLE News_  
@@ -89,8 +89,8 @@ Pool: 21 recent videos, 145 baseline videos
 ### Cluster 6: `story`
 
 - **Recent saturation:** 3/21 videos (**14%**)
-- **Baseline saturation:** 3/145 videos (2%)
-- **Spike ratio:** 6.0x
+- **Baseline saturation:** 3/142 videos (2%)
+- **Spike ratio:** 5.8x
 - **Related terms:** `story`
 - **Sample recent videos:**
   - 2026-11-12 — _THIS IS INSANITY!_  
@@ -102,13 +102,13 @@ Pool: 21 recent videos, 145 baseline videos
 
 ## @JeremyHambly
 
-Pool: 10 recent videos, 91 baseline videos
+Pool: 10 recent videos, 89 baseline videos
 
 ### Cluster 1: `charlie`
 
 - **Recent saturation:** 4/10 videos (**40%**)
-- **Baseline saturation:** 10/91 videos (11%)
-- **Spike ratio:** 3.5x
+- **Baseline saturation:** 9/89 videos (10%)
+- **Spike ratio:** 3.8x
 - **Related terms:** `charlie`, `kirk`, `him`, `charlie kirk`
 - **Sample recent videos:**
   - 2026-11-10 — _THIS IS A DISGRACE!_  
