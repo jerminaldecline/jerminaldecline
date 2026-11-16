@@ -627,8 +627,8 @@ function renderKpis(c,A,P){
   const oh=fmtU(A.onHand)+(A.capped?'+':'');
   const moved=A.bulkU;
   const tiles=[
-    ['Units sold', fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} that left in one go`:(moved?`another ${fmtU(moved)} left in one go, not counted`:''))],
-    ['Sales value', fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
+    [`Units sold <i class="info" data-tip="An estimate, not confirmed sales. The business doesn't report sales — we read each listing's stock once a day and count a fall as units sold, so it is inferred from net stock movements. A sale and a restock on the same day cancel out, so treat it as a floor. More in 'How to read this' below.">i</i>`, fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} that left in one go`:(moved?`another ${fmtU(moved)} left in one go, not counted`:''))],
+    [`Sales value <i class="info" data-tip="An estimate, not a figure from the business — estimated units sold (inferred from daily stock falls; see Units sold) × the price each one sold at.">i</i>`, fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
     ['Profit '+netLabel(), fmtM(net), j(state.mode==='bag'?(state.bag===1?'his claim: $1 for every unit sold':'$'+state.bag+' for every unit sold'):`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
     ['Units in stock now', oh, A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:''],
