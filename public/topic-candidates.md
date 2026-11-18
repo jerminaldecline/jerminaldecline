@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-17
+# Topic candidates — 2026-11-18
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,49 +6,49 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 21 recent videos, 144 baseline videos
+Pool: 22 recent videos, 146 baseline videos
 
-### Cluster 1: `internet`
+### Cluster 1: `bomb`
 
-- **Recent saturation:** 5/21 videos (**24%**)
-- **Baseline saturation:** 5/144 videos (3%)
-- **Spike ratio:** 6.3x
-- **Related terms:** `internet`, `ole`, `miss`, `ole miss`
+- **Recent saturation:** 5/22 videos (**23%**)
+- **Baseline saturation:** 7/146 videos (5%)
+- **Spike ratio:** 4.5x
+- **Related terms:** `bomb`, `united`, `states`, `reportedly`, `united states`
 - **Sample recent videos:**
+  - 2026-11-17 — _SOMETHING IS VERY WRONG!_  
+    Ethanol Plant Bomber BUSTED After Coming Back To The Scene!
+  - 2026-11-17 — _IT'S ALL FALLING APART!_  
+    NSA GOES DARK! Stock Market Crash Wipes Out $1 Trillion
+  - 2026-11-17 — _Dirty BOMB Attack In Washington DC Details! Materials ALREADY In US But Something Is FISHY About It!_  
+    DIRTY BOMB In Washington?! Trump Warns Iran It Will Pay
+  - 2026-11-16 — _THEY CAUGHT THE SUSPECT!_  
+    Massive Bomb Found! Suspect Located At Ethanol Plant
+  - 2026-11-11 — _Plane HIJACKED By 3 Time DEPORTED Illegal! HE BREACHED The Cockpit!_  
+    He Was Deported TWICE—Then Allegedly Tried To Storm A Cockpit!
+
+### Cluster 2: `america`
+
+- **Recent saturation:** 5/22 videos (**23%**)
+- **Baseline saturation:** 1/146 videos (1%)
+- **Spike ratio:** 22.3x
+- **Related terms:** `america`, `country`
+- **Sample recent videos:**
+  - 2026-11-18 — _Americans Get DIRE Update On MASSIVE ONGOING HACKS! It's Getting Worse!_  
+    “PREPARE FOR THE WORST!” JD Vance Issues Dire Warning
+  - 2026-11-17 — _IT'S ALL FALLING APART!_  
+    NSA GOES DARK! Stock Market Crash Wipes Out $1 Trillion
+  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
+    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
   - 2026-11-16 — _THE END IS NIGH!_  
     Nationwide Blackout Panic ERUPTS Ahead Of November 17!
-  - 2026-11-12 — _THIS IS DISGRACEFUL!_  
-    Viral Ole Miss Interview BACKFIRES As Fundraiser Explodes!
-  - 2026-11-11 — _MIDTERM ELECTION FLIP INCOMING!_  
-    Massive Election Fraud Claim ERUPTS After 100,000 Republican Votes Vanish
-  - 2026-11-11 — _Cancelled Babe STRIKES BACK With EPIC WIN & Media RAGES_  
-    Ole Miss Outrage BACKFIRES As Donations Pour In!
-  - 2026-11-10 — _They CAN’T Be This Fragile Can They?_  
-    Ole Miss Girls CAUGHT On Camera! Internet Meltdown Goes Nuclear
-
-### Cluster 2: `began`
-
-- **Recent saturation:** 6/21 videos (**29%**)
-- **Baseline saturation:** 14/144 videos (10%)
-- **Spike ratio:** 2.9x
-- **Related terms:** `began`, `charlie`, `kirk`, `dave`, `chappelle`, `footage`, `worse`, `backlash`
-- **Sample recent videos:**
-  - 2026-11-12 — _Dave Chappelle Fans Share Shockingly Scary Truth!_  
-    Dave Chappelle Fans TERRIFIED As Audience Walks Out!
-  - 2026-11-11 — _Cancelled Babe STRIKES BACK With EPIC WIN & Media RAGES_  
-    Ole Miss Outrage BACKFIRES As Donations Pour In!
-  - 2026-11-11 — _HIS CAREER IS OVER!_  
-    Dave Chappelle Backlash EXPLODES After Sick 9/11 Claim
-  - 2026-11-10 — _Jennifer Welch MELTDOWN Live As She Offers INSANE Cope!_  
-    Jennifer Welch Just Made It WORSE! Sponsors Keep Fleeing Her
-  - 2026-11-10 — _HE'S RUNNING SCARED!_  
-    Dave Chappelle Disaster Gets WORSE! Another Sick Kirk Clip Leaks
+  - 2026-11-16 — _Something BAD Is Coming.._  
+    FAA GROUNDS America! Every Airport Hit By Nationwide Shutdown
 
 ### Cluster 3: `set`
 
-- **Recent saturation:** 4/21 videos (**19%**)
-- **Baseline saturation:** 2/144 videos (1%)
-- **Spike ratio:** 11.0x
+- **Recent saturation:** 4/22 videos (**18%**)
+- **Baseline saturation:** 2/146 videos (1%)
+- **Spike ratio:** 10.7x
 - **Related terms:** `set`, `judge`
 - **Sample recent videos:**
   - 2026-11-17 — _Ilhan Omar COURT DATE SET As Physical REMOVAL From Government Now In Play_  
@@ -60,49 +60,49 @@ Pool: 21 recent videos, 144 baseline videos
   - 2026-11-11 — _MIDTERM ELECTION FLIP INCOMING!_  
     Massive Election Fraud Claim ERUPTS After 100,000 Republican Votes Vanish
 
-### Cluster 4: `clip`
+### Cluster 4: `days`
 
-- **Recent saturation:** 4/21 videos (**19%**)
-- **Baseline saturation:** 7/144 videos (5%)
-- **Spike ratio:** 3.7x
-- **Related terms:** `clip`, `explodes`
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 2/146 videos (1%)
+- **Spike ratio:** 8.0x
+- **Related terms:** `days`
 - **Sample recent videos:**
-  - 2026-11-12 — _THIS IS DISGRACEFUL!_  
-    Viral Ole Miss Interview BACKFIRES As Fundraiser Explodes!
-  - 2026-11-12 — _llhan Omar Gets TERRIBLE News_  
-    Ilhan Omar Investigation EXPLODES After DOJ Tries To Flip Ex-Bodyguard
-  - 2026-11-11 — _HIS CAREER IS OVER!_  
-    Dave Chappelle Backlash EXPLODES After Sick 9/11 Claim
-  - 2026-11-10 — _HE'S RUNNING SCARED!_  
-    Dave Chappelle Disaster Gets WORSE! Another Sick Kirk Clip Leaks
+  - 2026-11-17 — _SOMETHING IS VERY WRONG!_  
+    Ethanol Plant Bomber BUSTED After Coming Back To The Scene!
+  - 2026-11-13 — _It Just Got Worse For Jennifer Welch , Views Collapse , She's Now Blacklisted And Freaking Out!_  
+    Jennifer Welch BACKPEDALS After Brewery Praise Blows Up!
+  - 2026-11-12 — _Dave Chappelle Fans Share Shockingly Scary Truth!_  
+    Dave Chappelle Fans TERRIFIED As Audience Walks Out!
 
-### Cluster 5: `absolutely`
+### Cluster 5: `washington`
 
-- **Recent saturation:** 3/21 videos (**14%**)
-- **Baseline saturation:** 4/144 videos (3%)
-- **Spike ratio:** 4.6x
-- **Related terms:** `absolutely`
+- **Recent saturation:** 3/22 videos (**14%**)
+- **Baseline saturation:** 3/146 videos (2%)
+- **Spike ratio:** 5.7x
+- **Related terms:** `washington`
 - **Sample recent videos:**
+  - 2026-11-17 — _Dirty BOMB Attack In Washington DC Details! Materials ALREADY In US But Something Is FISHY About It!_  
+    DIRTY BOMB In Washington?! Trump Warns Iran It Will Pay
+  - 2026-11-17 — _Ilhan Omar COURT DATE SET As Physical REMOVAL From Government Now In Play_  
+    Court Date SET In Ilhan Omar Case! Sealed Raid Records Could Drop
+  - 2026-11-12 — _THIS IS INSANITY!_  
+    INSANE New Details About The DC Gym Shooter Emerge!
+
+### Cluster 6: `inside`
+
+- **Recent saturation:** 4/22 videos (**18%**)
+- **Baseline saturation:** 9/146 videos (6%)
+- **Spike ratio:** 2.8x
+- **Related terms:** `inside`, `absolutely`
+- **Sample recent videos:**
+  - 2026-11-17 — _SOMETHING IS VERY WRONG!_  
+    Ethanol Plant Bomber BUSTED After Coming Back To The Scene!
   - 2026-11-16 — _THE END IS NIGH!_  
     Nationwide Blackout Panic ERUPTS Ahead Of November 17!
   - 2026-11-12 — _THIS IS INSANITY!_  
     INSANE New Details About The DC Gym Shooter Emerge!
-  - 2026-11-10 — _Ilhan Omar Makes A HUGE Mistake & Trump Goes BERSERK After TRUTH Of Midterm BETRAYL By Own Staff_  
-    Ilhan Omar Demands Hegseth Impeachment—Then Trump UNLOADS!
-
-### Cluster 6: `stop`
-
-- **Recent saturation:** 3/21 videos (**14%**)
-- **Baseline saturation:** 5/144 videos (3%)
-- **Spike ratio:** 3.8x
-- **Related terms:** `stop`
-- **Sample recent videos:**
-  - 2026-11-16 — _Something BAD Is Coming.._  
-    FAA GROUNDS America! Every Airport Hit By Nationwide Shutdown
-  - 2026-11-13 — _SOMETHING TERRIBLE IS COMING!_  
-    White Girl PUMMELED By Male Student As Adults Do NOTHING!
-  - 2026-11-10 — _Jennifer Welch MELTDOWN Live As She Offers INSANE Cope!_  
-    Jennifer Welch Just Made It WORSE! Sponsors Keep Fleeing Her
+  - 2026-11-11 — _HIS CAREER IS OVER!_  
+    Dave Chappelle Backlash EXPLODES After Sick 9/11 Claim
 
 ---
 
