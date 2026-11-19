@@ -308,6 +308,23 @@ def main():
 
     if not COMMIT:
         return 0
+    # Freshness guard (2026-11-18): the scan and the publish now run on different
+    # machines - the spare laptop scans Amazon on the home IP, OneDrive carries
+    # history.csv here, and this PC builds + pushes at 13:30. If the scan never landed
+    # (laptop asleep, OneDrive unsynced, scanner crashed) the CSV has no reading dated
+    # today, and committing would republish yesterday's numbers under a fresh
+    # "generated" stamp as if they were today's. Refuse to push a day with no reading
+    # of its own. A healthy day lands 76/76 exact readings; the failure is a clean
+    # zero, so this trips only when today's scan is genuinely missing. Fail closed.
+    today = datetime.date.today().isoformat()
+    fresh = sum(1 for s in amazon["skus"] for d, v in zip(amazon["days"], s["stock"])
+                if d == today and v is not None) if amazon else 0
+    if not fresh:
+        newest = amazon["days"][-1] if amazon and amazon["days"] else "none"
+        log(f"ABORT commit: no Amazon reading dated today ({today}); newest is {newest}. "
+            f"Scan did not run or OneDrive is unsynced - not publishing stale data.")
+        return 5
+    log(f"freshness ok: {fresh} exact Amazon readings dated {today}")
     if not changed:
         log("nothing to commit")
         return 0
