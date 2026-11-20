@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-19
+# Topic candidates — 2026-11-20
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 24 recent videos, 150 baseline videos
+Pool: 24 recent videos, 155 baseline videos
 
 ### Cluster 1: `try our`
 
 - **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 1/150 videos (1%)
-- **Spike ratio:** 21.0x
+- **Baseline saturation:** 1/155 videos (1%)
+- **Spike ratio:** 21.7x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
@@ -26,29 +26,69 @@ Pool: 24 recent videos, 150 baseline videos
   - 2026-11-18 — _Banks DRAINED In Seconds In New WARNING As Cell Phone Networks GO DOWN & More Cyber Attacks_  
     **BANKS UNDER THREAT? FBI Exposes AI Tool Behind Global Cyberattacks**
 
-### Cluster 2: `emergency`
+### Cluster 2: `nationwide`
 
-- **Recent saturation:** 6/24 videos (**25%**)
-- **Baseline saturation:** 3/150 videos (2%)
-- **Spike ratio:** 10.8x
-- **Related terms:** `emergency`, `washington`, `security`
+- **Recent saturation:** 4/24 videos (**17%**)
+- **Baseline saturation:** 0/155 videos (0%)
+- **Spike ratio:** 52.0x
+- **Related terms:** `nationwide`, `country`
 - **Sample recent videos:**
-  - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
-    Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC
+  - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
+    TRUMP LOSES TOP CYBER CHIEF! $ Major Departure Amid Nationwide Outages!
+  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
+    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
+  - 2026-11-16 — _THE END IS NIGH!_  
+    Nationwide Blackout Panic ERUPTS Ahead Of November 17!
+  - 2026-11-16 — _Something BAD Is Coming.._  
+    FAA GROUNDS America! Every Airport Hit By Nationwide Shutdown
+
+### Cluster 3: `outages`
+
+- **Recent saturation:** 3/24 videos (**13%**)
+- **Baseline saturation:** 0/155 videos (0%)
+- **Spike ratio:** 39.0x
+- **Related terms:** `outages`
+- **Sample recent videos:**
+  - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
+    TRUMP LOSES TOP CYBER CHIEF! $ Major Departure Amid Nationwide Outages!
   - 2026-11-18 — _THEY'RE ALL PANICKING!_  
     THEY FINALLY ADMITTED IT: Costco Shoppers Are Stockpiling Emergency Supplies
-  - 2026-11-17 — _Dirty BOMB Attack In Washington DC Details! Materials ALREADY In US But Something Is FISHY About It!_  
-    DIRTY BOMB In Washington?! Trump Warns Iran It Will Pay
-  - 2026-11-17 — _Ilhan Omar COURT DATE SET As Physical REMOVAL From Government Now In Play_  
-    Court Date SET In Ilhan Omar Case! Sealed Raid Records Could Drop
-  - 2026-11-12 — _THIS IS INSANITY!_  
-    INSANE New Details About The DC Gym Shooter Emerge!
+  - 2026-11-18 — _Americans Get DIRE Update On MASSIVE ONGOING HACKS! It's Getting Worse!_  
+    “PREPARE FOR THE WORST!” JD Vance Issues Dire Warning
 
-### Cluster 3: `banks`
+### Cluster 4: `america's`
+
+- **Recent saturation:** 3/24 videos (**13%**)
+- **Baseline saturation:** 0/155 videos (0%)
+- **Spike ratio:** 39.0x
+- **Related terms:** `america's`
+- **Sample recent videos:**
+  - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
+    TRUMP LOSES TOP CYBER CHIEF! $ Major Departure Amid Nationwide Outages!
+  - 2026-11-19 — _THIS IS ARGMAGEDDON!_  
+    Chase Bank Under Fire After SHOCKING Cyberattack Disclosure!
+  - 2026-11-18 — _Cyber Attack TRUTH Finally Revealed & It's As BAD As I Thought_  
+    AI Threats Put Banks, Websites And Critical Infrastructure At Risk
+
+### Cluster 5: `billion`
+
+- **Recent saturation:** 3/24 videos (**13%**)
+- **Baseline saturation:** 0/155 videos (0%)
+- **Spike ratio:** 39.0x
+- **Related terms:** `billion`
+- **Sample recent videos:**
+  - 2026-11-19 — _GTA 6 MELTDOWN! Asmongold TheBurntPeanut RAGE Over ABSURD Gameplay & NO REFUNDS_  
+    GTA 6 CHAOS! $1 BILLION Lost As Workers DITCH Their Jobs To Play!
+  - 2026-11-19 — _ELON MUSK EXPLODES! (FIXED)_  
+    Trump And Musk Face A MASSIVE Political Nightmare After Midterms!
+  - 2026-11-13 — _Donald Trump SNAPPED On Race Grifter Stephen A Smith!_  
+    Trump Scores MASSIVE Win Against BBC! $10 Billion Case Moves Forward
+
+### Cluster 6: `banks`
 
 - **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 2/150 videos (1%)
-- **Spike ratio:** 12.6x
+- **Baseline saturation:** 2/155 videos (1%)
+- **Spike ratio:** 13.0x
 - **Related terms:** `banks`, `critical`, `warning`
 - **Sample recent videos:**
   - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
@@ -62,61 +102,43 @@ Pool: 24 recent videos, 150 baseline videos
   - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
     BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
 
-### Cluster 4: `biggest`
-
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/150 videos (0%)
-- **Spike ratio:** 37.8x
-- **Related terms:** `biggest`
-- **Sample recent videos:**
-  - 2026-11-18 — _PEOPLE ARE OUTRAGED!_  
-    GTA 6 Launch Sparks Debate Over Hype And Missing Features
-  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
-    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
-  - 2026-11-13 — _Donald Trump SNAPPED On Race Grifter Stephen A Smith!_  
-    Trump Scores MASSIVE Win Against BBC! $10 Billion Case Moves Forward
-
-### Cluster 5: `country`
-
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/150 videos (0%)
-- **Spike ratio:** 37.8x
-- **Related terms:** `country`
-- **Sample recent videos:**
-  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
-    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
-  - 2026-11-16 — _THE END IS NIGH!_  
-    Nationwide Blackout Panic ERUPTS Ahead Of November 17!
-  - 2026-11-16 — _Something BAD Is Coming.._  
-    FAA GROUNDS America! Every Airport Hit By Nationwide Shutdown
-
-### Cluster 6: `america`
-
-- **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 1/150 videos (1%)
-- **Spike ratio:** 21.0x
-- **Related terms:** `america`
-- **Sample recent videos:**
-  - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
-    Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC
-  - 2026-11-18 — _Americans Get DIRE Update On MASSIVE ONGOING HACKS! It's Getting Worse!_  
-    “PREPARE FOR THE WORST!” JD Vance Issues Dire Warning
-  - 2026-11-17 — _IT'S ALL FALLING APART!_  
-    NSA GOES DARK! Stock Market Crash Wipes Out $1 Trillion
-  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
-    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
-  - 2026-11-16 — _Something BAD Is Coming.._  
-    FAA GROUNDS America! Every Airport Hit By Nationwide Shutdown
-
 ## @JeremyHambly
 
-Pool: 12 recent videos, 94 baseline videos
+Pool: 15 recent videos, 95 baseline videos
 
-### Cluster 1: `try`
+### Cluster 1: `city`
 
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 0/94 videos (0%)
-- **Spike ratio:** 47.5x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 0/95 videos (0%)
+- **Spike ratio:** 38.4x
+- **Related terms:** `city`
+- **Sample recent videos:**
+  - 2026-11-19 — _Hasan Piker & Ilhan Omar Get DRAGGED Into Huge Coverup!_  
+    Child Trafficking Scandal? Politicians Face Explosive Scrutiny!
+  - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
+    Mamdani Just Made New York Even More Dangerous!
+  - 2026-11-16 — _Another INSANE Bus Attack! America Is At MAXIUM Fatigue_  
+    It Keeps Happening! Woman PUMMELED By Mob On City Bus
+
+### Cluster 2: `history`
+
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 0/95 videos (0%)
+- **Spike ratio:** 38.4x
+- **Related terms:** `history`
+- **Sample recent videos:**
+  - 2026-11-19 — _Trans Bond Girl Set To DESTROY Robert Pattinson New James Bond Film_  
+    Hollywood's Next Bond Girl?! Hunter Schafer Sparks HUGE Debate!
+  - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
+    GTA 6 ROASTED! Gamers Aren't Holding Back On Rockstar
+  - 2026-11-17 — _Shane Gillis Reveals MEDICAL SCARE On Joe Rogan After SNL Backlash! Episode Pulled!_  
+    Shane Gillis Episode VANISHES After Woke Meltdown!
+
+### Cluster 3: `try`
+
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 0/95 videos (0%)
+- **Spike ratio:** 38.4x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-18 — _New CHILLING Cyber Attack That PROVES AI Is Out Of Control!_  
@@ -126,11 +148,25 @@ Pool: 12 recent videos, 94 baseline videos
   - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
     GTA 6 ROASTED! Gamers Aren't Holding Back On Rockstar
 
-### Cluster 2: `more`
+### Cluster 4: `its`
 
-- **Recent saturation:** 3/12 videos (**25%**)
-- **Baseline saturation:** 3/94 videos (3%)
-- **Spike ratio:** 6.8x
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 1/95 videos (1%)
+- **Spike ratio:** 12.8x
+- **Related terms:** `its`
+- **Sample recent videos:**
+  - 2026-11-19 — _The View RAGES & Spreads FALSE Health Information To PANIC Americans_  
+    The View ERUPTS As Whoopi Goes After Trump's RFK Jr!
+  - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
+    Mamdani Just Made New York Even More Dangerous!
+  - 2026-11-16 — _Ammo Company GOES WOKE & Immediately Regrets It!_  
+    Gun Company Insults Its Own Customers And Gets DESTROYED!
+
+### Cluster 5: `more`
+
+- **Recent saturation:** 3/15 videos (**20%**)
+- **Baseline saturation:** 3/95 videos (3%)
+- **Spike ratio:** 5.5x
 - **Related terms:** `more`
 - **Sample recent videos:**
   - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
@@ -139,6 +175,24 @@ Pool: 12 recent videos, 94 baseline videos
     Mamdani Just Made New York Even More Dangerous!
   - 2026-11-16 — _Russell Brand INSANITY New Twist Has Them ATTACKING His Family & All Videos_  
     Russell Brand In MORE Trouble! Prison Message Sparks Investigation
+
+## @QuarteringLive
+
+Pool: 6 recent videos, 10 baseline videos
+
+### Cluster 1: `hit`
+
+- **Recent saturation:** 3/6 videos (**50%**)
+- **Baseline saturation:** 0/10 videos (0%)
+- **Spike ratio:** 11.0x
+- **Related terms:** `hit`
+- **Sample recent videos:**
+  - 2026-11-19 — _THIS IS INSANITY!_  
+    A BILLION DOLLARS LOST OVER GTA 6?!
+  - 2026-11-18 — _Customers RAGE Over New OUTRAGEOUS Fees RIPPING Us Off!_  
+    Woman Charged $350 Tip WITHOUT CONSENT! This Is Getting Insane
+  - 2026-11-17 — _Americans REFUSE To Eat Out & Family Tradition Dies_  
+    THE DEATH OF DINING OUT! Restaurants Hit Record Low
 
 ---
 

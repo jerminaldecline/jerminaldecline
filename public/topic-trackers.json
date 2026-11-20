@@ -1,4 +1,20 @@
 {
-  "lastUpdated": "2026-11-19T13:41:15.576Z",
-  "trackers": []
+  "lastUpdated": "2026-11-20T13:24:23.745Z",
+  "trackers": [
+    {
+      "channelHandle": "@QuarteringLive",
+      "termId": "hit",
+      "keywords": [
+        "hit"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.5,
+        "baselineSaturation": 0.0455,
+        "spikeRatio": 11,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 0,
+        "detectedAt": "2026-11-20T13:24:23.745Z"
+      }
+    }
+  ]
 }
