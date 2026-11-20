@@ -264,6 +264,14 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
         <button type="button" data-store="base" aria-pressed="false">Jan–Sep</button>
         <button type="button" data-store="peak" aria-pressed="false">Oct–Dec</button>
       </div></div>
+    <div class="ctl"><span class="ctl-label">Count likely returns<i class="info" data-tip="Off by default, and a what-if rather than a measured figure. When a few units re-enter a listing that is currently selling — and not being restocked — they could be customer returns rather than a delivery. Turn this on to treat any re-entry of the chosen size or fewer, on an item that was selling and not building up stock, as a return and take it off the sales total. Note: in this data most small re-entries actually arrive as part of catalogue-wide restock deliveries, so this most likely overstates returns — treat it as a generous upper bound, not a count.">i</i></span>
+      <div class="seg" role="group" aria-label="Count likely returns against sales">
+        <button type="button" data-ret="0" aria-pressed="true">Off</button>
+        <button type="button" data-ret="1" aria-pressed="false">≤1</button>
+        <button type="button" data-ret="2" aria-pressed="false">≤2</button>
+        <button type="button" data-ret="3" aria-pressed="false">≤3</button>
+        <button type="button" data-ret="5" aria-pressed="false">≤5</button>
+      </div></div>
     <label class="check"><input type="checkbox" id="bulkChk"> Count big one-day drops as sales <small>(large amounts of one item leaving at once)</small><i class="info" data-tip="Now and then 40 or more units of one item — at least half of what the listing had — disappear between one day's reading and the next. A fall that large and sudden is unusual for everyday sales: it could be a single bulk order, or it could be stock being moved elsewhere (his own shop, a wholesale buyer, or another Amazon warehouse). The stock count on its own can't tell which. These drops are shown separately in amber and left out of the sales totals unless you tick the box. If the same amount returns to the listing within four weeks, it is treated as a temporary move and left out of both the drop and the delivery figures.">i</i></label>
   </div>
 
@@ -341,6 +349,7 @@ tr.row.sel td{background:linear-gradient(var(--accent-2-bg),var(--accent-2-bg)),
       <li><b>Units sold</b> is stock going down a few units at a time between two readings. When 40 or more units — and at least half of a listing — vanish in a single day, that is too big and sudden to read as everyday sales: it may be a single bulk order, or it may be stock moved elsewhere, and the count can't tell which. We show those drops separately in amber as <b>left in one go</b>, and keep them out of sales unless you tick the box.</li>
       <li><b>Stock that leaves and comes back</b> is left out of everything. A count can collapse one day and rebuild over the following weeks — for example when Amazon moves stock between its warehouses. When a listing's stock climbs back within four weeks of a big drop, neither the drop nor the return is counted.</li>
       <li><b>Sales value</b> is units sold multiplied by the price each one actually sold for — a clearance that held for a few days counts at the clearance price, while a one-day price blip is ignored. <b>Profit</b> is just that sales value times the margin you pick above, or a flat $1 to $5 a unit in the $-a-bag mode; it starts at the $1 a unit he has said he makes. That is an illustrative figure you set — not a calculation of his real costs, Amazon's fees or tax — and neither it nor the sales value is an actual figure from the business.</li>
+      <li><b>Count likely returns</b> is an option above, off by default. A few units re-entering a listing that is already selling — and not being restocked — could be customer returns rather than a delivery, so when it is on, re-entries up to the size you choose are treated as returns and taken off <b>Units sold</b>, <b>Sales value</b> and <b>Profit</b>. Only listings that sold in the previous couple of weeks and are not building up stock qualify. It is a what-if you switch on, not a measured figure: in this data most small re-entries arrive as part of a wider restock delivery, so it most likely overstates returns. The charts and the per-listing figures still show the raw stock movements.</li>
       <li><b>vs prior</b> compares the period with the same number of days immediately before it, when enough readings exist.</li>
       <li><b>Sales and a delivery on the same day net off.</b> Stock is counted once a day, so we see only the day's net change, not the separate movements inside it. If 10 units sell and 20 arrive, the count rises by 10, so we record a delivery of 10 and no sale — the 10 sales are hidden inside the restock. <b>Units sold</b> and <b>stock delivered in</b> are therefore minimums, higher than shown on any day where selling and restocking both happen.</li>
       <li>Days with no usable reading are skipped, and a fall across a gap is booked on the day the next reading landed. Weekly bars group days by the week starting Monday.</li>
@@ -357,7 +366,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const FAM=[['K-Cups','var(--f-kcups)'],['Ground','var(--f-ground)'],['Whole Bean','var(--f-wb)'],['Other','var(--f-other)']];
 const famColor=f=>{const m=FAM.find(x=>x[0]===f);return m?m[1]:'var(--f-other)'};
 const BULK_MIN=40, BULK_SHARE=0.5, WEEK_ABOVE=45, PRICE_MIN_RUN=3;
-const state={period:0,margin:15,mode:'bag',bag:1,bulk:false,store:(new Date().getMonth()>=9?'peak':'base'),day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
+const state={period:0,margin:15,mode:'bag',bag:1,bulk:false,returns:0,store:(new Date().getMonth()>=9?'peak':'base'),day:null,daySort:{key:'sl',dir:'desc'},group:'auto',sort:{key:'sold',dir:'desc'},sel:null,fam:'all',oos:false,q:''};
 let DATA=null, CH={};
 
 const fmtU=n=>Math.round(n).toLocaleString('en-US');
@@ -413,6 +422,25 @@ function deriveSku(s, days, cap){
   // a remnant too small to be a big drop is ordinary selling during the round-trip
   for(let i=0;i<n;i++) if(bulk[i]>0 && bulk[i]<BULK_MIN){ sold[i]+=bulk[i]; bulk[i]=0; }
   s.sold=sold; s.bulk=bulk; s.rest=rest; s.ret=ret;
+  // Likely-returns tag (2026-11-20, user option): the SIZE of each small re-entry
+  // that looks more like a customer return than a restock — the listing was SELLING
+  // in the prior ~14 days and NOT building up stock over that window. Size is kept
+  // here; the page deducts the ones <= the threshold the viewer picks (threshold-
+  // independent so it needn't recompute). NB our own analysis found most small
+  // re-entries actually arrive inside catalogue-wide restock deliveries, so this
+  // leans high — it is an opt-in what-if, not a measured returns figure.
+  const RET_WIN=14, retSale=new Array(n).fill(0), ks=[];
+  for(let i=0;i<n;i++) if(s.stock[i]!=null) ks.push(i);
+  for(let p=1;p<ks.length;p++){
+    const i=ks[p]; if(rest[i]<=0) continue;
+    let priorSold=0, vStart=s.stock[ks[p-1]];
+    for(let q=p-1;q>=1;q--){
+      if(toT(days[i])-toT(days[ks[q-1]])>RET_WIN*dayMs) break;
+      priorSold+=sold[ks[q]]; vStart=s.stock[ks[q-1]];
+    }
+    if(priorSold>0 && s.stock[ks[p-1]]-vStart<=0) retSale[i]=rest[i];
+  }
+  s.retSale=retSale;
   // Value each day's sales at the price that HELD for >= PRICE_MIN_RUN in-stock
   // readings (the same rule the price log uses), carried forward across one-day
   // buy-box flaps and gaps: a clearance lasting a few days is valued at the
@@ -463,14 +491,17 @@ function aggregate(c,[i0,i1]){
   const days=c.days.slice(i0,i1+1), n=days.length;
   const sold=new Array(n).fill(0), bulk=new Array(n).fill(0), rest=new Array(n).fill(0), gross=new Array(n).fill(0), grossBulk=new Array(n).fill(0);
   const byFam={}, famSold={}; FAM.forEach(f=>{byFam[f[0]]=new Array(n).fill(0); famSold[f[0]]=0;});
-  let onHand=0,onHandVal=0,onHandCuft=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,ohDelta=0;
+  let onHand=0,onHandVal=0,onHandCuft=0,capped=0,inStock=0,oos=0,unknown=0,retU=0,retSaleU=0,retSaleVal=0,ohDelta=0;
   const rows=[];
   for(const s of c.skus){
-    const p=s.price||0; let sl=0,bk=0,rs=0,oo=0,rg=0;
+    const p=s.price||0; let sl=0,bk=0,rs=0,oo=0,rg=0,rr=0,rrV=0;
     for(let i=0;i<n;i++){ const j=i0+i, ep=(s.effPrice&&s.effPrice[j]!=null)?s.effPrice[j]:p;
       sold[i]+=s.sold[j]; bulk[i]+=s.bulk[j]; rest[i]+=s.rest[j]; retU+=s.ret[j]; gross[i]+=s.sold[j]*ep; grossBulk[i]+=s.bulk[j]*ep;
       sl+=s.sold[j]; bk+=s.bulk[j]; rs+=s.rest[j]; rg+=(s.sold[j]+(state.bulk?s.bulk[j]:0))*ep; if(s.stock[j]===0) oo++;
+      if(state.returns>0&&s.retSale){ const rsz=s.retSale[j]; if(rsz>0&&rsz<=state.returns){ rr+=rsz; rrV+=rsz*ep; } }
       const v = s.stock[j]!=null ? s.stock[j] : lastKnownBefore(s.stock,j); if(v!=null) byFam[s.family][i]+=v; }
+    if(rr>sl){ if(rr>0) rrV*=sl/rr; rr=sl; }   // can't return more than was sold in-window
+    retSaleU+=rr; retSaleVal+=rrV;
     famSold[s.family]+=sl+(state.bulk?bk:0);
     const first=firstKnownFrom(s.stock,i0), cap=capOf(s);
     if(first!=null&&s.last!=null&&!(cap!=null&&(first>=cap||s.last>=cap))) ohDelta+=s.last-first;
@@ -481,7 +512,7 @@ function aggregate(c,[i0,i1]){
     if(s.last>0) inStock++; else oos++;
     onHand+=s.last; onHandVal+=s.last*p; onHandCuft+=s.last*cuftOf(s); if(s.lastCapped) capped++;
   }
-  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,onHandCuft,capped,inStock,oos,unknown,retU,ohDelta,
+  return {days,i0,i1,sold,bulk,rest,gross,grossBulk,byFam,famSold,rows,onHand,onHandVal,onHandCuft,capped,inStock,oos,unknown,retU,retSaleU,retSaleVal,ohDelta,
     soldU:sum(sold),bulkU:sum(bulk),restU:sum(rest),grossU:sum(gross),grossBulkU:sum(grossBulk),
     units:sum(sold)+(state.bulk?sum(bulk):0), grossAll:sum(gross)+(state.bulk?sum(grossBulk):0)};
 }
@@ -620,16 +651,17 @@ function deltaHtml(curV, prevV){
 }
 
 function renderKpis(c,A,P){
-  const nd=A.days.length, units=A.units, gross=A.grossAll, net=netOf(gross,units);
+  const nd=A.days.length, retU_=A.retSaleU||0, retVal_=A.retSaleVal||0, units=A.units-retU_, gross=A.grossAll-retVal_, net=netOf(gross,units);
+  const pUnits=P?P.units-(P.retSaleU||0):null, pGross=P?P.grossAll-(P.retSaleVal||0):null;
   const rate=v=> nd>1?`≈ ${fmtU(v/nd)} a day`:'';
   const j=(...xs)=>xs.filter(Boolean).join(' · ');
   const storeRate=STORE_RATE[state.store], storeCost=A.onHandCuft*storeRate;
   const oh=fmtU(A.onHand)+(A.capped?'+':'');
   const moved=A.bulkU;
   const tiles=[
-    [`Units sold <i class="info" data-tip="An estimate, not confirmed sales. The business doesn't report sales — we read each listing's stock once a day and count a fall as units sold, so it is inferred from net stock movements. A sale and a restock on the same day cancel out, so treat it as a floor. More in 'How to read this' below.">i</i>`, fmtU(units), j(rate(units), P&&deltaHtml(units,P.units), state.bulk?`includes ${fmtU(moved)} that left in one go`:(moved?`another ${fmtU(moved)} left in one go, not counted`:''))],
-    [`Sales value <i class="info" data-tip="An estimate, not a figure from the business — estimated units sold (inferred from daily stock falls; see Units sold) × the price each one sold at.">i</i>`, fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,P.grossAll))],
-    ['Profit '+netLabel(), fmtM(net), j(state.mode==='bag'?(state.bag===1?'his claim: $1 for every unit sold':'$'+state.bag+' for every unit sold'):`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(P.grossAll,P.units))), 'net'],
+    [`Units sold <i class="info" data-tip="An estimate, not confirmed sales. The business doesn't report sales — we read each listing's stock once a day and count a fall as units sold, so it is inferred from net stock movements. A sale and a restock on the same day cancel out, so treat it as a floor. More in 'How to read this' below.">i</i>`, fmtU(units), j(rate(units), P&&deltaHtml(units,pUnits), state.returns&&retU_?`net of ${fmtU(retU_)} assumed return${retU_===1?'':'s'}`:'', state.bulk?`includes ${fmtU(moved)} that left in one go`:(moved?`another ${fmtU(moved)} left in one go, not counted`:''))],
+    [`Sales value <i class="info" data-tip="An estimate, not a figure from the business — estimated units sold (inferred from daily stock falls; see Units sold) × the price each one sold at.">i</i>`, fmtM(gross), j(nd>1?`≈ ${fmtM(gross/nd)} a day`:'', P&&deltaHtml(gross,pGross))],
+    ['Profit '+netLabel(), fmtM(net), j(state.mode==='bag'?(state.bag===1?'his claim: $1 for every unit sold':'$'+state.bag+' for every unit sold'):`if he keeps ${state.margin}% of the sales value`, state.mode==='bag'&&nd>1?`≈ ${fmtM(net/nd)} a day`:'', P&&deltaHtml(net,netOf(pGross,pUnits))), 'net'],
     ['Stock delivered in', fmtU(A.restU), j('units', P&&deltaHtml(A.restU,P.restU), A.retU?`${fmtU(A.retU)} that left and came back not counted`:'')],
     ['Units in stock now', oh, A.ohDelta?`<b>${A.ohDelta>0?'▲':'▼'} ${fmtU(Math.abs(A.ohDelta))}</b> over the period`:''],
     [`Stock value <i class="info" data-tip="Units in stock now × each listing's usual price (its most common in-stock price) — what the inventory would be worth at the normal shelf price. Not a discounted, clearance or live price, and not what it has sold for. On-hand stock only; it does not change with the period filter above. Not a figure from the business.">i</i>`, fmtM(A.onHandVal), `at each listing's usual price`],
@@ -843,6 +875,7 @@ function wire(){
   document.querySelectorAll('[data-mb]').forEach(b=>b.onclick=()=>setMode(b.dataset.mb));
   document.querySelectorAll('[data-bag]').forEach(b=>b.onclick=()=>{ state.bag=+b.dataset.bag; press('[data-bag]','bag',b.dataset.bag); render(); });
   document.getElementById('bulkChk').onchange=e=>{ state.bulk=e.target.checked; render(); };
+  document.querySelectorAll('[data-ret]').forEach(b=>b.onclick=()=>{ state.returns=+b.dataset.ret; press('[data-ret]','ret',b.dataset.ret); render(); });
   document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>{ state.store=b.dataset.store; press('[data-store]','store',state.store); render(); });
   press('[data-store]','store',state.store);
   // click a bar: open (or close) the day behind it under that chart
