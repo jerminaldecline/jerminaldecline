@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-21
+# Topic candidates — 2026-11-22
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,15 +6,17 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 24 recent videos, 155 baseline videos
+Pool: 25 recent videos, 150 baseline videos
 
-### Cluster 1: `try our`
+### Cluster 1: `try`
 
-- **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 1/155 videos (1%)
-- **Spike ratio:** 21.7x
+- **Recent saturation:** 6/25 videos (**24%**)
+- **Baseline saturation:** 1/150 videos (1%)
+- **Spike ratio:** 24.2x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
+  - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
+    Hackers Could CRIPPLE America’s Food Supply! Officials Sound Alarm
   - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
     Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC
   - 2026-11-18 — _Cyber Attack TRUTH Finally Revealed & It's As BAD As I Thought_  
@@ -23,14 +25,12 @@ Pool: 24 recent videos, 155 baseline videos
     GTA 6 Launch Sparks Debate Over Hype And Missing Features
   - 2026-11-18 — _Massive FRAUD Revealed As Democrats FLIP Alaska & President Trump ERUPTS_  
     ANOTHER STEAL?? Alaska Senate Flips Blue Amid Decoy Dan Scandal
-  - 2026-11-18 — _Banks DRAINED In Seconds In New WARNING As Cell Phone Networks GO DOWN & More Cyber Attacks_  
-    **BANKS UNDER THREAT? FBI Exposes AI Tool Behind Global Cyberattacks**
 
 ### Cluster 2: `nationwide`
 
-- **Recent saturation:** 6/24 videos (**25%**)
-- **Baseline saturation:** 3/155 videos (2%)
-- **Spike ratio:** 11.1x
+- **Recent saturation:** 6/25 videos (**24%**)
+- **Baseline saturation:** 3/150 videos (2%)
+- **Spike ratio:** 10.4x
 - **Related terms:** `nationwide`, `country`, `major`
 - **Sample recent videos:**
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
@@ -46,9 +46,9 @@ Pool: 24 recent videos, 155 baseline videos
 
 ### Cluster 3: `america's`
 
-- **Recent saturation:** 4/24 videos (**17%**)
-- **Baseline saturation:** 0/155 videos (0%)
-- **Spike ratio:** 52.0x
+- **Recent saturation:** 4/25 videos (**16%**)
+- **Baseline saturation:** 0/150 videos (0%)
+- **Spike ratio:** 48.3x
 - **Related terms:** `america's`
 - **Sample recent videos:**
   - 2026-11-20 — _THIS IS VERY BAD!_  
@@ -62,12 +62,12 @@ Pool: 24 recent videos, 155 baseline videos
 
 ### Cluster 4: `gta`
 
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/155 videos (0%)
-- **Spike ratio:** 39.0x
+- **Recent saturation:** 3/25 videos (**12%**)
+- **Baseline saturation:** 0/150 videos (0%)
+- **Spike ratio:** 36.2x
 - **Related terms:** `gta`
 - **Sample recent videos:**
-  - 2026-11-20 — _GTA 6 Gamers BLASTED In UNHINGED Report!_  
+  - 2026-11-20 — _THEY GOT BLASTED!_  
     GTA 6 FANS GET DESTROYED! Fox News & WIRED BLAST THE MANOSPHERE MELTDOWN!
   - 2026-11-19 — _GTA 6 MELTDOWN! Asmongold TheBurntPeanut RAGE Over ABSURD Gameplay & NO REFUNDS_  
     GTA 6 CHAOS! $1 BILLION Lost As Workers DITCH Their Jobs To Play!
@@ -76,9 +76,9 @@ Pool: 24 recent videos, 155 baseline videos
 
 ### Cluster 5: `infrastructure`
 
-- **Recent saturation:** 4/24 videos (**17%**)
-- **Baseline saturation:** 1/155 videos (1%)
-- **Spike ratio:** 17.3x
+- **Recent saturation:** 4/25 videos (**16%**)
+- **Baseline saturation:** 1/150 videos (1%)
+- **Spike ratio:** 16.1x
 - **Related terms:** `infrastructure`, `critical`
 - **Sample recent videos:**
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
@@ -92,9 +92,9 @@ Pool: 24 recent videos, 155 baseline videos
 
 ### Cluster 6: `outages`
 
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/155 videos (0%)
-- **Spike ratio:** 39.0x
+- **Recent saturation:** 3/25 videos (**12%**)
+- **Baseline saturation:** 0/150 videos (0%)
+- **Spike ratio:** 36.2x
 - **Related terms:** `outages`
 - **Sample recent videos:**
   - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
@@ -106,18 +106,18 @@ Pool: 24 recent videos, 155 baseline videos
 
 ## @JeremyHambly
 
-Pool: 17 recent videos, 92 baseline videos
+Pool: 17 recent videos, 89 baseline videos
 
 ### Cluster 1: `city`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 0/92 videos (0%)
-- **Spike ratio:** 43.8x
+- **Baseline saturation:** 0/89 videos (0%)
+- **Spike ratio:** 42.4x
 - **Related terms:** `city`
 - **Sample recent videos:**
   - 2026-11-20 — _HE'S FINISHED NOW!_  
     MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
-  - 2026-11-19 — _Hasan Piker & Ilhan Omar Get DRAGGED Into Huge Coverup!_  
+  - 2026-11-19 — _THEY'RE COVERING IT UP!_  
     Child Trafficking Scandal? Politicians Face Explosive Scrutiny!
   - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
     Mamdani Just Made New York Even More Dangerous!
@@ -127,11 +127,11 @@ Pool: 17 recent videos, 92 baseline videos
 ### Cluster 2: `history`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/92 videos (0%)
-- **Spike ratio:** 32.8x
+- **Baseline saturation:** 0/89 videos (0%)
+- **Spike ratio:** 31.8x
 - **Related terms:** `history`
 - **Sample recent videos:**
-  - 2026-11-19 — _Trans Bond Girl Set To DESTROY Robert Pattinson New James Bond Film_  
+  - 2026-11-19 — _THEY'RE DESTROYING EVERYTHING!_  
     Hollywood's Next Bond Girl?! Hunter Schafer Sparks HUGE Debate!
   - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
     GTA 6 ROASTED! Gamers Aren't Holding Back On Rockstar
@@ -141,11 +141,11 @@ Pool: 17 recent videos, 92 baseline videos
 ### Cluster 3: `try`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/92 videos (0%)
-- **Spike ratio:** 32.8x
+- **Baseline saturation:** 0/89 videos (0%)
+- **Spike ratio:** 31.8x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
-  - 2026-11-18 — _New CHILLING Cyber Attack That PROVES AI Is Out Of Control!_  
+  - 2026-11-18 — _THIS IS CHILLING!_  
     AI Chatbots Helped Plan MASS-CASUALTY Attacks, Government Report Finds
   - 2026-11-18 — _Brett Cooper Walks Away!_  
     BRETT COOPER QUITS MAGA After TURNING On Trump!
@@ -155,13 +155,13 @@ Pool: 17 recent videos, 92 baseline videos
 ### Cluster 4: `its`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/92 videos (1%)
-- **Spike ratio:** 14.6x
+- **Baseline saturation:** 1/89 videos (1%)
+- **Spike ratio:** 14.1x
 - **Related terms:** `its`
 - **Sample recent videos:**
   - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
     NETFLIX'S DISGUSTING NEW LOW! Christians FURIOUS Over Sick New Show!
-  - 2026-11-19 — _The View RAGES & Spreads FALSE Health Information To PANIC Americans_  
+  - 2026-11-19 — _THEY ARE RAGING!_  
     The View ERUPTS As Whoopi Goes After Trump's RFK Jr!
   - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
     Mamdani Just Made New York Even More Dangerous!
@@ -171,8 +171,8 @@ Pool: 17 recent videos, 92 baseline videos
 ### Cluster 5: `more`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 3/92 videos (3%)
-- **Spike ratio:** 6.3x
+- **Baseline saturation:** 3/89 videos (3%)
+- **Spike ratio:** 6.1x
 - **Related terms:** `more`
 - **Sample recent videos:**
   - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
@@ -187,13 +187,13 @@ Pool: 17 recent videos, 92 baseline videos
 ### Cluster 6: `sparks`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/92 videos (3%)
-- **Spike ratio:** 4.7x
+- **Baseline saturation:** 3/89 videos (3%)
+- **Spike ratio:** 4.5x
 - **Related terms:** `sparks`
 - **Sample recent videos:**
   - 2026-11-20 — _HE'S FINISHED NOW!_  
     MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
-  - 2026-11-19 — _Trans Bond Girl Set To DESTROY Robert Pattinson New James Bond Film_  
+  - 2026-11-19 — _THEY'RE DESTROYING EVERYTHING!_  
     Hollywood's Next Bond Girl?! Hunter Schafer Sparks HUGE Debate!
   - 2026-11-16 — _Russell Brand INSANITY New Twist Has Them ATTACKING His Family & All Videos_  
     Russell Brand In MORE Trouble! Prison Message Sparks Investigation
