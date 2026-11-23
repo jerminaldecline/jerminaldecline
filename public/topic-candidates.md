@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-22
+# Topic candidates — 2026-11-23
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 25 recent videos, 150 baseline videos
+Pool: 24 recent videos, 148 baseline videos
 
 ### Cluster 1: `try`
 
-- **Recent saturation:** 6/25 videos (**24%**)
-- **Baseline saturation:** 1/150 videos (1%)
-- **Spike ratio:** 24.2x
+- **Recent saturation:** 6/24 videos (**25%**)
+- **Baseline saturation:** 1/148 videos (1%)
+- **Spike ratio:** 24.8x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
@@ -26,31 +26,15 @@ Pool: 25 recent videos, 150 baseline videos
   - 2026-11-18 — _Massive FRAUD Revealed As Democrats FLIP Alaska & President Trump ERUPTS_  
     ANOTHER STEAL?? Alaska Senate Flips Blue Amid Decoy Dan Scandal
 
-### Cluster 2: `nationwide`
+### Cluster 2: `america's`
 
-- **Recent saturation:** 6/25 videos (**24%**)
-- **Baseline saturation:** 3/150 videos (2%)
-- **Spike ratio:** 10.4x
-- **Related terms:** `nationwide`, `country`, `major`
+- **Recent saturation:** 5/24 videos (**21%**)
+- **Baseline saturation:** 3/148 videos (2%)
+- **Spike ratio:** 8.9x
+- **Related terms:** `america's`, `major`
 - **Sample recent videos:**
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
     FINALLY THE TRUTH?! FAA Reveals What CAUSED Nationwide Flight Chaos!
-  - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
-    TRUMP LOSES TOP CYBER CHIEF! $ Major Departure Amid Nationwide Outages!
-  - 2026-11-19 — _THIS IS ARGMAGEDDON!_  
-    Chase Bank Under Fire After SHOCKING Cyberattack Disclosure!
-  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
-    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
-  - 2026-11-16 — _THE END IS NIGH!_  
-    Nationwide Blackout Panic ERUPTS Ahead Of November 17!
-
-### Cluster 3: `america's`
-
-- **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 0/150 videos (0%)
-- **Spike ratio:** 48.3x
-- **Related terms:** `america's`
-- **Sample recent videos:**
   - 2026-11-20 — _THIS IS VERY BAD!_  
     ARREST ALL MAGA?! The INSANE New Political Demand Going Viral!
   - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
@@ -60,11 +44,11 @@ Pool: 25 recent videos, 150 baseline videos
   - 2026-11-18 — _Cyber Attack TRUTH Finally Revealed & It's As BAD As I Thought_  
     AI Threats Put Banks, Websites And Critical Infrastructure At Risk
 
-### Cluster 4: `gta`
+### Cluster 3: `gta`
 
-- **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 0/150 videos (0%)
-- **Spike ratio:** 36.2x
+- **Recent saturation:** 3/24 videos (**13%**)
+- **Baseline saturation:** 0/148 videos (0%)
+- **Spike ratio:** 37.3x
 - **Related terms:** `gta`
 - **Sample recent videos:**
   - 2026-11-20 — _THEY GOT BLASTED!_  
@@ -74,11 +58,11 @@ Pool: 25 recent videos, 150 baseline videos
   - 2026-11-18 — _PEOPLE ARE OUTRAGED!_  
     GTA 6 Launch Sparks Debate Over Hype And Missing Features
 
-### Cluster 5: `infrastructure`
+### Cluster 4: `infrastructure`
 
-- **Recent saturation:** 4/25 videos (**16%**)
-- **Baseline saturation:** 1/150 videos (1%)
-- **Spike ratio:** 16.1x
+- **Recent saturation:** 4/24 videos (**17%**)
+- **Baseline saturation:** 1/148 videos (1%)
+- **Spike ratio:** 16.6x
 - **Related terms:** `infrastructure`, `critical`
 - **Sample recent videos:**
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
@@ -90,11 +74,11 @@ Pool: 25 recent videos, 150 baseline videos
   - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
     BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
 
-### Cluster 6: `outages`
+### Cluster 5: `outages`
 
-- **Recent saturation:** 3/25 videos (**12%**)
-- **Baseline saturation:** 0/150 videos (0%)
-- **Spike ratio:** 36.2x
+- **Recent saturation:** 3/24 videos (**13%**)
+- **Baseline saturation:** 0/148 videos (0%)
+- **Spike ratio:** 37.3x
 - **Related terms:** `outages`
 - **Sample recent videos:**
   - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
@@ -104,15 +88,33 @@ Pool: 25 recent videos, 150 baseline videos
   - 2026-11-18 — _Americans Get DIRE Update On MASSIVE ONGOING HACKS! It's Getting Worse!_  
     “PREPARE FOR THE WORST!” JD Vance Issues Dire Warning
 
+### Cluster 6: `warning`
+
+- **Recent saturation:** 5/24 videos (**21%**)
+- **Baseline saturation:** 1/148 videos (1%)
+- **Spike ratio:** 20.7x
+- **Related terms:** `warning`, `banks`
+- **Sample recent videos:**
+  - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
+    Hackers Could CRIPPLE America’s Food Supply! Officials Sound Alarm
+  - 2026-11-18 — _Cyber Attack TRUTH Finally Revealed & It's As BAD As I Thought_  
+    AI Threats Put Banks, Websites And Critical Infrastructure At Risk
+  - 2026-11-18 — _Banks DRAINED In Seconds In New WARNING As Cell Phone Networks GO DOWN & More Cyber Attacks_  
+    **BANKS UNDER THREAT? FBI Exposes AI Tool Behind Global Cyberattacks**
+  - 2026-11-18 — _Americans Get DIRE Update On MASSIVE ONGOING HACKS! It's Getting Worse!_  
+    “PREPARE FOR THE WORST!” JD Vance Issues Dire Warning
+  - 2026-11-17 — _DOOMSDAY Is HERE! Banks REFUSE Customers, News Agencies HACKED, Another Airline Outage!_  
+    BLACKOUT DAY IS HERE! Banks, Airlines & CNN All Go Down
+
 ## @JeremyHambly
 
-Pool: 17 recent videos, 89 baseline videos
+Pool: 17 recent videos, 87 baseline videos
 
 ### Cluster 1: `city`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 0/89 videos (0%)
-- **Spike ratio:** 42.4x
+- **Baseline saturation:** 0/87 videos (0%)
+- **Spike ratio:** 41.4x
 - **Related terms:** `city`
 - **Sample recent videos:**
   - 2026-11-20 — _HE'S FINISHED NOW!_  
@@ -127,8 +129,8 @@ Pool: 17 recent videos, 89 baseline videos
 ### Cluster 2: `history`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/89 videos (0%)
-- **Spike ratio:** 31.8x
+- **Baseline saturation:** 0/87 videos (0%)
+- **Spike ratio:** 31.1x
 - **Related terms:** `history`
 - **Sample recent videos:**
   - 2026-11-19 — _THEY'RE DESTROYING EVERYTHING!_  
@@ -141,8 +143,8 @@ Pool: 17 recent videos, 89 baseline videos
 ### Cluster 3: `try`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/89 videos (0%)
-- **Spike ratio:** 31.8x
+- **Baseline saturation:** 0/87 videos (0%)
+- **Spike ratio:** 31.1x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-18 — _THIS IS CHILLING!_  
@@ -155,8 +157,8 @@ Pool: 17 recent videos, 89 baseline videos
 ### Cluster 4: `its`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/89 videos (1%)
-- **Spike ratio:** 14.1x
+- **Baseline saturation:** 1/87 videos (1%)
+- **Spike ratio:** 13.8x
 - **Related terms:** `its`
 - **Sample recent videos:**
   - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
@@ -171,8 +173,8 @@ Pool: 17 recent videos, 89 baseline videos
 ### Cluster 5: `more`
 
 - **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 3/89 videos (3%)
-- **Spike ratio:** 6.1x
+- **Baseline saturation:** 3/87 videos (3%)
+- **Spike ratio:** 5.9x
 - **Related terms:** `more`
 - **Sample recent videos:**
   - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
@@ -187,8 +189,8 @@ Pool: 17 recent videos, 89 baseline videos
 ### Cluster 6: `sparks`
 
 - **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/89 videos (3%)
-- **Spike ratio:** 4.5x
+- **Baseline saturation:** 3/87 videos (3%)
+- **Spike ratio:** 4.4x
 - **Related terms:** `sparks`
 - **Sample recent videos:**
   - 2026-11-20 — _HE'S FINISHED NOW!_  
