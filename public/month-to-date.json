@@ -1,14 +1,14 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-23T20:05:30.190Z",
+ "generated": "2026-11-23T21:13:08.384Z",
  "month": "2026-11",
  "dom": 23,
- "liveAt": "2026-11-23T20:04:20.387Z",
+ "liveAt": "2026-11-23T21:12:00.575Z",
  "prev": {
   "month": "2026-10",
   "asOf": "2026-10-24T01:29:15.892Z",
   "dump": "2026-10-24-AM.json.gz",
-  "offsetHours": 5.4
+  "offsetHours": 4.3
  },
  "yoy": {
   "month": "2025-11",
@@ -38,7 +38,7 @@
     }
    },
    "yoy": {
-    "n": 99,
+    "n": 100,
     "tot": null,
     "med": null,
     "engaged": null,
@@ -46,7 +46,7 @@
     "lv": null,
     "comments": null,
     "avglen": 12.6,
-    "runtime": 45.7,
+    "runtime": 45.9,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -80,7 +80,7 @@
     }
    },
    "yoy": {
-    "n": 64,
+    "n": 65,
     "tot": null,
     "med": null,
     "engaged": null,
@@ -88,7 +88,7 @@
     "lv": null,
     "comments": null,
     "avglen": 12.6,
-    "runtime": 13.6,
+    "runtime": 13.8,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
