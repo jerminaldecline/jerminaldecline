@@ -344,8 +344,6 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
 /* Row, not column: this used to stack the number over a confidence chip that
    carried the (i). With the chip gone the icon is a direct child, and a column
    would strand it on a line of its own under the number. */
-.hero-proj{font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-top:0.75rem;display:flex;align-items:center;gap:0.35rem;line-height:1.3;flex-wrap:wrap}
-.hero-proj .info-icon{color:var(--text-dim);border-color:var(--border)}
 @media(max-width:900px){.hero.cols4{grid-template-columns:1fr 1fr}}
 .report-topgrid{display:grid;grid-template-columns:minmax(280px,1fr) 1.4fr;gap:1rem;align-items:stretch;margin-bottom:1rem}
 .report-topgrid .peak-headline{margin-bottom:0;padding-bottom:0;border-bottom:none;grid-template-columns:1fr;align-content:start;gap:0.9rem}
@@ -356,10 +354,6 @@ a.ds-tab{display:inline-block;text-decoration:none;line-height:normal}
 .hero-num{font-size:2.5rem;font-weight:800;letter-spacing:-0.025em;line-height:1}
 .hero-num.rev{font-size:2.05rem}  /* revenue is a range string, so a touch smaller to fit */
 .hero-sub{font-size:0.85rem;color:var(--subtext);margin-top:0.35rem}
-/* The range an engaged estimate could sit in. Deliberately quiet: it qualifies
-   the number above it and should never compete with it. */
-.hero-range{font-size:0.85rem;color:var(--subtext);margin-top:0.45rem;display:flex;align-items:center;gap:0.4rem;font-variant-numeric:tabular-nums;line-height:1.2}
-.hero-range b{color:var(--label);font-weight:700;white-space:nowrap}
 .hero-chart-link.hero-how{margin-top:0.3rem;align-self:flex-start;text-align:left}
 /* Secondary headline figure (Shorts views on the Total views card): clearly
    subordinate to the main long-form number, but heavier than sub-text. */
@@ -4412,21 +4406,13 @@ function render(m){
   // a views figure to compare.
   const vccCross = !!((p && pm && pm < '2026-09' && p.tot) || (y && yo && yo < '2026-09' && y.tot));
   const basisTag = (vccAdj && vccCross) ? (useEng ? 'engaged' : 'reported') : null;
-  // An engaged figure is an estimate, so it is shown with the range it could
-  // sit in: the same views divided by each end of the factor's range. One quiet
-  // line under the number, and nothing at all on periods the change never
-  // touched or while the reported basis is selected.
-  const rngOk = (lo, hi) => lo != null && hi != null && hi > lo * 1.005;
-  const rngTxt = (lo, hi) => `likely <b>${fmt(lo)} \u2013 ${fmt(hi)}</b>`;
-  const rangeTot = (useEng && rngOk(d.engagedLo, d.engagedHi))
-    ? `<div class="hero-range">${rngTxt(d.engagedLo, d.engagedHi)}</div>` : '';
-  // The single route from an engaged figure to how it was worked out. Shown
-  // whenever the engaged basis is on, with or without a visible range.
+  // An engaged figure is an estimate. Until 24 Nov 2026 the cards also carried a
+  // "likely X – Y" line (the same views divided by each end of the factor's
+  // range); it was dropped because, stacked under the number next to the
+  // month-end projection, the two read as competing guesses at one figure. The
+  // range still lives in the explainer and the chart tooltips. The single route
+  // from an engaged figure to how it was worked out is the link below.
   const howLink = useEng ? `<button type="button" class="hero-chart-link hero-how" data-goto-benchmark>how this was calculated →</button>` : '';
-  const lfMeanEngLo = (d.n && d.engagedLo != null) ? Math.round(d.engagedLo / d.n) : null;
-  const lfMeanEngHi = (d.n && d.engagedHi != null) ? Math.round(d.engagedHi / d.n) : null;
-  const rangeAvg = (useEng && rngOk(d.engagedMedLo, d.engagedMedHi))
-    ? `<div class="hero-range"><span class="js-med">${rngTxt(d.engagedMedLo, d.engagedMedHi)}</span><span class="js-mean">${rngOk(lfMeanEngLo, lfMeanEngHi) ? rngTxt(lfMeanEngLo, lfMeanEngHi) : ''}</span></div>` : '';
   // Sits on the row label, not on a card: it governs Total views AND Average
   // views, and hanging it off one of them implied it only applied there.
   const basisToggle = vccAdj ? `<div class="basis-row"><div class="chart-fmt-seg basis-seg" role="group" aria-label="Counting basis"><button type="button" class="chart-ctrl-btn seg" data-vopt="reported" aria-pressed="true" onclick="__setViewBasis(false)">Reported views</button><button type="button" class="chart-ctrl-btn seg" data-vopt="engaged" aria-pressed="false" onclick="__setViewBasis(true)">Engaged views</button></div><span class="info-icon" data-popover="Since 27 Aug 2026 YouTube counts a view the moment a video starts, where it used to need about 30 seconds of watching. The same audience now shows up as about twice as many views. Engaged views divides the views counted since then by ${VCC_MID.toFixed(2)}, so months either side can be compared. It is an estimate." tabindex="0" role="button" aria-label="About engaged views">ⓘ</span></div>` : '';
@@ -4435,66 +4421,11 @@ function render(m){
   const shMeanYoy = (y&&y.shorts&&y.shorts.n) ? y.shorts.v/y.shorts.n : null;
   const meanSubsStr = subsPctStr(lfMean);
   const meanSubsStrEng = subsPctStr(lfMeanEng);
-  // Projection for the in-progress month (long-form Total views): current total +
-  // expected-remaining-uploads × current avg views/upload. Gated to >=5 uploads
-  // (below that it's pure noise) and flagged by confidence until ~a third of the
-  // month's uploads are in.
-  //
-  // What it predicts: the SETTLED total, not the figure showing on the last day.
-  // Measured from the snapshot archive, a month's videos keep earning for about a
-  // week after the month closes and then stop (June: +228k in week one, then +7k,
-  // +3k, +2k — a ×1.04-1.05 tail; July ×1.05). Replayed day-by-day against that
-  // settled target the estimate is near-unbiased — June mean abs error 2.6%
-  // (bias -1.8%), July 5.1% (bias +3.1%) — whereas against the last-day figure it
-  // reads ~5-8% high, purely because that tail hasn't arrived yet. So do NOT
-  // "correct" it downwards: the apparent optimism is the post-month tail.
-  //
-  // Deliberately NOT excluding young videos from the average. A video published
-  // hours ago drags the mean down, but the target contains equally-young videos
-  // (the ones posted on the 30th), so the drag is doing real work: filtering to
-  // >=24/48/72h made every backtest worse (mean abs error 6.2% -> 8.4/9.2/9.7%).
-  //
-  // EXPECTED UPLOADS was the mean of the last 3 complete months. That is fine for
-  // a single channel with steady output, but a mean cannot see a trend, and on the
-  // all-channel view — where output has been falling — it just drags an old month
-  // forward. On 8 Aug 2026 it assumed 168 uploads against a run-rate of 116 and
-  // projected 5.28M. Replayed against settled months it ran bias +26.4% / MAE
-  // 26.4% network-wide, while looking fine (+4.2% / 5.8%) on TheQuartering alone,
-  // which is why the earlier single-channel backtest never caught it.
-  //
-  // Now: last month's count blended with the pace this month is actually setting,
-  // weighted by progress through the month. Better on BOTH scopes — network-wide
-  // +7.3% / MAE 9.7%, TheQuartering +1.7% / 5.3%.
-  //
-  // This does NOT contradict the "don't correct downwards" note above: that is
-  // about the post-month tail, and those backtests already score against the
-  // settled total, not the last-day figure. Two different errors.
-  let projTot = null, projExp = 0;
-  if (isPartial && d && d.n && d.tot != null && typeof D !== 'undefined' && D) {
-    const cm = Object.keys(D).filter(k => /^\d{4}-\d{2}$/.test(k) && k < CURRENT_MONTH_KEY && D[k] && D[k].n).sort();
-    const recent = cm.slice(-1).map(k => D[k].n);
-    if (recent.length && d.n >= 5) {
-      const prevN = recent[0];
-      // Blend last month's count with the pace this month is actually setting,
-      // weighted by how far through the month we are: early on there's no pace
-      // worth trusting, by the end the pace IS the answer. Both inputs alone run
-      // high (previous month +15.7% bias, run-rate -4.3%); blended it's +7.1%
-      // with mean absolute error 9.7% against 26.1% for the old 3-month mean.
-      const dom = +new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', day: 'numeric' }).format(new Date());
-      const dim = new Date(+CURRENT_MONTH_KEY.slice(0, 4), +CURRENT_MONTH_KEY.slice(5, 7), 0).getDate();
-      const w = Math.min(1, dom / dim);
-      const rate = d.n / Math.max(1, dom) * dim;
-      projExp = Math.round((1 - w) * prevN + w * rate);
-      if (projExp > 0) {
-        const perVid = d.tot / d.n, remaining = Math.max(0, projExp - d.n);
-        projTot = Math.round(d.tot + remaining * perVid);
-      }
-    }
-  }
-  // Exact, not an approximation: projTot is linear in d.tot (it adds
-  // remaining * d.tot/d.n), so scaling by engaged/reported gives the
-  // projection the same arithmetic would produce from engaged views.
-  const projTotEng = (projTot && d.tot) ? Math.round(projTot * totEng / d.tot) : projTot;
+  // The in-progress month used to show a projected month-end total here (views so
+  // far + expected remaining uploads x views per upload). Removed 24 Nov 2026: its
+  // own backtests ran ~7% high with a typical miss near 10% network-wide, it once
+  // ran +26%, and the "vs same point in <last month>" line now answers the same
+  // question with real data.
   const subsFoot = subsTot ? `<div class="stat-sub">${fmt(subsTot)} total${rateStr}</div>` : '';
   cards.push({num:subsNum,lbl:'Subscribers gained <span class="info-icon" data-popover="Net change in YouTube\'s rounded subscriber counter. The rounding step grows with channel size — a 1M+ channel only moves in 10,000-subscriber jumps — so small real changes show as ±0. ≈/day is the period average. Tracked since June 2026." tabindex="0" role="button" aria-label="About subscribers gained">\u24d8</span>',cur:null,selfNum:true,p:null,y:null,goodUp:null,foot:subsFoot});
   const cardHTML=cards.map(c=>{
@@ -4726,16 +4657,14 @@ function render(m){
       <div class="hero-card">
         <div class="hero-label">Total views</div>
         <div class="hero-num" title="${fmtFull(useEng?totEng:d.tot)}${useEng?' engaged':''} views">${fmt(useEng?totEng:d.tot)}</div>
-        ${rangeTot}${howLink}
+        ${howLink}
         <div class="hero-sub">${(v => v?v.replace(/^ · /,''):'')(useEng?totSubsStrEng:totSubsStr)}</div>
-        ${projTot ? `<div class="hero-proj"><span class="hero-proj-num">↗ ~${fmt(useEng?projTotEng:projTot)} projected</span><span class="info-icon" data-popover="Projected month-end total from this month’s upload pace. It swings while only a few videos are out, then tends to read LOW late in the month, because the newest uploads are still gaining views. Backtested on July it ran +4% to +26% over the first fortnight and averaged −5% from the midpoint on." tabindex="0" role="button" aria-label="About the projection">ⓘ</span></div>` : ``}
         ${useEng ? heroDeltas(totEng,p&&p.engaged,y&&y.engaged,null,null,basisTag)
                  : heroDeltas(d.tot,p&&p.tot,y&&y.tot,null,null,basisTag)}
       </div>
       <div class="hero-card avg-card">
         <div class="hero-label">Average views <span class="info-icon" data-popover="Two ways to average the month's long-form views. Median (default) is the typical upload — one viral hit or dead month can't skew it. Mean is total views ÷ uploads, so mean × uploads = total views. The % is that figure as a share of the subscriber base (subs tracked June 2026 on)." tabindex="0" role="button" aria-label="About average long-form views">ⓘ</span></div>
         <div class="hero-num"><span class="js-med">${fmt(useEng?d.engagedMed:d.med)}</span><span class="js-mean">${fmt(useEng?lfMeanEng:lfMean)}</span></div>
-        ${rangeAvg}
         <div class="avg-toggle" role="group" aria-label="Average type"><button type="button" data-avgopt="median" aria-pressed="true" onclick="__setAvgMetric(false)">median</button><button type="button" data-avgopt="mean" aria-pressed="false" onclick="__setAvgMetric(true)">mean</button></div>
         <div class="hero-sub">per long-form upload<span class="js-med">${useEng?medSubsStrEng:medSubsStr}</span><span class="js-mean">${useEng?meanSubsStrEng:meanSubsStr}</span></div>
         ${useEng ? heroDeltas(d.engagedMed,p&&p.engagedMed,y&&y.engagedMed,null,'js-med',basisTag)
