@@ -1,4 +1,4 @@
-# Topic candidates — 2026-11-23
+# Topic candidates — 2026-11-24
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
@@ -6,13 +6,13 @@ _Auto-generated nightly from video descriptions. Clusters of terms that have spi
 
 ## @TheQuartering
 
-Pool: 24 recent videos, 148 baseline videos
+Pool: 25 recent videos, 151 baseline videos
 
 ### Cluster 1: `try`
 
-- **Recent saturation:** 6/24 videos (**25%**)
-- **Baseline saturation:** 1/148 videos (1%)
-- **Spike ratio:** 24.8x
+- **Recent saturation:** 6/25 videos (**24%**)
+- **Baseline saturation:** 1/151 videos (1%)
+- **Spike ratio:** 24.3x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
@@ -26,11 +26,29 @@ Pool: 24 recent videos, 148 baseline videos
   - 2026-11-18 — _Massive FRAUD Revealed As Democrats FLIP Alaska & President Trump ERUPTS_  
     ANOTHER STEAL?? Alaska Senate Flips Blue Amid Decoy Dan Scandal
 
-### Cluster 2: `america's`
+### Cluster 2: `gta`
 
-- **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 3/148 videos (2%)
-- **Spike ratio:** 8.9x
+- **Recent saturation:** 6/25 videos (**24%**)
+- **Baseline saturation:** 7/151 videos (5%)
+- **Spike ratio:** 4.9x
+- **Related terms:** `gta`, `already`, `get`
+- **Sample recent videos:**
+  - 2026-11-23 — _IS YOUTUBE OVER?_  
+    YouTube Is FAKING Views Now?! Tim Pool Sounds The Alarm
+  - 2026-11-23 — _GTA 6 IS FREE ON PC!_  
+    GTA 6 Just Leaked Onto PC FOR FREE!
+  - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
+    Hackers Could CRIPPLE America’s Food Supply! Officials Sound Alarm
+  - 2026-11-20 — _THEY GOT BLASTED!_  
+    GTA 6 FANS GET DESTROYED! Fox News & WIRED BLAST THE MANOSPHERE MELTDOWN!
+  - 2026-11-19 — _GTA 6 MELTDOWN! Asmongold TheBurntPeanut RAGE Over ABSURD Gameplay & NO REFUNDS_  
+    GTA 6 CHAOS! $1 BILLION Lost As Workers DITCH Their Jobs To Play!
+
+### Cluster 3: `america's`
+
+- **Recent saturation:** 5/25 videos (**20%**)
+- **Baseline saturation:** 3/151 videos (2%)
+- **Spike ratio:** 8.7x
 - **Related terms:** `america's`, `major`
 - **Sample recent videos:**
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
@@ -44,27 +62,15 @@ Pool: 24 recent videos, 148 baseline videos
   - 2026-11-18 — _Cyber Attack TRUTH Finally Revealed & It's As BAD As I Thought_  
     AI Threats Put Banks, Websites And Critical Infrastructure At Risk
 
-### Cluster 3: `gta`
+### Cluster 4: `critical`
 
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/148 videos (0%)
-- **Spike ratio:** 37.3x
-- **Related terms:** `gta`
+- **Recent saturation:** 5/25 videos (**20%**)
+- **Baseline saturation:** 1/151 videos (1%)
+- **Spike ratio:** 20.3x
+- **Related terms:** `critical`, `infrastructure`
 - **Sample recent videos:**
-  - 2026-11-20 — _THEY GOT BLASTED!_  
-    GTA 6 FANS GET DESTROYED! Fox News & WIRED BLAST THE MANOSPHERE MELTDOWN!
-  - 2026-11-19 — _GTA 6 MELTDOWN! Asmongold TheBurntPeanut RAGE Over ABSURD Gameplay & NO REFUNDS_  
-    GTA 6 CHAOS! $1 BILLION Lost As Workers DITCH Their Jobs To Play!
-  - 2026-11-18 — _PEOPLE ARE OUTRAGED!_  
-    GTA 6 Launch Sparks Debate Over Hype And Missing Features
-
-### Cluster 4: `infrastructure`
-
-- **Recent saturation:** 4/24 videos (**17%**)
-- **Baseline saturation:** 1/148 videos (1%)
-- **Spike ratio:** 16.6x
-- **Related terms:** `infrastructure`, `critical`
-- **Sample recent videos:**
+  - 2026-11-23 — _Flights HACKED AGAIN! Donald Trump SCRAMBLES To Assemble Team To Prevent Thanksgiving Day Disaster_  
+    Planes SHUT DOWN AGAIN! Delta Outage Wrecks Thanksgiving Travel
   - 2026-11-20 — _IT'S GETTING WAY WORSE!_  
     FINALLY THE TRUTH?! FAA Reveals What CAUSED Nationwide Flight Chaos!
   - 2026-11-19 — _Water Supply HIT, Fire Hydrants FAIL & The EMERGENCY Meeting In Washington DC_  
@@ -76,9 +82,9 @@ Pool: 24 recent videos, 148 baseline videos
 
 ### Cluster 5: `outages`
 
-- **Recent saturation:** 3/24 videos (**13%**)
-- **Baseline saturation:** 0/148 videos (0%)
-- **Spike ratio:** 37.3x
+- **Recent saturation:** 3/25 videos (**12%**)
+- **Baseline saturation:** 0/151 videos (0%)
+- **Spike ratio:** 36.5x
 - **Related terms:** `outages`
 - **Sample recent videos:**
   - 2026-11-20 — _SO NOW THEY TELL THE TRUTH!?_  
@@ -90,9 +96,9 @@ Pool: 24 recent videos, 148 baseline videos
 
 ### Cluster 6: `warning`
 
-- **Recent saturation:** 5/24 videos (**21%**)
-- **Baseline saturation:** 1/148 videos (1%)
-- **Spike ratio:** 20.7x
+- **Recent saturation:** 5/25 videos (**20%**)
+- **Baseline saturation:** 1/151 videos (1%)
+- **Spike ratio:** 20.3x
 - **Related terms:** `warning`, `banks`
 - **Sample recent videos:**
   - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
@@ -108,29 +114,13 @@ Pool: 24 recent videos, 148 baseline videos
 
 ## @JeremyHambly
 
-Pool: 17 recent videos, 87 baseline videos
+Pool: 18 recent videos, 89 baseline videos
 
-### Cluster 1: `city`
+### Cluster 1: `history`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 0/87 videos (0%)
-- **Spike ratio:** 41.4x
-- **Related terms:** `city`
-- **Sample recent videos:**
-  - 2026-11-20 — _HE'S FINISHED NOW!_  
-    MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
-  - 2026-11-19 — _THEY'RE COVERING IT UP!_  
-    Child Trafficking Scandal? Politicians Face Explosive Scrutiny!
-  - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
-    Mamdani Just Made New York Even More Dangerous!
-  - 2026-11-16 — _Another INSANE Bus Attack! America Is At MAXIUM Fatigue_  
-    It Keeps Happening! Woman PUMMELED By Mob On City Bus
-
-### Cluster 2: `history`
-
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/87 videos (0%)
-- **Spike ratio:** 31.1x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 0/89 videos (0%)
+- **Spike ratio:** 30.0x
 - **Related terms:** `history`
 - **Sample recent videos:**
   - 2026-11-19 — _THEY'RE DESTROYING EVERYTHING!_  
@@ -140,11 +130,11 @@ Pool: 17 recent videos, 87 baseline videos
   - 2026-11-17 — _Shane Gillis Reveals MEDICAL SCARE On Joe Rogan After SNL Backlash! Episode Pulled!_  
     Shane Gillis Episode VANISHES After Woke Meltdown!
 
-### Cluster 3: `try`
+### Cluster 2: `try`
 
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 0/87 videos (0%)
-- **Spike ratio:** 31.1x
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 0/89 videos (0%)
+- **Spike ratio:** 30.0x
 - **Related terms:** `try`, `try our`
 - **Sample recent videos:**
   - 2026-11-18 — _THIS IS CHILLING!_  
@@ -154,61 +144,73 @@ Pool: 17 recent videos, 87 baseline videos
   - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
     GTA 6 ROASTED! Gamers Aren't Holding Back On Rockstar
 
-### Cluster 4: `its`
+### Cluster 3: `gone`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 1/87 videos (1%)
-- **Spike ratio:** 13.8x
-- **Related terms:** `its`
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 1/89 videos (1%)
+- **Spike ratio:** 10.0x
+- **Related terms:** `gone`
 - **Sample recent videos:**
+  - 2026-11-24 — _Mark Rufffalo Just ENDED His Career!_  
+    Mark Ruffalo Goes FULL MASK OFF & Immediately Regrets It!
+  - 2026-11-23 — _Angry Joe RAGES Over GTA 6 Reviews & Gets HUMBLED_  
+    GTA 6 Review RAGE Goes Nuclear! Angry Joe Unloads
+  - 2026-11-18 — _SHE'S GETTING DEPLATFORMED!_  
+    She’s Gone NUTS! Jennifer Welch Smears Every MAGA Voter
+
+### Cluster 4: `demanding`
+
+- **Recent saturation:** 4/18 videos (**22%**)
+- **Baseline saturation:** 3/89 videos (3%)
+- **Spike ratio:** 5.7x
+- **Related terms:** `demanding`, `its`
+- **Sample recent videos:**
+  - 2026-11-23 — _Massive Cyber Security Mystery! 11 Agents THIS YEAR Found Dead_  
+    11 NSA Workers Are Dead—Congress Demands Answers!
   - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
     NETFLIX'S DISGUSTING NEW LOW! Christians FURIOUS Over Sick New Show!
   - 2026-11-19 — _THEY ARE RAGING!_  
     The View ERUPTS As Whoopi Goes After Trump's RFK Jr!
   - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
     Mamdani Just Made New York Even More Dangerous!
-  - 2026-11-16 — _Ammo Company GOES WOKE & Immediately Regrets It!_  
-    Gun Company Insults Its Own Customers And Gets DESTROYED!
 
-### Cluster 5: `more`
+### Cluster 5: `city`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 3/87 videos (3%)
-- **Spike ratio:** 5.9x
-- **Related terms:** `more`
-- **Sample recent videos:**
-  - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
-    NETFLIX'S DISGUSTING NEW LOW! Christians FURIOUS Over Sick New Show!
-  - 2026-11-18 — _The Burnt Peanut SAVAGES GTA 6 Launch & Players RAGE Over Poor Performance_  
-    GTA 6 ROASTED! Gamers Aren't Holding Back On Rockstar
-  - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
-    Mamdani Just Made New York Even More Dangerous!
-  - 2026-11-16 — _Russell Brand INSANITY New Twist Has Them ATTACKING His Family & All Videos_  
-    Russell Brand In MORE Trouble! Prison Message Sparks Investigation
-
-### Cluster 6: `sparks`
-
-- **Recent saturation:** 3/17 videos (**18%**)
-- **Baseline saturation:** 3/87 videos (3%)
-- **Spike ratio:** 4.4x
-- **Related terms:** `sparks`
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 1/89 videos (1%)
+- **Spike ratio:** 10.0x
+- **Related terms:** `city`
 - **Sample recent videos:**
   - 2026-11-20 — _HE'S FINISHED NOW!_  
     MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
-  - 2026-11-19 — _THEY'RE DESTROYING EVERYTHING!_  
-    Hollywood's Next Bond Girl?! Hunter Schafer Sparks HUGE Debate!
-  - 2026-11-16 — _Russell Brand INSANITY New Twist Has Them ATTACKING His Family & All Videos_  
-    Russell Brand In MORE Trouble! Prison Message Sparks Investigation
+  - 2026-11-19 — _THEY'RE COVERING IT UP!_  
+    Child Trafficking Scandal? Politicians Face Explosive Scrutiny!
+  - 2026-11-17 — _Mamdani DISBANDS Police & DEMANDS Unarmed Citizens Now Respond To Crimes_  
+    Mamdani Just Made New York Even More Dangerous!
+
+### Cluster 6: `finally`
+
+- **Recent saturation:** 3/18 videos (**17%**)
+- **Baseline saturation:** 3/89 videos (3%)
+- **Spike ratio:** 4.3x
+- **Related terms:** `finally`
+- **Sample recent videos:**
+  - 2026-11-23 — _Angry Joe RAGES Over GTA 6 Reviews & Gets HUMBLED_  
+    GTA 6 Review RAGE Goes Nuclear! Angry Joe Unloads
+  - 2026-11-17 — _Ilhan Omar FREAKS OUT As Judge Rules Records To Be RELEASED_  
+    Ilhan Omar Gets TERRIBLE NEWS! The Files Are Coming Out
+  - 2026-11-17 — _Nvidia CEO Jensen Huang DROPS New Statement & Lies DEBUNKED!_  
+    Jensen Huang BREAKS HIS SILENCE! He Wants Back In
 
 ## @QuarteringLive
 
-Pool: 6 recent videos, 10 baseline videos
+Pool: 5 recent videos, 12 baseline videos
 
 ### Cluster 1: `hit`
 
-- **Recent saturation:** 3/6 videos (**50%**)
-- **Baseline saturation:** 0/10 videos (0%)
-- **Spike ratio:** 11.0x
+- **Recent saturation:** 3/5 videos (**60%**)
+- **Baseline saturation:** 0/12 videos (0%)
+- **Spike ratio:** 15.6x
 - **Related terms:** `hit`
 - **Sample recent videos:**
   - 2026-11-19 — _THIS IS INSANITY!_  
