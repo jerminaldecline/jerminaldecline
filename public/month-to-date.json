@@ -1,14 +1,14 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-24T18:50:04.213Z",
+ "generated": "2026-11-24T22:24:29.024Z",
  "month": "2026-11",
  "dom": 24,
- "liveAt": "2026-11-24T18:48:47.279Z",
+ "liveAt": "2026-11-24T22:23:25.887Z",
  "prev": {
   "month": "2026-10",
-  "asOf": "2026-10-24T13:14:42.235Z",
-  "dump": "2026-10-24-PM.json.gz",
-  "offsetHours": 5.6
+  "asOf": "2026-10-25T01:00:41.342Z",
+  "dump": "2026-10-25-AM.json.gz",
+  "offsetHours": 2.6
  },
  "yoy": {
   "month": "2025-11",
@@ -18,27 +18,27 @@
  "scopes": {
   "ALL": {
    "prev": {
-    "n": 97,
-    "tot": 5394997,
-    "med": 52537,
-    "engaged": 2606279,
-    "engagedMed": 25380,
+    "n": 98,
+    "tot": 5518766,
+    "med": 53479,
+    "engaged": 2666071,
+    "engagedMed": 25835,
     "lv": 4.8,
-    "comments": 30941,
+    "comments": 31501,
     "avglen": 12,
-    "runtime": 19.1,
-    "lrevlo": 2047,
-    "lrevhi": 3560,
-    "srevlo": 262,
-    "srevhi": 916,
+    "runtime": 19.3,
+    "lrevlo": 2094,
+    "lrevhi": 3641,
+    "srevlo": 264,
+    "srevhi": 923,
     "shorts": {
      "n": 120,
-     "v": 13087472,
-     "med": 31069.5
+     "v": 13181326,
+     "med": 31614.5
     }
    },
    "yoy": {
-    "n": 100,
+    "n": 104,
     "tot": null,
     "med": null,
     "engaged": null,
@@ -46,7 +46,7 @@
     "lv": null,
     "comments": null,
     "avglen": 12.6,
-    "runtime": 45.9,
+    "runtime": 47.9,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -60,35 +60,35 @@
   },
   "@TheQuartering": {
    "prev": {
-    "n": 63,
-    "tot": 4809843,
-    "med": 74329,
-    "engaged": 2323596,
-    "engagedMed": 35908,
+    "n": 64,
+    "tot": 4925141,
+    "med": 75308,
+    "engaged": 2379295,
+    "engagedMed": 36380,
     "lv": 4.1,
-    "comments": 27219,
+    "comments": 27732,
     "avglen": 12.1,
-    "runtime": 12.6,
-    "lrevlo": 1825,
-    "lrevhi": 3174,
+    "runtime": 12.9,
+    "lrevlo": 1869,
+    "lrevhi": 3250,
     "srevlo": 81,
-    "srevhi": 284,
+    "srevhi": 285,
     "shorts": {
      "n": 43,
-     "v": 4053940,
-     "med": 36467
+     "v": 4072087,
+     "med": 36473
     }
    },
    "yoy": {
-    "n": 65,
+    "n": 68,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 12.6,
-    "runtime": 13.8,
+    "avglen": 12.5,
+    "runtime": 14.4,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -103,22 +103,22 @@
   "@JeremyHambly": {
    "prev": {
     "n": 34,
-    "tot": 585154,
-    "med": 15689,
-    "engaged": 282683,
-    "engagedMed": 7579,
-    "lv": 5.5,
-    "comments": 3722,
+    "tot": 593625,
+    "med": 15918,
+    "engaged": 286775,
+    "engagedMed": 7690,
+    "lv": 5.6,
+    "comments": 3769,
     "avglen": 11.3,
     "runtime": 6.4,
-    "lrevlo": 222,
-    "lrevhi": 386,
+    "lrevlo": 225,
+    "lrevhi": 392,
     "srevlo": 60,
-    "srevhi": 208,
+    "srevhi": 210,
     "shorts": {
      "n": 35,
-     "v": 2977720,
-     "med": 28695
+     "v": 2997038,
+     "med": 28868
     }
    },
    "yoy": {
@@ -239,24 +239,24 @@
     "engagedMed": null,
     "lrevlo": 0,
     "lrevhi": 0,
-    "srevlo": 121,
-    "srevhi": 424,
+    "srevlo": 122,
+    "srevhi": 428,
     "shorts": {
      "n": 42,
-     "v": 6055812,
-     "med": 27461.5
+     "v": 6112201,
+     "med": 27468
     }
    },
    "yoy": {
-    "n": 19,
+    "n": 20,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 99.5,
-    "runtime": 29.1,
+    "avglen": 98.8,
+    "runtime": 30.6,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
