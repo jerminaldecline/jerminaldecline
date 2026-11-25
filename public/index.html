@@ -4526,7 +4526,7 @@ function render(m){
   const debHTML = d.debate ? `
     <div class="hl debate">
       <div>
-        ${labelRow('Most contentious', d.debate, { noMode: true })}
+        ${labelRow('Most controversial', d.debate, { noMode: true })}
         ${titleRow(d.debate, ytLink(d.debate.id))}
         ${sumLine(d.debate.id)}
         <div class="hl-note">${d.debate.crate}% of viewers commented — ${d.debate.mult}× usual rate.</div>
@@ -4718,13 +4718,13 @@ function render(m){
     ${d.n >= 2
       ? `<div class="highlights">${topHTML}${worstHTML}${debHTML}</div>`
       : (d.shortsOnly
-          // Best/worst/most-contentious all rank long-form, so a shorts-only
+          // Best/worst/most-controversial all rank long-form, so a shorts-only
           // month has nothing to put here. Say that once, rather than dropping
           // the row silently (which reads as a rendering fault) or stamping out
           // three identical empty boxes.
           ? `<div class="highlights"><div class="hl hl-nodata">
                <div><div class="hl-label">Video highlights</div>
-               <div class="hl-nodata-msg">No long-form uploads this month, so there is no best, worst or most-contentious video to rank. ${SD.n ? `The ${SD.n} Short${SD.n===1?'':'s'} posted this month ${SD.n===1?'is':'are'} covered above and in the Videos tab.` : ''}</div></div>
+               <div class="hl-nodata-msg">No long-form uploads this month, so there is no best, worst or most-controversial video to rank. ${SD.n ? `The ${SD.n} Short${SD.n===1?'':'s'} posted this month ${SD.n===1?'is':'are'} covered above and in the Videos tab.` : ''}</div></div>
              </div></div>`
           : '')}
     <div class="lower">
