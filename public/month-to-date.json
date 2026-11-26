@@ -1,14 +1,14 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-26T04:55:57.916Z",
+ "generated": "2026-11-26T09:24:48.051Z",
  "month": "2026-11",
- "dom": 25,
- "liveAt": "2026-11-26T04:54:40.258Z",
+ "dom": 26,
+ "liveAt": "2026-11-26T09:23:34.076Z",
  "prev": {
   "month": "2026-10",
-  "asOf": "2026-10-25T01:00:41.342Z",
-  "dump": "2026-10-25-AM.json.gz",
-  "offsetHours": 3.9
+  "asOf": "2026-10-26T12:48:14.320Z",
+  "dump": "2026-10-26-PM.json.gz",
+  "offsetHours": 3.4
  },
  "yoy": {
   "month": "2025-11",
@@ -19,26 +19,26 @@
   "ALL": {
    "prev": {
     "n": 98,
-    "tot": 5518766,
-    "med": 53479,
-    "engaged": 2666071,
-    "engagedMed": 25835,
+    "tot": 5649339,
+    "med": 54318,
+    "engaged": 2729149,
+    "engagedMed": 26241,
     "lv": 4.8,
-    "comments": 31501,
+    "comments": 31833,
     "avglen": 12,
     "runtime": 19.3,
-    "lrevlo": 2094,
-    "lrevhi": 3641,
-    "srevlo": 264,
-    "srevhi": 923,
+    "lrevlo": 2144,
+    "lrevhi": 3727,
+    "srevlo": 268,
+    "srevhi": 937,
     "shorts": {
      "n": 120,
-     "v": 13181326,
-     "med": 31614.5
+     "v": 13387466,
+     "med": 31749.5
     }
    },
    "yoy": {
-    "n": 105,
+    "n": 111,
     "tot": null,
     "med": null,
     "engaged": null,
@@ -46,7 +46,7 @@
     "lv": null,
     "comments": null,
     "avglen": 12.6,
-    "runtime": 48.1,
+    "runtime": 50.6,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -61,34 +61,34 @@
   "@TheQuartering": {
    "prev": {
     "n": 64,
-    "tot": 4925141,
-    "med": 75308,
-    "engaged": 2379295,
-    "engagedMed": 36380,
+    "tot": 5038978,
+    "med": 77630,
+    "engaged": 2434289,
+    "engagedMed": 37502,
     "lv": 4.1,
-    "comments": 27732,
+    "comments": 27998,
     "avglen": 12.1,
     "runtime": 12.9,
-    "lrevlo": 1869,
-    "lrevhi": 3250,
-    "srevlo": 81,
-    "srevhi": 285,
+    "lrevlo": 1912,
+    "lrevhi": 3325,
+    "srevlo": 82,
+    "srevhi": 287,
     "shorts": {
      "n": 43,
-     "v": 4072087,
-     "med": 36473
+     "v": 4096737,
+     "med": 36494
     }
    },
    "yoy": {
-    "n": 69,
+    "n": 74,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 12.6,
-    "runtime": 14.6,
+    "avglen": 12.5,
+    "runtime": 15.6,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
@@ -103,22 +103,22 @@
   "@JeremyHambly": {
    "prev": {
     "n": 34,
-    "tot": 593625,
-    "med": 15918,
-    "engaged": 286775,
-    "engagedMed": 7690,
-    "lv": 5.6,
-    "comments": 3769,
+    "tot": 610361,
+    "med": 16136,
+    "engaged": 294860,
+    "engagedMed": 7795,
+    "lv": 5.5,
+    "comments": 3835,
     "avglen": 11.3,
     "runtime": 6.4,
-    "lrevlo": 225,
-    "lrevhi": 392,
-    "srevlo": 60,
-    "srevhi": 210,
+    "lrevlo": 232,
+    "lrevhi": 403,
+    "srevlo": 61,
+    "srevhi": 213,
     "shorts": {
      "n": 35,
-     "v": 2997038,
-     "med": 28868
+     "v": 3046780,
+     "med": 29100
     }
    },
    "yoy": {
@@ -239,24 +239,24 @@
     "engagedMed": null,
     "lrevlo": 0,
     "lrevhi": 0,
-    "srevlo": 122,
-    "srevhi": 428,
+    "srevlo": 125,
+    "srevhi": 437,
     "shorts": {
      "n": 42,
-     "v": 6112201,
-     "med": 27468
+     "v": 6243949,
+     "med": 27498.5
     }
    },
    "yoy": {
-    "n": 20,
+    "n": 21,
     "tot": null,
     "med": null,
     "engaged": null,
     "engagedMed": null,
     "lv": null,
     "comments": null,
-    "avglen": 98.8,
-    "runtime": 30.6,
+    "avglen": 98,
+    "runtime": 32.1,
     "lrevlo": null,
     "lrevhi": null,
     "srevlo": null,
