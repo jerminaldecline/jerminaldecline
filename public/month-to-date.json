@@ -1,9 +1,9 @@
 {
  "_note": "Comparators for the in-progress month, taken at the same point of the previous month and of the same month a year ago, so the Overview can compare like with like while a month is still running. prev is recomputed from the snapshot dump nearest to one calendar month before the live reading, with the page's own formulas; yoy has no dump and carries only the publish-date and duration figures. Built by scripts/build-month-to-date.js.",
- "generated": "2026-11-27T03:08:53.266Z",
+ "generated": "2026-11-27T03:10:19.740Z",
  "month": "2026-11",
  "dom": 26,
- "liveAt": "2026-11-27T03:07:46.133Z",
+ "liveAt": "2026-11-27T03:09:10.977Z",
  "prev": {
   "month": "2026-10",
   "asOf": "2026-10-26T02:38:34.055Z",
