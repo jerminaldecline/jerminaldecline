@@ -1,4 +1,81 @@
 {
-  "lastUpdated": "2026-11-26T14:09:52.252Z",
-  "trackers": []
+  "lastUpdated": "2026-11-27T14:07:27.972Z",
+  "trackers": [
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "out",
+      "keywords": [
+        "black friday",
+        "check",
+        "coffee's",
+        "check out",
+        "out coffee",
+        "coffee brand",
+        "brand coffee's",
+        "coffee's black",
+        "black",
+        "friday",
+        "brand",
+        "out"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3529,
+        "baselineSaturation": 0.0823,
+        "spikeRatio": 4.29,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 13,
+        "detectedAt": "2026-11-27T14:07:27.972Z"
+      }
+    },
+    {
+      "channelHandle": "@TheQuartering",
+      "termId": "released",
+      "keywords": [
+        "files",
+        "released",
+        "connected",
+        "finally",
+        "massive"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.4118,
+        "baselineSaturation": 0.1494,
+        "spikeRatio": 2.76,
+        "recentVideoCount": 7,
+        "baselineVideoCount": 24,
+        "detectedAt": "2026-11-27T14:07:27.972Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "backlash",
+      "keywords": [
+        "backlash"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3636,
+        "baselineSaturation": 0.0842,
+        "spikeRatio": 4.32,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 8,
+        "detectedAt": "2026-11-27T14:07:27.972Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "completely",
+      "keywords": [
+        "completely",
+        "war"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3636,
+        "baselineSaturation": 0.1238,
+        "spikeRatio": 2.94,
+        "recentVideoCount": 4,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-11-27T14:07:27.972Z"
+      }
+    }
+  ]
 }
