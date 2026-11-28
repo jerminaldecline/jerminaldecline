@@ -1,6 +1,47 @@
 {
-  "lastUpdated": "2026-11-27T14:07:27.972Z",
+  "lastUpdated": "2026-11-28T13:25:03.118Z",
   "trackers": [
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "check",
+      "keywords": [
+        "check",
+        "coffee's",
+        "black",
+        "deals",
+        "check out",
+        "out coffee",
+        "coffee brand",
+        "brand coffee's",
+        "coffee's black",
+        "black friday",
+        "friday deals",
+        "friday"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.125,
+        "spikeRatio": 2.4,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 12,
+        "detectedAt": "2026-11-28T13:25:03.118Z"
+      }
+    },
+    {
+      "channelHandle": "@JeremyHambly",
+      "termId": "completely",
+      "keywords": [
+        "completely"
+      ],
+      "detectorMeta": {
+        "recentSaturation": 0.3,
+        "baselineSaturation": 0.065,
+        "spikeRatio": 4.62,
+        "recentVideoCount": 3,
+        "baselineVideoCount": 6,
+        "detectedAt": "2026-11-28T13:25:03.118Z"
+      }
+    },
     {
       "channelHandle": "@TheQuartering",
       "termId": "out",
@@ -13,18 +54,18 @@
         "coffee brand",
         "brand coffee's",
         "coffee's black",
+        "deals",
+        "friday deals",
         "black",
-        "friday",
-        "brand",
-        "out"
+        "friday"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.3529,
+        "recentSaturation": 0.5,
         "baselineSaturation": 0.0823,
-        "spikeRatio": 4.29,
-        "recentVideoCount": 6,
+        "spikeRatio": 6.07,
+        "recentVideoCount": 8,
         "baselineVideoCount": 13,
-        "detectedAt": "2026-11-27T14:07:27.972Z"
+        "detectedAt": "2026-11-28T13:25:03.118Z"
       }
     },
     {
@@ -34,47 +75,15 @@
         "files",
         "released",
         "connected",
-        "finally",
         "massive"
       ],
       "detectorMeta": {
-        "recentSaturation": 0.4118,
-        "baselineSaturation": 0.1494,
-        "spikeRatio": 2.76,
-        "recentVideoCount": 7,
-        "baselineVideoCount": 24,
-        "detectedAt": "2026-11-27T14:07:27.972Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "backlash",
-      "keywords": [
-        "backlash"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.0842,
-        "spikeRatio": 4.32,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 8,
-        "detectedAt": "2026-11-27T14:07:27.972Z"
-      }
-    },
-    {
-      "channelHandle": "@JeremyHambly",
-      "termId": "completely",
-      "keywords": [
-        "completely",
-        "war"
-      ],
-      "detectorMeta": {
-        "recentSaturation": 0.3636,
-        "baselineSaturation": 0.1238,
-        "spikeRatio": 2.94,
-        "recentVideoCount": 4,
-        "baselineVideoCount": 12,
-        "detectedAt": "2026-11-27T14:07:27.972Z"
+        "recentSaturation": 0.375,
+        "baselineSaturation": 0.0884,
+        "spikeRatio": 4.24,
+        "recentVideoCount": 6,
+        "baselineVideoCount": 14,
+        "detectedAt": "2026-11-28T13:25:03.118Z"
       }
     }
   ]

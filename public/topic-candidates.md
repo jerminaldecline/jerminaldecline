@@ -1,37 +1,69 @@
-# Topic candidates — 2026-11-27
+# Topic candidates — 2026-11-28
 
 _Auto-generated nightly from video descriptions. Clusters of terms that have spiked in recent uploads (last 7 days) relative to the 53-day baseline. Review and add to STORY_CONFIG if any deserve a tracker._
 
 ---
 
+## @JeremyHambly
+
+Pool: 10 recent videos, 99 baseline videos
+
+### Cluster 1: `check`
+
+- **Recent saturation:** 3/10 videos (**30%**)
+- **Baseline saturation:** 12/99 videos (12%)
+- **Spike ratio:** 2.4x
+- **Related terms:** `check`, `coffee's`, `black`, `deals`, `friday`, `out`, `brand`, `check out`
+- **Sample recent videos:**
+  - 2026-11-27 — _THIS IS TOO FAR!_  
+    Netflix Posts DISGUSTING Thanksgiving Ad—Don Jr. ERUPTS!
+  - 2026-11-25 — _Woke INSANITY Destroys Beloved Coffee Shop!_  
+    Anti-ICE Mob DESTROYS Latina-Owned Chicago Coffee Shop!
+  - 2026-11-25 — _IT'S OVER FOR CANDACE!_  
+    Candace Owens Is COOKED! Defamation Case Moves Forward
+
+### Cluster 2: `completely`
+
+- **Recent saturation:** 3/10 videos (**30%**)
+- **Baseline saturation:** 6/99 videos (6%)
+- **Spike ratio:** 4.6x
+- **Related terms:** `completely`
+- **Sample recent videos:**
+  - 2026-11-24 — _WHY WOMEN DESERVE LESS_  
+    Nvidia Brings Him Back! Feminists Have A Complete Meltdown
+  - 2026-11-24 — _Mark Rufffalo Just ENDED His Career!_  
+    Mark Ruffalo Goes FULL MASK OFF & Immediately Regrets It!
+  - 2026-11-23 — _Angry Joe RAGES Over GTA 6 Reviews & Gets HUMBLED_  
+    GTA 6 Review RAGE Goes Nuclear! Angry Joe Unloads
+
 ## @TheQuartering
 
-Pool: 17 recent videos, 163 baseline videos
+Pool: 16 recent videos, 163 baseline videos
 
 ### Cluster 1: `out`
 
-- **Recent saturation:** 6/17 videos (**35%**)
+- **Recent saturation:** 8/16 videos (**50%**)
 - **Baseline saturation:** 13/163 videos (8%)
-- **Spike ratio:** 4.3x
-- **Related terms:** `out`, `black`, `friday`, `check`, `coffee's`, `brand`, `black friday`, `check out`
+- **Spike ratio:** 6.1x
+- **Related terms:** `out`, `black`, `friday`, `check`, `coffee's`, `brand`, `deals`, `black friday`
 - **Sample recent videos:**
+  - 2026-11-27 — _NATIONAL SECURITY NIGHTMARE!_  
+    U.S. Military HACKED! Air Force’s Most Important Cloud Breached
+  - 2026-11-27 — _THIS IS INSANE_  
+    Trump Faces SHOCK Senate Revolt—11 GOP Votes Could END It
   - 2026-11-25 — _SHE'S MELTING DOWN!_  
     Jennifer Welch Hits A NEW DISGUSTING LOW Attacking Melania Trump!
   - 2026-11-25 — _The USAID Files LEAK & It’s Insane!_  
     MASSIVE CENSORSHIP FILES EXPOSED! Trump Releases USAID Archive
   - 2026-11-25 — _SHE’S GETTING DESTROYED!_  
     Ilhan Omar Grand Jury BOMBSHELL! It’s Getting Real
-  - 2026-11-25 — _WE ARE CLEARLY AT WAR NOW_  
-    LEAKED MEMO Reveals Microsoft Is In Full-Blown Crisis!
-  - 2026-11-23 — _THEY FINALLY GOT HER!_  
-    Ilhan Omar Is FREAKING OUT As $186,000 Payment Story EXPLODES!
 
 ### Cluster 2: `released`
 
-- **Recent saturation:** 7/17 videos (**41%**)
-- **Baseline saturation:** 24/163 videos (15%)
-- **Spike ratio:** 2.8x
-- **Related terms:** `released`, `connected`, `finally`, `massive`, `files`
+- **Recent saturation:** 6/16 videos (**38%**)
+- **Baseline saturation:** 14/163 videos (9%)
+- **Spike ratio:** 4.2x
+- **Related terms:** `released`, `connected`, `massive`, `files`
 - **Sample recent videos:**
   - 2026-11-25 — _The USAID Files LEAK & It’s Insane!_  
     MASSIVE CENSORSHIP FILES EXPOSED! Trump Releases USAID Archive
@@ -46,9 +78,9 @@ Pool: 17 recent videos, 163 baseline videos
 
 ### Cluster 3: `reveal`
 
-- **Recent saturation:** 3/17 videos (**18%**)
+- **Recent saturation:** 3/16 videos (**19%**)
 - **Baseline saturation:** 2/163 videos (1%)
-- **Spike ratio:** 11.6x
+- **Spike ratio:** 12.3x
 - **Related terms:** `reveal`
 - **Sample recent videos:**
   - 2026-11-25 — _WE ARE CLEARLY AT WAR NOW_  
@@ -58,27 +90,39 @@ Pool: 17 recent videos, 163 baseline videos
   - 2026-11-24 — _WE WERE LIED TO_  
     Massive ICE Data Reveal! Trump’s Biggest Claim Blows Up
 
-### Cluster 4: `already`
+### Cluster 4: `united`
 
-- **Recent saturation:** 4/17 videos (**24%**)
-- **Baseline saturation:** 7/163 videos (4%)
-- **Spike ratio:** 5.1x
-- **Related terms:** `already`, `get`
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 5/163 videos (3%)
+- **Spike ratio:** 5.6x
+- **Related terms:** `united`, `states`, `united states`
 - **Sample recent videos:**
+  - 2026-11-27 — _NATIONAL SECURITY NIGHTMARE!_  
+    U.S. Military HACKED! Air Force’s Most Important Cloud Breached
+  - 2026-11-24 — _THIS FEELS OFF_  
+    Entire U.S. Lead Bomb Stockpile Set To DETONATE! FEMA Issues Warning
+  - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
+    Hackers Could CRIPPLE America’s Food Supply! Officials Sound Alarm
+
+### Cluster 5: `already`
+
+- **Recent saturation:** 3/16 videos (**19%**)
+- **Baseline saturation:** 4/163 videos (2%)
+- **Spike ratio:** 6.8x
+- **Related terms:** `already`
+- **Sample recent videos:**
+  - 2026-11-27 — _THIS IS INSANE_  
+    Trump Faces SHOCK Senate Revolt—11 GOP Votes Could END It
   - 2026-11-23 — _IS YOUTUBE OVER?_  
     YouTube Is FAKING Views Now?! Tim Pool Sounds The Alarm
   - 2026-11-23 — _GTA 6 IS FREE ON PC!_  
     GTA 6 Just Leaked Onto PC FOR FREE!
-  - 2026-11-21 — _Cyber ATTACK Targteting US Food Supply WARNED We Are NOT Ready!_  
-    Hackers Could CRIPPLE America’s Food Supply! Officials Sound Alarm
-  - 2026-11-20 — _THEY GOT BLASTED!_  
-    GTA 6 FANS GET DESTROYED! Fox News & WIRED BLAST THE MANOSPHERE MELTDOWN!
 
-### Cluster 5: `roughly`
+### Cluster 6: `roughly`
 
-- **Recent saturation:** 3/17 videos (**18%**)
+- **Recent saturation:** 3/16 videos (**19%**)
 - **Baseline saturation:** 4/163 videos (2%)
-- **Spike ratio:** 6.4x
+- **Spike ratio:** 6.8x
 - **Related terms:** `roughly`
 - **Sample recent videos:**
   - 2026-11-24 — _THIS FEELS OFF_  
@@ -87,42 +131,6 @@ Pool: 17 recent videos, 163 baseline videos
     Ilhan Omar’s Secret Files Just Dropped! This Is INSANE
   - 2026-11-23 — _GTA 6 IS FREE ON PC!_  
     GTA 6 Just Leaked Onto PC FOR FREE!
-
-## @JeremyHambly
-
-Pool: 11 recent videos, 100 baseline videos
-
-### Cluster 1: `backlash`
-
-- **Recent saturation:** 4/11 videos (**36%**)
-- **Baseline saturation:** 8/100 videos (8%)
-- **Spike ratio:** 4.3x
-- **Related terms:** `backlash`
-- **Sample recent videos:**
-  - 2026-11-25 — _Mamdani Just GUARANTEED His DOWNFALL_  
-    Mamdani Is COOKED After NYC Crime Disaster EXPLODES!
-  - 2026-11-24 — _WHY WOMEN DESERVE LESS_  
-    Nvidia Brings Him Back! Feminists Have A Complete Meltdown
-  - 2026-11-20 — _HE'S FINISHED NOW!_  
-    MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
-  - 2026-11-20 — _Netflix Faces MASSIVE BOYCOTT After Totally INSULTING New Show!_  
-    NETFLIX'S DISGUSTING NEW LOW! Christians FURIOUS Over Sick New Show!
-
-### Cluster 2: `completely`
-
-- **Recent saturation:** 4/11 videos (**36%**)
-- **Baseline saturation:** 12/100 videos (12%)
-- **Spike ratio:** 2.9x
-- **Related terms:** `completely`, `war`
-- **Sample recent videos:**
-  - 2026-11-24 — _WHY WOMEN DESERVE LESS_  
-    Nvidia Brings Him Back! Feminists Have A Complete Meltdown
-  - 2026-11-24 — _Mark Rufffalo Just ENDED His Career!_  
-    Mark Ruffalo Goes FULL MASK OFF & Immediately Regrets It!
-  - 2026-11-23 — _Angry Joe RAGES Over GTA 6 Reviews & Gets HUMBLED_  
-    GTA 6 Review RAGE Goes Nuclear! Angry Joe Unloads
-  - 2026-11-20 — _HE'S FINISHED NOW!_  
-    MAMDANI DECLARES WAR ON AMAZON! $5 DELIVERY THREAT Sparks HUGE Backlash!
 
 ---
 
